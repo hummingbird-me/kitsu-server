@@ -31,6 +31,14 @@ module DataImport
       end
     end
 
+    def get_character(external_id)
+      media = Mapping.lookup('myanimelist', external_id) || Character.new
+
+      get(external_id) do |response|
+        character = Extractor::Character.new(response, external_id)
+      end
+    end
+
     private
 
     def get(url, opts = {})
