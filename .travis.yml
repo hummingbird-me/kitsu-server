@@ -1,0 +1,24 @@
+language: ruby
+rvm:
+  - 2.3.1
+
+sudo: false
+
+# Postgres v9.4 and ElasticSearch vWhoGivesAFuck
+addons:
+  postgresql: 9.4
+services:
+  - elasticsearch
+
+cache:
+  directories:
+    - vendor/bundle
+
+install:
+  - bundle install --deployment --jobs=3 --retry=3
+
+before_script:
+  - bundle exec rake db:create db:schema:load
+
+script:
+  - bundle exec rspec
