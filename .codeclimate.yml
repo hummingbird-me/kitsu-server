@@ -1,0 +1,20 @@
+# Using CodeClimate Platform
+# http://docs.codeclimate.com/article/300-the-codeclimate-platform
+
+engines:
+  rubocop:
+    enabled: true
+  scsslint:
+    enabled: true
+  bundler_audit:
+    enabled: true
+
+ratings:
+  paths:
+  - app/**/*
+  - lib/**/*
+  - "**/*.rb"
+
+exclude_paths:
+- spec/**/*
+- vendor/**/*
