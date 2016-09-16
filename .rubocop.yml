@@ -139,7 +139,7 @@ Metrics/LineLength:
   Max: 80
   AllowURI: true
   Exclude:
-    - server/config/routes.rb
+    - config/routes.rb
 Metrics/MethodLength:
   Enabled: true
   CountComments: false
