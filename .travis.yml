@@ -4,11 +4,6 @@ rvm:
 
 sudo: false
 
-# Postgres v9.4 and ElasticSearch vWhoGivesAFuck
-addons:
-  postgresql: 9.4
-services:
-  - elasticsearch
 
 cache:
   directories:
@@ -23,7 +18,12 @@ before_script:
 script:
   - bundle exec rspec
 
+# Postgres v9.4 and ElasticSearch vWhoGivesAFuck
+services:
+  - elasticsearch
 addons:
+  postgresql: 9.4
+  # Oh and report to CodeClimate
   code_climate:
     repo_token: 5e2172ea5a30b07e172058a3b33dfe08c6354699808e8f3010acc32b1ef41395
 
