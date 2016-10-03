@@ -1,18 +1,22 @@
 # == Schema Information
 #
-# Table name: Chapters
+# Table name: chapters
 #
-#  id                   :integer          not noll, primary key
-#  manga_id             :integer          not noll, foreign key
-#  titles               :hstore           default({}), not null
-#  canonical_title      :string           default("en_jp"), not null
-#  number               :integer          not null
-#  volume               :integer
-#  length               :integer
-#  synopsis             :text
-#  published            :date
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
+#  id              :integer          not null, primary key
+#  canonical_title :string           default("en_jp"), not null
+#  length          :integer
+#  number          :integer          not null
+#  published       :date
+#  synopsis        :text
+#  titles          :hstore           default({}), not null
+#  volume          :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  manga_id        :integer          indexed
+#
+# Indexes
+#
+#  index_chapters_on_manga_id  (manga_id)
 #
 
 class Chapter < ActiveRecord::Base
