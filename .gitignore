@@ -1,0 +1,10 @@
+*.rbc
+/log
+/tmp
+/public/system
+/coverage/
+/spec/tmp
+
+## Environment normalization:
+/.bundle
+/vendor/bundle
