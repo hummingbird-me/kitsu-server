@@ -5,8 +5,6 @@ class DeleteLegacyTables < ActiveRecord::Migration
     drop_table :apps
 
     # Move to archive server, no longer used
-    drop_table :stories
-    drop_table :substories
     drop_table :forem_categories
     drop_table :forem_forums
     drop_table :forem_groups

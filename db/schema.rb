@@ -565,6 +565,26 @@ ActiveRecord::Schema.define(version: 20160705041049) do
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
+  create_table "stories", force: :cascade do |t|
+    t.integer  "user_id"
+    t.hstore   "data"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.string   "story_type",       limit: 255
+    t.integer  "target_id"
+    t.string   "target_type",      limit: 255
+    t.integer  "library_entry_id"
+    t.boolean  "adult",                        default: false
+    t.integer  "total_votes",                  default: 0,     null: false
+    t.integer  "group_id"
+    t.datetime "deleted_at"
+  end
+
+  add_index "stories", ["created_at"], name: "index_stories_on_created_at", using: :btree
+  add_index "stories", ["deleted_at"], name: "index_stories_on_deleted_at", using: :btree
+  add_index "stories", ["group_id"], name: "index_stories_on_group_id", using: :btree
+  add_index "stories", ["user_id"], name: "index_stories_on_user_id", using: :btree
+
   create_table "streamers", force: :cascade do |t|
     t.string   "site_name",         limit: 255, null: false
     t.string   "logo_file_name"
@@ -584,6 +604,24 @@ ActiveRecord::Schema.define(version: 20160705041049) do
 
   add_index "streaming_links", ["media_type", "media_id"], name: "index_streaming_links_on_media_type_and_media_id", using: :btree
   add_index "streaming_links", ["streamer_id"], name: "index_streaming_links_on_streamer_id", using: :btree
+
+  create_table "substories", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "story_id"
+    t.integer  "target_id"
+    t.string   "target_type",   limit: 255
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.hstore   "data"
+    t.integer  "substory_type",             default: 0, null: false
+    t.datetime "deleted_at"
+  end
+
+  add_index "substories", ["created_at"], name: "index_substories_on_created_at", using: :btree
+  add_index "substories", ["deleted_at"], name: "index_substories_on_deleted_at", using: :btree
+  add_index "substories", ["story_id"], name: "index_substories_on_story_id", using: :btree
+  add_index "substories", ["target_id"], name: "index_substories_on_target_id", using: :btree
+  add_index "substories", ["user_id"], name: "index_substories_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255, default: "",          null: false
