@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160705041049) do
+ActiveRecord::Schema.define(version: 20161003165019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,15 @@ ActiveRecord::Schema.define(version: 20160705041049) do
 
   add_index "characters", ["mal_id"], name: "character_mal_id", unique: true, using: :btree
   add_index "characters", ["mal_id"], name: "index_characters_on_mal_id", unique: true, using: :btree
+
+  create_table "comments", force: :cascade do |t|
+    t.integer  "post_id",        null: false
+    t.integer  "user_id",        null: false
+    t.text     "text",           null: false
+    t.text     "text_formatted", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
 
   create_table "dramas", force: :cascade do |t|
     t.string   "slug",                                        null: false
@@ -484,6 +493,29 @@ ActiveRecord::Schema.define(version: 20160705041049) do
   add_index "people", ["mal_id"], name: "index_people_on_mal_id", unique: true, using: :btree
   add_index "people", ["mal_id"], name: "person_mal_id", unique: true, using: :btree
 
+  create_table "post_likes", force: :cascade do |t|
+    t.integer  "post_id",    null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.integer  "user_id",                           null: false
+    t.integer  "target_id"
+    t.text     "text",                              null: false
+    t.text     "text_formatted",                    null: false
+    t.integer  "media_id"
+    t.string   "media_type"
+    t.boolean  "spoiler",           default: false, null: false
+    t.boolean  "nsfw",              default: false, null: false
+    t.boolean  "blocked",           default: false, null: false
+    t.integer  "spoiled_unit_id"
+    t.string   "spoiled_unit_type"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
   create_table "pro_membership_plans", force: :cascade do |t|
     t.string   "name",                       null: false
     t.integer  "amount",                     null: false
@@ -740,5 +772,11 @@ ActiveRecord::Schema.define(version: 20160705041049) do
   add_index "votes", ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true, using: :btree
   add_index "votes", ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type", using: :btree
 
+  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users"
+  add_foreign_key "post_likes", "posts"
+  add_foreign_key "post_likes", "users"
+  add_foreign_key "posts", "users"
+  add_foreign_key "posts", "users", column: "target_id"
   add_foreign_key "streaming_links", "streamers"
 end
