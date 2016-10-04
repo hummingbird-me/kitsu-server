@@ -4,8 +4,8 @@
 #
 #  id                :integer          not null, primary key
 #  blocked           :boolean          default(FALSE), not null
-#  content           :text             not null
-#  content_formatted :text             not null
+#  content           :content             not null
+#  content_formatted :content             not null
 #  deleted_at        :datetime
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
@@ -22,9 +22,9 @@ class Comment < ActiveRecord::Base
   belongs_to :user, required: true
   belongs_to :post, required: true
 
-  validates :text, :text_formatted, presence: true
+  validates :content, :content_formatted, presence: true
 
   before_validation do
-    self.text_formatted = text
+    self.content_formatted = content
   end
 end

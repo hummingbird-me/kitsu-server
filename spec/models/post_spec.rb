@@ -32,8 +32,8 @@ RSpec.describe Post, type: :model do
 
   it { should belong_to(:user) }
   it { should validate_presence_of(:user) }
-  it { should belong_to(:target).class_name('User') }
-  it { should validate_presence_of(:text) }
+  it { should belong_to(:target_user).class_name('User') }
+  it { should validate_presence_of(:content) }
   it { should belong_to(:media) }
   it { should belong_to(:spoiled_unit) }
 
@@ -44,8 +44,8 @@ RSpec.describe Post, type: :model do
     it { should_not allow_value(false).for(:spoiler) }
   end
 
-  context 'without text' do
-    subject { build(:post, text: '') }
-    it { should validate_presence_of(:text_formatted) }
+  context 'without content' do
+    subject { build(:post, content: '') }
+    it { should validate_presence_of(:content_formatted) }
   end
 end
