@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161003165019) do
+ActiveRecord::Schema.define(version: 20161003225612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,12 +122,14 @@ ActiveRecord::Schema.define(version: 20161003165019) do
   add_index "characters", ["mal_id"], name: "index_characters_on_mal_id", unique: true, using: :btree
 
   create_table "comments", force: :cascade do |t|
-    t.integer  "post_id",        null: false
-    t.integer  "user_id",        null: false
-    t.text     "text",           null: false
-    t.text     "text_formatted", null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.integer  "post_id",                           null: false
+    t.integer  "user_id",                           null: false
+    t.text     "content",                           null: false
+    t.text     "content_formatted",                 null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.datetime "deleted_at"
+    t.boolean  "blocked",           default: false, null: false
   end
 
   create_table "dramas", force: :cascade do |t|
@@ -502,9 +504,9 @@ ActiveRecord::Schema.define(version: 20161003165019) do
 
   create_table "posts", force: :cascade do |t|
     t.integer  "user_id",                           null: false
-    t.integer  "target_id"
-    t.text     "text",                              null: false
-    t.text     "text_formatted",                    null: false
+    t.integer  "target_user_id"
+    t.text     "content",                           null: false
+    t.text     "content_formatted",                 null: false
     t.integer  "media_id"
     t.string   "media_type"
     t.boolean  "spoiler",           default: false, null: false
@@ -514,6 +516,8 @@ ActiveRecord::Schema.define(version: 20161003165019) do
     t.string   "spoiled_unit_type"
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
+    t.datetime "deleted_at"
+    t.integer  "target_group_id"
   end
 
   create_table "pro_membership_plans", force: :cascade do |t|
@@ -777,6 +781,6 @@ ActiveRecord::Schema.define(version: 20161003165019) do
   add_foreign_key "post_likes", "posts"
   add_foreign_key "post_likes", "users"
   add_foreign_key "posts", "users"
-  add_foreign_key "posts", "users", column: "target_id"
+  add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "streaming_links", "streamers"
 end
