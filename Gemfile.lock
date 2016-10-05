@@ -151,6 +151,9 @@ GEM
     hiredis (0.6.1)
     hitimes (1.2.4)
     htmlentities (4.3.4)
+    http_signatures (0.2.2)
+    httparty (0.14.0)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     ice_cube (0.11.1)
     image_optim (0.22.1)
@@ -353,6 +356,14 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.9)
+    stream-ruby (2.2.5)
+      http_signatures (~> 0)
+      httparty (~> 0)
+    stream_rails (2.4.0)
+      actionpack (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      railties (>= 3.0.0)
+      stream-ruby (~> 2.2.5)
     thor (0.19.1)
     thread_safe (0.3.5)
     timecop (0.8.1)
@@ -427,10 +438,14 @@ DEPENDENCIES
   simplecov
   spring
   stackprof
+  stream_rails
   timecop
   twemoji!
   typhoeus
   webmock
+
+RUBY VERSION
+   ruby 2.3.1p112
 
 BUNDLED WITH
    1.12.5

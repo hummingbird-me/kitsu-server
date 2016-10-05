@@ -47,6 +47,7 @@ gem 'jsonapi-resources', '~> 0.7.0' # JSON-API resources
 gem 'acts_as_list' # Sortables!
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'counter_culture' # Fancier counter caches
+gem 'stream_rails' # Feeds
 
 # Rack Middleware
 gem 'rack-cors'
