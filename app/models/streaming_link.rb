@@ -22,7 +22,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class StreamingLink < ActiveRecord::Base
+class StreamingLink < ApplicationRecord
   belongs_to :media, polymorphic: true, touch: true
   belongs_to :streamer
 

@@ -12,7 +12,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Streamer < ActiveRecord::Base
+class Streamer < ApplicationRecord
   has_attached_file :logo
 
   validates :site_name, presence: true

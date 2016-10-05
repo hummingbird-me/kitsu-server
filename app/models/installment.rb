@@ -16,7 +16,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Installment < ActiveRecord::Base
+class Installment < ApplicationRecord
   acts_as_list
 
   validates :tag, length: { maximum: 40 }

@@ -15,7 +15,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Mapping < ActiveRecord::Base
+class Mapping < ApplicationRecord
   belongs_to :media, polymorphic: true, required: true
 
   validates :external_site, :external_id, presence: true

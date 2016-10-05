@@ -12,7 +12,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Genre < ActiveRecord::Base
+class Genre < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: %i[slugged finders history]
   resourcify

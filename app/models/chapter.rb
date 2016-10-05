@@ -19,7 +19,7 @@
 #  index_chapters_on_manga_id  (manga_id)
 #
 
-class Chapter < ActiveRecord::Base
+class Chapter < ApplicationRecord
   belongs_to :manga
 
   validates :manga, presence: true

@@ -26,7 +26,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class LibraryEntry < ActiveRecord::Base
+class LibraryEntry < ApplicationRecord
   # TODO: apply this globally so that we can easily update it to add the
   # totally definitely happening 1000-point scale.  Or just because it's good
   # practice.

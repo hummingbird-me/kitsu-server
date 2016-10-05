@@ -11,7 +11,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Franchise < ActiveRecord::Base
+class Franchise < ApplicationRecord
   include Titleable
 
   has_many :installments, dependent: :destroy

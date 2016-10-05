@@ -20,7 +20,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Person < ActiveRecord::Base
+class Person < ApplicationRecord
   has_attached_file :image
 
   has_many :castings, dependent: :destroy

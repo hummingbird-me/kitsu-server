@@ -33,7 +33,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Manga < ActiveRecord::Base
+class Manga < ApplicationRecord
   include Media
 
   enum manga_type: %i[manga novel manhua oneshot doujin]

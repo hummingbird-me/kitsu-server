@@ -18,7 +18,7 @@
 #  fk_rails_2fd19c0db7  (post_id => posts.id)
 #
 
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :post, required: true
 

@@ -40,7 +40,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Drama < ActiveRecord::Base
+class Drama < ApplicationRecord
   include Media
   include AgeRatings
   include Episodic

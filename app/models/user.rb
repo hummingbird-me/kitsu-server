@@ -75,7 +75,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   PAST_NAMES_LIMIT = 10
 
   devise :database_authenticatable, :registerable, :recoverable,

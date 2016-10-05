@@ -24,7 +24,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Casting < ActiveRecord::Base
+class Casting < ApplicationRecord
   belongs_to :media, polymorphic: true, touch: true
   belongs_to :character, touch: true
   belongs_to :person, touch: true

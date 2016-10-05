@@ -24,7 +24,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Character < ActiveRecord::Base
+class Character < ApplicationRecord
   extend FriendlyId
   friendly_id :slug_candidates, use: %i[slugged finders history]
 

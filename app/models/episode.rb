@@ -26,7 +26,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Episode < ActiveRecord::Base
+class Episode < ApplicationRecord
   include Titleable
 
   belongs_to :media, polymorphic: true, touch: true

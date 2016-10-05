@@ -22,7 +22,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class ListImport < ActiveRecord::Base
+class ListImport < ApplicationRecord
   belongs_to :user, required: true, touch: true
 
   enum strategy: %i[greater obliterate]

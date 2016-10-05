@@ -42,7 +42,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Anime < ActiveRecord::Base
+class Anime < ApplicationRecord
   SEASONS = %w[winter spring summer fall].freeze
 
   include Media

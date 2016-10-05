@@ -25,7 +25,7 @@
 #  fk_rails_6fac2de613  (target_user_id => users.id)
 #
 
-class Post < ActiveRecord::Base
+class Post < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :target_user, class_name: 'User'
   belongs_to :media, polymorphic: true
