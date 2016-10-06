@@ -38,6 +38,24 @@ class Post < ApplicationRecord
     message: 'must be true if spoiled_unit is provided'
   }, if: :spoiled_unit
 
+  def media_feed
+    Feed.media(media_type, media_id) if media.present?
+  end
+
+  def user_feed
+    Feed.user(user.id)
+  end
+
+  def target_user_feed
+    Feed.user(target_user.id) if target_user.present?
+  end
+
+  after_save do
+    user_feed.activities.new(
+      to: [media_feed, target_user_feed].compact
+    ).save
+  end
+
   before_validation do
     self.content_formatted = content
   end
