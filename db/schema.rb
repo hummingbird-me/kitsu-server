@@ -136,6 +136,16 @@ ActiveRecord::Schema.define(version: 20170615000439) do
   add_index "blocks", ["blocked_id"], name: "index_blocks_on_blocked_id", using: :btree
   add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
 
+  create_table "bestowments", force: :cascade do |t|
+    t.string   "badge_id",                null: false
+    t.integer  "user_id",                 null: false
+    t.integer  "progress",    default: 0, null: false
+    t.integer  "rank",        default: 0
+    t.datetime "bestowed_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "castings", force: :cascade do |t|
     t.integer  "media_id",                                 null: false
     t.integer  "person_id"
@@ -1476,6 +1486,7 @@ ActiveRecord::Schema.define(version: 20170615000439) do
   add_foreign_key "reviews", "library_entries"
   add_foreign_key "site_announcements", "users"
   add_foreign_key "stats", "users"
+  add_foreign_key "bestowments", "users"
   add_foreign_key "streaming_links", "streamers"
   add_foreign_key "users", "posts", column: "pinned_post_id"
 end
