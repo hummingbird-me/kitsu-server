@@ -48,4 +48,16 @@ RSpec.describe Post, type: :model do
     subject { build(:post, content: '') }
     it { should validate_presence_of(:content_formatted) }
   end
+
+  context 'with a media' do
+    let(:media) { create(:anime) }
+    subject { create(:post, media: media) }
+    it 'should create an activity' do
+      expect {
+        subject.save!
+      }.to change {
+        Feed.media(subject.media_type, media.id).activities.to_a.size
+      }.by(1)
+    end
+  end
 end

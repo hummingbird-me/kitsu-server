@@ -38,7 +38,7 @@ class Feed
     alias_method :<<, :add_activity
 
     def to_a
-      feed.stream_feed.get(data)
+      feed.stream_feed.get(data)['results']
     end
   end
 end
