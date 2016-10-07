@@ -19,7 +19,6 @@ class Feed
     end
 
     def save
-      return unless StreamRails.enabled?
       feed.activities << self
     end
 
