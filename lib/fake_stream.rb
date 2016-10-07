@@ -26,8 +26,12 @@ class FakeStream
       Object.const_set(:Stream, FakeStream)
     end
 
+    def fake?
+      StreamRails == FakeStream::Rails && Stream == FakeStream
+    end
+
     def feed_for(group, id)
-      feeds[group][:data][id]
+      feeds[group.downcase][:data][id]
     end
 
     def activities_for(group, id)

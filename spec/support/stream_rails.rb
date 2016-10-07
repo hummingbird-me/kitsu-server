@@ -1,4 +1,4 @@
-FakeStream.fake!
+FakeStream.fake! unless ENV['STREAM_API_KEY'].present?
 FakeStream.configure do
   feed :user, :flat
   feed :user_aggr, :aggregated

@@ -6,7 +6,7 @@
 #   timeline/2 (aggregated) - Follows user feeds for whoever we follow
 #   notifications/2 (notifications) - Gets CC'd notifications for the user
 
-unless Rails.env.test?
+unless FakeStream.fake?
   StreamRails.configure do |config|
     config.api_key = ENV['STREAM_API_KEY']
     config.api_secret = ENV['STREAM_API_SECRET']

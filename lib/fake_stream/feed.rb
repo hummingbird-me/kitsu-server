@@ -10,6 +10,10 @@ class FakeStream
       @fake_activities = fake_feed[:activities]
     end
 
+    def get(query)
+      { duration: '20ms', results: fake_activities }
+    end
+
     def add_activity(activity)
       fake_activities << activity
       activity.merge(duration: '35ms', id: SecureRandom.uuid).stringify_keys
