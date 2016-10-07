@@ -23,6 +23,8 @@
 # rubocop:enable Metrics/LineLength
 
 class ListImport < ApplicationRecord
+  include Enumerable
+
   belongs_to :user, required: true, touch: true
 
   enum strategy: %i[greater obliterate]
@@ -40,35 +42,39 @@ class ListImport < ApplicationRecord
 
     yield({ status: :running, total: count, current: 0 })
     LibraryEntry.transaction do
-      each.with_index do |media, data, index|
+      each_with_index do |(media, data), index|
         entry = LibraryEntry.where(user: user, media: media).first_or_create
-        merged_entry(entry, data, strategy).save!
+        merged_entry(entry, data).save!
         yield({ status: :running, total: count, current: index + 1 })
       end
     end
     yield({ status: :completed, total: count, current: count })
-  rescue StandardError
-    yield({ status: :error, total: count })
-    raise
+  rescue StandardError => e
+    yield({
+      status: :error,
+      total: count,
+      error_message: e.message,
+      error_trace: e.backtrace.join("\n")
+    })
   end
 
   # Apply the ListImport while updating the model db every [frequency] times
   def apply!(frequency: 20)
-    apply(user) do |info|
+    apply do |info|
       # Apply every [frequency] updates unless the status is not :running
       if info[:status] != :running || info[:current] % frequency == 0
         update info
-        yield info
+        yield info if block_given?
       end
     end
   end
 
-  def merged_entry(entry, data, strategy)
-    case strategy
+  def merged_entry(entry, data)
+    case strategy.to_sym
     when :greater
       # Compare the [completions, progress] tuples and pick the greater
-      theirs = data.values_at(:completions, :progress)
-      ours = [entry.reconsume_count, entry.progress]
+      theirs = [data[:completions] || 0, data[:progress] || 0]
+      ours = [entry.reconsume_count || 0, entry.progress || 0]
 
       # -1 if ours, 1 if theirs
       entry.assign_attributes(data) if (theirs <=> ours).positive?
