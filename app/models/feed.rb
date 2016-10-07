@@ -16,7 +16,7 @@ class Feed
   end
 
   %i[user media timeline notifications].each do |feed|
-    define_singleton_method(feed) { |*args| new(feed, args.join(':')) }
+    define_singleton_method(feed) { |*args| new(feed, args.join('-')) }
   end
 
   private
