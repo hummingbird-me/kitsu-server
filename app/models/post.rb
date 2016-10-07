@@ -52,6 +52,9 @@ class Post < ApplicationRecord
 
   after_save do
     user_feed.activities.new(
+      actor: user,
+      object: self,
+      verb: 'post',
       to: [media_feed, target_user_feed].compact
     ).save
   end
