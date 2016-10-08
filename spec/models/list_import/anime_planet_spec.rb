@@ -25,28 +25,29 @@
 require 'rails_helper'
 
 RSpec.describe ListImport::AnimePlanet do
-  subject { described_class.new }
+  subject { described_class.new('toyhammered/anime') }
 
   before do
     host = described_class::ANIME_PLANET_HOST
-    extensions = '?mylist_view=list&page=1&per_page=480&sort=title'
+    20.times do |page|
+      extensions = "?mylist_view=list&per_page=480&sort=title&page=#{page + 1}"
 
-    stub_request(:get, "#{host}toyhammered/anime#{extensions}")
-      .to_return(body: fixture('list_import/anime_planet/toy-anime.html'))
-    stub_request(:get, "#{host}toyhammered/manga#{extensions}")
-      .to_return(body: fixture('list_import/anime_planet/toy-manga.html'))
+      stub_request(:get, "#{host}toyhammered/anime#{extensions}")
+        .to_return(body: fixture('list_import/anime_planet/toy-anime.html'))
+      stub_request(:get, "#{host}toyhammered/manga#{extensions}")
+        .to_return(body: fixture('list_import/anime_planet/toy-manga.html'))
+    end
   end
 
   context 'with a list' do
-
     describe '#count' do
       it 'should return the total number of entries' do
-        expect(subject.count('toyhammered/anime')).to eq(575)
+        expect(subject.count).to eq(575)
       end
     end
 
     describe '#each' do
-      it 'should yield at least 100 times' do
+      it 'should yield atleast 100 times' do
         expect { |b|
           subject.each(&b)
         }.to yield_control.at_least(100)
@@ -56,18 +57,13 @@ RSpec.describe ListImport::AnimePlanet do
     describe 'getting a url' do
       it 'should issue a request to the server' do
         host = described_class::ANIME_PLANET_HOST
-        extensions = '?mylist_view=list&page=1&per_page=480&sort=title'
+        extensions = '?mylist_view=list&per_page=480&sort=title&page=1'
 
         stub_request(:get, "#{host}toyhammered/anime#{extensions}").to_return(body: 'Sexypants')
 
-        expect(subject.get('toyhammered/anime').body).to eq('Sexypants')
+        expect(subject.get('toyhammered/anime').text).to eq('Sexypants')
       end
 
-      context 'which returns an error' do
-        it 'should output a message and never call the block' do
-
-        end
-      end
     end
   end
 end

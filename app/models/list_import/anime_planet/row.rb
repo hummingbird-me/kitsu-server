@@ -2,16 +2,24 @@ class ListImport
   class AnimePlanet
     class Row
 
-      attr_reader :page
+      attr_reader :node
 
-      def initialize(page)
-        @page = page
+      def initialize(node)
+        @node = node
       end
 
-      def total_pages
-        page.css('.pagination li').map(&:content).map(&:to_i).max
+      def media_info
+        {
+          title: node.at_css('.tableTitle').text
+        }
       end
 
+
+      def data
+      %i[media_info ].map do |k|
+        [k, send(k)]
+      end.to_h
+    end
 
     end
   end

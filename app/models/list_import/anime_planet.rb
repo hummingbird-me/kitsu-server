@@ -26,22 +26,35 @@ class ListImport
   class AnimePlanet < ListImport
     ANIME_PLANET_HOST = 'http://www.anime-planet.com/users/'.freeze
 
-    def count(external_id)
+    attr_reader :external_id
+
+    def initialize(external_id)
+      @external_id = external_id
+    end
+
+    def count
       get(external_id).css('.pagination + p').children.first.text.to_i
     end
 
-    def each(external_id)
-      get()
-        row = Row.new(media)
-        yield row.media, row.data
+    def each
+      amount = get(external_id).css('.pagination li')
+                  .map(&:content).map(&:to_i).max
+
+      amount.times do |page|
+        get(external_id, page + 1).css('table.personalList tr:nth-child(n+2)').each do |line|
+          row = Row.new(line)
+          # yield row.media, row.data
+          yield row.data
+        end
+      end
     end
 
     # private
 
-    def get(url, opts = {})
+    def get(url, page = 1, opts = {})
       Nokogiri::HTML(
         Typhoeus::Request.get(
-            "#{build_url(url)}",
+            "#{build_url(url, page)}",
             {
               cookiefile: "/tmp/anime-planet-cookies",
               cookiejar: "/tmp/anime-planet-cookies",
@@ -51,7 +64,7 @@ class ListImport
       )
     end
 
-    def build_url(path, page = 1)
+    def build_url(path, page)
       # toyhammered/anime
       extensions = "?sort=title&mylist_view=list&per_page=480&page=#{page}"
       "#{ANIME_PLANET_HOST}#{path}#{extensions}"
