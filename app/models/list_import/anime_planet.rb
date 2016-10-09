@@ -26,32 +26,34 @@ class ListImport
   class AnimePlanet < ListImport
     ANIME_PLANET_HOST = 'http://www.anime-planet.com/users/'.freeze
 
-    attr_reader :external_id
+    attr_reader :username
 
-    def initialize(external_id)
-      @external_id = external_id
+    def initialize(username)
+      @username = username
     end
 
     def count
-      get(external_id).css('.pagination + p').children.first.text.to_i
+      # can I just loop twice for anime/manga?
+      # get(username).css('.pagination + p').children.first.text.to_i
     end
 
     def each
-      amount = get(external_id).css('.pagination li')
-                  .map(&:content).map(&:to_i).max
+      %w[anime manga].each do |type|
+        amount = get("#{username}/#{type}").css('.pagination li').map(&:content).map(&:to_i).max
 
-      amount.times do |page|
-        get(external_id, page + 1).css('table.personalList tr:nth-child(n+2)').each do |line|
-          row = Row.new(line)
-          # yield row.media, row.data
-          yield row.data
+        amount.times do |page|
+          get("#{username}/#{type}", page + 1).css('table.personalList tr:nth-child(n+2)').each do |line|
+            row = Row.new(line, type)
+            # yield row.media, row.data
+            yield row.data
+          end
         end
       end
     end
 
     # private
 
-    def get(url, page = 1, opts = {})
+    def get(url, page = 1, view = 'list', opts = {})
       Nokogiri::HTML(
         Typhoeus::Request.get(
             "#{build_url(url, page)}",
@@ -66,7 +68,7 @@ class ListImport
 
     def build_url(path, page)
       # toyhammered/anime
-      extensions = "?sort=title&mylist_view=list&per_page=480&page=#{page}"
+      extensions = "?mylist_view=list&per_page=480&sort=title&page=#{page}"
       "#{ANIME_PLANET_HOST}#{path}#{extensions}"
     end
 

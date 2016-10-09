@@ -25,7 +25,7 @@
 require 'rails_helper'
 
 RSpec.describe ListImport::AnimePlanet do
-  subject { described_class.new('toyhammered/anime') }
+  subject { described_class.new('toyhammered') }
 
   before do
     host = described_class::ANIME_PLANET_HOST
