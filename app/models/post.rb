@@ -4,11 +4,13 @@
 #
 #  id                :integer          not null, primary key
 #  blocked           :boolean          default(FALSE), not null
+#  comments_count    :integer          default(0), not null
 #  content           :text             not null
 #  content_formatted :text             not null
 #  deleted_at        :datetime
 #  media_type        :string
 #  nsfw              :boolean          default(FALSE), not null
+#  post_likes_count  :integer          default(0), not null
 #  spoiled_unit_type :string
 #  spoiler           :boolean          default(FALSE), not null
 #  created_at        :datetime         not null
@@ -30,6 +32,8 @@ class Post < ApplicationRecord
   belongs_to :target_user, class_name: 'User'
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
+  has_many :post_likes, counter_cache: true
+  has_many :comments, counter_cache: true
 
   validates :content, :content_formatted, presence: true
   validates :media, presence: true, if: :spoiled_unit

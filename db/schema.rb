@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161003225612) do
+ActiveRecord::Schema.define(version: 20161010200413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -518,6 +518,8 @@ ActiveRecord::Schema.define(version: 20161003225612) do
     t.datetime "updated_at",                        null: false
     t.datetime "deleted_at"
     t.integer  "target_group_id"
+    t.integer  "post_likes_count",  default: 0,     null: false
+    t.integer  "comments_count",    default: 0,     null: false
   end
 
   create_table "pro_membership_plans", force: :cascade do |t|

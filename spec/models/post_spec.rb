@@ -4,11 +4,13 @@
 #
 #  id                :integer          not null, primary key
 #  blocked           :boolean          default(FALSE), not null
+#  comments_count    :integer          default(0), not null
 #  content           :text             not null
 #  content_formatted :text             not null
 #  deleted_at        :datetime
 #  media_type        :string
 #  nsfw              :boolean          default(FALSE), not null
+#  post_likes_count  :integer          default(0), not null
 #  spoiled_unit_type :string
 #  spoiler           :boolean          default(FALSE), not null
 #  created_at        :datetime         not null
