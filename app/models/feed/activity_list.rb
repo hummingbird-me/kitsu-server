@@ -32,10 +32,18 @@ class Feed
       Feed::Activity.new(feed, data)
     end
 
-    def add_activity(activity)
+    def add(activity)
       feed.stream_feed.add_activity(activity.as_json)
     end
-    alias_method :<<, :add_activity
+    alias_method :<<, :add
+
+    def update(activity)
+      feed.stream_feed.update_activity(activity.as_json)
+    end
+
+    def destroy(activity)
+      feed.stream_feed.remove_activity(activity)
+    end
 
     def to_a
       feed.stream_feed.get(data)['results']

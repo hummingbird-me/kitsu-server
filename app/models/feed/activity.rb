@@ -18,8 +18,16 @@ class Feed
       json.compact
     end
 
-    def save
-      feed.activities << self
+    def create
+      feed.activities.add(self)
+    end
+
+    def update
+      feed.activities.update(self)
+    end
+
+    def destroy
+      feed.activities.destroy(self)
     end
 
     private
