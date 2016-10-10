@@ -34,8 +34,8 @@ class Post < ApplicationRecord
   belongs_to :target_user, class_name: 'User'
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
-  has_many :post_likes, counter_cache: true
-  has_many :comments, counter_cache: true
+  has_many :post_likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
 
   validates :content, :content_formatted, presence: true
   validates :media, presence: true, if: :spoiled_unit
