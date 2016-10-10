@@ -46,4 +46,8 @@ module Media
   def run_length
     (end_date || Date.today) - start_date if start_date
   end
+
+  def feed
+    Feed.media(self.class.name, id)
+  end
 end

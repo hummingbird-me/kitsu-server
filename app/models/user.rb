@@ -118,6 +118,10 @@ class User < ApplicationRecord
     past_names.first
   end
 
+  def feed
+    Feed.user(id)
+  end
+
   before_update do
     if name_changed?
       # Push it onto the front and limit
