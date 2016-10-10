@@ -33,19 +33,20 @@ class ListImport
     end
 
     def count
-      # can I just loop twice for anime/manga?
-      # get(username).css('.pagination + p').children.first.text.to_i
+      %w[anime manga].map { |type|
+        get("#{username}/#{type}").css('.pagination + p').children.first.text.to_i
+      }.inject(&:+)
     end
 
     def each
       %w[anime manga].each do |type|
-        amount = get("#{username}/#{type}").css('.pagination li').map(&:content).map(&:to_i).max
+        amount = get("#{username}/#{type}").css('.pagination li')&.map(&:content)&.map(&:to_i)&.max
+        amount ||= 1
 
         amount.times do |page|
-          get("#{username}/#{type}", page + 1).css('table.personalList tr:nth-child(n+2)').each do |line|
+          get("#{username}/#{type}", page + 1).css('.personalList tr:nth-child(n+2)').each do |line|
             row = Row.new(line, type)
-            # yield row.media, row.data
-            yield row.data
+            yield row.media, row.data
           end
         end
       end
@@ -53,7 +54,7 @@ class ListImport
 
     # private
 
-    def get(url, page = 1, view = 'list', opts = {})
+    def get(url, page = 1, opts = {})
       Nokogiri::HTML(
         Typhoeus::Request.get(
             "#{build_url(url, page)}",

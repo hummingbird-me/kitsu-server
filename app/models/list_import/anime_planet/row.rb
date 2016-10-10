@@ -43,10 +43,6 @@ class ListImport
         node.at_css(anime, manga)&.text&.to_i
       end
 
-      def volumes
-        node.at_css('.tableVols')&.text&.to_i
-      end
-
       def rating
         node.at_css('.tableRating .starrating div').attr('name').to_f
       end
@@ -55,8 +51,12 @@ class ListImport
         node.at_css('.tableTimesWatched')&.text&.tr('x','')&.to_i
       end
 
+      def volumes
+        node.at_css('.tableVols')&.text&.to_i
+      end
+
       def data
-        %i[].map do |k|
+        %i[status progress rating reconsume_count volumes].map do |k|
           [k, send(k)]
         end.to_h
       end

@@ -11,6 +11,10 @@ RSpec.describe ListImport::AnimePlanet::Row do
       Nokogiri::HTML(anime).css('table.personalList tr')[1],
       'anime'
     )}
+    describe '#media' do
+      # will figure out how to test.
+    end
+
     describe '#media_info' do
       it 'should return the id' do
         expect(subject.media_info[:id]).to eq(2353)

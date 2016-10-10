@@ -29,7 +29,7 @@ RSpec.describe ListImport::AnimePlanet do
 
   before do
     host = described_class::ANIME_PLANET_HOST
-    20.times do |page|
+    2.times do |page|
       extensions = "?mylist_view=list&per_page=480&sort=title&page=#{page + 1}"
 
       stub_request(:get, "#{host}toyhammered/anime#{extensions}")
@@ -42,7 +42,7 @@ RSpec.describe ListImport::AnimePlanet do
   context 'with a list' do
     describe '#count' do
       it 'should return the total number of entries' do
-        expect(subject.count).to eq(575)
+        expect(subject.count).to eq(676)
       end
     end
 
