@@ -25,11 +25,9 @@
 require 'rails_helper'
 
 RSpec.describe ListImport::AnimePlanet do
-  subject { described_class.new('toyhammered') }
-
   before do
     host = described_class::ANIME_PLANET_HOST
-    extensions = "?mylist_view=list&per_page=480&sort=title&page="
+    extensions = '?mylist_view=list&per_page=480&sort=title&page='
 
     # Page 1 Toy
     stub_request(:get, "#{host}toyhammered/anime#{extensions}1")
@@ -48,7 +46,20 @@ RSpec.describe ListImport::AnimePlanet do
       .to_return(body: fixture('list_import/anime_planet/sierra-manga.html'))
   end
 
+  it { should validate_presence_of(:input_text) }
+  it { should validate_length_of(:input_text)
+    .is_at_least(3)
+    .is_at_most(20)
+  }
+
   context 'with a list' do
+    subject do
+      ListImport::AnimePlanet.create(
+        input_text: 'toyhammered',
+        user: build(:user)
+      )
+    end
+
     describe '#count' do
       it 'should return the total number of entries' do
         expect(subject.count).to eq(676)
@@ -57,7 +68,10 @@ RSpec.describe ListImport::AnimePlanet do
 
     describe '#each' do
       it 'should yield exactly 47 times' do
-        subject = described_class.new('sierrawithas')
+        subject = ListImport::AnimePlanet.create(
+          input_text: 'sierrawithas',
+          user: build(:user)
+        )
         expect { |b|
           subject.each(&b)
         }.to yield_control.exactly(47)
@@ -69,11 +83,11 @@ RSpec.describe ListImport::AnimePlanet do
         host = described_class::ANIME_PLANET_HOST
         extensions = '?mylist_view=list&per_page=480&sort=title&page=1'
 
-        stub_request(:get, "#{host}toyhammered/anime#{extensions}").to_return(body: 'Sexypants')
+        stub_request(:get, "#{host}toyhammered/anime#{extensions}")
+          .to_return(body: 'Sexypants')
 
         expect(subject.get('toyhammered/anime').text).to eq('Sexypants')
       end
-
     end
   end
 end

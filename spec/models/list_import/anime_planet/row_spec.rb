@@ -4,13 +4,14 @@ RSpec.describe ListImport::AnimePlanet::Row do
   let(:anime) { fixture('list_import/anime_planet/toy-anime.html') }
   let(:manga) { fixture('list_import/anime_planet/toy-manga.html') }
 
-
-
   context 'Anime' do
-    subject { described_class.new(
-      Nokogiri::HTML(anime).css('table.personalList tr')[1],
-      'anime'
-    )}
+    subject do
+      described_class.new(
+        Nokogiri::HTML(anime).css('table.personalList tr')[1],
+        'anime'
+      )
+    end
+
     describe '#media' do
       # will figure out how to test.
     end
@@ -27,14 +28,8 @@ RSpec.describe ListImport::AnimePlanet::Row do
         expect(subject.media_info[:show_type]).to eq('TV')
       end
 
-      context 'total episodes' do
-        it 'should return an integer' do
-          expect(subject.media_info[:episode_count]).to eq(25)
-        end
-
-        it 'should return 0 if no episodes present' do
-          pending "No example found yet"
-        end
+      it 'should return total episodes' do
+        expect(subject.media_info[:episode_count]).to eq(25)
       end
 
       it 'should not return total amount of chapters' do
@@ -45,42 +40,60 @@ RSpec.describe ListImport::AnimePlanet::Row do
     describe '#status' do
       context 'of "Watched"' do
         it 'should return :completed' do
-          subject = described_class.new(Nokogiri::HTML(anime).css('table.personalList tr')[1], 'anime')
+          subject = described_class.new(
+            Nokogiri::HTML(anime).css('table.personalList tr')[1],
+            'anime'
+          )
 
           expect(subject.status).to eq(:completed)
         end
       end
       context 'of "Watching"' do
         it 'should return :current' do
-          subject = described_class.new(Nokogiri::HTML(anime).css('table.personalList tr')[2], 'anime')
+          subject = described_class.new(
+            Nokogiri::HTML(anime).css('table.personalList tr')[2],
+            'anime'
+          )
 
           expect(subject.status).to eq(:current)
         end
       end
       context 'of "Want to Watch"' do
         it 'should return :planned' do
-          subject = described_class.new(Nokogiri::HTML(anime).css('table.personalList tr')[3], 'anime')
+          subject = described_class.new(
+            Nokogiri::HTML(anime).css('table.personalList tr')[3],
+            'anime'
+          )
 
           expect(subject.status).to eq(:planned)
         end
       end
       context 'of "Stalled"' do
         it 'should return :on_hold' do
-          subject = described_class.new(Nokogiri::HTML(anime).css('table.personalList tr')[4], 'anime')
+          subject = described_class.new(
+            Nokogiri::HTML(anime).css('table.personalList tr')[4],
+            'anime'
+          )
 
           expect(subject.status).to eq(:on_hold)
         end
       end
       context 'of "Dropped"' do
         it 'should return :dropped' do
-          subject = described_class.new(Nokogiri::HTML(anime).css('table.personalList tr')[5], 'anime')
+          subject = described_class.new(
+            Nokogiri::HTML(anime).css('table.personalList tr')[5],
+            'anime'
+          )
 
           expect(subject.status).to eq(:dropped)
         end
       end
       context 'of "Wont Watch"' do
         it 'should be ignored' do
-          subject = described_class.new(Nokogiri::HTML(anime).css('table.personalList tr')[6], 'anime')
+          subject = described_class.new(
+            Nokogiri::HTML(anime).css('table.personalList tr')[6],
+            'anime'
+          )
 
           expect(subject.status).to eq(nil)
         end
@@ -112,14 +125,14 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
   end
 
-
-
-
   context 'Manga' do
-    subject { described_class.new(
-      Nokogiri::HTML(manga).css('table.personalList tr')[1],
-      'manga'
-    )}
+    subject do
+      described_class.new(
+        Nokogiri::HTML(manga).css('table.personalList tr')[1],
+        'manga'
+      )
+    end
+
     describe '#media_info' do
       it 'should return the id' do
         expect(subject.media_info[:id]).to eq(1854)
@@ -142,7 +155,10 @@ RSpec.describe ListImport::AnimePlanet::Row do
         end
 
         it 'should return 0 if no chapters present' do
-          subject = described_class.new(Nokogiri::HTML(manga).css('table.personalList tr').last, 'manga')
+          subject = described_class.new(
+            Nokogiri::HTML(manga).css('table.personalList tr').last,
+            'manga'
+          )
 
           expect(subject.media_info[:chapter_count]).to eq(0)
         end
@@ -152,42 +168,60 @@ RSpec.describe ListImport::AnimePlanet::Row do
     describe '#status' do
       context 'of "Read"' do
         it 'should return :completed' do
-          subject = described_class.new(Nokogiri::HTML(manga).css('table.personalList tr')[4], 'manga')
+          subject = described_class.new(
+            Nokogiri::HTML(manga).css('table.personalList tr')[4],
+            'manga'
+          )
 
           expect(subject.status).to eq(:completed)
         end
       end
       context 'of "Reading"' do
         it 'should return :current' do
-          subject = described_class.new(Nokogiri::HTML(manga).css('table.personalList tr')[1], 'manga')
+          subject = described_class.new(
+            Nokogiri::HTML(manga).css('table.personalList tr')[1],
+            'manga'
+          )
 
           expect(subject.status).to eq(:current)
         end
       end
       context 'of "Want to Read"' do
         it 'should return :planned' do
-          subject = described_class.new(Nokogiri::HTML(manga).css('table.personalList tr')[2], 'manga')
+          subject = described_class.new(
+            Nokogiri::HTML(manga).css('table.personalList tr')[2],
+            'manga'
+          )
 
           expect(subject.status).to eq(:planned)
         end
       end
       context 'of "Stalled"' do
         it 'should return :on_hold' do
-          subject = described_class.new(Nokogiri::HTML(manga).css('table.personalList tr')[3], 'manga')
+          subject = described_class.new(
+            Nokogiri::HTML(manga).css('table.personalList tr')[3],
+            'manga'
+          )
 
           expect(subject.status).to eq(:on_hold)
         end
       end
       context 'of "Dropped"' do
         it 'should return :dropped' do
-          subject = described_class.new(Nokogiri::HTML(manga).css('table.personalList tr')[5], 'manga')
+          subject = described_class.new(
+            Nokogiri::HTML(manga).css('table.personalList tr')[5],
+            'manga'
+          )
 
           expect(subject.status).to eq(:dropped)
         end
       end
       context 'of "Wont Read"' do
         it 'should be ignored' do
-          subject = described_class.new(Nokogiri::HTML(manga).css('table.personalList tr')[6], 'manga')
+          subject = described_class.new(
+            Nokogiri::HTML(manga).css('table.personalList tr')[6],
+            'manga'
+          )
 
           expect(subject.status).to eq(nil)
         end
@@ -218,8 +252,4 @@ RSpec.describe ListImport::AnimePlanet::Row do
       end
     end
   end
-
-
-
-
 end

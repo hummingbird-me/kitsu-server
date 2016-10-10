@@ -1,7 +1,6 @@
 class ListImport
   class AnimePlanet
     class Row
-
       attr_reader :node, :type
 
       def initialize(node, type)
@@ -13,7 +12,7 @@ class ListImport
         key = "#{type}/#{media_info[:id]}"
 
         Mapping.lookup('animeplanet', key) ||
-        Mapping.guess(type.classify.safe_constantize, media_info)
+          Mapping.guess(type.classify.safe_constantize, media_info)
       end
 
       def media_info
@@ -48,7 +47,7 @@ class ListImport
       end
 
       def reconsume_count
-        node.at_css('.tableTimesWatched')&.text&.tr('x','')&.to_i
+        node.at_css('.tableTimesWatched')&.text&.tr('x', '')&.to_i
       end
 
       def volumes
@@ -56,9 +55,9 @@ class ListImport
       end
 
       def data
-        %i[status progress rating reconsume_count volumes].map do |k|
+        %i[status progress rating reconsume_count volumes].map { |k|
           [k, send(k)]
-        end.to_h
+        }.to_h
       end
 
       private
@@ -86,7 +85,6 @@ class ListImport
 
         chapters&.split('Ch:')&.last&.tr('+', '')&.to_i
       end
-
     end
   end
 end

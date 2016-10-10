@@ -26,25 +26,30 @@ class ListImport
   class AnimePlanet < ListImport
     ANIME_PLANET_HOST = 'http://www.anime-planet.com/users/'.freeze
 
-    attr_reader :username
-
-    def initialize(username)
-      @username = username
-    end
+    # accepts a username as input
+    validates :input_text, length: {
+      minimum: 3,
+      maximum: 20
+    }, presence: true
+    # does not accept file uploads
 
     def count
       %w[anime manga].map { |type|
-        get("#{username}/#{type}").css('.pagination + p').children.first.text.to_i
+        get("#{input_text}/#{type}").css('.pagination + p')
+                                    .children.first.text.to_i
       }.inject(&:+)
     end
 
     def each
       %w[anime manga].each do |type|
-        amount = get("#{username}/#{type}").css('.pagination li')&.map(&:content)&.map(&:to_i)&.max
+        amount = get("#{input_text}/#{type}").css('.pagination li')
+          &.map(&:content)
+          &.map(&:to_i)
+          &.max
         amount ||= 1
 
-        amount.times do |page|
-          get("#{username}/#{type}", page + 1).css('.personalList tr:nth-child(n+2)').each do |line|
+        1.upto(amount) do |page|
+          get("#{input_text}/#{type}", page).css('.personalList tr:nth-child(n+2)').each do |line|
             row = Row.new(line, type)
             yield row.media, row.data
           end
@@ -57,10 +62,10 @@ class ListImport
     def get(url, page = 1, opts = {})
       Nokogiri::HTML(
         Typhoeus::Request.get(
-            "#{build_url(url, page)}",
+          build_url(url, page),
             {
-              cookiefile: "/tmp/anime-planet-cookies",
-              cookiejar: "/tmp/anime-planet-cookies",
+              cookiefile: '/tmp/anime-planet-cookies',
+              cookiejar: '/tmp/anime-planet-cookies',
               followlocation: true
             }.merge(opts)
         ).body
@@ -72,6 +77,5 @@ class ListImport
       extensions = "?mylist_view=list&per_page=480&sort=title&page=#{page}"
       "#{ANIME_PLANET_HOST}#{path}#{extensions}"
     end
-
   end
 end
