@@ -28,6 +28,8 @@
 #
 
 class Post < ApplicationRecord
+  include WithActivity
+
   belongs_to :user, required: true
   belongs_to :target_user, class_name: 'User'
   belongs_to :media, polymorphic: true
@@ -42,25 +44,13 @@ class Post < ApplicationRecord
     message: 'must be true if spoiled_unit is provided'
   }, if: :spoiled_unit
 
-  def media_feed
-    Feed.media(media_type, media_id) if media.present?
-  end
-
-  def user_feed
-    Feed.user(user.id)
-  end
-
-  def target_user_feed
-    Feed.user(target_user.id) if target_user.present?
-  end
-
-  after_save do
-    user_feed.activities.new(
-      actor: user,
-      object: self,
-      verb: 'post',
-      to: [media_feed, target_user_feed].compact
-    ).save
+  def stream_activity
+    user.feed.activities.new(
+      updated_at: updated_at,
+      post_likes_count: post_likes_count,
+      comments_count: comments_count,
+      to: [media&.feed, target_user&.feed].compact
+    )
   end
 
   before_validation do
