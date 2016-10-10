@@ -29,14 +29,23 @@ RSpec.describe ListImport::AnimePlanet do
 
   before do
     host = described_class::ANIME_PLANET_HOST
-    2.times do |page|
-      extensions = "?mylist_view=list&per_page=480&sort=title&page=#{page + 1}"
+    extensions = "?mylist_view=list&per_page=480&sort=title&page="
 
-      stub_request(:get, "#{host}toyhammered/anime#{extensions}")
-        .to_return(body: fixture('list_import/anime_planet/toy-anime.html'))
-      stub_request(:get, "#{host}toyhammered/manga#{extensions}")
-        .to_return(body: fixture('list_import/anime_planet/toy-manga.html'))
-    end
+    # Page 1 Toy
+    stub_request(:get, "#{host}toyhammered/anime#{extensions}1")
+      .to_return(body: fixture('list_import/anime_planet/toy-anime.html'))
+    stub_request(:get, "#{host}toyhammered/manga#{extensions}1")
+      .to_return(body: fixture('list_import/anime_planet/toy-manga.html'))
+
+    # Page 2 Toy
+    stub_request(:get, "#{host}toyhammered/anime#{extensions}2")
+      .to_return(body: fixture('list_import/anime_planet/toy-anime.html'))
+
+    # Page 1 Sierra
+    stub_request(:get, "#{host}sierrawithas/anime#{extensions}1")
+      .to_return(body: fixture('list_import/anime_planet/sierra-anime.html'))
+    stub_request(:get, "#{host}sierrawithas/manga#{extensions}1")
+      .to_return(body: fixture('list_import/anime_planet/sierra-manga.html'))
   end
 
   context 'with a list' do
@@ -47,10 +56,11 @@ RSpec.describe ListImport::AnimePlanet do
     end
 
     describe '#each' do
-      it 'should yield atleast 100 times' do
+      it 'should yield exactly 47 times' do
+        subject = described_class.new('sierrawithas')
         expect { |b|
           subject.each(&b)
-        }.to yield_control.at_least(100)
+        }.to yield_control.exactly(47)
       end
     end
 
