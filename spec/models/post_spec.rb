@@ -55,13 +55,11 @@ RSpec.describe Post, type: :model do
 
   context 'with a media' do
     let(:media) { create(:anime) }
-    subject { create(:post, media: media) }
-    it 'should create an activity' do
-      expect {
-        subject.save!
-      }.to change {
-        Feed.media(subject.media_type, media.id).activities.to_a.size
-      }.by(1)
+    subject { build(:post, media: media) }
+    let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
+
+    it 'should have an activity with media feed in "to" list' do
+      expect(activity[:to]).to include(media.feed.stream_id)
     end
   end
 end
