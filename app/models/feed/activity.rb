@@ -1,7 +1,7 @@
 class Feed
   class Activity
     attr_accessor :data, :feed
-    %i[actor subject target foreign_id verb to time].each do |key|
+    %i[actor object target foreign_id verb to time].each do |key|
       define_method("#{key}=") { |value| data[key] = value }
       define_method(key) { data[key] }
     end
