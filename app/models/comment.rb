@@ -4,8 +4,8 @@
 #
 #  id                :integer          not null, primary key
 #  blocked           :boolean          default(FALSE), not null
-#  content           :content             not null
-#  content_formatted :content             not null
+#  content           :text             not null
+#  content_formatted :text             not null
 #  deleted_at        :datetime
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
