@@ -18,15 +18,15 @@ class ListImport
       def media_info
         {
           id: node.attr('data-id')&.to_i,
-          title: media_title(tooltip),
-          show_type: show_type(tooltip),
-          episode_count: total_episodes(tooltip),
-          chapter_count: total_chapters(tooltip)
+          title: media_title,
+          show_type: show_type,
+          episode_count: total_episodes,
+          chapter_count: total_chapters
         }.compact
       end
 
       def status
-        @status ||= media_status(tooltip)
+        @status ||= media_status
 
         case @status
         when /ing\z/ then :current
@@ -46,7 +46,7 @@ class ListImport
             media_info[:chapter_count]
           end
         else
-          media_progress(tooltip)
+          media_progress
         end
       end
 
@@ -65,9 +65,9 @@ class ListImport
         return unless type == 'manga'
 
         if status == :completed
-          total_volumes(tooltip)
+          total_volumes
         else
-          read_volumes(tooltip)
+          read_volumes
         end
       end
 
@@ -86,31 +86,31 @@ class ListImport
       end
 
       # Media Info
-      def media_title(fragment)
-        fragment.at_css('h5')&.text
+      def media_title
+        tooltip.at_css('h5')&.text
       end
 
-      def show_type(fragment)
+      def show_type
         return if type == 'manga'
 
-        episodes = fragment.at_css('.entryBar .type').text
+        episodes = tooltip.at_css('.entryBar .type').text
 
         episodes.split(' (').first.strip
       end
 
-      def total_episodes(fragment)
+      def total_episodes
         return if type == 'manga'
 
-        episodes = fragment.at_css('.entryBar .type').text
+        episodes = tooltip.at_css('.entryBar .type').text
 
         episodes.match(/\d+/)[0].to_i
         # episodes&.split(' (')&.last&.gsub(/(ep?s)+/, '')&.to_i
       end
 
-      def total_chapters(fragment)
+      def total_chapters
         return if type == 'anime'
 
-        chapters = fragment.at_css('.entryBar .iconVol').text
+        chapters = tooltip.at_css('.entryBar .iconVol').text
 
         chapters.match(/Ch:(\s\d+)/)[1].to_i
       rescue NameError
@@ -118,15 +118,15 @@ class ListImport
         0
       end
 
-      def total_volumes(fragment)
-        total = fragment.at_css('.entryBar .iconVol').text
+      def total_volumes
+        total = tooltip.at_css('.entryBar .iconVol').text
 
         total.match(/Vol:(\s\d+)/)[1].to_i
       end
 
       # Status
-      def media_status(fragment)
-        status = fragment.at_css('.myListBar').xpath('./text()').to_s.strip
+      def media_status
+        status = tooltip.at_css('.myListBar').xpath('./text()').to_s.strip
 
         return status unless status.include?('-')
 
@@ -134,8 +134,8 @@ class ListImport
       end
 
       # Progress
-      def media_progress(fragment)
-        amount = fragment.at_css('.myListBar').xpath('./text()').to_s.strip
+      def media_progress
+        amount = tooltip.at_css('.myListBar').xpath('./text()').to_s.strip
 
         return 0 if amount.exclude?('-') || amount.include?('vols')
 
@@ -147,8 +147,8 @@ class ListImport
       end
 
       # Volumes
-      def read_volumes(fragment)
-        amount = fragment.at_css('.myListBar').xpath('./text()').to_s.strip
+      def read_volumes
+        amount = tooltip.at_css('.myListBar').xpath('./text()').to_s.strip
 
         return 0 if amount.exclude?('-') || amount.include?('chs')
 

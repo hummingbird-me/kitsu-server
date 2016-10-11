@@ -58,7 +58,7 @@ class ListImport
       end
     end
 
-    # private
+    private
 
     def get(url, page = 1, opts = {})
       url = build_url(url, page)

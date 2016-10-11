@@ -77,17 +77,5 @@ RSpec.describe ListImport::AnimePlanet do
         }.to yield_control.exactly(47)
       end
     end
-
-    describe 'getting a url' do
-      it 'should issue a request to the server' do
-        host = described_class::ANIME_PLANET_HOST
-        extensions = '?mylist_view=grid&per_page=480&sort=title&page=1'
-
-        stub_request(:get, "#{host}toyhammered/anime#{extensions}")
-          .to_return(body: 'Sexypants')
-
-        expect(subject.get('toyhammered/anime').text).to eq('Sexypants')
-      end
-    end
   end
 end
