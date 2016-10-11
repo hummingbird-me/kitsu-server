@@ -134,14 +134,10 @@ class ListImport
       def extract_volumes(fragment)
         amount = fragment.at_css('.myListBar')&.content
 
-        if type === 'anime'
+        if amount&.include?('vols')
+          amount = amount&.split('-')&.last&.split(' ')&.first&.strip
+        else
           amount = 0
-        else # manga
-          if amount&.include?('vols')
-            amount = amount&.split('-')&.last&.split(' ')&.first&.strip
-          else
-            amount = 0
-          end
         end
 
         amount&.to_i
