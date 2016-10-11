@@ -35,4 +35,77 @@ RSpec.describe Feed::ActivityList, type: :model do
       expect(subject.data[:limit]).to eq(10)
     end
   end
+
+  describe '#limit' do
+    subject { list.limit(20) }
+    it 'should set the limit in the query' do
+      expect(subject.data[:limit]).to eq(20)
+    end
+    it 'should not mutate the original instance' do
+      expect(list.data[:limit]).to be_nil
+    end
+  end
+
+  describe '#offset' do
+    subject { list.offset(20) }
+    it 'should set the offset in the query' do
+      expect(subject.data[:offset]).to eq(20)
+    end
+    it 'should not mutate the original instance' do
+      expect(list.data[:offset]).to be_nil
+    end
+  end
+
+  describe '#ranking' do
+    subject { list.ranking('cool_ranking') }
+    it 'should set the ranking in the query' do
+      expect(subject.data[:ranking]).to eq('cool_ranking')
+    end
+    it 'should not mutate the original instance' do
+      expect(list.data[:ranking]).to be_nil
+    end
+  end
+
+  describe '#new' do
+    it 'should return an Activity with the feed preloaded' do
+      expect(subject.new).to be_a(Feed::Activity)
+    end
+  end
+
+  describe '#add' do
+    let(:activity) { Feed::Activity.new(subject) }
+    it 'should tell Stream to add the activity by JSON' do
+      expect(subject.feed.stream_feed).to receive(:add_activity).with(Hash).once
+      subject.add(activity)
+    end
+  end
+
+  describe '#update' do
+    let(:activity) { Feed::Activity.new(subject) }
+    before { activity }
+    it 'should tell Stream to update the activity by JSON' do
+      client = double('Stream::Client')
+      allow(Feed).to receive(:client).and_return(client)
+      expect(client).to receive(:update_activity).with(Hash).once
+      subject.update(activity)
+    end
+  end
+
+  describe '#destroy' do
+    let(:activity) { Feed::Activity.new(subject, foreign_id: 'id') }
+    it 'should tell Stream to remove the activity by ID' do
+      expect(subject.feed.stream_feed).to receive(:remove_activity)
+        .with('id', foreign_id: true).once
+      subject.destroy(activity)
+    end
+  end
+
+  describe '#to_a' do
+    subject { list.limit(50) }
+    it 'should get the activities using the query and read the results' do
+      expect(subject.feed.stream_feed).to receive(:get).with(limit: 50)
+        .and_return({'results' => 'hi'})
+      expect(subject.to_a).to eq('hi')
+    end
+  end
 end

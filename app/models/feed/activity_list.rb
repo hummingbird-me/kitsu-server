@@ -52,11 +52,11 @@ class Feed
     alias_method :<<, :add
 
     def update(activity)
-      feed.stream_feed.update_activity(activity.as_json)
+      Feed.client.update_activity(activity.as_json)
     end
 
     def destroy(activity)
-      feed.stream_feed.remove_activity(activity)
+      feed.stream_feed.remove_activity(activity.foreign_id, foreign_id: true)
     end
 
     def to_a
