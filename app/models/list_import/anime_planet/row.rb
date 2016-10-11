@@ -18,20 +18,20 @@ class ListImport
       def media_info
         {
           id: node.attr('data-id')&.to_i,
-          title: extract_title(tooltip),
-          show_type: extract_show_type(tooltip),
-          episode_count: extract_total_episodes(tooltip),
-          chapter_count: extract_total_chapters(tooltip)
+          title: media_title(tooltip),
+          show_type: show_type(tooltip),
+          episode_count: total_episodes(tooltip),
+          chapter_count: total_chapters(tooltip)
         }.compact
       end
 
       def status
-        @status ||= extract_status(tooltip)
+        @status ||= media_status(tooltip)
 
         case @status
         when /ing\z/ then :current
         when /\AWant/ then :planned
-        when %r{Won't} then nil
+        when /\AWon't/ then nil
         when 'Stalled' then :on_hold
         when 'Dropped' then :dropped
         when 'Watched', /Read([0-9.]+)?/ then :completed
@@ -39,29 +39,36 @@ class ListImport
       end
 
       def progress
-        if status == (:completed || :planned || nil)
+        if status == :completed
           if type == 'anime'
-            amount = media_info[:episode_count]
-          else # manga
-            amount = media_info[:chapter_count]
+            media_info[:episode_count]
+          else
+            media_info[:chapter_count]
           end
         else
-          extract_progress(tooltip)
+          media_progress(tooltip)
         end
       end
 
       def rating
-        extract_rating(tooltip)
+        tooltip.css('.ttRating')&.last&.text&.to_f
       end
 
       def reconsume_count
-        if (status == :completed && type == 'anime')
-          extract_reconsume_count(tooltip)
-        end
+        return unless type == 'anime' && status == :completed
+
+        amount = tooltip.at_css('.myListBar')&.content
+        amount&.split('-')&.last&.split('x')&.first&.to_i
       end
 
       def volumes
-        extract_volumes(tooltip) if type == 'manga'
+        return unless type == 'manga'
+
+        if status == :completed
+          total_volumes(tooltip)
+        else
+          read_volumes(tooltip)
+        end
       end
 
       def data
@@ -79,75 +86,73 @@ class ListImport
       end
 
       # Media Info
-      def extract_title(fragment)
+      def media_title(fragment)
         fragment.at_css('h5')&.text
       end
 
-      def extract_show_type(fragment)
-        show_type = episodes = fragment.at_css('.entryBar .type')&.text
+      def show_type(fragment)
+        return if type == 'manga'
 
-        episodes&.split(' (')&.first&.strip
+        episodes = fragment.at_css('.entryBar .type').text
+
+        episodes&.split(' (').first.strip
       end
 
-      def extract_total_episodes(fragment)
-        episodes = fragment.at_css('.entryBar .type')&.text
+      def total_episodes(fragment)
+        return if type == 'manga'
 
-        episodes&.split(' (')&.last&.gsub(/(ep?s)+/, '')&.to_i
+        episodes = fragment.at_css('.entryBar .type').text
+
+        episodes.match(/\d+/)[0].to_i
+        # episodes&.split(' (')&.last&.gsub(/(ep?s)+/, '')&.to_i
       end
 
-      def extract_total_chapters(fragment)
-        chapters = fragment.at_css('.entryBar .iconVol')&.text
+      def total_chapters(fragment)
+        return if type == 'anime'
 
-        chapters&.split('Ch:')&.last&.tr('+', '')&.to_i
+        chapters = fragment.at_css('.entryBar .iconVol').text
+
+        chapters.match(/Ch:(\s\d+)/)[1].to_i
+      rescue NameError
+        # regex returned nil
+        0
+      end
+
+      def total_volumes(fragment)
+        total = fragment.at_css('.entryBar .iconVol').text
+
+        total.match(/Vol:(\s\d+)/)[1].to_i
       end
 
       # Status
-      def extract_status(fragment)
-        show_type = fragment.at_css('.myListBar')&.content
+      def media_status(fragment)
+        status = fragment.at_css('.myListBar').xpath('./text()').to_s.strip
 
-        show_type&.split(':')&.last&.split('-')&.first&.strip
-      end
+        return status unless status.include?('-')
 
-      # Rating
-      def extract_rating(fragment)
-        fragment.css('.ttRating')&.last&.text&.to_f
+        status.split('-').first.strip
       end
 
       # Progress
-      def extract_progress(fragment)
-        amount = fragment.at_css('.myListBar')&.content
+      def media_progress(fragment)
+        amount = fragment.at_css('.myListBar').xpath('./text()').to_s.strip
 
-        if type === 'anime'
-          amount = amount&.split('-')&.last&.split('/')&.first&.strip
-        else # manga
-          if amount&.include?('chs')
-            amount = amount&.split('-')&.last&.split(' ')&.first&.strip
-          else
-            amount = 0
-          end
+        return 0 if amount.exclude?('-') || amount.include?('vols')
+
+        if type == 'anime'
+          amount.split('-').last.split('/').first.to_i
+        else
+          amount.split('-').last.split(' ').first.to_i
         end
-
-        amount&.to_i
       end
 
       # Volumes
-      def extract_volumes(fragment)
-        amount = fragment.at_css('.myListBar')&.content
+      def read_volumes(fragment)
+        amount = fragment.at_css('.myListBar').xpath('./text()').to_s.strip
 
-        if amount&.include?('vols')
-          amount = amount&.split('-')&.last&.split(' ')&.first&.strip
-        else
-          amount = 0
-        end
+        return 0 if amount.exclude?('-') || amount.include?('chs')
 
-        amount&.to_i
-      end
-
-      # Reconsume Count
-      def extract_reconsume_count(fragment)
-        amount = fragment.at_css('.myListBar')&.content
-
-        amount&.split('-')&.last&.split('x')&.first&.to_i
+        amount.split('-').last.split(' ').first.to_i
       end
     end
   end

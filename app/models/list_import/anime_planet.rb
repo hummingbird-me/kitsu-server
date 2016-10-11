@@ -32,6 +32,7 @@ class ListImport
       maximum: 20
     }, presence: true
     # does not accept file uploads
+    validates :input_file, absence: true
 
     def count
       %w[anime manga].map { |type|

@@ -110,6 +110,15 @@ RSpec.describe ListImport::AnimePlanet::Row do
           expect(subject.progress).to eq(1)
         end
       end
+      context 'Want to Watch' do
+        it 'should always return 0 episodes' do
+          subject = described_class.new(
+            Nokogiri::HTML(anime).css('.cardDeck .card')[2],
+            'anime'
+          )
+          expect(subject.progress).to eq(0)
+        end
+      end
     end
 
     describe '#volumes' do
@@ -259,8 +268,20 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#volumes' do
-      it 'should return number of volumes read' do
-        expect(subject.volumes).to eq(11)
+      context 'Read' do
+        it 'should return all volumes' do
+          subject = described_class.new(
+            Nokogiri::HTML(manga).css('.cardDeck .card')[3],
+            'manga'
+          )
+
+          expect(subject.volumes).to eq(37)
+        end
+      end
+      context 'Reading' do
+        it 'should return number of volumes read' do
+          expect(subject.volumes).to eq(11)
+        end
       end
     end
 
