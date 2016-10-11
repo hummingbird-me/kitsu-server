@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe AttachmentFormatter do
-  subject { AttachmentFormatter }
+RSpec.describe AttachmentValueFormatter do
+  subject { AttachmentValueFormatter }
 
   context '.format' do
     context 'without attachment' do
