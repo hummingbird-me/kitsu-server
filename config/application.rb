@@ -52,5 +52,10 @@ module Hummingbird
                       max_age: 1.hour
       end
     end
+
+    # Fancy new URLs for images
+    config.paperclip_defaults = {
+      url: '/system/:class/:attachment/:id/:style.:content_type_extension'
+    }
   end
 end
