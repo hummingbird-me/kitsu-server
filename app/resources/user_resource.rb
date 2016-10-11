@@ -1,11 +1,10 @@
 class UserResource < BaseResource
   PRIVATE_FIELDS = %i[email password].freeze
 
-  attributes :name, :past_names, :avatar, :cover_image, :about, :bio,
-    :about_formatted, :location, :website, :waifu_or_husbando, :rating_system,
-    :to_follow, :followers_count, :following_count, :onboarded,
-    :life_spent_on_anime
-
+  attributes :name, :past_names, :about, :bio, :about_formatted, :location,
+    :website, :waifu_or_husbando, :rating_system, :to_follow, :followers_count,
+    :following_count, :onboarded, :life_spent_on_anime
+  attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }

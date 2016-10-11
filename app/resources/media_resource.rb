@@ -20,14 +20,16 @@ class MediaResource < BaseResource
   }.freeze
 
   attributes :slug, :synopsis,
-    # Images
-    :poster_image, :cover_image, :cover_image_top_offset,
+    # Cover image location
+    :cover_image_top_offset,
     # Titles
     :titles, :canonical_title, :abbreviated_titles,
     # Ratings
     :average_rating, :rating_frequencies,
     # Dates
     :start_date, :end_date
+  # Images
+  attributes :poster_image, :cover_image, format: :attachment
 
   has_many :genres
   has_many :castings
