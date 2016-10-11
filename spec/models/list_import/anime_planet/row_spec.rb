@@ -13,7 +13,25 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#media' do
-      # will figure out how to test.
+      it 'should work for lookup' do
+        expect(Mapping).to receive(:lookup).with('animeplanet', 'anime/2353')
+          .and_return('hello')
+
+        subject.media
+      end
+
+      it 'should work for guess' do
+        allow(Mapping).to receive(:lookup).and_return(nil)
+
+        expect(Mapping).to receive(:guess).with(Anime, {
+          id: 2353,
+          title: '07-Ghost',
+          show_type: 'TV',
+          episode_count: 25
+        }).and_return('hello')
+
+        subject.media
+      end
     end
 
     describe '#media_info' do
@@ -146,6 +164,27 @@ RSpec.describe ListImport::AnimePlanet::Row do
         Nokogiri::HTML(manga).css('.cardDeck .card').first,
         'manga'
       )
+    end
+
+    describe '#media' do
+      it 'should work for lookup' do
+        expect(Mapping).to receive(:lookup).with('animeplanet', 'manga/1854')
+          .and_return('hello')
+
+        subject.media
+      end
+
+      it 'should work for guess' do
+        allow(Mapping).to receive(:lookup).and_return(nil)
+
+        expect(Mapping).to receive(:guess).with(Manga, {
+          id: 1854,
+          title: '1/2 Prince',
+          chapter_count: 76
+        }).and_return('hello')
+
+        subject.media
+      end
     end
 
     describe '#media_info' do

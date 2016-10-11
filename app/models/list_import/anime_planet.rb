@@ -52,8 +52,7 @@ class ListImport
         1.upto(amount) do |page|
           get("#{input_text}/#{type}", page).css('.cardDeck .card').each do |card|
             row = Row.new(card, type)
-            # yield row.media, row.data
-            yield row.media
+            yield row.media, row.data
           end
         end
       end
@@ -62,16 +61,14 @@ class ListImport
     # private
 
     def get(url, page = 1, opts = {})
-      Nokogiri::HTML(
-        Typhoeus::Request.get(
-          build_url(url, page),
-            {
-              cookiefile: '/tmp/anime-planet-cookies',
-              cookiejar: '/tmp/anime-planet-cookies',
-              followlocation: true
-            }.merge(opts)
-        ).body
-      )
+      url = build_url(url, page)
+      request = Typhoeus::Request.get(url, {
+        cookiefile: '/tmp/anime-planet-cookies',
+        cookiejar: '/tmp/anime-planet-cookies',
+        followlocation: true
+      }.merge(opts))
+      html = Nokogiri::HTML(request.body)
+      html
     end
 
     def build_url(path, page)

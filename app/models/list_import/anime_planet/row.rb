@@ -95,7 +95,7 @@ class ListImport
 
         episodes = fragment.at_css('.entryBar .type').text
 
-        episodes&.split(' (').first.strip
+        episodes.split(' (').first.strip
       end
 
       def total_episodes(fragment)
