@@ -27,7 +27,7 @@ require 'rails_helper'
 RSpec.describe ListImport::AnimePlanet do
   before do
     host = described_class::ANIME_PLANET_HOST
-    extensions = '?mylist_view=list&per_page=480&sort=title&page='
+    extensions = '?mylist_view=grid&per_page=480&sort=title&page='
 
     # Page 1 Toy
     stub_request(:get, "#{host}toyhammered/anime#{extensions}1")
@@ -81,7 +81,7 @@ RSpec.describe ListImport::AnimePlanet do
     describe 'getting a url' do
       it 'should issue a request to the server' do
         host = described_class::ANIME_PLANET_HOST
-        extensions = '?mylist_view=list&per_page=480&sort=title&page=1'
+        extensions = '?mylist_view=grid&per_page=480&sort=title&page=1'
 
         stub_request(:get, "#{host}toyhammered/anime#{extensions}")
           .to_return(body: 'Sexypants')

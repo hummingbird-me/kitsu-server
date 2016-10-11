@@ -49,9 +49,10 @@ class ListImport
         amount ||= 1
 
         1.upto(amount) do |page|
-          get("#{input_text}/#{type}", page).css('.personalList tr:nth-child(n+2)').each do |line|
-            row = Row.new(line, type)
-            yield row.media, row.data
+          get("#{input_text}/#{type}", page).css('.cardDeck .card').each do |card|
+            row = Row.new(card, type)
+            # yield row.media, row.data
+            yield row.media
           end
         end
       end
@@ -74,7 +75,7 @@ class ListImport
 
     def build_url(path, page)
       # toyhammered/anime
-      extensions = "?mylist_view=list&per_page=480&sort=title&page=#{page}"
+      extensions = "?mylist_view=grid&per_page=480&sort=title&page=#{page}"
       "#{ANIME_PLANET_HOST}#{path}#{extensions}"
     end
   end

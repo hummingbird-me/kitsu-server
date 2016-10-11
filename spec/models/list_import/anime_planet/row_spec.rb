@@ -7,7 +7,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
   context 'Anime' do
     subject do
       described_class.new(
-        Nokogiri::HTML(anime).css('table.personalList tr')[1],
+        Nokogiri::HTML(anime).css('.cardDeck .card').first,
         'anime'
       )
     end
@@ -40,18 +40,13 @@ RSpec.describe ListImport::AnimePlanet::Row do
     describe '#status' do
       context 'of "Watched"' do
         it 'should return :completed' do
-          subject = described_class.new(
-            Nokogiri::HTML(anime).css('table.personalList tr')[1],
-            'anime'
-          )
-
           expect(subject.status).to eq(:completed)
         end
       end
       context 'of "Watching"' do
         it 'should return :current' do
           subject = described_class.new(
-            Nokogiri::HTML(anime).css('table.personalList tr')[2],
+            Nokogiri::HTML(anime).css('.cardDeck .card')[1],
             'anime'
           )
 
@@ -61,7 +56,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
       context 'of "Want to Watch"' do
         it 'should return :planned' do
           subject = described_class.new(
-            Nokogiri::HTML(anime).css('table.personalList tr')[3],
+            Nokogiri::HTML(anime).css('.cardDeck .card')[2],
             'anime'
           )
 
@@ -71,7 +66,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
       context 'of "Stalled"' do
         it 'should return :on_hold' do
           subject = described_class.new(
-            Nokogiri::HTML(anime).css('table.personalList tr')[4],
+            Nokogiri::HTML(anime).css('.cardDeck .card')[3],
             'anime'
           )
 
@@ -81,7 +76,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
       context 'of "Dropped"' do
         it 'should return :dropped' do
           subject = described_class.new(
-            Nokogiri::HTML(anime).css('table.personalList tr')[5],
+            Nokogiri::HTML(anime).css('.cardDeck .card')[4],
             'anime'
           )
 
@@ -91,7 +86,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
       context 'of "Wont Watch"' do
         it 'should be ignored' do
           subject = described_class.new(
-            Nokogiri::HTML(anime).css('table.personalList tr')[6],
+            Nokogiri::HTML(anime).css('.cardDeck .card')[5],
             'anime'
           )
 
@@ -101,8 +96,19 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#progress' do
-      it 'should return the number of episodes watched' do
-        expect(subject.progress).to eq(25)
+      context 'Watched' do
+        it 'should return total episodes' do
+          expect(subject.progress).to eq(25)
+        end
+      end
+      context 'Watching' do
+        it 'should return episodes watched' do
+          subject = described_class.new(
+            Nokogiri::HTML(anime).css('.cardDeck .card')[1],
+            'anime'
+          )
+          expect(subject.progress).to eq(1)
+        end
       end
     end
 
@@ -119,7 +125,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#reconsume_count' do
-      it 'shoult return amount of times watched' do
+      it 'should return amount of times watched' do
         expect(subject.reconsume_count).to eq(1)
       end
     end
@@ -128,7 +134,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
   context 'Manga' do
     subject do
       described_class.new(
-        Nokogiri::HTML(manga).css('table.personalList tr')[1],
+        Nokogiri::HTML(manga).css('.cardDeck .card').first,
         'manga'
       )
     end
@@ -156,7 +162,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
 
         it 'should return 0 if no chapters present' do
           subject = described_class.new(
-            Nokogiri::HTML(manga).css('table.personalList tr').last,
+            Nokogiri::HTML(manga).css('.cardDeck .card').last,
             'manga'
           )
 
@@ -169,7 +175,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
       context 'of "Read"' do
         it 'should return :completed' do
           subject = described_class.new(
-            Nokogiri::HTML(manga).css('table.personalList tr')[4],
+            Nokogiri::HTML(manga).css('.cardDeck .card')[3],
             'manga'
           )
 
@@ -178,18 +184,13 @@ RSpec.describe ListImport::AnimePlanet::Row do
       end
       context 'of "Reading"' do
         it 'should return :current' do
-          subject = described_class.new(
-            Nokogiri::HTML(manga).css('table.personalList tr')[1],
-            'manga'
-          )
-
           expect(subject.status).to eq(:current)
         end
       end
       context 'of "Want to Read"' do
         it 'should return :planned' do
           subject = described_class.new(
-            Nokogiri::HTML(manga).css('table.personalList tr')[2],
+            Nokogiri::HTML(manga).css('.cardDeck .card')[1],
             'manga'
           )
 
@@ -199,7 +200,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
       context 'of "Stalled"' do
         it 'should return :on_hold' do
           subject = described_class.new(
-            Nokogiri::HTML(manga).css('table.personalList tr')[3],
+            Nokogiri::HTML(manga).css('.cardDeck .card')[2],
             'manga'
           )
 
@@ -209,7 +210,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
       context 'of "Dropped"' do
         it 'should return :dropped' do
           subject = described_class.new(
-            Nokogiri::HTML(manga).css('table.personalList tr')[5],
+            Nokogiri::HTML(manga).css('.cardDeck .card')[4],
             'manga'
           )
 
@@ -219,7 +220,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
       context 'of "Wont Read"' do
         it 'should be ignored' do
           subject = described_class.new(
-            Nokogiri::HTML(manga).css('table.personalList tr')[6],
+            Nokogiri::HTML(manga).css('.cardDeck .card')[5],
             'manga'
           )
 
@@ -229,8 +230,31 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#progress' do
-      it 'should return the number of chapters read' do
-        expect(subject.progress).to eq(0)
+      context 'Stored as Volumes' do
+        it 'should always return 0' do
+          expect(subject.progress).to eq(0)
+        end
+      end
+      context 'Stored as Chapters' do
+        context 'Read' do
+          it 'should return all chapters' do
+            subject = described_class.new(
+              Nokogiri::HTML(manga).css('.cardDeck .card')[3],
+              'manga'
+            )
+            expect(subject.progress).to eq(357)
+          end
+        end
+
+        context 'Reading' do
+          it 'should return chapters read' do
+            subject = described_class.new(
+              Nokogiri::HTML(manga).css('.cardDeck .card')[2],
+              'manga'
+            )
+            expect(subject.progress).to eq(13)
+          end
+        end
       end
     end
 
@@ -247,7 +271,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#reconsume_count' do
-      it 'shoult not exist' do
+      it 'should not exist' do
         expect(subject.reconsume_count).to eq(nil)
       end
     end
