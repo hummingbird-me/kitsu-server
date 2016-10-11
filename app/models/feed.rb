@@ -2,8 +2,8 @@ class Feed
   attr_accessor :stream_feed, :group, :id
 
   def initialize(group, id)
-    @group = group
-    @id = id
+    @group = group.to_s
+    @id = id.to_s
     self.stream_feed = client.feed(group, id)
   end
 
