@@ -32,7 +32,6 @@ class Episode < ApplicationRecord
   belongs_to :media, polymorphic: true, touch: true
 
   has_attached_file :thumbnail
-  html_fragment :synopsis, scrub: :strip
 
   validates :media, presence: true
   validates :number, presence: true
@@ -51,6 +50,9 @@ class Episode < ApplicationRecord
     average(:length)
   end
 
+  before_save do
+    self.synopsis = Sanitize.fragment(synopsis, Sanitize::Config::RESTRICTED)
+  end
   before_validation do
     self.length = media.episode_length if length.nil?
   end
