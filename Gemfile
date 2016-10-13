@@ -35,6 +35,8 @@ gem 'sidekiq', '~> 3.4.2'
 gem 'sidetiq'
 
 # Text pipeline
+gem 'html-pipeline'
+gem 'kramdown'
 gem 'loofah-activerecord'
 gem 'onebox'
 gem 'twemoji', github: 'vevix/twemoji'
