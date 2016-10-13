@@ -34,6 +34,7 @@ class LibraryEntry < ApplicationRecord
 
   belongs_to :user, touch: true
   belongs_to :media, polymorphic: true
+  has_many :marathons, dependent: :destroy
 
   enum status: {
     current: 1,
@@ -56,6 +57,10 @@ class LibraryEntry < ApplicationRecord
   }
   validate :progress_limit
   validate :rating_on_halves
+
+  def current_marathon
+    marathons.current.first_or_create
+  end
 
   def progress_limit
     return unless progress

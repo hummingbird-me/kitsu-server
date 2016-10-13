@@ -387,6 +387,25 @@ ActiveRecord::Schema.define(version: 20161013173818) do
 
   add_index "mappings", ["external_site", "external_id", "media_type", "media_id"], name: "index_mappings_on_external_and_media", unique: true, using: :btree
 
+  create_table "marathon_events", force: :cascade do |t|
+    t.integer  "marathon_id", null: false
+    t.integer  "unit_id"
+    t.string   "unit_type"
+    t.integer  "event",       null: false
+    t.integer  "status"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "marathons", force: :cascade do |t|
+    t.integer  "library_entry_id", null: false
+    t.boolean  "rewatch",          null: false
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
   create_table "not_interesteds", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "media_id"
@@ -781,6 +800,8 @@ ActiveRecord::Schema.define(version: 20161013173818) do
 
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "marathon_events", "marathons"
+  add_foreign_key "marathons", "library_entries"
   add_foreign_key "post_likes", "posts"
   add_foreign_key "post_likes", "users"
   add_foreign_key "posts", "users"
