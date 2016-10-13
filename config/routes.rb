@@ -98,6 +98,10 @@
 #                                        PATCH     /edge/drama/:id(.:format)                                                 drama#update
 #                                        PUT       /edge/drama/:id(.:format)                                                 drama#update
 #                                        DELETE    /edge/drama/:id(.:format)                                                 drama#destroy
+#               user_relationships_waifu GET       /edge/users/:user_id/relationships/waifu(.:format)                        users#show_relationship {:relationship=>"waifu"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/waifu(.:format)                        users#update_relationship {:relationship=>"waifu"}
+#                                        DELETE    /edge/users/:user_id/relationships/waifu(.:format)                        users#destroy_relationship {:relationship=>"waifu"}
+#                             user_waifu GET       /edge/users/:user_id/waifu(.:format)                                      characters#get_related_resource {:relationship=>"waifu", :source=>"users"}
 #                                  users GET       /edge/users(.:format)                                                     users#index
 #                                        POST      /edge/users(.:format)                                                     users#create
 #                                   user GET       /edge/users/:id(.:format)                                                 users#show
