@@ -7,7 +7,7 @@ class UserResource < BaseResource
   attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 
-  has_one :waifu, relation_name: 'waifu', foreign_key: 'waifu_id'
+  has_one :waifu
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (_r, _v, options) {
