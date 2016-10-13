@@ -84,7 +84,7 @@ class User < ApplicationRecord
   rolify
 
   belongs_to :pro_membership_plan, required: false
-  belongs_to :waifu, required: false
+  belongs_to :waifu, required: false, class_name: 'Character'
 
   has_attached_file :avatar
   has_attached_file :cover_image
