@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161010200413) do
+ActiveRecord::Schema.define(version: 20161013173818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -683,7 +683,6 @@ ActiveRecord::Schema.define(version: 20161010200413) do
     t.string   "facebook_id",                 limit: 255
     t.string   "bio",                         limit: 140, default: "",          null: false
     t.boolean  "sfw_filter",                              default: true
-    t.integer  "rating_system",                           default: 1
     t.string   "mal_username",                limit: 255
     t.integer  "life_spent_on_anime",                     default: 0,           null: false
     t.string   "about",                       limit: 500, default: "",          null: false
@@ -722,6 +721,8 @@ ActiveRecord::Schema.define(version: 20161010200413) do
     t.string   "import_error",                limit: 255
     t.boolean  "onboarded",                               default: false,       null: false
     t.string   "past_names",                              default: [],          null: false, array: true
+    t.string   "gender"
+    t.date     "birthday"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

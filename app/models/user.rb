@@ -13,6 +13,7 @@
 #  avatar_processing           :boolean
 #  avatar_updated_at           :datetime
 #  bio                         :string(140)      default(""), not null
+#  birthday                    :date
 #  confirmation_sent_at        :datetime
 #  confirmation_token          :string(255)      indexed
 #  confirmed_at                :datetime
@@ -28,6 +29,7 @@
 #  encrypted_password          :string(255)      default(""), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
+#  gender                      :string
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
@@ -43,7 +45,6 @@
 #  onboarded                   :boolean          default(FALSE), not null
 #  past_names                  :string           default([]), not null, is an Array
 #  pro_expires_at              :datetime
-#  rating_system               :integer          default(1)
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
@@ -82,9 +83,9 @@ class User < ApplicationRecord
     :validatable, :confirmable, :async
   rolify
 
-  belongs_to :pro_membership_plan
+  belongs_to :pro_membership_plan, required: false
+  belongs_to :waifu, required: false
 
-  enum rating_system: %i[smilies stars]
   has_attached_file :avatar
   has_attached_file :cover_image
 
