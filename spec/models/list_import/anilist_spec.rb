@@ -48,13 +48,17 @@ RSpec.describe ListImport::Anilist do
     stub_request(:get,
       "#{host}user/toyhammered/mangalist?access_token=#{access_token}")
       .to_return(body: fixture('list_import/anilist/toy-manga.json'))
+
+    stub_request(:get,
+      "#{host}user/nuck/mangalist?access_token=#{access_token}")
+      .to_return(body: fixture('list_import/anilist/nuck-manga.json'))
   end
 
-  # it { should validate_presence_of(:input_text) }
-  # it { should validate_length_of(:input_text)
-  #   .is_at_least(3)
-  #   .is_at_most(20)
-  # }
+  it { should validate_presence_of(:input_text) }
+  it { should validate_length_of(:input_text)
+    .is_at_least(3)
+    .is_at_most(20)
+  }
 
   context 'with a list' do
     subject do
