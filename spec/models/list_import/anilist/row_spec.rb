@@ -187,7 +187,7 @@ RSpec.describe ListImport::Anilist::Row do
         allow(Mapping).to receive(:lookup).and_return(nil)
 
         expect(Mapping).to receive(:guess).with(Manga, {
-          id: 30933,
+          id: 30_933,
           title: 'Elfen Lied',
           show_type: 'Manga',
           chapter_count: 113
@@ -199,7 +199,7 @@ RSpec.describe ListImport::Anilist::Row do
 
     describe '#media_info' do
       it 'should return the id' do
-        expect(subject.media_info[:id]).to eq(30933)
+        expect(subject.media_info[:id]).to eq(30_933)
       end
       it 'should return the romaji title' do
         expect(subject.media_info[:title]).to eq('Elfen Lied')

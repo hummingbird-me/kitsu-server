@@ -26,7 +26,6 @@
 require 'rails_helper'
 
 RSpec.describe ListImport::Anilist do
-
   before do
     host = described_class::ANILIST_API
     access_token = 'RahlCEqLEgc6GPu2zBYqiGgOy2aLLZEjYridJrCO'
@@ -85,8 +84,5 @@ RSpec.describe ListImport::Anilist do
         }.to yield_control.exactly(1)
       end
     end
-
-
   end
-
 end

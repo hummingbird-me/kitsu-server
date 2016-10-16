@@ -46,10 +46,10 @@ class ListImport
       end
 
       def rating
-        return nil if node['score_raw'] == 0
+        return nil if node['score_raw'].zero?
 
         # 100-point scale to 5-point scale (raw)
-        [((node['score_raw'].to_f / 20) / 0.5).round.ceil * 0.5, 0.5].max
+        ((node['score_raw'].to_f / 20) / 0.5).ceil * 0.5
       end
 
       def reconsume_count
@@ -57,7 +57,7 @@ class ListImport
       end
 
       def notes
-
+        # will implement later
       end
 
       def my_start_date
@@ -73,7 +73,6 @@ class ListImport
           [k, send(k)]
         }.to_h
       end
-
     end
   end
 end

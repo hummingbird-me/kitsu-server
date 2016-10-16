@@ -71,8 +71,7 @@ class ListImport
           client_id: 'toyhammered-c6imc',
           client_secret: 'P8sO0FJ58OwluYiek30N'
         },
-        headers: { Accept: 'application/json'}
-      )
+        headers: { Accept: 'application/json' })
 
       request.run
 
@@ -84,14 +83,14 @@ class ListImport
       @auth_token ||= get_auth_token
       url = build_url(url)
 
-      request = Typhoeus::Request.get(url)
+      request = Typhoeus::Request.get(url).merge(opts)
 
       json = JSON.parse(request.body)
       json
     end
 
     def build_url(path)
-      #toyhammered/animelist
+      # toyhammered/animelist
       "#{ANILIST_API}user/#{path}?access_token=#{@auth_token}"
     end
   end
