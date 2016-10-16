@@ -79,11 +79,11 @@ class ListImport
       json
     end
 
-    def get(url, opts = {})
+    def get(url)
       @auth_token ||= get_auth_token
       url = build_url(url)
 
-      request = Typhoeus::Request.get(url).merge(opts)
+      request = Typhoeus::Request.get(url)
 
       json = JSON.parse(request.body)
       json
