@@ -149,19 +149,110 @@ RSpec.describe ListImport::Anilist::Row do
     end
 
     describe '#reconsume_count' do
-      context 'on-hold' do
-        it 'should return amount of times rewatched' do
-          expect(subject.reconsume_count).to eq(0)
+      it 'should return 0 if not rewatched' do
+        expect(subject.reconsume_count).to eq(0)
+      end
+      it 'should return amount of times rewatched' do
+        subject = described_class.new(
+          JSON.parse(anime)['lists']['completed'].first,
+          'anime'
+        )
+
+        expect(subject.reconsume_count).to eq(4)
+      end
+    end
+
+    describe '#notes' do
+      context 'with notes being empty' do
+        it 'should return nil' do
+          expect(subject.notes).to be_nil
         end
       end
-      context 'completed' do
-        it 'should return amount of times rewatched' do
+
+      context 'with notes being filled out' do
+        it 'should return text' do
           subject = described_class.new(
             JSON.parse(anime)['lists']['completed'].first,
             'anime'
           )
 
-          expect(subject.reconsume_count).to eq(4)
+          expect(subject.notes).to_not be_nil
+        end
+      end
+    end
+
+    describe '#my_start_date' do
+      context 'with date being empty' do
+        it 'should return nil' do
+          expect(subject.my_start_date).to be_nil
+        end
+      end
+      context 'with YYYY existing' do
+        it 'should default day and month to 01' do
+          subject = described_class.new(
+            JSON.parse(anime)['lists']['completed'][2],
+            'anime'
+          )
+          # YYYY
+          expect(subject.my_start_date).to eq(Date.new(2016))
+        end
+      end
+      context 'with YYYY/MM existing' do
+        it 'should default day to 01' do
+          subject = described_class.new(
+            JSON.parse(anime)['lists']['completed'][1],
+            'anime'
+          )
+          # YYYY-MM
+          expect(subject.my_start_date).to eq(Date.new(2016, 10))
+        end
+      end
+      context 'with YYYY/MM/DD existing' do
+        it 'should return a valid ISO 8601 date' do
+          subject = described_class.new(
+            JSON.parse(anime)['lists']['completed'].first,
+            'anime'
+          )
+          # YYYY-MM-DD
+          expect(subject.my_start_date).to eq(Date.new(2016, 10, 3))
+        end
+      end
+    end
+
+    describe '#my_finish_date' do
+      context 'with date being empty' do
+        it 'should return nil' do
+          expect(subject.my_finish_date).to be_nil
+        end
+      end
+      context 'with YYYY existing' do
+        it 'should default day and month to 01' do
+          subject = described_class.new(
+            JSON.parse(anime)['lists']['completed'][2],
+            'anime'
+          )
+          # YYYY
+          expect(subject.my_finish_date).to eq(Date.new(2016))
+        end
+      end
+      context 'with YYYY/MM existing' do
+        it 'should default day to 01' do
+          subject = described_class.new(
+            JSON.parse(anime)['lists']['completed'][1],
+            'anime'
+          )
+          # YYYY-MM
+          expect(subject.my_finish_date).to eq(Date.new(2016, 10))
+        end
+      end
+      context 'with YYYY/MM/DD existing' do
+        it 'should return a valid ISO 8601 date' do
+          subject = described_class.new(
+            JSON.parse(anime)['lists']['completed'].first,
+            'anime'
+          )
+          # YYYY-MM-DD
+          expect(subject.my_finish_date).to eq(Date.new(2016, 10, 10))
         end
       end
     end
@@ -278,21 +369,17 @@ RSpec.describe ListImport::Anilist::Row do
     end
 
     describe '#reconsume_count' do
-      context 'on-hold' do
-        it 'should return amount of times reread' do
-          expect(subject.reconsume_count).to eq(0)
-        end
+      it 'should return 0' do
+        expect(subject.reconsume_count).to eq(0)
       end
 
-      context 'completed' do
-        it 'should return amount of times reread' do
-          subject = described_class.new(
-            JSON.parse(manga)['lists']['completed'][1],
-            'manga'
-          )
+      it 'should return amount of times reread' do
+        subject = described_class.new(
+          JSON.parse(manga)['lists']['completed'][1],
+          'manga'
+        )
 
-          expect(subject.reconsume_count).to eq(69)
-        end
+        expect(subject.reconsume_count).to eq(69)
       end
     end
   end
