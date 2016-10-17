@@ -36,6 +36,22 @@ RSpec.describe Feed, type: :model do
     end
   end
 
+  describe '#follow' do
+    it 'should call on stream_feed.follow' do
+      target_feed = Feed.new('media', '7')
+      expect(subject.stream_feed).to receive(:follow).with('media', '7')
+      subject.follow(target_feed)
+    end
+  end
+
+  describe '#unfollow' do
+    it 'should call on stream_feed.unfollow' do
+      target_feed = Feed.new('media', '7')
+      expect(subject.stream_feed).to receive(:unfollow).with('media', '7')
+      subject.unfollow(target_feed)
+    end
+  end
+
   it 'should respond to .timeline and .notifications' do
     expect(described_class).to respond_to(:timeline)
     expect(described_class).to respond_to(:notifications)

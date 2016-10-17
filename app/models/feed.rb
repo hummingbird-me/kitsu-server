@@ -11,6 +11,14 @@ class Feed
     ActivityList.new(self)
   end
 
+  def follow(feed)
+    stream_feed.follow(feed.group, feed.id)
+  end
+
+  def unfollow(feed)
+    stream_feed.unfollow(feed.group, feed.id)
+  end
+
   def stream_id
     "#{group}:#{id}"
   end
