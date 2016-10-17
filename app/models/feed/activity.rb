@@ -14,7 +14,7 @@ class Feed
     def as_json(options = {})
       json = data.transform_values { |val| get_stream_id(val) }
       json[:time] = json[:time]&.iso8601
-      json[:to] = json[:to]&.map { |val| get_stream_id(val) }
+      json[:to] = json[:to]&.compact&.map { |val| get_stream_id(val) }
       json.compact
     end
 
