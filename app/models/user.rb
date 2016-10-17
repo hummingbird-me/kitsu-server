@@ -123,6 +123,14 @@ class User < ApplicationRecord
     Feed.user(id)
   end
 
+  def aggregated_feed
+    Feed.user_aggr(id)
+  end
+
+  after_create do
+    aggregated_feed.follow(feed)
+  end
+
   before_update do
     if name_changed?
       # Push it onto the front and limit
