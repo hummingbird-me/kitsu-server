@@ -8,21 +8,21 @@ class MediaActivityService
   end
 
   def status(status)
-    user.feed.activities.new(
+    fill_defaults user.feed.activities.new(
       verb: 'updated',
       status: status
     )
   end
 
   def rating(rating)
-    user.feed.activities.new(
+    fill_defaults user.feed.activities.new(
       verb: 'rated',
       rating: rating,
     )
   end
 
   def progress(progress, unit = nil)
-    user.feed.activities.new(
+    fill_defaults user.feed.activities.new(
       verb: 'progressed',
       progress: progress,
       unit: unit
@@ -30,7 +30,7 @@ class MediaActivityService
   end
 
   def reviewed(review)
-    user.feed.activities.new(
+    fill_defaults user.feed.activities.new(
       verb: 'reviewed',
       review: review
     )

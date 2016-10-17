@@ -85,9 +85,9 @@ class LibraryEntry < ApplicationRecord
   end
 
   before_save do
-    activity.rating(rating) if rating_changed?
-    activity.status(status) if status_changed?
-    activity.progress(progress) if progress_changed?
+    activity.rating(rating).create if rating_changed?
+    activity.status(status).create if status_changed?
+    activity.progress(progress).create if progress_changed?
   end
 
   after_save do
