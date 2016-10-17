@@ -23,7 +23,7 @@ class Feed
     "#{group}:#{id}"
   end
 
-  %i[user media timeline notifications].each do |feed|
+  %i[user user_aggr media media_aggr timeline notifications].each do |feed|
     define_singleton_method(feed) { |*args| new(feed, args.join('-')) }
   end
 
