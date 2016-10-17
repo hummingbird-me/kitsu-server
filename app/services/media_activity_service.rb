@@ -44,7 +44,6 @@ class MediaActivityService
       activity.to << media&.feed
       activity.data[:media] ||= media
       activity.foreign_id ||= library_entry
-      activity.updated_at ||= library_entry.updated_at
       activity.time ||= library_entry.updated_at
     end
   end
