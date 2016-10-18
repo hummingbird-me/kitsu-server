@@ -50,6 +50,7 @@ gem 'acts_as_list' # Sortables!
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'counter_culture' # Fancier counter caches
 gem 'stream_rails' # Feeds
+gem 'hashie' # Souped-up Hashes
 
 # Rack Middleware
 gem 'rack-cors'
