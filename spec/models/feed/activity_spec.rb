@@ -53,4 +53,10 @@ RSpec.describe Feed::Activity, type: :model do
   it 'should return nil for properties which are not set' do
     expect(subject.doodle).to be_nil
   end
+
+  it 'should coerce an ISO8601 timestring into an actual Time' do
+    time = Time.now.round
+    activity = Feed::Activity.new(feed, time: time.iso8601)
+    expect(activity.time).to eq(time)
+  end
 end

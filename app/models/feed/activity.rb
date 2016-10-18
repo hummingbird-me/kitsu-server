@@ -1,9 +1,11 @@
 class Feed
-  class Activity < Hashie::Mash
+  class Activity < OpenStruct
     attr_reader :feed
 
     def initialize(feed, data = {})
       @feed = feed
+      data = data.symbolize_keys
+      data[:time] = Time.iso8601(data[:time]) if data[:time].is_a? String
       super(data)
     end
 
