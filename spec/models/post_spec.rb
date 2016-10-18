@@ -48,11 +48,6 @@ RSpec.describe Post, type: :model do
     it { should_not allow_value(false).for(:spoiler) }
   end
 
-  context 'without content' do
-    subject { build(:post, content: '') }
-    it { should validate_presence_of(:content_formatted) }
-  end
-
   context 'with a media' do
     let(:media) { create(:anime) }
     subject { build(:post, media: media) }
@@ -61,5 +56,10 @@ RSpec.describe Post, type: :model do
     it 'should have an activity with media feed in "to" list' do
       expect(activity[:to]).to include(media.feed.stream_id)
     end
+  end
+
+  it 'should convert basic markdown to fill in content_formatted' do
+    post = create(:post, content: '*Emphasis* is cool!')
+    expect(post.content_formatted).to include('<em>')
   end
 end
