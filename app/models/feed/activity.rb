@@ -1,18 +1,14 @@
 class Feed
-  class Activity
-    attr_accessor :data, :feed
-    %i[actor object target foreign_id verb to time].each do |key|
-      define_method("#{key}=") { |value| data[key] = value }
-      define_method(key) { data[key] }
-    end
+  class Activity < Hashie::Mash
+    attr_reader :feed
 
     def initialize(feed, data = {})
       @feed = feed
-      @data = data
+      super(data)
     end
 
     def as_json(options = {})
-      json = data.transform_values { |val| get_stream_id(val) }
+      json = to_h.transform_values { |val| get_stream_id(val) }.symbolize_keys
       json[:time] = json[:time]&.iso8601
       json[:to] = json[:to]&.compact&.map { |val| get_stream_id(val) }
       json.compact

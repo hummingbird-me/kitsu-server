@@ -42,7 +42,7 @@ class MediaActivityService
       activity.object ||= library_entry
       activity.to ||= []
       activity.to << media&.feed
-      activity.data[:media] ||= media
+      activity.media ||= media
       activity.foreign_id ||= library_entry
       activity.time ||= library_entry.updated_at
     end
