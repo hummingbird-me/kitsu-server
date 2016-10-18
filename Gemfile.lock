@@ -5,6 +5,14 @@ GIT
     twemoji (2.0.1)
       nokogiri (~> 1.6.2)
 
+GIT
+  remote: https://github.com/Badiapp/doorkeeper-grants_assertion
+  revision: 353e67e10d17e9421a3691d98bc41595cb046ed1
+  specs:
+    doorkeeper-grants_assertion (0.0.1)
+      doorkeeper (>= 4.0)
+      railties (>= 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -406,6 +414,7 @@ DEPENDENCIES
   devise (~> 3.5)
   devise-async
   doorkeeper
+  doorkeeper-grants_assertion!
   dotenv-rails
   factory_girl_rails
   faker

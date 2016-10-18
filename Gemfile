@@ -18,6 +18,7 @@ gem 'chewy' # ElasticSearch
 gem 'devise', '~> 3.5'
 gem 'devise-async'
 gem 'doorkeeper'
+gem 'doorkeeper-grants_assertion', git: 'https://github.com/Badiapp/doorkeeper-grants_assertion'
 gem 'pundit'
 gem 'jsonapi-authorization'
 gem 'rolify'

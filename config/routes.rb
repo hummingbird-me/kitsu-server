@@ -235,6 +235,7 @@
 #          oauth_authorized_applications GET       /oauth/authorized_applications(.:format)                                  doorkeeper/authorized_applications#index
 #           oauth_authorized_application DELETE    /oauth/authorized_applications/:id(.:format)                              doorkeeper/authorized_applications#destroy
 #                       oauth_token_info GET       /oauth/token/info(.:format)                                               doorkeeper/token_info#show
+#                 add_followers_facebook POST      /add_followers/facebook(.:format)                                         followers#facebook
 #                                   root GET       /                                                                         home#index
 #
 
@@ -257,6 +258,8 @@ Rails.application.routes.draw do
   end
 
   use_doorkeeper
+
+  post '/add_followers/facebook' => 'followers#facebook'
 
   root to: 'home#index'
 end

@@ -85,6 +85,9 @@ class User < ApplicationRecord
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
+  has_many :friendships, foreign_key: "user_id",
+    class_name: "Friendship"
+  has_many :friends, through: :friendships
 
   has_attached_file :avatar
   has_attached_file :cover_image
