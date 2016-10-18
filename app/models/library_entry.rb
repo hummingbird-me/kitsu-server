@@ -84,7 +84,7 @@ class LibraryEntry < ApplicationRecord
     MediaActivityService.new(self)
   end
 
-  before_save do
+  after_save do
     activity.rating(rating).create if rating_changed?
     activity.status(status).create if status_changed?
     activity.progress(progress).create if progress_changed?
