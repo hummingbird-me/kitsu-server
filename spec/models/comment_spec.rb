@@ -25,8 +25,8 @@ RSpec.describe Comment, type: :model do
   it { should belong_to(:user) }
   it { should validate_presence_of(:content) }
 
-  context 'without content' do
-    subject { build(:post, content: '') }
-    it { should validate_presence_of(:content_formatted) }
+  it 'should convert basic markdown to fill in content_formatted' do
+    comment = create(:comment, content: '*Emphasis* is cool!')
+    expect(comment.content_formatted).to include('<em>')
   end
 end

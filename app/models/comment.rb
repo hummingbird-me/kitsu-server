@@ -25,6 +25,8 @@ class Comment < ApplicationRecord
   validates :content, :content_formatted, presence: true
 
   before_validation do
-    self.content_formatted = content
+    if content_changed?
+      self.content_formatted = InlinePipeline.call(content)[:output].to_s
+    end
   end
 end
