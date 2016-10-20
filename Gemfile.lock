@@ -183,7 +183,8 @@ GEM
     jsonapi-resources (0.8.0)
       concurrent-ruby
       rails (>= 4.0)
-    jsonapi-utils (0.4.2)
+    jsonapi-utils (0.5.0.beta3)
+      jsonapi-resources (~> 0.8.0)
     jwt (1.5.2)
     kramdown (1.12.0)
     listen (3.1.5)
@@ -434,7 +435,7 @@ DEPENDENCIES
   json_expressions
   jsonapi-authorization (~> 0.8.0)
   jsonapi-resources (~> 0.8.0)
-  jsonapi-utils
+  jsonapi-utils (= 0.5.0.beta3)
   kramdown
   nokogiri
   oauth2
