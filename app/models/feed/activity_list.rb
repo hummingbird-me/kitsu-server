@@ -64,12 +64,10 @@ class Feed
     end
 
     def to_a
-      results.map do |result|
-        if result.key?('activities')
-          Feed::ActivityGroup.new(feed, result)
-        else
-          Feed::Activity.new(feed, result)
-        end
+      if feed.aggregated? || feed.notification?
+        results.map { |res| Feed::ActivityGroup.new(feed, res) }
+      else
+        results.map { |res| Feed::Activity.new(feed, res) }
       end
     end
   end
