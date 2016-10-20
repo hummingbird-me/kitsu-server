@@ -1,4 +1,13 @@
 class Feed
+  FEED_GROUPS = {
+    user: :flat,
+    user_aggr: :aggregated,
+    media: :flat,
+    media_aggr: :aggregated,
+    timeline: :aggregated,
+    notifications: :notification
+  }
+
   attr_accessor :stream_feed, :group, :id
 
   def initialize(group, id)
@@ -23,8 +32,16 @@ class Feed
     "#{group}:#{id}"
   end
 
-  %i[user user_aggr media media_aggr timeline notifications].each do |feed|
+  FEED_GROUPS.keys.each do |feed|
     define_singleton_method(feed) { |*args| new(feed, args.join('-')) }
+  end
+
+  FEED_GROUPS.values.uniq.each do |expected_type|
+    define_method("#{expected_type}?") { type == expected_type }
+  end
+
+  def type
+    FEED_GROUPS[group.to_sym]
   end
 
   private
