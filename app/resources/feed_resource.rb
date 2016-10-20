@@ -1,0 +1,2 @@
+class FeedResource < BaseResource
+end
