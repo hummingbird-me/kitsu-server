@@ -59,8 +59,18 @@ class Feed
       feed.stream_feed.remove_activity(activity.foreign_id, foreign_id: true)
     end
 
-    def to_a
+    def results
       feed.stream_feed.get(data)['results']
+    end
+
+    def to_a
+      results.map do |result|
+        if result.key?('activities')
+          Feed::ActivityGroup.new(feed, result)
+        else
+          Feed::Activity.new(feed, result)
+        end
+      end
     end
   end
 end
