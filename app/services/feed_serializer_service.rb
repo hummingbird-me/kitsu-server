@@ -3,8 +3,8 @@ class FeedSerializerService
 
   def initialize(activity_list, including: nil, fields: nil)
     @activity_list = activity_list
-    @including = including || []
-    @fields = fields || []
+    @including = including
+    @fields = fields
   end
 
   def as_json(*)
@@ -12,7 +12,11 @@ class FeedSerializerService
   end
 
   def resources
-    activity_list.to_a.map { |activity| resource_class.new(activity, nil) }
+    activities.map { |activity| resource_class.new(activity, nil) }
+  end
+
+  def activities
+    activity_list.includes(@including).to_a
   end
 
   def including
@@ -30,9 +34,9 @@ class FeedSerializerService
 
   def resource_class
     if feed.aggregated? || feed.notification?
-      Feed::ActivityGroupResource
+      ActivityGroupResource
     else
-      Feed::ActivityResource
+      ActivityResource
     end
   end
 
