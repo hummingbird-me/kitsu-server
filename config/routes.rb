@@ -317,6 +317,8 @@ Rails.application.routes.draw do
     jsonapi_resources :posts
     jsonapi_resources :comments
     jsonapi_resources :post_likes
+    resources :activities, only: %i[destroy]
+    get '/feeds/:group/:id', to: 'feeds#show'
   end
 
   use_doorkeeper
