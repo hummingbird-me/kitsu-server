@@ -1,6 +1,6 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_number, :page_size
+    attr_accessor :data, :feed, :page_number, :page_size, :including
     %i[limit offset ranking].each do |key|
       define_method(key) do |value|
         self.dup.tap { |al| al.data[key] = value }
@@ -30,6 +30,13 @@ class Feed
       dup.tap do |al|
         al.page_size = page_size
         al.update_pagination! if page_number
+      end
+    end
+
+    def includes(*relationships)
+      self.dup.tap do |al|
+        al.including = [relationships].flatten.map(&:to_sym)
+        al.including += including if including.present?
       end
     end
 
@@ -63,11 +70,23 @@ class Feed
       feed.stream_feed.get(data)['results']
     end
 
+    def enriched_results
+      if feed.aggregated? || feed.notification?
+        enricher.enrich_aggregated_activities(results)
+      else
+        enricher.enrich_activities(results)
+      end
+    end
+
+    def enricher
+      StreamRails::Enrich.new(including)
+    end
+
     def to_a
       if feed.aggregated? || feed.notification?
-        results.map { |res| Feed::ActivityGroup.new(feed, res) }
+        enriched_results.map { |res| Feed::ActivityGroup.new(feed, res) }
       else
-        results.map { |res| Feed::Activity.new(feed, res) }
+        enriched_results.map { |res| Feed::Activity.new(feed, res) }
       end
     end
   end
