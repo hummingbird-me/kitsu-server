@@ -1,0 +1,1 @@
+class UnitResource < BaseResource; end
