@@ -1,9 +1,9 @@
-class FeedsController < ActionController::Base
+class FeedsController < ApplicationController
   include Pundit
 
   def show
     serializer = FeedSerializerService.new(activity_list, including: including,
-                                           fields: fields)
+                                           fields: fields, context: context)
     render json: serializer
   end
 
