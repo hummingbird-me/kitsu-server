@@ -17,7 +17,7 @@ class FeedSerializerService
   end
 
   def activities
-    activity_list.includes(@including).to_a
+    activity_list.includes(stream_enrichment_fields).to_a
   end
 
   def including
@@ -26,6 +26,10 @@ class FeedSerializerService
     else
       @including
     end
+  end
+
+  def stream_enrichment_fields
+    @including.map { |inc| inc.split('.').first }
   end
 
   def serializer
