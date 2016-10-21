@@ -5,7 +5,7 @@ module Authorization
       @password = password
     end
 
-    def get_user!
+    def user!
       @user if @user && @user.valid_password?(@password)
     end
   end

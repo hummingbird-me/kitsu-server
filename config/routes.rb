@@ -218,6 +218,66 @@
 #                                        PATCH     /edge/mappings/:id(.:format)                                              mappings#update
 #                                        PUT       /edge/mappings/:id(.:format)                                              mappings#update
 #                                        DELETE    /edge/mappings/:id(.:format)                                              mappings#destroy
+#                post_relationships_user GET       /edge/posts/:post_id/relationships/user(.:format)                         posts#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/posts/:post_id/relationships/user(.:format)                         posts#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/posts/:post_id/relationships/user(.:format)                         posts#destroy_relationship {:relationship=>"user"}
+#                              post_user GET       /edge/posts/:post_id/user(.:format)                                       users#get_related_resource {:relationship=>"user", :source=>"posts"}
+#         post_relationships_target_user GET       /edge/posts/:post_id/relationships/target-user(.:format)                  posts#show_relationship {:relationship=>"target_user"}
+#                                        PUT|PATCH /edge/posts/:post_id/relationships/target-user(.:format)                  posts#update_relationship {:relationship=>"target_user"}
+#                                        DELETE    /edge/posts/:post_id/relationships/target-user(.:format)                  posts#destroy_relationship {:relationship=>"target_user"}
+#                       post_target_user GET       /edge/posts/:post_id/target-user(.:format)                                users#get_related_resource {:relationship=>"target_user", :source=>"posts"}
+#               post_relationships_media GET       /edge/posts/:post_id/relationships/media(.:format)                        posts#show_relationship {:relationship=>"media"}
+#                                        PUT|PATCH /edge/posts/:post_id/relationships/media(.:format)                        posts#update_relationship {:relationship=>"media"}
+#                                        DELETE    /edge/posts/:post_id/relationships/media(.:format)                        posts#destroy_relationship {:relationship=>"media"}
+#                             post_media GET       /edge/posts/:post_id/media(.:format)                                      media#get_related_resource {:relationship=>"media", :source=>"posts"}
+#        post_relationships_spoiled_unit GET       /edge/posts/:post_id/relationships/spoiled-unit(.:format)                 posts#show_relationship {:relationship=>"spoiled_unit"}
+#                                        PUT|PATCH /edge/posts/:post_id/relationships/spoiled-unit(.:format)                 posts#update_relationship {:relationship=>"spoiled_unit"}
+#                                        DELETE    /edge/posts/:post_id/relationships/spoiled-unit(.:format)                 posts#destroy_relationship {:relationship=>"spoiled_unit"}
+#                      post_spoiled_unit GET       /edge/posts/:post_id/spoiled-unit(.:format)                               spoiled_units#get_related_resource {:relationship=>"spoiled_unit", :source=>"posts"}
+#          post_relationships_post_likes GET       /edge/posts/:post_id/relationships/post-likes(.:format)                   posts#show_relationship {:relationship=>"post_likes"}
+#                                        POST      /edge/posts/:post_id/relationships/post-likes(.:format)                   posts#create_relationship {:relationship=>"post_likes"}
+#                                        PUT|PATCH /edge/posts/:post_id/relationships/post-likes(.:format)                   posts#update_relationship {:relationship=>"post_likes"}
+#                                        DELETE    /edge/posts/:post_id/relationships/post-likes(.:format)                   posts#destroy_relationship {:relationship=>"post_likes"}
+#                        post_post_likes GET       /edge/posts/:post_id/post-likes(.:format)                                 post_likes#get_related_resources {:relationship=>"post_likes", :source=>"posts"}
+#            post_relationships_comments GET       /edge/posts/:post_id/relationships/comments(.:format)                     posts#show_relationship {:relationship=>"comments"}
+#                                        POST      /edge/posts/:post_id/relationships/comments(.:format)                     posts#create_relationship {:relationship=>"comments"}
+#                                        PUT|PATCH /edge/posts/:post_id/relationships/comments(.:format)                     posts#update_relationship {:relationship=>"comments"}
+#                                        DELETE    /edge/posts/:post_id/relationships/comments(.:format)                     posts#destroy_relationship {:relationship=>"comments"}
+#                          post_comments GET       /edge/posts/:post_id/comments(.:format)                                   comments#get_related_resources {:relationship=>"comments", :source=>"posts"}
+#                                  posts GET       /edge/posts(.:format)                                                     posts#index
+#                                        POST      /edge/posts(.:format)                                                     posts#create
+#                                   post GET       /edge/posts/:id(.:format)                                                 posts#show
+#                                        PATCH     /edge/posts/:id(.:format)                                                 posts#update
+#                                        PUT       /edge/posts/:id(.:format)                                                 posts#update
+#                                        DELETE    /edge/posts/:id(.:format)                                                 posts#destroy
+#             comment_relationships_user GET       /edge/comments/:comment_id/relationships/user(.:format)                   comments#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/comments/:comment_id/relationships/user(.:format)                   comments#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/comments/:comment_id/relationships/user(.:format)                   comments#destroy_relationship {:relationship=>"user"}
+#                           comment_user GET       /edge/comments/:comment_id/user(.:format)                                 users#get_related_resource {:relationship=>"user", :source=>"comments"}
+#             comment_relationships_post GET       /edge/comments/:comment_id/relationships/post(.:format)                   comments#show_relationship {:relationship=>"post"}
+#                                        PUT|PATCH /edge/comments/:comment_id/relationships/post(.:format)                   comments#update_relationship {:relationship=>"post"}
+#                                        DELETE    /edge/comments/:comment_id/relationships/post(.:format)                   comments#destroy_relationship {:relationship=>"post"}
+#                           comment_post GET       /edge/comments/:comment_id/post(.:format)                                 posts#get_related_resource {:relationship=>"post", :source=>"comments"}
+#                               comments GET       /edge/comments(.:format)                                                  comments#index
+#                                        POST      /edge/comments(.:format)                                                  comments#create
+#                                comment GET       /edge/comments/:id(.:format)                                              comments#show
+#                                        PATCH     /edge/comments/:id(.:format)                                              comments#update
+#                                        PUT       /edge/comments/:id(.:format)                                              comments#update
+#                                        DELETE    /edge/comments/:id(.:format)                                              comments#destroy
+#           post_like_relationships_post GET       /edge/post-likes/:post_like_id/relationships/post(.:format)               post_likes#show_relationship {:relationship=>"post"}
+#                                        PUT|PATCH /edge/post-likes/:post_like_id/relationships/post(.:format)               post_likes#update_relationship {:relationship=>"post"}
+#                                        DELETE    /edge/post-likes/:post_like_id/relationships/post(.:format)               post_likes#destroy_relationship {:relationship=>"post"}
+#                         post_like_post GET       /edge/post-likes/:post_like_id/post(.:format)                             posts#get_related_resource {:relationship=>"post", :source=>"post_likes"}
+#           post_like_relationships_user GET       /edge/post-likes/:post_like_id/relationships/user(.:format)               post_likes#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/post-likes/:post_like_id/relationships/user(.:format)               post_likes#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/post-likes/:post_like_id/relationships/user(.:format)               post_likes#destroy_relationship {:relationship=>"user"}
+#                         post_like_user GET       /edge/post-likes/:post_like_id/user(.:format)                             users#get_related_resource {:relationship=>"user", :source=>"post_likes"}
+#                             post_likes GET       /edge/post-likes(.:format)                                                post_likes#index
+#                                        POST      /edge/post-likes(.:format)                                                post_likes#create
+#                              post_like GET       /edge/post-likes/:id(.:format)                                            post_likes#show
+#                                        PATCH     /edge/post-likes/:id(.:format)                                            post_likes#update
+#                                        PUT       /edge/post-likes/:id(.:format)                                            post_likes#update
+#                                        DELETE    /edge/post-likes/:id(.:format)                                            post_likes#destroy
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
 #                    oauth_authorization GET       /oauth/authorize(.:format)                                                doorkeeper/authorizations#new
 #                                        POST      /oauth/authorize(.:format)                                                doorkeeper/authorizations#create
@@ -255,6 +315,11 @@ Rails.application.routes.draw do
     jsonapi_resources :franchises
     jsonapi_resources :installments
     jsonapi_resources :mappings
+    jsonapi_resources :posts
+    jsonapi_resources :comments
+    jsonapi_resources :post_likes
+    resources :activities, only: %i[destroy]
+    get '/feeds/:group/:id', to: 'feeds#show'
   end
 
   use_doorkeeper

@@ -80,6 +80,16 @@ class LibraryEntry < ApplicationRecord
     errors.add(:rating, 'must be a multiple of 0.5') unless rating % 0.5 == 0.0
   end
 
+  def activity
+    MediaActivityService.new(self)
+  end
+
+  after_save do
+    activity.rating(rating).create if rating_changed?
+    activity.status(status).create if status_changed?
+    activity.progress(progress).create if progress_changed?
+  end
+
   after_save do
     if rating_changed?
       media.transaction do

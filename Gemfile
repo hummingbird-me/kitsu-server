@@ -20,7 +20,7 @@ gem 'devise-async'
 gem 'doorkeeper'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/Badiapp/doorkeeper-grants_assertion'
 gem 'pundit'
-gem 'jsonapi-authorization'
+gem 'jsonapi-authorization', '~> 0.8.0'
 gem 'rolify'
 
 # Attachments
@@ -46,11 +46,13 @@ gem 'twemoji', github: 'vevix/twemoji'
 gem 'friendly_id' # slug-urls-are-cool
 gem 'nokogiri' # Parse MAL XML shit
 gem 'typhoeus' # Parallelize scraping tasks
-gem 'jsonapi-resources', '~> 0.7.0' # JSON-API resources
+gem 'jsonapi-resources', '~> 0.8.0' # JSON-API resources
+gem 'jsonapi-utils', '0.5.0.beta3' # Use JR stuff outside their abstraction
 gem 'acts_as_list' # Sortables!
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'counter_culture' # Fancier counter caches
 gem 'stream_rails' # Feeds
+gem 'hashie' # Souped-up Hashes
 
 # Rack Middleware
 gem 'rack-cors'

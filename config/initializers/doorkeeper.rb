@@ -9,13 +9,13 @@ Doorkeeper.configure do
   end
   # Authenticate in Resource Owner Password flow
   resource_owner_from_credentials do
-    Authorization::Password.new(params[:username], params[:password]).get_user!
+    Authorization::Password.new(params[:username], params[:password]).user!
   end
 
   resource_owner_from_assertion do
     case params[:provider]
     when 'facebook'
-      Authorization::Assertion::Facebook.new(params[:assertion]).get_user!
+      Authorization::Assertion::Facebook.new(params[:assertion]).user!
     # when 'twitter'
     #   Authorization::Assertion::Twitter.new(params[:assertion]).get_user!
     end

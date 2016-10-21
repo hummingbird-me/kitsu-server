@@ -104,8 +104,27 @@ RSpec.describe Feed::ActivityList, type: :model do
     subject { list.limit(50) }
     it 'should get the activities using the query and read the results' do
       expect(subject.feed.stream_feed).to receive(:get).with(limit: 50)
-        .and_return({'results' => 'hi'})
-      expect(subject.to_a).to eq('hi')
+        .and_return({'results' => []})
+      expect(subject.to_a).to eq([])
+    end
+    context 'for an aggregated feed' do
+      subject { Feed::ActivityList.new(Feed.new('user_aggr', '1')) }
+      it 'should return an Array of ActivityGroup instances' do
+        p subject.feed.type
+        expect(subject.feed.stream_feed).to receive(:get).and_return({
+          'results' => [{}, {}]
+        })
+        expect(subject.to_a).to all(be_a(Feed::ActivityGroup))
+      end
+    end
+    context 'for a flat feed' do
+      subject { Feed::ActivityList.new(Feed.new('user', '1')) }
+      it 'should return an Array of Activity instances' do
+        expect(subject.feed.stream_feed).to receive(:get).and_return({
+          'results' => [{}, {}]
+        })
+        expect(subject.to_a).to all(be_a(Feed::Activity))
+      end
     end
   end
 end

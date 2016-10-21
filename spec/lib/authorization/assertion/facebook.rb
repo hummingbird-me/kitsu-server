@@ -23,23 +23,31 @@ RSpec.describe Authorization::Assertion::Facebook do
     }'
   end
   let(:facebook_auth) do
-    stub_request(:get, "https://graph.facebook.com/v2.5/me?access_token=any%20token&fields=id,name,email,first_name,last_name,gender,friends").
-      with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'graph.facebook.com', 'User-Agent'=>'Ruby'}).
-      to_return(:status => 200, :body => facebook_responce, :headers => {})
+    stub_request(:get, 'https://graph.facebook.com/v2.5/me?access_token'\
+      '=any%20token&fields=id,name,email,first_name,last_name,gender,friends')
+      .with(
+        headers: {
+          'Accept': '*/*',
+          'Accept-Encoding': 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Host': 'graph.facebook.com',
+          'User-Agent': 'Ruby'
+        }
+      )
+      .to_return(status: 200, body: facebook_responce, headers: {})
     Authorization::Assertion::Facebook.new('any token')
   end
 
-  describe "#get_user" do
+  describe '#user!' do
     let!(:user) { create :user, facebook_id: '1659565134412042' }
 
-    subject { facebook_auth.get_user! }
+    subject { facebook_auth.user! }
 
-    it "should return user" do
+    it 'should return user' do
       expect(subject).to eq(user)
     end
   end
 
-  describe "#friends" do
+  describe '#friends' do
     let!(:user) { create :user, facebook_id: '1659565134412042' }
     let!(:friend) { create :user, facebook_id: '10204220238175291' }
 

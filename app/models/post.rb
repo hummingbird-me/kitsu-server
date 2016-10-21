@@ -54,6 +54,8 @@ class Post < ApplicationRecord
   end
 
   before_validation do
-    self.content_formatted = content
+    if content_changed?
+      self.content_formatted = InlinePipeline.call(content)[:output].to_s
+    end
   end
 end
