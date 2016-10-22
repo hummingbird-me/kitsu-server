@@ -124,11 +124,11 @@ class User < ApplicationRecord
   end
 
   def feed
-    Feed.user(id)
+    @feed ||= Feed.user(id)
   end
 
   def aggregated_feed
-    Feed.user_aggr(id)
+    @aggr_feed ||= Feed.user_aggr(id)
   end
 
   after_create do

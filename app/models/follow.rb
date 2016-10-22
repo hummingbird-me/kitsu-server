@@ -17,8 +17,16 @@
 # rubocop:enable Metrics/LineLength
 
 class Follow < ApplicationRecord
-  belongs_to :follower, class_name: 'User', required: true, counter_cache: true,
-    touch: true
-  belongs_to :followed, class_name: 'User', required: true, counter_cache: true,
-    touch: true
+  belongs_to :follower, class_name: 'User', required: true,
+    counter_cache: :following_count, touch: true
+  belongs_to :followed, class_name: 'User', required: true,
+    counter_cache: :followers_count, touch: true
+
+  after_save do
+    follower.feed.follow(followed.feed)
+  end
+
+  after_destroy do
+    follower.feed.unfollow(followed.feed)
+  end
 end

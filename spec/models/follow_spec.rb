@@ -19,10 +19,24 @@
 require 'rails_helper'
 
 RSpec.describe Follow, type: :model do
-  it { should belong_to(:follower).class_name('User').counter_cache(true)
-    .touch(true) }
+  subject { build(:follow) }
+  it { should belong_to(:follower).class_name('User')
+    .counter_cache(:following_count).touch(true) }
   it { should validate_presence_of(:follower) }
-  it { should belong_to(:followed).class_name('User').counter_cache(true)
-    .touch(true) }
+  it { should belong_to(:followed).class_name('User')
+    .counter_cache(:followers_count).touch(true) }
   it { should validate_presence_of(:followed) }
+
+  it "should add follow to follower's feed on save" do
+    expect(subject.follower.feed).to receive(:follow)
+      .with(subject.followed.feed)
+    subject.save!
+  end
+
+  it "should remove follow on follwer's feed on destroy" do
+    subject.save!
+    expect(subject.follower.feed).to receive(:unfollow)
+      .with(subject.followed.feed)
+    subject.destroy!
+  end
 end
