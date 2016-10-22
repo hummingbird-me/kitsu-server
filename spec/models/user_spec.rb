@@ -85,6 +85,8 @@ RSpec.describe User, type: :model do
   it { should have_db_index(:facebook_id) }
   it { should belong_to(:waifu) }
   it { should belong_to(:pro_membership_plan) }
+  it { should have_many(:followers).dependent(:destroy) }
+  it { should have_many(:following).dependent(:destroy) }
   it { should validate_uniqueness_of(:name).case_insensitive }
   it { should validate_uniqueness_of(:email).case_insensitive }
 
