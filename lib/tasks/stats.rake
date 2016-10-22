@@ -1,6 +1,6 @@
-task :stats => "hummingbird:stats_setup"
+task :stats => "kitsu:stats_setup"
 
-namespace :hummingbird do
+namespace :kitsu do
   task :stats_setup do
     require 'rails/code_statistics'
     ::STATS_DIRECTORIES += {

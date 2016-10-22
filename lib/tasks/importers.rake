@@ -1,5 +1,5 @@
 namespace :importers do
-  namespace :hummingbird do
+  namespace :kitsu do
     desc 'Download only anime posters'
     task :posters, [:quantity] => [:environment] do |_t, args|
       args.with_defaults(quantity: 72)
@@ -15,7 +15,7 @@ namespace :importers do
     end
 
     def get_anime_image(quantity, type = :poster_image)
-      require 'data_import/hummingbird'
+      require 'data_import/kitsu'
 
       Chewy.strategy(:bypass) do
         puts 'Getting unimported list...'
@@ -30,7 +30,7 @@ namespace :importers do
         GC.start
 
         puts 'Downloading files...'
-        data = DataImport::Hummingbird.new(host: 'https://hummingbird.me')
+        data = DataImport::Kitsu.new(host: 'https://hummingbird.me')
         i = 0
         data.download_posters(ids) do |a, poster|
           i += 1

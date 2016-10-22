@@ -60,5 +60,5 @@ Doorkeeper.configure do
   # end
 
   # WWW-Authenticate Realm
-  realm 'Hummingbird'
+  realm 'Kitsu'
 end

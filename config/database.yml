@@ -5,12 +5,12 @@ default: &default
 
 development:
   <<: *default
-  database: hummingbird_development
+  database: kitsu_development
 
 test:
   <<: *default
-  database: hummingbird_test
+  database: kitsu_test
 
 production:
   <<: *default
-  database: hummingbird_production
+  database: kitsu_production

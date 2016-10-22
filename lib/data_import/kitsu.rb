@@ -1,9 +1,9 @@
 module DataImport
-  class Hummingbird
+  class Kitsu
     attr_reader :hydra
     delegate :queue, :run, to: :@hydra
 
-    # Create a new Hummingbird data import processor
+    # Create a new Kitsu data import processor
     def initialize(opts = {})
       @opts = opts.with_indifferent_access
       @hydra = Typhoeus::Hydra.new(max_concurrency: 80) # hail hydra
