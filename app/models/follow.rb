@@ -22,6 +22,11 @@ class Follow < ApplicationRecord
   belongs_to :followed, class_name: 'User', required: true,
     counter_cache: :followers_count, touch: true
 
+  def validate_not_yourself
+    errors.add(:followed, 'cannot follow yourself') if follower == followed
+  end
+  validate :validate_not_yourself
+
   after_save do
     follower.feed.follow(followed.feed)
   end

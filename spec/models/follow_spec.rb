@@ -39,4 +39,11 @@ RSpec.describe Follow, type: :model do
       .with(subject.followed.feed)
     subject.destroy!
   end
+
+  it 'should not permit you to follow yourself' do
+    user = build(:user)
+    follow = build(:follow, follower: user, followed: user)
+    follow.valid?
+    expect(follow.errors[:followed]).to include('cannot follow yourself')
+  end
 end
