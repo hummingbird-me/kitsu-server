@@ -2,6 +2,7 @@ namespace :stream do
   namespace :sync do
     desc 'Synchronize followers to Stream'
     task :follows do
+      print 'Following'
       Follow.find_in_batches do |group|
         batches = group.map do |g|
           {
@@ -10,7 +11,9 @@ namespace :stream do
           }
         end
         Feed.client.follow_many(batches)
+        print '.'
       end
+      print "\n"
     end
   end
 end
