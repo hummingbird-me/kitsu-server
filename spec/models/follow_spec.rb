@@ -46,4 +46,9 @@ RSpec.describe Follow, type: :model do
     follow.valid?
     expect(follow.errors[:followed]).to include('cannot follow yourself')
   end
+
+  it "should generate an activity on the followers' aggregated feed" do
+    follower_feed = subject.follower.aggregated_feed
+    expect(subject.stream_activity.feed).to eq(follower_feed)
+  end
 end
