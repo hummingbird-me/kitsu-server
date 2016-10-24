@@ -7,4 +7,5 @@ class ActivityResource < BaseResource
   has_one :actor, class_name: 'User'
   has_one :unit, polymorphic: true
   has_one :media, polymorphic: true
+  has_one :object, polymorphic: true
 end
