@@ -1,6 +1,6 @@
 class PostResource < BaseResource
   attributes :content, :content_formatted, :comments_count, :post_likes_count,
-    :spoiler, :nsfw, :blocked, :deleted_at
+    :spoiler, :nsfw, :blocked, :deleted_at, :created_at
 
   has_one :user
   has_one :target_user
