@@ -35,7 +35,10 @@ class Feed
 
     def includes(*relationships)
       self.dup.tap do |al|
-        al.including = [relationships].flatten.map(&:to_sym)
+        al.including = [relationships].flatten.map(&:to_s)
+        # Hardwire subject->object
+        al.including = al.including.map { |inc| inc.sub('subject', 'object') }
+        al.including = al.including.map(&:to_sym)
         al.including += including if including.present?
       end
     end

@@ -6,6 +6,7 @@ class Feed
       @feed = feed
       data = data.symbolize_keys
       data[:time] = Time.iso8601(data[:time]) if data[:time].is_a? String
+      data[:object] = data[:subject] unless data.key?(:object)
       super(data)
     end
 
@@ -14,6 +15,14 @@ class Feed
       json[:time] = json[:time]&.iso8601
       json[:to] = json[:to]&.compact&.map { |val| get_stream_id(val) }
       json.compact
+    end
+
+    def subject
+      object
+    end
+
+    def subject=(val)
+      self.object = val
     end
 
     def create

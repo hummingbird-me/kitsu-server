@@ -1,0 +1,1 @@
+class SubjectResource < BaseResource; end
