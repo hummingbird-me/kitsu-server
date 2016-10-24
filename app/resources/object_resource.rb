@@ -1,0 +1,1 @@
+class ObjectResource < BaseResource; end
