@@ -85,9 +85,10 @@ class User < ApplicationRecord
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
-  has_many :friendships, foreign_key: 'user_id',
-    class_name: 'Friendship'
-  has_many :friends, through: :friendships
+  has_many :followers, class_name: 'Follow', foreign_key: 'followed_id',
+    dependent: :destroy
+  has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
+    dependent: :destroy
 
   has_attached_file :avatar
   has_attached_file :cover_image
@@ -123,11 +124,11 @@ class User < ApplicationRecord
   end
 
   def feed
-    Feed.user(id)
+    @feed ||= Feed.user(id)
   end
 
   def aggregated_feed
-    Feed.user_aggr(id)
+    @aggr_feed ||= Feed.user_aggr(id)
   end
 
   after_create do

@@ -4,11 +4,13 @@ class UserResource < BaseResource
   attributes :name, :past_names, :about, :bio, :about_formatted, :location,
     :website, :waifu_or_husbando, :to_follow, :followers_count, :created_at,
     :following_count, :onboarded, :life_spent_on_anime, :birthday, :gender,
-    :facebook_id
+    :facebook_id, :updated_at
   attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 
   has_one :waifu
+  has_many :followers
+  has_many :following
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (_r, _v, options) {

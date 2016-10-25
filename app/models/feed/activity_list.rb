@@ -35,7 +35,10 @@ class Feed
 
     def includes(*relationships)
       self.dup.tap do |al|
-        al.including = [relationships].flatten.map(&:to_sym)
+        al.including = [relationships].flatten.map(&:to_s)
+        # Hardwire subject->object
+        al.including = al.including.map { |inc| inc.sub('subject', 'object') }
+        al.including = al.including.map(&:to_sym)
         al.including += including if including.present?
       end
     end
@@ -84,9 +87,33 @@ class Feed
 
     def to_a
       if feed.aggregated? || feed.notification?
-        enriched_results.map { |res| Feed::ActivityGroup.new(feed, res) }
+        enriched_results.map do |res|
+          strip_unfound(Feed::ActivityGroup.new(feed, res))
+        end
       else
-        enriched_results.map { |res| Feed::Activity.new(feed, res) }
+        enriched_results.map do |res|
+          strip_unfound(Feed::Activity.new(feed, res))
+        end
+      end
+    end
+
+    private
+
+    # Strips unfound
+    def strip_unfound(activity)
+      # Recurse into activities if we're passed an ActivityGroup
+      if activity.respond_to?(:activities)
+        activity.dup.tap do |ag|
+          ag.activities = activity.activities.map { |a| strip_unfound(a) }
+        end
+      else
+        activity.dup.tap do |act|
+          # For each field we've asked to have included
+          including.each do |key|
+            # Delete it if it's still a String
+            act.delete_field(key) if act[key].is_a? String
+          end
+        end
       end
     end
   end

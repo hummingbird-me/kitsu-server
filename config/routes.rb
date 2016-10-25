@@ -306,6 +306,7 @@ Rails.application.routes.draw do
     jsonapi_resources :manga
     jsonapi_resources :drama
     jsonapi_resources :users
+    jsonapi_resources :follows
     jsonapi_resources :characters
     jsonapi_resources :people
     jsonapi_resources :castings

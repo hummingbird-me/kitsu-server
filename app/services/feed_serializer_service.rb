@@ -1,10 +1,11 @@
 class FeedSerializerService
-  attr_reader :activity_list, :including, :fields
+  attr_reader :activity_list, :including, :fields, :context
 
-  def initialize(activity_list, including: nil, fields: nil)
+  def initialize(activity_list, including: nil, fields: nil, context: nil)
     @activity_list = activity_list
-    @including = including
-    @fields = fields
+    @including = including || []
+    @fields = fields || []
+    @context = context || {}
   end
 
   def as_json(*)
@@ -12,11 +13,11 @@ class FeedSerializerService
   end
 
   def resources
-    activities.map { |activity| resource_class.new(activity, nil) }
+    activities.map { |activity| resource_class.new(activity, context) }
   end
 
   def activities
-    activity_list.includes(@including).to_a
+    activity_list.includes(stream_enrichment_fields).to_a
   end
 
   def including
@@ -25,6 +26,10 @@ class FeedSerializerService
     else
       @including
     end
+  end
+
+  def stream_enrichment_fields
+    @including.map { |inc| inc.split('.').first }
   end
 
   def serializer

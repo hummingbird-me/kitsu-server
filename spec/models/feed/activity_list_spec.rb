@@ -110,9 +110,14 @@ RSpec.describe Feed::ActivityList, type: :model do
     context 'for an aggregated feed' do
       subject { Feed::ActivityList.new(Feed.new('user_aggr', '1')) }
       it 'should return an Array of ActivityGroup instances' do
-        p subject.feed.type
         expect(subject.feed.stream_feed).to receive(:get).and_return({
-          'results' => [{}, {}]
+          'results' => [
+            {
+              'activities' => [{}]
+            }, {
+              'activities' => [{}]
+            }
+          ]
         })
         expect(subject.to_a).to all(be_a(Feed::ActivityGroup))
       end

@@ -23,8 +23,8 @@
 #
 # Foreign Keys
 #
+#  fk_rails_43023491e6  (target_user_id => users.id)
 #  fk_rails_5b5ddfd518  (user_id => users.id)
-#  fk_rails_6fac2de613  (target_user_id => users.id)
 #
 
 FactoryGirl.define do
