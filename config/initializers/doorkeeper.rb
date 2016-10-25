@@ -9,8 +9,14 @@ Doorkeeper.configure do
   end
   # Authenticate in Resource Owner Password flow
   resource_owner_from_credentials do
-    user = User.find_for_auth(params[:username])
-    user if user && user.valid_password?(params[:password])
+    Authorization::Password.new(params[:username], params[:password]).user!
+  end
+
+  resource_owner_from_assertion do
+    case params[:provider]
+    when 'facebook'
+      Authorization::Assertion::Facebook.new(params[:assertion]).user!
+    end
   end
   # Restrict access to the web interface for adding oauth applications
   admin_authenticator do
@@ -50,7 +56,9 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.2
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
-  grant_flows %w[authorization_code client_credentials implicit password]
+  grant_flows %w[
+    authorization_code client_credentials implicit password assertion
+  ]
 
   # Under some circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.

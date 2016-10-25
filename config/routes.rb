@@ -102,12 +102,29 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/waifu(.:format)                        users#update_relationship {:relationship=>"waifu"}
 #                                        DELETE    /edge/users/:user_id/relationships/waifu(.:format)                        users#destroy_relationship {:relationship=>"waifu"}
 #                             user_waifu GET       /edge/users/:user_id/waifu(.:format)                                      characters#get_related_resource {:relationship=>"waifu", :source=>"users"}
+#           user_relationships_followers GET       /edge/users/:user_id/relationships/followers(.:format)                    users#show_relationship {:relationship=>"followers"}
+#                                        POST      /edge/users/:user_id/relationships/followers(.:format)                    users#create_relationship {:relationship=>"followers"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/followers(.:format)                    users#update_relationship {:relationship=>"followers"}
+#                                        DELETE    /edge/users/:user_id/relationships/followers(.:format)                    users#destroy_relationship {:relationship=>"followers"}
+#                         user_followers GET       /edge/users/:user_id/followers(.:format)                                  follows#get_related_resources {:relationship=>"followers", :source=>"users"}
+#           user_relationships_following GET       /edge/users/:user_id/relationships/following(.:format)                    users#show_relationship {:relationship=>"following"}
+#                                        POST      /edge/users/:user_id/relationships/following(.:format)                    users#create_relationship {:relationship=>"following"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/following(.:format)                    users#update_relationship {:relationship=>"following"}
+#                                        DELETE    /edge/users/:user_id/relationships/following(.:format)                    users#destroy_relationship {:relationship=>"following"}
+#                         user_following GET       /edge/users/:user_id/following(.:format)                                  follows#get_related_resources {:relationship=>"following", :source=>"users"}
 #                                  users GET       /edge/users(.:format)                                                     users#index
 #                                        POST      /edge/users(.:format)                                                     users#create
 #                                   user GET       /edge/users/:id(.:format)                                                 users#show
 #                                        PATCH     /edge/users/:id(.:format)                                                 users#update
 #                                        PUT       /edge/users/:id(.:format)                                                 users#update
 #                                        DELETE    /edge/users/:id(.:format)                                                 users#destroy
+#                   for_facebook_follows POST      /edge/follows/for_facebook(.:format)                                      follows#for_facebook
+#                                follows GET       /edge/follows(.:format)                                                   follows#index
+#                                        POST      /edge/follows(.:format)                                                   follows#create
+#                                 follow GET       /edge/follows/:id(.:format)                                               follows#show
+#                                        PATCH     /edge/follows/:id(.:format)                                               follows#update
+#                                        PUT       /edge/follows/:id(.:format)                                               follows#update
+#                                        DELETE    /edge/follows/:id(.:format)                                               follows#destroy
 #  character_relationships_primary_media GET       /edge/characters/:character_id/relationships/primary-media(.:format)      characters#show_relationship {:relationship=>"primary_media"}
 #                                        PUT|PATCH /edge/characters/:character_id/relationships/primary-media(.:format)      characters#update_relationship {:relationship=>"primary_media"}
 #                                        DELETE    /edge/characters/:character_id/relationships/primary-media(.:format)      characters#destroy_relationship {:relationship=>"primary_media"}
@@ -278,6 +295,8 @@
 #                                        PATCH     /edge/post-likes/:id(.:format)                                            post_likes#update
 #                                        PUT       /edge/post-likes/:id(.:format)                                            post_likes#update
 #                                        DELETE    /edge/post-likes/:id(.:format)                                            post_likes#destroy
+#                               activity DELETE    /edge/activities/:id(.:format)                                            activities#destroy
+#                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
 #                    oauth_authorization GET       /oauth/authorize(.:format)                                                doorkeeper/authorizations#new
 #                                        POST      /oauth/authorize(.:format)                                                doorkeeper/authorizations#create
@@ -305,7 +324,9 @@ Rails.application.routes.draw do
     jsonapi_resources :manga
     jsonapi_resources :drama
     jsonapi_resources :users
-    jsonapi_resources :follows
+    jsonapi_resources :follows do
+      post :import_from_facebook, on: :collection
+    end
     jsonapi_resources :characters
     jsonapi_resources :people
     jsonapi_resources :castings
