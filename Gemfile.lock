@@ -6,8 +6,8 @@ GIT
       nokogiri (~> 1.6.2)
 
 GIT
-  remote: https://github.com/Badiapp/doorkeeper-grants_assertion
-  revision: 353e67e10d17e9421a3691d98bc41595cb046ed1
+  remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
+  revision: 94b1e6345e63cb380a0185436f62f42a2d340491
   specs:
     doorkeeper-grants_assertion (0.0.1)
       doorkeeper (>= 4.0)

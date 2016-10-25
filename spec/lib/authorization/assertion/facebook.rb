@@ -47,16 +47,16 @@ RSpec.describe Authorization::Assertion::Facebook do
     end
   end
 
-  describe '#friends' do
+  describe '#import_friends' do
     let!(:user) { create :user, facebook_id: '1659565134412042' }
     let!(:friend) { create :user, facebook_id: '10204220238175291' }
 
-    before { facebook_auth.friends }
+    before { facebook_auth.import_friends }
 
-    subject { user.friends }
+    subject { Follow.where(followed: user, follower: friend) }
 
-    it 'should have friend' do
-      expect(subject).to include(friend)
+    it 'follow should exist' do
+      expect(subject).to exist
     end
   end
 end
