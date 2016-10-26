@@ -11,9 +11,10 @@ class Feed
     end
 
     def as_json(options = {})
-      json = to_h.transform_values { |val| get_stream_id(val) }.symbolize_keys
+      json = to_h.transform_values { |val| Feed.get_stream_id(val) }
+      json.symbolize_keys!
       json[:time] = json[:time]&.iso8601
-      json[:to] = json[:to]&.compact&.map { |val| get_stream_id(val) }
+      json[:to] = json[:to]&.compact&.map { |val| Feed.get_stream_id(val) }
       json.compact
     end
 
@@ -35,12 +36,6 @@ class Feed
 
     def destroy
       feed.activities.destroy(self)
-    end
-
-    private
-
-    def get_stream_id(obj)
-      obj.respond_to?(:stream_id) ? obj.stream_id : obj
     end
   end
 end

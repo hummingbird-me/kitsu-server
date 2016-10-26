@@ -28,6 +28,16 @@ class Feed
     stream_feed.unfollow(feed.group, feed.id)
   end
 
+  def self.follow_many(follows)
+    stream_follows = follows.map(&:to_a).map do |(source, target)|
+      {
+        source: Feed.get_stream_id(source),
+        target: Feed.get_stream_id(target)
+      }
+    end
+    client.follow_many(stream_follows)
+  end
+
   def stream_id
     "#{group}:#{id}"
   end
@@ -44,11 +54,16 @@ class Feed
     FEED_GROUPS[group.to_sym]
   end
 
+  def self.get_stream_id(obj)
+    obj.respond_to?(:stream_id) ? obj.stream_id : obj
+  end
+
   private
 
   def self.client
     StreamRails.client
   end
+
   def client
     self.class.client
   end
