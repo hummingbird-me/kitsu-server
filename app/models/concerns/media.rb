@@ -33,6 +33,8 @@ module Media
     validates_attachment :poster_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
     }
+
+    after_create :follow_self
   end
 
   def slug_candidates
@@ -48,6 +50,14 @@ module Media
   end
 
   def feed
-    Feed.media(self.class.name, id)
+    @feed ||= Feed.media(self.class.name, id)
+  end
+
+  def aggregated_feed
+    @aggregated_feed ||= Feed.media_aggr(self.class.name, id)
+  end
+
+  def follow_self
+    aggregated_feed.follow(feed)
   end
 end
