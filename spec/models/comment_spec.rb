@@ -33,4 +33,12 @@ RSpec.describe Comment, type: :model do
     comment = create(:comment, content: '*Emphasis* is cool!')
     expect(comment.content_formatted).to include('<em>')
   end
+
+  it 'should not allow grandchildren' do
+    grandparent = build(:comment)
+    parent = build(:comment, parent: grandparent)
+    comment = build(:comment, parent: parent)
+    expect(comment).not_to be_valid
+    expect(comment.errors[:parent]).to be_present
+  end
 end

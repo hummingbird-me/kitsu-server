@@ -27,6 +27,11 @@ class Comment < ApplicationRecord
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id'
 
   validates :content, :content_formatted, presence: true
+  validate :no_grandparents
+
+  def no_grandparents
+    errors.add(:parent, 'cannot have a parent of their own') if parent&.parent
+  end
 
   before_validation do
     if content_changed?
