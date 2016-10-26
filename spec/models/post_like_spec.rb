@@ -23,4 +23,5 @@ RSpec.describe PostLike, type: :model do
 
   it { should belong_to(:post).counter_cache(true) }
   it { should belong_to(:user) }
+  it { should validate_uniqueness_of(:post).scoped_to(:user_id) }
 end
