@@ -118,7 +118,7 @@
 #                                        PATCH     /edge/users/:id(.:format)                                                 users#update
 #                                        PUT       /edge/users/:id(.:format)                                                 users#update
 #                                        DELETE    /edge/users/:id(.:format)                                                 users#destroy
-#                   for_facebook_follows POST      /edge/follows/for_facebook(.:format)                                      follows#for_facebook
+#           import_from_facebook_follows POST      /edge/follows/import_from_facebook(.:format)                              follows#import_from_facebook
 #                                follows GET       /edge/follows(.:format)                                                   follows#index
 #                                        POST      /edge/follows(.:format)                                                   follows#create
 #                                 follow GET       /edge/follows/:id(.:format)                                               follows#show
