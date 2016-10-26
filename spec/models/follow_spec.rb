@@ -27,15 +27,15 @@ RSpec.describe Follow, type: :model do
     .counter_cache(:followers_count).touch(true) }
   it { should validate_presence_of(:followed) }
 
-  it "should add follow to follower's feed on save" do
-    expect(subject.follower.feed).to receive(:follow)
+  it "should add follow to follower's timeline on save" do
+    expect(subject.follower.timeline).to receive(:follow)
       .with(subject.followed.feed)
     subject.save!
   end
 
-  it "should remove follow on follwer's feed on destroy" do
+  it "should remove follow on follower's timeline on destroy" do
     subject.save!
-    expect(subject.follower.feed).to receive(:unfollow)
+    expect(subject.follower.timeline).to receive(:unfollow)
       .with(subject.followed.feed)
     subject.destroy!
   end
