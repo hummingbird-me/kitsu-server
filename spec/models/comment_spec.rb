@@ -26,6 +26,7 @@ RSpec.describe Comment, type: :model do
   it { should belong_to(:post).counter_cache(true) }
   it { should belong_to(:parent).class_name('Comment') }
   it { should belong_to(:user) }
+  it { should have_many(:replies).class_name('Comment') }
   it { should validate_presence_of(:content) }
 
   it 'should convert basic markdown to fill in content_formatted' do

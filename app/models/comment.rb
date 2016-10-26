@@ -24,6 +24,7 @@ class Comment < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :post, required: true, counter_cache: true
   belongs_to :parent, class_name: 'Comment', required: false
+  has_many :replies, class_name: 'Comment', foreign_key: 'parent_id'
 
   validates :content, :content_formatted, presence: true
 
