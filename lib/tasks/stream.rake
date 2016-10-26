@@ -1,19 +1,17 @@
 namespace :stream do
   namespace :sync do
     desc 'Synchronize followers to Stream'
-    task :follows do
-      print 'Following'
-      Follow.find_in_batches do |group|
-        batches = group.map do |g|
-          {
-            source: Feed.timeline(g.follower.id),
-            target: Feed.user(g.following.id)
-          }
-        end
-        Feed.client.follow_many(batches)
-        print '.'
+    task :follows => :environment do
+      StreamSync.sync_follows
+    end
+
+    desc 'Synchronize automatic (under-the-hood) follows to Stream'
+    task :auto_follows => :environment do
+      StreamSync.follow_user_aggr
+
+      [Anime, Manga, Drama].each do |type|
+        StreamSync.follow_media_aggr(type)
       end
-      print "\n"
     end
   end
 end

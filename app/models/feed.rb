@@ -28,14 +28,15 @@ class Feed
     stream_feed.unfollow(feed.group, feed.id)
   end
 
-  def self.follow_many(follows)
-    stream_follows = follows.map(&:to_a).map do |(source, target)|
+  def self.follow_many(follows, scrollback: 100)
+    follows = follows.map(&:to_a).map(&:flatten)
+    stream_follows = follows.map do |(source, target)|
       {
         source: Feed.get_stream_id(source),
         target: Feed.get_stream_id(target)
       }
     end
-    client.follow_many(stream_follows)
+    client.follow_many(stream_follows, scrollback)
   end
 
   def stream_id
