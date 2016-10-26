@@ -11,6 +11,7 @@ class Feed
     def initialize(feed, data = {})
       @feed = feed
       @data = data.with_indifferent_access
+      self.including = []
     end
 
     def page(page_number = nil, id_lt: nil)
