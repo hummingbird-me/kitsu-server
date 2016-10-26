@@ -9,6 +9,7 @@
 #  deleted_at        :datetime
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  parent_id         :integer
 #  post_id           :integer          not null
 #  user_id           :integer          not null
 #
@@ -16,11 +17,13 @@
 #
 #  fk_rails_03de2dc08c  (user_id => users.id)
 #  fk_rails_2fd19c0db7  (post_id => posts.id)
+#  fk_rails_31554e7034  (parent_id => comments.id)
 #
 
 class Comment < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :post, required: true, counter_cache: true
+  belongs_to :parent, class_name: 'Comment', required: false
 
   validates :content, :content_formatted, presence: true
 
