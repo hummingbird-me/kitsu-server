@@ -13,5 +13,10 @@ namespace :stream do
         StreamSync.follow_media_aggr(type)
       end
     end
+
+    desc 'Dump posts in the mass import format for Stream'
+    task :dump_posts => :environment do
+      StreamSync.dump_posts.each { |instr| puts instr.to_json }
+    end
   end
 end
