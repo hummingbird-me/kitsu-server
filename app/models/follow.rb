@@ -25,7 +25,11 @@ class Follow < ApplicationRecord
     counter_cache: :followers_count, touch: true
 
   def stream_activity
-    follower.aggregated_feed.activities.new(actor: follower, followed: followed)
+    follower.aggregated_feed.activities.new(
+      actor: follower,
+      followed: followed,
+      to: [followed.notifications]
+    )
   end
 
   def validate_not_yourself

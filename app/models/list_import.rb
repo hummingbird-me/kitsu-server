@@ -24,6 +24,7 @@
 
 class ListImport < ApplicationRecord
   include Enumerable
+  include WithActivity
 
   belongs_to :user, required: true, touch: true
 
@@ -82,6 +83,10 @@ class ListImport < ApplicationRecord
       entry.assign_attributes(data)
     end
     entry
+  end
+
+  def stream_activity
+    user.notifications.activities.new(status: status) if failed? || completed?
   end
 
   after_create do

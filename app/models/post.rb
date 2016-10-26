@@ -49,7 +49,7 @@ class Post < ApplicationRecord
       updated_at: updated_at,
       post_likes_count: post_likes_count,
       comments_count: comments_count,
-      to: [media&.feed, target_user&.feed].compact
+      to: [media&.feed, target_user&.feed, target_user&.notifications].compact
     )
   end
 
