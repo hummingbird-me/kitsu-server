@@ -44,6 +44,10 @@ class Post < ApplicationRecord
     message: 'must be true if spoiled_unit is provided'
   }, if: :spoiled_unit
 
+  def feed
+    Feed.post(id)
+  end
+
   def stream_activity
     user.feed.activities.new(
       updated_at: updated_at,

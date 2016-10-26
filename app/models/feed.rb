@@ -4,6 +4,7 @@ class Feed
     user_aggr: :aggregated,
     media: :flat,
     media_aggr: :aggregated,
+    post: :flat,
     timeline: :aggregated,
     notifications: :notification
   }
