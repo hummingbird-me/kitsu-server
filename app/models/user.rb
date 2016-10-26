@@ -137,6 +137,7 @@ class User < ApplicationRecord
 
   after_create do
     aggregated_feed.follow(feed)
+    timeline.follow(feed)
   end
 
   before_update do
