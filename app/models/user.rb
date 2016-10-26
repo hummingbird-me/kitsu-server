@@ -135,6 +135,10 @@ class User < ApplicationRecord
     @timeline ||= Feed.timeline(id)
   end
 
+  def notifications
+    @notifications ||= Feed.notifications(id)
+  end
+
   after_create do
     aggregated_feed.follow(feed)
     timeline.follow(feed)
