@@ -131,6 +131,10 @@ class User < ApplicationRecord
     @aggr_feed ||= Feed.user_aggr(id)
   end
 
+  def timeline
+    @timeline ||= Feed.timeline(id)
+  end
+
   after_create do
     aggregated_feed.follow(feed)
   end

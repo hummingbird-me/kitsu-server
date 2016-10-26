@@ -33,11 +33,11 @@ class Follow < ApplicationRecord
   end
   validate :validate_not_yourself
 
-  after_save do
-    follower.feed.follow(followed.feed)
+  after_create do
+    follower.timeline.follow(followed.feed)
   end
 
   after_destroy do
-    follower.feed.unfollow(followed.feed)
+    follower.timeline.unfollow(followed.feed)
   end
 end
