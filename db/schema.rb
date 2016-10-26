@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161026215344) do
+ActiveRecord::Schema.define(version: 20161026224944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,6 +121,15 @@ ActiveRecord::Schema.define(version: 20161026215344) do
   add_index "characters", ["mal_id"], name: "character_mal_id", unique: true, using: :btree
   add_index "characters", ["mal_id"], name: "index_characters_on_mal_id", unique: true, using: :btree
 
+  create_table "comment_likes", force: :cascade do |t|
+    t.integer "comment_id"
+    t.integer "user_id"
+  end
+
+  add_index "comment_likes", ["comment_id"], name: "index_comment_likes_on_comment_id", using: :btree
+  add_index "comment_likes", ["user_id", "comment_id"], name: "index_comment_likes_on_user_id_and_comment_id", unique: true, using: :btree
+  add_index "comment_likes", ["user_id"], name: "index_comment_likes_on_user_id", using: :btree
+
   create_table "comments", force: :cascade do |t|
     t.integer  "post_id",                           null: false
     t.integer  "user_id",                           null: false
@@ -131,6 +140,7 @@ ActiveRecord::Schema.define(version: 20161026215344) do
     t.datetime "deleted_at"
     t.boolean  "blocked",           default: false, null: false
     t.integer  "parent_id"
+    t.integer  "likes_count",       default: 0,     null: false
   end
 
   create_table "dramas", force: :cascade do |t|
@@ -799,6 +809,8 @@ ActiveRecord::Schema.define(version: 20161026215344) do
   add_index "votes", ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true, using: :btree
   add_index "votes", ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type", using: :btree
 
+  add_foreign_key "comment_likes", "comments"
+  add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"

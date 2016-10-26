@@ -7,6 +7,7 @@
 #  content           :text             not null
 #  content_formatted :text             not null
 #  deleted_at        :datetime
+#  likes_count       :integer          default(0), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  parent_id         :integer
@@ -26,7 +27,8 @@ RSpec.describe Comment, type: :model do
   it { should belong_to(:post).counter_cache(true) }
   it { should belong_to(:parent).class_name('Comment') }
   it { should belong_to(:user) }
-  it { should have_many(:replies).class_name('Comment') }
+  it { should have_many(:replies).class_name('Comment').dependent(:destroy) }
+  it { should have_many(:likes).class_name('CommentLike').dependent(:destroy) }
   it { should validate_presence_of(:content) }
 
   it 'should convert basic markdown to fill in content_formatted' do

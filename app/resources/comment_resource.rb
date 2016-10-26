@@ -4,5 +4,6 @@ class CommentResource < BaseResource
   has_one :user
   has_one :post
   has_one :parent
+  has_many :likes
   has_many :replies
 end

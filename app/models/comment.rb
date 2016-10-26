@@ -7,6 +7,7 @@
 #  content           :text             not null
 #  content_formatted :text             not null
 #  deleted_at        :datetime
+#  likes_count       :integer          default(0), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  parent_id         :integer
@@ -24,7 +25,9 @@ class Comment < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :post, required: true, counter_cache: true
   belongs_to :parent, class_name: 'Comment', required: false
-  has_many :replies, class_name: 'Comment', foreign_key: 'parent_id'
+  has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
+    dependent: :destroy
+  has_many :likes, class_name: 'CommentLike', dependent: :destroy
 
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
