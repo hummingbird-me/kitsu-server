@@ -3,15 +3,16 @@
 # Table name: linked_profiles
 #
 #  id               :integer          not null, primary key
-#  share_from       :boolean
-#  share_to         :boolean
+#  public           :boolean          default(FALSE), not null
+#  share_from       :boolean          default(FALSE), not null
+#  share_to         :boolean          default(FALSE), not null
 #  token            :string
-#  url              :string
+#  url              :string           not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  external_user_id :integer
-#  linked_site_id   :integer          indexed
-#  user_id          :integer          indexed
+#  external_user_id :string           not null
+#  linked_site_id   :integer          not null, indexed
+#  user_id          :integer          not null, indexed
 #
 # Indexes
 #

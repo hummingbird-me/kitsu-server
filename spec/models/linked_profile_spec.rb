@@ -3,15 +3,16 @@
 # Table name: linked_profiles
 #
 #  id               :integer          not null, primary key
-#  share_from       :boolean
-#  share_to         :boolean
+#  public           :boolean          default(FALSE), not null
+#  share_from       :boolean          default(FALSE), not null
+#  share_to         :boolean          default(FALSE), not null
 #  token            :string
-#  url              :string
+#  url              :string           not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  external_user_id :integer
-#  linked_site_id   :integer          indexed
-#  user_id          :integer          indexed
+#  external_user_id :string           not null
+#  linked_site_id   :integer          not null, indexed
+#  user_id          :integer          not null, indexed
 #
 # Indexes
 #
@@ -29,4 +30,17 @@ require 'rails_helper'
 RSpec.describe LinkedProfile, type: :model do
   it { should belong_to(:user) }
   it { should belong_to(:linked_site) }
+
+  subject { described_class.new }
+
+  describe 'validates url' do
+    context 'if public' do
+      before { allow(subject).to receive(:public?).and_return(true) }
+      it { should validate_presence_of(:url) }
+    end
+    context 'if private' do
+      before { allow(subject).to receive(:public?).and_return(false) }
+      it { should_not validate_presence_of(:url) }
+    end
+  end
 end

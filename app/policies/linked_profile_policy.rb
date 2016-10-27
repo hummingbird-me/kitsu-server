@@ -1,6 +1,6 @@
 class LinkedProfilePolicy < ApplicationPolicy
   def show?
-    record.user == user || user.has_role?(:admin)
+    record.user == user || record.public? || is_admin?
   end
 
   def update?

@@ -5,7 +5,7 @@ class LinkedProfileResource < BaseResource
   has_one :user
   has_one :linked_site
 
-  filter :self, apply: -> (_r, _v, options) {
+  filter :self, apply: -> (records, _v, options) {
     current_user = options[:context][:user]
     records.where(id: current_user&.id) || User.none
   }
@@ -14,7 +14,7 @@ class LinkedProfileResource < BaseResource
     if current_user == _model
       super
     else
-      super - :token
+      super - [:token]
     end
   end
 end

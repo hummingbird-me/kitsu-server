@@ -356,27 +356,28 @@ ActiveRecord::Schema.define(version: 20161108024127) do
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
 
   create_table "linked_profiles", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "linked_site_id"
-    t.integer  "external_user_id"
-    t.string   "url"
-    t.boolean  "share_to"
-    t.boolean  "share_from"
+    t.integer  "user_id",                          null: false
+    t.integer  "linked_site_id",                   null: false
+    t.string   "external_user_id",                 null: false
+    t.string   "url",                              null: false
+    t.boolean  "share_to",         default: false, null: false
+    t.boolean  "share_from",       default: false, null: false
+    t.boolean  "public",           default: false, null: false
     t.string   "token"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   add_index "linked_profiles", ["linked_site_id"], name: "index_linked_profiles_on_linked_site_id", using: :btree
   add_index "linked_profiles", ["user_id"], name: "index_linked_profiles_on_user_id", using: :btree
 
   create_table "linked_sites", force: :cascade do |t|
-    t.string   "name"
-    t.boolean  "share_to"
-    t.boolean  "share_from"
-    t.integer  "link_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",                       null: false
+    t.boolean  "share_to",   default: false, null: false
+    t.boolean  "share_from", default: false, null: false
+    t.integer  "link_type",                  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "list_imports", force: :cascade do |t|
