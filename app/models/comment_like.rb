@@ -21,6 +21,12 @@
 # rubocop:enable Metrics/LineLength
 
 class CommentLike < ApplicationRecord
+  include WithActivity
+
   belongs_to :user, required: true
   belongs_to :comment, required: true, counter_cache: :likes_count
+
+  def stream_activity
+    comment.post.feed.activities.new
+  end
 end
