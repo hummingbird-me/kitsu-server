@@ -22,6 +22,8 @@
 #
 
 class Comment < ApplicationRecord
+  include WithActivity
+
   belongs_to :user, required: true
   belongs_to :post, required: true, counter_cache: true
   belongs_to :parent, class_name: 'Comment', required: false
@@ -31,6 +33,12 @@ class Comment < ApplicationRecord
 
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
+
+  def stream_activity
+    post.feed.activities.new(
+      likes_count: likes_count
+    )
+  end
 
   def no_grandparents
     errors.add(:parent, 'cannot have a parent of their own') if parent&.parent
