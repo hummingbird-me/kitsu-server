@@ -89,6 +89,7 @@ class User < ApplicationRecord
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
     dependent: :destroy
   has_many :blocks, dependent: :destroy
+  has_many :linked_profiles
 
   has_attached_file :avatar
   has_attached_file :cover_image

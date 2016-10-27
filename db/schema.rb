@@ -355,6 +355,30 @@ ActiveRecord::Schema.define(version: 20161108024127) do
   add_index "library_entries", ["user_id", "status"], name: "index_library_entries_on_user_id_and_status", using: :btree
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
 
+  create_table "linked_profiles", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "linked_site_id"
+    t.integer  "external_user_id"
+    t.string   "url"
+    t.boolean  "share_to"
+    t.boolean  "share_from"
+    t.string   "token"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "linked_profiles", ["linked_site_id"], name: "index_linked_profiles_on_linked_site_id", using: :btree
+  add_index "linked_profiles", ["user_id"], name: "index_linked_profiles_on_user_id", using: :btree
+
+  create_table "linked_sites", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "share_to"
+    t.boolean  "share_from"
+    t.integer  "link_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "list_imports", force: :cascade do |t|
     t.string   "type",                                null: false
     t.integer  "user_id",                             null: false
@@ -830,6 +854,8 @@ ActiveRecord::Schema.define(version: 20161108024127) do
   add_foreign_key "comments", "comments", column: "parent_id"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "linked_profiles", "linked_sites"
+  add_foreign_key "linked_profiles", "users"
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
   add_foreign_key "post_likes", "posts"

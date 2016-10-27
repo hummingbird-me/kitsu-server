@@ -131,6 +131,11 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/blocks(.:format)                       users#update_relationship {:relationship=>"blocks"}
 #                                        DELETE    /edge/users/:user_id/relationships/blocks(.:format)                       users#destroy_relationship {:relationship=>"blocks"}
 #                            user_blocks GET       /edge/users/:user_id/blocks(.:format)                                     blocks#get_related_resources {:relationship=>"blocks", :source=>"users"}
+#     user_relationships_linked_profiles GET       /edge/users/:user_id/relationships/linked-profiles(.:format)              users#show_relationship {:relationship=>"linked_profiles"}
+#                                        POST      /edge/users/:user_id/relationships/linked-profiles(.:format)              users#create_relationship {:relationship=>"linked_profiles"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/linked-profiles(.:format)              users#update_relationship {:relationship=>"linked_profiles"}
+#                                        DELETE    /edge/users/:user_id/relationships/linked-profiles(.:format)              users#destroy_relationship {:relationship=>"linked_profiles"}
+#                   user_linked_profiles GET       /edge/users/:user_id/linked-profiles(.:format)                            linked_profiles#get_related_resources {:relationship=>"linked_profiles", :source=>"users"}
 #                                  users GET       /edge/users(.:format)                                                     users#index
 #                                        POST      /edge/users(.:format)                                                     users#create
 #                                   user GET       /edge/users/:id(.:format)                                                 users#show
