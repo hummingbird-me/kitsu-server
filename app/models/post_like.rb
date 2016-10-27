@@ -17,8 +17,14 @@
 # rubocop:enable Metrics/LineLength
 
 class PostLike < ApplicationRecord
+  include WithActivity
+
   belongs_to :user, required: true
   belongs_to :post, required: true, counter_cache: true
 
   validates :post, uniqueness: { scope: :user_id }
+
+  def stream_activity
+    post.feed.activities.new
+  end
 end
