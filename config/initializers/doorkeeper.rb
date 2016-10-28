@@ -16,6 +16,11 @@ Doorkeeper.configure do
     case params[:provider]
     when 'facebook'
       Authorization::Assertion::Facebook.new(params[:assertion]).user!
+    when 'twitter'
+      Authorization::Assertion::Twitter.new(
+        params[:access_token],
+        params[:access_token_secret]
+      )
     end
   end
   # Restrict access to the web interface for adding oauth applications

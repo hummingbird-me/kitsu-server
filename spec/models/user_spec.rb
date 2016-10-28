@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -64,6 +63,7 @@
 #  facebook_id                 :string(255)      indexed
 #  pro_membership_plan_id      :integer
 #  stripe_customer_id          :string(255)
+#  twitter_id                  :string
 #  waifu_id                    :integer          indexed
 #
 # Indexes
@@ -74,7 +74,6 @@
 #  index_users_on_to_follow           (to_follow)
 #  index_users_on_waifu_id            (waifu_id)
 #
-# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 

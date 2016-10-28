@@ -354,6 +354,7 @@ Rails.application.routes.draw do
     jsonapi_resources :users
     jsonapi_resources :follows do
       post :import_from_facebook, on: :collection
+      post :import_from_twitter, on: :collection
     end
     jsonapi_resources :characters
     jsonapi_resources :people
