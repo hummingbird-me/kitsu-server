@@ -7,4 +7,6 @@ class CommentResource < BaseResource
   has_one :parent
   has_many :likes
   has_many :replies
+
+  filter :post_id
 end
