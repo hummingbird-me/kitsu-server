@@ -62,4 +62,28 @@ RSpec.describe Post, type: :model do
     post = create(:post, content: '*Emphasis* is cool!')
     expect(post.content_formatted).to include('<em>')
   end
+
+  context 'with an @mention' do
+    let!(:user) { create(:user) }
+    subject { build(:post, content: "@#{user.name}") }
+    let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
+
+    describe '#stream_activity' do
+      it "should have the mentioned user's notifications in the to field" do
+        expect(activity[:to]).to include(user.notifications.stream_id)
+      end
+    end
+  end
+
+  context 'with a target user' do
+    let(:user) { create(:user) }
+    subject { build(:post, target_user: user) }
+    let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
+
+    describe '#stream_activity' do
+      it "should have the mentioned user's feed in the to field" do
+        expect(activity[:to]).to include(user.feed.stream_id)
+      end
+    end
+  end
 end

@@ -106,7 +106,9 @@ class User < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png image/gif]
   }
 
-  scope :by_name, -> (name) { where('lower(name) = ?', name.to_s.downcase) }
+  scope :by_name, -> (*names) {
+    where('lower(name) IN (?)', names.flatten.map(&:downcase))
+  }
 
   # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
