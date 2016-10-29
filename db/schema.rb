@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161026224944) do
+ActiveRecord::Schema.define(version: 20161029060323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,16 @@ ActiveRecord::Schema.define(version: 20161026224944) do
 
   add_index "anime_producers", ["anime_id"], name: "index_anime_producers_on_anime_id", using: :btree
   add_index "anime_producers", ["producer_id"], name: "index_anime_producers_on_producer_id", using: :btree
+
+  create_table "blocks", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "blocked_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "blocks", ["blocked_id"], name: "index_blocks_on_blocked_id", using: :btree
+  add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
 
   create_table "castings", force: :cascade do |t|
     t.integer  "media_id",                                 null: false
@@ -809,6 +819,8 @@ ActiveRecord::Schema.define(version: 20161026224944) do
   add_index "votes", ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true, using: :btree
   add_index "votes", ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type", using: :btree
 
+  add_foreign_key "blocks", "users"
+  add_foreign_key "blocks", "users", column: "blocked_id"
   add_foreign_key "comment_likes", "comments"
   add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"

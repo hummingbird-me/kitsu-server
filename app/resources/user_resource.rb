@@ -11,6 +11,7 @@ class UserResource < BaseResource
   has_one :waifu
   has_many :followers
   has_many :following
+  has_many :blocks
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (records, _v, options) {
