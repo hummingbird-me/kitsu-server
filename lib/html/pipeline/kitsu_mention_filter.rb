@@ -8,6 +8,10 @@ module HTML
       def link_to_mentioned_user(login)
         super if User.by_name(login).exists?
       end
+
+      def username_pattern
+        /[a-z0-9][a-z0-9_]*/
+      end
     end
   end
 end
