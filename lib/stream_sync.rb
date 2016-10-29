@@ -6,8 +6,20 @@ class StreamSync
       end
     end
 
+    def follow_timeline
+      mass_follow('timeline', User.pluck(:id)) do |id|
+        { Feed.timeline(id) => Feed.user(id) }
+      end
+    end
+
+    def follow_global
+      mass_follow('global', User.pluck(:id)) do |id|
+        { Feed.global => Feed.user(id) }
+      end
+    end
+
     def follow_media_aggr(type)
-      mass_follow("media_aggr:#{type.name}", type.pluck(:id)) do |id|
+      mass_follow("media_aggr<#{type.name}>", type.pluck(:id)) do |id|
         { Feed.media_aggr(type, id) => Feed.media(type, id) }
       end
     end

@@ -7,6 +7,8 @@ namespace :stream do
 
     desc 'Synchronize automatic (under-the-hood) follows to Stream'
     task :auto_follows => :environment do
+      StreamSync.follow_timeline
+      StreamSync.follow_global
       StreamSync.follow_user_aggr
 
       [Anime, Manga, Drama].each do |type|
