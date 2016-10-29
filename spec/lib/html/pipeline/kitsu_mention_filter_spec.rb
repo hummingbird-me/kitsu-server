@@ -11,7 +11,7 @@ RSpec.describe HTML::Pipeline::KitsuMentionFilter do
   end
 
   context 'with existent user' do
-    let(:user) { create(:user) }
+    let!(:user) { create(:user) }
     let(:filter) { described_class.new("@#{user.name}") }
 
     it 'should linkify mentions' do
