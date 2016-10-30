@@ -11,6 +11,7 @@ class Feed
   }
 
   attr_accessor :stream_feed, :group, :id
+  delegate :readonly_token, to: :stream_feed
 
   def initialize(group, id)
     @group = group.to_s
