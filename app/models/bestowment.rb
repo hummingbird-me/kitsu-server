@@ -24,16 +24,22 @@ class Bestowment < ActiveRecord::Base
 	validates :rank, :progress, :badge_id, presence: true
 	validates :badge_id, uniqueness: { scope: :user_id }
 
+	def self.earn(badge)
+		bestowment = where(badge_id: badge.id, user: badge.user).first
+		bestowment.progress = 100
+		bestowment.save
+	end
+
+	def self.update_for(badge)
+		bestowment = where(badge_id: badge.id, user: badge.user).first
+		bestowment.update()
+	end
+
 	def bestowed?
 		bestowed_at < Time.now
 	end
 
 	def badge
 		badge_id.safe_constantize
-	end
-
-	def self.update_for(badge)
-		bestowment = where(badge_id: badge.id, user: badge.user).first
-		bestowment.update()
 	end
 end

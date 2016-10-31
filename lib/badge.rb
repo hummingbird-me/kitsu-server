@@ -5,6 +5,10 @@ class Badge
     self.name.underscore.dasherize.sub('-badge', '')
   end
 
+  def self.unachieved_group
+    Badge.where(progress: 1...goal)
+  end
+
   def slug
     self.class.slug
   end
@@ -51,5 +55,13 @@ class Badge
 
   def show_progress?
     !goal.respond_to?(:call)
+  end
+
+  def has_progress?
+    progress > 0 && progress < goal
+  end
+
+  def lowest_unachieved_in_group?
+    progress == Badge.unachieved_group.map(&:progress).min
   end
 end
