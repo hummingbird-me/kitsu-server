@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: linked_profiles
@@ -24,22 +25,22 @@
 #  fk_rails_166e103170  (user_id => users.id)
 #  fk_rails_25de88e967  (linked_site_id => linked_sites.id)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
 RSpec.describe LinkedProfile, type: :model do
   it { should belong_to(:user) }
   it { should belong_to(:linked_site) }
-
-  subject { described_class.new }
+  it { should validate_presence_of(:external_user_id) }
 
   describe 'validates url' do
     context 'if public' do
-      before { allow(subject).to receive(:public?).and_return(true) }
+      subject { described_class.new(public: true) }
       it { should validate_presence_of(:url) }
     end
     context 'if private' do
-      before { allow(subject).to receive(:public?).and_return(false) }
+      subject { described_class.new(public: false) }
       it { should_not validate_presence_of(:url) }
     end
   end

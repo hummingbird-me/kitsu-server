@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: linked_sites
@@ -10,7 +11,11 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# rubocop:enable Metrics/LineLength
 
 class LinkedSite < ApplicationRecord
   enum link_type: %i[username oauth2]
+
+  validates_presence_of :name
+  validates_presence_of :link_type
 end

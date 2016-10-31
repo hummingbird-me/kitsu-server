@@ -5,7 +5,7 @@ class CreateLinkedProfiles < ActiveRecord::Migration
       t.references :linked_site, index: true, foreign_key: true, null: false
 
       t.string :external_user_id, null: false
-      t.string :url, null: false
+      t.string :url
       t.boolean :share_to, null: false, default: false
       t.boolean :share_from, null: false, default: false
       t.boolean :public, null: false, default: false

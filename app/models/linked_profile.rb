@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: linked_profiles
@@ -24,10 +25,12 @@
 #  fk_rails_166e103170  (user_id => users.id)
 #  fk_rails_25de88e967  (linked_site_id => linked_sites.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class LinkedProfile < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :linked_site, required: true
 
-  validates :url, presence: true, if: :public?
+  validates_presence_of :url, if: :public? # might need to remove null: false constraint
+  validates_presence_of :external_user_id
 end
