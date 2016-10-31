@@ -3,4 +3,5 @@ class PostLikeResource < BaseResource
   has_one :user
 
   filter :post_id
+  filter :user_id
 end
