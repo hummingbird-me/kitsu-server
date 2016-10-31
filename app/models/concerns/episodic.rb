@@ -12,6 +12,10 @@ module Episodic
     update(episode_length: length)
   end
 
+  def unit(number)
+    episodes.where(number: number).first
+  end
+
   def default_progress_limit
     # Weekly with a margin
     if run_length

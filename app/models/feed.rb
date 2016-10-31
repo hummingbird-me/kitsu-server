@@ -6,10 +6,12 @@ class Feed
     media_aggr: :aggregated,
     post: :flat,
     timeline: :aggregated,
-    notifications: :notification
+    notifications: :notification,
+    global: :aggregated
   }
 
   attr_accessor :stream_feed, :group, :id
+  delegate :readonly_token, to: :stream_feed
 
   def initialize(group, id)
     @group = group.to_s
@@ -50,6 +52,10 @@ class Feed
 
   FEED_GROUPS.values.uniq.each do |expected_type|
     define_method("#{expected_type}?") { type == expected_type }
+  end
+
+  def self.global
+    new('global', 'global')
   end
 
   def type

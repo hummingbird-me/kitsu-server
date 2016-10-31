@@ -9,7 +9,7 @@ class FeedSerializerService
   end
 
   def as_json(*)
-    serializer.serialize_to_hash(resources)
+    serializer.serialize_to_hash(resources).merge(meta: meta)
   end
 
   def resources
@@ -26,6 +26,10 @@ class FeedSerializerService
     else
       @including
     end
+  end
+
+  def meta
+    { readonlyToken: activity_list.feed.readonly_token }
   end
 
   def stream_enrichment_fields

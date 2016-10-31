@@ -11,11 +11,12 @@ class UserResource < BaseResource
   has_one :waifu
   has_many :followers
   has_many :following
+  has_many :blocks
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
-  filter :self, apply: -> (_r, _v, options) {
+  filter :self, apply: -> (records, _v, options) {
     current_user = options[:context][:user]
-    records.where(id: current_user.try(:id)) || User.none
+    records.where(id: current_user&.id) || User.none
   }
 
   def fetchable_fields

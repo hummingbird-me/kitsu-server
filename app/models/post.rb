@@ -53,13 +53,26 @@ class Post < ApplicationRecord
       updated_at: updated_at,
       post_likes_count: post_likes_count,
       comments_count: comments_count,
-      to: [media&.feed, target_user&.feed, target_user&.notifications].compact
+      to: [
+        media&.feed,
+        target_user&.feed,
+        target_user&.notifications,
+        *mentioned_users.map(&:notifications)
+      ].compact
     )
+  end
+
+  def processed_content
+    @processed_content ||= InlinePipeline.call(content)
+  end
+
+  def mentioned_users
+    User.by_name(processed_content[:mentioned_usernames])
   end
 
   before_validation do
     if content_changed?
-      self.content_formatted = InlinePipeline.call(content)[:output].to_s
+      self.content_formatted = processed_content[:output].to_s
     end
   end
 end

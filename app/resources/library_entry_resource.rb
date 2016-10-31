@@ -10,6 +10,7 @@ class LibraryEntryResource < BaseResource
 
   has_one :user
   has_one :media, polymorphic: true
+  has_one :unit, polymorphic: true
 
   paginator :unlimited
 end

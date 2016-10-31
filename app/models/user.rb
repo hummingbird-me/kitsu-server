@@ -88,6 +88,7 @@ class User < ApplicationRecord
     dependent: :destroy
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
     dependent: :destroy
+  has_many :blocks, dependent: :destroy
 
   has_attached_file :avatar
   has_attached_file :cover_image
@@ -105,7 +106,9 @@ class User < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png image/gif]
   }
 
-  scope :by_name, -> (name) { where('lower(name) = ?', name.to_s.downcase) }
+  scope :by_name, -> (*names) {
+    where('lower(name) IN (?)', names.flatten.map(&:downcase))
+  }
 
   # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
@@ -141,6 +144,7 @@ class User < ApplicationRecord
   after_create do
     aggregated_feed.follow(feed)
     timeline.follow(feed)
+    Feed.global.follow(feed)
   end
 
   before_update do

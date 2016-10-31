@@ -42,6 +42,10 @@ class Manga < ApplicationRecord
 
   has_many :chapters
 
+  def unit(number)
+    chapters.where(number: number).first
+  end
+
   def default_progress_limit
     # Biweekly with a margin
     if run_length
