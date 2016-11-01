@@ -92,11 +92,23 @@ RSpec.describe Feed::ActivityList, type: :model do
   end
 
   describe '#destroy' do
-    let(:activity) { Feed::Activity.new(subject, foreign_id: 'id') }
-    it 'should tell Stream to remove the activity by ID' do
-      expect(subject.feed.stream_feed).to receive(:remove_activity)
-        .with('id', foreign_id: true).once
-      subject.destroy(activity)
+    context 'with string foreign_id' do
+      let(:activity) { Feed::Activity.new(subject, foreign_id: 'id') }
+      it 'should tell Stream to remove the activity by ID' do
+        expect(subject.feed.stream_feed).to receive(:remove_activity)
+          .with('id', foreign_id: true).once
+        subject.destroy(activity)
+      end
+    end
+
+    context 'with object foreign_id' do
+      let(:object) { OpenStruct.new(stream_id: 'id') }
+      let(:activity) { Feed::Activity.new(subject, foreign_id: object) }
+      it 'should tell Stream to remove the activity by the #stream_id' do
+        expect(subject.feed.stream_feed).to receive(:remove_activity)
+          .with('id', foreign_id: true).once
+        subject.destroy(activity)
+      end
     end
   end
 
