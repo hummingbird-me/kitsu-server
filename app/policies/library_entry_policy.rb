@@ -1,7 +1,7 @@
 class LibraryEntryPolicy < ApplicationPolicy
   def show?
     # Yes, if you own it or are admin
-    return true if record.user == user || user.has_role?(:admin)
+    return true if record.user == user || is_admin?
     # No, if it's private
     return false if record.private?
     # No, if it's nsfw and you're not a perv
