@@ -185,9 +185,6 @@ GEM
     jmespath (1.3.0)
     json (1.8.3)
     json_expressions (0.8.3)
-    jsonapi-authorization (0.8.1)
-      jsonapi-resources (~> 0.8.0.beta1)
-      pundit (~> 1.0)
     jsonapi-resources (0.8.1)
       concurrent-ruby
       rails (>= 4.0)
@@ -265,6 +262,11 @@ GEM
     puma (3.4.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
+    pundit-resources (1.1.1)
+      activesupport
+      jsonapi-resources
+      pundit
+      rails (>= 4.2.1, < 5.1)
     rack (1.6.4)
     rack-cors (0.4.0)
     rack-mini-profiler (0.10.1)
@@ -440,7 +442,6 @@ DEPENDENCIES
   image_optim
   image_optim_pack
   json_expressions
-  jsonapi-authorization (~> 0.8.0)
   jsonapi-resources (~> 0.8.0)
   jsonapi-utils (= 0.5.0.beta3)
   kramdown
@@ -455,6 +456,7 @@ DEPENDENCIES
   pry-rails
   puma
   pundit
+  pundit-resources
   rack-cors
   rack-mini-profiler
   rails (= 4.2.1)

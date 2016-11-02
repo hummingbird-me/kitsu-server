@@ -47,13 +47,12 @@ module SearchableResource
     end
 
     # Override the #find method to search when called upon
-    def find(filters, opts = {})
+    def find_records(filters, opts = {})
       return super(filters, opts) unless should_query?(filters)
       return [] if filters.values.any?(&:nil?)
 
-      context = opts[:context]
-      # Apply scopes, load, and wrap
-      apply_scopes(filters, opts).load.map { |result| new(result, context) }
+      # Apply scopes and load
+      apply_scopes(filters, opts).load
     end
 
     # Count all search results
