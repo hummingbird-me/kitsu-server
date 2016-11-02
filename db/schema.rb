@@ -359,7 +359,7 @@ ActiveRecord::Schema.define(version: 20161108024127) do
     t.integer  "user_id",                          null: false
     t.integer  "linked_site_id",                   null: false
     t.string   "external_user_id",                 null: false
-    t.string   "url",                              null: false
+    t.string   "url"
     t.boolean  "share_to",         default: false, null: false
     t.boolean  "share_from",       default: false, null: false
     t.boolean  "public",           default: false, null: false

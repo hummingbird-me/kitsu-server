@@ -8,7 +8,7 @@
 #  share_from       :boolean          default(FALSE), not null
 #  share_to         :boolean          default(FALSE), not null
 #  token            :string
-#  url              :string           not null
+#  url              :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  external_user_id :string           not null
