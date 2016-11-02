@@ -8,6 +8,5 @@ RSpec.describe FranchisePolicy do
   permissions :show? do
     it('should allow anons') { should permit(nil, franchise) }
     it('should allow users') { should permit(user, franchise) }
-    end
   end
 end
