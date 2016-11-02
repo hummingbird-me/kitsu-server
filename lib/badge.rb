@@ -13,6 +13,26 @@ class Badge
     @user = user
   end
 
+  def current_rank
+    current_rank = 0
+    self.class::RANKS.each do |key, value|
+      if progress > value[:bestow_when]
+        current_rank = key
+      end
+    end
+    current_rank
+  end
+
+  def current_goal
+    rank = current_rank + 1
+    self.class::RANKS[rank][:bestow_when]
+  end
+
+  def current_title_description
+    rank = self.class::RANKS[current_rank]
+    [rank[:title], rank[:description]]
+  end
+
   attr_reader :user
 
   def progress
@@ -36,11 +56,11 @@ class Badge
   end
 
   def run
-    if has_progress?
-      Bestowment.update_for(self) if progress > 0 && lowest_unachieved_in_group?
-    else
-      Bestowment.earn(self) if earned?
-    end
+    #if show_progress?
+      Bestowment.update_for(self) # if progress > 0 && lowest_unachieved_in_group?
+    #else
+      #Bestowment.earn(self) if earned?
+    #end
   end
 
   private
@@ -51,5 +71,9 @@ class Badge
 
   def show_progress?
     !goal.respond_to?(:call)
+  end
+
+  def has_progress?
+    true
   end
 end

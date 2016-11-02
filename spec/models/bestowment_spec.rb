@@ -21,5 +21,20 @@
 require 'rails_helper'
 
 RSpec.describe Bestowment, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let!(:user) { create :user }
+
+  describe '.prepare_for' do
+    before { Bestowment.prepare_for(user) }
+
+    it 'create bestowments for all badges for user' do
+      Bestowment::BADGES.each do |badge|
+        expect(
+          Bestowment.where(
+            user: user,
+            badge_id: badge
+          ).first
+        ).to_not be(blank?)
+      end
+    end
+  end
 end

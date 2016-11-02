@@ -38,6 +38,8 @@ module Kitsu
     # Eager-load list_import files
     import_dirs = Dir['lib/list_import'].map { |d| File.expand_path(d) }
     config.eager_load_paths += import_dirs
+    badges_path = Dir['app/badges/*'].map { |d| File.expand_path(d) }
+    config.eager_load_paths += badges_path
     # Rip out any non-unique entries
     config.eager_load_paths.uniq!
 
