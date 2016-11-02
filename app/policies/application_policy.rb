@@ -11,6 +11,10 @@ class ApplicationPolicy
   end
   alias_method :index?, :show?
 
+  def see_nsfw?
+    user ? !user.sfw_filter? : false
+  end
+
   def is_admin? # rubocop:disable Style/PredicateName
     user && user.has_role?(:admin, model_class)
   end
