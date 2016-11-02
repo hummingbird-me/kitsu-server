@@ -7,7 +7,9 @@ class Badge
         return if model.nil?
         @model_class = model
         badge = self
-        model.after_commit { badge.new(self.user).run }
+        model.after_commit do
+          badge.new(self.user).run
+        end
       end
 
       # Provide `key "value"` methods for each of these (also accept blocks)

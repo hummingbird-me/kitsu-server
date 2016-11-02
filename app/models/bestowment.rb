@@ -19,21 +19,39 @@
 # rubocop:enable Metrics/LineLength
 
 class Bestowment < ActiveRecord::Base
-	belongs_to :user, required: true
+  BADGES = [
+    'LikingFeedPostsBadge',
+    'TimeWatchedBadge'
+  ]
 
-	validates :rank, :progress, :badge_id, presence: true
-	validates :badge_id, uniqueness: { scope: :user_id }
+  belongs_to :user, required: true
 
-	def bestowed?
-		bestowed_at < Time.now
-	end
+  validates :rank, :progress, :badge_id, presence: true
+  validates :badge_id, uniqueness: { scope: :user_id }
 
-	def badge
-		badge_id.safe_constantize
-	end
+  def bestowed?
+    bestowed_at < Time.now
+  end
 
-	def self.update_for(badge)
-		bestowment = where(badge_id: badge.id, user: badge.user).first
-		bestowment.update()
-	end
+  def badge
+    badge_id.safe_constantize
+  end
+
+  def self.update_for(badge)
+    prepare_for(badge.user)
+    bestowment = where(badge_id: badge.class, user: badge.user).first
+    bestowment.update(
+      rank: badge.current_rank,
+      progress: badge.progress
+    )
+  end
+
+  def self.prepare_for(user)
+    BADGES.each do |badge|
+      bestowment = where(badge_id: badge, user: user).first
+      if bestowment.blank?
+        create(badge_id: badge, user: user)
+      end
+    end
+  end
 end

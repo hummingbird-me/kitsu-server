@@ -33,11 +33,14 @@ module Kitsu
     # Eager-load data_import and list_import files
     import_dirs = Dir['lib/{data,list}_import'].map { |d| File.expand_path(d) }
     config.eager_load_paths += import_dirs
+    badges_path = Dir['app/badges/*'].map { |d| File.expand_path(d) }
+    config.eager_load_paths += badges_path
     # Rip out any non-unique entries
     config.eager_load_paths.uniq!
 
     # Allow autoloading any lib files
     config.autoload_paths << "#{Rails.root}/lib"
+    config.autoload_paths << "#{Rails.root}/app/badges"
 
     # Eable CORS
     config.middleware.insert_before 0, 'Rack::Cors' do
