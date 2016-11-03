@@ -42,8 +42,8 @@ class MoveOldStories < ActiveRecord::Migration
         stories.id,
         stories.user_id AS target_group_id,
         stories.target_id AS user_id,
-        substories.data->'comment' AS content,
-        substories.data->'formatted_comment' AS content_formatted,
+        coalesce(substories.data->'comment', '') AS content,
+        coalesce(substories.data->'formatted_comment', '') AS content_formatted,
         stories.created_at,
         stories.updated_at,
         stories.deleted_at
@@ -62,8 +62,8 @@ class MoveOldStories < ActiveRecord::Migration
       ) SELECT
         stories.id,
         stories.user_id,
-        substories.data->'comment' AS content,
-        substories.data->'formatted_comment' AS content_formatted,
+        coalesce(substories.data->'comment', '') AS content,
+        coalesce(substories.data->'formatted_comment', '') AS content_formatted,
         stories.created_at,
         stories.updated_at,
         stories.deleted_at
@@ -83,8 +83,8 @@ class MoveOldStories < ActiveRecord::Migration
       ) SELECT
         comment.id,
         comment.user_id,
-        comment.data->'reply' AS content,
-        comment.data->'reply' AS content_formatted,
+        coalesce(comment.data->'reply', '') AS content,
+        coalesce(comment.data->'reply', '') AS content_formatted,
         comment.created_at,
         comment.updated_at,
         comment.deleted_at,
