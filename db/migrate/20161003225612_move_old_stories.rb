@@ -33,6 +33,9 @@ class MoveOldStories < ActiveRecord::Migration
     rename_column :comments, :text, :content
     rename_column :comments, :text_formatted, :content_formatted
 
+    ### Referential Integrity Broke It.
+    remove_foreign_key :post_likes, :posts
+
     # Text: User A --> User B
     execute <<-SQL.squish
       INSERT INTO posts (
