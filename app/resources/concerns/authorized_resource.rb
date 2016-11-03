@@ -15,6 +15,12 @@ module AuthorizedResource
     def warn_if_show_defined; end
   end
 
+  def records_for(association_name, options = {})
+    super.to_a.select do |record|
+      show?(Pundit.policy!(context[:current_user], record), record.id)
+    end
+  end
+
   private
 
   def show?(policy, record_id)
