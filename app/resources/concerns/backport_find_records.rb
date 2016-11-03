@@ -3,7 +3,7 @@ module BackportFindRecords
   extend ActiveSupport::Concern
 
   class_methods do
-    def find(filters, opts = {})
+    def find(filters, options = {})
       resources_for(find_records(filters, options), options[:context])
     end
 
