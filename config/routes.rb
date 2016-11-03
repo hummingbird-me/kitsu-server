@@ -392,6 +392,7 @@ Rails.application.routes.draw do
     jsonapi_resources :post_likes
     jsonapi_resources :comment_likes
     jsonapi_resources :blocks
+    jsonapi_resources :favorites
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
   end
