@@ -11,6 +11,11 @@ RSpec.describe Authorization::Assertion::TwitterAuth do
     open_file(file_name)
   end
 
+  let(:twitter_users_show_response) do
+    file_name = 'twitter_users_show_response.json'
+    open_file(file_name)
+  end
+
   let(:twitter_auth) do
     stub_request(
       :get,
@@ -29,6 +34,16 @@ RSpec.describe Authorization::Assertion::TwitterAuth do
       .to_return(
         status: 200,
         body: twitter_auth_response,
+        headers: {}
+      )
+    stub_request(
+      :get,
+      'https://api.twitter.com/1.1/users/show.json?'\
+      'user_id=2244994945'
+    )
+      .to_return(
+        status: 200,
+        body: twitter_users_show_response,
         headers: {}
       )
     stub_request(
