@@ -95,3 +95,7 @@ group :test do
   # Libraries used to test our API itself
   gem 'oauth2'
 end
+
+group :production do
+  gem 'rails_12factor' # Log to stdout, serve assets
+end
