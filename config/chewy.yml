@@ -1,5 +1,5 @@
 default: &default
-  host: <%= ENV['ELASTICSEARCH_HOST'] %>
+  host: <%= ENV['ELASTICSEARCH_HOST'] || ENV['SEARCHBOX_SSL_URL'] %>
 
 development:
   <<: *default
