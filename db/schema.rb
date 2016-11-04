@@ -765,6 +765,7 @@ ActiveRecord::Schema.define(version: 20161102232654) do
     t.string   "past_names",                              default: [],          null: false, array: true
     t.string   "gender"
     t.date     "birthday"
+    t.string   "twitter_id"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

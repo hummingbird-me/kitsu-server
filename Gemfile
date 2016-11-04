@@ -22,6 +22,7 @@ gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doork
 gem 'pundit'
 gem 'pundit-resources'
 gem 'rolify'
+gem 'twitter'
 
 # Attachments
 gem 'paperclip', '~> 4.1'

@@ -68,6 +68,7 @@ GEM
     aws-sdk-resources (2.3.22)
       aws-sdk-core (= 2.3.22)
     bcrypt (3.1.11)
+    buftok (0.2.0)
     builder (3.2.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
@@ -104,6 +105,8 @@ GEM
       devise (>= 3.2, < 4.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    domain_name (0.5.20160826)
+      unf (>= 0.0.5, < 1.0.0)
     doorkeeper (4.0.0)
       railties (>= 4.2)
     dotenv (2.1.1)
@@ -118,6 +121,7 @@ GEM
     elasticsearch-transport (1.0.18)
       faraday
       multi_json
+    equalizer (0.0.10)
     erubis (2.7.0)
     ethon (0.9.0)
       ffi (>= 1.3.0)
@@ -166,6 +170,15 @@ GEM
       activesupport (>= 2)
       nokogiri (>= 1.4)
     htmlentities (4.3.4)
+    http (1.0.4)
+      addressable (~> 2.3)
+      http-cookie (~> 1.0)
+      http-form_data (~> 1.0.1)
+      http_parser.rb (~> 0.6.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    http-form_data (1.0.1)
+    http_parser.rb (0.6.0)
     http_signatures (0.2.2)
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
@@ -201,6 +214,8 @@ GEM
     lumberjack (1.0.10)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    memoizable (0.4.2)
+      thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -213,6 +228,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     mustache (1.0.3)
+    naught (1.1.0)
     nenv (0.3.0)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
@@ -369,6 +385,7 @@ GEM
       celluloid (>= 0.14.1)
       ice_cube (= 0.11.1)
       sidekiq (>= 3.0.0)
+    simple_oauth (0.3.1)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -399,10 +416,24 @@ GEM
     timecop (0.8.1)
     timers (4.0.4)
       hitimes
+    twitter (5.16.0)
+      addressable (~> 2.3)
+      buftok (~> 0.2.0)
+      equalizer (= 0.0.10)
+      faraday (~> 0.9.0)
+      http (~> 1.0)
+      http_parser.rb (~> 0.6.0)
+      json (~> 1.8)
+      memoizable (~> 0.4.0)
+      naught (~> 1.0)
+      simple_oauth (~> 0.3.0)
     typhoeus (1.0.2)
       ethon (>= 0.9.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
     warden (1.2.6)
       rack (>= 1.0)
     webmock (2.1.0)
@@ -476,6 +507,7 @@ DEPENDENCIES
   stream_rails
   timecop
   twemoji!
+  twitter
   typhoeus
   webmock
 

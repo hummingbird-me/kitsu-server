@@ -32,8 +32,11 @@ module Authorization
         return unless @user_data.present?
         user = user!
         @user_data['friends']['data'].each do |friend|
-          follower = User.where(facebook_id: friend['id']).first
-          Follow.create(follower: follower, followed: user) if follower.present?
+          followed = User.where(facebook_id: friend['id']).first
+          Follow.find_or_create_by(
+            follower: user,
+            followed: followed
+          ) if followed.present?
         end
       end
     end
