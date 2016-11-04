@@ -35,6 +35,7 @@ class MoveOldStories < ActiveRecord::Migration
 
     ### Referential Integrity Broke It.
     remove_foreign_key :post_likes, :posts
+    remove_foreign_key :post_likes, :users
 
     # Text: User A --> User B
     execute <<-SQL.squish
