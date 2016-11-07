@@ -7,7 +7,7 @@ class Badge
         return if model.nil?
         @model_class = model
         badge = self
-        model.after_commit do
+        model.after_save do
           badge.new(self.user).run
         end
       end
@@ -27,13 +27,16 @@ class Badge
       # badge's rank
       def rank(value = nil, &block)
         return @rank if value.nil?
-
         subclass = const_set("Rank#{value}", Class.new(self, &block))
         subclass.rank = value
       end
 
       def rank=(value)
         @rank = value
+      end
+
+      def ranks
+        constants.grep(/^Rank/)
       end
 
       # Declare the goal for the badge
@@ -56,16 +59,6 @@ class Badge
 
       def hidden?
         @hidden
-      end
-
-      # Inherit attributes and hooks onto the subclasses
-      def inherited(subclass)
-        %i[progress title description hidden rank goal].each do |attr|
-          value = instance_variable_get("@#{attr}")
-          subclass.instance_variable_set("@#{attr}", value)
-        end
-        subclass.on(@model_class)
-        super
       end
     end
   end

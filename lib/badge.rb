@@ -1,6 +1,8 @@
 class Badge
   include DSL
 
+  attr_reader :title, :description, :goal, :rank, :user
+
   def self.slug
     self.name.underscore.dasherize.sub('-badge', '')
   end
@@ -11,69 +13,54 @@ class Badge
 
   def initialize(user)
     @user = user
+    get_context
   end
-
-  def current_rank
-    current_rank = 0
-    self.class::RANKS.each do |key, value|
-      if progress > value[:bestow_when]
-        current_rank = key
-      end
-    end
-    current_rank
-  end
-
-  def current_goal
-    rank = current_rank + 1
-    self.class::RANKS[rank][:bestow_when]
-  end
-
-  def current_title_description
-    rank = self.class::RANKS[current_rank]
-    [rank[:title], rank[:description]]
-  end
-
-  attr_reader :user
 
   def progress
-    return 0 unless show_progress?
-
-    context.instance_eval(&self.class.progress)
-  end
-
-  def goal
-    self.class.goal
+    @progress ||= instance_eval(&self.class.progress)
   end
 
   def earned?
-    return false unless goal
-
-    if show_progress?
-      progress >= goal
-    else
-      context.instance_eval(goal)
-    end
+    return false unless @goal
+    progress > @goal
   end
 
   def run
-    #if show_progress?
-      Bestowment.update_for(self) # if progress > 0 && lowest_unachieved_in_group?
-    #else
-      #Bestowment.earn(self) if earned?
-    #end
+    Bestowment.update_for(self)
   end
 
   private
 
-  def context
-    OpenStruct.new(user: @user)
+  def get_context
+    @rank = 0
+    next_goal = false
+    self.class.ranks.each do |rank|
+      state = self.class.const_get(rank)
+      current_goal = get_goal_result(state.goal)
+      if next_goal
+        @goal = current_goal
+        next_goal = false
+      end
+      if progress >= current_goal
+        @rank = state.rank
+        @title = state.title
+        @description = state.description
+        next_goal = true
+      end
+    end
+    @rank
   end
 
-  def show_progress?
-    !goal.respond_to?(:call)
+  def get_goal
+    state = self.class.const_get("Rank#{rank}")
+    @goal = get_goal_result(state.goal)
   end
 
-  def has_progress?
-    true
+  def get_goal_result(goal)
+    if goal.is_a? Proc
+      instance_eval(&goal)
+    else
+      goal
+    end
   end
 end
