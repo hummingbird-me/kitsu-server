@@ -79,6 +79,8 @@ module SearchableResource
     private
 
     def apply_scopes(filters, opts = {})
+      # TODO: actually apply policy somehow
+      opts[:context][:policy_used]&.call
       # Generate query
       query = generate_query(filters)
       query = query.reduce(@chewy_index) do |scope, subquery|

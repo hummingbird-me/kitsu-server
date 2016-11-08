@@ -2,7 +2,7 @@ class BaseResource < JSONAPI::Resource
   abstract
   include BackportFindRecords
   include AuthenticatedResource
-  include AuthorizedResource
+  include Pundit::Resource
   include SearchableResource
 
   def self.apply_filter(records, filter, value, options)
