@@ -11,8 +11,9 @@ class LibraryEntryPolicy < ApplicationPolicy
       t = LibraryEntry.arel_table
       private, user_id = t[:private], t[:user_id]
 
+      filtered_scope = scope
       # Apply SFW filter if it's enabled
-      filtered_scope = scope.sfw if user&.sfw_filter?
+      filtered_scope = filtered_scope.sfw if user&.sfw_filter?
       # Don't apply privacy if the user is an admin
       return filtered_scope if user.has_role?(:admin)
       # RAILS-5: This can be replaced with a simple ActiveRecord.or
