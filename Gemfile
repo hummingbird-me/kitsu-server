@@ -20,8 +20,9 @@ gem 'devise-async'
 gem 'doorkeeper'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'pundit'
-gem 'jsonapi-authorization', '~> 0.8.0'
+gem 'pundit-resources'
 gem 'rolify'
+gem 'twitter'
 
 # Attachments
 gem 'paperclip', '~> 4.1'
@@ -93,4 +94,8 @@ group :test do
 
   # Libraries used to test our API itself
   gem 'oauth2'
+end
+
+group :production do
+  gem 'rails_12factor' # Log to stdout, serve assets
 end

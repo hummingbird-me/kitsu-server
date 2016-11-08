@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161029060323) do
+ActiveRecord::Schema.define(version: 20161108024127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,8 +142,10 @@ ActiveRecord::Schema.define(version: 20161029060323) do
   add_index "characters", ["mal_id"], name: "index_characters_on_mal_id", unique: true, using: :btree
 
   create_table "comment_likes", force: :cascade do |t|
-    t.integer "comment_id"
-    t.integer "user_id"
+    t.integer  "comment_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "comment_likes", ["comment_id"], name: "index_comment_likes_on_comment_id", using: :btree
@@ -230,12 +232,12 @@ ActiveRecord::Schema.define(version: 20161029060323) do
   add_index "favorite_genres_users", ["genre_id", "user_id"], name: "index_favorite_genres_users_on_genre_id_and_user_id", unique: true, using: :btree
 
   create_table "favorites", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "item_id"
-    t.string   "item_type",  limit: 255
+    t.integer  "user_id",                               null: false
+    t.integer  "item_id",                               null: false
+    t.string   "item_type",  limit: 255,                null: false
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
-    t.integer  "fav_rank",               default: 9999
+    t.integer  "fav_rank",               default: 9999, null: false
   end
 
   add_index "favorites", ["item_id", "item_type"], name: "index_favorites_on_item_id_and_item_type", using: :btree
@@ -331,7 +333,7 @@ ActiveRecord::Schema.define(version: 20161029060323) do
     t.text     "about_formatted"
   end
 
-  create_table "installments", id: false, force: :cascade do |t|
+  create_table "installments", force: :cascade do |t|
     t.integer "media_id"
     t.integer "franchise_id"
     t.string  "media_type",               null: false
@@ -356,6 +358,7 @@ ActiveRecord::Schema.define(version: 20161029060323) do
     t.boolean  "reconsuming",                             default: false, null: false
     t.string   "media_type",                                              null: false
     t.integer  "volumes_owned",                           default: 0,     null: false
+    t.boolean  "nsfw",                                    default: false, null: false
   end
 
   add_index "library_entries", ["user_id", "media_type", "media_id"], name: "index_library_entries_on_user_id_and_media_type_and_media_id", unique: true, using: :btree
@@ -773,6 +776,7 @@ ActiveRecord::Schema.define(version: 20161029060323) do
     t.string   "past_names",                              default: [],          null: false, array: true
     t.string   "gender"
     t.date     "birthday"
+    t.string   "twitter_id"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

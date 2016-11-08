@@ -1,4 +1,6 @@
 class ActivityResource < BaseResource
+  include ScopelessResource
+
   model_name 'Feed::Activity'
 
   attributes :status, :verb, :time, :stream_id, :foreign_id, :rating,

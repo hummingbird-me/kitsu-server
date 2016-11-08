@@ -15,7 +15,7 @@ class UserResource < BaseResource
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (records, _v, options) {
-    current_user = options[:context][:user]
+    current_user = options[:context][:current_user]
     records.where(id: current_user&.id) || User.none
   }
 

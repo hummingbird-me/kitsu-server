@@ -67,7 +67,8 @@ class Feed
     end
 
     def destroy(activity)
-      feed.stream_feed.remove_activity(activity.foreign_id, foreign_id: true)
+      foreign_id = Feed.get_stream_id(activity.foreign_id)
+      feed.stream_feed.remove_activity(foreign_id, foreign_id: true)
     end
 
     def results

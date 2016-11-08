@@ -53,7 +53,7 @@ RSpec.describe Authorization::Assertion::Facebook do
 
     before { facebook_auth.import_friends }
 
-    subject { Follow.where(followed: user, follower: friend) }
+    subject { Follow.where(follower: user, followed: friend) }
 
     it 'follow should exist' do
       expect(subject).to exist

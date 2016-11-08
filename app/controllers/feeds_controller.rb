@@ -1,5 +1,6 @@
 class FeedsController < ApplicationController
   include Pundit
+  skip_after_action :enforce_policy_use
 
   def show
     serializer = FeedSerializerService.new(activity_list, including: including,

@@ -1,0 +1,1 @@
+class ItemResource < BaseResource; end

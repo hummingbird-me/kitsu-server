@@ -4,6 +4,8 @@
 # Table name: comment_likes
 #
 #  id         :integer          not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #  comment_id :integer          indexed, indexed => [user_id]
 #  user_id    :integer          indexed, indexed => [comment_id]
 #

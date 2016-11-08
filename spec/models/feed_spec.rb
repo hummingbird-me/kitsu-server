@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Feed, type: :model do
   subject { Feed.new('user', '1') }
 
-  it { should delegate_method(:readonly_token, to: :stream_feed) }
+  it { should delegate_method(:readonly_token).to(:stream_feed) }
 
   describe '#activities' do
     it 'should return an ActivityList for the feed' do
