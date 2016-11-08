@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161107224046) do
+ActiveRecord::Schema.define(version: 20161108024127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -323,7 +323,7 @@ ActiveRecord::Schema.define(version: 20161107224046) do
     t.text     "about_formatted"
   end
 
-  create_table "installments", id: false, force: :cascade do |t|
+  create_table "installments", force: :cascade do |t|
     t.integer "media_id"
     t.integer "franchise_id"
     t.string  "media_type",               null: false
