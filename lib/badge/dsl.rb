@@ -8,7 +8,12 @@ class Badge
         @model_class = model
         badge = self
         model.after_save do
-          badge.new(self.user).run
+          user = if self.class == User
+                   self
+                 else
+                   self.user
+                 end
+          badge.new(user).run
         end
       end
 

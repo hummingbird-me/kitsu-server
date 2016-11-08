@@ -4,7 +4,7 @@ class Badge
   attr_reader :title, :description, :goal, :rank, :user
 
   def self.slug
-    self.name.underscore.dasherize.sub('-badge', '')
+    name.underscore.dasherize.sub('-badge', '')
   end
 
   def slug
@@ -13,16 +13,24 @@ class Badge
 
   def initialize(user)
     @user = user
-    get_context
+    describe_context
   end
 
   def progress
-    @progress ||= instance_eval(&self.class.progress)
+    if self.class.progress.nil?
+      nil
+    else
+      @progress ||= instance_eval(&self.class.progress)
+    end
   end
 
   def earned?
     return false unless @goal
-    progress > @goal
+    if progress.nil?
+      instance_eval(&@goal)
+    else
+      progress > @goal
+    end
   end
 
   def run
@@ -31,17 +39,23 @@ class Badge
 
   private
 
-  def get_context
+  def describe_context
     @rank = 0
     next_goal = false
-    self.class.ranks.each do |rank|
-      state = self.class.const_get(rank)
-      current_goal = get_goal_result(state.goal)
-      if next_goal
-        @goal = current_goal
-        next_goal = false
-      end
-      if progress >= current_goal
+    ranks = self.class.ranks
+    if ranks.blank?
+      @title = self.class.title
+      @description = self.class.description
+      @goal = self.class.goal
+    else
+      ranks.each do |rank|
+        state = self.class.const_get(rank)
+        current_goal = get_goal_result(state.goal)
+        if next_goal
+          @goal = current_goal
+          next_goal = false
+        end
+        next unless progress >= current_goal
         @rank = state.rank
         @title = state.title
         @description = state.description
@@ -49,11 +63,6 @@ class Badge
       end
     end
     @rank
-  end
-
-  def get_goal
-    state = self.class.const_get("Rank#{rank}")
-    @goal = get_goal_result(state.goal)
   end
 
   def get_goal_result(goal)

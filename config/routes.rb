@@ -409,7 +409,9 @@ Rails.application.routes.draw do
     jsonapi_resources :anime
     jsonapi_resources :manga
     jsonapi_resources :drama
-    jsonapi_resources :users
+    jsonapi_resources :users do
+      jsonapi_resources :bestowments, only: [:index]
+    end
     jsonapi_resources :follows do
       post :import_from_facebook, on: :collection
       post :import_from_twitter, on: :collection

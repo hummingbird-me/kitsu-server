@@ -21,11 +21,11 @@
 class Bestowment < ActiveRecord::Base
   belongs_to :user, required: true
 
-  validates :rank, :progress, :badge_id, presence: true
+  validates :badge_id, presence: true
   validates :badge_id, uniqueness: { scope: :user_id }
 
   def bestowed?
-    bestowed_at < Time.now
+    !bestowed_at.nil? && bestowed_at < Time.now
   end
 
   def badge
@@ -33,11 +33,31 @@ class Bestowment < ActiveRecord::Base
   end
 
   def self.update_for(badge)
-    bestowment = first_or_create(badge_id: badge.class, user: badge.user)
-    bestowment.update(
-      rank: badge.rank,
-      progress: badge.progress,
-      bestowed_at: DateTime.now
-    )
+    bestowment = where(badge_id: badge.class, user: badge.user).first
+    if badge.class.ranks.present?
+      if bestowment.blank?
+        bestowment = new(
+          badge_id: badge.class,
+          user: badge.user,
+          rank: badge.rank,
+          progress: badge.progress
+        )
+        bestowment.bestowed_at = DateTime.now if badge.earned?
+        bestowment.save
+      else
+        unless bestowment.bestowed?
+          bestowment.rank = badge.rank
+          bestowment.progress = badge.progress
+          bestowment.bestowed_at = DateTime.now if badge.earned?
+          bestowment.save
+        end
+      end
+    elsif badge.earned? && bestowment.blank?
+      create(
+        badge_id: badge.class,
+        user: badge.user,
+        bestowed_at: DateTime.now
+      )
+    end
   end
 end
