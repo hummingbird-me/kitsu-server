@@ -9,6 +9,7 @@ class MediaActivityService
 
   def status(status)
     fill_defaults user.feed.activities.new(
+      foreign_id: "LibraryEntry:#{library_entry.id}:updated-#{status}",
       verb: 'updated',
       status: status
     )
@@ -16,6 +17,7 @@ class MediaActivityService
 
   def rating(rating)
     fill_defaults user.feed.activities.new(
+      foreign_id: "LibraryEntry:#{library_entry.id}:rated",
       verb: 'rated',
       rating: rating,
     )
@@ -24,6 +26,7 @@ class MediaActivityService
   def progress(progress, unit = nil)
     fill_defaults user.feed.activities.new(
       verb: 'progressed',
+      foreign_id: "LibraryEntry:#{library_entry.id}:progressed-#{progress}",
       progress: progress,
       unit: unit
     )
@@ -31,6 +34,7 @@ class MediaActivityService
 
   def reviewed(review)
     fill_defaults user.feed.activities.new(
+      foreign_id: review,
       verb: 'reviewed',
       review: review
     )
