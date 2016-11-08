@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       # Profile data
       jsonapi_resources :profile_links
       jsonapi_resources :profile_link_sites
+      # Badges
+      jsonapi_resources :bestowments
       # Follows/Blocks/Memberships
       jsonapi_resources :follows do
         post :import_from_facebook, on: :collection

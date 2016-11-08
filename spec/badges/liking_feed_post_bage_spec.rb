@@ -16,7 +16,7 @@ RSpec.describe LikingFeedPostsBadge do
     end
 
     it 'create bestowment' do
-      expect(Bestowment.all.count).to eq(1)
+      expect(Bestowment.where(badge_id: 'LikingFeedPostsBadge').count).to eq(1)
     end
   end
 

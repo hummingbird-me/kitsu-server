@@ -278,6 +278,7 @@ class User < ApplicationRecord
     @site_announcements_feed ||= SiteAnnouncementsFeed.new(id)
   end
 
+<<<<<<< HEAD
   def library_feed
     @library_feed ||= PrivateLibraryFeed.new(id)
   end
@@ -343,6 +344,10 @@ class User < ApplicationRecord
         GlobalFeed.new.unfollow(profile_feed)
       end
     end
+  end
+
+  def finished?
+    email.present? && bio.present?
   end
 
   before_update do

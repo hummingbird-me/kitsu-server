@@ -5,7 +5,8 @@ class LibraryIndex < Chewy::Index
 
       # Titles
       translatable_field :titles, value: -> (e) { e.media.titles }
-      field :abbreviated_titles, type: 'string',
+      field :abbreviated_titles,
+        type: 'string',
         value: -> (e) { e.media.abbreviated_titles }
       field :status, type: 'string'
       field :media_type, type: 'string'
