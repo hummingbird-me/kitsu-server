@@ -4,4 +4,6 @@ class EpisodeResource < BaseResource
   attribute :thumbnail, format: :attachment
 
   has_one :media, polymorphic: true
+
+  filter :media_id
 end
