@@ -37,6 +37,16 @@ class ListImport < ApplicationRecord
   validates_attachment :input_file, presence: { unless: :input_text? }
   validates_attachment :input_file, content_type: { content_type: %w[] }
 
+  validate :type_is_subclass
+
+  def type_is_subclass
+    in_namespace = type.start_with?('ListImport::')
+    is_descendant = type.safe_constantize < ListImport
+    unless in_namespace && is_descendant
+      errors.add(:type, 'must be a ListImport class')
+    end
+  end
+
   # Apply the ListImport
   def apply
     fail 'No each method defined' unless respond_to? :each
