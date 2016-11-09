@@ -3,14 +3,6 @@ class Badge
 
   attr_reader :title, :description, :goal, :rank, :user
 
-  def self.slug
-    name.underscore.dasherize.sub('-badge', '')
-  end
-
-  def slug
-    self.class.slug
-  end
-
   def initialize(user)
     @user = user
     describe_context
