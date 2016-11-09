@@ -1,0 +1,1 @@
+class ListImportsController < ApplicationController; end

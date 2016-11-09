@@ -430,6 +430,7 @@ Rails.application.routes.draw do
     jsonapi_resources :blocks
     jsonapi_resources :favorites
     jsonapi_resources :episodes
+    jsonapi_resources :list_imports
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
   end
