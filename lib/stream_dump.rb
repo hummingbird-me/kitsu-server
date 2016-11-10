@@ -37,6 +37,7 @@ module StreamDump
     end
 
     def stream_activity
+      return unless story&.library_entry
       case substory_type
       when 'status_update' then activity.status(status)
       when 'progress' then activity.progress(progress)
