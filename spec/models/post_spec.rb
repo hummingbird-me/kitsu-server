@@ -40,6 +40,7 @@ RSpec.describe Post, type: :model do
   it { should belong_to(:spoiled_unit) }
   it { should have_many(:post_likes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
+  it { should validate_length_of(:content).is_at_most(9_000) }
 
   context 'with a spoiled unit' do
     subject { build(:post, spoiled_unit: build(:episode)) }

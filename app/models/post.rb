@@ -43,6 +43,7 @@ class Post < ApplicationRecord
     accept: true,
     message: 'must be true if spoiled_unit is provided'
   }, if: :spoiled_unit
+  validates :content, length: { maximum: 9_000 }
 
   def feed
     Feed.post(id)

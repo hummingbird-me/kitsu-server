@@ -33,6 +33,7 @@ class Comment < ApplicationRecord
 
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
+  validates :content, length: { maximum: 9_000 }
 
   def stream_activity
     post.feed.activities.new(

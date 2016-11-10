@@ -30,6 +30,7 @@ RSpec.describe Comment, type: :model do
   it { should have_many(:replies).class_name('Comment').dependent(:destroy) }
   it { should have_many(:likes).class_name('CommentLike').dependent(:destroy) }
   it { should validate_presence_of(:content) }
+  it { should validate_length_of(:content).is_at_most(9_000) }
 
   it 'should convert basic markdown to fill in content_formatted' do
     comment = create(:comment, content: '*Emphasis* is cool!')
