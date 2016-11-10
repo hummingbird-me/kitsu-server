@@ -28,6 +28,14 @@ module StreamDump
       MediaActivityService.new(story.library_entry)
     end
 
+    def progress
+      data['episode_number']
+    end
+
+    def status
+      data['new_status']
+    end
+
     def stream_activity
       case substory_type
       when 'status_update' then activity.status(status)
