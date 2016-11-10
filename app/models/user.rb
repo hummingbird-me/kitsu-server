@@ -48,7 +48,9 @@
 #  ninja_banned                :boolean          default(FALSE)
 #  onboarded                   :boolean          default(FALSE), not null
 #  past_names                  :string           default([]), not null, is an Array
+#  posts_count                 :integer          default(0), not null
 #  pro_expires_at              :datetime
+#  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
