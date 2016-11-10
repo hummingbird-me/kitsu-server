@@ -346,6 +346,7 @@ GEM
       redis (>= 2.2)
     responders (2.2.0)
       railties (>= 4.2.0, < 5.1)
+    rinku (2.0.2)
     rolify (5.1.0)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
@@ -500,6 +501,7 @@ DEPENDENCIES
   rails_12factor
   redis
   redis-rails
+  rinku
   rolify
   rspec-rails
   rspec-sidekiq

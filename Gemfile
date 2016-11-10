@@ -42,6 +42,7 @@ gem 'kramdown'
 gem 'sanitize'
 gem 'onebox'
 gem 'twemoji', github: 'vevix/twemoji'
+gem 'rinku'
 
 # Miscellaneous Utilities
 gem 'friendly_id' # slug-urls-are-cool
