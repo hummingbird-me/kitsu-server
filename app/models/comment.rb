@@ -49,7 +49,7 @@ class Comment < ApplicationRecord
 
   before_validation do
     if content_changed?
-      self.content_formatted = InlinePipeline.call(content)[:output].to_s
+      self.content_formatted = LongPipeline.call(content)[:output].to_s
     end
   end
 end

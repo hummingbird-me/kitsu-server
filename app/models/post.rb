@@ -66,7 +66,7 @@ class Post < ApplicationRecord
   end
 
   def processed_content
-    @processed_content ||= InlinePipeline.call(content)
+    @processed_content ||= LongPipeline.call(content)
   end
 
   def mentioned_users
