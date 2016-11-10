@@ -7,7 +7,7 @@ class LinkedProfilePolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope.where(private: true) unless user
+      return scope.where(private: false) unless user
       t = LinkedProfile.arel_table
       private, user_id = t[:private], t[:user_id]
 

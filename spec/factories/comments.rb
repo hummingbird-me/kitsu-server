@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: comments
@@ -20,6 +21,7 @@
 #  fk_rails_2fd19c0db7  (post_id => posts.id)
 #  fk_rails_31554e7034  (parent_id => comments.id)
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :comment do

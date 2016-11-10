@@ -35,12 +35,12 @@ RSpec.describe LinkedProfile, type: :model do
   it { should validate_presence_of(:external_user_id) }
 
   describe 'validates url' do
-    context 'if public' do
-      subject { described_class.new(public: true) }
+    context 'if private' do
+      subject { described_class.new(private: true) }
       it { should validate_presence_of(:url) }
     end
-    context 'if private' do
-      subject { described_class.new(public: false) }
+    context 'if public' do
+      subject { described_class.new(private: false) }
       it { should_not validate_presence_of(:url) }
     end
   end

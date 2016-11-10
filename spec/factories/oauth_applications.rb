@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: oauth_applications
@@ -13,6 +14,7 @@
 #  owner_id     :integer
 #  owner_type   :string
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :oauth_application, class: ::Doorkeeper::Application do

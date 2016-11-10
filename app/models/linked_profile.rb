@@ -31,6 +31,6 @@ class LinkedProfile < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :linked_site, required: true
 
-  validates_presence_of :url, if: :public?
+  validates_presence_of :url, if: :private?
   validates_presence_of :external_user_id
 end
