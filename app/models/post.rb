@@ -32,7 +32,7 @@
 class Post < ApplicationRecord
   include WithActivity
 
-  belongs_to :user, required: true
+  belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
