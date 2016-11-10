@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: chapters
@@ -18,6 +19,7 @@
 #
 #  index_chapters_on_manga_id  (manga_id)
 #
+# rubocop:enable Metrics/LineLength
 
 class Chapter < ApplicationRecord
   belongs_to :manga

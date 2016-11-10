@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: installments
@@ -14,6 +15,7 @@
 #  index_installments_on_franchise_id             (franchise_id)
 #  index_installments_on_media_type_and_media_id  (media_type,media_id)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
