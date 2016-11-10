@@ -35,6 +35,8 @@ RSpec.describe ListImport do
     def count; 100; end
   end
 
+  subject { build(:list_import) }
+
   it { should define_enum_for(:status) }
   it { should belong_to(:user).touch }
   it { should validate_presence_of(:user) }
