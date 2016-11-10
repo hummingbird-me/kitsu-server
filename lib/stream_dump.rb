@@ -1,4 +1,4 @@
-class StreamDump
+module StreamDump
   class Story < ActiveRecord::Base
     default_scope { where(deleted_at: nil) }
 
