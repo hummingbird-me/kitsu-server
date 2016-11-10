@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -74,6 +75,7 @@
 #  index_users_on_to_follow           (to_follow)
 #  index_users_on_waifu_id            (waifu_id)
 #
+# rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
   PAST_NAMES_LIMIT = 10
@@ -89,6 +91,7 @@ class User < ApplicationRecord
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
     dependent: :destroy
   has_many :blocks, dependent: :destroy
+  has_many :linked_profiles, dependent: :destroy
 
   has_attached_file :avatar
   has_attached_file :cover_image

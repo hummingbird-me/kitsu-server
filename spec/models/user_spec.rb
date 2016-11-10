@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -74,6 +75,7 @@
 #  index_users_on_to_follow           (to_follow)
 #  index_users_on_waifu_id            (waifu_id)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
@@ -83,6 +85,7 @@ RSpec.describe User, type: :model do
 
   it { should have_db_index(:facebook_id) }
   it { should belong_to(:waifu) }
+  it { should have_many(:linked_profiles) }
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }

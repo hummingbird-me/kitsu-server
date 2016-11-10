@@ -131,6 +131,11 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/blocks(.:format)                       users#update_relationship {:relationship=>"blocks"}
 #                                        DELETE    /edge/users/:user_id/relationships/blocks(.:format)                       users#destroy_relationship {:relationship=>"blocks"}
 #                            user_blocks GET       /edge/users/:user_id/blocks(.:format)                                     blocks#get_related_resources {:relationship=>"blocks", :source=>"users"}
+#     user_relationships_linked_profiles GET       /edge/users/:user_id/relationships/linked-profiles(.:format)              users#show_relationship {:relationship=>"linked_profiles"}
+#                                        POST      /edge/users/:user_id/relationships/linked-profiles(.:format)              users#create_relationship {:relationship=>"linked_profiles"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/linked-profiles(.:format)              users#update_relationship {:relationship=>"linked_profiles"}
+#                                        DELETE    /edge/users/:user_id/relationships/linked-profiles(.:format)              users#destroy_relationship {:relationship=>"linked_profiles"}
+#                   user_linked_profiles GET       /edge/users/:user_id/linked-profiles(.:format)                            linked_profiles#get_related_resources {:relationship=>"linked_profiles", :source=>"users"}
 #                                  users GET       /edge/users(.:format)                                                     users#index
 #                                        POST      /edge/users(.:format)                                                     users#create
 #                                   user GET       /edge/users/:id(.:format)                                                 users#show
@@ -381,6 +386,16 @@
 #                                        PATCH     /edge/episodes/:id(.:format)                                              episodes#update
 #                                        PUT       /edge/episodes/:id(.:format)                                              episodes#update
 #                                        DELETE    /edge/episodes/:id(.:format)                                              episodes#destroy
+#         list_import_relationships_user GET       /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#destroy_relationship {:relationship=>"user"}
+#                       list_import_user GET       /edge/list-imports/:list_import_id/user(.:format)                         users#get_related_resource {:relationship=>"user", :source=>"list_imports"}
+#                           list_imports GET       /edge/list-imports(.:format)                                              list_imports#index
+#                                        POST      /edge/list-imports(.:format)                                              list_imports#create
+#                            list_import GET       /edge/list-imports/:id(.:format)                                          list_imports#show
+#                                        PATCH     /edge/list-imports/:id(.:format)                                          list_imports#update
+#                                        PUT       /edge/list-imports/:id(.:format)                                          list_imports#update
+#                                        DELETE    /edge/list-imports/:id(.:format)                                          list_imports#destroy
 #                               activity DELETE    /edge/activities/:id(.:format)                                            activities#destroy
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
