@@ -14,6 +14,7 @@
 #  avatar_updated_at           :datetime
 #  bio                         :string(140)      default(""), not null
 #  birthday                    :date
+#  comments_count              :integer          default(0), not null
 #  confirmation_sent_at        :datetime
 #  confirmation_token          :string(255)      indexed
 #  confirmed_at                :datetime
@@ -27,6 +28,7 @@
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
 #  encrypted_password          :string(255)      default(""), not null
+#  favorites_count             :integer          default(0), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
 #  gender                      :string
@@ -38,6 +40,8 @@
 #  last_sign_in_at             :datetime
 #  last_sign_in_ip             :string(255)
 #  life_spent_on_anime         :integer          default(0), not null
+#  likes_given_count           :integer          default(0), not null
+#  likes_received_count        :integer          default(0), not null
 #  location                    :string(255)
 #  mal_username                :string(255)
 #  name                        :string(255)

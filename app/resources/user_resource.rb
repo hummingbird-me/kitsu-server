@@ -4,7 +4,8 @@ class UserResource < BaseResource
   attributes :name, :past_names, :about, :bio, :about_formatted, :location,
     :website, :waifu_or_husbando, :to_follow, :followers_count, :created_at,
     :following_count, :onboarded, :life_spent_on_anime, :birthday, :gender,
-    :facebook_id, :updated_at
+    :facebook_id, :updated_at, :comments_count, :favorites_count,
+    :likes_given_count, :likes_received_count
   attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 
