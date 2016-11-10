@@ -30,8 +30,8 @@ module StreamDump
 
     def stream_activity
       case substory_type
-      when :status_update then activity.status(status)
-      when :progress then activity.progress(progress)
+      when 'status_update' then activity.status(status)
+      when 'progress' then activity.progress(progress)
       end
     end
   end
