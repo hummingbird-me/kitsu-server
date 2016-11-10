@@ -53,7 +53,7 @@ module StreamDump
   def stories(scope = User)
     scope.pluck(:id).map do |user_id|
       substories = Substory.for_user(user_id).media_update.with_library_entry
-      next if stories.blank?
+      next if substories.blank?
       {
         instruction: 'add_activities',
         feedId: Feed.user(user_id).stream_id,
