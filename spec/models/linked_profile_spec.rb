@@ -4,7 +4,7 @@
 # Table name: linked_profiles
 #
 #  id               :integer          not null, primary key
-#  public           :boolean          default(FALSE), not null
+#  private          :boolean          default(TRUE), not null
 #  share_from       :boolean          default(FALSE), not null
 #  share_to         :boolean          default(FALSE), not null
 #  token            :string

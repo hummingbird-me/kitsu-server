@@ -386,6 +386,16 @@
 #                                        PATCH     /edge/episodes/:id(.:format)                                              episodes#update
 #                                        PUT       /edge/episodes/:id(.:format)                                              episodes#update
 #                                        DELETE    /edge/episodes/:id(.:format)                                              episodes#destroy
+#         list_import_relationships_user GET       /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#destroy_relationship {:relationship=>"user"}
+#                       list_import_user GET       /edge/list-imports/:list_import_id/user(.:format)                         users#get_related_resource {:relationship=>"user", :source=>"list_imports"}
+#                           list_imports GET       /edge/list-imports(.:format)                                              list_imports#index
+#                                        POST      /edge/list-imports(.:format)                                              list_imports#create
+#                            list_import GET       /edge/list-imports/:id(.:format)                                          list_imports#show
+#                                        PATCH     /edge/list-imports/:id(.:format)                                          list_imports#update
+#                                        PUT       /edge/list-imports/:id(.:format)                                          list_imports#update
+#                                        DELETE    /edge/list-imports/:id(.:format)                                          list_imports#destroy
 #                               activity DELETE    /edge/activities/:id(.:format)                                            activities#destroy
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
