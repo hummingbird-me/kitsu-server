@@ -1,6 +1,6 @@
 class ListImportResource < BaseResource
   # Parameters
-  attributes :input_text, :strategy, :type
+  attributes :input_text, :strategy, :kind
   attribute :input_file, format: :attachment
   # Status
   attributes :progress, :status, :total
