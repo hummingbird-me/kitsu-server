@@ -6,6 +6,32 @@ class Badge
   def initialize(user)
     @user = user
     describe_context
+    @bestowment = check_bestowment(@rank)
+  end
+
+  def check_bestowment(rank=nil)
+    bestowment = Bestowment.where(
+      badge_id: self.class,
+      user: @user
+    )
+    bestowment = bestowment.where(rank: rank) if has_progress?
+    bestowment.first
+  end
+
+  def bestowed(rank=nil)
+    if has_progress?
+      state = self.class.const_get("Rank#{rank}")
+    else
+      state = self
+    end
+    Bestowment.create(
+      badge_id: self.class,
+      rank: rank,
+      user: @user,
+      bestowed_at: DateTime.now,
+      title: state.title,
+      description: state.description
+    )
   end
 
   def progress
@@ -26,14 +52,23 @@ class Badge
   end
 
   def run
-    Bestowment.update_for(self)
+    #bestowed badge if all ranks was earned
+    bestowed(@rank) if earned? && @bestowment.nil?
+    #bestowed previous rank if it not earned
+    if (@rank - 1) > 0 && has_progress? && check_bestowment(@rank - 1).nil?
+      bestowed(@rank - 1)
+    end
+  end
+
+  def has_progress?
+    self.class.ranks.present?
   end
 
   private
 
   def describe_context
     @rank = 0
-    next_goal = false
+    stop = false
     ranks = self.class.ranks
     if ranks.blank?
       @title = self.class.title
@@ -41,20 +76,17 @@ class Badge
       @goal = self.class.goal
     else
       ranks.each do |rank|
+        break if stop
         state = self.class.const_get(rank)
         current_goal = get_goal_result(state.goal)
-        if next_goal
-          @goal = current_goal
-          next_goal = false
-        end
-        next unless progress >= current_goal
+        next unless progress < current_goal
         @rank = state.rank
         @title = state.title
         @description = state.description
-        next_goal = true
+        @goal = current_goal
+        stop = true
       end
     end
-    @rank
   end
 
   def get_goal_result(goal)

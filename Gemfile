@@ -64,6 +64,7 @@ gem 'flamegraph'
 gem 'stackprof'
 gem 'fast_blank' # Faster String#blank?
 gem 'oj' # Blazing-fast JSON parsing
+gem 'faker'
 
 group :development, :test do
   gem 'foreman' # Start processes
