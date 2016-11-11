@@ -4,7 +4,14 @@ module HTML
       def call
         doc.search('a').each do |a|
           preview = Onebox.preview(a['href'], max_width: 500) rescue nil
-          a.swap(preview.to_s) if preview&.to_s.present?
+          if preview&.to_s.present?
+            onebox_name = preview.send(:engine).class.onebox_name
+            a.swap <<-EOF
+              <div class="onebox onebox-#{onebox_name}">
+                #{preview}
+              </div>
+            EOF
+          end
         end
         doc
       end
