@@ -3,17 +3,29 @@ class Badge
     extend ActiveSupport::Concern
 
     class_methods do
-      def on(model)
+      def on(model, action=:save)
         return if model.nil?
         @model_class = model
         badge = self
-        model.after_save do
-          user = if self.class == User
-                   self
-                 else
-                   self.user
-                 end
-          badge.new(user).run
+        case action
+        when :save
+          model.after_save do
+            user = if self.class == User
+                     self
+                   else
+                     self.user
+                   end
+            badge.new(user).run
+          end
+        when :touch
+          model.after_touch do
+            user = if self.class == User
+                     self
+                   else
+                     self.user
+                   end
+            badge.new(user).run
+          end
         end
       end
 

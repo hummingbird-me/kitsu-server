@@ -8,12 +8,12 @@ RSpec.describe FeedCommentingBadge do
 
     it 'show rank, progress, title, description, goal' do
       badge = FeedCommentingBadge.new(user)
-      expect(badge.rank).to eq(1)
+      expect(badge.rank).to eq(2)
       expect(badge.goal).to eq(5)
       expect(badge.progress).to eq(1)
-      expect(badge.title).to eq('Smooth')
-      expect(badge.description).to eq('First comment! It seems you know' \
-        ' how to break the ice.')
+      expect(badge.title).to eq('Chatterbox')
+      expect(badge.description).to eq('You really know your way' \
+        ' around a conversation. You\'ve already made 5 comments!')
     end
 
     it 'create bestowment' do
@@ -26,12 +26,12 @@ RSpec.describe FeedCommentingBadge do
 
     it 'show rank, progress, title, description, goal' do
       badge = FeedCommentingBadge.new(user)
-      expect(badge.rank).to eq(2)
+      expect(badge.rank).to eq(3)
       expect(badge.goal).to eq(50)
       expect(badge.progress).to eq(5)
-      expect(badge.title).to eq('Chatterbox')
-      expect(badge.description).to eq('You really know your way' \
-        ' around a conversation. You\'ve already made 5 comments!')
+      expect(badge.title).to eq('Motormouth')
+      expect(badge.description).to eq('You certainly have a knack for' \
+        ' conversation. 50 replies!')
     end
   end
 end
