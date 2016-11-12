@@ -6,6 +6,14 @@ module StreamDump
     belongs_to :library_entry
   end
   class Substory < ActiveRecord::Base
+    STATUS_KEYS = {
+      'Currently Watching' => 'current',
+      'Plan to Watch' => 'planned',
+      'Completed' => 'completed',
+      'On Hold' => 'on_hold',
+      'Dropped' => 'dropped'
+    }
+
     default_scope { where(deleted_at: nil) }
 
     belongs_to :story
@@ -33,7 +41,7 @@ module StreamDump
     end
 
     def status
-      data['new_status']
+      STATUS_KEYS[data['new_status']]
     end
 
     def stream_activity
