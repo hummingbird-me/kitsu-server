@@ -96,6 +96,9 @@ class User < ApplicationRecord
     dependent: :destroy
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
     dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :posts, dependent: :destroy
+
   has_many :blocks, dependent: :destroy
   has_many :linked_profiles, dependent: :destroy
 
