@@ -51,6 +51,8 @@ module StreamDump
       case substory_type
       when 'status_update' then activity.status(status)
       when 'progress' then activity.progress(progress)
+      end.tap do |activity|
+        activity.time = created_at
       end
     end
   end
