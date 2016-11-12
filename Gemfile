@@ -55,6 +55,7 @@ gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'counter_culture' # Fancier counter caches
 gem 'stream_rails' # Feeds
 gem 'hashie' # Souped-up Hashes
+gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 
 # Rack Middleware
 gem 'rack-cors'

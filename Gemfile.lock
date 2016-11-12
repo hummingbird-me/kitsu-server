@@ -372,6 +372,7 @@ GEM
       rspec (~> 3.0, >= 3.0.0)
       sidekiq (>= 2.4.0)
     rspec-support (3.4.1)
+    ruby-progressbar (1.8.1)
     ruby_dep (1.3.1)
     safe_yaml (1.0.4)
     sanitize (4.4.0)
@@ -505,6 +506,7 @@ DEPENDENCIES
   rolify
   rspec-rails
   rspec-sidekiq
+  ruby-progressbar
   sanitize
   shoulda-matchers
   sidekiq (~> 3.4.2)
