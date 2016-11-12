@@ -30,7 +30,9 @@ module StreamDump
 
     scope :for_user, -> (user_id) { where(user_id: user_id) }
     scope :media_update, -> { where(substory_type: [1, 3]) }
-    scope :with_library_entry, -> { includes(story: [:library_entry]) }
+    scope :with_library_entry, -> {
+      includes(story: { library_entry: %i[user media] })
+    }
 
     def activity
       MediaActivityService.new(story.library_entry)
@@ -68,7 +70,7 @@ module StreamDump
   end
 
   def stories(scope = User)
-    scope.pluck(:id).map do |user_id|
+    scope.pluck(:id).each.lazy.map do |user_id|
       substories = Substory.for_user(user_id).media_update.with_library_entry
       next if substories.blank?
       {
