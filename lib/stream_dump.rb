@@ -72,14 +72,29 @@ module StreamDump
   end
 
   def stories(scope = User)
-    scope.pluck(:id).each.lazy.map do |user_id|
+    users = scope.pluck(:id)
+    enumerator = users.each.lazy
+    bar = progress_bar('Users', scope.count(:all))
+    enumerator.map do |user_id|
       substories = Substory.for_user(user_id).media_update.with_library_entry
       next if substories.blank?
+      data = substories.find_each.map(&:stream_activity).compact
+      next if data.blank?
       {
         instruction: 'add_activities',
         feedId: Feed.user(user_id).stream_id,
-        data: substories.find_each.map(&:stream_activity)
+        data: data
       }
-    end
+    end.reject(&:nil?).map { |u| bar.increment; u }
+  end
+
+  def progress_bar(title, count)
+    @bar ||= ProgressBar.create(
+      title: title,
+      total: count,
+      output: STDERR,
+      format: '%a (%p%%) |%B| %E %t'
+    )
+    @bar
   end
 end
