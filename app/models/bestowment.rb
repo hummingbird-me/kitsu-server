@@ -33,7 +33,10 @@ class Bestowment < ActiveRecord::Base
 
   def users_have
     all_users_count = User.count
-    with_this_badge = Bestowment.where(badge_id: badge_id, rank: rank).count
+    with_this_badge = BestowmentCash.where(
+                        badge_id: badge_id,
+                        rank: rank
+                      ).first.number
     (with_this_badge.to_f / all_users_count.to_f) * 100
   end
 
@@ -55,5 +58,9 @@ class Bestowment < ActiveRecord::Base
 
   def progress
     badge.progress
+  end
+
+  after_create do
+    BestowmentCash.first_or_create(badge_id: badge_id, rank: rank).inc
   end
 end
