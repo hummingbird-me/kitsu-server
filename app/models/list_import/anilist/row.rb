@@ -85,8 +85,8 @@ class ListImport
       private
 
       def format_date(date)
-        date[1] ||= "01"
-        date[2] ||= "01"
+        date[1] ||= '01'
+        date[2] ||= '01'
         date.join('-')
       end
     end
