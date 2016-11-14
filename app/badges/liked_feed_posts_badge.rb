@@ -1,5 +1,5 @@
 class LikedFeedPostsBadge < Badge
-  on PostLike
+  on Post, :touch
   progress do
     Post.where(user: user).map { |post| post.post_likes.count }.max.to_i
   end

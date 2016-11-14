@@ -31,46 +31,12 @@ class Bestowment < ActiveRecord::Base
     badge_id.safe_constantize.new(user)
   end
 
-  def self.update_for(badge)
-    if badge.class.ranks.present?
-      bestowment = where(
-        badge_id: badge.class,
-        user: badge.user,
-        rank: badge.rank
-      ).first
-      if bestowment.blank?
-        create(
-          badge_id: badge.class,
-          user: badge.user,
-          rank: badge.rank,
-          progress: badge.progress,
-          bestowed_at: DateTime.now,
-          title: badge.title,
-          description: badge.description
-        )
-      else
-        unless badge.earned?
-          bestowment.progress = badge.progress
-          bestowment.save
-        end
-      end
-    else
-      bestowment = where(badge_id: badge.class, user: badge.user).first
-      if badge.earned? && bestowment.blank?
-        create(
-          badge_id: badge.class,
-          user: badge.user,
-          bestowed_at: DateTime.now,
-          title: badge.title,
-          description: badge.description
-        )
-      end
-    end
-  end
-
   def users_have
     all_users_count = User.count
-    with_this_badge = Bestowment.where(badge_id: badge_id, rank: rank).count
+    with_this_badge = BestowmentCash.where(
+                        badge_id: badge_id,
+                        rank: rank
+                      ).first.number
     (with_this_badge.to_f / all_users_count.to_f) * 100
   end
 
@@ -88,5 +54,13 @@ class Bestowment < ActiveRecord::Base
 
   def goal
     badge.goal
+  end
+
+  def progress
+    badge.progress
+  end
+
+  after_create do
+    BestowmentCash.first_or_create(badge_id: badge_id, rank: rank).inc
   end
 end
