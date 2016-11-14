@@ -9,7 +9,7 @@ class Badge
     @bestowment = check_bestowment(@rank)
   end
 
-  def check_bestowment(rank=nil)
+  def check_bestowment(rank = nil)
     bestowment = Bestowment.where(
       badge_id: self.class,
       user: @user
@@ -18,7 +18,7 @@ class Badge
     bestowment.first
   end
 
-  def bestowed(rank=nil)
+  def bestowed(rank = nil)
     if has_progress?
       state = self.class.const_get("Rank#{rank}")
     else
@@ -52,10 +52,11 @@ class Badge
   end
 
   def run
-    #bestowed badge if all ranks was earned
+    # bestowed badge if all ranks was earned
     bestowed(@rank) if earned? && @bestowment.nil?
-    #bestowed previous rank if it not earned
-    if (@rank - 1) > 0 && has_progress? && check_bestowment(@rank - 1).nil?
+    # bestowed previous rank if it not earned
+    prev = @rank - 1
+    if prev.positive? && has_progress? && check_bestowment(prev).nil?
       bestowed(@rank - 1)
     end
   end

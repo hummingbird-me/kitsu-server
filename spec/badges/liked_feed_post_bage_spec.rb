@@ -13,8 +13,8 @@ RSpec.describe LikedFeedPostsBadge do
       expect(badge.goal).to eq(5)
       expect(badge.progress).to eq(1)
       expect(badge.title).to eq('High Five')
-        expect(badge.description).to eq('Give me 5! Your post has received' \
-          ' 5 likes. Keep it up!')
+      expect(badge.description).to eq('Give me 5! Your post has received' \
+        ' 5 likes. Keep it up!')
     end
 
     it 'create bestowment' do

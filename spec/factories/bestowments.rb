@@ -19,7 +19,11 @@
 #
 
 FactoryGirl.define do
-  # factory :bestowment do
-
-  # end
+  factory :bestowment do
+    badge_id 'LikingFeedPostsBadge'
+    rank 1
+    title 'Badge title'
+    description 'Badge description'
+    user
+  end
 end

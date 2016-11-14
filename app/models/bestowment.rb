@@ -23,6 +23,13 @@ class Bestowment < ActiveRecord::Base
 
   validates :badge_id, presence: true
 
+  after_create do
+    BestowmentCash.first_or_create(
+      badge_id: badge_id,
+      rank: rank
+    ).inc
+  end
+
   def bestowed?
     !bestowed_at.nil? && bestowed_at < Time.now
   end
