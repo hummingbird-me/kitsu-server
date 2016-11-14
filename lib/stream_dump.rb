@@ -57,25 +57,37 @@ module StreamDump
     end
   end
 
+  class UnmentioningPost < Post
+    def stream_activity
+      media_feed = Feed.media(media_type, media_id) if media_id
+      target_user_feed = Feed.user(target_user_id) if target_user_id
+      user.feed.activities.new(
+        updated_at: updated_at,
+        post_likes_count: post_likes_count,
+        comments_count: comments_count,
+        to: [media_feed, target_user_feed]
+      )
+    end
+  end
+
   module_function
 
-  def posts
-   User.pluck(:id).map do |user_id|
-     posts = Post.where(user_id: user_id)
-     next if posts.blank?
-     {
-       instruction: 'add_activities',
-       feedId: Feed.user(user_id).stream_id,
-       data: posts.find_each.map(&:complete_stream_activity)
-     }
+  def posts(scope = User)
+    each_user(scope) do |user_id|
+      posts = UnmentioningPost.where(user_id: user_id).includes(:user)
+      next if posts.blank?
+      data = posts.find_each.map(&:complete_stream_activity).compact
+      next if data.blank?
+      {
+        instruction: 'add_activities',
+        feedId: Feed.user(user_id).stream_id,
+        data: data
+      }
     end
   end
 
   def stories(scope = User)
-    users = scope.pluck(:id)
-    enumerator = users.each.lazy
-    bar = progress_bar('Users', scope.count(:all))
-    enumerator.map do |user_id|
+    each_user(scope) do |user_id|
       substories = Substory.for_user(user_id).media_update.with_library_entry
       next if substories.blank?
       data = substories.find_each.map(&:stream_activity).compact
@@ -85,16 +97,73 @@ module StreamDump
         feedId: Feed.user(user_id).stream_id,
         data: data
       }
-    end.reject(&:nil?).map { |u| bar.increment; u }
+    end
+  end
+
+  def follows(scope = User)
+    each_user(scope) do |user_id|
+      follows = Follow.where(follower: user_id).pluck(:followed_id)
+      follow_self = [Feed.user(user_id).stream_id]
+      {
+        instruction: 'follow',
+        feedId: Feed.timeline(user_id).stream_id,
+        data: follows.map { |uid| Feed.user(uid).stream_id } + follow_self
+      }
+    end
+  end
+
+  def auto_follows
+    users = each_user do |user_id|
+      {
+        instruction: 'follow',
+        feedId: Feed.user_aggr(user_id).stream_id,
+        data: [Feed.user(user_id).stream_id]
+      }
+    end
+    media = each_media do |type, id|
+      {
+        instruction: 'follow',
+        feedId: Feed.media_aggr(type, id).stream_id,
+        data: [Feed.media(type, id).stream_id]
+      }
+    end
+    [users, media].lazy.flat_map { |list| list }
+  end
+
+  def each_user(scope = User, &block)
+    each_id(scope, 'User', &block)
+  end
+
+  def each_anime(scope = Anime, &block)
+    each_id(scope, 'Anime', &block)
+  end
+
+  def each_manga(scope = Manga, &block)
+    each_id(scope, 'Manga', &block)
+  end
+
+  def each_drama(scope = Drama, &block)
+    each_id(scope, 'Drama', &block)
+  end
+
+  def each_media(&block)
+    each_anime { |id| block.('Anime', id) }
+    each_manga { |id| block.('Manga', id) }
+    each_drama { |id| block.('Drama', id) }
+  end
+
+  def each_id(scope, title, &block)
+    items = scope.pluck(:id).each.lazy
+    bar = progress_bar(title, scope.count(:all))
+    items.map(&block).reject(&:nil?).map { |i| bar.increment; i }
   end
 
   def progress_bar(title, count)
-    @bar ||= ProgressBar.create(
+    ProgressBar.create(
       title: title,
       total: count,
       output: STDERR,
       format: '%a (%p%%) |%B| %E %t'
     )
-    @bar
   end
 end
