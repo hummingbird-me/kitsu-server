@@ -21,6 +21,20 @@ class UserResource < BaseResource
     records.where(id: current_user&.id) || User.none
   }
 
+  query :query,
+    mode: :query,
+    apply: -> (values, _ctx) {
+      {
+        multi_match: {
+          fields: %w[name past_names],
+          query: values.join(' '),
+          fuzziness: 2,
+          max_expansions: 15,
+          prefix_length: 1
+        }
+      }
+    }
+
   def fetchable_fields
     if current_user == _model
       super
