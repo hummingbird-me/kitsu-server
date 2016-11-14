@@ -147,9 +147,11 @@ module StreamDump
   end
 
   def each_media(&block)
-    each_anime { |id| block.('Anime', id) }
-    each_manga { |id| block.('Manga', id) }
-    each_drama { |id| block.('Drama', id) }
+    [
+      each_anime { |id| block.('Anime', id) },
+      each_manga { |id| block.('Manga', id) },
+      each_drama { |id| block.('Drama', id) }
+    ].lazy.flat_map { |list| list }
   end
 
   def each_id(scope, title, &block)
