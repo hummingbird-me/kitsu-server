@@ -74,14 +74,14 @@ RSpec.describe ListImport::Anilist do
     end
 
     describe '#each' do
-      it 'should yield exactly once for Boku no Pico' do
+      it 'should yield twice' do
         subject = ListImport::Anilist.create(
           input_text: 'nuck',
           user: build(:user)
         )
         expect { |b|
           subject.each(&b)
-        }.to yield_control.exactly(1)
+        }.to yield_control.exactly(2)
       end
     end
   end

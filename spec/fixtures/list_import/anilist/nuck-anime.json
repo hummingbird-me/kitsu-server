@@ -119,6 +119,58 @@
           "airing_status": "finished airing"
         }
       }
+    ],
+    "on_hold": [
+      {
+        "record_id": 13295885,
+        "series_id": 1,
+        "list_status": "on-hold",
+        "score": 0,
+        "score_raw": 0,
+        "episodes_watched": 1,
+        "chapters_read": 1,
+        "volumes_read": 0,
+        "rewatched": 0,
+        "reread": 0,
+        "priority": 0,
+        "private": 0,
+        "hidden_default": 0,
+        "notes": null,
+        "advanced_rating_scores": [],
+        "custom_lists": null,
+        "started_on": null,
+        "finished_on": null,
+        "added_time": "2012-05-30T11:56:33+09:00",
+        "updated_time": "2012-05-30T11:56:33+09:00",
+        "anime": {
+          "id": 1,
+          "title_romaji": "COWBOY BEBOP",
+          "title_english": "Cowboy Bebop",
+          "title_japanese": "カウボーイビバップ",
+          "type": "TV",
+          "start_date_fuzzy": 19980403,
+          "end_date_fuzzy": 19990424,
+          "season": null,
+          "series_type": "anime",
+          "synonyms": [],
+          "genres": [
+            "Action",
+            "Adventure",
+            "Comedy",
+            "Drama",
+            "Sci-Fi"
+          ],
+          "adult": false,
+          "average_score": 86.3,
+          "popularity": 11458,
+          "updated_at": 1475459350,
+          "image_url_sml": "https://cdn.anilist.co/img/dir/anime/sml/1.jpg",
+          "image_url_med": "https://cdn.anilist.co/img/dir/anime/med/1.jpg",
+          "image_url_lge": "https://cdn.anilist.co/img/dir/anime/reg/1.jpg",
+          "total_episodes": 26,
+          "airing_status": "finished airing"
+        }
+      }
     ]
   },
   "custom_lists": [],

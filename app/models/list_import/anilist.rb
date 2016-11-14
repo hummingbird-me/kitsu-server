@@ -45,13 +45,12 @@ class ListImport
       # pass in toyhammered/#{anime}list
       %w[anime manga].each do |type|
         list = get("#{input_text}/#{type}list")['lists']
-
         # in case there are no anime/manga
         # need to prevent an error being raised
         list&.each do |status|
-          status.shift # get rid of "completed" "on-hold" etc...
-
-          status.each do |media|
+          # status[0] is always going to be either
+          # completed, on-hold, etc... just skip over that part
+          status[1].each do |media|
             row = Row.new(media, type)
 
             yield row.media, row.data
