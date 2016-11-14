@@ -17,8 +17,6 @@
 #
 # Foreign Keys
 #
-#  fk_rails_03de2dc08c  (user_id => users.id)
-#  fk_rails_2fd19c0db7  (post_id => posts.id)
 #  fk_rails_31554e7034  (parent_id => comments.id)
 #
 # rubocop:enable Metrics/LineLength

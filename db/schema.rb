@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161112011840) do
+ActiveRecord::Schema.define(version: 20161114042030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_trgm"
 
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
@@ -859,14 +858,10 @@ ActiveRecord::Schema.define(version: 20161112011840) do
   add_foreign_key "comment_likes", "comments"
   add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"
-  add_foreign_key "comments", "posts"
-  add_foreign_key "comments", "users"
   add_foreign_key "linked_profiles", "linked_sites"
   add_foreign_key "linked_profiles", "users"
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
-  add_foreign_key "post_likes", "posts"
-  add_foreign_key "post_likes", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "streaming_links", "streamers"
