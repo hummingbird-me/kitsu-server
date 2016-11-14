@@ -155,7 +155,7 @@ module StreamDump
   def each_id(scope, title, &block)
     items = scope.pluck(:id).each.lazy
     bar = progress_bar(title, scope.count(:all))
-    items.map(&block).reject(&:nil?).map { |i| bar.increment; i }
+    items.map(&block).map { |i| bar.increment; i }.reject(&:nil?)
   end
 
   def progress_bar(title, count)
