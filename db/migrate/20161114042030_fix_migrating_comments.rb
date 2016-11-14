@@ -12,8 +12,6 @@ class FixMigratingComments < ActiveRecord::Migration
   end
 
   def change
-    add_foreign_key :comments, :users
-    add_foreign_key :comments, :posts
     # Referential integrity is broken
     remove_foreign_key :comments, :users
     remove_foreign_key :comments, :posts
