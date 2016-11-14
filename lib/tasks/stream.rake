@@ -27,5 +27,15 @@ namespace :stream do
     task :stories => :environment do
       StreamDump.stories.each { |instr| STDOUT.puts instr.to_json }
     end
+
+    desc 'Dump automatic follows'
+    task :auto_follows => :environment do
+      StreamDump.auto_follows.each { |instr| STDOUT.puts instr.to_json }
+    end
+
+    desc 'Dump follows'
+    task :follows => :environment do
+      StreamDump.follows.each { |instr| STDOUT.puts instr.to_json }
+    end
   end
 end
