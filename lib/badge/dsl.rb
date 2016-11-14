@@ -3,7 +3,7 @@ class Badge
     extend ActiveSupport::Concern
 
     class_methods do
-      def on(model, action=:save)
+      def on(model, action = :save)
         return if model.nil?
         @model_class = model
         badge = self
