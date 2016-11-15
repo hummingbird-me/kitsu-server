@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114042030) do
+ActiveRecord::Schema.define(version: 20161115070551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -454,6 +454,14 @@ ActiveRecord::Schema.define(version: 20161114042030) do
     t.datetime "updated_at",       null: false
   end
 
+  create_table "media_follows", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "media_id",   null: false
+    t.string   "media_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "not_interesteds", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "media_id"
@@ -862,6 +870,7 @@ ActiveRecord::Schema.define(version: 20161114042030) do
   add_foreign_key "linked_profiles", "users"
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
+  add_foreign_key "media_follows", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "streaming_links", "streamers"
