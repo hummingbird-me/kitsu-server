@@ -1352,6 +1352,8 @@ ActiveRecord::Schema.define(version: 20170615000439) do
     t.integer  "rating_system",                           default: 0,           null: false
     t.integer  "theme",                                   default: 0,           null: false
     t.datetime "deleted_at"
+    t.integer  "consecutive_days",                        default: 0,           null: false
+    t.datetime "last_login"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

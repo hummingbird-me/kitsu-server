@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -16,6 +15,7 @@
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
 #  confirmed_at                :datetime
+#  consecutive_days            :integer          default(0), not null
 #  country                     :string(2)
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
@@ -38,6 +38,7 @@
 #  ip_addresses                :inet             default([]), is an Array
 #  language                    :string
 #  last_backup                 :datetime
+#  last_login                  :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
 #  life_spent_on_anime         :integer          default(0), not null
@@ -90,7 +91,6 @@
 #
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
-# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
