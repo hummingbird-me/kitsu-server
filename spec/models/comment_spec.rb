@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: comments
@@ -16,10 +17,9 @@
 #
 # Foreign Keys
 #
-#  fk_rails_03de2dc08c  (user_id => users.id)
-#  fk_rails_2fd19c0db7  (post_id => posts.id)
 #  fk_rails_31554e7034  (parent_id => comments.id)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
@@ -30,6 +30,7 @@ RSpec.describe Comment, type: :model do
   it { should have_many(:replies).class_name('Comment').dependent(:destroy) }
   it { should have_many(:likes).class_name('CommentLike').dependent(:destroy) }
   it { should validate_presence_of(:content) }
+  it { should validate_length_of(:content).is_at_most(9_000) }
 
   it 'should convert basic markdown to fill in content_formatted' do
     comment = create(:comment, content: '*Emphasis* is cool!')

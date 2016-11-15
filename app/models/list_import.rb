@@ -31,11 +31,22 @@ class ListImport < ApplicationRecord
   enum strategy: %i[greater obliterate]
   enum status: %i[queued running failed completed]
   has_attached_file :input_file, s3_permissions: :private
+  alias_attribute :kind, :type
 
   validates :strategy, presence: true
   validates :input_text, presence: { unless: :input_file? }
   validates_attachment :input_file, presence: { unless: :input_text? }
   validates_attachment :input_file, content_type: { content_type: %w[] }
+
+  validate :type_is_subclass
+
+  def type_is_subclass
+    in_namespace = type.start_with?('ListImport')
+    is_descendant = type.safe_constantize <= ListImport
+    unless in_namespace && is_descendant
+      errors.add(:type, 'must be a ListImport class')
+    end
+  end
 
   # Apply the ListImport
   def apply

@@ -1,0 +1,2 @@
+class StreamingLinkPolicy < ApplicationPolicy
+end

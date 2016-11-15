@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114170359) do
+ActiveRecord::Schema.define(version: 20161115070551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_trgm"
 
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
@@ -375,6 +374,31 @@ ActiveRecord::Schema.define(version: 20161114170359) do
   add_index "library_entries", ["user_id", "status"], name: "index_library_entries_on_user_id_and_status", using: :btree
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
 
+  create_table "linked_profiles", force: :cascade do |t|
+    t.integer  "user_id",                          null: false
+    t.integer  "linked_site_id",                   null: false
+    t.string   "external_user_id",                 null: false
+    t.string   "url"
+    t.boolean  "share_to",         default: false, null: false
+    t.boolean  "share_from",       default: false, null: false
+    t.boolean  "private",          default: true,  null: false
+    t.string   "token"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  add_index "linked_profiles", ["linked_site_id"], name: "index_linked_profiles_on_linked_site_id", using: :btree
+  add_index "linked_profiles", ["user_id"], name: "index_linked_profiles_on_user_id", using: :btree
+
+  create_table "linked_sites", force: :cascade do |t|
+    t.string   "name",                       null: false
+    t.boolean  "share_to",   default: false, null: false
+    t.boolean  "share_from", default: false, null: false
+    t.integer  "link_type",                  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "list_imports", force: :cascade do |t|
     t.string   "type",                                null: false
     t.integer  "user_id",                             null: false
@@ -448,6 +472,14 @@ ActiveRecord::Schema.define(version: 20161114170359) do
     t.datetime "ended_at"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+  end
+
+  create_table "media_follows", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "media_id",   null: false
+    t.string   "media_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "not_interesteds", force: :cascade do |t|
@@ -787,6 +819,12 @@ ActiveRecord::Schema.define(version: 20161114170359) do
     t.string   "gender"
     t.date     "birthday"
     t.string   "twitter_id"
+    t.integer  "comments_count",                          default: 0,           null: false
+    t.integer  "likes_given_count",                       default: 0,           null: false
+    t.integer  "likes_received_count",                    default: 0,           null: false
+    t.integer  "favorites_count",                         default: 0,           null: false
+    t.integer  "posts_count",                             default: 0,           null: false
+    t.integer  "ratings_count",                           default: 0,           null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -849,12 +887,11 @@ ActiveRecord::Schema.define(version: 20161114170359) do
   add_foreign_key "comment_likes", "comments"
   add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"
-  add_foreign_key "comments", "posts"
-  add_foreign_key "comments", "users"
+  add_foreign_key "linked_profiles", "linked_sites"
+  add_foreign_key "linked_profiles", "users"
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
-  add_foreign_key "post_likes", "posts"
-  add_foreign_key "post_likes", "users"
+  add_foreign_key "media_follows", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "streaming_links", "streamers"

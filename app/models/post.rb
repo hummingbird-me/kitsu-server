@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: posts
@@ -26,11 +27,14 @@
 #  fk_rails_43023491e6  (target_user_id => users.id)
 #  fk_rails_5b5ddfd518  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class Post < ApplicationRecord
   include WithActivity
 
-  belongs_to :user, required: true
+  acts_as_paranoid
+
+  belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
@@ -43,6 +47,7 @@ class Post < ApplicationRecord
     accept: true,
     message: 'must be true if spoiled_unit is provided'
   }, if: :spoiled_unit
+  validates :content, length: { maximum: 9_000 }
 
   def feed
     Feed.post(id)
@@ -63,7 +68,7 @@ class Post < ApplicationRecord
   end
 
   def processed_content
-    @processed_content ||= InlinePipeline.call(content)
+    @processed_content ||= LongPipeline.call(content)
   end
 
   def mentioned_users

@@ -24,6 +24,9 @@ class PostLike < ApplicationRecord
 
   validates :post, uniqueness: { scope: :user_id }
 
+  counter_culture :user, column_name: 'likes_given_count'
+  counter_culture [:post, :user], column_name: 'likes_received_count'
+
   def stream_activity
     post.feed.activities.new
   end

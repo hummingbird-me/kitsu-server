@@ -2,7 +2,7 @@ namespace :stream do
   namespace :sync do
     desc 'Synchronize followers to Stream'
     task :follows => :environment do
-      StreamSync.sync_follows
+      StreamSync.follows
     end
 
     desc 'Synchronize automatic (under-the-hood) follows to Stream'
@@ -15,10 +15,27 @@ namespace :stream do
         StreamSync.follow_media_aggr(type)
       end
     end
+  end
 
+  namespace :dump do
     desc 'Dump posts in the mass import format for Stream'
-    task :dump_posts => :environment do
-      StreamSync.dump_posts.each { |instr| puts instr.to_json }
+    task :posts => :environment do
+      StreamDump.posts.each { |instr| puts instr.to_json }
+    end
+
+    desc 'Dump all stories in the mass import format for Stream'
+    task :stories => :environment do
+      StreamDump.stories.each { |instr| STDOUT.puts instr.to_json }
+    end
+
+    desc 'Dump automatic follows'
+    task :auto_follows => :environment do
+      StreamDump.auto_follows.each { |instr| STDOUT.puts instr.to_json }
+    end
+
+    desc 'Dump follows'
+    task :follows => :environment do
+      StreamDump.follows.each { |instr| STDOUT.puts instr.to_json }
     end
   end
 end

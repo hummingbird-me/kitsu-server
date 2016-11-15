@@ -42,6 +42,7 @@ gem 'kramdown'
 gem 'sanitize'
 gem 'onebox'
 gem 'twemoji', github: 'vevix/twemoji'
+gem 'rinku'
 
 # Miscellaneous Utilities
 gem 'friendly_id' # slug-urls-are-cool
@@ -54,6 +55,7 @@ gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'counter_culture' # Fancier counter caches
 gem 'stream_rails' # Feeds
 gem 'hashie' # Souped-up Hashes
+gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 
 # Rack Middleware
 gem 'rack-cors'

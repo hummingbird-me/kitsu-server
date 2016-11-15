@@ -61,6 +61,8 @@ class LibraryEntry < ApplicationRecord
   validate :progress_limit
   validate :rating_on_halves
 
+  counter_culture :user, column_name: -> (le) { 'ratings_count' if le.rating }
+
   def current_marathon
     marathons.current.first_or_create
   end

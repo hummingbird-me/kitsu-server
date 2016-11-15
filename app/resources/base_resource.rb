@@ -12,4 +12,10 @@ class BaseResource < JSONAPI::Resource
       super
     end
   end
+
+  def records_for(association_name, options={})
+    records = _model.public_send(association_name)
+    return records unless records.is_a?(ActiveRecord::Relation)
+    super
+  end
 end

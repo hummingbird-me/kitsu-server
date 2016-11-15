@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -13,6 +14,7 @@
 #  avatar_updated_at           :datetime
 #  bio                         :string(140)      default(""), not null
 #  birthday                    :date
+#  comments_count              :integer          default(0), not null
 #  confirmation_sent_at        :datetime
 #  confirmation_token          :string(255)      indexed
 #  confirmed_at                :datetime
@@ -26,6 +28,7 @@
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
 #  encrypted_password          :string(255)      default(""), not null
+#  favorites_count             :integer          default(0), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
 #  gender                      :string
@@ -37,13 +40,17 @@
 #  last_sign_in_at             :datetime
 #  last_sign_in_ip             :string(255)
 #  life_spent_on_anime         :integer          default(0), not null
+#  likes_given_count           :integer          default(0), not null
+#  likes_received_count        :integer          default(0), not null
 #  location                    :string(255)
 #  mal_username                :string(255)
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
 #  onboarded                   :boolean          default(FALSE), not null
 #  past_names                  :string           default([]), not null, is an Array
+#  posts_count                 :integer          default(0), not null
 #  pro_expires_at              :datetime
+#  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
@@ -74,6 +81,7 @@
 #  index_users_on_to_follow           (to_follow)
 #  index_users_on_waifu_id            (waifu_id)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
@@ -83,6 +91,7 @@ RSpec.describe User, type: :model do
 
   it { should have_db_index(:facebook_id) }
   it { should belong_to(:waifu) }
+  it { should have_many(:linked_profiles) }
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }

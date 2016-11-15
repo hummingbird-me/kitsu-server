@@ -131,6 +131,16 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/blocks(.:format)                       users#update_relationship {:relationship=>"blocks"}
 #                                        DELETE    /edge/users/:user_id/relationships/blocks(.:format)                       users#destroy_relationship {:relationship=>"blocks"}
 #                            user_blocks GET       /edge/users/:user_id/blocks(.:format)                                     blocks#get_related_resources {:relationship=>"blocks", :source=>"users"}
+#     user_relationships_linked_profiles GET       /edge/users/:user_id/relationships/linked-profiles(.:format)              users#show_relationship {:relationship=>"linked_profiles"}
+#                                        POST      /edge/users/:user_id/relationships/linked-profiles(.:format)              users#create_relationship {:relationship=>"linked_profiles"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/linked-profiles(.:format)              users#update_relationship {:relationship=>"linked_profiles"}
+#                                        DELETE    /edge/users/:user_id/relationships/linked-profiles(.:format)              users#destroy_relationship {:relationship=>"linked_profiles"}
+#                   user_linked_profiles GET       /edge/users/:user_id/linked-profiles(.:format)                            linked_profiles#get_related_resources {:relationship=>"linked_profiles", :source=>"users"}
+#       user_relationships_media_follows GET       /edge/users/:user_id/relationships/media-follows(.:format)                users#show_relationship {:relationship=>"media_follows"}
+#                                        POST      /edge/users/:user_id/relationships/media-follows(.:format)                users#create_relationship {:relationship=>"media_follows"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/media-follows(.:format)                users#update_relationship {:relationship=>"media_follows"}
+#                                        DELETE    /edge/users/:user_id/relationships/media-follows(.:format)                users#destroy_relationship {:relationship=>"media_follows"}
+#                     user_media_follows GET       /edge/users/:user_id/media-follows(.:format)                              media_follows#get_related_resources {:relationship=>"media_follows", :source=>"users"}
 #                                  users GET       /edge/users(.:format)                                                     users#index
 #                                        POST      /edge/users(.:format)                                                     users#create
 #                                   user GET       /edge/users/:id(.:format)                                                 users#show
@@ -155,6 +165,20 @@
 #                                        PATCH     /edge/follows/:id(.:format)                                               follows#update
 #                                        PUT       /edge/follows/:id(.:format)                                               follows#update
 #                                        DELETE    /edge/follows/:id(.:format)                                               follows#destroy
+#        media_follow_relationships_user GET       /edge/media-follows/:media_follow_id/relationships/user(.:format)         media_follows#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/media-follows/:media_follow_id/relationships/user(.:format)         media_follows#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/media-follows/:media_follow_id/relationships/user(.:format)         media_follows#destroy_relationship {:relationship=>"user"}
+#                      media_follow_user GET       /edge/media-follows/:media_follow_id/user(.:format)                       users#get_related_resource {:relationship=>"user", :source=>"media_follows"}
+#       media_follow_relationships_media GET       /edge/media-follows/:media_follow_id/relationships/media(.:format)        media_follows#show_relationship {:relationship=>"media"}
+#                                        PUT|PATCH /edge/media-follows/:media_follow_id/relationships/media(.:format)        media_follows#update_relationship {:relationship=>"media"}
+#                                        DELETE    /edge/media-follows/:media_follow_id/relationships/media(.:format)        media_follows#destroy_relationship {:relationship=>"media"}
+#                     media_follow_media GET       /edge/media-follows/:media_follow_id/media(.:format)                      media#get_related_resource {:relationship=>"media", :source=>"media_follows"}
+#                          media_follows GET       /edge/media-follows(.:format)                                             media_follows#index
+#                                        POST      /edge/media-follows(.:format)                                             media_follows#create
+#                           media_follow GET       /edge/media-follows/:id(.:format)                                         media_follows#show
+#                                        PATCH     /edge/media-follows/:id(.:format)                                         media_follows#update
+#                                        PUT       /edge/media-follows/:id(.:format)                                         media_follows#update
+#                                        DELETE    /edge/media-follows/:id(.:format)                                         media_follows#destroy
 #  character_relationships_primary_media GET       /edge/characters/:character_id/relationships/primary-media(.:format)      characters#show_relationship {:relationship=>"primary_media"}
 #                                        PUT|PATCH /edge/characters/:character_id/relationships/primary-media(.:format)      characters#update_relationship {:relationship=>"primary_media"}
 #                                        DELETE    /edge/characters/:character_id/relationships/primary-media(.:format)      characters#destroy_relationship {:relationship=>"primary_media"}
@@ -391,6 +415,16 @@
 #                                        PATCH     /edge/episodes/:id(.:format)                                              episodes#update
 #                                        PUT       /edge/episodes/:id(.:format)                                              episodes#update
 #                                        DELETE    /edge/episodes/:id(.:format)                                              episodes#destroy
+#         list_import_relationships_user GET       /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/list-imports/:list_import_id/relationships/user(.:format)           list_imports#destroy_relationship {:relationship=>"user"}
+#                       list_import_user GET       /edge/list-imports/:list_import_id/user(.:format)                         users#get_related_resource {:relationship=>"user", :source=>"list_imports"}
+#                           list_imports GET       /edge/list-imports(.:format)                                              list_imports#index
+#                                        POST      /edge/list-imports(.:format)                                              list_imports#create
+#                            list_import GET       /edge/list-imports/:id(.:format)                                          list_imports#show
+#                                        PATCH     /edge/list-imports/:id(.:format)                                          list_imports#update
+#                                        PUT       /edge/list-imports/:id(.:format)                                          list_imports#update
+#                                        DELETE    /edge/list-imports/:id(.:format)                                          list_imports#destroy
 #                               activity DELETE    /edge/activities/:id(.:format)                                            activities#destroy
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
@@ -425,6 +459,7 @@ Rails.application.routes.draw do
       post :import_from_facebook, on: :collection
       post :import_from_twitter, on: :collection
     end
+    jsonapi_resources :media_follows
     jsonapi_resources :characters
     jsonapi_resources :people
     jsonapi_resources :castings
@@ -441,6 +476,7 @@ Rails.application.routes.draw do
     jsonapi_resources :blocks
     jsonapi_resources :favorites
     jsonapi_resources :episodes
+    jsonapi_resources :list_imports
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
   end

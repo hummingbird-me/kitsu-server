@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: posts
@@ -26,6 +27,7 @@
 #  fk_rails_43023491e6  (target_user_id => users.id)
 #  fk_rails_5b5ddfd518  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
@@ -40,6 +42,7 @@ RSpec.describe Post, type: :model do
   it { should belong_to(:spoiled_unit) }
   it { should have_many(:post_likes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
+  it { should validate_length_of(:content).is_at_most(9_000) }
 
   context 'with a spoiled unit' do
     subject { build(:post, spoiled_unit: build(:episode)) }

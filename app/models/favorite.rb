@@ -22,6 +22,6 @@
 class Favorite < ApplicationRecord
   acts_as_list column: 'fav_rank', scope: %i[user_id item_type]
 
-  belongs_to :user, required: true
+  belongs_to :user, required: true, counter_cache: true
   belongs_to :item, polymorphic: true, required: true
 end

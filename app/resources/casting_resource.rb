@@ -4,4 +4,6 @@ class CastingResource < BaseResource
   has_one :media, polymorphic: true
   has_one :character
   has_one :person
+
+  filter :media_id
 end

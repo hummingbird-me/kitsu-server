@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: comments
@@ -16,15 +17,16 @@
 #
 # Foreign Keys
 #
-#  fk_rails_03de2dc08c  (user_id => users.id)
-#  fk_rails_2fd19c0db7  (post_id => posts.id)
 #  fk_rails_31554e7034  (parent_id => comments.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class Comment < ApplicationRecord
   include WithActivity
 
-  belongs_to :user, required: true
+  acts_as_paranoid
+
+  belongs_to :user, required: true, counter_cache: true
   belongs_to :post, required: true, counter_cache: true
   belongs_to :parent, class_name: 'Comment', required: false
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
@@ -33,6 +35,7 @@ class Comment < ApplicationRecord
 
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
+  validates :content, length: { maximum: 9_000 }
 
   def stream_activity
     post.feed.activities.new(
@@ -46,7 +49,7 @@ class Comment < ApplicationRecord
 
   before_validation do
     if content_changed?
-      self.content_formatted = InlinePipeline.call(content)[:output].to_s
+      self.content_formatted = LongPipeline.call(content)[:output].to_s
     end
   end
 end
