@@ -7,25 +7,13 @@ class Badge
         return if model.nil?
         @model_class = model
         badge = self
-        case action
-        when :save
-          model.after_save do
-            user = if self.class == User
-                     self
-                   else
-                     self.user
-                   end
-            badge.new(user).run
-          end
-        when :touch
-          model.after_touch do
-            user = if self.class == User
-                     self
-                   else
-                     self.user
-                   end
-            badge.new(user).run
-          end
+        model.public_send("after_#{action}") do
+          user = if self.class == User
+                   self
+                 else
+                   self.user
+                 end
+          badge.new(user).run
         end
       end
 

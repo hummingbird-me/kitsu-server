@@ -15,6 +15,8 @@
 require 'rails_helper'
 
 RSpec.describe BestowmentCash, type: :model do
+  subject { BestowmentCash.new(badge_id: 'LikingFeedPostsBadge') }
+
   it { should validate_presence_of(:badge_id) }
   it do
     should validate_uniqueness_of(:badge_id)
