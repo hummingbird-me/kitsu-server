@@ -14,6 +14,7 @@ class UserResource < BaseResource
   has_many :following
   has_many :blocks
   has_many :linked_profiles
+  has_many :media_follows
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (records, _v, options) {
