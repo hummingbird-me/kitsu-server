@@ -33,6 +33,8 @@ module Media
     validates_attachment :poster_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
     }
+
+    after_create :follow_self
   end
 
   def slug_candidates
@@ -45,5 +47,17 @@ module Media
   # How long the series ran for, or nil if the start date is unknown
   def run_length
     (end_date || Date.today) - start_date if start_date
+  end
+
+  def feed
+    @feed ||= Feed.media(self.class.name, id)
+  end
+
+  def aggregated_feed
+    @aggregated_feed ||= Feed.media_aggr(self.class.name, id)
+  end
+
+  def follow_self
+    aggregated_feed.follow(feed)
   end
 end

@@ -1,17 +1,17 @@
 FROM rails:4.2
-MAINTAINER Hummingbird Media, Inc.
+MAINTAINER Kitsu, Inc.
 
-RUN mkdir -p /opt/hummingbird/server
+RUN mkdir -p /opt/kitsu/server
 
 # Preinstall gems in an earlier layer so we don't reinstall every time any file
 # changes.
-COPY ./Gemfile /opt/hummingbird/server/
-COPY ./Gemfile.lock /opt/hummingbird/server/
-WORKDIR /opt/hummingbird/server
+COPY ./Gemfile /opt/kitsu/server/
+COPY ./Gemfile.lock /opt/kitsu/server/
+WORKDIR /opt/kitsu/server
 RUN bundle install
 
 # *NOW* we copy the codebase in
-COPY . /opt/hummingbird/server
+COPY . /opt/kitsu/server
 
 ENV DATABASE_URL=postgresql://postgres:mysecretpassword@postgres/
 ENV REDIS_URL=redis://redis/1

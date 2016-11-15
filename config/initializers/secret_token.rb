@@ -16,4 +16,4 @@
 # Using secret_token for rails3 compatibility. Change to secret_key_base
 # to avoid deprecation warning.
 # Can be safely removed in a rails3 api-only application.
-Hummingbird::Application.config.secret_token = 'e314ec5d45ac0f0268b3d156afd6ebfa894b94816e54308fe37a5f083207d14d244897cdd124652a7e19113a953833d678f95c7b924bc33ed5a2cfc20f566d75'
+Kitsu::Application.config.secret_token = 'e314ec5d45ac0f0268b3d156afd6ebfa894b94816e54308fe37a5f083207d14d244897cdd124652a7e19113a953833d678f95c7b924bc33ed5a2cfc20f566d75'

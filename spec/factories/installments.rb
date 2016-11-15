@@ -3,6 +3,7 @@
 #
 # Table name: installments
 #
+#  id           :integer          not null, primary key
 #  media_type   :string           not null, indexed => [media_id]
 #  position     :integer          default(0), not null
 #  tag          :string

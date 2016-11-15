@@ -10,9 +10,10 @@ Dir[Rails.root.join("#{SEED_DIR}/*.yml")].each do |f|
   puts "==> Seeding: #{model.name}"
 
   yaml.each do |key, values|
-    puts key
+    print "#{key} "
     model.where(id: values['id']).first_or_create do |record|
       record.assign_attributes(values)
     end
   end
+  print "\n"
 end

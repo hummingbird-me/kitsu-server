@@ -5,6 +5,14 @@ GIT
     twemoji (2.0.1)
       nokogiri (~> 1.6.2)
 
+GIT
+  remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
+  revision: 94b1e6345e63cb380a0185436f62f42a2d340491
+  specs:
+    doorkeeper-grants_assertion (0.0.1)
+      doorkeeper (>= 4.0)
+      railties (>= 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -60,6 +68,7 @@ GEM
     aws-sdk-resources (2.3.22)
       aws-sdk-core (= 2.3.22)
     bcrypt (3.1.11)
+    buftok (0.2.0)
     builder (3.2.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
@@ -81,6 +90,7 @@ GEM
       after_commit_action (~> 1.0.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
+    crass (1.0.2)
     database_cleaner (1.5.3)
     delayed_paperclip (2.10.0)
       paperclip (>= 3.3)
@@ -95,6 +105,8 @@ GEM
       devise (>= 3.2, < 4.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    domain_name (0.5.20160826)
+      unf (>= 0.0.5, < 1.0.0)
     doorkeeper (4.0.0)
       railties (>= 4.2)
     dotenv (2.1.1)
@@ -109,6 +121,7 @@ GEM
     elasticsearch-transport (1.0.18)
       faraday
       multi_json
+    equalizer (0.0.10)
     erubis (2.7.0)
     ethon (0.9.0)
       ffi (>= 1.3.0)
@@ -131,7 +144,9 @@ GEM
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
     fspath (2.1.1)
-    globalid (0.3.6)
+    gene_pool (1.4.1)
+      thread_safe
+    globalid (0.3.7)
       activesupport (>= 4.1.0)
     guard (2.14.0)
       formatador (>= 0.2.4)
@@ -148,9 +163,22 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     hashdiff (0.3.0)
+    hashie (3.4.6)
     hiredis (0.6.1)
     hitimes (1.2.4)
+    html-pipeline (2.4.2)
+      activesupport (>= 2)
+      nokogiri (>= 1.4)
     htmlentities (4.3.4)
+    http (1.0.4)
+      addressable (~> 2.3)
+      http-cookie (~> 1.0)
+      http-form_data (~> 1.0.1)
+      http_parser.rb (~> 0.6.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    http-form_data (1.0.1)
+    http_parser.rb (0.6.0)
     http_signatures (0.2.2)
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
@@ -170,39 +198,42 @@ GEM
     jmespath (1.3.0)
     json (1.8.3)
     json_expressions (0.8.3)
-    jsonapi-authorization (0.6.1)
-      jsonapi-resources (~> 0.7.0)
-      pundit (~> 1.0)
-    jsonapi-resources (0.7.0)
+    jsonapi-resources (0.8.1)
+      concurrent-ruby
       rails (>= 4.0)
-    jwt (1.5.4)
+    jsonapi-utils (0.5.0.beta3)
+      jsonapi-resources (~> 0.8.0)
+    jwt (1.5.2)
+    kramdown (1.12.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    loofah-activerecord (1.2.0)
-      loofah (>= 1.0.0)
     lumberjack (1.0.10)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    memoizable (0.4.2)
+      thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mimemagic (0.3.0)
     mini_portile2 (2.1.0)
-    minitest (5.9.0)
+    minitest (5.9.1)
     moneta (0.8.0)
     multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     mustache (1.0.3)
+    naught (1.1.0)
     nenv (0.3.0)
-    nokogiri (1.6.8)
+    nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
+    nokogumbo (1.4.9)
+      nokogiri
     notiffany (0.1.0)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -231,8 +262,12 @@ GEM
       paperclip (>= 3.4)
     paranoia (2.1.5)
       activerecord (~> 4.0)
+    persistent_http (1.0.6)
+      gene_pool (>= 1.3)
+    persistent_httparty (0.1.2)
+      httparty (~> 0.9)
+      persistent_http (< 2)
     pg (0.18.4)
-    pkg-config (1.1.7)
     progress (3.1.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -243,6 +278,11 @@ GEM
     puma (3.4.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
+    pundit-resources (1.1.1)
+      activesupport
+      jsonapi-resources
+      pundit
+      rails (>= 4.2.1, < 5.1)
     rack (1.6.4)
     rack-cors (0.4.0)
     rack-mini-profiler (0.10.1)
@@ -271,12 +311,17 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
+    rails_12factor (0.0.3)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.5)
+    rails_stdout_logging (0.0.5)
     railties (4.2.1)
       actionpack (= 4.2.1)
       activesupport (= 4.2.1)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (11.2.2)
+    rake (11.3.0)
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
@@ -301,6 +346,7 @@ GEM
       redis (>= 2.2)
     responders (2.2.0)
       railties (>= 4.2.0, < 5.1)
+    rinku (2.0.2)
     rolify (5.1.0)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
@@ -326,8 +372,13 @@ GEM
       rspec (~> 3.0, >= 3.0.0)
       sidekiq (>= 2.4.0)
     rspec-support (3.4.1)
+    ruby-progressbar (1.8.1)
     ruby_dep (1.3.1)
     safe_yaml (1.0.4)
+    sanitize (4.4.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.4.4)
+      nokogumbo (~> 1.4.1)
     shellany (0.0.1)
     shoulda-matchers (3.1.1)
       activesupport (>= 4.0.0)
@@ -341,6 +392,7 @@ GEM
       celluloid (>= 0.14.1)
       ice_cube (= 0.11.1)
       sidekiq (>= 3.0.0)
+    simple_oauth (0.3.1)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -348,31 +400,47 @@ GEM
     simplecov-html (0.10.0)
     slop (3.6.0)
     spring (1.7.2)
-    sprockets (3.6.3)
+    sprockets (3.7.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.1.1)
+    sprockets-rails (3.2.0)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.9)
-    stream-ruby (2.2.5)
+    stream-ruby (2.4.4)
       http_signatures (~> 0)
       httparty (~> 0)
-    stream_rails (2.4.0)
+      jwt (= 1.5.2)
+      persistent_httparty (~> 0.1.2)
+    stream_rails (2.5.0)
       actionpack (>= 3.0.0)
       activerecord (>= 3.0.0)
       railties (>= 3.0.0)
-      stream-ruby (~> 2.2.5)
+      stream-ruby (~> 2.4)
     thor (0.19.1)
     thread_safe (0.3.5)
     timecop (0.8.1)
     timers (4.0.4)
       hitimes
+    twitter (5.16.0)
+      addressable (~> 2.3)
+      buftok (~> 0.2.0)
+      equalizer (= 0.0.10)
+      faraday (~> 0.9.0)
+      http (~> 1.0)
+      http_parser.rb (~> 0.6.0)
+      json (~> 1.8)
+      memoizable (~> 0.4.0)
+      naught (~> 1.0)
+      simple_oauth (~> 0.3.0)
     typhoeus (1.0.2)
       ethon (>= 0.9.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
     warden (1.2.6)
       rack (>= 1.0)
     webmock (2.1.0)
@@ -396,6 +464,7 @@ DEPENDENCIES
   devise (~> 3.5)
   devise-async
   doorkeeper
+  doorkeeper-grants_assertion!
   dotenv-rails
   factory_girl_rails
   faker
@@ -405,13 +474,15 @@ DEPENDENCIES
   friendly_id
   guard
   guard-rspec
+  hashie
   hiredis
+  html-pipeline
   image_optim
   image_optim_pack
   json_expressions
-  jsonapi-authorization
-  jsonapi-resources (~> 0.7.0)
-  loofah-activerecord
+  jsonapi-resources (~> 0.8.0)
+  jsonapi-utils (= 0.5.0.beta3)
+  kramdown
   nokogiri
   oauth2
   oj
@@ -423,15 +494,20 @@ DEPENDENCIES
   pry-rails
   puma
   pundit
+  pundit-resources
   rack-cors
   rack-mini-profiler
   rails (= 4.2.1)
   rails-api
+  rails_12factor
   redis
   redis-rails
+  rinku
   rolify
   rspec-rails
   rspec-sidekiq
+  ruby-progressbar
+  sanitize
   shoulda-matchers
   sidekiq (~> 3.4.2)
   sidetiq
@@ -441,6 +517,7 @@ DEPENDENCIES
   stream_rails
   timecop
   twemoji!
+  twitter
   typhoeus
   webmock
 

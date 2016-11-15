@@ -1,0 +1,2 @@
+class FranchisePolicy < ApplicationPolicy
+end

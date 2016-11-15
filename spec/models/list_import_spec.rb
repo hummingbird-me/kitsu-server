@@ -25,12 +25,25 @@
 require 'rails_helper'
 
 RSpec.describe ListImport do
+  class FakeImport < ListImport
+    def each
+      media = FactoryGirl.create_list(:anime, 100)
+      100.times do |i|
+        yield media[i], status: :current, progress: 1
+      end
+    end
+    def count; 100; end
+  end
+
+  subject { build(:list_import) }
+
   it { should define_enum_for(:status) }
   it { should belong_to(:user).touch }
   it { should validate_presence_of(:user) }
   it { should define_enum_for(:strategy) }
   it { should validate_presence_of(:strategy) }
   it { should have_attached_file(:input_file) }
+
   context 'without input_file' do
     subject { build(:list_import, input_file: nil) }
     it { should validate_presence_of(:input_text) }
@@ -38,5 +51,49 @@ RSpec.describe ListImport do
   context 'without input_text' do
     subject { build(:list_import, input_text: nil) }
     it { should validate_presence_of(:input_file) }
+  end
+
+  describe '#apply!' do
+    let(:user) { create(:user) }
+    subject { FakeImport.create(user: user, input_text: 'hi', strategy: :obliterate) }
+
+    it 'should call #apply and update every 20 rows' do
+      expect(subject).to receive(:apply) do |&block|
+        100.times { |i| block.call({ status: :running, current: i }) }
+      end
+      expect(subject).to receive(:update).exactly(5).times
+      subject.apply!
+    end
+  end
+
+  describe '#apply' do
+    let(:user) { create(:user) }
+
+    context 'with a proper #each method' do
+      subject { FakeImport.create(user: user, input_text: 'hi', strategy: :greater) }
+
+      it 'should yield repeatedly with the status' do
+        expect { |b|
+          subject.apply(&b)
+        }.to yield_successive_args(*Array.new(102, Hash))
+      end
+    end
+
+    context 'raising an error' do
+      class ErrorFakeImport < ListImport
+        def each; raise 'An error'; end
+        def count; 7; end
+      end
+      subject { ErrorFakeImport.create(user: user, input_text: 'hi') }
+
+      it 'should yield once for running and once for error' do
+        expect { |b|
+          subject.apply(&b)
+        }.to yield_successive_args(
+          { status: :running, total: 7, current: 0 },
+          { status: :error, total: 7, error_message: 'An error', error_trace: String }
+        )
+      end
+    end
   end
 end

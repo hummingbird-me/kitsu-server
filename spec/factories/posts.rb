@@ -1,14 +1,17 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: posts
 #
 #  id                :integer          not null, primary key
 #  blocked           :boolean          default(FALSE), not null
+#  comments_count    :integer          default(0), not null
 #  content           :text             not null
 #  content_formatted :text             not null
 #  deleted_at        :datetime
 #  media_type        :string
 #  nsfw              :boolean          default(FALSE), not null
+#  post_likes_count  :integer          default(0), not null
 #  spoiled_unit_type :string
 #  spoiler           :boolean          default(FALSE), not null
 #  created_at        :datetime         not null
@@ -21,9 +24,10 @@
 #
 # Foreign Keys
 #
+#  fk_rails_43023491e6  (target_user_id => users.id)
 #  fk_rails_5b5ddfd518  (user_id => users.id)
-#  fk_rails_6fac2de613  (target_user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :post do

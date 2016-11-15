@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -13,9 +12,12 @@
 #  avatar_processing           :boolean
 #  avatar_updated_at           :datetime
 #  bio                         :string(140)      default(""), not null
+#  birthday                    :date
+#  comments_count              :integer          default(0), not null
 #  confirmation_sent_at        :datetime
 #  confirmation_token          :string(255)      indexed
 #  confirmed_at                :datetime
+#  consecutive_days            :integer          default(0), not null
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
@@ -26,24 +28,30 @@
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
 #  encrypted_password          :string(255)      default(""), not null
+#  favorites_count             :integer          default(0), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
+#  gender                      :string
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
 #  last_backup                 :datetime
+#  last_login                  :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
 #  last_sign_in_ip             :string(255)
 #  life_spent_on_anime         :integer          default(0), not null
+#  likes_given_count           :integer          default(0), not null
+#  likes_received_count        :integer          default(0), not null
 #  location                    :string(255)
 #  mal_username                :string(255)
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
 #  onboarded                   :boolean          default(FALSE), not null
 #  past_names                  :string           default([]), not null, is an Array
+#  posts_count                 :integer          default(0), not null
 #  pro_expires_at              :datetime
-#  rating_system               :integer          default(1)
+#  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
@@ -63,6 +71,7 @@
 #  facebook_id                 :string(255)      indexed
 #  pro_membership_plan_id      :integer
 #  stripe_customer_id          :string(255)
+#  twitter_id                  :string
 #  waifu_id                    :integer          indexed
 #
 # Indexes
@@ -73,7 +82,6 @@
 #  index_users_on_to_follow           (to_follow)
 #  index_users_on_waifu_id            (waifu_id)
 #
-# rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
   PAST_NAMES_LIMIT = 10
@@ -82,9 +90,18 @@ class User < ApplicationRecord
     :validatable, :confirmable, :async
   rolify
 
-  belongs_to :pro_membership_plan
+  belongs_to :pro_membership_plan, required: false
+  belongs_to :waifu, required: false, class_name: 'Character'
+  has_many :followers, class_name: 'Follow', foreign_key: 'followed_id',
+    dependent: :destroy
+  has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
+    dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :posts, dependent: :destroy
+  has_many :media_follows, dependent: :destroy
+  has_many :blocks, dependent: :destroy
+  has_many :linked_profiles, dependent: :destroy
 
-  enum rating_system: %i[smilies stars]
   has_attached_file :avatar
   has_attached_file :cover_image
 
@@ -101,7 +118,9 @@ class User < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png image/gif]
   }
 
-  scope :by_name, -> (name) { where('lower(name) = ?', name.to_s.downcase) }
+  scope :by_name, -> (*names) {
+    where('lower(name) IN (?)', names.flatten.map(&:downcase))
+  }
 
   # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
@@ -118,10 +137,48 @@ class User < ApplicationRecord
     past_names.first
   end
 
+  def feed
+    @feed ||= Feed.user(id)
+  end
+
+  def aggregated_feed
+    @aggr_feed ||= Feed.user_aggr(id)
+  end
+
+  def timeline
+    @timeline ||= Feed.timeline(id)
+  end
+
+  def notifications
+    @notifications ||= Feed.notifications(id)
+  end
+
+  def finished?
+    email.present? && bio.present?
+  end
+
+  after_create do
+    aggregated_feed.follow(feed)
+    timeline.follow(feed)
+    Feed.global.follow(feed)
+  end
+
   before_update do
     if name_changed?
       # Push it onto the front and limit
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
+    end
+
+    if last_login_changed?
+      # Count consecutive days
+      between = (
+        last_login.beginning_of_day - last_login_was.beginning_of_day
+      ) / 1.days
+      if between > 1
+        self.consecutive_days = 0
+      elsif between == 1
+        self.consecutive_days += 1
+      end
     end
   end
 end

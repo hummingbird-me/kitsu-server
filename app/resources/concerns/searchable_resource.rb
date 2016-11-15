@@ -42,27 +42,29 @@ module SearchableResource
 
     # Determine if an ElasticSearch hit is required
     def should_query?(filters)
+      @queryable_fields ||= {}
       filters.keys.any? { |key| @queryable_fields.include?(key) }
     end
 
-    # Perform a search, given the filters object and options
-    def search(filters, opts = {})
-      context = opts[:context]
-
+    # Override the #find method to search when called upon
+    def find_records(filters, opts = {})
+      return super(filters, opts) unless should_query?(filters)
       return [] if filters.values.any?(&:nil?)
 
-      # Apply scopes, load, and wrap
-      apply_scopes(filters, opts).load.map { |result| new(result, context) }
+      # Apply scopes and load
+      apply_scopes(filters, opts).load
     end
 
     # Count all search results
-    def search_count(filters, opts = {})
+    def find_count(filters, opts = {})
+      return super(filters, opts) unless should_query?(filters)
       return 0 if filters.values.any?(&:nil?)
       apply_scopes(filters, opts).total_count
     end
 
     # Allow sorting on anything queryable + _score
     def sortable_fields(context = nil)
+      @queryable_fields ||= {}
       if is_searchable?
         super(context) + @queryable_fields.keys + ['_score']
       else
@@ -77,6 +79,8 @@ module SearchableResource
     private
 
     def apply_scopes(filters, opts = {})
+      # TODO: actually apply policy somehow
+      opts[:context][:policy_used]&.call
       # Generate query
       query = generate_query(filters)
       query = query.reduce(@chewy_index) do |scope, subquery|
@@ -87,8 +91,11 @@ module SearchableResource
       # Sorting
       if opts[:sort_criteria]
         query = opts[:sort_criteria].reduce(query) do |scope, sort|
-          scope.order(sort[:field] => sort[:direction])
+          field = (sort[:field] == 'id') ? '_score' : sort[:field]
+          scope.order(field => sort[:direction])
         end
+      else
+        query = query.order('_score' => :desc)
       end
       query
     end

@@ -6,6 +6,7 @@
 #  id              :integer          not null, primary key
 #  media_type      :string           not null, indexed => [user_id, media_id]
 #  notes           :text
+#  nsfw            :boolean          default(FALSE), not null
 #  private         :boolean          default(FALSE), not null
 #  progress        :integer          default(0), not null
 #  rating          :decimal(2, 1)

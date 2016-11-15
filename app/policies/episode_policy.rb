@@ -1,0 +1,2 @@
+class EpisodePolicy < ApplicationPolicy
+end

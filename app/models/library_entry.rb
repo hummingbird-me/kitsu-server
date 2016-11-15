@@ -6,6 +6,7 @@
 #  id              :integer          not null, primary key
 #  media_type      :string           not null, indexed => [user_id, media_id]
 #  notes           :text
+#  nsfw            :boolean          default(FALSE), not null
 #  private         :boolean          default(FALSE), not null
 #  progress        :integer          default(0), not null
 #  rating          :decimal(2, 1)
@@ -34,6 +35,9 @@ class LibraryEntry < ApplicationRecord
 
   belongs_to :user, touch: true
   belongs_to :media, polymorphic: true
+  has_many :marathons, dependent: :destroy
+
+  scope :sfw, -> { where(nsfw: false) }
 
   enum status: {
     current: 1,
@@ -57,6 +61,12 @@ class LibraryEntry < ApplicationRecord
   validate :progress_limit
   validate :rating_on_halves
 
+  counter_culture :user, column_name: -> (le) { 'ratings_count' if le.rating }
+
+  def current_marathon
+    marathons.current.first_or_create
+  end
+
   def progress_limit
     return unless progress
     progress_cap = media.try(:progress_limit)
@@ -69,10 +79,24 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  def unit
+    media.unit(progress)
+  end
+
   def rating_on_halves
     return unless rating
 
     errors.add(:rating, 'must be a multiple of 0.5') unless rating % 0.5 == 0.0
+  end
+
+  def activity
+    MediaActivityService.new(self)
+  end
+
+  after_save do
+    activity.rating(rating).create if rating_changed?
+    activity.status(status).create if status_changed?
+    activity.progress(progress).create if progress_changed?
   end
 
   after_save do

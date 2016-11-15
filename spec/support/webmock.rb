@@ -5,5 +5,6 @@ WebMock.disable_net_connect!(allow: [
   'codeclimate.com',
   %r{pigment.github.io/fake-logos},
   'localhost',
+  'api.getstream.io',
   'elasticsearch:9200'
 ])

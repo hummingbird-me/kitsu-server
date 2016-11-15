@@ -24,8 +24,6 @@
 
 class ListImport
   class MyAnimeList < ListImport
-    include Enumerable
-
     # We can only accept files as input right now, not usernames
     validates :input_text, absence: true
     # Accept .gz or .xml.gz

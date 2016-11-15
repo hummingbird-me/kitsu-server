@@ -1,0 +1,2 @@
+class InstallmentPolicy < ApplicationPolicy
+end

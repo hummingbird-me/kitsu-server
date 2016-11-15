@@ -18,9 +18,11 @@ gem 'chewy' # ElasticSearch
 gem 'devise', '~> 3.5'
 gem 'devise-async'
 gem 'doorkeeper'
+gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'pundit'
-gem 'jsonapi-authorization'
+gem 'pundit-resources'
 gem 'rolify'
+gem 'twitter'
 
 # Attachments
 gem 'paperclip', '~> 4.1'
@@ -35,19 +37,25 @@ gem 'sidekiq', '~> 3.4.2'
 gem 'sidetiq'
 
 # Text pipeline
-gem 'loofah-activerecord'
+gem 'html-pipeline'
+gem 'kramdown'
+gem 'sanitize'
 gem 'onebox'
 gem 'twemoji', github: 'vevix/twemoji'
+gem 'rinku'
 
 # Miscellaneous Utilities
 gem 'friendly_id' # slug-urls-are-cool
 gem 'nokogiri' # Parse MAL XML shit
 gem 'typhoeus' # Parallelize scraping tasks
-gem 'jsonapi-resources', '~> 0.7.0' # JSON-API resources
+gem 'jsonapi-resources', '~> 0.8.0' # JSON-API resources
+gem 'jsonapi-utils', '0.5.0.beta3' # Use JR stuff outside their abstraction
 gem 'acts_as_list' # Sortables!
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'counter_culture' # Fancier counter caches
 gem 'stream_rails' # Feeds
+gem 'hashie' # Souped-up Hashes
+gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 
 # Rack Middleware
 gem 'rack-cors'
@@ -88,4 +96,8 @@ group :test do
 
   # Libraries used to test our API itself
   gem 'oauth2'
+end
+
+group :production do
+  gem 'rails_12factor' # Log to stdout, serve assets
 end

@@ -17,6 +17,17 @@
 # rubocop:enable Metrics/LineLength
 
 class PostLike < ApplicationRecord
+  include WithActivity
+
   belongs_to :user, required: true
-  belongs_to :post, required: true
+  belongs_to :post, required: true, counter_cache: true, touch: true
+
+  validates :post, uniqueness: { scope: :user_id }
+
+  counter_culture :user, column_name: 'likes_given_count'
+  counter_culture [:post, :user], column_name: 'likes_received_count'
+
+  def stream_activity
+    post.feed.activities.new
+  end
 end

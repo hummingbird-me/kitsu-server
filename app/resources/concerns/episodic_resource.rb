@@ -6,5 +6,7 @@ module EpisodicResource
 
     query :episode_count, MediaResource::NUMERIC_QUERY
     query :episode_length, MediaResource::NUMERIC_QUERY
+
+    has_many :episodes
   end
 end

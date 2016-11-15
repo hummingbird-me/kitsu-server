@@ -14,7 +14,7 @@ require 'rails/test_unit/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Hummingbird
+module Kitsu
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified
     # here.  Application configuration should go into files in
@@ -39,9 +39,6 @@ module Hummingbird
     # Allow autoloading any lib files
     config.autoload_paths << "#{Rails.root}/lib"
 
-    # We run under /api
-    config.relative_url_root = '/api'
-
     # Eable CORS
     config.middleware.insert_before 0, 'Rack::Cors' do
       allow do
@@ -52,5 +49,10 @@ module Hummingbird
                       max_age: 1.hour
       end
     end
+
+    # Fancy new URLs for images
+    config.paperclip_defaults = {
+      url: '/system/:class/:attachment/:id/:style.:content_type_extension'
+    }
   end
 end

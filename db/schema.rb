@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161003225612) do
+ActiveRecord::Schema.define(version: 20161115113717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,14 @@ ActiveRecord::Schema.define(version: 20161003225612) do
   add_index "anime_producers", ["anime_id"], name: "index_anime_producers_on_anime_id", using: :btree
   add_index "anime_producers", ["producer_id"], name: "index_anime_producers_on_producer_id", using: :btree
 
+  create_table "bestowment_cashes", force: :cascade do |t|
+    t.string   "badge_id",               null: false
+    t.integer  "rank"
+    t.integer  "number",     default: 0, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "bestowments", force: :cascade do |t|
     t.string   "badge_id",                null: false
     t.integer  "user_id",                 null: false
@@ -78,7 +86,19 @@ ActiveRecord::Schema.define(version: 20161003225612) do
     t.datetime "bestowed_at"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.string   "title"
+    t.text     "description"
   end
+
+  create_table "blocks", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "blocked_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "blocks", ["blocked_id"], name: "index_blocks_on_blocked_id", using: :btree
+  add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
 
   create_table "castings", force: :cascade do |t|
     t.integer  "media_id",                                 null: false
@@ -131,6 +151,17 @@ ActiveRecord::Schema.define(version: 20161003225612) do
   add_index "characters", ["mal_id"], name: "character_mal_id", unique: true, using: :btree
   add_index "characters", ["mal_id"], name: "index_characters_on_mal_id", unique: true, using: :btree
 
+  create_table "comment_likes", force: :cascade do |t|
+    t.integer  "comment_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "comment_likes", ["comment_id"], name: "index_comment_likes_on_comment_id", using: :btree
+  add_index "comment_likes", ["user_id", "comment_id"], name: "index_comment_likes_on_user_id_and_comment_id", unique: true, using: :btree
+  add_index "comment_likes", ["user_id"], name: "index_comment_likes_on_user_id", using: :btree
+
   create_table "comments", force: :cascade do |t|
     t.integer  "post_id",                           null: false
     t.integer  "user_id",                           null: false
@@ -140,6 +171,8 @@ ActiveRecord::Schema.define(version: 20161003225612) do
     t.datetime "updated_at",                        null: false
     t.datetime "deleted_at"
     t.boolean  "blocked",           default: false, null: false
+    t.integer  "parent_id"
+    t.integer  "likes_count",       default: 0,     null: false
   end
 
   create_table "dramas", force: :cascade do |t|
@@ -209,12 +242,12 @@ ActiveRecord::Schema.define(version: 20161003225612) do
   add_index "favorite_genres_users", ["genre_id", "user_id"], name: "index_favorite_genres_users_on_genre_id_and_user_id", unique: true, using: :btree
 
   create_table "favorites", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "item_id"
-    t.string   "item_type",  limit: 255
+    t.integer  "user_id",                               null: false
+    t.integer  "item_id",                               null: false
+    t.string   "item_type",  limit: 255,                null: false
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
-    t.integer  "fav_rank",               default: 9999
+    t.integer  "fav_rank",               default: 9999, null: false
   end
 
   add_index "favorites", ["item_id", "item_type"], name: "index_favorites_on_item_id_and_item_type", using: :btree
@@ -310,7 +343,7 @@ ActiveRecord::Schema.define(version: 20161003225612) do
     t.text     "about_formatted"
   end
 
-  create_table "installments", id: false, force: :cascade do |t|
+  create_table "installments", force: :cascade do |t|
     t.integer "media_id"
     t.integer "franchise_id"
     t.string  "media_type",               null: false
@@ -335,11 +368,37 @@ ActiveRecord::Schema.define(version: 20161003225612) do
     t.boolean  "reconsuming",                             default: false, null: false
     t.string   "media_type",                                              null: false
     t.integer  "volumes_owned",                           default: 0,     null: false
+    t.boolean  "nsfw",                                    default: false, null: false
   end
 
   add_index "library_entries", ["user_id", "media_type", "media_id"], name: "index_library_entries_on_user_id_and_media_type_and_media_id", unique: true, using: :btree
   add_index "library_entries", ["user_id", "status"], name: "index_library_entries_on_user_id_and_status", using: :btree
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
+
+  create_table "linked_profiles", force: :cascade do |t|
+    t.integer  "user_id",                          null: false
+    t.integer  "linked_site_id",                   null: false
+    t.string   "external_user_id",                 null: false
+    t.string   "url"
+    t.boolean  "share_to",         default: false, null: false
+    t.boolean  "share_from",       default: false, null: false
+    t.boolean  "private",          default: true,  null: false
+    t.string   "token"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  add_index "linked_profiles", ["linked_site_id"], name: "index_linked_profiles_on_linked_site_id", using: :btree
+  add_index "linked_profiles", ["user_id"], name: "index_linked_profiles_on_user_id", using: :btree
+
+  create_table "linked_sites", force: :cascade do |t|
+    t.string   "name",                       null: false
+    t.boolean  "share_to",   default: false, null: false
+    t.boolean  "share_from", default: false, null: false
+    t.integer  "link_type",                  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
 
   create_table "list_imports", force: :cascade do |t|
     t.string   "type",                                null: false
@@ -396,6 +455,33 @@ ActiveRecord::Schema.define(version: 20161003225612) do
   end
 
   add_index "mappings", ["external_site", "external_id", "media_type", "media_id"], name: "index_mappings_on_external_and_media", unique: true, using: :btree
+
+  create_table "marathon_events", force: :cascade do |t|
+    t.integer  "marathon_id", null: false
+    t.integer  "unit_id"
+    t.string   "unit_type"
+    t.integer  "event",       null: false
+    t.integer  "status"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "marathons", force: :cascade do |t|
+    t.integer  "library_entry_id", null: false
+    t.boolean  "rewatch",          null: false
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "media_follows", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "media_id",   null: false
+    t.string   "media_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "not_interesteds", force: :cascade do |t|
     t.integer  "user_id"
@@ -528,6 +614,8 @@ ActiveRecord::Schema.define(version: 20161003225612) do
     t.datetime "updated_at",                        null: false
     t.datetime "deleted_at"
     t.integer  "target_group_id"
+    t.integer  "post_likes_count",  default: 0,     null: false
+    t.integer  "comments_count",    default: 0,     null: false
   end
 
   create_table "pro_membership_plans", force: :cascade do |t|
@@ -691,7 +779,6 @@ ActiveRecord::Schema.define(version: 20161003225612) do
     t.string   "facebook_id",                 limit: 255
     t.string   "bio",                         limit: 140, default: "",          null: false
     t.boolean  "sfw_filter",                              default: true
-    t.integer  "rating_system",                           default: 1
     t.string   "mal_username",                limit: 255
     t.integer  "life_spent_on_anime",                     default: 0,           null: false
     t.string   "about",                       limit: 500, default: "",          null: false
@@ -730,6 +817,17 @@ ActiveRecord::Schema.define(version: 20161003225612) do
     t.string   "import_error",                limit: 255
     t.boolean  "onboarded",                               default: false,       null: false
     t.string   "past_names",                              default: [],          null: false, array: true
+    t.string   "gender"
+    t.date     "birthday"
+    t.string   "twitter_id"
+    t.integer  "comments_count",                          default: 0,           null: false
+    t.integer  "likes_given_count",                       default: 0,           null: false
+    t.integer  "likes_received_count",                    default: 0,           null: false
+    t.integer  "favorites_count",                         default: 0,           null: false
+    t.integer  "posts_count",                             default: 0,           null: false
+    t.integer  "ratings_count",                           default: 0,           null: false
+    t.integer  "consecutive_days",                        default: 0,           null: false
+    t.datetime "last_login"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -786,12 +884,20 @@ ActiveRecord::Schema.define(version: 20161003225612) do
   add_index "votes", ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true, using: :btree
   add_index "votes", ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type", using: :btree
 
-  add_foreign_key "comments", "posts"
-  add_foreign_key "comments", "users"
+  add_foreign_key "bestowments", "users"
+  add_foreign_key "blocks", "users"
+  add_foreign_key "blocks", "users", column: "blocked_id"
+  add_foreign_key "comment_likes", "comments"
+  add_foreign_key "comment_likes", "users"
+  add_foreign_key "comments", "comments", column: "parent_id"
+  add_foreign_key "linked_profiles", "linked_sites"
+  add_foreign_key "linked_profiles", "users"
+  add_foreign_key "marathon_events", "marathons"
+  add_foreign_key "marathons", "library_entries"
+  add_foreign_key "media_follows", "users"
   add_foreign_key "post_likes", "posts"
   add_foreign_key "post_likes", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
-  add_foreign_key "bestowments", "users"
   add_foreign_key "streaming_links", "streamers"
 end

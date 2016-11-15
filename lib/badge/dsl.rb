@@ -3,11 +3,18 @@ class Badge
     extend ActiveSupport::Concern
 
     class_methods do
-      def on(model)
+      def on(model, action = :save)
         return if model.nil?
         @model_class = model
         badge = self
-        model.after_commit { badge.new(self.user).run }
+        model.public_send("after_#{action}") do
+          user = if self.class == User
+                   self
+                 else
+                   self.user
+                 end
+          badge.new(user).run
+        end
       end
 
       # Provide `key "value"` methods for each of these (also accept blocks)
@@ -25,13 +32,16 @@ class Badge
       # badge's rank
       def rank(value = nil, &block)
         return @rank if value.nil?
-
         subclass = const_set("Rank#{value}", Class.new(self, &block))
         subclass.rank = value
       end
 
       def rank=(value)
         @rank = value
+      end
+
+      def ranks
+        constants.grep(/^Rank/)
       end
 
       # Declare the goal for the badge
@@ -54,16 +64,6 @@ class Badge
 
       def hidden?
         @hidden
-      end
-
-      # Inherit attributes and hooks onto the subclasses
-      def inherited(subclass)
-        %i[progress title description hidden rank goal].each do |attr|
-          value = instance_variable_get("@#{attr}")
-          subclass.instance_variable_set("@#{attr}", value)
-        end
-        subclass.on(@model_class)
-        super
       end
     end
   end

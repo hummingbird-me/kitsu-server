@@ -1,8 +1,6 @@
 require 'unlimited_paginator'
 
 class LibraryEntryResource < BaseResource
-  include JSONAPI::Authorization::PunditScopedResource
-
   attributes :status, :progress, :reconsuming, :reconsume_count, :notes,
     :private, :rating, :updated_at
 
@@ -10,6 +8,7 @@ class LibraryEntryResource < BaseResource
 
   has_one :user
   has_one :media, polymorphic: true
+  has_one :unit, polymorphic: true
 
   paginator :unlimited
 end
