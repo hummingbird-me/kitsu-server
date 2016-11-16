@@ -59,7 +59,7 @@ module StreamDump
 
   class UnmentioningPost < Post
     scope :by_user, -> (user) { where(user: user) }
-    scope :groupless, -> { where(group: nil) }
+    scope :groupless, -> { where(group_id: nil) }
 
     def stream_activity
       media_feed = Feed.media(media_type, media_id) if media_id
