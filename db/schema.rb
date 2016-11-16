@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115070551) do
+ActiveRecord::Schema.define(version: 20161115181856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 20161115070551) do
     t.boolean  "blocked",           default: false, null: false
     t.integer  "parent_id"
     t.integer  "likes_count",       default: 0,     null: false
+    t.integer  "replies_count",     default: 0,     null: false
   end
 
   create_table "dramas", force: :cascade do |t|

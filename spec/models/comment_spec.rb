@@ -9,6 +9,7 @@
 #  content_formatted :text             not null
 #  deleted_at        :datetime
 #  likes_count       :integer          default(0), not null
+#  replies_count     :integer          default(0), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  parent_id         :integer
@@ -25,7 +26,8 @@ require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
   it { should belong_to(:post).counter_cache(true) }
-  it { should belong_to(:parent).class_name('Comment') }
+  it { should belong_to(:parent).class_name('Comment')
+    .counter_cache('replies_count') }
   it { should belong_to(:user) }
   it { should have_many(:replies).class_name('Comment').dependent(:destroy) }
   it { should have_many(:likes).class_name('CommentLike').dependent(:destroy) }
