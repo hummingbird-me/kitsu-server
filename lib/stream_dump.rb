@@ -68,6 +68,7 @@ module StreamDump
         updated_at: updated_at,
         post_likes_count: post_likes_count,
         comments_count: comments_count,
+        content: content,
         to: [media_feed, target_user_feed]
       )
     end
