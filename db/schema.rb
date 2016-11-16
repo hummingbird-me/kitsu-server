@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115070551) do
+ActiveRecord::Schema.define(version: 20161115113717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_trgm"
 
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
@@ -825,6 +826,8 @@ ActiveRecord::Schema.define(version: 20161115070551) do
     t.integer  "favorites_count",                         default: 0,           null: false
     t.integer  "posts_count",                             default: 0,           null: false
     t.integer  "ratings_count",                           default: 0,           null: false
+    t.integer  "consecutive_days",                        default: 0,           null: false
+    t.datetime "last_login"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -892,6 +895,8 @@ ActiveRecord::Schema.define(version: 20161115070551) do
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
   add_foreign_key "media_follows", "users"
+  add_foreign_key "post_likes", "posts"
+  add_foreign_key "post_likes", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "streaming_links", "streamers"
