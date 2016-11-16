@@ -58,6 +58,9 @@ module StreamDump
   end
 
   class UnmentioningPost < Post
+    scope :by_user, -> (user) { where(user: user) }
+    scope :groupless, -> { where(group: nil) }
+
     def stream_activity
       media_feed = Feed.media(media_type, media_id) if media_id
       target_user_feed = Feed.user(target_user_id) if target_user_id
@@ -74,7 +77,7 @@ module StreamDump
 
   def posts(scope = User)
     each_user(scope) do |user_id|
-      posts = UnmentioningPost.where(user_id: user_id).includes(:user)
+      posts = UnmentioningPost.groupless.by_user(user_id).includes(:user)
       next if posts.blank?
       data = posts.find_each.map(&:complete_stream_activity).compact
       next if data.blank?
