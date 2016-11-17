@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115181856) do
+ActiveRecord::Schema.define(version: 20161116064623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -646,26 +646,30 @@ ActiveRecord::Schema.define(version: 20161115181856) do
 
   add_index "recommendations", ["user_id"], name: "index_recommendations_on_user_id", using: :btree
 
-  create_table "reviews", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "anime_id"
-    t.text     "content"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.integer  "rating"
-    t.string   "source",           limit: 255
-    t.integer  "rating_story"
-    t.integer  "rating_animation"
-    t.integer  "rating_sound"
-    t.integer  "rating_character"
-    t.integer  "rating_enjoyment"
-    t.string   "summary",          limit: 255
-    t.float    "wilson_score",                 default: 0.0
-    t.integer  "positive_votes",               default: 0
-    t.integer  "total_votes",                  default: 0
+  create_table "review_likes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "review_id",  null: false
+    t.integer  "user_id",    null: false
   end
 
-  add_index "reviews", ["anime_id"], name: "index_reviews_on_anime_id", using: :btree
+  create_table "reviews", force: :cascade do |t|
+    t.integer  "user_id",                                       null: false
+    t.integer  "media_id",                                      null: false
+    t.text     "content",                                       null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.integer  "rating",                                        null: false
+    t.string   "source",            limit: 255
+    t.string   "summary",           limit: 255
+    t.integer  "likes_count",                   default: 0
+    t.string   "media_type"
+    t.text     "content_formatted",                             null: false
+    t.boolean  "legacy",                        default: false, null: false
+    t.integer  "library_entry_id"
+  end
+
+  add_index "reviews", ["media_id"], name: "index_reviews_on_media_id", using: :btree
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
@@ -874,5 +878,8 @@ ActiveRecord::Schema.define(version: 20161115181856) do
   add_foreign_key "media_follows", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
+  add_foreign_key "review_likes", "reviews"
+  add_foreign_key "review_likes", "users"
+  add_foreign_key "reviews", "library_entries"
   add_foreign_key "streaming_links", "streamers"
 end
