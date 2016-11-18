@@ -5,6 +5,10 @@
 #                                        PUT|PATCH /edge/library-entries/:library_entry_id/relationships/user(.:format)      library_entries#update_relationship {:relationship=>"user"}
 #                                        DELETE    /edge/library-entries/:library_entry_id/relationships/user(.:format)      library_entries#destroy_relationship {:relationship=>"user"}
 #                     library_entry_user GET       /edge/library-entries/:library_entry_id/user(.:format)                    users#get_related_resource {:relationship=>"user", :source=>"library_entries"}
+#     library_entry_relationships_review GET       /edge/library-entries/:library_entry_id/relationships/review(.:format)    library_entries#show_relationship {:relationship=>"review"}
+#                                        PUT|PATCH /edge/library-entries/:library_entry_id/relationships/review(.:format)    library_entries#update_relationship {:relationship=>"review"}
+#                                        DELETE    /edge/library-entries/:library_entry_id/relationships/review(.:format)    library_entries#destroy_relationship {:relationship=>"review"}
+#                   library_entry_review GET       /edge/library-entries/:library_entry_id/review(.:format)                  reviews#get_related_resource {:relationship=>"review", :source=>"library_entries"}
 #      library_entry_relationships_media GET       /edge/library-entries/:library_entry_id/relationships/media(.:format)     library_entries#show_relationship {:relationship=>"media"}
 #                                        PUT|PATCH /edge/library-entries/:library_entry_id/relationships/media(.:format)     library_entries#update_relationship {:relationship=>"media"}
 #                                        DELETE    /edge/library-entries/:library_entry_id/relationships/media(.:format)     library_entries#destroy_relationship {:relationship=>"media"}
@@ -39,6 +43,11 @@
 #                                        PUT|PATCH /edge/anime/:anime_id/relationships/mappings(.:format)                    anime#update_relationship {:relationship=>"mappings"}
 #                                        DELETE    /edge/anime/:anime_id/relationships/mappings(.:format)                    anime#destroy_relationship {:relationship=>"mappings"}
 #                         anime_mappings GET       /edge/anime/:anime_id/mappings(.:format)                                  mappings#get_related_resources {:relationship=>"mappings", :source=>"anime"}
+#            anime_relationships_reviews GET       /edge/anime/:anime_id/relationships/reviews(.:format)                     anime#show_relationship {:relationship=>"reviews"}
+#                                        POST      /edge/anime/:anime_id/relationships/reviews(.:format)                     anime#create_relationship {:relationship=>"reviews"}
+#                                        PUT|PATCH /edge/anime/:anime_id/relationships/reviews(.:format)                     anime#update_relationship {:relationship=>"reviews"}
+#                                        DELETE    /edge/anime/:anime_id/relationships/reviews(.:format)                     anime#destroy_relationship {:relationship=>"reviews"}
+#                          anime_reviews GET       /edge/anime/:anime_id/reviews(.:format)                                   reviews#get_related_resources {:relationship=>"reviews", :source=>"anime"}
 #           anime_relationships_episodes GET       /edge/anime/:anime_id/relationships/episodes(.:format)                    anime#show_relationship {:relationship=>"episodes"}
 #                                        POST      /edge/anime/:anime_id/relationships/episodes(.:format)                    anime#create_relationship {:relationship=>"episodes"}
 #                                        PUT|PATCH /edge/anime/:anime_id/relationships/episodes(.:format)                    anime#update_relationship {:relationship=>"episodes"}
@@ -75,6 +84,11 @@
 #                                        PUT|PATCH /edge/manga/:manga_id/relationships/mappings(.:format)                    manga#update_relationship {:relationship=>"mappings"}
 #                                        DELETE    /edge/manga/:manga_id/relationships/mappings(.:format)                    manga#destroy_relationship {:relationship=>"mappings"}
 #                         manga_mappings GET       /edge/manga/:manga_id/mappings(.:format)                                  mappings#get_related_resources {:relationship=>"mappings", :source=>"manga"}
+#            manga_relationships_reviews GET       /edge/manga/:manga_id/relationships/reviews(.:format)                     manga#show_relationship {:relationship=>"reviews"}
+#                                        POST      /edge/manga/:manga_id/relationships/reviews(.:format)                     manga#create_relationship {:relationship=>"reviews"}
+#                                        PUT|PATCH /edge/manga/:manga_id/relationships/reviews(.:format)                     manga#update_relationship {:relationship=>"reviews"}
+#                                        DELETE    /edge/manga/:manga_id/relationships/reviews(.:format)                     manga#destroy_relationship {:relationship=>"reviews"}
+#                          manga_reviews GET       /edge/manga/:manga_id/reviews(.:format)                                   reviews#get_related_resources {:relationship=>"reviews", :source=>"manga"}
 #                            manga_index GET       /edge/manga(.:format)                                                     manga#index
 #                                        POST      /edge/manga(.:format)                                                     manga#create
 #                                  manga GET       /edge/manga/:id(.:format)                                                 manga#show
@@ -101,6 +115,11 @@
 #                                        PUT|PATCH /edge/drama/:drama_id/relationships/mappings(.:format)                    dramas#update_relationship {:relationship=>"mappings"}
 #                                        DELETE    /edge/drama/:drama_id/relationships/mappings(.:format)                    dramas#destroy_relationship {:relationship=>"mappings"}
 #                         drama_mappings GET       /edge/drama/:drama_id/mappings(.:format)                                  mappings#get_related_resources {:relationship=>"mappings", :source=>"dramas"}
+#            drama_relationships_reviews GET       /edge/drama/:drama_id/relationships/reviews(.:format)                     dramas#show_relationship {:relationship=>"reviews"}
+#                                        POST      /edge/drama/:drama_id/relationships/reviews(.:format)                     dramas#create_relationship {:relationship=>"reviews"}
+#                                        PUT|PATCH /edge/drama/:drama_id/relationships/reviews(.:format)                     dramas#update_relationship {:relationship=>"reviews"}
+#                                        DELETE    /edge/drama/:drama_id/relationships/reviews(.:format)                     dramas#destroy_relationship {:relationship=>"reviews"}
+#                          drama_reviews GET       /edge/drama/:drama_id/reviews(.:format)                                   reviews#get_related_resources {:relationship=>"reviews", :source=>"dramas"}
 #           drama_relationships_episodes GET       /edge/drama/:drama_id/relationships/episodes(.:format)                    dramas#show_relationship {:relationship=>"episodes"}
 #                                        POST      /edge/drama/:drama_id/relationships/episodes(.:format)                    dramas#create_relationship {:relationship=>"episodes"}
 #                                        PUT|PATCH /edge/drama/:drama_id/relationships/episodes(.:format)                    dramas#update_relationship {:relationship=>"episodes"}
@@ -415,6 +434,38 @@
 #                                        PATCH     /edge/list-imports/:id(.:format)                                          list_imports#update
 #                                        PUT       /edge/list-imports/:id(.:format)                                          list_imports#update
 #                                        DELETE    /edge/list-imports/:id(.:format)                                          list_imports#destroy
+#     review_relationships_library_entry GET       /edge/reviews/:review_id/relationships/library-entry(.:format)            reviews#show_relationship {:relationship=>"library_entry"}
+#                                        PUT|PATCH /edge/reviews/:review_id/relationships/library-entry(.:format)            reviews#update_relationship {:relationship=>"library_entry"}
+#                                        DELETE    /edge/reviews/:review_id/relationships/library-entry(.:format)            reviews#destroy_relationship {:relationship=>"library_entry"}
+#                   review_library_entry GET       /edge/reviews/:review_id/library-entry(.:format)                          library_entries#get_related_resource {:relationship=>"library_entry", :source=>"reviews"}
+#             review_relationships_media GET       /edge/reviews/:review_id/relationships/media(.:format)                    reviews#show_relationship {:relationship=>"media"}
+#                                        PUT|PATCH /edge/reviews/:review_id/relationships/media(.:format)                    reviews#update_relationship {:relationship=>"media"}
+#                                        DELETE    /edge/reviews/:review_id/relationships/media(.:format)                    reviews#destroy_relationship {:relationship=>"media"}
+#                           review_media GET       /edge/reviews/:review_id/media(.:format)                                  media#get_related_resource {:relationship=>"media", :source=>"reviews"}
+#              review_relationships_user GET       /edge/reviews/:review_id/relationships/user(.:format)                     reviews#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/reviews/:review_id/relationships/user(.:format)                     reviews#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/reviews/:review_id/relationships/user(.:format)                     reviews#destroy_relationship {:relationship=>"user"}
+#                            review_user GET       /edge/reviews/:review_id/user(.:format)                                   users#get_related_resource {:relationship=>"user", :source=>"reviews"}
+#                                reviews GET       /edge/reviews(.:format)                                                   reviews#index
+#                                        POST      /edge/reviews(.:format)                                                   reviews#create
+#                                 review GET       /edge/reviews/:id(.:format)                                               reviews#show
+#                                        PATCH     /edge/reviews/:id(.:format)                                               reviews#update
+#                                        PUT       /edge/reviews/:id(.:format)                                               reviews#update
+#                                        DELETE    /edge/reviews/:id(.:format)                                               reviews#destroy
+#       review_like_relationships_review GET       /edge/review-likes/:review_like_id/relationships/review(.:format)         review_likes#show_relationship {:relationship=>"review"}
+#                                        PUT|PATCH /edge/review-likes/:review_like_id/relationships/review(.:format)         review_likes#update_relationship {:relationship=>"review"}
+#                                        DELETE    /edge/review-likes/:review_like_id/relationships/review(.:format)         review_likes#destroy_relationship {:relationship=>"review"}
+#                     review_like_review GET       /edge/review-likes/:review_like_id/review(.:format)                       reviews#get_related_resource {:relationship=>"review", :source=>"review_likes"}
+#         review_like_relationships_user GET       /edge/review-likes/:review_like_id/relationships/user(.:format)           review_likes#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/review-likes/:review_like_id/relationships/user(.:format)           review_likes#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/review-likes/:review_like_id/relationships/user(.:format)           review_likes#destroy_relationship {:relationship=>"user"}
+#                       review_like_user GET       /edge/review-likes/:review_like_id/user(.:format)                         users#get_related_resource {:relationship=>"user", :source=>"review_likes"}
+#                           review_likes GET       /edge/review-likes(.:format)                                              review_likes#index
+#                                        POST      /edge/review-likes(.:format)                                              review_likes#create
+#                            review_like GET       /edge/review-likes/:id(.:format)                                          review_likes#show
+#                                        PATCH     /edge/review-likes/:id(.:format)                                          review_likes#update
+#                                        PUT       /edge/review-likes/:id(.:format)                                          review_likes#update
+#                                        DELETE    /edge/review-likes/:id(.:format)                                          review_likes#destroy
 #                               activity DELETE    /edge/activities/:id(.:format)                                            activities#destroy
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
@@ -466,6 +517,8 @@ Rails.application.routes.draw do
     jsonapi_resources :favorites
     jsonapi_resources :episodes
     jsonapi_resources :list_imports
+    jsonapi_resources :reviews
+    jsonapi_resources :review_likes
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
   end

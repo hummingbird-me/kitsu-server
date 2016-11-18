@@ -35,6 +35,7 @@ class LibraryEntry < ApplicationRecord
 
   belongs_to :user, touch: true
   belongs_to :media, polymorphic: true
+  has_one :review, dependent: :destroy
   has_many :marathons, dependent: :destroy
 
   scope :sfw, -> { where(nsfw: false) }

@@ -7,6 +7,7 @@ class LibraryEntryResource < BaseResource
   filters :user_id, :media_id, :media_type, :status
 
   has_one :user
+  has_one :review
   has_one :media, polymorphic: true
   has_one :unit, polymorphic: true
 
