@@ -468,7 +468,7 @@ Rails.application.routes.draw do
     jsonapi_resources :list_imports
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
-    get '/thumbnail', to: 'link_thumbnails#thumbnail'
+    get '/format_content', to: 'formatters#format_content'
   end
 
   use_doorkeeper
