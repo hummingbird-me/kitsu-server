@@ -1,0 +1,53 @@
+# == Schema Information
+#
+# Table name: reviews
+#
+#  id                :integer          not null, primary key
+#  content           :text             not null
+#  content_formatted :text             not null
+#  legacy            :boolean          default(FALSE), not null
+#  likes_count       :integer          default(0)
+#  media_type        :string
+#  progress          :integer
+#  rating            :integer          not null
+#  source            :string(255)
+#  summary           :string(255)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  library_entry_id  :integer
+#  media_id          :integer          not null, indexed
+#  user_id           :integer          not null, indexed
+#
+# Indexes
+#
+#  index_reviews_on_media_id  (media_id)
+#  index_reviews_on_user_id   (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_150e554f22  (library_entry_id => library_entries.id)
+#
+
+class Review < ApplicationRecord
+  has_many :likes, class_name: 'ReviewLike'
+  belongs_to :media, polymorphic: true, required: true
+  belongs_to :user, required: true
+  belongs_to :library_entry, required: true
+
+  validates :content, presence: true
+  validates :rating, presence: true
+  validates :summary, presence: true
+
+  def processed_content
+    @processed_content ||= InlinePipeline.call(content)
+  end
+
+  before_validation do
+    self.source ||= 'hummingbird'
+    self.progress = library_entry&.progress
+    self.rating = library_entry&.rating
+    if content_changed?
+      self.content_formatted = processed_content[:output].to_s
+    end
+  end
+end

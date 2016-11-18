@@ -25,6 +25,7 @@ module Media
     has_many :franchises, through: :installments
     has_many :library_entries, as: 'media', dependent: :destroy
     has_many :mappings, as: 'media', dependent: :destroy
+    has_many :reviews, as: 'media', dependent: :destroy
     delegate :year, to: :start_date, allow_nil: true
 
     validates_attachment :cover_image, content_type: {
