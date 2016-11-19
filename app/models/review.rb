@@ -29,7 +29,7 @@
 #
 
 class Review < ApplicationRecord
-  has_many :likes, class_name: 'ReviewLike'
+  has_many :likes, class_name: 'ReviewLike', dependent: :destroy
   belongs_to :media, polymorphic: true, required: true
   belongs_to :user, required: true
   belongs_to :library_entry, required: true
