@@ -101,6 +101,7 @@ class User < ApplicationRecord
   has_many :media_follows, dependent: :destroy
   has_many :blocks, dependent: :destroy
   has_many :linked_profiles, dependent: :destroy
+  has_many :user_roles, dependent: :destroy
 
   has_attached_file :avatar
   has_attached_file :cover_image

@@ -160,6 +160,11 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/media-follows(.:format)                users#update_relationship {:relationship=>"media_follows"}
 #                                        DELETE    /edge/users/:user_id/relationships/media-follows(.:format)                users#destroy_relationship {:relationship=>"media_follows"}
 #                     user_media_follows GET       /edge/users/:user_id/media-follows(.:format)                              media_follows#get_related_resources {:relationship=>"media_follows", :source=>"users"}
+#          user_relationships_user_roles GET       /edge/users/:user_id/relationships/user-roles(.:format)                   users#show_relationship {:relationship=>"user_roles"}
+#                                        POST      /edge/users/:user_id/relationships/user-roles(.:format)                   users#create_relationship {:relationship=>"user_roles"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/user-roles(.:format)                   users#update_relationship {:relationship=>"user_roles"}
+#                                        DELETE    /edge/users/:user_id/relationships/user-roles(.:format)                   users#destroy_relationship {:relationship=>"user_roles"}
+#                        user_user_roles GET       /edge/users/:user_id/user-roles(.:format)                                 user_roles#get_related_resources {:relationship=>"user_roles", :source=>"users"}
 #                                  users GET       /edge/users(.:format)                                                     users#index
 #                                        POST      /edge/users(.:format)                                                     users#create
 #                                   user GET       /edge/users/:id(.:format)                                                 users#show
@@ -466,6 +471,35 @@
 #                                        PATCH     /edge/review-likes/:id(.:format)                                          review_likes#update
 #                                        PUT       /edge/review-likes/:id(.:format)                                          review_likes#update
 #                                        DELETE    /edge/review-likes/:id(.:format)                                          review_likes#destroy
+#          role_relationships_user_roles GET       /edge/roles/:role_id/relationships/user-roles(.:format)                   roles#show_relationship {:relationship=>"user_roles"}
+#                                        POST      /edge/roles/:role_id/relationships/user-roles(.:format)                   roles#create_relationship {:relationship=>"user_roles"}
+#                                        PUT|PATCH /edge/roles/:role_id/relationships/user-roles(.:format)                   roles#update_relationship {:relationship=>"user_roles"}
+#                                        DELETE    /edge/roles/:role_id/relationships/user-roles(.:format)                   roles#destroy_relationship {:relationship=>"user_roles"}
+#                        role_user_roles GET       /edge/roles/:role_id/user-roles(.:format)                                 user_roles#get_related_resources {:relationship=>"user_roles", :source=>"roles"}
+#            role_relationships_resource GET       /edge/roles/:role_id/relationships/resource(.:format)                     roles#show_relationship {:relationship=>"resource"}
+#                                        PUT|PATCH /edge/roles/:role_id/relationships/resource(.:format)                     roles#update_relationship {:relationship=>"resource"}
+#                                        DELETE    /edge/roles/:role_id/relationships/resource(.:format)                     roles#destroy_relationship {:relationship=>"resource"}
+#                          role_resource GET       /edge/roles/:role_id/resource(.:format)                                   resources#get_related_resource {:relationship=>"resource", :source=>"roles"}
+#                                  roles GET       /edge/roles(.:format)                                                     roles#index
+#                                        POST      /edge/roles(.:format)                                                     roles#create
+#                                   role GET       /edge/roles/:id(.:format)                                                 roles#show
+#                                        PATCH     /edge/roles/:id(.:format)                                                 roles#update
+#                                        PUT       /edge/roles/:id(.:format)                                                 roles#update
+#                                        DELETE    /edge/roles/:id(.:format)                                                 roles#destroy
+#           user_role_relationships_user GET       /edge/user-roles/:user_role_id/relationships/user(.:format)               user_roles#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/user-roles/:user_role_id/relationships/user(.:format)               user_roles#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/user-roles/:user_role_id/relationships/user(.:format)               user_roles#destroy_relationship {:relationship=>"user"}
+#                         user_role_user GET       /edge/user-roles/:user_role_id/user(.:format)                             users#get_related_resource {:relationship=>"user", :source=>"user_roles"}
+#           user_role_relationships_role GET       /edge/user-roles/:user_role_id/relationships/role(.:format)               user_roles#show_relationship {:relationship=>"role"}
+#                                        PUT|PATCH /edge/user-roles/:user_role_id/relationships/role(.:format)               user_roles#update_relationship {:relationship=>"role"}
+#                                        DELETE    /edge/user-roles/:user_role_id/relationships/role(.:format)               user_roles#destroy_relationship {:relationship=>"role"}
+#                         user_role_role GET       /edge/user-roles/:user_role_id/role(.:format)                             roles#get_related_resource {:relationship=>"role", :source=>"user_roles"}
+#                             user_roles GET       /edge/user-roles(.:format)                                                user_roles#index
+#                                        POST      /edge/user-roles(.:format)                                                user_roles#create
+#                              user_role GET       /edge/user-roles/:id(.:format)                                            user_roles#show
+#                                        PATCH     /edge/user-roles/:id(.:format)                                            user_roles#update
+#                                        PUT       /edge/user-roles/:id(.:format)                                            user_roles#update
+#                                        DELETE    /edge/user-roles/:id(.:format)                                            user_roles#destroy
 #                               activity DELETE    /edge/activities/:id(.:format)                                            activities#destroy
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
@@ -519,6 +553,8 @@ Rails.application.routes.draw do
     jsonapi_resources :list_imports
     jsonapi_resources :reviews
     jsonapi_resources :review_likes
+    jsonapi_resources :roles
+    jsonapi_resources :user_roles
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
   end
