@@ -1,5 +1,5 @@
 class UserResource < BaseResource
-  PRIVATE_FIELDS = %i[email password].freeze
+  PRIVATE_FIELDS = %i[email password confirmed_at unconfirmed_email].freeze
 
   attributes :name, :past_names, :about, :bio, :about_formatted, :location,
     :website, :waifu_or_husbando, :to_follow, :followers_count, :created_at,

@@ -1,41 +1,110 @@
+# Base class for all policies.  Provides a bunch of useful shortcuts for checks
+# that we use frequently, such as checking for admin-ness, lewd goggles, or
+# token scopes.
+#
+# Because of overlap between Pundit, Doorkeeper, and Rolify terminology,
+# there are three different meanings of "scope", depending on context.
+# Generally this should be obvious, but there may be scenarios when you need to
+# reference the docs to understand.
+#
+# @abstract
+# @attr_reader [User, nil] user the current user, if token is valid and refers
+#   to a user
+# @attr_reader [Object] record the record to authorize access to
+# @attr_reader [Doorkeeper::AccessToken, nil] token the token provided by the
+#   client to authenticate the request
 class ApplicationPolicy
-  attr_reader :user, :record
+  attr_reader :user, :record, :token
 
-  def initialize(user, record)
-    @user = user
+  # Initialize a policy with a token and record.
+  #
+  # Generally, Pundit takes a `user` instead of a `token`, but to make OAuth2
+  # scope handling simpler, we pass in `token` instead and then manually look
+  # up the `user` based on that.  This allows us to put scope handling in the
+  # Policy layer instead of up at the Resource or Controller layer, simplifying
+  # logic and centralizing all authorization code in one place.
+  #
+  # TL;DR we use Pundit in weird ways
+  def initialize(token, record)
+    @token = token
     @record = record
+    @user = User.find_for_token(token)
   end
 
-  def show?
+  # By default, resources are visible to everybody
+  def index?
     true
   end
-  alias_method :index?, :show?
 
-  def see_nsfw?
-    user ? !user.sfw_filter? : false
+  # By default, resources are only editable by admins
+  def edit?
+    is_admin?
   end
+  alias_method :create?, :edit?
+  alias_method :update?, :edit?
+  alias_method :destroy?, :edit?
 
-  def is_admin? # rubocop:disable Style/PredicateName
-    user && user.has_role?(:admin, model_class)
-  end
-  alias_method :create?, :is_admin?
-  alias_method :update?, :is_admin?
-  alias_method :destroy?, :is_admin?
+  # We don't have a #show? method because Pundit-Resources does not use them.
+  # Instead, we use Pundit Scopes (see ApplicationPolicy::Scope)
 
-  def model_class
-    record.class || self.class.name.sub('Policy', '').safe_constantize
-  end
+  private
 
+  # @return [ApplicationPolicy::Scope] a utility class for applying a scope to
+  #   an ActiveRecord::Relation based on the token + record
   def scope
     Pundit.policy_scope!(user, record.class)
   end
 
-  class Scope
-    attr_reader :user, :scope
+  # Check if the user can see NSFW stuff
+  #
+  # @return [Boolean] Whether a user has their lewd goggles enabled
+  def see_nsfw?
+    user ? !user.sfw_filter? : false
+  end
 
-    def initialize(user, scope)
-      @user = user
+  # Check if the token provides a scope.
+  #
+  # When the token has the magical :all scope, this will always return true.
+  #
+  # @param [Symbol, String] *scopes A list of scopes which allow access to the
+  #   requested resource.
+  # @return [Boolean] Whether the current token provides the scope requested
+  def has_scope?(*scopes)
+    token&.acceptable?(scopes + [:all])
+  end
+
+  # Demand that the token provide a scope, raising an error and halting the
+  # request if it's missing.
+  #
+  # @param [Symbol, String] *scopes A list of scopes which allow access to the
+  #   requested resource.
+  # @raise [OAuth::ForbiddenTokenError]
+  def require_scope!(*scopes)
+    unless has_scope?(*scopes)
+      raise OAuth::ForbiddenTokenError.for_scopes(scopes)
+    end
+  end
+
+  # Politely ask if the user has an admin role for the record.  If your "scope"
+  # for administration is not the record itself, you can manually specify the
+  # scope as a parameter.
+  #
+  # @param [Object, Class, optional] scope The record or class you require the
+  #   admin role on
+  # @return [Boolean] Whether the current user has the admin role for the
+  #   requested scope
+  def is_admin?(scope = record) # rubocop:disable Style/PredicateName
+    user&.has_role?(:admin, scope)
+  end
+
+  # Provide access control and act as #show?
+  class Scope
+    attr_reader :user, :scope, :token
+
+    def initialize(token, scope)
+      @token = token
       @scope = scope
+      @user = User.find_for_token(token)
     end
 
     def resolve

@@ -2,9 +2,7 @@ module DoorkeeperHelpers
   extend ActiveSupport::Concern
 
   # Returns the current user
-  def current_user
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-  end
+  alias_method :current_user, :doorkeeper_token
 
   # Return boolean representing whether there is a user signed in
   def signed_in?
@@ -13,6 +11,6 @@ module DoorkeeperHelpers
 
   # Provide context of current user to JR
   def context
-    { user: current_user, token: doorkeeper_token }
+    { current_user: doorkeeper_token }
   end
 end

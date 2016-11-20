@@ -129,6 +129,10 @@ class User < ApplicationRecord
     where('lower(email)=? OR lower(name)=?', *(identification * 2)).first
   end
 
+  def self.find_for_token(token)
+    User.find(token.resource_owner_id) if token
+  end
+
   def pro?
     return false if pro_expires_at.nil?
     pro_expires_at >= Time.now
