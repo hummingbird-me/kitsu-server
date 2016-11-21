@@ -36,7 +36,8 @@ class Review < ApplicationRecord
 
   validates :content, presence: true
   validates :rating, presence: true
-  validates :summary, presence: true
+  validates :summary, absence: true, unless: :legacy?
+  validates :summary, presence: true, if: :legacy?
 
   def processed_content
     @processed_content ||= InlinePipeline.call(content)
