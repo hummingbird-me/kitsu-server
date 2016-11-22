@@ -20,7 +20,7 @@ namespace :stream do
   namespace :dump do
     desc 'Dump posts in the mass import format for Stream'
     task :posts => :environment do
-      StreamDump.posts.each { |instr| puts instr.to_json }
+      StreamDump.posts.each { |instr| STDOUT.puts instr.to_json }
     end
 
     desc 'Dump all stories in the mass import format for Stream'

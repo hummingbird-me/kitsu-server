@@ -64,12 +64,16 @@ module StreamDump
     def stream_activity
       media_feed = Feed.media(media_type, media_id) if media_id
       target_user_feed = Feed.user(target_user_id) if target_user_id
+      as_post = self.becomes(Post)
       user.feed.activities.new(
         updated_at: updated_at,
         post_likes_count: post_likes_count,
         comments_count: comments_count,
         content: content,
-        to: [media_feed, target_user_feed]
+        to: [media_feed, target_user_feed],
+        verb: 'post',
+        object: as_post,
+        foreign_id: as_post
       )
     end
   end

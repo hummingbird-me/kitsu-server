@@ -40,43 +40,45 @@ class MoveOldStories < ActiveRecord::Migration
     # Text: User A --> User B
     execute <<-SQL.squish
       INSERT INTO posts (
-        id, target_group_id, user_id, content, content_formatted, created_at,
+        id, target_user_id, user_id, content, content_formatted, created_at,
         updated_at, deleted_at
       ) SELECT
         stories.id,
-        stories.user_id AS target_group_id,
+        stories.user_id AS target_user_id,
         stories.target_id AS user_id,
         coalesce(substories.data->'comment', '') AS content,
         coalesce(substories.data->'formatted_comment', '') AS content_formatted,
         stories.created_at,
         stories.updated_at,
         stories.deleted_at
-      FROM stories
-      JOIN substories
+      FROM substories
+      JOIN stories
         ON stories.id = substories.story_id
-        AND substories.substory_type = #{Substory.substory_types[:comment]}
-      WHERE story_type = 'comment'
+      WHERE substories.substory_type = #{Substory.substory_types[:comment]}
         AND stories.target_type = 'User'
+        AND stories.target_id != stories.user_id
+        AND stories.group_id IS NULL
     SQL
     # Text: User A
     execute <<-SQL.squish
       INSERT INTO posts (
-        id, user_id, content, content_formatted, created_at, updated_at,
-        deleted_at
+        id, user_id, target_group_id, content, content_formatted, created_at,
+        updated_at, deleted_at
       ) SELECT
         stories.id,
         stories.user_id,
+        stories.group_id AS target_group_id,
         coalesce(substories.data->'comment', '') AS content,
         coalesce(substories.data->'formatted_comment', '') AS content_formatted,
         stories.created_at,
         stories.updated_at,
         stories.deleted_at
-      FROM stories
-      JOIN substories
-        ON substories.id = substories.story_id
-        AND substories.substory_type = #{Substory.substory_types[:comment]}
-      WHERE story_type = 'comment'
-        AND stories.target_type != 'User'
+      FROM substories
+      JOIN stories
+        ON stories.id = substories.story_id
+      WHERE substories.substory_type = #{Substory.substory_types[:comment]}
+        AND stories.target_type = 'User'
+        AND stories.target_id = stories.user_id
     SQL
 
     # Likes
