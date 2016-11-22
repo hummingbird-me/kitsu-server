@@ -66,7 +66,7 @@ class CleanUpReviews < ActiveRecord::Migration
     # Create table
     create_table :review_likes do |t|
       t.timestamps null: false
-      t.references :review, null: false, foreign_key: true
+      t.references :review, null: false
       t.references :user, null: false, foreign_key: true
     end
     # Move existing data
