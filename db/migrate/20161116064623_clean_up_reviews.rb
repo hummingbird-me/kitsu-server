@@ -71,8 +71,8 @@ class CleanUpReviews < ActiveRecord::Migration
     end
     # Move existing data
     execute <<-SQL.squish
-      INSERT INTO review_likes (review_id, user_id)
-      SELECT target_id, user_id
+      INSERT INTO review_likes (review_id, user_id, created_at, updated_at)
+      SELECT target_id, user_id, created_at, updated_at
       FROM votes
       WHERE target_type = 'Review'
       AND positive = 't'
