@@ -40,5 +40,14 @@ RSpec.describe Review, type: :model do
   it { should belong_to(:library_entry) }
   it { should validate_presence_of(:library_entry) }
   it { should validate_presence_of(:content) }
-  it { should validate_presence_of(:summary) }
+
+  context 'in a legacy review' do
+    subject { build(:review, legacy: true) }
+    it { should validate_presence_of(:summary) }
+  end
+
+  context 'in a new review' do
+    subject { build(:review, legacy: false) }
+    it { should validate_absence_of(:summary) }
+  end
 end

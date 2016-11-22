@@ -31,7 +31,6 @@
 FactoryGirl.define do
   factory :review do
     content { Faker::Lorem.paragraphs(2) }
-    summary { Faker::Lorem.sentence }
     association :library_entry, factory: :library_entry, rating: 3.0
     user
     association :media, factory: :anime
