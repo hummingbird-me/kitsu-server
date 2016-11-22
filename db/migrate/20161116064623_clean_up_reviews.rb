@@ -34,10 +34,13 @@ class CleanUpReviews < ActiveRecord::Migration
 
     #### Content Stuff
     # Add formatted content
-    add_column :reviews, :content_formatted, :text, null: false
+    add_column :reviews, :content_formatted, :text
+    # Copy formatted content
+    execute 'UPDATE reviews SET content_formatted = content'
     # Remove nullability of content
     Review.where(content: nil).destroy_all
     change_column_null :reviews, :content, false
+    change_column_null :reviews, :content_formatted, false
     # Add column to mark HTML-backed content
     add_column :reviews, :legacy, :boolean, default: false, null: false
     # Mark all reviews as legacy for now
