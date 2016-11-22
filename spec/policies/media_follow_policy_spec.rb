@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe MediaFollowPolicy do
-  let(:user) { build(:user) }
+  let(:user) { token_for build(:user) }
   let(:media) { build(:anime) }
-  let(:other) { build(:user) }
-  let(:follow) { build(:media_follow, user: user, media: media) }
+  let(:other) { token_for build(:user) }
+  let(:follow) { build(:media_follow, user: user.resource_owner, media: media) }
   subject { described_class }
 
   permissions :update? do

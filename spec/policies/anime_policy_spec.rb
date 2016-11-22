@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe AnimePolicy do
-  let(:user) { build(:user) }
-  let(:pervert) { build(:user, sfw_filter: false) }
-  let(:admin) { create(:user, :admin) }
-  let(:mod) { create(:user, :anime_admin) }
+  let(:user) { token_for build(:user) }
+  let(:pervert) { token_for build(:user, sfw_filter: false) }
+  let(:admin) { token_for create(:user, :admin) }
+  let(:mod) { token_for create(:user, :anime_admin) }
   let(:anime) { build(:anime) }
   let(:hentai) { build(:anime, :nsfw) }
   subject { described_class }

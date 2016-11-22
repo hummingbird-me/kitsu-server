@@ -36,6 +36,16 @@ RSpec.describe UsersController, type: :controller do
       get :show, id: user.id
       expect(response).to have_http_status(:ok)
     end
+
+    context 'without authentication' do
+      it 'should not return the password or email' do
+        get :show, id: user.id
+        expect(response.body).not_to have_resource({
+          password: String,
+          email: String
+        }, 'users')
+      end
+    end
   end
 
   describe '#create' do
@@ -66,7 +76,7 @@ RSpec.describe UsersController, type: :controller do
     end
   end
 
-  describe 'update user' do
+  describe '#update' do
     let(:user) { create(:user) }
     def update_user
       sign_in user

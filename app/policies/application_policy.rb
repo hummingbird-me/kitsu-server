@@ -28,7 +28,7 @@ class ApplicationPolicy
   def initialize(token, record)
     @token = token
     @record = record
-    @user = User.find_for_token(token)
+    @user = token&.resource_owner
   end
 
   # By default, resources are visible to everybody
@@ -69,8 +69,10 @@ class ApplicationPolicy
   # @param [Symbol, String] *scopes A list of scopes which allow access to the
   #   requested resource.
   # @return [Boolean] Whether the current token provides the scope requested
-  def has_scope?(*scopes)
-    token&.acceptable?(scopes + [:all])
+  def has_scope?(*scopes, accept_all: true)
+    acceptable = scopes
+    acceptable += [:all] if accept_all
+    token&.acceptable?(acceptable)
   end
 
   # Demand that the token provide a scope, raising an error and halting the
@@ -104,7 +106,7 @@ class ApplicationPolicy
     def initialize(token, scope)
       @token = token
       @scope = scope
-      @user = User.find_for_token(token)
+      @user = token&.resource_owner
     end
 
     def resolve

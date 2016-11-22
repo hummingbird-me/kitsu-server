@@ -19,7 +19,7 @@ class UserResource < BaseResource
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (records, _v, options) {
-    current_user = options[:context][:current_user]
+    current_user = options[:context][:current_user]&.resource_owner
     records.where(id: current_user&.id) || User.none
   }
 
@@ -37,12 +37,4 @@ class UserResource < BaseResource
         }
       }
     }
-
-  def fetchable_fields
-    if current_user == _model
-      super
-    else
-      super - PRIVATE_FIELDS
-    end
-  end
 end

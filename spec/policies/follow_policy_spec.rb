@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe FollowPolicy do
-  let(:follower) { build(:user) }
+  let(:follower) { token_for build(:user) }
   let(:following) { build(:user) }
-  let(:other) { build(:user) }
-  let(:follow) { build(:follow, follower: follower, followed: following) }
+  let(:other) { token_for build(:user) }
+  let(:follow) do
+    build(:follow, follower: follower.resource_owner, followed: following)
+  end
   subject { described_class }
 
   permissions :update? do

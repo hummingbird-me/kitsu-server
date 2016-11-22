@@ -1,24 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe DoorkeeperHelpers do
-  let(:token) { double('token') }
   let(:controller) do
     Class.new do
+      def doorkeeper_token; end
+
       include DoorkeeperHelpers
 
       def render(*); end
-
-      def doorkeeper_token; end
     end
   end
   let(:instance) { controller.new }
 
-  context 'current_user method' do
-    it 'should return a User instance when there is one logged in' do
-      user = create(:user)
+  context '#current_user' do
+    it 'should return the token when there is a user logged in' do
+      user = build(:user)
+      token = token_for(user)
       allow(instance).to receive(:doorkeeper_token) { token }
-      allow(token).to receive(:resource_owner_id) { user.id }
-      expect(instance.current_user).to eq(user)
+      expect(instance.current_user).to eq(token)
     end
     it 'should return nil when there is nobody logged in' do
       allow(instance).to receive(:doorkeeper_token) { nil }
@@ -26,7 +25,7 @@ RSpec.describe DoorkeeperHelpers do
     end
   end
 
-  context 'signed_in? method' do
+  context '#signed_in?' do
     it 'should return true if logged in' do
       allow(instance).to receive(:current_user) { build(:user) }
       expect(instance.signed_in?).to be true

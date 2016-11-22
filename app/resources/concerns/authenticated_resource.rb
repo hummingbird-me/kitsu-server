@@ -6,8 +6,8 @@ module AuthenticatedResource
     @context[:current_user]
   end
 
-  def current_user
-    User.find_for_token(token)
+  def actual_current_user
+    token&.resource_owner
   end
 
   def fetchable_fields

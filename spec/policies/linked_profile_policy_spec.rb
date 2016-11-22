@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe LinkedProfilePolicy do
-  let(:owner) { build(:user) }
-  let(:user) { build(:user) }
-  let(:admin) { create(:user, :admin) }
+  let(:owner) { token_for build(:user) }
+  let(:user) { token_for build(:user) }
+  let(:admin) { token_for create(:user, :admin) }
   let(:linked_site) { build(:linked_site) }
   let(:linked_profile) do
-    build(:linked_profile, user: owner, linked_site: linked_site)
+    build(:linked_profile, user: owner.resource_owner, linked_site: linked_site)
   end
   subject { described_class }
 

@@ -1,8 +1,9 @@
 module DoorkeeperHelpers
   extend ActiveSupport::Concern
 
-  # Returns the current user
-  alias_method :current_user, :doorkeeper_token
+  def current_user
+    doorkeeper_token
+  end
 
   # Return boolean representing whether there is a user signed in
   def signed_in?
@@ -11,6 +12,6 @@ module DoorkeeperHelpers
 
   # Provide context of current user to JR
   def context
-    { current_user: doorkeeper_token }
+    { current_user: current_user }
   end
 end
