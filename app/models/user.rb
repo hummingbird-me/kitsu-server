@@ -102,6 +102,13 @@ class User < ApplicationRecord
   has_many :blocks, dependent: :destroy
   has_many :linked_profiles, dependent: :destroy
   has_many :user_roles, dependent: :destroy
+  has_many :library_entries, dependent: :destroy
+  has_many :favorites, dependent: :destroy
+  has_many :reviews, dependent: :destroy
+  has_many :comment_likes, dependent: :destroy
+  has_many :post_likes, dependent: :destroy
+  has_many :review_likes, dependent: :destroy
+  has_many :list_imports, dependent: :destroy
 
   has_attached_file :avatar
   has_attached_file :cover_image
