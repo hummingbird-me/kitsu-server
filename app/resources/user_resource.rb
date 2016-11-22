@@ -16,6 +16,7 @@ class UserResource < BaseResource
   has_many :linked_profiles
   has_many :media_follows
   has_many :user_roles
+  has_many :library_entries
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (records, _v, options) {
