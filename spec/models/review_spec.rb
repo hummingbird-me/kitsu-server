@@ -35,6 +35,10 @@ RSpec.describe Review, type: :model do
   it { should have_many(:likes).class_name('ReviewLike') }
   it { should belong_to(:media) }
   it { should validate_presence_of(:media) }
+  it 'should validate uniqueness per media and user' do
+    subject.save!
+    expect(subject).to validate_uniqueness_of(:media_id).scoped_to(:user_id)
+  end
   it { should belong_to(:user) }
   it { should validate_presence_of(:user) }
   it { should belong_to(:library_entry) }

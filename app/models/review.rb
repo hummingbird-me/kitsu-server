@@ -31,13 +31,14 @@
 class Review < ApplicationRecord
   has_many :likes, class_name: 'ReviewLike', dependent: :destroy
   belongs_to :media, polymorphic: true, required: true
-  belongs_to :user, required: true
+  belongs_to :user, required: true, counter_cache: true
   belongs_to :library_entry, required: true
 
   validates :content, presence: true
   validates :rating, presence: true
   validates :summary, absence: true, unless: :legacy?
   validates :summary, presence: true, if: :legacy?
+  validates :media_id, uniqueness: { scope: :user_id }
 
   def processed_content
     @processed_content ||= InlinePipeline.call(content)
