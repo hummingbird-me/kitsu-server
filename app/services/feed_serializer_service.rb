@@ -1,4 +1,26 @@
 class FeedSerializerService
+  class FeedSerializer < JSONAPI::ResourceSerializer
+    def links_hash(source)
+      if source.is_a? ActivityGroupResource
+        {}
+      else
+        super
+      end
+    end
+
+    def link_object_to_many(*)
+      super.reject { |k, v| k == :links }.to_h
+    end
+
+    def link_object_to_one(*)
+      super.reject { |k, v| k == :links }.to_h
+    end
+
+    def relationships_hash(*)
+      super.select { |k, v| v.present? }.to_h
+    end
+  end
+
   attr_reader :activity_list, :including, :fields, :context, :id_lt, :base_url
 
   def initialize(activity_list, including: nil, fields: nil, context: nil,
@@ -43,8 +65,7 @@ class FeedSerializerService
   end
 
   def serializer
-    JSONAPI::ResourceSerializer.new(resource_class, include: including,
-                                    fields: fields)
+    FeedSerializer.new(resource_class, include: including, fields: fields)
   end
 
   def resource_class
