@@ -3,20 +3,32 @@ class FeedsController < ApplicationController
   skip_after_action :enforce_policy_use
 
   def show
-    serializer = FeedSerializerService.new(activity_list, including: including,
-                                           fields: fields, context: context,
-                                           base_url: request.url)
-    render json: serializer
+    render json: serialize_activities(activity_list)
+  end
+
+  def mark_read
+    activities = feed.activities.mark(:read, params)
+    render json: serialize_activities(activities)
+  end
+
+  def mark_seen
+    activities = feed.activities.mark(:seen, params)
+    render json: serialize_activities(activities)
   end
 
   private
+
+  def serialize_activities(list)
+    FeedSerializerService.new(list, including: including, fields: fields,
+                              context: context, base_url: request.url)
+  end
 
   def feed
     @feed ||= Feed.new(params[:group], params[:id])
   end
 
   def activity_list
-    @feed_data ||= paginate(feed.activities)
+    @feed_data ||= auto_mark(paginate(feed.activities))
   end
 
   def paginate(list)
@@ -24,6 +36,11 @@ class FeedsController < ApplicationController
     limit = params.dig(:page, :limit).to_i
     list = list.page(id_lt: cursor) if cursor
     list = list.limit(limit) if limit
+    list
+  end
+
+  def auto_mark(list)
+    list = list.mark(params[:mark]) if params.include? :mark
     list
   end
 

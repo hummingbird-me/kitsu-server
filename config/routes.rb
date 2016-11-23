@@ -517,6 +517,8 @@
 #                                        DELETE    /edge/user-roles/:id(.:format)                                            user_roles#destroy
 #                               activity DELETE    /edge/activities/:id(.:format)                                            activities#destroy
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
+#                                        POST      /edge/feeds/:group/:id/_read(.:format)                                    feeds#mark_read
+#                                        POST      /edge/feeds/:group/:id/_seen(.:format)                                    feeds#mark_seen
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
 #                    oauth_authorization GET       /oauth/authorize(.:format)                                                doorkeeper/authorizations#new
 #                                        POST      /oauth/authorize(.:format)                                                doorkeeper/authorizations#create
@@ -572,6 +574,8 @@ Rails.application.routes.draw do
     jsonapi_resources :user_roles
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
+    post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
+    post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
   end
 
   use_doorkeeper
