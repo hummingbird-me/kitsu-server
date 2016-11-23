@@ -21,7 +21,7 @@ class FeedSerializerService
     end
   end
 
-  attr_reader :activity_list, :including, :fields, :context, :id_lt, :base_url
+  attr_reader :activity_list, :including, :fields, :context, :base_url
 
   def initialize(activity_list, including: nil, fields: nil, context: nil,
                  base_url:)

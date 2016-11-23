@@ -3,7 +3,7 @@ class FeedsController < ApplicationController
   skip_after_action :enforce_policy_use
 
   def show
-    serializer = FeedSerializerService.new(page, including: including,
+    serializer = FeedSerializerService.new(activity_list, including: including,
                                            fields: fields, context: context,
                                            base_url: request.url)
     render json: serializer
@@ -16,14 +16,18 @@ class FeedsController < ApplicationController
   end
 
   def activity_list
-    @feed_data ||= feed.activities
+    @feed_data ||= paginate(feed.activities)
   end
 
-  def page
+  def paginate(list)
     if params.dig(:page, :cursor)
-      @page ||= activity_list.page(id_lt: params.dig(:page, :cursor))
+      cursor = params.dig(:page, :cursor)
+      limit = params.dig(:page, :limit).to_i
+      list = list.page(id_lt: cursor)
+      list = list.limit(limit) if limit
+      list
     else
-      @page ||= activity_list
+      activity_list
     end
   end
 
