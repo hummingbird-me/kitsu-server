@@ -2,10 +2,10 @@ class UserResource < BaseResource
   PRIVATE_FIELDS = %i[email password confirmed_at unconfirmed_email].freeze
 
   attributes :name, :past_names, :about, :bio, :about_formatted, :location,
-    :website, :waifu_or_husbando, :to_follow, :followers_count, :created_at,
-    :following_count, :onboarded, :life_spent_on_anime, :birthday, :gender,
-    :facebook_id, :updated_at, :comments_count, :favorites_count,
-    :likes_given_count, :likes_received_count, :posts_count, :ratings_count
+    :website, :waifu_or_husbando, :followers_count, :created_at, :onboarded,
+    :following_count, :life_spent_on_anime, :birthday, :gender, :facebook_id,
+    :updated_at, :comments_count, :favorites_count, :likes_given_count,
+    :likes_received_count, :posts_count, :ratings_count
   attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 
