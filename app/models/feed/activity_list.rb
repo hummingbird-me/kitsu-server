@@ -89,14 +89,18 @@ class Feed
 
     def to_a
       if feed.aggregated? || feed.notification?
-        enriched_results.map do |res|
+        @results ||= enriched_results.map do |res|
           strip_unfound(Feed::ActivityGroup.new(feed, res))
         end
       else
-        enriched_results.map do |res|
+        @results ||= enriched_results.map do |res|
           strip_unfound(Feed::Activity.new(feed, res))
         end
       end
+    end
+
+    def empty?
+      to_a.empty?
     end
 
     private

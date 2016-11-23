@@ -57,7 +57,11 @@ class FeedSerializerService
   end
 
   def links
-    { next: url_for_params('page[cursor]' => activities.last.id) }
+    if activities.empty?
+      {}
+    else
+      { next: url_for_params('page[cursor]' => activities.last.id) }
+    end
   end
 
   def stream_enrichment_fields
