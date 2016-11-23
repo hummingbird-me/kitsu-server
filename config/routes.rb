@@ -572,6 +572,7 @@ Rails.application.routes.draw do
     jsonapi_resources :user_roles
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
+    get '/format_content', to: 'formatters#format_content'
   end
 
   use_doorkeeper
