@@ -26,6 +26,7 @@ class Comment < ApplicationRecord
   include WithActivity
 
   acts_as_paranoid
+  resourcify
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :post, required: true, counter_cache: true

@@ -33,6 +33,7 @@ class Post < ApplicationRecord
   include WithActivity
 
   acts_as_paranoid
+  resourcify
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'

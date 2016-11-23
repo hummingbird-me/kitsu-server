@@ -40,6 +40,8 @@ class Review < ApplicationRecord
   validates :summary, presence: true, if: :legacy?
   validates :media_id, uniqueness: { scope: :user_id }
 
+  resourcify
+
   def processed_content
     @processed_content ||= InlinePipeline.call(content)
   end
