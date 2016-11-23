@@ -165,6 +165,21 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/user-roles(.:format)                   users#update_relationship {:relationship=>"user_roles"}
 #                                        DELETE    /edge/users/:user_id/relationships/user-roles(.:format)                   users#destroy_relationship {:relationship=>"user_roles"}
 #                        user_user_roles GET       /edge/users/:user_id/user-roles(.:format)                                 user_roles#get_related_resources {:relationship=>"user_roles", :source=>"users"}
+#     user_relationships_library_entries GET       /edge/users/:user_id/relationships/library-entries(.:format)              users#show_relationship {:relationship=>"library_entries"}
+#                                        POST      /edge/users/:user_id/relationships/library-entries(.:format)              users#create_relationship {:relationship=>"library_entries"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/library-entries(.:format)              users#update_relationship {:relationship=>"library_entries"}
+#                                        DELETE    /edge/users/:user_id/relationships/library-entries(.:format)              users#destroy_relationship {:relationship=>"library_entries"}
+#                   user_library_entries GET       /edge/users/:user_id/library-entries(.:format)                            library_entries#get_related_resources {:relationship=>"library_entries", :source=>"users"}
+#           user_relationships_favorites GET       /edge/users/:user_id/relationships/favorites(.:format)                    users#show_relationship {:relationship=>"favorites"}
+#                                        POST      /edge/users/:user_id/relationships/favorites(.:format)                    users#create_relationship {:relationship=>"favorites"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/favorites(.:format)                    users#update_relationship {:relationship=>"favorites"}
+#                                        DELETE    /edge/users/:user_id/relationships/favorites(.:format)                    users#destroy_relationship {:relationship=>"favorites"}
+#                         user_favorites GET       /edge/users/:user_id/favorites(.:format)                                  favorites#get_related_resources {:relationship=>"favorites", :source=>"users"}
+#             user_relationships_reviews GET       /edge/users/:user_id/relationships/reviews(.:format)                      users#show_relationship {:relationship=>"reviews"}
+#                                        POST      /edge/users/:user_id/relationships/reviews(.:format)                      users#create_relationship {:relationship=>"reviews"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/reviews(.:format)                      users#update_relationship {:relationship=>"reviews"}
+#                                        DELETE    /edge/users/:user_id/relationships/reviews(.:format)                      users#destroy_relationship {:relationship=>"reviews"}
+#                           user_reviews GET       /edge/users/:user_id/reviews(.:format)                                    reviews#get_related_resources {:relationship=>"reviews", :source=>"users"}
 #                                  users GET       /edge/users(.:format)                                                     users#index
 #                                        POST      /edge/users(.:format)                                                     users#create
 #                                   user GET       /edge/users/:id(.:format)                                                 users#show
