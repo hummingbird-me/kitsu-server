@@ -1,12 +1,12 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_number, :page_size, :including
-    %i[limit offset ranking].each do |key|
+    attr_accessor :data, :feed, :page_number, :page_size, :including,
+      :mark_read, :mark_seen
+    %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
         self.dup.tap { |al| al.data[key] = value }
       end
     end
-    alias_method :per, :limit
 
     def initialize(feed, data = {})
       @feed = feed
@@ -42,6 +42,11 @@ class Feed
         al.including = al.including.map(&:to_sym)
         al.including += including if including.present?
       end
+    end
+
+    def mark(type, values = true)
+      values = [values] if values.is_a? String
+      send("mark_#{type}", values)
     end
 
     def update_pagination!
