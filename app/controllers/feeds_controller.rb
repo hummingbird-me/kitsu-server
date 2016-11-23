@@ -20,15 +20,11 @@ class FeedsController < ApplicationController
   end
 
   def paginate(list)
-    if params.dig(:page, :cursor)
-      cursor = params.dig(:page, :cursor)
-      limit = params.dig(:page, :limit).to_i
-      list = list.page(id_lt: cursor)
-      list = list.limit(limit) if limit
-      list
-    else
-      list
-    end
+    cursor = params.dig(:page, :cursor)
+    limit = params.dig(:page, :limit).to_i
+    list = list.page(id_lt: cursor) if cursor
+    list = list.limit(limit) if limit
+    list
   end
 
   def including
