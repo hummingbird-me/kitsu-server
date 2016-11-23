@@ -39,7 +39,7 @@ RSpec.describe Review, type: :model do
     subject.save!
     expect(subject).to validate_uniqueness_of(:media_id).scoped_to(:user_id)
   end
-  it { should belong_to(:user) }
+  it { should belong_to(:user).counter_cache(true) }
   it { should validate_presence_of(:user) }
   it { should belong_to(:library_entry) }
   it { should validate_presence_of(:library_entry) }

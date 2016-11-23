@@ -56,6 +56,7 @@
 #  remember_created_at         :datetime
 #  reset_password_sent_at      :datetime
 #  reset_password_token        :string(255)
+#  reviews_count               :integer          default(0), not null
 #  sfw_filter                  :boolean          default(TRUE)
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
