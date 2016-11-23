@@ -27,7 +27,7 @@ class FeedsController < ApplicationController
       list = list.limit(limit) if limit
       list
     else
-      activity_list
+      list
     end
   end
 
