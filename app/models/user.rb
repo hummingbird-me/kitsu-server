@@ -15,8 +15,6 @@
 #  bio                         :string(140)      default(""), not null
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
-#  confirmation_sent_at        :datetime
-#  confirmation_token          :string(255)      indexed
 #  confirmed_at                :datetime
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
@@ -54,8 +52,6 @@
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
-#  reset_password_sent_at      :datetime
-#  reset_password_token        :string(255)
 #  reviews_count               :integer          default(0), not null
 #  sfw_filter                  :boolean          default(TRUE)
 #  sign_in_count               :integer          default(0)
@@ -76,11 +72,10 @@
 #
 # Indexes
 #
-#  index_users_on_confirmation_token  (confirmation_token) UNIQUE
-#  index_users_on_email               (email) UNIQUE
-#  index_users_on_facebook_id         (facebook_id) UNIQUE
-#  index_users_on_to_follow           (to_follow)
-#  index_users_on_waifu_id            (waifu_id)
+#  index_users_on_email        (email) UNIQUE
+#  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_to_follow    (to_follow)
+#  index_users_on_waifu_id     (waifu_id)
 #
 # rubocop:enable Metrics/LineLength
 

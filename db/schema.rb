@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124021947) do
+ActiveRecord::Schema.define(version: 20161124040820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -747,8 +747,6 @@ ActiveRecord::Schema.define(version: 20161124021947) do
     t.string   "email",                       limit: 255, default: "",          null: false
     t.string   "name",                        limit: 255
     t.string   "password_digest",             limit: 255, default: "",          null: false
-    t.string   "reset_password_token",        limit: 255
-    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                           default: 0
     t.datetime "current_sign_in_at"
@@ -768,9 +766,7 @@ ActiveRecord::Schema.define(version: 20161124021947) do
     t.string   "mal_username",                limit: 255
     t.integer  "life_spent_on_anime",                     default: 0,           null: false
     t.string   "about",                       limit: 500, default: "",          null: false
-    t.string   "confirmation_token",          limit: 255
     t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email",           limit: 255
     t.string   "cover_image_file_name",       limit: 255
     t.string   "cover_image_content_type",    limit: 255
@@ -815,7 +811,6 @@ ActiveRecord::Schema.define(version: 20161124021947) do
     t.integer  "reviews_count",                           default: 0,           null: false
   end
 
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["facebook_id"], name: "index_users_on_facebook_id", unique: true, using: :btree
   add_index "users", ["to_follow"], name: "index_users_on_to_follow", using: :btree
