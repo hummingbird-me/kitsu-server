@@ -6,6 +6,11 @@ class LibraryEntryResource < BaseResource
 
   filters :user_id, :media_id, :media_type, :status
 
+  filter :status, apply: ->(records, value, _options) {
+    value = LibraryEntry.statuses[value] || value
+    records.where(status: value)
+  }
+
   has_one :user
   has_one :review
   has_one :media, polymorphic: true
