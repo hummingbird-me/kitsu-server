@@ -27,6 +27,9 @@ class Comment < ApplicationRecord
 
   acts_as_paranoid
   resourcify
+  counter_culture :post, column_name: -> (model) {
+    'top_level_comments_count' if model.parent.blank?
+  }
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :post, required: true, counter_cache: true

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123015147) do
+ActiveRecord::Schema.define(version: 20161124021947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -579,23 +579,24 @@ ActiveRecord::Schema.define(version: 20161123015147) do
   end
 
   create_table "posts", force: :cascade do |t|
-    t.integer  "user_id",                           null: false
+    t.integer  "user_id",                                  null: false
     t.integer  "target_user_id"
-    t.text     "content",                           null: false
-    t.text     "content_formatted",                 null: false
+    t.text     "content",                                  null: false
+    t.text     "content_formatted",                        null: false
     t.integer  "media_id"
     t.string   "media_type"
-    t.boolean  "spoiler",           default: false, null: false
-    t.boolean  "nsfw",              default: false, null: false
-    t.boolean  "blocked",           default: false, null: false
+    t.boolean  "spoiler",                  default: false, null: false
+    t.boolean  "nsfw",                     default: false, null: false
+    t.boolean  "blocked",                  default: false, null: false
     t.integer  "spoiled_unit_id"
     t.string   "spoiled_unit_type"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.datetime "deleted_at"
     t.integer  "target_group_id"
-    t.integer  "post_likes_count",  default: 0,     null: false
-    t.integer  "comments_count",    default: 0,     null: false
+    t.integer  "post_likes_count",         default: 0,     null: false
+    t.integer  "comments_count",           default: 0,     null: false
+    t.integer  "top_level_comments_count", default: 0,     null: false
   end
 
   create_table "pro_membership_plans", force: :cascade do |t|
