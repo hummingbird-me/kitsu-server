@@ -1,7 +1,6 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :mark_read, :mark_seen
+    attr_accessor :data, :feed, :page_number, :page_size, :including
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
         self.dup.tap { |al| al.data[key] = value }
