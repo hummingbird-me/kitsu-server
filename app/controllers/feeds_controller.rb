@@ -33,7 +33,7 @@ class FeedsController < ApplicationController
 
   def paginate(list)
     cursor = params.dig(:page, :cursor)
-    limit = params.dig(:page, :limit).to_i
+    limit = params.dig(:page, :limit)&.to_i
     list = list.page(id_lt: cursor) if cursor
     list = list.limit(limit) if limit
     list
