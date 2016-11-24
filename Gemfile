@@ -15,8 +15,7 @@ gem 'connection_pool' # Pool our Redises
 gem 'chewy' # ElasticSearch
 
 # Auth{entication,orization}
-gem 'devise', '~> 3.5'
-gem 'devise-async'
+gem 'bcrypt'
 gem 'doorkeeper'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'pundit'

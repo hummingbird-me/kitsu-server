@@ -27,7 +27,6 @@
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
-#  encrypted_password          :string(255)      default(""), not null
 #  favorites_count             :integer          default(0), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
@@ -47,6 +46,7 @@
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
 #  onboarded                   :boolean          default(FALSE), not null
+#  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
 #  pro_expires_at              :datetime
@@ -87,9 +87,8 @@
 class User < ApplicationRecord
   PAST_NAMES_LIMIT = 10
 
-  devise :database_authenticatable, :registerable, :recoverable,
-    :validatable, :confirmable, :async
   rolify
+  has_secure_password
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
@@ -118,7 +117,7 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false }
-  validates :encrypted_password, presence: true
+  validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
   validates_attachment :avatar, content_type: {
     content_type: %w[image/jpg image/jpeg image/png image/gif]

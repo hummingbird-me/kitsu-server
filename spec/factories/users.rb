@@ -27,7 +27,6 @@
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
-#  encrypted_password          :string(255)      default(""), not null
 #  favorites_count             :integer          default(0), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
@@ -47,6 +46,7 @@
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
 #  onboarded                   :boolean          default(FALSE), not null
+#  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
 #  pro_expires_at              :datetime
