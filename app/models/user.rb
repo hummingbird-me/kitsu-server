@@ -80,6 +80,7 @@
 
 class User < ApplicationRecord
   PAST_NAMES_LIMIT = 10
+  PAST_IPS_LIMIT = 20
 
   rolify
   has_secure_password
@@ -137,6 +138,14 @@ class User < ApplicationRecord
 
   def previous_name
     past_names.first
+  end
+
+  def add_ip(new_ip)
+    unless ip_addresses.include?(new_ip)
+      ips = [new_ip, *ip_addresses].compact.first(PAST_IPS_LIMIT)
+      update!(ip_addresses: ips)
+    end
+    ip_addresses
   end
 
   def feed

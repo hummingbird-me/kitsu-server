@@ -1,6 +1,7 @@
 class ApplicationController < JSONAPI::ResourceController
   include DoorkeeperHelpers
   include Pundit::ResourceController
+  include MaintainIpAddresses
 
   def base_url
     super + '/api/edge'
