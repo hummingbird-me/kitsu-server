@@ -6,9 +6,9 @@ class LibraryEntryResource < BaseResource
 
   filters :user_id, :media_id, :media_type, :status
 
-  filter :status, apply: ->(records, value, _options) {
-    value = LibraryEntry.statuses[value] || value
-    records.where(status: value)
+  filter :status, apply: ->(records, values, _options) {
+    values = LibraryEntry.statuses.values_at(*values) || values
+    records.where(status: values)
   }
 
   has_one :user
