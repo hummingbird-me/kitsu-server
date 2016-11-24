@@ -4,24 +4,29 @@ module CounterCacheResets
   def posts
     execute sql_for(Post, :post_likes)
     execute sql_for(Post, :comments)
+    execute sql_for(Post, :comments,
+                    counter_cache_column: 'top_level_comments_count',
+                    where: 'parent_id IS NULL')
   end
 
-  def sql_for(model, association_name)
+  def sql_for(model, association_name, counter_cache_column: nil, where: nil)
     association = model.reflections[association_name.to_s]
     inverse = association.inverse_of
+    counter_cache_column ||= inverse.counter_cache_column
     temp_table = "#{model}_#{association.name}_count"
     [
       <<-SQL.squish,
         CREATE TEMP TABLE #{temp_table} AS
         SELECT #{association.foreign_key}, count(*) AS count
         FROM #{association.table_name}
+        #{where ? "WHERE #{where}" : ''}
         GROUP BY #{association.foreign_key}
       SQL
       "CREATE INDEX ON #{temp_table} (post_id)",
       "VACUUM #{temp_table}",
       <<-SQL.squish,
         UPDATE #{model.table_name}
-        SET #{inverse.counter_cache_column} = COALESCE((
+        SET #{counter_cache_column} = COALESCE((
           SELECT count
           FROM #{temp_table}
           WHERE #{association.foreign_key} = #{model.table_name}.id
