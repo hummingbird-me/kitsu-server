@@ -81,4 +81,8 @@ Rails.application.configure do
     url: ':s3_alias_url',
     path: '/:class/:attachment/:id_partition/:style/:filename'
   }
+
+  config.action_mailer.default_url_options = {
+    host: 'kitsu.io'
+  }
 end

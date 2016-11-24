@@ -54,5 +54,17 @@ module Kitsu
     config.paperclip_defaults = {
       url: '/system/:class/:attachment/:id/:style.:content_type_extension'
     }
+
+    # Email Server
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.smtp_settings = {
+      address: ENV['SMTP_ADDRESS'],
+      port: ENV['SMTP_PORT']&.to_i,
+      user_name: ENV['SMTP_USERNAME'],
+      password: ENV['SMTP_PASSWORD'],
+      authentication: ENV['SMTP_AUTHENTICATION']&.to_sym
+    }.compact
   end
 end
