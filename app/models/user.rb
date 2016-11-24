@@ -21,7 +21,6 @@
 #  cover_image_file_size       :integer
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
-#  current_sign_in_ip          :string(255)
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
@@ -32,10 +31,10 @@
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
+#  ip_addresses                :inet             default([]), is an Array
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
-#  last_sign_in_ip             :string(255)
 #  life_spent_on_anime         :integer          default(0), not null
 #  likes_given_count           :integer          default(0), not null
 #  likes_received_count        :integer          default(0), not null
