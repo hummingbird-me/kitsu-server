@@ -7,12 +7,12 @@ class FeedsController < ApplicationController
   end
 
   def mark_read
-    activities = feed.activities.mark(:read, params)
+    activities = feed.activities.mark(:read, params[:_json])
     render json: serialize_activities(activities)
   end
 
   def mark_seen
-    activities = feed.activities.mark(:seen, params)
+    activities = feed.activities.mark(:seen, params[:_json])
     render json: serialize_activities(activities)
   end
 
