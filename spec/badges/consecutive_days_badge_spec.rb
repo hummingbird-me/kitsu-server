@@ -11,17 +11,20 @@ RSpec.describe ConsecutiveDaysBadge do
     end
 
     it 'show rank, progress, title, description, goal' do
-      badge = ConsecutiveDaysBadge.new(user)
-      expect(badge.rank).to eq(2)
-      expect(badge.goal).to eq(30)
+      badge = ConsecutiveDaysBadge::Rank1.new(user)
+      expect(badge.rank).to eq(1)
+      expect(badge.goal).to eq(3)
       expect(badge.progress).to eq(3)
-      expect(badge.title).to eq('Enthusiast')
-      expect(badge.description).to eq('Hey, we\'ve got a good thing going.' \
-        ' You\'ve visited Kitsu every day for 30 consecutive days.')
+      expect(badge.title).to eq('Filthy Casual')
+      expect(badge.description).to eq('You\'ve visited Kitsu every day' \
+        ' for 3 consecutive days. Happy to have you here!')
+      expect(badge.earned?).to eq(true)
     end
 
     it 'create bestowment' do
-      expect(Bestowment.where(badge_id: 'ConsecutiveDaysBadge', rank: 1).count).to eq(1)
+      expect(
+        Bestowment.where(badge_id: 'ConsecutiveDaysBadge::Rank1').count
+      ).to eq(1)
     end
   end
 end

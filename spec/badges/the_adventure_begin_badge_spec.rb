@@ -6,7 +6,11 @@ RSpec.describe TheAdventureBeginBadge do
   describe 'bestowment creation' do
     context 'without user bio param' do
       it 'dont create bestowment' do
-        expect(Bestowment.all.count).to eq(0)
+        expect(
+          Bestowment.where(
+            badge_id: 'TheAdventureBeginBadge'
+          ).count
+        ).to eq(0)
       end
     end
 
@@ -17,7 +21,11 @@ RSpec.describe TheAdventureBeginBadge do
       end
 
       it 'create bestowment' do
-        expect(Bestowment.all.count).to eq(1)
+        expect(
+          Bestowment.where(
+            badge_id: 'TheAdventureBeginBadge'
+          ).count
+        ).to eq(1)
       end
     end
   end

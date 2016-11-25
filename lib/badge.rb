@@ -1,36 +1,29 @@
 class Badge
   include DSL
 
-  attr_reader :title, :description, :goal, :rank, :user
+  attr_reader :title, :description, :rank, :user, :goal
 
   def initialize(user)
     @user = user
     describe_context
-    @bestowment = check_bestowment(@rank)
+    @bestowment = check_bestowment
   end
 
-  def check_bestowment(rank = nil)
-    bestowment = Bestowment.where(
+  def check_bestowment
+    Bestowment.where(
       badge_id: self.class,
       user: @user
-    )
-    bestowment = bestowment.where(rank: rank) if has_progress?
-    bestowment.first
+    ).first
   end
 
-  def bestowed(rank = nil)
-    if has_progress?
-      state = self.class.const_get("Rank#{rank}")
-    else
-      state = self
-    end
+  def bestowed
     Bestowment.create(
       badge_id: self.class,
-      rank: rank,
+      rank: @rank,
       user: @user,
       bestowed_at: DateTime.now,
-      title: state.title,
-      description: state.description
+      title: @title,
+      description: @description
     )
   end
 
@@ -45,49 +38,23 @@ class Badge
   def earned?
     return false unless @goal
     if progress.nil?
-      instance_eval(&@goal)
+      @goal
     else
-      progress > @goal
+      progress >= @goal
     end
   end
 
   def run
-    # bestowed badge if all ranks was earned
-    bestowed(@rank) if earned? && @bestowment.nil?
-    # bestowed previous rank if it not earned
-    prev = @rank - 1
-    if prev.positive? && has_progress? && check_bestowment(prev).nil?
-      bestowed(@rank - 1)
-    end
-  end
-
-  def has_progress?
-    self.class.ranks.present?
+    bestowed if earned? && @bestowment.nil?
   end
 
   private
 
   def describe_context
-    @rank = 0
-    stop = false
-    ranks = self.class.ranks
-    if ranks.blank?
-      @title = self.class.title
-      @description = self.class.description
-      @goal = self.class.goal
-    else
-      ranks.each do |rank|
-        break if stop
-        state = self.class.const_get(rank)
-        current_goal = get_goal_result(state.goal)
-        next unless progress < current_goal
-        @rank = state.rank
-        @title = state.title
-        @description = state.description
-        @goal = current_goal
-        stop = true
-      end
-    end
+    @rank = self.class.rank || 0
+    @title = self.class.title
+    @description = self.class.description
+    @goal = get_goal_result(self.class.goal)
   end
 
   def get_goal_result(goal)

@@ -7,20 +7,19 @@ RSpec.describe LikingFeedPostsBadge do
     before { create(:post_like, user: user) }
 
     it 'show rank, progress, title, description, goal' do
-      badge = LikingFeedPostsBadge.new(user)
-      expect(badge.rank).to eq(2)
-      expect(badge.goal).to eq(10)
+      badge = LikingFeedPostsBadge::Rank1.new(user)
+      expect(badge.rank).to eq(1)
+      expect(badge.goal).to eq(1)
       expect(badge.progress).to eq(1)
-      expect(badge.title).to eq('People Person')
-      expect(badge.description).to eq('10 likes given! We love that' \
-        ' you are spreading the love across the community. You\'re great!')
+      expect(badge.title).to eq('First like')
+      expect(badge.description).to eq('You\'ve liked a comment, we like you.')
+      expect(badge.earned?).to eq(true)
     end
 
     it 'create bestowment' do
       expect(
         Bestowment.where(
-          badge_id: 'LikingFeedPostsBadge',
-          rank: 1
+          badge_id: 'LikingFeedPostsBadge::Rank1'
         ).count
       ).to eq(1)
     end
@@ -30,26 +29,25 @@ RSpec.describe LikingFeedPostsBadge do
     before { 10.times { create(:post_like, user: user) } }
 
     it 'show rank, progress, title, description, goal' do
-      badge = LikingFeedPostsBadge.new(user)
-      expect(badge.rank).to eq(3)
-      expect(badge.goal).to eq(50)
+      badge = LikingFeedPostsBadge::Rank2.new(user)
+      expect(badge.rank).to eq(2)
+      expect(badge.goal).to eq(10)
       expect(badge.progress).to eq(10)
-      expect(badge.title).to eq('Passionate')
-      expect(badge.description).to eq('You\'re becoming uniquely' \
-        ' passionate about Kitsu and the community. 50 likes given!')
+      expect(badge.title).to eq('People Person')
+      expect(badge.description).to eq('10 likes given! We love that' \
+        ' you are spreading the love across the community. You\'re great!')
+      expect(badge.earned?).to eq(true)
     end
 
     it 'create bestowment' do
       expect(
         Bestowment.where(
-          badge_id: 'LikingFeedPostsBadge',
-          rank: 1
+          badge_id: 'LikingFeedPostsBadge::Rank1'
         ).count
       ).to eq(1)
       expect(
         Bestowment.where(
-          badge_id: 'LikingFeedPostsBadge',
-          rank: 2
+          badge_id: 'LikingFeedPostsBadge::Rank2'
         ).count
       ).to eq(1)
     end
