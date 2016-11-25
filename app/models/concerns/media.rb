@@ -23,7 +23,8 @@ module Media
     has_many :castings, as: 'media'
     has_many :installments, as: 'media'
     has_many :franchises, through: :installments
-    has_many :library_entries, as: 'media', dependent: :destroy
+    has_many :library_entries, as: 'media', dependent: :destroy,
+      inverse_of: :media
     has_many :mappings, as: 'media', dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
     delegate :year, to: :start_date, allow_nil: true

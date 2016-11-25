@@ -34,7 +34,7 @@ class LibraryEntry < ApplicationRecord
   VALID_RATINGS = (0.5..5).step(0.5).to_a.freeze
 
   belongs_to :user, touch: true
-  belongs_to :media, polymorphic: true
+  belongs_to :media, polymorphic: true, counter_cache: 'user_count'
   has_one :review, dependent: :destroy
   has_many :marathons, dependent: :destroy
 
