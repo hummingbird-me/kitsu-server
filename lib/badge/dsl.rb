@@ -6,6 +6,7 @@ class Badge
       def on(model, action = :save)
         return if model.nil?
         @model_class = model
+        @model_action = action
         badge = self
         model.public_send("after_#{action}") do
           user = if self.class == User
@@ -17,8 +18,17 @@ class Badge
         end
       end
 
+      def progress(value = nil, &block)
+        if value || block
+          const_set('PROGRESS', value || block)
+        else
+          return nil unless defined? PROGRESS
+          const_get('PROGRESS')
+        end
+      end
+
       # Provide `key "value"` methods for each of these (also accept blocks)
-      %i[progress title description].each do |attr|
+      %i[title description].each do |attr|
         define_method(attr) do |value = nil, &block|
           if value || block
             instance_variable_set("@#{attr}", value || block)
@@ -34,6 +44,7 @@ class Badge
         return @rank if value.nil?
         subclass = const_set("Rank#{value}", Class.new(self, &block))
         subclass.rank = value
+        subclass.on(@model_class, @model_action)
       end
 
       def rank=(value)
@@ -64,6 +75,14 @@ class Badge
 
       def hidden?
         @hidden
+      end
+
+      def root?
+        superclass == Badge
+      end
+
+      def processed?
+        !(root? && ranks.present?)
       end
     end
   end
