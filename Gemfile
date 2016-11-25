@@ -59,12 +59,10 @@ gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 # Rack Middleware
 gem 'rack-cors'
 
-# Optimizations and Profiling
-gem 'rack-mini-profiler'
-gem 'flamegraph'
-gem 'stackprof'
+# Optimizations
 gem 'fast_blank' # Faster String#blank?
 gem 'oj' # Blazing-fast JSON parsing
+gem 'oj_mimic_json' # Hook it in place of JSON gem
 
 group :development, :test do
   gem 'foreman' # Start processes
