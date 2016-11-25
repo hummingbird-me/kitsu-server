@@ -1,13 +1,13 @@
 class UserMailer < ApplicationMailer
   def confirmation(user)
     @token = token_for(user, :email_confirm, expires_in: 7.days)
-    @confirm_link = client_url_for("/confirm_email?token=#{@token.token}")
+    @confirm_link = client_url_for("/confirm-email?token=#{@token.token}")
     mail to: user.unconfirmed_email, subject: 'Welcome to Kitsu'
   end
 
   def password_reset(user)
     @token = token_for(user, :email_password_reset, expires_in: 6.hours)
-    @reset_link = client_url_for("/password_reset?token=#{@token.token}")
+    @reset_link = client_url_for("/password-reset?token=#{@token.token}")
     mail to: user.email, subject: 'Reset your Kitsu password'
   end
 
