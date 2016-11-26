@@ -15,8 +15,25 @@ module Media
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
-    has_attached_file :cover_image
-    has_attached_file :poster_image
+    has_attached_file :cover_image, styles: {
+      small: ['840x200#', :jpg],
+      large: ['1680x400#', :jpg]
+    }, convert_options: {
+      small: '-quality 20 -thumbnail',
+      large: '-quality 10 -thumbnail'
+    }
+    has_attached_file :poster_image, styles: {
+      tiny: ['110x156#', :jpg],
+      small: ['284x402#', :jpg],
+      medium: ['390x554#', :jpg],
+      large: ['550x780#', :jpg]
+    }, convert_options: {
+      tiny: '-quality 90 -thumbnail',
+      small: '-quality 75 -thumbnail',
+      medium: '-quality 40 -thumbnail',
+      large: '-quality 20 -thumbnail'
+    }
+
     update_index("media##{name.underscore}") { self }
 
     has_and_belongs_to_many :genres
