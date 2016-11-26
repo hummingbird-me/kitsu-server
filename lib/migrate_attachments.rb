@@ -1,8 +1,8 @@
 class MigrateAttachments
   BUCKET = 'kitsu-media'.freeze
 
-  SOURCE_PATH = ':class/:attachment/:id_partition/:style/:filename'.freeze
-  TARGET_PATH = ':class/:attachment/:id/:style.:content_type_extension'.freeze
+  SOURCE = ':class/:attachment/:id_partition/:style/:filename'.freeze
+  TARGET = ':class/:attachment/:id/:style.:content_type_extension'.freeze
 
   attr_reader :client, :scope, :attachment
 
@@ -28,9 +28,9 @@ class MigrateAttachments
     client.delete_object(bucket: BUCKET)
   end
 
-  def each_item(scope, title, &block)
+  def each_item(&block)
     items = scope.find_each.lazy
-    bar = progress_bar(title, scope.count(:all))
+    bar = progress_bar("#{scope.table_name}/#{attachment}", scope.count(:all))
     items.map(&block).map { |i| bar.increment; i }.reject(&:nil?)
   end
 
