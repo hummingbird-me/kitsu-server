@@ -11,6 +11,7 @@ module CounterCacheResets
 
   def media_user_counts
     execute sql_for(Anime, :library_entries)
+    execute sql_for(Manga, :library_entries)
   end
 
   def clean!
