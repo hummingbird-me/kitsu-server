@@ -29,6 +29,8 @@
 #
 
 class Review < ApplicationRecord
+  include WithActivity
+
   has_many :likes, class_name: 'ReviewLike', dependent: :destroy
   belongs_to :media, polymorphic: true, required: true
   belongs_to :user, required: true, counter_cache: true
@@ -53,5 +55,14 @@ class Review < ApplicationRecord
     if content_changed?
       self.content_formatted = processed_content[:output].to_s
     end
+  end
+
+  def stream_activity
+    user.feed.activities.new(
+      progress: progress,
+      updated_at: updated_at,
+      likes_count: likes_count,
+      to: [media.feed]
+    )
   end
 end
