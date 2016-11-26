@@ -46,6 +46,7 @@
 #  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
+#  previous_email              :string
 #  pro_expires_at              :datetime
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
@@ -58,7 +59,6 @@
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
-#  unconfirmed_email           :string(255)
 #  waifu_or_husbando           :string(255)
 #  website                     :string(255)
 #  created_at                  :datetime         not null
@@ -136,6 +136,15 @@ class User < ApplicationRecord
     pro_expires_at >= Time.now
   end
 
+  def confirmed
+    return false if confirmed_at.nil?
+    confirmed_at <= Time.now
+  end
+
+  def confirmed=(val)
+    self.confirmed_at = Time.now if val
+  end
+
   def previous_name
     past_names.first
   end
@@ -165,6 +174,7 @@ class User < ApplicationRecord
   end
 
   after_create do
+    UserMailer.confirmation(self).deliver_now
     aggregated_feed.follow(feed)
     timeline.follow(feed)
     Feed.global.follow(feed)
@@ -174,6 +184,14 @@ class User < ApplicationRecord
     if name_changed?
       # Push it onto the front and limit
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
+    end
+    if confirmed_at_changed?
+      self.previous_email = nil
+    end
+    if email_changed?
+      self.previous_email = email_was
+      self.confirmed_at = nil
+      UserMailer.confirmation(self).deliver_now
     end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124051242) do
+ActiveRecord::Schema.define(version: 20161125232508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -765,7 +765,6 @@ ActiveRecord::Schema.define(version: 20161124051242) do
     t.integer  "life_spent_on_anime",                     default: 0,           null: false
     t.string   "about",                       limit: 500, default: "",          null: false
     t.datetime "confirmed_at"
-    t.string   "unconfirmed_email",           limit: 255
     t.string   "cover_image_file_name",       limit: 255
     t.string   "cover_image_content_type",    limit: 255
     t.integer  "cover_image_file_size"
@@ -808,6 +807,7 @@ ActiveRecord::Schema.define(version: 20161124051242) do
     t.integer  "ratings_count",                           default: 0,           null: false
     t.integer  "reviews_count",                           default: 0,           null: false
     t.inet     "ip_addresses",                            default: [],                       array: true
+    t.string   "previous_email"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

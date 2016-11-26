@@ -15,9 +15,9 @@ class UserPolicy < ApplicationPolicy
     if has_scope?(:email_password_reset, accept_all: false)
       [:password]
     elsif has_scope?(:email_confirm, accept_all: false)
-      [:confirmed_at, :unconfirmed_email, :email]
+      [:confirmed]
     else
-      all
+      all - [:confirmed]
     end
   end
 
@@ -25,7 +25,7 @@ class UserPolicy < ApplicationPolicy
     if record == user
       all
     else
-      all - %i[email password confirmed_at unconfirmed_email]
+      all - %i[email password confirmed previous_email]
     end
   end
 end

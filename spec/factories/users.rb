@@ -46,6 +46,7 @@
 #  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
+#  previous_email              :string
 #  pro_expires_at              :datetime
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
@@ -58,7 +59,6 @@
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
-#  unconfirmed_email           :string(255)
 #  waifu_or_husbando           :string(255)
 #  website                     :string(255)
 #  created_at                  :datetime         not null
