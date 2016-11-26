@@ -91,7 +91,7 @@ RSpec.describe ListImport do
           subject.apply(&b)
         }.to yield_successive_args(
           { status: :running, total: 7, current: 0 },
-          { status: :error, total: 7, error_message: 'An error', error_trace: String }
+          { status: :failed, total: 7, error_message: 'An error', error_trace: String }
         )
       end
     end

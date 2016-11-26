@@ -24,7 +24,7 @@ gem 'rolify'
 gem 'twitter'
 
 # Attachments
-gem 'paperclip', '~> 4.1'
+gem 'paperclip', '~> 5.0'
 gem 'paperclip-optimizer'
 gem 'delayed_paperclip'
 gem 'image_optim_pack', require: false
