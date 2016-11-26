@@ -24,7 +24,8 @@ class MigrateAttachments
     old = Paperclip::Interpolations.interpolate(SOURCE, attachment, 'original')
     new = Paperclip::Interpolations.interpolate(TARGET, attachment, 'original')
 
-    client.copy_object(bucket: BUCKET, copy_source: old, key: new)
+    client.copy_object(bucket: BUCKET, copy_source: "#{BUCKET}/#{old}",
+                       key: new)
     client.delete_object(bucket: BUCKET)
   end
 
