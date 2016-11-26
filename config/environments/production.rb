@@ -76,10 +76,10 @@ Rails.application.configure do
       access_key_id: ENV['AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
     },
-    s3_host_alias: 'static.hummingbird.me',
+    s3_host_alias: 'kitsu-media.s3.amazonaws.com',
     s3_protocol: :https,
     url: ':s3_alias_url',
-    path: '/:class/:attachment/:id_partition/:style/:filename'
+    path: '/:class/:attachment/:id/:style.:content_type_extension'
   }
 
   config.action_mailer.default_url_options = {
