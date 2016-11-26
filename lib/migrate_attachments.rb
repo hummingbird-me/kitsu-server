@@ -21,12 +21,13 @@ class MigrateAttachments
   private
 
   def move(attachment)
+    return if attachment.blank?
     old = Paperclip::Interpolations.interpolate(SOURCE, attachment, 'original')
     new = Paperclip::Interpolations.interpolate(TARGET, attachment, 'original')
 
     client.copy_object(bucket: BUCKET, copy_source: "#{BUCKET}/#{old}",
-                       key: new)
-    client.delete_object(bucket: BUCKET)
+                       key: new) rescue return
+    client.delete_object(bucket: BUCKET, key: old)
   end
 
   def each_item(&block)
