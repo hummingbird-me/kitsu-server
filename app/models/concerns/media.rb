@@ -19,8 +19,8 @@ module Media
       small: ['840x200#', :jpg],
       large: ['1680x400#', :jpg]
     }, convert_options: {
-      small: '-quality 20 -thumbnail',
-      large: '-quality 10 -thumbnail'
+      small: '-quality 20 -strip',
+      large: '-quality 10 -strip'
     }
     has_attached_file :poster_image, styles: {
       tiny: ['110x156#', :jpg],
@@ -28,10 +28,10 @@ module Media
       medium: ['390x554#', :jpg],
       large: ['550x780#', :jpg]
     }, convert_options: {
-      tiny: '-quality 90 -thumbnail',
-      small: '-quality 75 -thumbnail',
-      medium: '-quality 40 -thumbnail',
-      large: '-quality 20 -thumbnail'
+      tiny: '-quality 90 -strip',
+      small: '-quality 75 -strip',
+      medium: '-quality 40 -strip',
+      large: '-quality 20 -strip'
     }
 
     update_index("media##{name.underscore}") { self }
