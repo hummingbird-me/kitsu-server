@@ -23,7 +23,7 @@
 # rubocop:enable Metrics/LineLength
 
 class ListImport
-  class MyAnimeList < ListImport
+  class MyAnimeListXML < ListImport
     # We can only accept files as input right now, not usernames
     validates :input_text, absence: true
     # Accept .gz or .xml.gz

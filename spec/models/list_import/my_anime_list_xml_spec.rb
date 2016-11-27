@@ -24,7 +24,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ListImport::MyAnimeList do
+RSpec.describe ListImport::MyAnimeListXML do
   let(:file) { Fixture.new('list_import/my_anime_list/nuck.xml.gz').to_file }
   it { should validate_absence_of(:input_text) }
   it { should have_attached_file(:input_file) }
@@ -37,7 +37,7 @@ RSpec.describe ListImport::MyAnimeList do
 
   context 'with a list' do
     subject do
-      ListImport::MyAnimeList.create(
+      ListImport::MyAnimeListXML.create(
         input_file: file,
         strategy: :greater,
         user: build(:user)

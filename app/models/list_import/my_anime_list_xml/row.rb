@@ -1,5 +1,5 @@
 class ListImport
-  class MyAnimeList
+  class MyAnimeListXML
     class Row
       attr_reader :node
 

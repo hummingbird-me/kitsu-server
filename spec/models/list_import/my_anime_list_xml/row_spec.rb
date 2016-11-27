@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ListImport::MyAnimeList::Row do
+RSpec.describe ListImport::MyAnimeListXML::Row do
   def create_mapping(media)
     fail 'Media must be saved' unless media.persisted?
     prefix = media.class.name.underscore
