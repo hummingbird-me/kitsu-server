@@ -5,6 +5,6 @@ class EpisodeResource < BaseResource
 
   has_one :media, polymorphic: true
 
-  filter :media_id, :media_type
+  filters :media_id, :media_type
   filter :number, MediaResource::NUMERIC_QUERY
 end
