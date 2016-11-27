@@ -104,7 +104,7 @@ class ListImport
 
         episodes = tooltip.at_css('.entryBar .type').text
 
-        episodes.match(/\d+/).try(:[], 0)&.to_i
+        episodes.match(/\d+/).try(:[], 0).to_i
       end
 
       def total_chapters
@@ -112,7 +112,7 @@ class ListImport
 
         chapters = tooltip.at_css('.entryBar .iconVol').text
 
-        chapters.match(/Ch:(\s\d+)/).try(:[], 1)&.to_i
+        chapters.match(/Ch:(\s\d+)/).try(:[], 1).to_i
       end
 
       def total_volumes
