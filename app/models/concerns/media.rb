@@ -16,11 +16,11 @@ module Media
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
     has_attached_file :cover_image, styles: {
-      small: ['840x200#', :jpg],
-      large: ['1680x400#', :jpg]
+      small: ['1680x400#', :jpg],
+      large: ['3360x800#', :jpg]
     }, convert_options: {
-      small: '-quality 20 -strip',
-      large: '-quality 10 -strip'
+      small: '-quality 75 -strip',
+      large: '-quality 50 -strip'
     }
     has_attached_file :poster_image, styles: {
       tiny: ['110x156#', :jpg],
@@ -30,8 +30,8 @@ module Media
     }, convert_options: {
       tiny: '-quality 90 -strip',
       small: '-quality 75 -strip',
-      medium: '-quality 40 -strip',
-      large: '-quality 20 -strip'
+      medium: '-quality 50 -strip',
+      large: '-quality 40 -strip'
     }
 
     update_index("media##{name.underscore}") { self }
