@@ -9,10 +9,11 @@ class ListImport
       end
 
       def media
+        return @media if @media
         key = "#{type}/#{media_info[:id]}"
 
-        Mapping.lookup('animeplanet', key) ||
-          Mapping.guess(type.classify.safe_constantize, media_info)
+        @media = Mapping.lookup('animeplanet', key) ||
+                   Mapping.guess(type.classify.safe_constantize, media_info)
       end
 
       def media_info
@@ -103,8 +104,7 @@ class ListImport
 
         episodes = tooltip.at_css('.entryBar .type').text
 
-        episodes.match(/\d+/)[0].to_i
-        # episodes&.split(' (')&.last&.gsub(/(ep?s)+/, '')&.to_i
+        episodes.match(/\d+/).try(:[], 0)&.to_i
       end
 
       def total_chapters
@@ -112,10 +112,7 @@ class ListImport
 
         chapters = tooltip.at_css('.entryBar .iconVol').text
 
-        chapters.match(/Ch:(\s\d+)/)[1].to_i
-      rescue NameError
-        # regex returned nil
-        0
+        chapters.match(/Ch:(\s\d+)/).try(:[], 1)&.to_i
       end
 
       def total_volumes
