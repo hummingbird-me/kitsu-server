@@ -1,0 +1,73 @@
+{
+  "id": 26989,
+  "display_name": "Nuck",
+  "anime_time": 136,
+  "manga_chap": 0,
+  "about": "",
+  "list_order": 0,
+  "adult_content": true,
+  "forum_homepage": 0,
+  "legacy_lists": false,
+  "donator": 0,
+  "following": false,
+  "image_url_lge": "https://cdn.anilist.co/img/dir/user/reg/default.png",
+  "image_url_med": "https://cdn.anilist.co/img/dir/user/sml/default.png",
+  "image_url_banner": "https://cdn.anilist.co/img/dir/userbanner/",
+  "title_language": "romaji",
+  "score_type": 0,
+  "custom_list_anime": [],
+  "custom_list_manga": [],
+  "stats": {
+    "status_distribution": {
+      "anime": {
+        "watching": 0,
+        "plan to watch": 0,
+        "completed": 1,
+        "dropped": 0,
+        "on-hold": 0
+      },
+      "manga": {
+        "reading": 0,
+        "plan to read": 0,
+        "completed": 0,
+        "dropped": 0,
+        "on-hold": 0
+      }
+    },
+    "score_distribution": {
+      "anime": {
+        "10": 0,
+        "20": 0,
+        "30": 0,
+        "40": 0,
+        "50": 0,
+        "60": 0,
+        "70": 0,
+        "80": 0,
+        "90": 0,
+        "100": 0
+      },
+      "manga": {
+        "10": 0,
+        "20": 0,
+        "30": 0,
+        "40": 0,
+        "50": 0,
+        "60": 0,
+        "70": 0,
+        "80": 0,
+        "90": 0,
+        "100": 0
+      }
+    },
+    "favourite_genres": {
+      "Hentai": 1
+    }
+  },
+  "advanced_rating": true,
+  "advanced_rating_names": [],
+  "notifications": 0,
+  "lists": [],
+  "custom_lists": [],
+  "css": []
+}
