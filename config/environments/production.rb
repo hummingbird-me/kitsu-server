@@ -86,4 +86,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = {
     host: 'kitsu.io'
   }
+
+  # Enable Rack-Attack middleware
+  config.middleware.insert_after ActionDispatch::RemoteIp, Rack::Attack
 end
