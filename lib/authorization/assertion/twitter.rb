@@ -1,6 +1,6 @@
 module Authorization
   module Assertion
-    class TwitterAuth
+    class Twitter
       def initialize(access_token, access_token_secret)
         @access_token = access_token
         @access_token_secret = access_token_secret

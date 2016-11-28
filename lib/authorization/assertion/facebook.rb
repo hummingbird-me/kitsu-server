@@ -31,13 +31,13 @@ module Authorization
       def import_friends
         return unless @user_data.present?
         user = user!
-        @user_data['friends']['data'].each do |friend|
+        @user_data['friends']['data'].map do |friend|
           followed = User.where(facebook_id: friend['id']).first
           Follow.find_or_create_by(
             follower: user,
             followed: followed
           ) if followed.present?
-        end
+        end.compact
       end
     end
   end
