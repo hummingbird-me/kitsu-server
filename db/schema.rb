@@ -630,6 +630,7 @@ ActiveRecord::Schema.define(version: 20161128204055) do
     t.integer  "anime_id",                 null: false
     t.text     "content",                  null: false
     t.integer  "character_id",             null: false
+    t.string   "character_name", limit: 255
     t.integer  "user_id",                  null: false
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
