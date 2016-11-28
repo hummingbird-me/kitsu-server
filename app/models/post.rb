@@ -32,9 +32,11 @@
 
 class Post < ApplicationRecord
   include WithActivity
+  include ContentProcessable
 
   acts_as_paranoid
   resourcify
+  processable :content, LongPipeline
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'
@@ -69,17 +71,7 @@ class Post < ApplicationRecord
     )
   end
 
-  def processed_content
-    @processed_content ||= LongPipeline.call(content)
-  end
-
   def mentioned_users
     User.by_name(processed_content[:mentioned_usernames])
-  end
-
-  before_validation do
-    if content_changed?
-      self.content_formatted = processed_content[:output].to_s
-    end
   end
 end
