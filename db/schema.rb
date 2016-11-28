@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161128204055) do
+ActiveRecord::Schema.define(version: 20161128223733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -627,14 +627,14 @@ ActiveRecord::Schema.define(version: 20161128204055) do
   add_index "quote_likes", ["user_id"], name: "index_quote_likes_on_user_id", using: :btree
 
   create_table "quotes", force: :cascade do |t|
-    t.integer  "anime_id",                 null: false
-    t.text     "content",                  null: false
-    t.integer  "character_id",             null: false
+    t.integer  "anime_id",                               null: false
+    t.text     "content",                                null: false
+    t.integer  "character_id",                           null: false
     t.string   "character_name", limit: 255
-    t.integer  "user_id",                  null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "likes_count",  default: 0, null: false
+    t.integer  "user_id",                                null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "likes_count",                default: 0, null: false
   end
 
   add_index "quotes", ["anime_id"], name: "index_quotes_on_anime_id", using: :btree
@@ -820,6 +820,7 @@ ActiveRecord::Schema.define(version: 20161128204055) do
     t.integer  "reviews_count",                           default: 0,           null: false
     t.inet     "ip_addresses",                            default: [],                       array: true
     t.string   "previous_email"
+    t.integer  "quotes_count",                            default: 0,           null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

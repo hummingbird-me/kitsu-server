@@ -21,7 +21,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class QuoteLike < ActiveRecord::Base
+class QuoteLike < ApplicationRecord
   belongs_to :quote, required: true, counter_cache: :likes_count
   belongs_to :user, required: true
 end

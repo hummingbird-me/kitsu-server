@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: quote_likes
@@ -18,10 +19,11 @@
 #  fk_rails_0e4bf2e834  (user_id => users.id)
 #  fk_rails_48de98e559  (quote_id => quotes.id)
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :quote_like do
-    user nil
-    quote nil
+    quote
+    user
   end
 end

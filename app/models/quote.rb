@@ -3,14 +3,15 @@
 #
 # Table name: quotes
 #
-#  id           :integer          not null, primary key
-#  content      :text             not null
-#  likes_count  :integer          default(0), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  anime_id     :integer          not null, indexed
-#  character_id :integer          not null
-#  user_id      :integer          not null
+#  id             :integer          not null, primary key
+#  character_name :string(255)
+#  content        :text             not null
+#  likes_count    :integer          default(0), not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  anime_id       :integer          not null, indexed
+#  character_id   :integer          not null
+#  user_id        :integer          not null
 #
 # Indexes
 #
@@ -24,9 +25,11 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Quote < ActiveRecord::Base
+class Quote < ApplicationRecord
+  include WithActivity
+
   # defaults to required: true in Rails 5
-  belongs_to :user, required: true
+  belongs_to :user, required: true, counter_cache: true
   belongs_to :anime, required: true
   belongs_to :character, required: true
   has_many :likes, class_name: 'QuoteLike', dependent: :destroy
