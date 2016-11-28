@@ -519,6 +519,7 @@
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        POST      /edge/feeds/:group/:id/_read(.:format)                                    feeds#mark_read
 #                                        POST      /edge/feeds/:group/:id/_seen(.:format)                                    feeds#mark_seen
+#                         users__recover POST      /edge/users/_recover(.:format)                                            users#recover
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
 #                    oauth_authorization GET       /oauth/authorize(.:format)                                                doorkeeper/authorizations#new
 #                                        POST      /oauth/authorize(.:format)                                                doorkeeper/authorizations#create
@@ -576,6 +577,7 @@ Rails.application.routes.draw do
     get '/feeds/:group/:id', to: 'feeds#show'
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
     post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
+    post '/users/_recover', to: 'users#recover'
   end
 
   use_doorkeeper
