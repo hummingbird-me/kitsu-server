@@ -68,6 +68,6 @@ module Kitsu
     }.compact
 
     # Redis caching
-    config.cache_store = :redis_store, ENV['REDIS_URL'], expires_in: 1.day
+    config.cache_store = :redis_store, ENV['REDIS_URL'], { expires_in: 1.day }
   end
 end
