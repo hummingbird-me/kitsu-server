@@ -3,14 +3,14 @@
 #
 # Table name: quotes
 #
-#  id             :integer          not null, primary key
-#  content        :text             not null
-#  positive_votes :integer          default(0), not null
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  anime_id       :integer          not null, indexed
-#  character_id   :integer          not null
-#  user_id        :integer          not null
+#  id           :integer          not null, primary key
+#  content      :text             not null
+#  likes_count  :integer          default(0), not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  anime_id     :integer          not null, indexed
+#  character_id :integer          not null
+#  user_id      :integer          not null
 #
 # Indexes
 #
