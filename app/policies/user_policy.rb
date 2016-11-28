@@ -28,4 +28,10 @@ class UserPolicy < ApplicationPolicy
       all - %i[email password confirmed previous_email]
     end
   end
+
+  class Scope < Scope
+    def resolve
+      scope.where.not(id: blocked_users)
+    end
+  end
 end

@@ -146,6 +146,10 @@ class User < ApplicationRecord
     pro_expires_at >= Time.now
   end
 
+  def blocked?(user)
+    blocks.where(user: [self, user], blocked: [self, user]).exists?
+  end
+
   def confirmed
     return false if confirmed_at.nil?
     confirmed_at <= Time.now
