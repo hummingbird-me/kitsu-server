@@ -104,6 +104,7 @@ class User < ApplicationRecord
   has_many :post_likes, dependent: :destroy
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
+  has_many :quotes, dependent: :destroy
 
   has_attached_file :avatar, styles: {
     tiny: '40x40#',
