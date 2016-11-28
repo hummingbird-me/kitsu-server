@@ -39,5 +39,4 @@ RSpec.describe Quote, type: :model do
   it { should validate_presence_of(:anime) }
   it { should validate_presence_of(:character) }
   it { should validate_presence_of(:content) }
-
 end

@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe QuoteLikePolicy do
   let(:user) { token_for build(:user) }
-  let(:like) { build(:post_like, user: user.resource_owner) }
-  let(:other) { build(:post_like) }
+  let(:like) { build(:quote_like, user: user.resource_owner) }
+  let(:other) { build(:quote_like) }
   subject { described_class }
 
   permissions :update? do
-    it('should not allow users') { should_not permit(user, like) }
     it('should not allow anons') { should_not permit(nil, like) }
+    it('should not allow users') { should_not permit(user, like) }
   end
 
   permissions :create?, :destroy? do
