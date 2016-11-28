@@ -49,7 +49,7 @@ class Comment < ApplicationRecord
     post.feed.activities.new(
       likes_count: likes_count,
       replies_count: replies_count,
-      *mentioned_users.map(&:notifications)
+      to: mentioned_users.map(&:notifications)
     )
   end
 
