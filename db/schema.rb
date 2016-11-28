@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125232508) do
+ActiveRecord::Schema.define(version: 20161128201646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_trgm"
 
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
@@ -615,14 +616,24 @@ ActiveRecord::Schema.define(version: 20161125232508) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "quote_likes", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "quote_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "quote_likes", ["quote_id"], name: "index_quote_likes_on_quote_id", using: :btree
+  add_index "quote_likes", ["user_id"], name: "index_quote_likes_on_user_id", using: :btree
+
   create_table "quotes", force: :cascade do |t|
-    t.integer  "anime_id"
-    t.text     "content"
-    t.string   "character_name", limit: 255
-    t.integer  "user_id"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.integer  "positive_votes",             default: 0, null: false
+    t.integer  "anime_id",                   null: false
+    t.text     "content",                    null: false
+    t.integer  "character_id",               null: false
+    t.integer  "user_id",                    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "positive_votes", default: 0, null: false
   end
 
   add_index "quotes", ["anime_id"], name: "index_quotes_on_anime_id", using: :btree
@@ -873,9 +884,15 @@ ActiveRecord::Schema.define(version: 20161125232508) do
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
   add_foreign_key "media_follows", "users"
+  add_foreign_key "post_likes", "posts"
+  add_foreign_key "post_likes", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
-  add_foreign_key "review_likes", "reviews"
+  add_foreign_key "quote_likes", "quotes"
+  add_foreign_key "quote_likes", "users"
+  add_foreign_key "quotes", "anime"
+  add_foreign_key "quotes", "characters"
+  add_foreign_key "quotes", "users"
   add_foreign_key "review_likes", "users"
   add_foreign_key "reviews", "library_entries"
   add_foreign_key "streaming_links", "streamers"
