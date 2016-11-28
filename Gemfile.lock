@@ -275,6 +275,8 @@ GEM
       pundit
       rails (>= 4.2.1, < 5.1)
     rack (1.6.4)
+    rack-attack (5.0.1)
+      rack
     rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -478,6 +480,7 @@ DEPENDENCIES
   puma
   pundit
   pundit-resources
+  rack-attack
   rack-cors
   rails (= 4.2.1)
   rails-api

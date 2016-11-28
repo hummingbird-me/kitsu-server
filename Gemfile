@@ -58,6 +58,7 @@ gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 
 # Rack Middleware
 gem 'rack-cors'
+gem 'rack-attack'
 
 # Optimizations
 gem 'fast_blank' # Faster String#blank?
