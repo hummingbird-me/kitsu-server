@@ -56,7 +56,7 @@ RSpec.describe Authorization::Assertion::Twitter do
         body: twitter_followers_response,
         headers: {}
       )
-    Authorization::Assertion::TwitterAuth.new(
+    Authorization::Assertion::Twitter.new(
       'any token',
       'any token secret'
     )
