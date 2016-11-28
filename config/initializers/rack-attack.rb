@@ -1,7 +1,7 @@
 class Rack::Attack
   throttle('logins/ip', limit: 15, period: 60.seconds) do |req|
     if req.path == '/oauth/token' && req.post? && req.params['grant_type'] == 'password'
-      req.remote_ip
+      ActionDispatch::Request.new(req.env).remote_ip
     end
   end
 
