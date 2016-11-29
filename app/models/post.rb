@@ -62,6 +62,7 @@ class Post < ApplicationRecord
       updated_at: updated_at,
       post_likes_count: post_likes_count,
       comments_count: comments_count,
+      nsfw: nsfw,
       to: [
         media&.feed,
         target_user&.feed,
@@ -73,5 +74,10 @@ class Post < ApplicationRecord
 
   def mentioned_users
     User.by_name(processed_content[:mentioned_usernames])
+  end
+
+  before_update do
+    # Always check if the media is NSFW and try to force into NSFWness
+    self.nsfw = media.try(:nsfw?) unless nsfw
   end
 end
