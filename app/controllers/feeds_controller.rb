@@ -20,7 +20,12 @@ class FeedsController < ApplicationController
 
   def serialize_activities(list)
     FeedSerializerService.new(list, including: including, fields: fields,
-                              context: context, base_url: request.url)
+                              context: context, base_url: request.url,
+                              sfw_filter: sfw_filter?)
+  end
+
+  def sfw_filter?
+    current_user&.resource_owner&.sfw_filter?
   end
 
   def feed

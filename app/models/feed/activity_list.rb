@@ -1,6 +1,7 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_number, :page_size, :including
+    attr_accessor :data, :feed, :page_number, :page_size, :including,
+      :sfw_filter
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
         self.dup.tap { |al| al.data[key] = value }
@@ -11,6 +12,7 @@ class Feed
       @feed = feed
       @data = data.with_indifferent_access
       self.including = []
+      self.sfw_filter = false
     end
 
     def page(page_number = nil, id_lt: nil)
@@ -30,6 +32,12 @@ class Feed
       dup.tap do |al|
         al.page_size = page_size
         al.update_pagination! if page_number
+      end
+    end
+
+    def sfw
+      dup.tap do |al|
+        al.sfw_filter = true
       end
     end
 
@@ -91,14 +99,19 @@ class Feed
       StreamRails::Enrich.new(including)
     end
 
+
     def to_a
       if feed.aggregated? || feed.notification?
         @results ||= enriched_results.map do |res|
-          strip_unfound(Feed::ActivityGroup.new(feed, res))
+          result = strip_unfound(Feed::ActivityGroup.new(feed, res))
+          return nil if result.nsfw? && sfw_filter
+          result
         end
       else
         @results ||= enriched_results.map do |res|
-          strip_unfound(Feed::Activity.new(feed, res))
+          result = strip_unfound(Feed::Activity.new(feed, res))
+          return nil if result.nsfw? && sfw_filter
+          result
         end
       end
     end
