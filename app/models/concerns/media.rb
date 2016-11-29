@@ -6,13 +6,6 @@ module Media
     include Titleable
     include Rateable
 
-    # HACK: we need to return a relation but want to handle historical slugs
-    scope :by_slug, -> (slug) {
-      record = where(slug: slug)
-      record = where(id: friendly.find(slug).id) if record.empty?
-      record
-    }
-
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
     has_attached_file :cover_image, styles: {
@@ -54,6 +47,17 @@ module Media
     }
 
     after_create :follow_self
+  end
+
+  class_methods do
+    # HACK: we need to return a relation but want to handle historical slugs
+    def by_slug(slug)
+      record = where(slug: slug)
+      record = where(id: friendly.find(slug).id) if record.empty?
+      record
+    rescue
+      none
+    end
   end
 
   def slug_candidates
