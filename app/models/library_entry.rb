@@ -94,13 +94,20 @@ class LibraryEntry < ApplicationRecord
     MediaActivityService.new(self)
   end
 
-  after_save do
-    activity.rating(rating)&.create if rating_changed?
-    activity.status(status)&.create if status_changed?
-    activity.progress(progress)&.create if progress_changed?
+  before_save do
+    if status_changed? && status == :completed && media.progress_cap
+      # When marked completed, we try to update progress to the cap
+      self.progress = media.progress_cap
+    end
   end
 
   after_save do
+    activity.rating(rating)&.create if rating_changed?
+    activity.status(status)&.create if status_changed?
+    # If the progress has changed, make an activity unless the status is also
+    # changing
+    activity.progress(progress)&.create if progress_changed? && !status_changed?
+
     if rating_changed?
       media.transaction do
         media.decrement_rating_frequency(rating_was)
