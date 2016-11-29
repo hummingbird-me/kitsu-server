@@ -58,6 +58,11 @@
 #                                        PUT|PATCH /edge/anime/:anime_id/relationships/streaming-links(.:format)             anime#update_relationship {:relationship=>"streaming_links"}
 #                                        DELETE    /edge/anime/:anime_id/relationships/streaming-links(.:format)             anime#destroy_relationship {:relationship=>"streaming_links"}
 #                  anime_streaming_links GET       /edge/anime/:anime_id/streaming-links(.:format)                           streaming_links#get_related_resources {:relationship=>"streaming_links", :source=>"anime"}
+#             anime_relationships_quotes GET       /edge/anime/:anime_id/relationships/quotes(.:format)                      anime#show_relationship {:relationship=>"quotes"}
+#                                        POST      /edge/anime/:anime_id/relationships/quotes(.:format)                      anime#create_relationship {:relationship=>"quotes"}
+#                                        PUT|PATCH /edge/anime/:anime_id/relationships/quotes(.:format)                      anime#update_relationship {:relationship=>"quotes"}
+#                                        DELETE    /edge/anime/:anime_id/relationships/quotes(.:format)                      anime#destroy_relationship {:relationship=>"quotes"}
+#                           anime_quotes GET       /edge/anime/:anime_id/quotes(.:format)                                    quotes#get_related_resources {:relationship=>"quotes", :source=>"anime"}
 #                            anime_index GET       /edge/anime(.:format)                                                     anime#index
 #                                        POST      /edge/anime(.:format)                                                     anime#create
 #                                  anime GET       /edge/anime/:id(.:format)                                                 anime#show
@@ -180,6 +185,11 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/reviews(.:format)                      users#update_relationship {:relationship=>"reviews"}
 #                                        DELETE    /edge/users/:user_id/relationships/reviews(.:format)                      users#destroy_relationship {:relationship=>"reviews"}
 #                           user_reviews GET       /edge/users/:user_id/reviews(.:format)                                    reviews#get_related_resources {:relationship=>"reviews", :source=>"users"}
+#              user_relationships_quotes GET       /edge/users/:user_id/relationships/quotes(.:format)                       users#show_relationship {:relationship=>"quotes"}
+#                                        POST      /edge/users/:user_id/relationships/quotes(.:format)                       users#create_relationship {:relationship=>"quotes"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/quotes(.:format)                       users#update_relationship {:relationship=>"quotes"}
+#                                        DELETE    /edge/users/:user_id/relationships/quotes(.:format)                       users#destroy_relationship {:relationship=>"quotes"}
+#                            user_quotes GET       /edge/users/:user_id/quotes(.:format)                                     quotes#get_related_resources {:relationship=>"quotes", :source=>"users"}
 #                                  users GET       /edge/users(.:format)                                                     users#index
 #                                        POST      /edge/users(.:format)                                                     users#create
 #                                   user GET       /edge/users/:id(.:format)                                                 users#show
@@ -217,6 +227,11 @@
 #                                        PUT|PATCH /edge/characters/:character_id/relationships/castings(.:format)           characters#update_relationship {:relationship=>"castings"}
 #                                        DELETE    /edge/characters/:character_id/relationships/castings(.:format)           characters#destroy_relationship {:relationship=>"castings"}
 #                     character_castings GET       /edge/characters/:character_id/castings(.:format)                         castings#get_related_resources {:relationship=>"castings", :source=>"characters"}
+#         character_relationships_quotes GET       /edge/characters/:character_id/relationships/quotes(.:format)             characters#show_relationship {:relationship=>"quotes"}
+#                                        POST      /edge/characters/:character_id/relationships/quotes(.:format)             characters#create_relationship {:relationship=>"quotes"}
+#                                        PUT|PATCH /edge/characters/:character_id/relationships/quotes(.:format)             characters#update_relationship {:relationship=>"quotes"}
+#                                        DELETE    /edge/characters/:character_id/relationships/quotes(.:format)             characters#destroy_relationship {:relationship=>"quotes"}
+#                       character_quotes GET       /edge/characters/:character_id/quotes(.:format)                           quotes#get_related_resources {:relationship=>"quotes", :source=>"characters"}
 #                             characters GET       /edge/characters(.:format)                                                characters#index
 #                                        POST      /edge/characters(.:format)                                                characters#create
 #                              character GET       /edge/characters/:id(.:format)                                            characters#show

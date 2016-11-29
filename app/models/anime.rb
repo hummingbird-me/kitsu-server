@@ -51,6 +51,7 @@ class Anime < ApplicationRecord
 
   enum show_type: %i[TV special OVA ONA movie music]
   has_many :streaming_links, as: 'media', dependent: :destroy
+  has_many :quotes, dependent: :destroy
 
   update_index('media#anime') { self }
 
