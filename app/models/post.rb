@@ -8,7 +8,7 @@
 #  comments_count           :integer          default(0), not null
 #  content                  :text             not null
 #  content_formatted        :text             not null
-#  deleted_at               :datetime
+#  deleted_at               :datetime         indexed
 #  media_type               :string
 #  nsfw                     :boolean          default(FALSE), not null
 #  post_likes_count         :integer          default(0), not null
@@ -22,6 +22,10 @@
 #  target_group_id          :integer
 #  target_user_id           :integer
 #  user_id                  :integer          not null
+#
+# Indexes
+#
+#  index_posts_on_deleted_at  (deleted_at)
 #
 # Foreign Keys
 #

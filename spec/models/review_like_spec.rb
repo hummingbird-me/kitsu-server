@@ -6,8 +6,13 @@
 #  id         :integer          not null, primary key
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  review_id  :integer          not null
-#  user_id    :integer          not null
+#  review_id  :integer          not null, indexed
+#  user_id    :integer          not null, indexed
+#
+# Indexes
+#
+#  index_review_likes_on_review_id  (review_id)
+#  index_review_likes_on_user_id    (user_id)
 #
 # Foreign Keys
 #

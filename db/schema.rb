@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161129192003) do
+ActiveRecord::Schema.define(version: 20161130210427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,6 +155,10 @@ ActiveRecord::Schema.define(version: 20161129192003) do
     t.integer  "replies_count",     default: 0,     null: false
   end
 
+  add_index "comments", ["deleted_at"], name: "index_comments_on_deleted_at", using: :btree
+  add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
+  add_index "comments", ["post_id"], name: "index_comments_on_post_id", using: :btree
+
   create_table "dramas", force: :cascade do |t|
     t.string   "slug",                                        null: false
     t.hstore   "titles",                    default: {},      null: false
@@ -232,6 +236,7 @@ ActiveRecord::Schema.define(version: 20161129192003) do
 
   add_index "favorites", ["item_id", "item_type"], name: "index_favorites_on_item_id_and_item_type", using: :btree
   add_index "favorites", ["user_id", "item_id", "item_type"], name: "index_favorites_on_user_id_and_item_id_and_item_type", unique: true, using: :btree
+  add_index "favorites", ["user_id", "item_type"], name: "index_favorites_on_user_id_and_item_type", using: :btree
   add_index "favorites", ["user_id"], name: "index_favorites_on_user_id", using: :btree
 
   create_table "follows", force: :cascade do |t|
@@ -351,7 +356,9 @@ ActiveRecord::Schema.define(version: 20161129192003) do
     t.boolean  "nsfw",                                    default: false, null: false
   end
 
+  add_index "library_entries", ["private"], name: "index_library_entries_on_private", using: :btree
   add_index "library_entries", ["user_id", "media_type", "media_id"], name: "index_library_entries_on_user_id_and_media_type_and_media_id", unique: true, using: :btree
+  add_index "library_entries", ["user_id", "media_type"], name: "index_library_entries_on_user_id_and_media_type", using: :btree
   add_index "library_entries", ["user_id", "status"], name: "index_library_entries_on_user_id_and_status", using: :btree
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
 
@@ -578,6 +585,8 @@ ActiveRecord::Schema.define(version: 20161129192003) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "post_likes", ["post_id"], name: "index_post_likes_on_post_id", using: :btree
+
   create_table "posts", force: :cascade do |t|
     t.integer  "user_id",                                  null: false
     t.integer  "target_user_id"
@@ -598,6 +607,8 @@ ActiveRecord::Schema.define(version: 20161129192003) do
     t.integer  "comments_count",           default: 0,     null: false
     t.integer  "top_level_comments_count", default: 0,     null: false
   end
+
+  add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
 
   create_table "pro_membership_plans", force: :cascade do |t|
     t.string   "name",                       null: false
@@ -670,6 +681,9 @@ ActiveRecord::Schema.define(version: 20161129192003) do
     t.integer  "user_id",    null: false
   end
 
+  add_index "review_likes", ["review_id"], name: "index_review_likes_on_review_id", using: :btree
+  add_index "review_likes", ["user_id"], name: "index_review_likes_on_user_id", using: :btree
+
   create_table "reviews", force: :cascade do |t|
     t.integer  "user_id",                                       null: false
     t.integer  "media_id",                                      null: false
@@ -687,6 +701,7 @@ ActiveRecord::Schema.define(version: 20161129192003) do
     t.integer  "progress"
   end
 
+  add_index "reviews", ["likes_count"], name: "index_reviews_on_likes_count", using: :btree
   add_index "reviews", ["media_id"], name: "index_reviews_on_media_id", using: :btree
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id", using: :btree
 

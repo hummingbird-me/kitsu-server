@@ -7,14 +7,20 @@
 #  blocked           :boolean          default(FALSE), not null
 #  content           :text             not null
 #  content_formatted :text             not null
-#  deleted_at        :datetime
+#  deleted_at        :datetime         indexed
 #  likes_count       :integer          default(0), not null
 #  replies_count     :integer          default(0), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  parent_id         :integer
-#  post_id           :integer          not null
+#  parent_id         :integer          indexed
+#  post_id           :integer          not null, indexed
 #  user_id           :integer          not null
+#
+# Indexes
+#
+#  index_comments_on_deleted_at  (deleted_at)
+#  index_comments_on_parent_id   (parent_id)
+#  index_comments_on_post_id     (post_id)
 #
 # Foreign Keys
 #

@@ -6,7 +6,7 @@
 #  content           :text             not null
 #  content_formatted :text             not null
 #  legacy            :boolean          default(FALSE), not null
-#  likes_count       :integer          default(0)
+#  likes_count       :integer          default(0), indexed
 #  media_type        :string
 #  progress          :integer
 #  rating            :integer          not null
@@ -20,8 +20,9 @@
 #
 # Indexes
 #
-#  index_reviews_on_media_id  (media_id)
-#  index_reviews_on_user_id   (user_id)
+#  index_reviews_on_likes_count  (likes_count)
+#  index_reviews_on_media_id     (media_id)
+#  index_reviews_on_user_id      (user_id)
 #
 # Foreign Keys
 #
