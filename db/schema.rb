@@ -647,6 +647,22 @@ ActiveRecord::Schema.define(version: 20161129192003) do
 
   add_index "recommendations", ["user_id"], name: "index_recommendations_on_user_id", using: :btree
 
+  create_table "reports", force: :cascade do |t|
+    t.integer  "naughty_id",               null: false
+    t.string   "naughty_type",             null: false
+    t.integer  "reason",                   null: false
+    t.text     "explanation"
+    t.integer  "user_id",                  null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "status",       default: 0, null: false
+    t.integer  "moderator_id"
+  end
+
+  add_index "reports", ["naughty_id", "user_id"], name: "index_reports_on_naughty_id_and_user_id", unique: true, using: :btree
+  add_index "reports", ["naughty_type", "naughty_id"], name: "index_reports_on_naughty_type_and_naughty_id", using: :btree
+  add_index "reports", ["status"], name: "index_reports_on_status", using: :btree
+
   create_table "review_likes", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -875,6 +891,8 @@ ActiveRecord::Schema.define(version: 20161129192003) do
   add_foreign_key "media_follows", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
+  add_foreign_key "reports", "users"
+  add_foreign_key "reports", "users", column: "moderator_id"
   add_foreign_key "review_likes", "reviews"
   add_foreign_key "review_likes", "users"
   add_foreign_key "reviews", "library_entries"
