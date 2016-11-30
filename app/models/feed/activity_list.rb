@@ -106,13 +106,13 @@ class Feed
           result = strip_unfound(Feed::ActivityGroup.new(feed, res))
           next if result.nsfw? && sfw_filter
           result
-        end
+        end.compact
       else
         @results ||= enriched_results.map do |res|
           result = strip_unfound(Feed::Activity.new(feed, res))
           next if result.nsfw? && sfw_filter
           result
-        end
+        end.compact
       end
     end
 
