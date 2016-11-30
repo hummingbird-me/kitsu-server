@@ -1,15 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe FavoritePolicy do
-  let(:owner) { build(:user) }
-  let(:other) { build(:user) }
-  let(:favorite) { build(:favorite, user: owner) }
+  let(:owner) { token_for build(:user) }
+  let(:other) { token_for build(:user) }
+  let(:favorite) { build(:favorite, user: owner.resource_owner) }
   subject { described_class }
-
-  permissions :show? do
-    it('should allow owner') { should permit(owner, favorite) }
-    it('should allow other') { should permit(other, favorite) }
-  end
 
   permissions :update?, :create?, :destroy? do
     it('should allow owner') { should permit(owner, favorite) }

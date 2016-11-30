@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe LibraryEntryPolicy do
-  let(:owner) { build(:user) }
-  let(:user) { build(:user) }
-  let(:admin) { create(:user, :admin) }
-  let(:entry) { build(:library_entry, user: owner) }
+  let(:owner) { token_for build(:user) }
+  let(:user) { token_for build(:user) }
+  let(:admin) { token_for create(:user, :admin) }
+  let(:entry) { build(:library_entry, user: owner.resource_owner) }
   subject { described_class }
 
   permissions :create?, :update?, :destroy? do

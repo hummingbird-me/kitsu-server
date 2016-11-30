@@ -1,12 +1,26 @@
 class FollowsController < ApplicationController
   def import_from_facebook
-    Authorization::Assertion::Facebook.new(params[:assertion]).import_friends
+    facebook = Authorization::Assertion::Facebook.new(params[:assertion])
+    render json: serialize_follows(facebook.import_friends)
   end
 
   def import_from_twitter
-    Authorization::Assertion::Twitter.new(
+    twitter = Authorization::Assertion::TwitterAuth.new(
       params[:access_token],
       params[:access_token_secret]
-    ).import_friends
+    )
+    render json: serialize_follows(twitter.import_friends)
+  end
+
+  def serialize_follows(follows)
+    serializer.serialize_to_hash(wrap_in_resources(follows))
+  end
+
+  def wrap_in_resources(follows)
+    follows.map { |follow| FollowResource.new(follow, context) }
+  end
+
+  def serializer
+    JSONAPI::ResourceSerializer.new(FollowResource, include: %w[followed])
   end
 end

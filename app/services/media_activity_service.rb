@@ -48,6 +48,7 @@ class MediaActivityService
       activity.to ||= []
       activity.to << media&.feed
       activity.media ||= media
+      activity.nsfw ||= media.try(:nsfw?)
       activity.foreign_id ||= library_entry
       activity.time ||= Time.now
     end

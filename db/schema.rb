@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115113717) do
+ActiveRecord::Schema.define(version: 20161129192003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(version: 20161115113717) do
     t.boolean  "blocked",           default: false, null: false
     t.integer  "parent_id"
     t.integer  "likes_count",       default: 0,     null: false
+    t.integer  "replies_count",     default: 0,     null: false
   end
 
   create_table "dramas", force: :cascade do |t|
@@ -599,23 +600,24 @@ ActiveRecord::Schema.define(version: 20161115113717) do
   end
 
   create_table "posts", force: :cascade do |t|
-    t.integer  "user_id",                           null: false
+    t.integer  "user_id",                                  null: false
     t.integer  "target_user_id"
-    t.text     "content",                           null: false
-    t.text     "content_formatted",                 null: false
+    t.text     "content",                                  null: false
+    t.text     "content_formatted",                        null: false
     t.integer  "media_id"
     t.string   "media_type"
-    t.boolean  "spoiler",           default: false, null: false
-    t.boolean  "nsfw",              default: false, null: false
-    t.boolean  "blocked",           default: false, null: false
+    t.boolean  "spoiler",                  default: false, null: false
+    t.boolean  "nsfw",                     default: false, null: false
+    t.boolean  "blocked",                  default: false, null: false
     t.integer  "spoiled_unit_id"
     t.string   "spoiled_unit_type"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.datetime "deleted_at"
     t.integer  "target_group_id"
-    t.integer  "post_likes_count",  default: 0,     null: false
-    t.integer  "comments_count",    default: 0,     null: false
+    t.integer  "post_likes_count",         default: 0,     null: false
+    t.integer  "comments_count",           default: 0,     null: false
+    t.integer  "top_level_comments_count", default: 0,     null: false
   end
 
   create_table "pro_membership_plans", force: :cascade do |t|
@@ -666,26 +668,31 @@ ActiveRecord::Schema.define(version: 20161115113717) do
 
   add_index "recommendations", ["user_id"], name: "index_recommendations_on_user_id", using: :btree
 
-  create_table "reviews", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "anime_id"
-    t.text     "content"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.integer  "rating"
-    t.string   "source",           limit: 255
-    t.integer  "rating_story"
-    t.integer  "rating_animation"
-    t.integer  "rating_sound"
-    t.integer  "rating_character"
-    t.integer  "rating_enjoyment"
-    t.string   "summary",          limit: 255
-    t.float    "wilson_score",                 default: 0.0
-    t.integer  "positive_votes",               default: 0
-    t.integer  "total_votes",                  default: 0
+  create_table "review_likes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "review_id",  null: false
+    t.integer  "user_id",    null: false
   end
 
-  add_index "reviews", ["anime_id"], name: "index_reviews_on_anime_id", using: :btree
+  create_table "reviews", force: :cascade do |t|
+    t.integer  "user_id",                                       null: false
+    t.integer  "media_id",                                      null: false
+    t.text     "content",                                       null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.integer  "rating",                                        null: false
+    t.string   "source",            limit: 255
+    t.string   "summary",           limit: 255
+    t.integer  "likes_count",                   default: 0
+    t.string   "media_type"
+    t.text     "content_formatted",                             null: false
+    t.boolean  "legacy",                        default: false, null: false
+    t.integer  "library_entry_id"
+    t.integer  "progress"
+  end
+
+  add_index "reviews", ["media_id"], name: "index_reviews_on_media_id", using: :btree
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
@@ -760,15 +767,11 @@ ActiveRecord::Schema.define(version: 20161115113717) do
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255, default: "",          null: false
     t.string   "name",                        limit: 255
-    t.string   "encrypted_password",          limit: 255, default: "",          null: false
-    t.string   "reset_password_token",        limit: 255
-    t.datetime "reset_password_sent_at"
+    t.string   "password_digest",             limit: 255, default: "",          null: false
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                           default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",          limit: 255
-    t.string   "last_sign_in_ip",             limit: 255
     t.datetime "created_at",                                                    null: false
     t.datetime "updated_at",                                                    null: false
     t.boolean  "recommendations_up_to_date"
@@ -782,10 +785,7 @@ ActiveRecord::Schema.define(version: 20161115113717) do
     t.string   "mal_username",                limit: 255
     t.integer  "life_spent_on_anime",                     default: 0,           null: false
     t.string   "about",                       limit: 500, default: "",          null: false
-    t.string   "confirmation_token",          limit: 255
     t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email",           limit: 255
     t.string   "cover_image_file_name",       limit: 255
     t.string   "cover_image_content_type",    limit: 255
     t.integer  "cover_image_file_size"
@@ -828,15 +828,17 @@ ActiveRecord::Schema.define(version: 20161115113717) do
     t.integer  "ratings_count",                           default: 0,           null: false
     t.integer  "consecutive_days",                        default: 0,           null: false
     t.datetime "last_login"
+    t.integer  "reviews_count",                           default: 0,           null: false
+    t.inet     "ip_addresses",                            default: [],                       array: true
+    t.string   "previous_email"
   end
 
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["facebook_id"], name: "index_users_on_facebook_id", unique: true, using: :btree
   add_index "users", ["to_follow"], name: "index_users_on_to_follow", using: :btree
   add_index "users", ["waifu_id"], name: "index_users_on_waifu_id", using: :btree
 
-  create_table "users_roles", id: false, force: :cascade do |t|
+  create_table "users_roles", force: :cascade do |t|
     t.integer "user_id"
     t.integer "role_id"
   end
@@ -899,5 +901,8 @@ ActiveRecord::Schema.define(version: 20161115113717) do
   add_foreign_key "post_likes", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
+  add_foreign_key "review_likes", "reviews"
+  add_foreign_key "review_likes", "users"
+  add_foreign_key "reviews", "library_entries"
   add_foreign_key "streaming_links", "streamers"
 end

@@ -8,4 +8,6 @@ class ListImportResource < BaseResource
   attributes :error_message, :error_trace
 
   has_one :user
+
+  filters :user_id
 end

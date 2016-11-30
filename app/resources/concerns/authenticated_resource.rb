@@ -1,26 +1,30 @@
 module AuthenticatedResource
   extend ActiveSupport::Concern
 
-  # Get current user from context
-  def current_user
-    @context[:user]
-  end
-
   def token
-    @context[:token]
+    # Sadly this is hardcoded into Pundit-Resources, so we just roll with it
+    @context[:current_user]
   end
 
-  def has_scopes?(*scopes)
-    token && token.acceptable?(scopes + [:all])
+  def actual_current_user
+    token&.resource_owner
   end
-  alias_method :has_scope?, :has_scopes?
+
+  def fetchable_fields
+    all = super
+    policy.try(:visible_attributes, all) || all
+  end
 
   class_methods do
-    def require_scopes!(*scopes)
-      unless has_scopes?(scopes)
-        raise OAuth::ForbiddenTokenError.for_scopes(scopes)
-      end
+    def class_policy(context)
+      Pundit.policy!(context[:current_user], _model_class)
     end
-    alias_method :require_scope!, :require_scopes!
+
+    def updatable_fields(context)
+      policy = class_policy(context)
+      all = super(context)
+      policy.try(:editable_attributes, all) || all
+    end
+    alias_method :creatable_fields, :updatable_fields
   end
 end

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe CommentLikePolicy do
-  let(:user) { build(:user) }
-  let(:like) { build(:comment_like, user: user) }
+  let(:user) { token_for build(:user) }
+  let(:like) { build(:comment_like, user: user.resource_owner) }
   let(:other) { build(:comment_like) }
   subject { described_class }
 

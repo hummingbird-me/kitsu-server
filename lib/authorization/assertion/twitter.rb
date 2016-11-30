@@ -1,10 +1,10 @@
 module Authorization
   module Assertion
-    class TwitterAuth
+    class Twitter
       def initialize(access_token, access_token_secret)
         @access_token = access_token
         @access_token_secret = access_token_secret
-        @twitter_client ||= Twitter::REST::Client.new do |config|
+        @twitter_client ||= ::Twitter::REST::Client.new do |config|
           config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
           config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
           config.access_token        = @access_token

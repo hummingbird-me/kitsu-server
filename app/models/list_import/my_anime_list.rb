@@ -24,43 +24,41 @@
 
 class ListImport
   class MyAnimeList < ListImport
-    # We can only accept files as input right now, not usernames
-    validates :input_text, absence: true
-    # Accept .gz or .xml.gz
-    validates_attachment :input_file, content_type: {
-      content_type: %w[application/gzip application/xml]
-    }, presence: true
+    MAL_HOST = 'https://myanimelist.net'.freeze
+
+    # Only accept usernames, not XML exports
+    validates :input_text, presence: true
+    validates :input_file, absence: true
 
     def count
-      xml.css('user_total_anime, user_total_manga').map(&:content).map(&:to_i).
-        sum
+      data.length
     end
 
     def each
-      xml.css('anime, manga').each do |media|
-        row = Row.new(media)
+      data.each do |row|
+        row = Row.new(row)
         yield row.media, row.data
       end
     end
 
     private
 
-    def gzipped?
-      input_file.content_type.include? 'gzip'
+    def data
+      @data ||= loop.with_index.reduce([]) do |data, (_, index)|
+        page = get(index)
+        break data if page.blank?
+        data + page
+      end
     end
 
-    def xml
-      return @xml if @xml
+    def get(page)
+      request = Typhoeus::Request.get(build_url(page))
+      JSON.parse(request.body)
+    end
 
-      data = open(input_file.path)
-      data = Zlib::GzipReader.new(data) if gzipped?         # Unzip
-      data = data.read
-      # We can't fix Xinil, but we can fix his mess.
-      data.scrub!                                           # Scrub encoding
-      data.gsub!(/&(?!(?:amp|lt|gt|quot|apos);)/, '&amp;')  # Fix escaping
-
-      @xml = Nokogiri::XML(data)
-      @xml
+    def build_url(page)
+      offset = page * 300
+      "#{MAL_HOST}/animelist/#{input_text}/load.json?offset=#{offset}&status=7"
     end
   end
 end

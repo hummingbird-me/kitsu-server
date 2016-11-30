@@ -14,8 +14,6 @@
 #  bio                         :string(140)      default(""), not null
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
-#  confirmation_sent_at        :datetime
-#  confirmation_token          :string(255)      indexed
 #  confirmed_at                :datetime
 #  consecutive_days            :integer          default(0), not null
 #  cover_image_content_type    :string(255)
@@ -23,11 +21,9 @@
 #  cover_image_file_size       :integer
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
-#  current_sign_in_ip          :string(255)
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
-#  encrypted_password          :string(255)      default(""), not null
 #  favorites_count             :integer          default(0), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
@@ -35,11 +31,11 @@
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
+#  ip_addresses                :inet             default([]), is an Array
 #  last_backup                 :datetime
 #  last_login                  :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
-#  last_sign_in_ip             :string(255)
 #  life_spent_on_anime         :integer          default(0), not null
 #  likes_given_count           :integer          default(0), not null
 #  likes_received_count        :integer          default(0), not null
@@ -48,22 +44,22 @@
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
 #  onboarded                   :boolean          default(FALSE), not null
+#  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
+#  previous_email              :string
 #  pro_expires_at              :datetime
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
-#  reset_password_sent_at      :datetime
-#  reset_password_token        :string(255)
+#  reviews_count               :integer          default(0), not null
 #  sfw_filter                  :boolean          default(TRUE)
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
-#  unconfirmed_email           :string(255)
 #  waifu_or_husbando           :string(255)
 #  website                     :string(255)
 #  created_at                  :datetime         not null
@@ -76,11 +72,10 @@
 #
 # Indexes
 #
-#  index_users_on_confirmation_token  (confirmation_token) UNIQUE
-#  index_users_on_email               (email) UNIQUE
-#  index_users_on_facebook_id         (facebook_id) UNIQUE
-#  index_users_on_to_follow           (to_follow)
-#  index_users_on_waifu_id            (waifu_id)
+#  index_users_on_email        (email) UNIQUE
+#  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_to_follow    (to_follow)
+#  index_users_on_waifu_id     (waifu_id)
 #
 
 FactoryGirl.define do

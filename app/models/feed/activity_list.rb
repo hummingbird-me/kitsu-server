@@ -1,17 +1,18 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_number, :page_size, :including
-    %i[limit offset ranking].each do |key|
+    attr_accessor :data, :feed, :page_number, :page_size, :including,
+      :sfw_filter
+    %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
         self.dup.tap { |al| al.data[key] = value }
       end
     end
-    alias_method :per, :limit
 
     def initialize(feed, data = {})
       @feed = feed
       @data = data.with_indifferent_access
       self.including = []
+      self.sfw_filter = false
     end
 
     def page(page_number = nil, id_lt: nil)
@@ -34,6 +35,12 @@ class Feed
       end
     end
 
+    def sfw
+      dup.tap do |al|
+        al.sfw_filter = true
+      end
+    end
+
     def includes(*relationships)
       self.dup.tap do |al|
         al.including = [relationships].flatten.map(&:to_s)
@@ -42,6 +49,11 @@ class Feed
         al.including = al.including.map(&:to_sym)
         al.including += including if including.present?
       end
+    end
+
+    def mark(type, values = true)
+      values = [values] if values.is_a? String
+      send("mark_#{type}", values)
     end
 
     def update_pagination!
@@ -87,16 +99,25 @@ class Feed
       StreamRails::Enrich.new(including)
     end
 
+
     def to_a
       if feed.aggregated? || feed.notification?
-        enriched_results.map do |res|
-          strip_unfound(Feed::ActivityGroup.new(feed, res))
+        @results ||= enriched_results.map do |res|
+          result = strip_unfound(Feed::ActivityGroup.new(feed, res))
+          return nil if result.nsfw? && sfw_filter
+          result
         end
       else
-        enriched_results.map do |res|
-          strip_unfound(Feed::Activity.new(feed, res))
+        @results ||= enriched_results.map do |res|
+          result = strip_unfound(Feed::Activity.new(feed, res))
+          return nil if result.nsfw? && sfw_filter
+          result
         end
       end
+    end
+
+    def empty?
+      to_a.empty?
     end
 
     private

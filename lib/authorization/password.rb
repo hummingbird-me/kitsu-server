@@ -6,7 +6,7 @@ module Authorization
     end
 
     def user!
-      @user if @user && @user.valid_password?(@password)
+      @user if @user&.authenticate(@password)
     end
   end
 end

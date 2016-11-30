@@ -3,24 +3,25 @@
 #
 # Table name: posts
 #
-#  id                :integer          not null, primary key
-#  blocked           :boolean          default(FALSE), not null
-#  comments_count    :integer          default(0), not null
-#  content           :text             not null
-#  content_formatted :text             not null
-#  deleted_at        :datetime
-#  media_type        :string
-#  nsfw              :boolean          default(FALSE), not null
-#  post_likes_count  :integer          default(0), not null
-#  spoiled_unit_type :string
-#  spoiler           :boolean          default(FALSE), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  media_id          :integer
-#  spoiled_unit_id   :integer
-#  target_group_id   :integer
-#  target_user_id    :integer
-#  user_id           :integer          not null
+#  id                       :integer          not null, primary key
+#  blocked                  :boolean          default(FALSE), not null
+#  comments_count           :integer          default(0), not null
+#  content                  :text             not null
+#  content_formatted        :text             not null
+#  deleted_at               :datetime
+#  media_type               :string
+#  nsfw                     :boolean          default(FALSE), not null
+#  post_likes_count         :integer          default(0), not null
+#  spoiled_unit_type        :string
+#  spoiler                  :boolean          default(FALSE), not null
+#  top_level_comments_count :integer          default(0), not null
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  media_id                 :integer
+#  spoiled_unit_id          :integer
+#  target_group_id          :integer
+#  target_user_id           :integer
+#  user_id                  :integer          not null
 #
 # Foreign Keys
 #
@@ -31,8 +32,11 @@
 
 class Post < ApplicationRecord
   include WithActivity
+  include ContentProcessable
 
   acts_as_paranoid
+  resourcify
+  processable :content, LongPipeline
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'
@@ -58,6 +62,7 @@ class Post < ApplicationRecord
       updated_at: updated_at,
       post_likes_count: post_likes_count,
       comments_count: comments_count,
+      nsfw: nsfw,
       to: [
         media&.feed,
         target_user&.feed,
@@ -67,17 +72,12 @@ class Post < ApplicationRecord
     )
   end
 
-  def processed_content
-    @processed_content ||= LongPipeline.call(content)
-  end
-
   def mentioned_users
     User.by_name(processed_content[:mentioned_usernames])
   end
 
-  before_validation do
-    if content_changed?
-      self.content_formatted = processed_content[:output].to_s
-    end
+  before_update do
+    # Always check if the media is NSFW and try to force into NSFWness
+    self.nsfw = media.try(:nsfw?) || false unless nsfw
   end
 end

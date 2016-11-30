@@ -72,13 +72,21 @@ Rails.application.configure do
   config.paperclip_defaults = {
     storage: :s3,
     s3_credentials: {
-      bucket: ENV['AWS_BUCKET'],
+      bucket: 'kitsu-media',
       access_key_id: ENV['AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
     },
-    s3_host_alias: 'static.hummingbird.me',
+    s3_host_alias: 'kitsu-media.s3.amazonaws.com',
     s3_protocol: :https,
+    s3_region: 'us-east-1',
     url: ':s3_alias_url',
-    path: '/:class/:attachment/:id_partition/:style/:filename'
+    path: '/:class/:attachment/:id/:style.:content_type_extension'
   }
+
+  config.action_mailer.default_url_options = {
+    host: 'kitsu.io'
+  }
+
+  # Enable Rack-Attack middleware
+  config.middleware.insert_after ActionDispatch::RemoteIp, Rack::Attack
 end

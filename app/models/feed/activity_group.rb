@@ -10,5 +10,13 @@ class Feed
       end
       super(data)
     end
+
+    def sfw?
+      activities.all?(&:sfw?)
+    end
+
+    def nsfw?
+      !sfw?
+    end
   end
 end

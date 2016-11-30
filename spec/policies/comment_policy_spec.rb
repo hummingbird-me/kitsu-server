@@ -1,15 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe CommentPolicy do
-  let(:owner) { build(:user) }
-  let(:other) { build(:user) }
-  let(:admin) { create(:user, :admin) }
-  let(:comment) { build(:comment, user: owner) }
+  let(:owner) { token_for build(:user) }
+  let(:other) { token_for build(:user) }
+  let(:admin) { token_for create(:user, :admin) }
+  let(:comment) { build(:comment, user: owner.resource_owner) }
   subject { described_class }
 
   permissions :update? do
     context 'with old comment' do
-      let(:comment) { build(:comment, user: owner, created_at: 1.hour.ago) }
+      let(:comment) do
+        build(:comment, user: owner.resource_owner, created_at: 1.hour.ago)
+      end
       it('should not allow owner') { should_not permit(owner, comment) }
       it('should allow admin') { should permit(admin, comment) }
       it('should not allow others') { should_not permit(other, comment) }

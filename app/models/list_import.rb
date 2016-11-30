@@ -63,7 +63,7 @@ class ListImport < ApplicationRecord
     yield({ status: :completed, total: count, current: count })
   rescue StandardError => e
     yield({
-      status: :error,
+      status: :failed,
       total: count,
       error_message: e.message,
       error_trace: e.backtrace.join("\n")

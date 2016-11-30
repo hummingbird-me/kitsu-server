@@ -15,8 +15,7 @@ gem 'connection_pool' # Pool our Redises
 gem 'chewy' # ElasticSearch
 
 # Auth{entication,orization}
-gem 'devise', '~> 3.5'
-gem 'devise-async'
+gem 'bcrypt'
 gem 'doorkeeper'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'pundit'
@@ -25,7 +24,7 @@ gem 'rolify'
 gem 'twitter'
 
 # Attachments
-gem 'paperclip', '~> 4.1'
+gem 'paperclip', '~> 5.0'
 gem 'paperclip-optimizer'
 gem 'delayed_paperclip'
 gem 'image_optim_pack', require: false
@@ -59,13 +58,12 @@ gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 
 # Rack Middleware
 gem 'rack-cors'
+gem 'rack-attack'
 
-# Optimizations and Profiling
-gem 'rack-mini-profiler'
-gem 'flamegraph'
-gem 'stackprof'
+# Optimizations
 gem 'fast_blank' # Faster String#blank?
 gem 'oj' # Blazing-fast JSON parsing
+gem 'oj_mimic_json' # Hook it in place of JSON gem
 
 group :development, :test do
   gem 'foreman' # Start processes
