@@ -22,7 +22,7 @@ class Badge
         if value || block
           const_set('PROGRESS', value || block)
         else
-          return nil unless defined? PROGRESS
+          return nil unless defined? self::PROGRESS
           const_get('PROGRESS')
         end
       end
