@@ -96,6 +96,7 @@ group :test do
   gem 'oauth2'
 end
 
-group :production do
+group :production, :staging do
   gem 'rails_12factor' # Log to stdout, serve assets
+  gem 'skylight' # Send profiling data to Skylight
 end
