@@ -597,6 +597,7 @@ Rails.application.routes.draw do
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
     post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
     post '/users/_recover', to: 'users#recover'
+    post '/users/_prodsync', to: 'users#prod_sync'
   end
 
   use_doorkeeper
