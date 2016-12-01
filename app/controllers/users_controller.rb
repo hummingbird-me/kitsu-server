@@ -13,7 +13,8 @@ class UsersController < ApplicationController
   def prod_sync
     id = params.require(:id)
     values = params.permit(:password_digest, :email, :name, :pro_expires_at)
-    User.find(id).update(values)
+
+    User.find_by(id: id)&.update(values)
 
     render json: id, status: 200
   end
