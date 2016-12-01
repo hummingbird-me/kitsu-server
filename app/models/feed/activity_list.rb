@@ -1,7 +1,7 @@
 class Feed
   class ActivityList
     attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :sfw_filter, :blocking
+      :sfw_filter, :blocked
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
         self.dup.tap { |al| al.data[key] = value }
@@ -43,7 +43,7 @@ class Feed
 
     def blocking(users)
       dup.tap do |al|
-        al.blocking = Set.new(users)
+        al.blocked = Set.new(users)
       end
     end
 
@@ -157,13 +157,12 @@ class Feed
 
     def filter_blocked(activity)
       select_activities(activity) do |act|
-        user_id = act.actor
-        if user_id.is_a?(User)
-          user_id = user_id.id
+        user_id = if act.actor.respond_to?(:id)
+          act.actor.id
         else
-          user_id = act.actor.split(':')[1].to_i
+          act.actor.split(':')[1].to_i
         end
-        !blocking.include?(user_id)
+        !blocked.include?(user_id)
       end
     end
   end
