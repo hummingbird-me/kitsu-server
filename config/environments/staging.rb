@@ -83,5 +83,8 @@ Rails.application.configure do
 
   # Enable Rack-Attack middleware
   config.middleware.insert_after ActionDispatch::RemoteIp, Rack::Attack
+
+  # Enable Skylight in staging
+  config.skylight.environments += ['staging']
 end
 
