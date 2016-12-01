@@ -7,5 +7,7 @@ class ApplicationController < JSONAPI::ResourceController
     super + '/api/edge'
   end
 
+  before_action :validate_token!
+
   force_ssl if Rails.env.production?
 end

@@ -1,10 +1,6 @@
 module DoorkeeperHelpers
   extend ActiveSupport::Concern
 
-  included do
-    before_action :validate_token!
-  end
-
   def current_user
     doorkeeper_token
   end
