@@ -1,4 +1,5 @@
 class ApplicationController < JSONAPI::ResourceController
+  include JSONAPI::Utils
   include DoorkeeperHelpers
   include Pundit::ResourceController
   include MaintainIpAddresses
