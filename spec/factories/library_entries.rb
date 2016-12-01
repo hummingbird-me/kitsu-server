@@ -31,12 +31,12 @@
 
 FactoryGirl.define do
   factory :library_entry do
-    association :media, factory: :anime
+    association :media, factory: :anime, strategy: :build
     user
     status 'planned'
 
     trait :nsfw do
-      association :media, :nsfw, factory: :anime
+      association :media, :nsfw, factory: :anime, strategy: :build
     end
   end
 end

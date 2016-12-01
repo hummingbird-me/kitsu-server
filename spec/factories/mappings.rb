@@ -17,7 +17,7 @@
 
 FactoryGirl.define do
   factory :mapping do
-    association :media, factory: :anime
+    association :media, factory: :anime, strategy: :build
     external_site 'myanimelist'
     external_id { rand(0..50_000) }
   end

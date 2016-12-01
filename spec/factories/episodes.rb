@@ -28,7 +28,7 @@
 
 FactoryGirl.define do
   factory :episode do
-    association :media, factory: :anime
+    association :media, factory: :anime, strategy: :build
     titles { { en_jp: Faker::Name.name } }
     canonical_title 'en_jp'
     synopsis { Faker::Lorem.paragraph(4) }
@@ -38,7 +38,7 @@ FactoryGirl.define do
     sequence(:number)
 
     factory :drama_episode do
-      association :media, factory: :drama
+      association :media, factory: :drama, strategy: :build
     end
   end
 end

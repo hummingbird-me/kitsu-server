@@ -23,7 +23,7 @@
 
 FactoryGirl.define do
   factory :chapter do
-    association :manga, factory: :manga
+    association :manga, factory: :manga, strategy: :build
     titles { { en_jp: Faker::Name.name } }
     canonical_title 'en_jp'
     sequence(:number)
