@@ -515,6 +515,24 @@
 #                                        PATCH     /edge/user-roles/:id(.:format)                                            user_roles#update
 #                                        PUT       /edge/user-roles/:id(.:format)                                            user_roles#update
 #                                        DELETE    /edge/user-roles/:id(.:format)                                            user_roles#destroy
+#           report_relationships_naughty GET       /edge/reports/:report_id/relationships/naughty(.:format)                  reports#show_relationship {:relationship=>"naughty"}
+#                                        PUT|PATCH /edge/reports/:report_id/relationships/naughty(.:format)                  reports#update_relationship {:relationship=>"naughty"}
+#                                        DELETE    /edge/reports/:report_id/relationships/naughty(.:format)                  reports#destroy_relationship {:relationship=>"naughty"}
+#                         report_naughty GET       /edge/reports/:report_id/naughty(.:format)                                naughties#get_related_resource {:relationship=>"naughty", :source=>"reports"}
+#              report_relationships_user GET       /edge/reports/:report_id/relationships/user(.:format)                     reports#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/reports/:report_id/relationships/user(.:format)                     reports#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/reports/:report_id/relationships/user(.:format)                     reports#destroy_relationship {:relationship=>"user"}
+#                            report_user GET       /edge/reports/:report_id/user(.:format)                                   users#get_related_resource {:relationship=>"user", :source=>"reports"}
+#         report_relationships_moderator GET       /edge/reports/:report_id/relationships/moderator(.:format)                reports#show_relationship {:relationship=>"moderator"}
+#                                        PUT|PATCH /edge/reports/:report_id/relationships/moderator(.:format)                reports#update_relationship {:relationship=>"moderator"}
+#                                        DELETE    /edge/reports/:report_id/relationships/moderator(.:format)                reports#destroy_relationship {:relationship=>"moderator"}
+#                       report_moderator GET       /edge/reports/:report_id/moderator(.:format)                              users#get_related_resource {:relationship=>"moderator", :source=>"reports"}
+#                                reports GET       /edge/reports(.:format)                                                   reports#index
+#                                        POST      /edge/reports(.:format)                                                   reports#create
+#                                 report GET       /edge/reports/:id(.:format)                                               reports#show
+#                                        PATCH     /edge/reports/:id(.:format)                                               reports#update
+#                                        PUT       /edge/reports/:id(.:format)                                               reports#update
+#                                        DELETE    /edge/reports/:id(.:format)                                               reports#destroy
 #                               activity DELETE    /edge/activities/:id(.:format)                                            activities#destroy
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        POST      /edge/feeds/:group/:id/_read(.:format)                                    feeds#mark_read
