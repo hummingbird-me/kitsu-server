@@ -21,7 +21,7 @@ class FeedsController < ApplicationController
   def serialize_activities(list)
     FeedSerializerService.new(list, including: including, fields: fields,
                               context: context, base_url: request.url,
-                              sfw_filter: sfw_filter?)
+                              sfw_filter: sfw_filter?, blocked: blocked)
   end
 
   def sfw_filter?
@@ -55,5 +55,9 @@ class FeedsController < ApplicationController
 
   def fields
     params[:fields]&.split(',')
+  end
+
+  def blocked
+    Block.hidden_for(current_user&.resource_owner)
   end
 end

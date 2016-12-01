@@ -114,9 +114,7 @@ class ApplicationPolicy
     end
 
     def blocked_users
-      blockeds = Block.where(user: user).pluck(:blocked_id)
-      blockers = Block.where(blocked_id: user).pluck(:user_id)
-      (blockeds + blockers).uniq
+      Block.hidden_for(user)
     end
   end
 end

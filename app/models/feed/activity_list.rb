@@ -1,7 +1,7 @@
 class Feed
   class ActivityList
     attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :sfw_filter
+      :sfw_filter, :blocking
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
         self.dup.tap { |al| al.data[key] = value }
@@ -38,6 +38,12 @@ class Feed
     def sfw
       dup.tap do |al|
         al.sfw_filter = true
+      end
+    end
+
+    def blocking(users)
+      dup.tap do |al|
+        al.blocking = Set.new(users)
       end
     end
 
@@ -99,18 +105,19 @@ class Feed
       StreamRails::Enrich.new(including)
     end
 
-
     def to_a
       if feed.aggregated? || feed.notification?
         @results ||= enriched_results.map do |res|
           result = strip_unfound(Feed::ActivityGroup.new(feed, res))
-          next if result.nsfw? && sfw_filter
+          return nil if result.nsfw? && sfw_filter
+          result = filter_blocked(result)
           result
         end.compact
       else
         @results ||= enriched_results.map do |res|
           result = strip_unfound(Feed::Activity.new(feed, res))
-          next if result.nsfw? && sfw_filter
+          return nil if result.nsfw? && sfw_filter
+          result = filter_blocked(result)
           result
         end.compact
       end
@@ -137,6 +144,21 @@ class Feed
             act.delete_field(key) if act[key].is_a? String
           end
         end
+      end
+    end
+
+    def select_activities(activity, &block)
+      if activity.respond_to?(:activities)
+        activity.activities = activity.activities.select(&block)
+      elsif block.call(activity)
+        activity
+      end
+    end
+
+    def filter_blocked(activity)
+      filter_activities(activity) do |act|
+        user_id = act.actor.split(':')[1]
+        !blocking.include?(user_id)
       end
     end
   end

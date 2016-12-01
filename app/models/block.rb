@@ -24,4 +24,10 @@
 class Block < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :blocked, class_name: 'User', required: true
+
+  def self.hidden_for(user)
+    blockeds = where(user: user).pluck(:blocked_id)
+    blockers = where(blocked_id: user).pluck(:user_id)
+    (blockeds + blockers).uniq
+  end
 end

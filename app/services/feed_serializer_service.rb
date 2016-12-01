@@ -22,15 +22,16 @@ class FeedSerializerService
   end
 
   attr_reader :activity_list, :including, :fields, :context, :base_url,
-    :sfw_filter
+    :sfw_filter, :blocking
 
   def initialize(activity_list, including: nil, fields: nil, context: nil,
-                 sfw_filter: nil, base_url:)
+                 sfw_filter: nil, blocking: nil, base_url:)
     @activity_list = activity_list
     @including = including || []
     @fields = fields || []
     @context = context || {}
     @sfw_filter = sfw_filter || false
+    @blocking = blocking || []
     @base_url = base_url
   end
 
@@ -45,6 +46,7 @@ class FeedSerializerService
   def activities
     activities = activity_list.includes(stream_enrichment_fields)
     activities = activities.sfw if sfw_filter
+    activities = activities.blocking(blocking)
     activities.to_a
   end
 
