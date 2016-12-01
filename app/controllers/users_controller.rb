@@ -14,5 +14,7 @@ class UsersController < ApplicationController
     id = params.require(:id)
     values = params.permit(:password_digest, :email, :name, :pro_expires_at)
     User.find(id).update(values)
+
+    render json: id, status: 200
   end
 end
