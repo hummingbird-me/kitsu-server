@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
+  include Pundit
+
   http_basic_authenticate_with name: 'Production',
     password: ENV['STAGING_SYNC_SECRET'], only: :prod_sync
   skip_before_action :validate_token!, only: :prod_sync
+  skip_after_action :enforce_policy_use, only: :prod_sync
 
   def recover
     query = params[:_json]
