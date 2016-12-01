@@ -14,7 +14,11 @@ module DoorkeeperHelpers
   def validate_token!
     # If we have a token, but it's not valid, explode
     if doorkeeper_token && !doorkeeper_token.accessible?
-      jsonapi_render_errors json: [{ title: 'Invalid token' }], status: 403
+      render json: {
+        errors: [
+          { title: 'Invalid token', status: "403"}
+        ]
+      }, status: 403
     end
   end
 
