@@ -69,5 +69,8 @@ module Kitsu
 
     # Redis caching
     config.cache_store = :redis_store, ENV['REDIS_URL'], { expires_in: 1.day }
+
+    # Enable Skylight in staging
+    config.skylight.environments += ['staging']
   end
 end
