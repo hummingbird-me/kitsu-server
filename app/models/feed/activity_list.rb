@@ -157,7 +157,12 @@ class Feed
 
     def filter_blocked(activity)
       select_activities(activity) do |act|
-        user_id = act.actor.split(':')[1].to_i
+        user_id = act.actor
+        if user_id.is_a?(User)
+          user_id = user.id
+        else
+          user_id = act.actor.split(':')[1].to_i
+        end
         !blocking.include?(user_id)
       end
     end
