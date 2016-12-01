@@ -6,7 +6,15 @@ module Authorization
     end
 
     def user!
-      @user if @user&.authenticate(@password)
+      @user if @user&.authenticate(@password) && is_allowed?
+    end
+
+    def is_allowed?
+      if Rails.env.staging?
+        @user.pro? || @user.has_role?(:admin)
+      else
+        true
+      end
     end
   end
 end
