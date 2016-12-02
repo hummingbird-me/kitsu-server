@@ -39,6 +39,7 @@ class Character < ApplicationRecord
 
   belongs_to :primary_media, polymorphic: true
   has_many :castings
+  has_many :quotes, dependent: :destroy
   has_many :media_characters, dependent: :destroy
   has_many :anime_characters, dependent: :destroy
   has_many :manga_characters, dependent: :destroy

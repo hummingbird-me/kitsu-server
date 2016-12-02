@@ -8,6 +8,7 @@ class AnimeResource < MediaResource
   has_many :anime_productions
   has_many :anime_characters
   has_many :anime_staff
+  has_many :quotes
 
   # ElasticSearch hookup
   index MediaIndex::Anime
