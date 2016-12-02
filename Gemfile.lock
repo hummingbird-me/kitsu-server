@@ -337,8 +337,6 @@ GEM
       redis (>= 2.2)
     rinku (2.0.2)
     rolify (5.1.0)
-    rollbar (2.13.3)
-      multi_json
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
       rspec-expectations (~> 3.4.0)
@@ -370,6 +368,8 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4.1)
+    sentry-raven (2.1.4)
+      faraday (>= 0.7.6, < 0.10.x)
     shellany (0.0.1)
     shoulda-matchers (3.1.1)
       activesupport (>= 4.0.0)
@@ -493,11 +493,11 @@ DEPENDENCIES
   redis-rails
   rinku
   rolify
-  rollbar
   rspec-rails
   rspec-sidekiq
   ruby-progressbar
   sanitize
+  sentry-raven
   shoulda-matchers
   sidekiq (~> 3.4.2)
   sidetiq
