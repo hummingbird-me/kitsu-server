@@ -16,7 +16,8 @@ class ApplicationController < JSONAPI::ResourceController
   before_action :tag_sentry_context
 
   def tag_sentry_context
-    Raven.user_context(id: current_user.resource_owner_id)
+    user = current_user&.resource_owner
+    Raven.user_context(id: user.id, name: user.name) if user
     Raven.extra_context(url: request.url)
   end
 end
