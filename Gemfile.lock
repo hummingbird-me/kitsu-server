@@ -337,6 +337,8 @@ GEM
       redis (>= 2.2)
     rinku (2.0.2)
     rolify (5.1.0)
+    rollbar (2.13.3)
+      multi_json
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
       rspec-expectations (~> 3.4.0)
@@ -491,6 +493,7 @@ DEPENDENCIES
   redis-rails
   rinku
   rolify
+  rollbar
   rspec-rails
   rspec-sidekiq
   ruby-progressbar

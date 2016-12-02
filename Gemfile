@@ -65,6 +65,8 @@ gem 'fast_blank' # Faster String#blank?
 gem 'oj' # Blazing-fast JSON parsing
 gem 'oj_mimic_json' # Hook it in place of JSON gem
 
+gem 'rollbar' # Send error data to Rollbar
+
 group :development, :test do
   gem 'foreman' # Start processes
   gem 'dotenv-rails' # Load default ENV
