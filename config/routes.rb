@@ -599,6 +599,8 @@ Rails.application.routes.draw do
     post '/users/_recover', to: 'users#recover'
   end
 
+  get '/debug/dump_all', to: 'debug#dump_all'
+  post '/debug/trace_on', to: 'debug#trace_on'
   post '/user/_prodsync', to: 'users#prod_sync'
   use_doorkeeper
 
