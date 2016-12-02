@@ -4,13 +4,21 @@ class UsersController < ApplicationController
   http_basic_authenticate_with name: 'Production',
     password: ENV['STAGING_SYNC_SECRET'], only: :prod_sync
   skip_before_action :validate_token!, only: :prod_sync
-  skip_after_action :enforce_policy_use, only: :prod_sync
+  skip_after_action :enforce_policy_use, only: %i[prod_sync recover]
 
   def recover
-    query = params[:_json]
+    query = params[:username]
+    unless query.present?
+      render json: { errors: [{ title: 'Username missing', status: '400' }] }
+      return
+    end
     user = User.find_for_auth(query)
+    unless user.present?
+      render json: { errors: [{ title: 'User not found', status: '400' }] }
+      return
+    end
     UserMailer.password_reset(user)
-    render json: query
+    render json: { username: query }
   end
 
   def prod_sync
