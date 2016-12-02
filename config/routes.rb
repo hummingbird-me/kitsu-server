@@ -601,6 +601,7 @@ Rails.application.routes.draw do
 
   get '/debug/dump_all', to: 'debug#dump_all'
   post '/debug/trace_on', to: 'debug#trace_on'
+  get '/debug/gc_info', to: 'debug#gc_info'
   post '/user/_prodsync', to: 'users#prod_sync'
   use_doorkeeper
 

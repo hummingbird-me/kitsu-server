@@ -21,4 +21,8 @@ class DebugController < ApplicationController
     ObjectSpace.trace_object_allocations_start
     render json: { trace: 'on' }
   end
+
+  def gc_info
+    render json: GC.latest_gc_info.as_json
+  end
 end
