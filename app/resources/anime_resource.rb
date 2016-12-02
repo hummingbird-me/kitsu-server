@@ -4,6 +4,7 @@ class AnimeResource < MediaResource
   attributes :show_type, :youtube_video_id, :age_rating, :age_rating_guide
   attribute :nsfw, delegate: :nsfw?
   has_many :streaming_links
+  has_many :quotes
 
   # ElasticSearch hookup
   index MediaIndex::Anime

@@ -41,6 +41,7 @@ class Manga < ApplicationRecord
   alias_attribute :progress_limit, :chapter_count
 
   has_many :chapters
+  has_many :quotes, dependent: :destroy
 
   def unit(number)
     chapters.where(number: number).first
