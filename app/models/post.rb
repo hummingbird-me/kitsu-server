@@ -83,5 +83,6 @@ class Post < ApplicationRecord
   before_update do
     # Always check if the media is NSFW and try to force into NSFWness
     self.nsfw = media.try(:nsfw?) || false unless nsfw
+    true
   end
 end
