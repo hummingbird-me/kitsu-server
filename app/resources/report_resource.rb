@@ -4,4 +4,6 @@ class ReportResource < BaseResource
   has_one :naughty, polymorphic: true
   has_one :user
   has_one :moderator
+
+  filters :user_id, :naughty_id, :naughty_type
 end
