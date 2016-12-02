@@ -202,7 +202,7 @@ class User < ApplicationRecord
     if confirmed_at_changed?
       self.previous_email = nil
     end
-    if email_changed?
+    if email_changed? && !Rails.env.staging?
       self.previous_email = email_was
       self.confirmed_at = nil
       UserMailer.confirmation(self).deliver_now
