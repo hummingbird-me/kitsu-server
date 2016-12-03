@@ -24,6 +24,8 @@ class Follow < ApplicationRecord
   belongs_to :followed, class_name: 'User', required: true,
     counter_cache: :followers_count, touch: true
 
+  validates :followed, uniqueness: { scope: :follower_id }
+
   def stream_activity
     follower.aggregated_feed.activities.new(
       actor: follower,
