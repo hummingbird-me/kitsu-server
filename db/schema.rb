@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161130210427) do
+ActiveRecord::Schema.define(version: 20161203192738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20161130210427) do
     t.float    "average_rating"
     t.integer  "user_count",                            default: 0,       null: false
     t.string   "age_rating_guide",          limit: 255
-    t.integer  "show_type"
+    t.integer  "show_type",                             default: 1,       null: false
     t.date     "start_date"
     t.date     "end_date"
     t.hstore   "rating_frequencies",                    default: {},      null: false
