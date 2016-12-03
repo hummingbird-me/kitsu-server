@@ -39,20 +39,11 @@ RSpec.describe Manga, type: :model do
   subject { build(:manga) }
   include_examples 'media'
 
-  describe '#default_progress_limit' do
-    context 'with a run length' do
-      it 'should return a number based on the length' do
-        subject.start_date = 12.weeks.ago.to_date
-        subject.end_date = Date.today
-        expect(subject.default_progress_limit).to eq(11)
-      end
-    end
-    context 'without a run length' do
-      it 'should return 200' do
-        subject.start_date = nil
-        subject.end_date = nil
-        expect(subject.default_progress_limit).to eq(200)
-      end
+  context '#default_progress_limit' do
+    it 'should return 5000' do
+      subject.start_date = nil
+      subject.end_date = nil
+      expect(subject.default_progress_limit).to eq(5000)
     end
   end
 end
