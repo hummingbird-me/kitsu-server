@@ -29,6 +29,9 @@ class CommentLike < ApplicationRecord
   belongs_to :comment, required: true, counter_cache: :likes_count
 
   def stream_activity
-    comment.post.feed.activities.new
+    comment.post.feed.activities.new(
+      target: comment,
+      to: [comment.user.notifications]
+    )
   end
 end

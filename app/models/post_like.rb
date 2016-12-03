@@ -32,6 +32,9 @@ class PostLike < ApplicationRecord
   counter_culture [:post, :user], column_name: 'likes_received_count'
 
   def stream_activity
-    post.feed.activities.new
+    post.feed.activities.new(
+      target: post,
+      to: [post.user.notifications]
+    )
   end
 end

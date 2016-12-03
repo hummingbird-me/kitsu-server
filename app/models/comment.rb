@@ -56,7 +56,12 @@ class Comment < ApplicationRecord
       likes_count: likes_count,
       replies_count: replies_count,
       post_id: post_id,
-      to: mentioned_users.map(&:notifications)
+      target: post,
+      to: [
+        post.user.notifications,
+        parent&.user&.notifications,
+        *mentioned_users.map(&:notifications)
+      ].compact
     )
   end
 
