@@ -3,5 +3,6 @@ namespace :counters do
   task :fix => :environment do
     CounterCacheResets.posts
     CounterCacheResets.media_user_counts
+    CounterCacheResets.reviews
   end
 end

@@ -14,6 +14,10 @@ module CounterCacheResets
     execute sql_for(Manga, :library_entries)
   end
 
+  def reviews
+    execute sql_for(User, :reviews)
+  end
+
   def clean!
     tables = ActiveRecord::Base.connection.tables.grep(/_count\z/)
     execute tables.map { |t| "DROP TABLE #{t}" }
