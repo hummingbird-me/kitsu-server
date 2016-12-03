@@ -9,12 +9,12 @@ class UsersController < ApplicationController
   def recover
     query = params[:username]
     unless query.present?
-      render json: { errors: [{ title: 'Username missing', status: '400' }] }
+      render json: { errors: [{ title: 'Username missing', status: '400' }] }, status: 400
       return
     end
     user = User.find_for_auth(query)
     unless user.present?
-      render json: { errors: [{ title: 'User not found', status: '400' }] }
+      render json: { errors: [{ title: 'User not found', status: '400' }] }, status: 400
       return
     end
     UserMailer.password_reset(user)
