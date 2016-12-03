@@ -47,12 +47,8 @@ class Manga < ApplicationRecord
   end
 
   def default_progress_limit
-    # Biweekly with a margin
-    if run_length
-      (run_length / 14) + 5
-    else
-      200
-    end
+    # TODO: Actually provide good logic for this
+    5000
   end
 
   def slug_candidates
