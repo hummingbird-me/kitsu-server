@@ -52,16 +52,17 @@ class Comment < ApplicationRecord
   validates :content, length: { maximum: 9_000 }
 
   def stream_activity
+    to = []
+    to << post.user.notifications unless post.user == user
+    to << parent&.user&.notifications unless parent&.user == user
+    to += mentioned_users.map(&:notifications)
+    to.compact!
     post.feed.activities.new(
       likes_count: likes_count,
       replies_count: replies_count,
       post_id: post_id,
       target: post,
-      to: [
-        post.user.notifications,
-        parent&.user&.notifications,
-        *mentioned_users.map(&:notifications)
-      ].compact
+      to: to
     )
   end
 
