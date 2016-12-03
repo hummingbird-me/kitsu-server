@@ -10,4 +10,5 @@ class ActivityResource < BaseResource
   has_one :unit, polymorphic: true
   has_one :media, polymorphic: true
   has_one :subject, polymorphic: true
+  has_one :target, polymorphic: true
 end
