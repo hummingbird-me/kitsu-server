@@ -11,7 +11,7 @@ module Authorization
 
     def is_allowed?
       if Rails.env.staging?
-        @user.pro? || @user.has_role?(:admin)
+        @user.pro? || @user.has_role?(:admin) || @user.has_role?(:client_dev)
       else
         true
       end
