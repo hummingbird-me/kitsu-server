@@ -59,7 +59,7 @@ class MediaResource < BaseResource
           query: {
             multi_match: {
               fields: %w[
-                titles.* abbreviated_titles synopsis actors characters
+                titles.* abbreviated_titles synopsis people characters
               ],
               query: values.join(','),
               fuzziness: 2,
