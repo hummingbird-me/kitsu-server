@@ -80,7 +80,7 @@ class Post < ApplicationRecord
     User.by_name(processed_content[:mentioned_usernames])
   end
 
-  before_update do
+  before_save do
     # Always check if the media is NSFW and try to force into NSFWness
     self.nsfw = media.try(:nsfw?) || false unless nsfw
     true
