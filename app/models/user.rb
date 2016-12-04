@@ -128,7 +128,7 @@ class User < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png image/gif]
   }
   validates_attachment :cover_image, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png image/gif]
+    content_type: %w[image/jpg image/jpeg image/png]
   }
 
   scope :by_name, -> (*names) {
