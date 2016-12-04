@@ -33,7 +33,7 @@ class FeedsController < ApplicationController
   end
 
   def activity_list
-    @feed_data ||= auto_mark(paginate(feed.activities))
+    @feed_data ||= auto_mark(filter_id(paginate(feed.activities)))
   end
 
   def paginate(list)
@@ -41,6 +41,11 @@ class FeedsController < ApplicationController
     limit = params.dig(:page, :limit)&.to_i
     list = list.page(id_lt: cursor) if cursor
     list = list.limit(limit) if limit
+    list
+  end
+
+  def filter_id(list)
+    list = list.where_id(*id_query) if id_query
     list
   end
 
@@ -55,6 +60,12 @@ class FeedsController < ApplicationController
 
   def fields
     params[:fields]&.split(',')
+  end
+
+  def id_query
+    return unless params.dig(:filter, :id).is_a? Hash
+    operator, id = params.dig(:filter, :id).to_a.flatten
+    [operator.to_sym, id]
   end
 
   def blocked
