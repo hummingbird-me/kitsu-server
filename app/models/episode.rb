@@ -33,7 +33,7 @@ class Episode < ApplicationRecord
 
   has_attached_file :thumbnail
 
-  validates :media, presence: true
+  validates :media, presence: true, polymorphism: { type: Media }
   validates :number, presence: true
   validates :season_number, presence: true
   validates :synopsis, length: { in: 50..600 }, allow_blank: true

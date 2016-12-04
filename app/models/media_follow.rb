@@ -20,6 +20,8 @@ class MediaFollow < ActiveRecord::Base
   belongs_to :user, required: true, touch: true
   belongs_to :media, required: true, polymorphic: true
 
+  validates :media, polymorphism: { type: Media }
+
   after_create do
     user.timeline.follow(media.feed)
   end

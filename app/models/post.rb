@@ -56,7 +56,7 @@ class Post < ApplicationRecord
     message: 'must be true if spoiled_unit is provided'
   }, if: :spoiled_unit
   validates :content, length: { maximum: 9_000 }
-  validates :media, polymorphism: { type: Media }
+  validates :media, polymorphism: { type: Media }, allow_blank: true
 
   def feed
     Feed.post(id)

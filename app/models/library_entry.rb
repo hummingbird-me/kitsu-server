@@ -52,6 +52,7 @@ class LibraryEntry < ApplicationRecord
 
   validates :user, :media, :status, :progress, :reconsume_count,
     presence: true
+  validates :media, polymorphism: { type: Media }
   validates :user_id, uniqueness: { scope: %i[media_type media_id] }
   validates :rating, numericality: {
     greater_than: 0,

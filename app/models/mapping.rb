@@ -21,6 +21,7 @@ class Mapping < ApplicationRecord
   validates :external_site, :external_id, presence: true
   # Right now, we want to ensure only one external id per media per site
   validates :media_id, uniqueness: { scope: %i[media_type external_site] }
+  validates :media, polymorphism: { type: Media }
 
   def self.lookup(site, id)
     find_by(external_site: site, external_id: id).try(:media)

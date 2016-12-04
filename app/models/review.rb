@@ -42,6 +42,7 @@ class Review < ApplicationRecord
   validates :summary, absence: true, unless: :legacy?
   validates :summary, presence: true, if: :legacy?
   validates :media_id, uniqueness: { scope: :user_id }
+  validates :media, polymorphism: { type: Media }
 
   resourcify
 
