@@ -73,7 +73,7 @@ class Post < ApplicationRecord
         target_user&.feed,
         target_user&.notifications,
         *mentioned_users.map(&:notifications)
-      ].compact
+      ].compact - [user.notifications]
     )
   end
 

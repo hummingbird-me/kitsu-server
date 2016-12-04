@@ -62,7 +62,7 @@ class Comment < ApplicationRecord
       replies_count: replies_count,
       post_id: post_id,
       target: post,
-      to: to
+      to: to - [user.notifications]
     )
   end
 
