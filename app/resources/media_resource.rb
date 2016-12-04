@@ -61,7 +61,7 @@ class MediaResource < BaseResource
               fields: %w[
                 titles.* abbreviated_titles synopsis people characters
               ],
-              query: values.join(','),
+              query: values.join(' '),
               fuzziness: 2,
               max_expansions: 15,
               prefix_length: 2
