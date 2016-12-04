@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -16,6 +15,7 @@
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
 #  confirmed_at                :datetime
+#  consecutive_days            :integer          default(0), not null
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
@@ -33,6 +33,7 @@
 #  import_status               :integer
 #  ip_addresses                :inet             default([]), is an Array
 #  last_backup                 :datetime
+#  last_login                  :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
 #  life_spent_on_anime         :integer          default(0), not null
@@ -76,7 +77,6 @@
 #  index_users_on_to_follow    (to_follow)
 #  index_users_on_waifu_id     (waifu_id)
 #
-# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :user do

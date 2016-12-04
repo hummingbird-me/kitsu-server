@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -16,6 +15,7 @@
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
 #  confirmed_at                :datetime
+#  consecutive_days            :integer          default(0), not null
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
@@ -33,6 +33,7 @@
 #  import_status               :integer
 #  ip_addresses                :inet             default([]), is an Array
 #  last_backup                 :datetime
+#  last_login                  :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
 #  life_spent_on_anime         :integer          default(0), not null
@@ -76,7 +77,6 @@
 #  index_users_on_to_follow    (to_follow)
 #  index_users_on_waifu_id     (waifu_id)
 #
-# rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
   PAST_NAMES_LIMIT = 10
@@ -187,6 +187,10 @@ class User < ApplicationRecord
     @notifications ||= Feed.notifications(id)
   end
 
+  def finished?
+    email.present? && bio.present?
+  end
+
   after_create do
     UserMailer.confirmation(self).deliver_now
     aggregated_feed.follow(feed)
@@ -199,6 +203,19 @@ class User < ApplicationRecord
       # Push it onto the front and limit
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
     end
+
+    if last_login_changed?
+      # Count consecutive days
+      between = (
+        last_login.beginning_of_day - last_login_was.beginning_of_day
+      ) / 1.days
+      if between > 1
+        self.consecutive_days = 1
+      elsif between == 1
+        self.consecutive_days += 1
+      end
+    end
+
     if confirmed_at_changed?
       self.previous_email = nil
     end

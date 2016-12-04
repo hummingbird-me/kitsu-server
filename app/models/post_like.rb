@@ -24,7 +24,7 @@ class PostLike < ApplicationRecord
   include WithActivity
 
   belongs_to :user, required: true
-  belongs_to :post, required: true, counter_cache: true
+  belongs_to :post, required: true, counter_cache: true, touch: true
 
   validates :post, uniqueness: { scope: :user_id }
 

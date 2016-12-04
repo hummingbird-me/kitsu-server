@@ -186,6 +186,16 @@
 #                                        PATCH     /edge/users/:id(.:format)                                                 users#update
 #                                        PUT       /edge/users/:id(.:format)                                                 users#update
 #                                        DELETE    /edge/users/:id(.:format)                                                 users#destroy
+#          bestowment_relationships_user GET       /edge/bestowment/:bestowment_id/relationships/user(.:format)              bestowments#show_relationship {:relationship=>"user"}
+#                                        PUT|PATCH /edge/bestowment/:bestowment_id/relationships/user(.:format)              bestowments#update_relationship {:relationship=>"user"}
+#                                        DELETE    /edge/bestowment/:bestowment_id/relationships/user(.:format)              bestowments#destroy_relationship {:relationship=>"user"}
+#                        bestowment_user GET       /edge/bestowment/:bestowment_id/user(.:format)                            users#get_related_resource {:relationship=>"user", :source=>"bestowments"}
+#                       bestowment_index GET       /edge/bestowment(.:format)                                                bestowment#index
+#                                        POST      /edge/bestowment(.:format)                                                bestowment#create
+#                             bestowment GET       /edge/bestowment/:id(.:format)                                            bestowment#show
+#                                        PATCH     /edge/bestowment/:id(.:format)                                            bestowment#update
+#                                        PUT       /edge/bestowment/:id(.:format)                                            bestowment#update
+#                                        DELETE    /edge/bestowment/:id(.:format)                                            bestowment#destroy
 #           import_from_facebook_follows POST      /edge/follows/import_from_facebook(.:format)                              follows#import_from_facebook
 #            import_from_twitter_follows POST      /edge/follows/import_from_twitter(.:format)                               follows#import_from_twitter
 #                                follows GET       /edge/follows(.:format)                                                   follows#index
@@ -565,6 +575,7 @@ Rails.application.routes.draw do
     jsonapi_resources :manga
     jsonapi_resources :drama
     jsonapi_resources :users
+    jsonapi_resources :bestowment
     jsonapi_resources :follows do
       post :import_from_facebook, on: :collection
       post :import_from_twitter, on: :collection

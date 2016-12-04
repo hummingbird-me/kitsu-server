@@ -1,0 +1,1 @@
+class BestowmentController < ApplicationController; end

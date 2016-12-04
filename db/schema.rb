@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20161203192738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_trgm"
 
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
@@ -68,6 +69,26 @@ ActiveRecord::Schema.define(version: 20161203192738) do
 
   add_index "anime_producers", ["anime_id"], name: "index_anime_producers_on_anime_id", using: :btree
   add_index "anime_producers", ["producer_id"], name: "index_anime_producers_on_producer_id", using: :btree
+
+  create_table "bestowment_cashes", force: :cascade do |t|
+    t.string   "badge_id",               null: false
+    t.integer  "rank"
+    t.integer  "number",     default: 0, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "bestowments", force: :cascade do |t|
+    t.string   "badge_id",                null: false
+    t.integer  "user_id",                 null: false
+    t.integer  "progress",    default: 0, null: false
+    t.integer  "rank",        default: 0
+    t.datetime "bestowed_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "title"
+    t.text     "description"
+  end
 
   create_table "blocks", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -836,6 +857,8 @@ ActiveRecord::Schema.define(version: 20161203192738) do
     t.integer  "favorites_count",                         default: 0,           null: false
     t.integer  "posts_count",                             default: 0,           null: false
     t.integer  "ratings_count",                           default: 0,           null: false
+    t.integer  "consecutive_days",                        default: 0,           null: false
+    t.datetime "last_login"
     t.integer  "reviews_count",                           default: 0,           null: false
     t.inet     "ip_addresses",                            default: [],                       array: true
     t.string   "previous_email"
@@ -894,6 +917,7 @@ ActiveRecord::Schema.define(version: 20161203192738) do
   add_index "votes", ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true, using: :btree
   add_index "votes", ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type", using: :btree
 
+  add_foreign_key "bestowments", "users"
   add_foreign_key "blocks", "users"
   add_foreign_key "blocks", "users", column: "blocked_id"
   add_foreign_key "comment_likes", "comments"
@@ -904,6 +928,8 @@ ActiveRecord::Schema.define(version: 20161203192738) do
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
   add_foreign_key "media_follows", "users"
+  add_foreign_key "post_likes", "posts"
+  add_foreign_key "post_likes", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "reports", "users"
