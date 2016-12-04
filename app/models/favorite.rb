@@ -26,5 +26,5 @@ class Favorite < ApplicationRecord
   belongs_to :user, required: true, counter_cache: true
   belongs_to :item, polymorphic: true, required: true
 
-  validates :media, polymorphism: { type: [Media, Character, Person] }
+  validates :item, polymorphism: { type: [Media, Character, Person] }
 end
