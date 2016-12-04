@@ -10,6 +10,7 @@ class UserResource < BaseResource
   attributes(*PRIVATE_FIELDS)
 
   has_one :waifu
+  has_one :pinned_post
   has_many :followers
   has_many :following
   has_many :blocks

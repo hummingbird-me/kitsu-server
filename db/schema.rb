@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161203192738) do
+ActiveRecord::Schema.define(version: 20161204092247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -839,6 +839,7 @@ ActiveRecord::Schema.define(version: 20161203192738) do
     t.integer  "reviews_count",                           default: 0,           null: false
     t.inet     "ip_addresses",                            default: [],                       array: true
     t.string   "previous_email"
+    t.integer  "pinned_post_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -908,8 +909,8 @@ ActiveRecord::Schema.define(version: 20161203192738) do
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "reports", "users"
   add_foreign_key "reports", "users", column: "moderator_id"
-  add_foreign_key "review_likes", "reviews"
   add_foreign_key "review_likes", "users"
   add_foreign_key "reviews", "library_entries"
   add_foreign_key "streaming_links", "streamers"
+  add_foreign_key "users", "posts", column: "pinned_post_id"
 end
