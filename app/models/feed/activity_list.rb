@@ -109,14 +109,14 @@ class Feed
       if feed.aggregated? || feed.notification?
         @results ||= enriched_results.map do |res|
           result = strip_unfound(Feed::ActivityGroup.new(feed, res))
-          next nil if result.nsfw? && sfw_filter
+          next if result.nsfw? && sfw_filter
           # result = filter_blocked(result)
           result
         end.compact
       else
         @results ||= enriched_results.map do |res|
           result = strip_unfound(Feed::Activity.new(feed, res))
-          next nil if result.nsfw? && sfw_filter
+          next if result.nsfw? && sfw_filter
           # result = filter_blocked(result)
           result
         end.compact
