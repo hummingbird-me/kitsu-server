@@ -56,6 +56,8 @@ class Comment < ApplicationRecord
     to << post.user.notifications unless post.user == user
     to << parent&.user&.notifications unless parent&.user == user
     to += mentioned_users.map(&:notifications)
+    to += post.stream_feeds
+    to += post.user.feed
     to.compact!
     post.feed.activities.new(
       likes_count: likes_count,

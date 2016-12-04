@@ -62,18 +62,22 @@ class Post < ApplicationRecord
     Feed.post(id)
   end
 
+  def stream_feeds
+    [
+      media&.feed,
+      target_user&.feed,
+      target_user&.notifications,
+      *mentioned_users.map(&:notifications)
+    ].compact - [user.notifications]
+  end
+
   def stream_activity
     user.feed.activities.new(
       updated_at: updated_at,
       post_likes_count: post_likes_count,
       comments_count: comments_count,
       nsfw: nsfw,
-      to: [
-        media&.feed,
-        target_user&.feed,
-        target_user&.notifications,
-        *mentioned_users.map(&:notifications)
-      ].compact - [user.notifications]
+      to: stream_to
     )
   end
 
