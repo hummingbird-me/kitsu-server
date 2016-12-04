@@ -117,6 +117,7 @@ class User < ApplicationRecord
     large: '-quality 60 -strip'
   }
   has_attached_file :cover_image
+  process_in_background :cover_image
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
