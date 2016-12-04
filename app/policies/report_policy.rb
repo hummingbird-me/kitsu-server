@@ -11,7 +11,7 @@ class ReportPolicy < ApplicationPolicy
     false
   end
 
-  class Scope
+  class Scope < Scope
     def resolve
       if is_global_admin?
         scope
