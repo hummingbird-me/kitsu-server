@@ -538,6 +538,10 @@
 #                                        POST      /edge/feeds/:group/:id/_read(.:format)                                    feeds#mark_read
 #                                        POST      /edge/feeds/:group/:id/_seen(.:format)                                    feeds#mark_seen
 #                         users__recover POST      /edge/users/_recover(.:format)                                            users#recover
+#                         debug_dump_all GET       /debug/dump_all(.:format)                                                 debug#dump_all
+#                         debug_trace_on POST      /debug/trace_on(.:format)                                                 debug#trace_on
+#                          debug_gc_info GET       /debug/gc_info(.:format)                                                  debug#gc_info
+#                         user__prodsync POST      /user/_prodsync(.:format)                                                 users#prod_sync
 #                                        GET       /oauth/authorize/:code(.:format)                                          doorkeeper/authorizations#show
 #                    oauth_authorization GET       /oauth/authorize(.:format)                                                doorkeeper/authorizations#new
 #                                        POST      /oauth/authorize(.:format)                                                doorkeeper/authorizations#create

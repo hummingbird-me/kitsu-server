@@ -22,7 +22,7 @@
 #  poster_image_file_size    :integer
 #  poster_image_updated_at   :datetime
 #  rating_frequencies        :hstore           default({}), not null
-#  show_type                 :integer
+#  show_type                 :integer          default(1), not null
 #  slug                      :string(255)      indexed
 #  start_date                :date
 #  started_airing_date_known :boolean          default(TRUE), not null
