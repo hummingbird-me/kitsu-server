@@ -19,8 +19,11 @@ class CleanManga < ActiveRecord::Migration
       WHEN 'Manga' THEN 1
       WHEN 'Novel' THEN 2
       WHEN 'Manhua' THEN 3
+      WHEN 'Manhwa' THEN 3
       WHEN 'One Shot' THEN 4
       WHEN 'Doujin' THEN 5
+      WHEN 'OEL' THEN 6
+      ELSE 1
       END
     )"
     change_column_default :manga, :manga_type, 1
