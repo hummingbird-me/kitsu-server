@@ -1,7 +1,5 @@
 class Feed
   class ActivityList
-    include Skylight::Helpers
-    
     attr_accessor :data, :feed, :page_number, :page_size, :including,
       :sfw_filter, :blocked
     %i[limit offset ranking mark_read mark_seen].each do |key|
@@ -107,7 +105,6 @@ class Feed
       StreamRails::Enrich.new(including)
     end
 
-    instrument_method
     def to_a
       if feed.aggregated? || feed.notification?
         @results ||= enriched_results.map do |res|
