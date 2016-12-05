@@ -1,4 +1,5 @@
 class FeedsController < ApplicationController
+  include Skylight::Helpers
   include Pundit
   skip_after_action :enforce_policy_use
 
@@ -18,6 +19,7 @@ class FeedsController < ApplicationController
 
   private
 
+  instrument_method
   def serialize_activities(list)
     FeedSerializerService.new(
       list,
