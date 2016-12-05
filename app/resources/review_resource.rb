@@ -1,6 +1,6 @@
 class ReviewResource < BaseResource
   attributes :content, :content_formatted, :legacy, :likes_count, :progress,
-    :rating, :source
+    :rating, :source, :spoiler
 
   has_one :library_entry
   has_one :media, polymorphic: true

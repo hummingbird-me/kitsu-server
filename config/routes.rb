@@ -135,6 +135,10 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/waifu(.:format)                        users#update_relationship {:relationship=>"waifu"}
 #                                        DELETE    /edge/users/:user_id/relationships/waifu(.:format)                        users#destroy_relationship {:relationship=>"waifu"}
 #                             user_waifu GET       /edge/users/:user_id/waifu(.:format)                                      characters#get_related_resource {:relationship=>"waifu", :source=>"users"}
+#         user_relationships_pinned_post GET       /edge/users/:user_id/relationships/pinned-post(.:format)                  users#show_relationship {:relationship=>"pinned_post"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/pinned-post(.:format)                  users#update_relationship {:relationship=>"pinned_post"}
+#                                        DELETE    /edge/users/:user_id/relationships/pinned-post(.:format)                  users#destroy_relationship {:relationship=>"pinned_post"}
+#                       user_pinned_post GET       /edge/users/:user_id/pinned-post(.:format)                                posts#get_related_resource {:relationship=>"pinned_post", :source=>"users"}
 #           user_relationships_followers GET       /edge/users/:user_id/relationships/followers(.:format)                    users#show_relationship {:relationship=>"followers"}
 #                                        POST      /edge/users/:user_id/relationships/followers(.:format)                    users#create_relationship {:relationship=>"followers"}
 #                                        PUT|PATCH /edge/users/:user_id/relationships/followers(.:format)                    users#update_relationship {:relationship=>"followers"}

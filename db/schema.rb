@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161204092247) do
+ActiveRecord::Schema.define(version: 20161205014148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -699,6 +699,7 @@ ActiveRecord::Schema.define(version: 20161204092247) do
     t.boolean  "legacy",                        default: false, null: false
     t.integer  "library_entry_id"
     t.integer  "progress"
+    t.boolean  "spoiler",                       default: false, null: false
   end
 
   add_index "reviews", ["likes_count"], name: "index_reviews_on_likes_count", using: :btree

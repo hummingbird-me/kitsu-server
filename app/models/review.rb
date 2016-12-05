@@ -11,6 +11,7 @@
 #  progress          :integer
 #  rating            :integer          not null
 #  source            :string(255)
+#  spoiler           :boolean          default(FALSE), not null
 #  summary           :string(255)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
