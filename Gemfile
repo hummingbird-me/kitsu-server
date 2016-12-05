@@ -66,6 +66,7 @@ gem 'oj' # Blazing-fast JSON parsing
 gem 'oj_mimic_json' # Hook it in place of JSON gem
 
 gem 'sentry-raven' # Send error data to Sentry
+gem 'skylight' # Send profiling data to Skylight
 
 group :development, :test do
   gem 'foreman' # Start processes
@@ -100,5 +101,4 @@ end
 
 group :production, :staging do
   gem 'rails_12factor' # Log to stdout, serve assets
-  gem 'skylight' # Send profiling data to Skylight
 end
