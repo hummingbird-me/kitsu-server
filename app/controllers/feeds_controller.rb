@@ -19,7 +19,7 @@ class FeedsController < ApplicationController
   private
 
   def serialize_activities(list)
-    FeedSerializerService.new(
+    @serializer ||= FeedSerializerService.new(
       list,
       including: params[:include]&.split(','),
       fields: params[:fields]&.split(','),
@@ -29,7 +29,7 @@ class FeedsController < ApplicationController
   end
 
   def query
-    FeedQueryService.new(params, current_user&.resource_owner)
+    @query ||= FeedQueryService.new(params, current_user&.resource_owner)
   end
 
   delegate :feed, to: :query

@@ -45,7 +45,7 @@ class FeedSerializerService
 
   instrument_method
   def activities
-    activity_list.includes(stream_enrichment_fields).to_a
+    @activities ||= activity_list.includes(stream_enrichment_fields).to_a
   end
 
   def including
@@ -73,7 +73,8 @@ class FeedSerializerService
   end
 
   def serializer
-    FeedSerializer.new(resource_class, include: including, fields: fields)
+    @serializer ||= FeedSerializer.new(resource_class, include: including,
+                                       fields: fields)
   end
 
   def resource_class
