@@ -18,6 +18,7 @@ module ContentProcessable
       before_validation do
         if public_send("#{column}_changed?")
           procssed_content = public_send(processed_column)[:output].to_s
+          processed_content.gsub!('</source>', '')
           assign_attributes("#{column}_formatted" => procssed_content)
         end
       end
