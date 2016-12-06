@@ -1,9 +1,10 @@
 class FeedsController < ApplicationController
+  include Skylight::Helpers
   include Pundit
   skip_after_action :enforce_policy_use
 
   def show
-    render json: serialize_activities(query.list)
+    render json: stringify_activities(query.list)
   end
 
   def mark_read
@@ -26,6 +27,11 @@ class FeedsController < ApplicationController
       context: context,
       base_url: request.url
     )
+  end
+
+  instrument_method
+  def stringify_activities(list)
+    Oj.dump(serialize_activities(list))
   end
 
   def query
