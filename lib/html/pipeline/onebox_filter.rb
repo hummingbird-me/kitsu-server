@@ -10,6 +10,7 @@ module HTML
             if onebox_name == 'whitelistedgeneric'
               onebox_name = URI.parse(url).host.split('.')[-2..-1].join('-')
             end
+            preview = Nokogiri::HTML5.fragment(preview.to_s)
             a.swap <<-EOF
               <div class="onebox onebox-#{onebox_name}">
                 #{preview}
