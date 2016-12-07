@@ -127,7 +127,14 @@ class Feed
     end
 
     def apply_select(activities)
-      activities.select { |act| @selects.all? { |proc| proc.call(act) } }
+      activities.lazy.map do |act|
+        if act.respond_to?(:activities)
+          act.activities = apply_select(act.activities)
+        else
+          next unless @selects.all? { |proc| proc.call(act) }
+        end
+        act
+      end.reject(&:blank?).to_a
     end
 
     def apply_maps(activities)
