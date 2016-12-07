@@ -9,7 +9,7 @@
 #  likes_count       :integer          default(0), indexed
 #  media_type        :string
 #  progress          :integer
-#  rating            :integer          not null
+#  rating            :float            not null
 #  source            :string(255)
 #  spoiler           :boolean          default(FALSE), not null
 #  summary           :string(255)
