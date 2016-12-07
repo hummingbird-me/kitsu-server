@@ -4,7 +4,7 @@ class ActivityResource < BaseResource
   model_name 'Feed::Activity'
 
   attributes :status, :verb, :time, :stream_id, :foreign_id, :rating,
-    :progress
+    :progress, :reply_to_type, :reply_to_user
 
   has_one :actor, class_name: 'User'
   has_one :unit, polymorphic: true
