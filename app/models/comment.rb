@@ -60,6 +60,8 @@ class Comment < ApplicationRecord
     to << post.user.feed
     to.compact!
     post.feed.activities.new(
+      reply_to_user: (parent&.user || post&.user),
+      reply_to_type: (parent.present? ? 'comment' : 'post'),
       likes_count: likes_count,
       replies_count: replies_count,
       post_id: post_id,
