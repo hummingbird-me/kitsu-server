@@ -52,15 +52,15 @@ class ListImport < ApplicationRecord
   def apply
     fail 'No each method defined' unless respond_to? :each
 
-    yield({ status: :running, total: count, current: 0 })
+    yield({ status: :running, total: count, progress: 0 })
     LibraryEntry.transaction do
       each_with_index do |(media, data), index|
         entry = LibraryEntry.where(user: user, media: media).first_or_create
         merged_entry(entry, data).save!
-        yield({ status: :running, total: count, current: index + 1 })
+        yield({ status: :running, total: count, progress: index + 1 })
       end
     end
-    yield({ status: :completed, total: count, current: count })
+    yield({ status: :completed, total: count, progress: count })
   rescue StandardError => e
     yield({
       status: :failed,
@@ -74,7 +74,7 @@ class ListImport < ApplicationRecord
   def apply!(frequency: 20)
     apply do |info|
       # Apply every [frequency] updates unless the status is not :running
-      if info[:status] != :running || info[:current] % frequency == 0
+      if info[:status] != :running || info[:progress] % frequency == 0
         update info
         yield info if block_given?
       end
