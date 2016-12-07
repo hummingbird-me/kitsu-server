@@ -73,7 +73,7 @@ class ListImport
       end
 
       def data
-        %i[status progress rating reconsume_count volumes].map { |k|
+        %i[status progress rating reconsume_count].map { |k|
           [k, send(k)]
         }.to_h
       end

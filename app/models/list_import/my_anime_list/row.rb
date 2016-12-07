@@ -76,7 +76,7 @@ class ListImport
       end
 
       def data
-        %i[status progress rating volumes].map do |k|
+        %i[status progress rating].map do |k|
           [k, send(k)]
         end.to_h
       end
