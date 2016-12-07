@@ -113,7 +113,7 @@ class Feed
         activities = enricher.enrich_activities(activities)
         activities = activities.map { |a| Feed::Activity.new(feed, a) }
       end
-      strip_unfound(activities)
+      activities.map { |act| strip_unfound(act) }
     end
 
     def select(&block)
