@@ -14,6 +14,7 @@ class FeedQueryService
     list = list.where_id(*id_query) if id_query
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
+    list = list.blocking(blocked)
     @list = list
   end
 

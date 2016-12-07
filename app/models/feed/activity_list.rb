@@ -171,24 +171,5 @@ class Feed
         end
       end
     end
-
-    def select_activities(activity, &block)
-      if activity.respond_to?(:activities)
-        activity.activities = activity.activities.select(&block)
-      elsif block.call(activity)
-        activity
-      end
-    end
-
-    def filter_blocked(activity)
-      select_activities(activity) do |act|
-        user_id = if act.actor.respond_to?(:id)
-          act.actor.id
-        else
-          act.actor.split(':')[1].to_i
-        end
-        !blocked.include?(user_id)
-      end
-    end
   end
 end
