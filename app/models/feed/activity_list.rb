@@ -2,73 +2,82 @@ class Feed
   class ActivityList
     attr_accessor :data, :feed, :page_number, :page_size, :including,
       :sfw_filter, :blocked
+
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
-        self.dup.tap { |al| al.data[key] = value }
+        data[key] = value
+        self
       end
     end
 
     def initialize(feed, data = {})
       @feed = feed
       @data = data.with_indifferent_access
-      self.including = []
-      self.sfw_filter = false
+      @including = []
+      @sfw_filter = false
+      @maps = []
+      @selects = []
     end
 
     def page(page_number = nil, id_lt: nil)
       if page_number
-        dup.tap do |al|
-          al.page_number = page_number
-          al.update_pagination! if page_size
-        end
+        @page_number = page_number
+        update_pagination!
+        self
       elsif id_lt
-        self.where_id(:lt, id_lt)
+        where_id(:lt, id_lt)
       else
         raise ArgumentError, 'Must provide an offset or id_lt'
       end
     end
 
     def per(page_size)
-      dup.tap do |al|
-        al.page_size = page_size
-        al.update_pagination! if page_number
-      end
+      @page_size = page_size
+      update_pagination!
+      self
     end
 
     def sfw
-      dup.tap do |al|
-        al.sfw_filter = true
-      end
+      @sfw_filter = true
+      self
     end
 
     def blocking(users)
-      dup.tap do |al|
-        al.blocked = Set.new(users)
+      blocked = Set.new(users)
+      select do |act|
+        user_id = if act.actor.respond_to?(:id)
+          act.actor.id
+        else
+          act.actor.split(':')[1].to_i
+        end
+        !blocked.include?(user_id)
       end
+      self
     end
 
     def includes(*relationships)
-      self.dup.tap do |al|
-        al.including = [relationships].flatten.map(&:to_s)
-        # Hardwire subject->object
-        al.including = al.including.map { |inc| inc.sub('subject', 'object') }
-        al.including = al.including.map(&:to_sym)
-        al.including += including if including.present?
-      end
+      including = [relationships].flatten.map(&:to_s)
+      # Hardwire subject->object, convert to symbols
+      including.map! { |inc| inc.sub('subject', 'object').to_sym }
+      @including += including
+      self
     end
 
     def mark(type, values = true)
       values = [values] if values.is_a? String
-      send("mark_#{type}", values)
+      data["mark_#{type}"] = values
+      self
     end
 
     def update_pagination!
+      return unless page_size && page_number
       data[:limit] = page_size
       data[:offset] = (page_number - 1) * page_size
     end
 
     def where_id(operator, id)
-      self.dup.tap { |al| al.data["id_#{operator}"] = id }
+      self.data["id_#{operator}"] = id
+      self
     end
 
     def new(data = {})
@@ -93,34 +102,50 @@ class Feed
       feed.stream_feed.get(data)['results']
     end
 
-    def enriched_results
+    # Loads in included associations, converts to Feed::Activity[Group]
+    # instances and removes any unfound association data to not break JR
+    def enrich(activities)
+      enricher = StreamRails::Enrich.new(including)
       if feed.aggregated? || feed.notification?
-        enricher.enrich_aggregated_activities(results)
+        activities = enricher.enrich_aggregated_activities(activities)
+        activities = activities.map { |ag| Feed::ActivityGroup.new(feed, ag) }
       else
-        enricher.enrich_activities(results)
+        activities = enricher.enrich_activities(activities)
+        activities = activities.map { |a| Feed::Activity.new(feed, a) }
       end
+      strip_unfound(activities)
     end
 
-    def enricher
-      StreamRails::Enrich.new(including)
+    def select(&block)
+      @selects << block
+      self
+    end
+
+    def map(&block)
+      @maps << block
+      self
+    end
+
+    def apply_select(activities)
+      activities.select { |act| @selects.all? { |proc| proc.call(act) } }
+    end
+
+    def apply_maps(activities)
+      activities.map do |act|
+        if act.respond_to?(:activities)
+          act.activities = apply_maps(act.activities)
+          act
+        else
+          @maps.reduce(act) { |act, proc| proc.call(act) }
+        end
+      end
     end
 
     def to_a
-      if feed.aggregated? || feed.notification?
-        @results ||= enriched_results.map do |res|
-          result = strip_unfound(Feed::ActivityGroup.new(feed, res))
-          next if result.nsfw? && sfw_filter
-          # result = filter_blocked(result)
-          result
-        end.compact
-      else
-        @results ||= enriched_results.map do |res|
-          result = strip_unfound(Feed::Activity.new(feed, res))
-          next if result.nsfw? && sfw_filter
-          # result = filter_blocked(result)
-          result
-        end.compact
-      end
+      res = enrich(results)
+      res = apply_select(res)
+      res = apply_maps(res)
+      return res.compact
     end
 
     def empty?
