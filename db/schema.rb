@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207194453) do
+ActiveRecord::Schema.define(version: 20161208090624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -841,6 +841,10 @@ ActiveRecord::Schema.define(version: 20161207194453) do
     t.inet     "ip_addresses",                            default: [],                       array: true
     t.string   "previous_email"
     t.integer  "pinned_post_id"
+    t.string   "time_zone"
+    t.string   "language"
+    t.string   "country",                     limit: 2
+    t.boolean  "share_to_global",                         default: true,        null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

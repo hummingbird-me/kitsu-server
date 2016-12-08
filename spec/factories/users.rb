@@ -16,6 +16,7 @@
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
 #  confirmed_at                :datetime
+#  country                     :string(2)
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
@@ -32,6 +33,7 @@
 #  import_from                 :string(255)
 #  import_status               :integer
 #  ip_addresses                :inet             default([]), is an Array
+#  language                    :string
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
@@ -54,9 +56,11 @@
 #  remember_created_at         :datetime
 #  reviews_count               :integer          default(0), not null
 #  sfw_filter                  :boolean          default(TRUE)
+#  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
+#  time_zone                   :string
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
 #  waifu_or_husbando           :string(255)
