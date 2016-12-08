@@ -25,10 +25,14 @@ class Block < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :blocked, class_name: 'User', required: true
 
+  validate :not_blocking_admin
+  def not_blocking_admin
+    errors.add(:blocked, "cannot be an admin") if blocked.has_role?(:admin)
+  end
+
   def self.hidden_for(user)
     blockeds = where(user: user).pluck(:blocked_id)
     blockers = where(blocked_id: user).pluck(:user_id)
-    unblockable = User.with_role(:admin).pluck(:id)
-    (blockeds + blockers).uniq - unblockable
+    (blockeds + blockers).uniq
   end
 end
