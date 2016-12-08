@@ -205,6 +205,16 @@ class User < ApplicationRecord
     Feed.global.follow(feed)
   end
 
+  after_save do
+    if share_to_global_changed?
+      if share_to_global
+        Feed.global.follow(feed)
+      else
+        Feed.global.unfollow(feed)
+      end
+    end
+  end
+
   before_update do
     if name_changed?
       # Push it onto the front and limit
