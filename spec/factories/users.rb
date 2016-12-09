@@ -92,7 +92,7 @@ FactoryGirl.define do
     name { Faker::Internet.user_name(nil, ['_']) + rand(1000).to_s }
     email { Faker::Internet.email }
     password { Faker::Internet.password }
-    avatar { Faker::Avatar.image }
+    avatar { Faker::Company.logo }
 
     trait :admin do
       after(:create) { |user| user.add_role(:admin) }
