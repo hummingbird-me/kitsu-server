@@ -25,6 +25,8 @@ class Block < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :blocked, class_name: 'User', required: true
 
+  validates :blocked, uniqueness: { scope: :user_id }
+
   validate :not_blocking_admin
   def not_blocking_admin
     errors.add(:blocked, "cannot be an admin") if blocked.has_role?(:admin)
