@@ -128,6 +128,8 @@ module SearchableResource
           matchers = value.map { |v| auto_query(field, v) }
           { bool: { should: matchers } }
         end
+      when Hash
+        value.deep_transform_keys { |key| key.to_s == '$field' ? field : key }
       else
         value
       end

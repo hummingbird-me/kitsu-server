@@ -2,16 +2,29 @@ class MediaResource < BaseResource
   # This regex accepts a numerical range or single number
   # $1 = start, $2 = dot representing closed/open, $3 = end
   NUMBER = /(\d+(?:\.\d+)?)/
-  NUMERIC_RANGE = /\A#{NUMBER}(?:(?:\.\.(\.)?)#{NUMBER})?\z/
+  NUMERIC_RANGE = /\A#{NUMBER}?(\.{2,3})?#{NUMBER}?\z/
   NUMERIC_QUERY = {
-    valid: -> (value, _ctx) { NUMERIC_RANGE.match(value) },
+    valid: -> (value, _ctx) {
+      matches = NUMERIC_RANGE.match(value)
+      # You gotta provide at least *one* number
+      matches && (matches[1].present? || matches[3].present?)
+    },
     apply: -> (values, _ctx) {
       # We only accept the first value
       values.map do |value|
         matches = NUMERIC_RANGE.match(value)
+        inclusive = matches[2] == '..'
 
-        if matches[3] # Range
-          Range.new(matches[1].to_f, matches[3].to_f, matches[2] == '.')
+        if matches[2] # Range
+          if matches[1] && matches[3] # Double-ended
+            Range.new(matches[1].to_f, matches[3].to_f, !inclusive)
+          elsif matches[1] # start...
+            key = inclusive ? 'gte' : 'gt'
+            { range: { '$field' => { key => matches[1] } } }
+          else # ...end
+            key = inclusive ? 'lte' : 'lt'
+            { range: { '$field' => { key => matches[3] } } }
+          end
         else # Scalar
           matches[1]
         end
