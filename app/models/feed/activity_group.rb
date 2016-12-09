@@ -11,6 +11,11 @@ class Feed
       super(data)
     end
 
+    def empty?
+      return true if activities.nil?
+      activities.empty?
+    end
+
     def sfw?
       activities.all?(&:sfw?)
     end
