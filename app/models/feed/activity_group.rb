@@ -15,6 +15,7 @@ class Feed
       return true if activities.nil?
       activities.empty?
     end
+    alias_method :blank?, :empty?
 
     def sfw?
       activities.all?(&:sfw?)
