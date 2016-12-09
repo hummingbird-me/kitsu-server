@@ -11,7 +11,7 @@ module HTML
               onebox_name = URI.parse(url).host.split('.')[-2..-1].join('-')
             end
             preview = Nokogiri::HTML5.fragment(preview.to_s)
-            a.swap <<-EOF
+            a.swap <<-EOF.squish
               <div class="onebox onebox-#{onebox_name}">
                 #{preview}
               </div>
