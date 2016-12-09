@@ -2,7 +2,7 @@ module HTML
   class Pipeline
     class OneboxFilter < HTML::Pipeline::Filter
       def call
-        doc.search('a').each do |a|
+        doc.search('a.autolink').each do |a|
           url = a['href']
           preview = Onebox.preview(url, max_width: 500) rescue nil
           if preview&.to_s.present?
