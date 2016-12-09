@@ -50,7 +50,9 @@ class Feed
         else
           act.actor.split(':')[1].to_i
         end
-        !blocked.include?(user_id)
+        will_block = blocked.include?(user_id)
+        throw :remove_group if will_block && act.verb == 'post'
+        !will_block
       end
       self
     end
@@ -129,11 +131,14 @@ class Feed
     def apply_select(activities)
       activities.lazy.map do |act|
         if act.respond_to?(:activities)
-          act.activities = apply_select(act.activities)
+          catch(:remove_group) do
+            act.activities = apply_select(act.activities)
+            act
+          end
         else
           next unless @selects.all? { |proc| proc.call(act) }
+          act
         end
-        act
       end.reject(&:blank?).to_a
     end
 
