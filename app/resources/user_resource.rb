@@ -33,12 +33,23 @@ class UserResource < BaseResource
     mode: :query,
     apply: -> (values, _ctx) {
       {
-        multi_match: {
-          fields: %w[name past_names],
-          query: values.join(' '),
-          fuzziness: 2,
-          max_expansions: 15,
-          prefix_length: 1
+        bool: {
+          should: [
+            {
+              multi_match: {
+                fields: %w[name past_names],
+                query: values.join(' '),
+                fuzziness: 2,
+                max_expansions: 15,
+                prefix_length: 1
+              }
+            },
+            {
+              match_phrase_prefix: {
+                name: values.join(' ')
+              }
+            }
+          ]
         }
       }
     }
