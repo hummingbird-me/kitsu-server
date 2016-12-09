@@ -89,6 +89,10 @@ class LibraryEntry < ApplicationRecord
     media.unit(progress)
   end
 
+  def next_unit
+    media.unit(progress + 1)
+  end
+
   def rating_on_halves
     return unless rating
 
