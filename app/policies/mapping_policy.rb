@@ -1,0 +1,2 @@
+class MappingPolicy < ApplicationPolicy
+end
