@@ -2,7 +2,7 @@ class PostPolicy < ApplicationPolicy
   def update?
     return true if is_admin?
     return false if record.created_at&.<(30.minutes.ago)
-    record.user == user
+    record.user_id_was == user.id
   end
 
   def create?
