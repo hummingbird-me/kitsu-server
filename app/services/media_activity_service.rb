@@ -20,6 +20,7 @@ class MediaActivityService
       foreign_id: "LibraryEntry:#{library_entry.id}:rated",
       verb: 'rated',
       rating: rating,
+      time: Date.today.to_time
     )
   end
 
