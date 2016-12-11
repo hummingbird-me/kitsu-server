@@ -29,7 +29,7 @@ RSpec.describe ListImport do
     def each
       media = FactoryGirl.create_list(:anime, 100)
       100.times do |i|
-        yield media[i], status: :current, current: 1
+        yield media[i], status: :current, progress: 1
       end
     end
     def count; 100; end
