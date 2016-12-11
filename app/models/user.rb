@@ -148,11 +148,11 @@ class User < ApplicationRecord
                      EOF
                    }
   validates :name, format: {
-    with: /[^A-Za-z0-9]/,
-    message: 'must begin with a number'
+    with: /\A[A-Za-z0-9]/,
+    message: 'must begin with a letter or number'
   }
   validates :name, format: {
-    with: /\A[0-9]*\z/,
+    without: /\A[0-9]*\z/,
     message: 'cannot be entirely numbers'
   }
   validates :password_digest, presence: true
