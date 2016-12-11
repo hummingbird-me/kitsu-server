@@ -14,6 +14,10 @@ class CommentPolicy < ApplicationPolicy
     is_owner? || is_admin?
   end
 
+  def editable_attributes(all)
+    all - [:content_formatted]
+  end
+
   class Scope < Scope
     def resolve
       scope.where.not(user_id: blocked_users)

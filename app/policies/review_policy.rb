@@ -7,6 +7,10 @@ class ReviewPolicy < ApplicationPolicy
 
   alias_method :destroy?, :update?
 
+  def editable_attributes(all)
+    all - [:content_formatted]
+  end
+
   class Scope < Scope
     def resolve
       scope.where.not(user_id: blocked_users)
