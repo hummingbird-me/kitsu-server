@@ -1,5 +1,9 @@
 class MediaIndex < Chewy::Index
   class << self
+    def sfw
+      filter { age_rating(:or) == AgeRatings::SAFE_AGE_RATINGS.map(&:downcase) }
+    end
+
     # Convert from [[id, name], ...] to id => [names...]
     def groupify(plucks)
       plucks.each.with_object({}) do |(id, name), out|

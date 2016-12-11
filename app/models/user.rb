@@ -167,6 +167,7 @@ class User < ApplicationRecord
   scope :by_name, -> (*names) {
     where('lower(name) IN (?)', names.flatten.map(&:downcase))
   }
+  scope :blocking, ->(*users) { where.not(id: users.flatten) }
 
   # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)

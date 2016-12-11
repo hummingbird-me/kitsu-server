@@ -79,8 +79,7 @@ module SearchableResource
     private
 
     def apply_scopes(filters, opts = {})
-      # TODO: actually apply policy somehow
-      opts[:context][:policy_used]&.call
+      context = opts[:context]
       # Generate query
       query = generate_query(filters)
       query = query.reduce(@chewy_index) do |scope, subquery|
@@ -97,7 +96,13 @@ module SearchableResource
       else
         query = query.order('_score' => :desc)
       end
+      query = search_policy_scope.new(context[:current_user], query).resolve
+      context[:policy_used]&.call
       query
+    end
+
+    def search_policy_scope
+      Pundit::PolicyFinder.new(_model_class.new).scope!
     end
 
     def generate_query(filters)
