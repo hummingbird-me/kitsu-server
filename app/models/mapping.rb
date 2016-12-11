@@ -30,9 +30,9 @@ class Mapping < ApplicationRecord
   def self.guess(type, info)
     results = "MediaIndex::#{type}".constantize.query(
       function_score: {
-        field_value_factor: {
-          field: 'user_count',
-          modifier: 'log1p'
+        script_score: {
+          lang: 'expression',
+          script: "max(log10(doc['user_count'].value), 1)",
         },
         query: {
           bool: {
@@ -43,6 +43,11 @@ class Mapping < ApplicationRecord
                 fuzziness: 3,
                 max_expansions: 15,
                 prefix_length: 2
+              } },
+              { multi_match: {
+                fields: %w[titles.* abbreviated_titles],
+                query: info[:title],
+                boost: 1.2,
               } },
               ({ match: {
                 show_type: info[:show_type]

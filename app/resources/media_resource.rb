@@ -65,19 +65,28 @@ class MediaResource < BaseResource
     apply: -> (values, _ctx) {
       {
         function_score: {
-          field_value_factor: {
-            field: 'user_count',
-            modifier: 'log1p'
+          script_score: {
+            lang: 'expression',
+            script: "max(log10(doc['user_count'].value), 1)",
           },
           query: {
-            multi_match: {
-              fields: %w[
-                titles.* abbreviated_titles synopsis people characters
-              ],
-              query: values.join(' '),
-              fuzziness: 2,
-              max_expansions: 15,
-              prefix_length: 2
+            bool: {
+              should: [
+                { multi_match: {
+                  fields: %w[
+                    titles.* abbreviated_titles synopsis people characters
+                  ],
+                  query: values.join(' '),
+                  fuzziness: 2,
+                  max_expansions: 15,
+                  prefix_length: 2
+                } },
+                { multi_match: {
+                  fields: %w[titles.* abbreviated_titles],
+                  query: values.join(' '),
+                  boost: 1.2
+                } }
+              ]
             }
           }
         }
