@@ -29,7 +29,7 @@ RSpec.describe ListImport do
     def each
       media = FactoryGirl.create_list(:anime, 100)
       100.times do |i|
-        yield media[i], status: :current, progress: 1
+        yield media[i], status: :current, current: 1
       end
     end
     def count; 100; end
@@ -59,7 +59,7 @@ RSpec.describe ListImport do
 
     it 'should call #apply and update every 20 rows' do
       expect(subject).to receive(:apply) do |&block|
-        100.times { |i| block.call({ status: :running, current: i }) }
+        100.times { |i| block.call({ status: :running, progress: i }) }
       end
       expect(subject).to receive(:update).exactly(5).times
       subject.apply!
@@ -90,7 +90,7 @@ RSpec.describe ListImport do
         expect { |b|
           subject.apply(&b)
         }.to yield_successive_args(
-          { status: :running, total: 7, current: 0 },
+          { status: :running, total: 7, progress: 0 },
           { status: :failed, total: 7, error_message: 'An error', error_trace: String }
         )
       end
