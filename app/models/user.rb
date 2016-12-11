@@ -90,6 +90,12 @@
 class User < ApplicationRecord
   PAST_NAMES_LIMIT = 10
   PAST_IPS_LIMIT = 20
+  RESERVED_NAMES = %w[
+    admin administrator connect dashboard developer developers edit favorites
+    feature featured features feed follow followers following hummingbird index
+    javascript json kitsu sysadmin sysadministrator system unfollow user users
+    wiki you
+  ]
 
   rolify
   has_secure_password
@@ -132,7 +138,23 @@ class User < ApplicationRecord
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
   validates :name, presence: true,
-                   uniqueness: { case_sensitive: false }
+                   uniqueness: { case_sensitive: false },
+                   length: { minimum: 3, maximum: 20 },
+                   exclusion: RESERVED_NAMES,
+                   format: {
+                     with: /\A[_A-Za-z0-9]+\z/,
+                     message: <<-EOF.squish
+                       can only contain letters, numbers, and underscores.
+                     EOF
+                   }
+  validates :name, format: {
+    with: /[^A-Za-z0-9]/,
+    message: 'must begin with a number'
+  }
+  validates :name, format: {
+    with: /\A[0-9]*\z/,
+    message: 'cannot be entirely numbers'
+  }
   validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
   validates_attachment :avatar, content_type: {
