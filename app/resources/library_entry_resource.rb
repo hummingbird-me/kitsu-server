@@ -12,6 +12,11 @@ class LibraryEntryResource < BaseResource
     records.where(status: statuses)
   }
 
+  filter :since, apply: ->(records, values, _options) {
+    time = values.join.to_time
+    records.where('updated_at >= ?', time)
+  }
+
   has_one :user
   has_one :review
   has_one :media, polymorphic: true
