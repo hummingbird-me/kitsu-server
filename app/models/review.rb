@@ -32,6 +32,7 @@
 
 class Review < ApplicationRecord
   include WithActivity
+  include ContentProcessable
 
   has_many :likes, class_name: 'ReviewLike', dependent: :destroy
   belongs_to :media, polymorphic: true, required: true
@@ -46,18 +47,12 @@ class Review < ApplicationRecord
   validates :media, polymorphism: { type: Media }
 
   resourcify
-
-  def processed_content
-    @processed_content ||= InlinePipeline.call(content)
-  end
+  processable :content, InlinePipeline
 
   before_validation do
     self.source ||= 'hummingbird'
     self.progress = library_entry&.progress
     self.rating = library_entry&.rating
-    if content_changed?
-      self.content_formatted = processed_content[:output].to_s
-    end
   end
 
   def stream_activity
