@@ -47,8 +47,6 @@ class ApplicationPolicy
   # We don't have a #show? method because Pundit-Resources does not use them.
   # Instead, we use Pundit Scopes (see ApplicationPolicy::Scope)
 
-  private
-
   # @return [ApplicationPolicy::Scope] a utility class for applying a scope to
   #   an ActiveRecord::Relation based on the token + record
   def scope
@@ -97,6 +95,15 @@ class ApplicationPolicy
   #   requested scope
   def is_admin?(scope = record) # rubocop:disable Style/PredicateName
     user&.has_role?(:admin, scope)
+  end
+
+  # Check the record.user association to see if it's owned by the current user.
+  #
+  # @return [Boolean] Whether the current user is the owner of the record
+  def is_owner?
+    return false if record.user && record.user != user
+    return false if record.user_id_was && record.user_id_was != user.id
+    true
   end
 
   # Provide access control and act as #show?

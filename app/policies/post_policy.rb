@@ -2,16 +2,16 @@ class PostPolicy < ApplicationPolicy
   def update?
     return true if is_admin?
     return false if record.created_at&.<(30.minutes.ago)
-    record.user_id_was == user.id
+    is_owner?
   end
 
   def create?
     return false if user&.blocked?(record.target_user)
-    record.user == user
+    is_owner?
   end
 
   def destroy?
-    record.user == user || is_admin?
+    is_owner? || is_admin?
   end
 
   class Scope < Scope

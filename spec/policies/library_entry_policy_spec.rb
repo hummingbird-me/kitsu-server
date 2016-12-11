@@ -9,7 +9,7 @@ RSpec.describe LibraryEntryPolicy do
 
   permissions :create?, :update?, :destroy? do
     it('should allow owner') { should permit(owner, entry) }
-    it('should allow admin') { should permit(admin, entry) }
+    it('should not allow admin') { should_not permit(admin, entry) }
     it('should not allow random dude') { should_not permit(user, entry) }
     it('should not allow anon') { should_not permit(nil, entry) }
   end

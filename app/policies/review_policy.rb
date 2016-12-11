@@ -1,11 +1,10 @@
 class ReviewPolicy < ApplicationPolicy
-  def create?
-    record.user == user
-  end
+  alias_method :create?, :is_owner?
 
   def update?
-    record.user == user || is_admin?
+    is_owner? || is_admin?
   end
+
   alias_method :destroy?, :update?
 
   class Scope < Scope

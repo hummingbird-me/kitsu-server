@@ -1,7 +1,5 @@
 class FavoritePolicy < ApplicationPolicy
-  def update?
-    record.user == user
-  end
-  alias_method :create?, :update?
-  alias_method :destroy?, :update?
+  alias_method :update?, :is_owner?
+  alias_method :create?, :is_owner?
+  alias_method :destroy?, :is_owner?
 end

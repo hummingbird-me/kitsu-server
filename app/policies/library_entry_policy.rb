@@ -1,9 +1,7 @@
 class LibraryEntryPolicy < ApplicationPolicy
-  def update?
-    record.user == user || is_admin?
-  end
-  alias_method :create?, :update?
-  alias_method :destroy?, :update?
+  alias_method :update?, :is_owner?
+  alias_method :create?, :is_owner?
+  alias_method :destroy?, :is_owner?
 
   class Scope < Scope
     def resolve

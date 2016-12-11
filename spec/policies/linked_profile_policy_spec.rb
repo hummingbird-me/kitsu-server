@@ -14,7 +14,7 @@ RSpec.describe LinkedProfilePolicy do
   # rubocop:disable Metrics/LineLength
   permissions :create?, :update?, :destroy? do
     it('should allow owner') { should permit(owner, linked_profile) }
-    it('should allow admin') { should permit(admin, linked_profile) }
+    it('should not allow admin') { should_not permit(admin, linked_profile) }
     it('should not allow random user') { should_not permit(user, linked_profile) }
     it('should not allow anon') { should_not permit(nil, linked_profile) }
   end

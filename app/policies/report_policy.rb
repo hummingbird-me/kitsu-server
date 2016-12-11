@@ -1,10 +1,8 @@
 class ReportPolicy < ApplicationPolicy
-  def create?
-    record.user == user
-  end
+  alias_method :create?, :is_owner?
 
   def update?
-    record.user == user || is_admin?(record.naughty)
+    is_owner? || is_admin?(record.naughty)
   end
 
   def destroy?
