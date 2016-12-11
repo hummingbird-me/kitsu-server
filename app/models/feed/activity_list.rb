@@ -1,7 +1,6 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :sfw_filter, :blocked
+    attr_accessor :data, :feed, :page_number, :page_size, :including
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
@@ -14,7 +13,6 @@ class Feed
       @feed = feed
       @data = data.with_indifferent_access
       @including = []
-      @sfw_filter = false
       @maps = []
       @selects = []
     end
@@ -38,7 +36,10 @@ class Feed
     end
 
     def sfw
-      @sfw_filter = true
+      select do |act|
+        throw :remove_group if act.nsfw?
+        act.sfw?
+      end
       self
     end
 

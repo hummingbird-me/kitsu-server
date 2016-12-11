@@ -19,11 +19,11 @@ class Feed
     end
 
     def sfw?
-      !nsfw
+      !nsfw?
     end
 
     def nsfw?
-      !sfw?
+      nsfw
     end
 
     def subject
