@@ -1,7 +1,6 @@
 class ActivityGroupResource < BaseResource
   include ScopelessResource
 
-  caching
   model_name 'Feed::ActivityGroup'
 
   # notifications
