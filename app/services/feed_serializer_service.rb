@@ -73,7 +73,7 @@ class FeedSerializerService
   end
 
   def serializer
-    @serializer ||= FeedSerializer.new(resource_class, include: including,
+    @serializer ||= ResourceSerializer.new(resource_class, include: including,
                                        fields: fields)
   end
 
