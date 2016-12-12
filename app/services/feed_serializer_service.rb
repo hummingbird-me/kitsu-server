@@ -28,7 +28,7 @@ class FeedSerializerService
   def initialize(list, including: nil, fields: nil, context: nil, base_url:)
     @activity_list = list
     @including = including || []
-    @fields = fields || []
+    @fields = fields || {}
     @context = context || {}
     @base_url = base_url
   end

@@ -23,7 +23,7 @@ class FeedsController < ApplicationController
     @serializer ||= FeedSerializerService.new(
       list,
       including: params[:include]&.split(','),
-      fields: params[:fields]&.split(','),
+      # fields: params[:fields]&.split(','),
       context: context,
       base_url: request.url
     )
