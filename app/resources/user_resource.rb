@@ -37,11 +37,18 @@ class UserResource < BaseResource
           should: [
             {
               multi_match: {
-                fields: %w[name past_names],
+                fields: %w[name^2 past_names],
                 query: values.join(' '),
                 fuzziness: 2,
                 max_expansions: 15,
                 prefix_length: 1
+              }
+            },
+            {
+              multi_match: {
+                fields: %w[name^2 past_names],
+                query: values.join(' '),
+                boost: 1.2
               }
             },
             {
