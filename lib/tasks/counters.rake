@@ -4,5 +4,6 @@ namespace :counters do
     CounterCacheResets.posts
     CounterCacheResets.media_user_counts
     CounterCacheResets.reviews
+    CounterCacheResets.users
   end
 end
