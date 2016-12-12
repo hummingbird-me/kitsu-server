@@ -6,5 +6,5 @@ class ActivityGroupResource < BaseResource
   # notifications
   attributes :group, :is_seen, :is_read
 
-  has_many :activities
+  has_many :activities, eager_load_on_include: false
 end
