@@ -3,4 +3,5 @@ JSONAPI.configure do |config|
   config.default_paginator = :offset
   config.default_page_size = 10
   config.maximum_page_size = 20
+  config.resource_cache = Rails.cache
 end
