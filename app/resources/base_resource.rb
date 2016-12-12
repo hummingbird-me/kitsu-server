@@ -6,7 +6,7 @@ class BaseResource < JSONAPI::Resource
   include SearchableResource
 
   def respond_to?(method_name)
-    if method_name.end_with?('_id')
+    if method_name.to_s.end_with?('_id')
       _model.respond_to?(method_name)
     else
       super
