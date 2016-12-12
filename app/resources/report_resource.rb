@@ -5,5 +5,5 @@ class ReportResource < BaseResource
   has_one :user
   has_one :moderator
 
-  filters :user_id, :naughty_id, :naughty_type, :status
+  filters :user_id, :naughty_id, :naughty_type, :status, :reason
 end
