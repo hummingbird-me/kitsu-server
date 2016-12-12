@@ -165,7 +165,7 @@ class User < ApplicationRecord
   }
 
   scope :by_name, -> (*names) {
-    where('lower(name) IN (?)', names.flatten.map(&:downcase))
+    where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
 
