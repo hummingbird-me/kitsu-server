@@ -48,7 +48,7 @@ class ListImport
       end
 
       def progress
-        obj[:num_read_chapters] || obj[:num_watched_episodes]
+        obj[:num_read_chapters] || obj[:num_watched_episodes] || 0
       end
 
       def volumes
@@ -56,6 +56,7 @@ class ListImport
       end
 
       def rating
+        return if obj[:score] == 0 || obj[:score].nil?
         obj[:score].to_f / 2
       end
 
