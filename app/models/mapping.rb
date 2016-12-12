@@ -72,9 +72,10 @@ class Mapping < ApplicationRecord
         }
       }
     )
-    top_result = results.preload.first
+    score = results.first&._score
+    top_result = results.load.first
     # If we only get one result, or the top result has a good score, pick it
-    top_result if top_result && top_result._score > 5 || results.count == 1
+    top_result if top_result && score > 5 || results.count == 1
     # Otherwise nil
   end
 end
