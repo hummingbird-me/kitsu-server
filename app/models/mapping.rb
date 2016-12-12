@@ -32,7 +32,7 @@ class Mapping < ApplicationRecord
       function_score: {
         script_score: {
           lang: 'expression',
-          script: "max(log10(doc['user_count'].value), 1)",
+          script: "max(log10(doc['user_count'].value), 1) * _score",
         },
         query: {
           bool: {
