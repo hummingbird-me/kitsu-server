@@ -5,5 +5,5 @@ class CastingResource < BaseResource
   has_one :character
   has_one :person
 
-  filter :media_id
+  filters :media_id, :media_type
 end
