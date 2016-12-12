@@ -32,6 +32,8 @@ class MediaResource < BaseResource
     }
   }.freeze
 
+  caching
+
   attributes :slug, :synopsis,
     # Cover image location
     :cover_image_top_offset,

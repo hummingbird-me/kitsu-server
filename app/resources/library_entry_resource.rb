@@ -1,6 +1,8 @@
 require 'unlimited_paginator'
 
 class LibraryEntryResource < BaseResource
+  caching
+
   attributes :status, :progress, :reconsuming, :reconsume_count, :notes,
     :private, :rating, :updated_at
 
