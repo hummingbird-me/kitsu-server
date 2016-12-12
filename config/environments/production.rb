@@ -70,7 +70,7 @@ Rails.application.configure do
       access_key_id: ENV['AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
     },
-    s3_host_alias: 'kitsu-media.s3.amazonaws.com',
+    s3_host_alias: 'media.kitsu.io',
     s3_protocol: :https,
     s3_region: 'us-east-1',
     url: ':s3_alias_url',
