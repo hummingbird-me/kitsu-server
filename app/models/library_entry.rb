@@ -77,7 +77,7 @@ class LibraryEntry < ApplicationRecord
     progress_cap = media&.progress_limit
     default_cap = media&.default_progress_limit
 
-    if progress_cap
+    if progress_cap && progress_cap != 0
       if progress > progress_cap
         errors.add(:progress, 'cannot exceed length of media')
       end
