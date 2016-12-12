@@ -55,6 +55,10 @@ class ListImport < ApplicationRecord
     yield({ status: :running, total: count, progress: 0 })
     LibraryEntry.transaction do
       each_with_index do |(media, data), index|
+        # Cap the progress
+        limit = media.progress_limit || media.default_progress_limit
+        data[:progress] = [data[:progress], limit].compact.min
+        # Merge the library entries
         entry = LibraryEntry.where(user: user, media: media).first_or_create
         merged_entry(entry, data).save!
         yield({ status: :running, total: count, progress: index + 1 })
