@@ -47,8 +47,8 @@ gem 'rinku'
 gem 'friendly_id' # slug-urls-are-cool
 gem 'nokogiri' # Parse MAL XML shit
 gem 'typhoeus' # Parallelize scraping tasks
-gem 'jsonapi-resources', '~> 0.8.0' # JSON-API resources
-gem 'jsonapi-utils', '0.5.0.beta3' # Use JR stuff outside their abstraction
+gem 'jsonapi-resources', github: 'cerebris/jsonapi-resources', branch: 'beta'
+# JSON-API resources
 gem 'acts_as_list' # Sortables!
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'counter_culture' # Fancier counter caches
