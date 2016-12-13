@@ -1,8 +1,6 @@
 class ActivityResource < BaseResource
   include ScopelessResource
 
-  caching
-
   model_name 'Feed::Activity'
 
   attributes :status, :verb, :time, :stream_id, :foreign_id, :rating,
