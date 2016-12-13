@@ -52,7 +52,7 @@ module SearchableResource
       return [] if filters.values.any?(&:nil?)
 
       # Apply scopes and load
-      apply_scopes(filters, opts).load
+      apply_scopes(filters, opts).load.to_a
     end
 
     # Count all search results
