@@ -30,6 +30,7 @@ class Block < ApplicationRecord
   validate :not_blocking_admin
   def not_blocking_admin
     errors.add(:blocked, "cannot be an admin") if blocked.has_role?(:admin)
+    errors.add(:blocked, "cannot be a moderator") if blocked.title == 'Mod'
   end
 
   def self.hidden_for(user)
