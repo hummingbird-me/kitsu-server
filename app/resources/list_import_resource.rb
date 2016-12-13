@@ -4,7 +4,7 @@ class ListImportResource < BaseResource
   model_hint model: ListImport::Anilist
 
   # Parameters
-  attributes :input_text, :strategy, :kind
+  attributes :input_text, :strategy, :kind, :created_at
   attribute :input_file, format: :attachment
   # Status
   attributes :progress, :status, :total
