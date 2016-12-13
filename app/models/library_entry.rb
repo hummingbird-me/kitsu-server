@@ -119,7 +119,7 @@ class LibraryEntry < ApplicationRecord
 
   after_save do
     # Disable activities on import
-    unless imported
+    unless imported || private?
       activity.rating(rating)&.create if rating_changed?
       activity.status(status)&.create if status_changed?
       # If the progress has changed, make an activity unless the status is also
