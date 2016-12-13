@@ -17,7 +17,7 @@ class UserPolicy < ApplicationPolicy
     elsif has_scope?(:email_confirm, accept_all: false)
       [:confirmed]
     else
-      all - [:confirmed]
+      all - %i[confirmed title]
     end
   end
 
