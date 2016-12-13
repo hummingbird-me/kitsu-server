@@ -36,6 +36,6 @@ class Block < ApplicationRecord
   def self.hidden_for(user)
     user = user.id if user.respond_to?(:id)
     Block.where('user_id = ? or blocked_id = ?', *[user]*2).
-          pluck(:blocked_id, :user_id).flatten.uniq - user
+          pluck(:blocked_id, :user_id).flatten.uniq - [user]
   end
 end
