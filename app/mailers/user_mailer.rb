@@ -20,6 +20,6 @@ class UserMailer < ApplicationMailer
   end
 
   def client_url_for(path)
-    "#{root_url}#{path}".gsub(%r{[^:]/+}, '/')
+    "#{root_url}#{path}".gsub(%r{([^:])/+}, '\1/')
   end
 end
