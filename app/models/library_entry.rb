@@ -49,6 +49,7 @@ class LibraryEntry < ApplicationRecord
     on_hold: 4,
     dropped: 5
   }
+  attr_accessor :imported
 
   validates :user, :media, :status, :progress, :reconsume_count,
     presence: true
@@ -117,11 +118,16 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_save do
-    activity.rating(rating)&.create if rating_changed?
-    activity.status(status)&.create if status_changed?
-    # If the progress has changed, make an activity unless the status is also
-    # changing
-    activity.progress(progress)&.create if progress_changed? && !status_changed?
+    # Disable activities on import
+    unless imported
+      activity.rating(rating)&.create if rating_changed?
+      activity.status(status)&.create if status_changed?
+      # If the progress has changed, make an activity unless the status is also
+      # changing
+      if progress_changed? && !status_changed?
+        activity.progress(progress)&.create
+      end
+    end
 
     if rating_changed?
       media.transaction do
