@@ -20,7 +20,7 @@ class LibraryEntryResource < BaseResource
   }
 
   has_one :user
-  has_one :review
+  has_one :review, eager_load_on_include: false
   has_one :media, polymorphic: true
   has_one :unit, polymorphic: true, eager_load_on_include: false
   has_one :next_unit, polymorphic: true, eager_load_on_include: false
