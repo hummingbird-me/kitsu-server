@@ -61,6 +61,7 @@
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  time_zone                   :string
+#  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
 #  waifu_or_husbando           :string(255)

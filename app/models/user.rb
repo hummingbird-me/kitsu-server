@@ -61,6 +61,7 @@
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  time_zone                   :string
+#  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
 #  waifu_or_husbando           :string(255)
@@ -97,7 +98,7 @@ class User < ApplicationRecord
     wiki you
   ]
 
-  rolify
+  rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
 
   belongs_to :pro_membership_plan, required: false
@@ -203,6 +204,14 @@ class User < ApplicationRecord
       update!(ip_addresses: ips)
     end
     ip_addresses
+  end
+
+  def update_title
+    if has_role?(:admin)
+      update(:title, 'Staff')
+    elsif has_role?(:admin, Anime)
+      update(:title, 'Mod')
+    end
   end
 
   def feed
