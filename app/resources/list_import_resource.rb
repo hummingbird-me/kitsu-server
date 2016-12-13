@@ -1,4 +1,8 @@
 class ListImportResource < BaseResource
+  model_hint model: ListImport::MyAnimeList
+  model_hint model: ListImport::AnimePlanet
+  model_hint model: ListImport::Anilist
+
   # Parameters
   attributes :input_text, :strategy, :kind
   attribute :input_file, format: :attachment
