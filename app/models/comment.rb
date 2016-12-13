@@ -40,9 +40,9 @@ class Comment < ApplicationRecord
   processable :content, LongPipeline
 
   belongs_to :user, required: true, counter_cache: true
-  belongs_to :post, required: true, counter_cache: true
+  belongs_to :post, required: true, counter_cache: true, touch: true
   belongs_to :parent, class_name: 'Comment', required: false,
-		counter_cache: 'replies_count'
+		counter_cache: 'replies_count', touch: true
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
     dependent: :destroy
   has_many :likes, class_name: 'CommentLike', dependent: :destroy
