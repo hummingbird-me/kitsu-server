@@ -206,11 +206,11 @@ class User < ApplicationRecord
     ip_addresses
   end
 
-  def update_title
+  def update_title(role)
     if has_role?(:admin)
-      update(:title, 'Staff')
+      update(title: 'Staff')
     elsif has_role?(:admin, Anime)
-      update(:title, 'Mod')
+      update(title: 'Mod')
     end
   end
 
