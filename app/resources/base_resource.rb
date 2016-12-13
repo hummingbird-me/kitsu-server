@@ -5,9 +5,9 @@ class BaseResource < JSONAPI::Resource
   include Pundit::Resource
   include SearchableResource
 
-  def respond_to?(method_name)
+  def respond_to?(method_name, include_private = false)
     if method_name.to_s.end_with?('_id')
-      _model.respond_to?(method_name)
+      _model.respond_to?(method_name, include_private)
     else
       super
     end
