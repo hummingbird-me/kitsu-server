@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161215204926) do
+ActiveRecord::Schema.define(version: 20161216124624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -702,8 +702,10 @@ ActiveRecord::Schema.define(version: 20161215204926) do
     t.integer  "library_entry_id"
     t.integer  "progress"
     t.boolean  "spoiler",                       default: false, null: false
+    t.datetime "deleted_at"
   end
 
+  add_index "reviews", ["deleted_at"], name: "index_reviews_on_deleted_at", using: :btree
   add_index "reviews", ["likes_count"], name: "index_reviews_on_likes_count", using: :btree
   add_index "reviews", ["media_id"], name: "index_reviews_on_media_id", using: :btree
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id", using: :btree
