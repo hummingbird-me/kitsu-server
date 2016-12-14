@@ -36,5 +36,4 @@ class Quote < ApplicationRecord
   has_many :likes, class_name: 'QuoteLike', dependent: :destroy
 
   validates_presence_of :content, :character_name
-
 end
