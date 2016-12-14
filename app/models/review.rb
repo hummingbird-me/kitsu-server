@@ -34,6 +34,8 @@ class Review < ApplicationRecord
   include WithActivity
   include ContentProcessable
 
+  acts_as_paranoid
+
   has_many :likes, class_name: 'ReviewLike', dependent: :destroy
   belongs_to :media, polymorphic: true, required: true
   belongs_to :user, required: true, counter_cache: true
