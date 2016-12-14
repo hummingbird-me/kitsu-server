@@ -156,6 +156,7 @@ class User < ApplicationRecord
     without: /\A[0-9]*\z/,
     message: 'cannot be entirely numbers'
   }
+  validates :gender, length: { maximum: 20 }
   validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
   validates_attachment :avatar, content_type: {
