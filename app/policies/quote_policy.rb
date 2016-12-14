@@ -1,10 +1,8 @@
-class QuoteLikePolicy < ApplicationPolicy
-  def update?
-    false
-  end
+class QuotePolicy < ApplicationPolicy
+  alias_method :create?, :is_owner?
 
-  def create?
-    record.user == user
+  def update?
+    is_owner? || is_admin?
   end
-  alias_method :destroy?, :create?
+  alias_method :destroy?, :update?
 end
