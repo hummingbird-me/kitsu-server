@@ -28,7 +28,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Report < ApplicationRecord
-  belongs_to :naughty, polymorphic: true, required: true
+  belongs_to :naughty, -> { with_deleted }, polymorphic: true, required: true
   belongs_to :user, required: true
   belongs_to :moderator, class_name: 'User', required: false
 
