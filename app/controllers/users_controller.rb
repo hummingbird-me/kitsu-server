@@ -17,7 +17,7 @@ class UsersController < ApplicationController
       render json: { errors: [{ title: 'User not found', status: '400' }] }, status: 400
       return
     end
-    UserMailer.password_reset(user)
+    UserMailer.password_reset(user).deliver_now
     render json: { username: query }
   end
 
