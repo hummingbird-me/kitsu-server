@@ -17,7 +17,11 @@ class UserPolicy < ApplicationPolicy
     elsif has_scope?(:email_confirm, accept_all: false)
       [:confirmed]
     else
-      all - %i[confirmed title]
+      all - %i[confirmed title pro_expires_at about_formatted comments_count
+               favorites_count followers_count following_count import_from
+               import_error import_status ip_addresses last_backup ratings_count
+               rejected_edit_count reviews_count sign_in_count stripe_token
+               stripe_customer_id life_spent_on_anime]
     end
   end
 
