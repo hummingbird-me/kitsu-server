@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213122246) do
+ActiveRecord::Schema.define(version: 20161214201646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -626,17 +626,31 @@ ActiveRecord::Schema.define(version: 20161213122246) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "quote_likes", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "quote_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "quote_likes", ["quote_id"], name: "index_quote_likes_on_quote_id", using: :btree
+  add_index "quote_likes", ["user_id"], name: "index_quote_likes_on_user_id", using: :btree
+
   create_table "quotes", force: :cascade do |t|
-    t.integer  "anime_id"
-    t.text     "content"
-    t.string   "character_name", limit: 255
+    t.integer  "media_id",                               null: false
+    t.text     "content",                                null: false
+    t.string   "character_name", limit: 255,             null: false
     t.integer  "user_id"
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
-    t.integer  "positive_votes",             default: 0, null: false
+    t.integer  "likes_count",                default: 0, null: false
+    t.string   "media_type",                             null: false
+    t.integer  "character_id",                           null: false
   end
 
-  add_index "quotes", ["anime_id"], name: "index_quotes_on_anime_id", using: :btree
+  add_index "quotes", ["character_id"], name: "index_quotes_on_character_id", using: :btree
+  add_index "quotes", ["media_id", "media_type"], name: "index_quotes_on_media_id_and_media_type", using: :btree
+  add_index "quotes", ["media_id"], name: "index_quotes_on_media_id", using: :btree
 
   create_table "rails_admin_histories", force: :cascade do |t|
     t.text     "message"
@@ -840,6 +854,7 @@ ActiveRecord::Schema.define(version: 20161213122246) do
     t.integer  "reviews_count",                           default: 0,           null: false
     t.inet     "ip_addresses",                            default: [],                       array: true
     t.string   "previous_email"
+    t.integer  "quotes_count",                            default: 0,           null: false
     t.integer  "pinned_post_id"
     t.string   "time_zone"
     t.string   "language"
@@ -913,6 +928,9 @@ ActiveRecord::Schema.define(version: 20161213122246) do
   add_foreign_key "media_follows", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
+  add_foreign_key "quote_likes", "quotes"
+  add_foreign_key "quote_likes", "users"
+  add_foreign_key "quotes", "characters"
   add_foreign_key "reports", "users"
   add_foreign_key "reports", "users", column: "moderator_id"
   add_foreign_key "review_likes", "users"

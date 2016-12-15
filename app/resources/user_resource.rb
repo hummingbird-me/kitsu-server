@@ -24,6 +24,7 @@ class UserResource < BaseResource
   has_many :library_entries
   has_many :favorites
   has_many :reviews
+  has_many :quotes
 
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (records, _v, options) {

@@ -50,6 +50,7 @@
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
 #  pro_expires_at              :datetime
+#  quotes_count                :integer          default(0), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)

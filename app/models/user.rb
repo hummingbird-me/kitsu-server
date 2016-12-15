@@ -50,6 +50,7 @@
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
 #  pro_expires_at              :datetime
+#  quotes_count                :integer          default(0), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
@@ -121,6 +122,7 @@ class User < ApplicationRecord
   has_many :post_likes, dependent: :destroy
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
+  has_many :quotes, dependent: :nullify
 
   has_attached_file :avatar, styles: {
     tiny: '40x40#',
