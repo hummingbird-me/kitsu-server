@@ -37,8 +37,11 @@ class ListImport
 
     def ensure_list_is_public
       request = Typhoeus::Request.get("#{MAL_HOST}/animelist/#{input_text}")
-      if request.code == 403
-        errors.add(:input_text, 'Anime list must be public')
+      case request.code
+      when 403
+        errors.add(:input_text, 'MyAnimeList lists must be public to import')
+      when 404
+        errors.add(:input_text, 'MyAnimeList user not found')
       end
     end
 
