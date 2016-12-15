@@ -29,9 +29,17 @@ class ListImport
     # Only accept usernames, not XML exports
     validates :input_text, presence: true
     validates :input_file, absence: true
+    validate :ensure_list_is_public, on: :create
 
     def count
       data.length
+    end
+
+    def ensure_list_is_public
+      request = Typhoeus::Request.get("#{MAL_HOST}/animelist/#{input_text}")
+      if request.code == 403
+        errors.add(:input_text, 'Anime list must be public')
+      end
     end
 
     def each
