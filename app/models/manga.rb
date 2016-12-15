@@ -42,7 +42,7 @@ class Manga < ApplicationRecord
 
   has_many :chapters
 
-  validates :chapter_count, numericality: { greater_than: 0 }
+  validates :chapter_count, numericality: { greater_than: 0 }, allow_nil: true
 
   def unit(number)
     chapters.where(number: number).first

@@ -30,6 +30,6 @@ module Episodic
     has_many :streaming_links, as: 'media', dependent: :destroy
     alias_attribute :progress_limit, :episode_count
 
-    validates :episode_count, numericality: { greater_than: 0 }
+    validates :episode_count, numericality: { greater_than: 0 }, allow_nil: true
   end
 end
