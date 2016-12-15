@@ -202,7 +202,7 @@ class User < ApplicationRecord
   def add_ip(new_ip)
     unless ip_addresses.include?(new_ip)
       ips = [new_ip, *ip_addresses].compact.first(PAST_IPS_LIMIT)
-      update!(ip_addresses: ips)
+      update_attribute(:ip_addresses, ips)
     end
     ip_addresses
   end
