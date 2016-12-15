@@ -48,7 +48,7 @@ FactoryGirl.define do
     age_rating 'G'
 
     trait :nsfw do
-      age_rting 'R18'
+      age_rating 'R18'
     end
   end
 end
