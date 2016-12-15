@@ -9,6 +9,7 @@
 #  content                  :text             not null
 #  content_formatted        :text             not null
 #  deleted_at               :datetime         indexed
+#  edited_at                :datetime
 #  media_type               :string
 #  nsfw                     :boolean          default(FALSE), not null
 #  post_likes_count         :integer          default(0), not null
@@ -94,6 +95,11 @@ class Post < ApplicationRecord
   before_save do
     # Always check if the media is NSFW and try to force into NSFWness
     self.nsfw = media.try(:nsfw?) || false unless nsfw
+    true
+  end
+
+  before_update do
+    self.edited_at = Time.now if content_changed?
     true
   end
 end

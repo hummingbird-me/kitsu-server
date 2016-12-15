@@ -9,6 +9,7 @@
 #  content                  :text             not null
 #  content_formatted        :text             not null
 #  deleted_at               :datetime         indexed
+#  edited_at                :datetime
 #  media_type               :string
 #  nsfw                     :boolean          default(FALSE), not null
 #  post_likes_count         :integer          default(0), not null

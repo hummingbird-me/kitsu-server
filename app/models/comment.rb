@@ -8,6 +8,7 @@
 #  content           :text             not null
 #  content_formatted :text             not null
 #  deleted_at        :datetime         indexed
+#  edited_at         :datetime
 #  likes_count       :integer          default(0), not null
 #  replies_count     :integer          default(0), not null
 #  created_at        :datetime         not null
@@ -76,5 +77,10 @@ class Comment < ApplicationRecord
 
   def no_grandparents
     errors.add(:parent, 'cannot have a parent of their own') if parent&.parent
+  end
+
+  before_update do
+    self.edited_at = Time.now if content_changed?
+    true
   end
 end
