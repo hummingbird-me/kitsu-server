@@ -39,4 +39,9 @@ class Block < ApplicationRecord
     Block.where('user_id = ? or blocked_id = ?', *[user]*2).
           pluck(:blocked_id, :user_id).flatten.uniq - [user]
   end
+
+  after_create do
+    user = blocked_id
+    Follow.where('follower_id = ? OR followed_id = ?', *[user]*2).destroy_all
+  end
 end
