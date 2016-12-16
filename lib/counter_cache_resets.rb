@@ -20,6 +20,7 @@ module CounterCacheResets
                     where: 'rating IS NOT NULL')
     execute sql_for(User, :post_likes,
                     counter_cache_column: 'likes_given_count')
+    execute sql_for(User, :favorites)
   end
 
   def reviews
