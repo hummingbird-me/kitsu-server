@@ -41,7 +41,7 @@ class Block < ApplicationRecord
   end
 
   after_create do
-    user = blocked_id
-    # Follow.where('follower_id = ? OR followed_id = ?', *[user]*2).destroy_all
+    Follow.where(follower: blocked, followed: user).destroy_all
+    Follow.where(follower: user, followed: blocked).destroy_all
   end
 end
