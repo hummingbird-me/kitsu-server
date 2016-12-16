@@ -25,6 +25,10 @@ class UserResource < BaseResource
   has_many :favorites
   has_many :reviews
 
+  def self.attribute_caching_context(context)
+    context[:current_user]&.resource_owner
+  end
+
   filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
   filter :self, apply: -> (records, _v, options) {
     current_user = options[:context][:current_user]&.resource_owner
