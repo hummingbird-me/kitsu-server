@@ -52,7 +52,7 @@ module SearchableResource
       return [] if filters.values.any?(&:nil?)
 
       # Apply scopes and load
-      apply_scopes(filters, opts).load.to_a
+      apply_scopes(filters, opts)
     end
 
     # Count all search results
@@ -77,6 +77,16 @@ module SearchableResource
     end
 
     private
+
+    def pluck_arel_attributes(relation, *attrs)
+      if relation.is_a?(Chewy::Query)
+        attr_names = attrs.map { |a| a.name.to_s }
+        relation = relation.only(*attr_names)
+        relation.map { |row| row.attributes.values_at(*attr_names) }
+      else
+        super
+      end
+    end
 
     def apply_scopes(filters, opts = {})
       context = opts[:context]
