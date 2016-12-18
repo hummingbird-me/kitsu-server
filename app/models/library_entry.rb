@@ -181,5 +181,10 @@ class LibraryEntry < ApplicationRecord
       user.update_feed_completed!
       user.update_profile_completed!
     end
+
+    # Sync MAL updates if linked profile exists
+    if LinkedProfile.find_by(user_id: user_id, url: 'myanimelist').present?
+      MyAnimeListSyncWorker.perform_async(self, request.method)
+    end
   end
 end

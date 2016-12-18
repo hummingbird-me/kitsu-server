@@ -40,6 +40,7 @@ FactoryGirl.define do
     association :media, factory: :anime, strategy: :build
     user
     status 'planned'
+    progress 0
 
     trait :nsfw do
       association :media, :nsfw, factory: :anime, strategy: :build

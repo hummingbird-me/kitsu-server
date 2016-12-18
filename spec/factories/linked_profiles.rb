@@ -29,9 +29,10 @@
 
 FactoryGirl.define do
   factory :linked_profile do
-    user
+    association :user
     linked_site
     url { Faker::Internet.url }
     external_user_id { Faker::Internet.user_name }
+    token "fakefake"
   end
 end
