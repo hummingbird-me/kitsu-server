@@ -55,7 +55,7 @@ class UserResource < BaseResource
               multi_match: {
                 fields: %w[name^2 past_names],
                 query: values.join(' '),
-                boost: 1.2
+                boost: 10
               }
             },
             {
