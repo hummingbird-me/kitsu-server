@@ -13,12 +13,12 @@ class ListImport
       end
 
       def media
-        key = "#{node.name}/#{media_info[:id]}"
-        Mapping.lookup('myanimelist', key) || Mapping.guess(type, media_info)
+        key = "myanimelist/#{node.name}"
+        Mapping.lookup(key, media_info[:id]) || Mapping.guess(type, media_info)
       end
 
       def media_info
-        {
+        @media_info ||= {
           id: node.at_css('manga_mediadb_id, series_animedb_id').content.to_i,
           title: node.at_css('manga_title, series_title').content,
           show_type: node.at_css('series_type')&.content,
