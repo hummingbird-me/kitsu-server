@@ -52,7 +52,7 @@ module SearchableResource
       return [] if filters.values.any?(&:nil?)
 
       # Apply scopes and load
-      apply_scopes(filters, opts)
+      apply_scopes(filters, opts).load.to_a
     end
 
     # Count all search results
@@ -82,6 +82,9 @@ module SearchableResource
       if relation.is_a?(Chewy::Query)
         attr_names = attrs.map { |a| a.name.to_s }
         relation = relation.only(*attr_names)
+        relation.map { |row| row.attributes.values_at(*attr_names) }
+      elsif relation.is_a?(Array)
+        attr_names = attrs.map { |a| a.name.to_s }
         relation.map { |row| row.attributes.values_at(*attr_names) }
       else
         super
