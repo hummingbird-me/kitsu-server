@@ -39,6 +39,7 @@ class CharactersIndex < Chewy::Index
       }
     end
 
+    field :updated_at
     field :name
     field :people, value: -> (ch) {
       ch.castings.map { |ca| ca.person&.name }.uniq.reject(&:blank?)

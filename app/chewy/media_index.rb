@@ -43,6 +43,7 @@ class MediaIndex < Chewy::Index
     root date_detection: false do
       include IndexTranslatable
 
+      field :updated_at
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
@@ -72,6 +73,7 @@ class MediaIndex < Chewy::Index
     root date_detection: false do
       include IndexTranslatable
 
+      field :updated_at
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
@@ -103,6 +105,7 @@ class MediaIndex < Chewy::Index
     root date_detection: false do
       include IndexTranslatable
 
+      field :updated_at
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
