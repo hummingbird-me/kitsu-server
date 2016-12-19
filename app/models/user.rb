@@ -26,6 +26,7 @@
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
 #  favorites_count             :integer          default(0), not null
+#  feed_completed              :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
 #  gender                      :string
@@ -44,12 +45,12 @@
 #  mal_username                :string(255)
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
-#  onboarded                   :boolean          default(FALSE), not null
 #  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
 #  pro_expires_at              :datetime
+#  profile_completed           :boolean          default(FALSE), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
@@ -260,6 +261,14 @@ class User < ApplicationRecord
       self.previous_email = email_was
       self.confirmed_at = nil
       UserMailer.confirmation(self).deliver_now
+    end
+    if ratings_count > 5 && following_count > 5 && comments_count > 0 &&
+       likes_given_count > 3
+      self.feed_completed = true
+    end
+    if ratings_count > 0 && avatar.present? && cover_image.present? &&
+       about.present? && favorites_count > 0
+      self.profile_completed = true
     end
   end
 end

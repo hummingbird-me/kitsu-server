@@ -5,6 +5,7 @@
 #  id                :integer          not null, primary key
 #  content           :text             not null
 #  content_formatted :text             not null
+#  deleted_at        :datetime         indexed
 #  legacy            :boolean          default(FALSE), not null
 #  likes_count       :integer          default(0), indexed
 #  media_type        :string

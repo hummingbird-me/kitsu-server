@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161216124624) do
+ActiveRecord::Schema.define(version: 20161219013436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -830,7 +830,6 @@ ActiveRecord::Schema.define(version: 20161216124624) do
     t.integer  "import_status"
     t.string   "import_from",                 limit: 255
     t.string   "import_error",                limit: 255
-    t.boolean  "onboarded",                               default: false,       null: false
     t.string   "past_names",                              default: [],          null: false, array: true
     t.string   "gender"
     t.date     "birthday"
@@ -850,6 +849,8 @@ ActiveRecord::Schema.define(version: 20161216124624) do
     t.string   "country",                     limit: 2
     t.boolean  "share_to_global",                         default: true,        null: false
     t.string   "title"
+    t.boolean  "profile_completed",                       default: false,       null: false
+    t.boolean  "feed_completed",                          default: false,       null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
