@@ -1,5 +1,5 @@
 module DataExport
-  class MyAnimeList
+  module MyAnimeList
     ATARASHII_API_HOST = 'https://hbv3-mal-api.herokuapp.com/2.1/'.freeze
     MINE = '?mine=1'.freeze
 
@@ -20,6 +20,7 @@ module DataExport
         url: 'myanimelist'
       )
 
+      # anime or manga lowercased
       media_type = entry.media_type.downcase
       mal_media_id = mal_media.external_id
 
