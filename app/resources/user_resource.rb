@@ -40,8 +40,8 @@ class UserResource < BaseResource
     mode: :query,
     apply: -> (values, _ctx) {
       {
-        bool: {
-          should: [
+        dis_max: {
+          queries: [
             {
               multi_match: {
                 fields: %w[name^2 past_names],
@@ -54,8 +54,7 @@ class UserResource < BaseResource
             {
               multi_match: {
                 fields: %w[name^2 past_names],
-                query: values.join(' '),
-                boost: 10
+                query: values.join(' ')
               }
             },
             {
