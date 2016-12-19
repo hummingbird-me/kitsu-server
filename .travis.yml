@@ -21,10 +21,15 @@ before_script:
 script:
   - bundle exec rspec
 
-# Postgres v9.4 and ElasticSearch vWhoGivesAFuck
+# Postgres v9.4 and ElasticSearch 2.x
 services:
   - elasticsearch
 addons:
+  apt:
+    sources:
+      - elasticsearch-2.x
+    packages:
+      - elasticsearch
   postgresql: 9.4
   # Oh and report to CodeClimate
   code_climate:
