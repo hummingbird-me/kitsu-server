@@ -189,15 +189,17 @@ class LibraryEntry < ApplicationRecord
 
     # Sync MAL updates if linked profile exists
     if linked_profile_exists?
+      return unless media_type.in? %w[anime manga]
+
       MyAnimeListSyncWorker.perform_async(self, 'create/update')
     end
   end
 
   after_destroy do
     if linked_profile_exists?
+      return unless media_type.in? %w[anime manga]
+
       MyAnimeListSyncWorker.perform_async(self, 'delete')
     end
   end
-
-
 end

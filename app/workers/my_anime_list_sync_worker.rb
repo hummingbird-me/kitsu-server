@@ -1,11 +1,10 @@
 class MyAnimeListSyncWorker
-
   include Sidekiq::Worker
-  include DataExport::MyAnimeList
+  # include DataExport::MyAnimeList
 
-  def perform(entry, method)
+  def perform(le, method)
     # TODO: make a report per day for what is happening (syncing)
-    media = MyAnimeList.new(entry, method)
+    media = MyAnimeListService.new(le, method)
     media.execute_method
   end
 end

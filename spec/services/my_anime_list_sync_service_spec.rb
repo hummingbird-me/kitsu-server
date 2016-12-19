@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DataExport::MyAnimeList do
+RSpec.describe MyAnimeListSyncService do
   let(:library_entry) { build(:library_entry,
     status: 'current',
     progress: 10
@@ -15,30 +15,27 @@ RSpec.describe DataExport::MyAnimeList do
     external_id: 11_633
   )}
 
+  # personalize subject per create/update/destroy
   subject { described_class.new(library_entry, 'update') }
 
   before do
     host = described_class::ATARASHII_API_HOST
     mine = '?mine=1'
 
-    # Authorization Check
-    stub_request(:get, "#{host}account/verify_credentials")
-      .to_return(body: fixture('data_export/my_anime_list/authorization_check.json'))
-
     # Blood Lad, this is on my list
     # authorized
     stub_request(:get, "#{host}anime/11633#{mine}")
-      .to_return(body: fixture('data_export/my_anime_list/anime/blood-lad.json'))
+      .to_return(body: fixture('my_anime_list/sync/anime/blood-lad.json'))
 
     # Boku no Pico, this is NOT on my list
     # authorized
     stub_request(:get, "#{host}anime/1639#{mine}")
-      .to_return(body: fixture('data_export/my_anime_list/anime/boku-no-pico.json'))
+      .to_return(body: fixture('my_anime_list/sync/anime/boku-no-pico.json'))
 
     # Toy's anime list (slimmed down)
     # not authorized
     stub_request(:get, "#{host}animelist/toyhammered")
-      .to_return(body: fixture('data_export/my_anime_list/anime/toy-anime-list.json'))
+      .to_return(body: fixture('my_anime_list/sync/anime/toy-anime-list.json'))
 
     # PUT request
     stub_request(:put, "#{host}animelist/anime/11633")
@@ -55,21 +52,36 @@ RSpec.describe DataExport::MyAnimeList do
 
   context 'Anime' do
     describe '#execute_method' do
-      # not sure hoow to test this
-      context 'Create or Update' do
-        it 'returns response' do
-          allow(Mapping).to receive(:lookup).and_return(mapping)
-          allow(LinkedProfile).to receive(:find_by).and_return(linked_profile)
 
-          p "Create or Update"
-          subject.execute_method
-        end
-      end
     end
-
   end
 
   context 'Manga' do
 
   end
+
+  context 'Tyhpoeus Requests' do
+    describe 'getting a url' do
+      # it 'should issue a request to the server' do
+      #   stub_request(:get, 'example.com', linked_profile).to_return(body: 'HULLO')
+      #   expect { |b|
+      #     subject.send(:get, 'example.com', linked_profile, &b)
+      #     subject.run
+      #   }.to yield_with_args('HULLO')
+      #   expect(WebMock).to have_requested(:get, 'example.com').once
+      # end
+    end
+
+    context 'which returns an error' do
+      # it 'should output a message and never call the block' do
+      #   stub_request(:get, 'example.com', linked_profile).to_return(status: 404)
+      #   expect { |b|
+      #     subject.send(:get, 'example.com', linked_profile, &b)
+      #     subject.run
+      #   }.not_to yield_control
+      #   expect(WebMock).to have_requested(:get, 'example.com').once
+      # end
+    end
+  end
+
 end
