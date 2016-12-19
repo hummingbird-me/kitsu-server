@@ -32,7 +32,7 @@ class Report < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :moderator, class_name: 'User', required: false
 
-  enum reason: %i[nsfw offensive spoiler bullying other]
+  enum reason: %i[nsfw offensive spoiler bullying other spam]
   enum status: %i[reported resolved declined]
 
   validates :explanation, presence: true, if: :other?
