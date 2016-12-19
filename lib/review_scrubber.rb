@@ -5,11 +5,29 @@ class ReviewScrubber
     @review = review
   end
 
-  def scrub!
+  def content_formatted
     output = div_to_p(review.content)
     output = Sanitize.fragment(output, Sanitize::Config::BASIC)
     output = br_to_p(output)
-    review.update_attribute(:content_formatted, output)
+    output
+  end
+
+  def content
+    html = content_formatted.gsub('rel="nofollow"', '')
+    markdown = Kramdown::Document.new(html, input: 'html',
+                                            html_to_native: true,
+                                            parse_block_html: true,
+                                            line_width: 150).to_kramdown
+    markdown.gsub(/\\(["'])/, '\1')
+  end
+
+  def scrub!
+    review.update_columns(
+      content_formatted: content_formatted,
+      content: content,
+      legacy: false,
+      updated_at: Time.now
+    )
   end
 
   def br_to_p(src)
