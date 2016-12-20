@@ -72,8 +72,8 @@ class MediaResource < BaseResource
             script: "max(log10(doc['user_count'].value), 1) * _score",
           },
           query: {
-            dis_max: {
-              queries: [
+            bool: {
+              should: [
                 { multi_match: {
                   fields: %w[
                     titles.* abbreviated_titles synopsis people characters
