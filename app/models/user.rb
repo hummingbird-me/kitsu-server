@@ -262,11 +262,11 @@ class User < ApplicationRecord
       self.confirmed_at = nil
       UserMailer.confirmation(self).deliver_now
     end
-    if ratings_count > 5 && following_count > 5 && comments_count > 0 &&
-       likes_given_count > 3
+    if ratings_count >= 5 && following_count >= 5 && comments_count > 0 &&
+       likes_given_count >= 3
       self.feed_completed = true
     end
-    if ratings_count > 0 && avatar.present? && cover_image.present? &&
+    if ratings_count >= 0 && avatar.present? && cover_image.present? &&
        about.present? && favorites_count > 0
       self.profile_completed = true
     end
