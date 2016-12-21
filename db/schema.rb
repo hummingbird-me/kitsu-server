@@ -355,6 +355,9 @@ ActiveRecord::Schema.define(version: 20170107034610) do
     t.string   "media_type",                                              null: false
     t.integer  "volumes_owned",                           default: 0,     null: false
     t.boolean  "nsfw",                                    default: false, null: false
+    t.integer  "anime_id"
+    t.integer  "manga_id"
+    t.integer  "drama_id"
   end
 
   add_index "library_entries", ["private"], name: "index_library_entries_on_private", using: :btree

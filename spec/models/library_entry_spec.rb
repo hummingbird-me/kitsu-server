@@ -16,6 +16,9 @@
 #  volumes_owned   :integer          default(0), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  anime_id        :integer
+#  drama_id        :integer
+#  manga_id        :integer
 #  media_id        :integer          not null, indexed => [user_id, media_type]
 #  user_id         :integer          not null, indexed, indexed => [media_type], indexed => [media_type, media_id], indexed => [status]
 #
