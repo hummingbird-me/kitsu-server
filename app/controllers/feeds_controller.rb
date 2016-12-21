@@ -18,6 +18,14 @@ class FeedsController < ApplicationController
     render_jsonapi serialize_activities(activities)
   end
 
+  def destroy_activity
+    uuid = params[:uuid]
+    activity = feed.activities.includes(:subject).find(params[:uuid])
+    if policy_for(activity.subject).destroy?
+      feed.activities.destroy(params[:uuid], uuid: true)
+    end
+  end
+
   private
 
   def serialize_activities(list)

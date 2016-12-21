@@ -545,6 +545,7 @@
 #                                        GET       /edge/feeds/:group/:id(.:format)                                          feeds#show
 #                                        POST      /edge/feeds/:group/:id/_read(.:format)                                    feeds#mark_read
 #                                        POST      /edge/feeds/:group/:id/_seen(.:format)                                    feeds#mark_seen
+#                                        DELETE    /edge/feeds/:group/:id/activities/:uuid(.:format)                         feeds#destroy_activity
 #                         users__recover POST      /edge/users/_recover(.:format)                                            users#recover
 #                         debug_dump_all GET       /debug/dump_all(.:format)                                                 debug#dump_all
 #                         debug_trace_on POST      /debug/trace_on(.:format)                                                 debug#trace_on
@@ -608,6 +609,7 @@ Rails.application.routes.draw do
     get '/feeds/:group/:id', to: 'feeds#show'
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
     post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
+    delete '/feeds/:group/:id/activities/:uuid', to: 'feeds#destroy_activity'
     post '/users/_recover', to: 'users#recover'
   end
 
