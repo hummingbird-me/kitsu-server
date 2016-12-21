@@ -1,6 +1,7 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_number, :page_size, :including
+    attr_accessor :data, :feed, :page_number, :page_size, :including,
+      :limit_ratio
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
@@ -15,6 +16,8 @@ class Feed
       @including = []
       @maps = []
       @selects = []
+      @limit_ratio = 1.0
+      @data[:limit] = 25
     end
 
     def page(page_number = nil, id_lt: nil)
@@ -112,6 +115,7 @@ class Feed
     end
 
     def results
+      data[:limit] = (data[:limit] / @limit_ratio).to_i
       feed.stream_feed.get(data)['results']
     end
 
@@ -129,7 +133,10 @@ class Feed
       activities.map { |act| strip_unfound(act) }
     end
 
-    def select(&block)
+    # @attr [Float] ratio The expected percentage of posts that will be matched
+    #                     by this selector
+    def select(ratio = 1.0, &block)
+      @limit_ratio *= ratio
       @selects << block
       self
     end
