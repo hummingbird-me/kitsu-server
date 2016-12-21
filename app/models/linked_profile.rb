@@ -33,4 +33,14 @@ class LinkedProfile < ApplicationRecord
 
   validates_presence_of :url, if: :private?
   validates_presence_of :external_user_id
+
+  before_save do
+    # should check to make sure username/password is valid
+  end
+
+  after_save do
+    if self.url == 'myanimelist'
+      MyAnimeListListComparisonWorker.perform_async(self.user_id)
+    end
+  end
 end
