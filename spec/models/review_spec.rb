@@ -22,6 +22,7 @@
 #
 # Indexes
 #
+#  index_reviews_on_deleted_at   (deleted_at)
 #  index_reviews_on_likes_count  (likes_count)
 #  index_reviews_on_media_id     (media_id)
 #  index_reviews_on_user_id      (user_id)

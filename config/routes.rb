@@ -17,6 +17,10 @@
 #                                        PUT|PATCH /edge/library-entries/:library_entry_id/relationships/unit(.:format)      library_entries#update_relationship {:relationship=>"unit"}
 #                                        DELETE    /edge/library-entries/:library_entry_id/relationships/unit(.:format)      library_entries#destroy_relationship {:relationship=>"unit"}
 #                     library_entry_unit GET       /edge/library-entries/:library_entry_id/unit(.:format)                    units#get_related_resource {:relationship=>"unit", :source=>"library_entries"}
+#  library_entry_relationships_next_unit GET       /edge/library-entries/:library_entry_id/relationships/next-unit(.:format) library_entries#show_relationship {:relationship=>"next_unit"}
+#                                        PUT|PATCH /edge/library-entries/:library_entry_id/relationships/next-unit(.:format) library_entries#update_relationship {:relationship=>"next_unit"}
+#                                        DELETE    /edge/library-entries/:library_entry_id/relationships/next-unit(.:format) library_entries#destroy_relationship {:relationship=>"next_unit"}
+#                library_entry_next_unit GET       /edge/library-entries/:library_entry_id/next-unit(.:format)               next_units#get_related_resource {:relationship=>"next_unit", :source=>"library_entries"}
 #                        library_entries GET       /edge/library-entries(.:format)                                           library_entries#index
 #                                        POST      /edge/library-entries(.:format)                                           library_entries#create
 #                          library_entry GET       /edge/library-entries/:id(.:format)                                       library_entries#show

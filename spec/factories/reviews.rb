@@ -5,6 +5,7 @@
 #  id                :integer          not null, primary key
 #  content           :text             not null
 #  content_formatted :text             not null
+#  deleted_at        :datetime         indexed
 #  legacy            :boolean          default(FALSE), not null
 #  likes_count       :integer          default(0), indexed
 #  media_type        :string
@@ -21,6 +22,7 @@
 #
 # Indexes
 #
+#  index_reviews_on_deleted_at   (deleted_at)
 #  index_reviews_on_likes_count  (likes_count)
 #  index_reviews_on_media_id     (media_id)
 #  index_reviews_on_user_id      (user_id)
