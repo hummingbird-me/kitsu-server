@@ -75,7 +75,9 @@ RSpec.describe Feed::ActivityList, type: :model do
   describe '#add' do
     let(:activity) { Feed::Activity.new(subject) }
     it 'should tell Stream to add the activity by JSON' do
-      expect(subject.feed.stream_feed).to receive(:add_activity).with(Hash).once
+      res = OpenStruct.new(parsed_response: {})
+      expect(subject.feed.stream_feed).to receive(:add_activity).
+        with(Hash).once.and_return(res)
       subject.add(activity)
     end
   end
@@ -109,6 +111,30 @@ RSpec.describe Feed::ActivityList, type: :model do
           .with('id', foreign_id: true).once
         subject.destroy(activity)
       end
+    end
+
+    context 'with uuid' do
+      it 'should tell Stream to remove the activity' do
+        activity = list.new(
+          actor: 'User:1',
+          object: 'Object:1',
+          verb: 'test'
+        ).create
+        expect(subject.feed.stream_feed).to receive(:remove_activity)
+          .with(activity.id)
+        subject.destroy(activity.id, uuid: true)
+      end
+    end
+  end
+
+  describe '#find' do
+    it 'should return a single Activity' do
+      act = list.new(
+        actor: 'User:1',
+        object: 'Object:1',
+        verb: 'test'
+      ).create
+      expect(list.find(act.id)).to eq(act)
     end
   end
 

@@ -87,8 +87,14 @@ class Feed
       Feed::Activity.new(feed, data)
     end
 
+    def find(id)
+      where_id(:lte, id).limit(1).to_a.first
+    end
+
     def add(activity)
-      feed.stream_feed.add_activity(activity.as_json)
+      req = feed.stream_feed.add_activity(activity.as_json)
+      res = req.parsed_response.symbolize_keys.except(:duration)
+      Feed::Activity.new(feed, res)
     end
     alias_method :<<, :add
 
@@ -96,9 +102,13 @@ class Feed
       Feed.client.update_activity(activity.as_json)
     end
 
-    def destroy(activity)
-      foreign_id = Feed.get_stream_id(activity.foreign_id)
-      feed.stream_feed.remove_activity(foreign_id, foreign_id: true)
+    def destroy(activity = nil, foreign_id: nil, uuid: nil)
+      if uuid
+        feed.stream_feed.remove_activity(activity)
+      else
+        foreign_id = Feed.get_stream_id(foreign_id || activity.foreign_id)
+        feed.stream_feed.remove_activity(foreign_id, foreign_id: true)
+      end
     end
 
     def results
