@@ -77,18 +77,16 @@ class FeedsController < ApplicationController
   end
 
   def policy_for(model)
-    policy = Pundit::PolicyFinder.new(model).policy
-    policy.new(current_user, model).tap { |policy| p policy }
+    Pundit.policy!(current_user, model)
   end
 
   def scope_for(model)
-    scope = Pundit::PolicyFinder.new(model).scope
-    scope.new(current_user, model).tap { |policy| p policy }
+    Pundit.policy_scope!(current_user, model)
   end
 
   def show?(model)
     scope = model.class.where(id: model.id)
-    scope_for(scope).resolve.exists?
+    scope_for(scope).exists?
   end
 
   def render_jsonapi(data, opts = {})
