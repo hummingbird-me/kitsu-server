@@ -5,17 +5,17 @@ class FeedsController < ApplicationController
   before_action :authorize_feed!
 
   def show
-    render json: stringify_activities(query.list)
+    render_jsonapi stringify_activities(query.list)
   end
 
   def mark_read
     activities = feed.activities.mark(:read, params[:_json])
-    render json: serialize_activities(activities)
+    render_jsonapi serialize_activities(activities)
   end
 
   def mark_seen
     activities = feed.activities.mark(:seen, params[:_json])
-    render json: serialize_activities(activities)
+    render_jsonapi serialize_activities(activities)
   end
 
   private
@@ -30,17 +30,6 @@ class FeedsController < ApplicationController
     )
   end
 
-  instrument_method
-  def stringify_activities(list)
-    Oj.dump(serialize_activities(list))
-  end
-
-  def query
-    @query ||= FeedQueryService.new(params, current_user&.resource_owner)
-  end
-
-  delegate :feed, to: :query
-
   def serialize_error(status, message)
     {
       errors: [
@@ -52,10 +41,21 @@ class FeedsController < ApplicationController
     }
   end
 
+  instrument_method
+  def stringify_activities(list)
+    Oj.dump(serialize_activities(list))
+  end
+
+  def query
+    @query ||= FeedQueryService.new(params, current_user&.resource_owner)
+  end
+
+  delegate :feed, to: :query
+
   def authorize_feed!
     unless feed_visible?
-      render status: 403,
-             json: serialize_error(403, 'Not allowed to access that feed')
+      error = serialize_error(403, 'Not allowed to access that feed')
+      render_jsonapi error, status: 403
     end
   end
 
@@ -89,5 +89,9 @@ class FeedsController < ApplicationController
   def show?(model)
     scope = model.class.where(id: model.id)
     scope_for(scope).resolve.exists?
+  end
+
+  def render_jsonapi(data, opts = {})
+    render opts.merge({ json: data, content_type: JSONAPI::MEDIA_TYPE })
   end
 end
