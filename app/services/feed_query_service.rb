@@ -55,14 +55,22 @@ class FeedQueryService
         {
           ratio: 0.8,
           proc: -> (act) {
-            throw :remove_group unless MEDIA_VERBS.include?(act.verb)
+            if MEDIA_VERBS.include?(act.verb)
+              true
+            else
+              throw :remove_group
+            end
           }
         }
       when 'posts'
         {
           ratio: 0.2,
           proc: -> (act) {
-            throw :remove_group unless POST_VERBS.include?(act.verb)
+            if POST_VERBS.include?(act.verb)
+              true
+            else
+              throw :remove_group
+            end
           }
         }
     end
