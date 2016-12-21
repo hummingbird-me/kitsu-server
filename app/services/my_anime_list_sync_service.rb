@@ -89,7 +89,7 @@ class MyAnimeListSyncService
 
   private
 
-  def get(url, profile, opts = {})
+  def get(url, profile)
     request = Typhoeus::Request.new(
       build_url(url),
       method: :get,
@@ -102,7 +102,7 @@ class MyAnimeListSyncService
     request.run
   end
 
-  def post(url, profile, body, opts = {})
+  def post(url, profile, body)
     request = Typhoeus::Request.new(
       build_url(url),
       method: :post,
@@ -117,7 +117,7 @@ class MyAnimeListSyncService
     request.run
   end
 
-  def put(url, profile, body, opts = {})
+  def put(url, profile, body)
     request = Typhoeus::Request.new(
       build_url(url),
       method: :put,
@@ -132,7 +132,7 @@ class MyAnimeListSyncService
     request.run
   end
 
-  def delete(url, profile, opts = {})
+  def delete(url, profile)
     request = Typhoeus::Request.new(
       build_url(url),
       method: :delete,
@@ -157,13 +157,13 @@ class MyAnimeListSyncService
         yield response.body
       elsif response.timed_out?
         # aw hell no
-        log("got a time out")
-      elsif response.code == 0
+        log('got a time out')
+      elsif response.code.zero?
         # Could not get an http response, something's wrong.
         log(response.return_message)
       else
         # Received a non-successful http response.
-        log("HTTP request failed: " + response.code.to_s)
+        log('HTTP request failed: ' + response.code.to_s)
       end
     end
   end

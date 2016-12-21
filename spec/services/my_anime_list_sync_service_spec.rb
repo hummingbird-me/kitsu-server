@@ -76,7 +76,7 @@ RSpec.describe MyAnimeListSyncService do
       #     subject.run
       #   }.to yield_with_args('HI')
         # expect(WebMock).to have_requested(:get, 'example.com', linked_profile).once
-      end
+      # end
     end
 
     context 'which returns an error' do

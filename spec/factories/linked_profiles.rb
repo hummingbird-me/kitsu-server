@@ -33,6 +33,6 @@ FactoryGirl.define do
     linked_site
     url { Faker::Internet.url }
     external_user_id { Faker::Internet.user_name }
-    token "fakefake"
+    token 'fakefake'
   end
 end

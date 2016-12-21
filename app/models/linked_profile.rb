@@ -39,8 +39,8 @@ class LinkedProfile < ApplicationRecord
   end
 
   after_save do
-    if self.url == 'myanimelist'
-      MyAnimeListListComparisonWorker.perform_async(self.user_id)
+    if url == 'myanimelist'
+      MyAnimeListListComparisonWorker.perform_async(user_id)
     end
   end
 end
