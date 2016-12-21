@@ -2,6 +2,7 @@ class FeedsController < ApplicationController
   include Skylight::Helpers
   include Pundit
   skip_after_action :enforce_policy_use
+  before_action :authorize_feed!
 
   def show
     render json: stringify_activities(query.list)
@@ -39,4 +40,54 @@ class FeedsController < ApplicationController
   end
 
   delegate :feed, to: :query
+
+  def serialize_error(status, message)
+    {
+      errors: [
+        {
+          status: status,
+          detail: message
+        }
+      ]
+    }
+  end
+
+  def authorize_feed!
+    unless feed_visible?
+      render status: 403,
+             json: serialize_error(403, 'Not allowed to access that feed')
+    end
+  end
+
+  def feed_visible?
+    case params[:group]
+    when 'media', 'media_aggr'
+      media_type, media_id = params[:id].split('-')
+      return false unless %w[Manga Anime Drama].include?(media_type)
+      media = media_type.safe_constantize.find_by(id: media_id)
+      media && show?(media)
+    when 'user', 'user_aggr'
+      user = User.find_by(id: params[:id])
+      user && show?(user)
+    when 'notifications', 'timeline'
+      user = User.find_by(id: params[:id])
+      user == current_user.resource_owner
+    when 'global' then true
+    end
+  end
+
+  def policy_for(model)
+    policy = Pundit::PolicyFinder.new(model).policy
+    policy.new(current_user, model).tap { |policy| p policy }
+  end
+
+  def scope_for(model)
+    scope = Pundit::PolicyFinder.new(model).scope
+    scope.new(current_user, model).tap { |policy| p policy }
+  end
+
+  def show?(model)
+    scope = model.class.where(id: model.id)
+    scope_for(scope).resolve.exists?
+  end
 end
