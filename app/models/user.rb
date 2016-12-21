@@ -266,7 +266,7 @@ class User < ApplicationRecord
        likes_given_count >= 3
       self.feed_completed = true
     end
-    if ratings_count >= 0 && avatar.present? && cover_image.present? &&
+    if ratings_count >= 5 && avatar.present? && cover_image.present? &&
        about.present? && favorites_count > 0
       self.profile_completed = true
     end
