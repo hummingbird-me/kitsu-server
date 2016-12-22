@@ -23,7 +23,9 @@ class FeedsController < ApplicationController
     activity = feed.activities.includes(:subject).find(params[:uuid])
     if policy_for(activity.subject).destroy?
       feed.activities.destroy(params[:uuid], uuid: true)
+      return render nothing: true, status: 204
     end
+    render nothing: true, status: 401
   end
 
   private
