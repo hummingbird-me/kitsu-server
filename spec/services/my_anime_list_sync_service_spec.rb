@@ -21,7 +21,7 @@ RSpec.describe MyAnimeListSyncService do
   end
 
   # delete or create/update
-  subject { MyAnimeListSyncService.new(library_entry, 'create/update') }
+  subject { described_class.new(library_entry, 'create/update') }
 
   before do
     @host = described_class::ATARASHII_API_HOST
@@ -29,42 +29,75 @@ RSpec.describe MyAnimeListSyncService do
 
     # Blood Lad, this is on my list
     # authorized
-    # stub_request(:get, "#{host}anime/11633#{mine}", linked_profile)
-    #   .to_return(body: fixture('my_anime_list/sync/anime/blood-lad.json'))
-    #
-    # # Boku no Pico, this is NOT on my list
-    # # authorized
-    # stub_request(:get, "#{host}anime/1639#{mine}", linked_profile)
-    #   .to_return(body: fixture('my_anime_list/sync/anime/boku-no-pico.json'))
-    #
-    # # Toy's anime list (slimmed down)
-    # # not authorized
-    # stub_request(:get, "#{host}animelist/toyhammered", linked_profile)
-    #   .to_return(body: fixture('my_anime_list/sync/anime/toy-anime-list.json'))
-    #
-    # # PUT request
-    # stub_request(:put, "#{host}animelist/anime/11633", linked_profile)
-    #   .with(
-    #     body: 'episodes=10&rewatch_count=0&score&status=1',
-    #     headers: {
-    #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-    #     })
-    #   .to_return(status: 200)
-    #
-    # # POST request
-    # stub_request(:post, "#{host}animelist/anime", linked_profile)
-    #   .with(
-    #     body: 'anime_id=11633&episodes=10&score&status=1',
-    #     headers: {
-    #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-    #     })
-    #   .to_return(status: 200)
+    stub_request(:get, "#{@host}anime/11633#{mine}")
+      .with(
+        headers: {
+          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+        })
+      .to_return(body: fixture('my_anime_list/sync/anime/blood-lad.json'))
+
+    # Boku no Pico, this is NOT on my list
+    # authorized
+    stub_request(:get, "#{@host}anime/1639#{mine}")
+      .with(
+        headers: {
+          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+        })
+      .to_return(body: fixture('my_anime_list/sync/anime/boku-no-pico.json'))
+
+    # TODO: fix, not working like I thought it would
+    # related to commented out before_save code
+    # in linked_profile
+    stub_request(:get, "#{@host}account/verify_credentials")
+      .with(
+        headers: {
+          Authorization: /.+/
+        })
+    .to_return(status: 200)
   end
 
-  context 'Anime' do
-  end
+  context 'Anime/Manga' do
+    describe '#format_status' do
+      context 'converting from kitsu -> mal' do
+        it 'should change current' do
+          le = build(:library_entry, status: 'current')
+          expect(subject.format_status(le.status)).to eq(1)
+        end
+        it 'should change planned' do
+          le = build(:library_entry, status: 'planned')
+          expect(subject.format_status(le.status)).to eq(6)
+        end
+        it 'should change completed' do
+          le = build(:library_entry, status: 'completed')
+          expect(subject.format_status(le.status)).to eq(2)
+        end
+        it 'should change on_hold' do
+          le = build(:library_entry, status: 'on_hold')
+          expect(subject.format_status(le.status)).to eq(3)
+        end
+        it 'should change dropped' do
+          le = build(:library_entry, status: 'dropped')
+          expect(subject.format_status(le.status)).to eq(4)
+        end
+      end
+    end
 
-  context 'Manga' do
+    describe '#format_score' do
+      context 'converting from kitsu -> mal' do
+        it 'should convert 3 stars' do
+          le = build(:library_entry, rating: 3)
+          expect(subject.format_score(le.rating)).to eq(6)
+        end
+        it 'should convert 3.5 stars' do
+          le = build(:library_entry, rating: 3.5)
+          expect(subject.format_score(le.rating)).to eq(7)
+        end
+        it 'should return nil if no score' do
+          le = build(:library_entry, rating: nil)
+          expect(subject.format_score(le.rating)).to eq(nil)
+        end
+      end
+    end
   end
 
   context 'Tyhpoeus Requests' do
@@ -111,6 +144,82 @@ RSpec.describe MyAnimeListSyncService do
               })
             .once
         end
+      end
+    end
+
+    describe '#post' do
+      it 'should issue a request to the server' do
+        stub_request(:post, "#{@host}example.com")
+          .with(
+            body: 'anime_id=11633&episodes=1&score&status=1',
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            })
+          .to_return(status: 200)
+
+        body = {
+          anime_id: 11633,
+          status: 1,
+          episodes: 1,
+          score: nil
+        }
+        subject.send(:post, 'example.com', linked_profile, body)
+
+        expect(WebMock).to have_requested(:post, "#{@host}example.com")
+          .with(
+            body: 'anime_id=11633&episodes=1&score&status=1',
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            })
+          .once
+      end
+    end
+
+    describe '#put' do
+      it 'should issue a request to the server' do
+        stub_request(:put, "#{@host}example.com")
+          .with(
+            body: 'episodes=10&rewatch_count=0&score&status=1',
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            })
+          .to_return(status: 200)
+
+        body = {
+          status: 1,
+          episodes: 10,
+          score: nil,
+          rewatch_count: 0
+        }
+        subject.send(:put, 'example.com', linked_profile, body)
+
+        expect(WebMock).to have_requested(:put, "#{@host}example.com")
+          .with(
+            body: 'episodes=10&rewatch_count=0&score&status=1',
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            })
+          .once
+      end
+    end
+
+    describe '#delete' do
+      it 'should issue a request to the server' do
+        stub_request(:delete, "#{@host}example.com")
+          .with(
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            })
+          .to_return(status: 200)
+
+        subject.send(:delete, 'example.com', linked_profile)
+
+        expect(WebMock).to have_requested(:delete, "#{@host}example.com")
+          .with(
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            })
+          .once
       end
     end
   end

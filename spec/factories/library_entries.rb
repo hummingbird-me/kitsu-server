@@ -41,6 +41,7 @@ FactoryGirl.define do
     user
     status 'planned'
     progress 0
+    rating 5
 
     trait :nsfw do
       association :media, :nsfw, factory: :anime, strategy: :build

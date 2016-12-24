@@ -32,8 +32,6 @@ class MyAnimeListSyncService
       get("#{media_type}/#{mal_media_id}#{MINE}", profile) do |response|
         # check if watched status exists
         if response['watched_status']
-          # update
-          # TODO: retry later on if we need to
           put(
             "animelist/#{media_type}/#{mal_media_id}",
             profile,
@@ -45,8 +43,6 @@ class MyAnimeListSyncService
             }
           )
         else
-          # create
-          # TODO: retry later on if we need to
           post(
             "animelist/#{media_type}",
             profile,
@@ -112,7 +108,7 @@ class MyAnimeListSyncService
 
     # TODO: @nuck is there a better way to handle this?
     request_status(request) do |response|
-      yield response
+      # yield response
     end
     request.run
   end
@@ -127,7 +123,8 @@ class MyAnimeListSyncService
 
     # TODO: @nuck is there a better way to handle this?
     request_status(request) do |response|
-      yield response
+      # yield response
+      # doesn't need to do anything if success
     end
     request.run
   end
@@ -141,7 +138,7 @@ class MyAnimeListSyncService
 
     # TODO: @nuck is there a better way to handle this?
     request_status(request) do |response|
-      yield response
+      # yield response
     end
     request.run
   end
@@ -154,7 +151,9 @@ class MyAnimeListSyncService
         # get/create/update/delete
         # afterwards the chosen method will send it up
         # to the parent request under my_anime_list.rb
-        yield response.body
+
+        # delete will not have a body so need try catch
+        yield response&.body
       elsif response.timed_out?
         # aw hell no
         $stderr.puts('got a time out')
