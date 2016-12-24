@@ -30,29 +30,56 @@ class MyAnimeListSyncService
     else
       # find the anime or manga
       get("#{media_type}/#{mal_media_id}#{MINE}", profile) do |response|
-        # check if watched status exists
-        if response['watched_status']
-          put(
-            "animelist/#{media_type}/#{mal_media_id}",
-            profile,
-            {
-              status: format_status(le.status),
-              episodes: le.progress,
-              score: format_score(le.rating),
-              rewatch_count: le.reconsume_count
-            }
-          )
+        # need to check watched_status OR read_status
+        if media_type == 'anime'
+          if response['watched_status']
+            put(
+              "animelist/#{media_type}/#{mal_media_id}",
+              profile,
+              {
+                status: format_status(le.status),
+                episodes: le.progress,
+                score: format_score(le.rating),
+                rewatch_count: le.reconsume_count
+              }
+            )
+          else
+            post(
+              "animelist/#{media_type}",
+              profile,
+              {
+                anime_id: mal_media_id,
+                status: format_status(le.status),
+                episodes: le.progress,
+                score: format_score(le.rating)
+              }
+            )
+          end
         else
-          post(
-            "animelist/#{media_type}",
-            profile,
-            {
-              anime_id: mal_media_id,
-              status: format_status(le.status),
-              episodes: le.progress,
-              score: format_score(le.rating)
-            }
-          )
+        # manga
+          if response['read_status']
+            put(
+              "mangalist/#{media_type}/#{mal_media_id}",
+              profile,
+              {
+                status: format_status(le.status),
+                chapters: le.progress,
+                score: format_score(le.rating),
+                reread_count: le.reconsume_count
+              }
+            )
+          else
+            post(
+              "mangalist/#{media_type}",
+              profile,
+              {
+                manga_id: mal_media_id,
+                status: format_status(le.status),
+                chapters: le.progress,
+                score: format_score(le.rating)
+              }
+            )
+          end
         end
       end
 
