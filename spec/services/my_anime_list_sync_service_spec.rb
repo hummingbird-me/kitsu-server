@@ -21,44 +21,44 @@ RSpec.describe MyAnimeListSyncService do
   end
 
   # delete or create/update
-  subject { described_class.new(library_entry, 'create/update') }
+  subject { MyAnimeListSyncService.new(library_entry, 'create/update') }
 
   before do
-    host = described_class::ATARASHII_API_HOST
+    @host = described_class::ATARASHII_API_HOST
     mine = '?mine=1'
 
     # Blood Lad, this is on my list
     # authorized
-    stub_request(:get, "#{host}anime/11633#{mine}")
-      .to_return(body: fixture('my_anime_list/sync/anime/blood-lad.json'))
-
-    # Boku no Pico, this is NOT on my list
-    # authorized
-    stub_request(:get, "#{host}anime/1639#{mine}")
-      .to_return(body: fixture('my_anime_list/sync/anime/boku-no-pico.json'))
-
-    # Toy's anime list (slimmed down)
-    # not authorized
-    stub_request(:get, "#{host}animelist/toyhammered")
-      .to_return(body: fixture('my_anime_list/sync/anime/toy-anime-list.json'))
-
-    # PUT request
-    stub_request(:put, "#{host}animelist/anime/11633")
-      .with(
-        body: 'episodes=10&rewatch_count=0&score&status=1',
-        headers: {
-          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-        })
-      .to_return(status: 200)
-
-    # POST request
-    stub_request(:post, "#{host}animelist/anime")
-      .with(
-        body: 'anime_id=11633&episodes=10&score&status=1',
-        headers: {
-          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-        })
-      .to_return(status: 200)
+    # stub_request(:get, "#{host}anime/11633#{mine}", linked_profile)
+    #   .to_return(body: fixture('my_anime_list/sync/anime/blood-lad.json'))
+    #
+    # # Boku no Pico, this is NOT on my list
+    # # authorized
+    # stub_request(:get, "#{host}anime/1639#{mine}", linked_profile)
+    #   .to_return(body: fixture('my_anime_list/sync/anime/boku-no-pico.json'))
+    #
+    # # Toy's anime list (slimmed down)
+    # # not authorized
+    # stub_request(:get, "#{host}animelist/toyhammered", linked_profile)
+    #   .to_return(body: fixture('my_anime_list/sync/anime/toy-anime-list.json'))
+    #
+    # # PUT request
+    # stub_request(:put, "#{host}animelist/anime/11633", linked_profile)
+    #   .with(
+    #     body: 'episodes=10&rewatch_count=0&score&status=1',
+    #     headers: {
+    #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+    #     })
+    #   .to_return(status: 200)
+    #
+    # # POST request
+    # stub_request(:post, "#{host}animelist/anime", linked_profile)
+    #   .with(
+    #     body: 'anime_id=11633&episodes=10&score&status=1',
+    #     headers: {
+    #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+    #     })
+    #   .to_return(status: 200)
   end
 
   context 'Anime' do
@@ -69,25 +69,49 @@ RSpec.describe MyAnimeListSyncService do
 
   context 'Tyhpoeus Requests' do
     describe '#get' do
-      # it 'should issue a request to the server' do
-      #   stub_request(:get, 'example.com', linked_profile).to_return(body: 'HI')
-      #   expect { |b|
-      #     subject.send(:get, 'example.com', linked_profile)
-      #     subject.run
-      #   }.to yield_with_args('HI')
-        # expect(WebMock).to have_requested(:get, 'example.com', linked_profile).once
-      # end
-    end
+      it 'should issue a request to the server' do
+        stub_request(:get, "#{@host}example.com")
+          .with(
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            })
+          .to_return(body: 'HI')
 
-    context 'which returns an error' do
-      # it 'should output a message and never call the block' do
-      #   stub_request(:get, 'example.com', linked_profile).to_return(status: 404)
-      #   expect { |b|
-      #     subject.send(:get, 'example.com', linked_profile, &b)
-      #     subject.run
-      #   }.not_to yield_control
-      #   expect(WebMock).to have_requested(:get, 'example.com').once
-      # end
+        expect { |b|
+          subject.send(:get, 'example.com', linked_profile, &b)
+        }.to yield_with_args('HI')
+
+        expect(WebMock).to have_requested(:get, "#{@host}example.com")
+          .with(
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            })
+          .once
+      end
+
+      context 'which returns an error' do
+        it 'should output a message and never call the block' do
+          stub_request(:get, "#{@host}example.com")
+            .with(
+              headers: {
+                Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+              })
+            .to_return(status: 404)
+
+          expect { |b|
+            expect {
+              subject.send(:get, 'example.com', linked_profile, &b)
+            }.to output(/failed/).to_stderr
+          }.not_to yield_control
+
+          expect(WebMock).to have_requested(:get, "#{@host}example.com")
+            .with(
+              headers: {
+                Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+              })
+            .once
+        end
+      end
     end
   end
 end

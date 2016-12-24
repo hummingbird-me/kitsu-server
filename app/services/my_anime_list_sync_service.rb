@@ -157,13 +157,13 @@ class MyAnimeListSyncService
         yield response.body
       elsif response.timed_out?
         # aw hell no
-        log('got a time out')
+        $stderr.puts('got a time out')
       elsif response.code.zero?
         # Could not get an http response, something's wrong.
-        log(response.return_message)
+        $stderr.puts(response.return_message)
       else
         # Received a non-successful http response.
-        log('HTTP request failed: ' + response.code.to_s)
+        $stderr.puts('HTTP request failed: ' + response.code.to_s)
       end
     end
   end
