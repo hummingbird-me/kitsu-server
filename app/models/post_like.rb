@@ -29,7 +29,7 @@ class PostLike < ApplicationRecord
   validates :post, uniqueness: { scope: :user_id }
 
   counter_culture :user, column_name: 'likes_given_count'
-  counter_culture [:post, :user], column_name: 'likes_received_count'
+  counter_culture %i[post user], column_name: 'likes_received_count'
 
   def stream_activity
     post.feed.activities.new(
@@ -37,4 +37,6 @@ class PostLike < ApplicationRecord
       to: [post.user.notifications]
     )
   end
+
+  after_create { user.update_feed_completed! }
 end

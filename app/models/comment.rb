@@ -35,7 +35,7 @@ class Comment < ApplicationRecord
 
   acts_as_paranoid
   resourcify
-  counter_culture :post, column_name: -> (model) {
+  counter_culture :post, column_name: ->(model) {
     'top_level_comments_count' if model.parent.blank?
   }
   processable :content, LongPipeline
@@ -43,9 +43,9 @@ class Comment < ApplicationRecord
   belongs_to :user, required: true, counter_cache: true
   belongs_to :post, required: true, counter_cache: true, touch: true
   belongs_to :parent, class_name: 'Comment', required: false,
-		counter_cache: 'replies_count', touch: true
+                      counter_cache: 'replies_count', touch: true
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
-    dependent: :destroy
+                     dependent: :destroy
   has_many :likes, class_name: 'CommentLike', dependent: :destroy
 
   validates :content, :content_formatted, presence: true
@@ -83,4 +83,6 @@ class Comment < ApplicationRecord
     self.edited_at = Time.now if content_changed?
     true
   end
+
+  after_create { user.update_feed_completed! }
 end

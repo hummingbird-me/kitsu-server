@@ -29,6 +29,8 @@ class Favorite < ApplicationRecord
   validates :item, polymorphism: { type: [Media, Character, Person] }
   validates :user_id, uniqueness: {
     scope: %i[item_type item_id],
-    message: "Cannot fave a media multiple times"
+    message: 'Cannot fave a media multiple times'
   }
+
+  after_create { user.update_profile_completed! }
 end
