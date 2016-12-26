@@ -97,7 +97,7 @@ class User < ApplicationRecord
     feature featured features feed follow followers following hummingbird index
     javascript json kitsu sysadmin sysadministrator system unfollow user users
     wiki you
-  ]
+  ].freeze
 
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
@@ -106,9 +106,9 @@ class User < ApplicationRecord
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false
   has_many :followers, class_name: 'Follow', foreign_key: 'followed_id',
-    dependent: :destroy
+                       dependent: :destroy
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
-    dependent: :destroy
+                       dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :posts, dependent: :destroy
   has_many :media_follows, dependent: :destroy
@@ -167,7 +167,7 @@ class User < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png]
   }
 
-  scope :by_name, -> (*names) {
+  scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
@@ -208,7 +208,7 @@ class User < ApplicationRecord
     ip_addresses
   end
 
-  def update_title(role)
+  def update_title(_role)
     if has_role?(:admin)
       update(title: 'Staff')
     elsif has_role?(:admin, Anime)
@@ -230,6 +230,30 @@ class User < ApplicationRecord
 
   def notifications
     @notifications ||= Feed.notifications(id)
+  end
+
+  def update_feed_completed
+    return self if feed_completed?
+    if library_entries.rated.count >= 5 && following.count >= 5 &&
+       comments.count.nonzero? && post_likes.count >= 3
+      assign_attributes(feed_completed: true)
+    end
+  end
+
+  def update_feed_completed!
+    update_feed_completed.save!
+  end
+
+  def update_profile_completed
+    return self if profile_completed?
+    if library_entries.rated.count >= 5 && avatar.present? &&
+       cover_image.present? && about.present? && favorites.count.nonzero?
+      assign_attributes(profile_completed: true)
+    end
+  end
+
+  def update_profile_completed!
+    update_profile_completed.save!
   end
 
   after_create do
@@ -254,21 +278,13 @@ class User < ApplicationRecord
       # Push it onto the front and limit
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
     end
-    if confirmed_at_changed?
-      self.previous_email = nil
-    end
+    self.previous_email = nil if confirmed_at_changed?
     if email_changed? && !Rails.env.staging?
       self.previous_email = email_was
       self.confirmed_at = nil
       UserMailer.confirmation(self).deliver_now
     end
-    if ratings_count >= 5 && following_count >= 5 && comments_count > 0 &&
-       likes_given_count >= 3
-      self.feed_completed = true
-    end
-    if ratings_count >= 5 && avatar.present? && cover_image.present? &&
-       about.present? && favorites_count > 0
-      self.profile_completed = true
-    end
+    update_profile_completed
+    update_feed_completed
   end
 end

@@ -66,7 +66,8 @@ class LibraryEntry < ApplicationRecord
   validate :progress_limit
   validate :rating_on_halves
 
-  counter_culture :user, column_name: -> (le) { 'ratings_count' if le.rating }
+  counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating }
+  scope :rated, -> { where.not(rating: nil) }
 
   def current_marathon
     marathons.current.first_or_create
@@ -77,7 +78,7 @@ class LibraryEntry < ApplicationRecord
     progress_cap = media&.progress_limit
     default_cap = media&.default_progress_limit
 
-    if progress_cap && progress_cap != 0
+    if progress_cap&.nonzero?
       if progress > progress_cap
         errors.add(:progress, 'cannot exceed length of media')
       end
@@ -96,7 +97,6 @@ class LibraryEntry < ApplicationRecord
 
   def rating_on_halves
     return unless rating
-
     errors.add(:rating, 'must be a multiple of 0.5') unless rating % 0.5 == 0.0
   end
 
@@ -131,6 +131,8 @@ class LibraryEntry < ApplicationRecord
         media.decrement_rating_frequency(rating_was)
         media.increment_rating_frequency(rating)
       end
+      user.update_feed_completed!
+      user.update_profile_completed!
     end
   end
 end
