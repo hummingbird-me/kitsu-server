@@ -238,6 +238,7 @@ class User < ApplicationRecord
        comments.count.nonzero? && post_likes.count >= 3
       assign_attributes(feed_completed: true)
     end
+    self
   end
 
   def update_feed_completed!
@@ -250,6 +251,7 @@ class User < ApplicationRecord
        cover_image.present? && about.present? && favorites.count.nonzero?
       assign_attributes(profile_completed: true)
     end
+    self
   end
 
   def update_profile_completed!
