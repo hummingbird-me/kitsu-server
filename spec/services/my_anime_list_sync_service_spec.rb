@@ -48,12 +48,13 @@ RSpec.describe MyAnimeListSyncService do
     # TODO: fix, not working like I thought it would
     # related to commented out before_save code
     # in linked_profile
-    stub_request(:get, "#{@host}account/verify_credentials")
-      .with(
-        headers: {
-          Authorization: /.+/
-        })
-    .to_return(status: 200)
+    # stub_request(:get, "#{@host}account/verify_credentials")
+    #   .with(
+    #     headers: {
+    #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+    #     })
+    #   .to_return(status: 200)
+
   end
 
   context 'Anime/Manga' do

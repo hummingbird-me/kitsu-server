@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170108054725) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -370,16 +369,17 @@ ActiveRecord::Schema.define(version: 20170108054725) do
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
 
   create_table "linked_profiles", force: :cascade do |t|
-    t.integer  "user_id",                          null: false
-    t.integer  "linked_site_id",                   null: false
-    t.string   "external_user_id",                 null: false
+    t.integer  "user_id",                            null: false
+    t.integer  "linked_site_id",                     null: false
+    t.string   "external_user_id",                   null: false
     t.string   "url"
-    t.boolean  "share_to",         default: false, null: false
-    t.boolean  "share_from",       default: false, null: false
-    t.boolean  "private",          default: true,  null: false
-    t.string   "token"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.boolean  "share_to",           default: false, null: false
+    t.boolean  "share_from",         default: false, null: false
+    t.boolean  "private",            default: true,  null: false
+    t.string   "encrypted_token"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "encrypted_token_iv"
   end
 
   add_index "linked_profiles", ["linked_site_id"], name: "index_linked_profiles_on_linked_site_id", using: :btree

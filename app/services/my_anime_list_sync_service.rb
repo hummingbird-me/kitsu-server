@@ -161,7 +161,7 @@ class MyAnimeListSyncService
       build_url(url),
       method: :delete,
       userpwd: simple_auth(profile)
-    ).run
+    )
 
     # TODO: @nuck is there a better way to handle this?
     request_status(request) do |response|

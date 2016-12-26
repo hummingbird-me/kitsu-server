@@ -25,14 +25,13 @@
 #  fk_rails_166e103170  (user_id => users.id)
 #  fk_rails_25de88e967  (linked_site_id => linked_sites.id)
 #
-# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :linked_profile do
     association :user
     linked_site
     url { Faker::Internet.url }
-    external_user_id { Faker::Internet.user_name }
+    external_user_id 'toyhammered'
     token 'fakefake'
   end
 end

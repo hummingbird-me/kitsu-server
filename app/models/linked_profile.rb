@@ -31,6 +31,8 @@ class LinkedProfile < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :linked_site, required: true
 
+  attr_encrypted :token, key: ENV['LP_TOKEN_KEY']
+
   validates_presence_of :url, if: :private?
   validates_presence_of :external_user_id
 
@@ -43,8 +45,8 @@ class LinkedProfile < ApplicationRecord
     #   "#{host}account/verify_credentials",
     #   method: :get,
     #   userpwd: "#{external_user_id}:#{token}"
-    # ).run
-    #
+    # )
+    # request.run
     # # should be a 403 I think if it fails
     # return false if request.response.code != 200
     #
