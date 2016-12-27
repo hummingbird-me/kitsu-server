@@ -47,5 +47,5 @@ class Follow < ApplicationRecord
     follower.timeline.unfollow(followed.feed)
   end
 
-  after_create { user.update_feed_completed! }
+  after_create { follower.update_feed_completed! }
 end
