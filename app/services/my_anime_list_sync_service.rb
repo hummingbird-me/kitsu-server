@@ -56,7 +56,7 @@ class MyAnimeListSyncService
             )
           end
         else
-        # manga
+          # manga
           if response['read_status']
             put(
               "mangalist/#{media_type}/#{mal_media_id}",
@@ -135,7 +135,7 @@ class MyAnimeListSyncService
 
     # TODO: @nuck is there a better way to handle this?
     request_status(request) do |response|
-      # yield response
+      # doesn't need to do anything if success
     end
     request.run
   end
@@ -150,7 +150,6 @@ class MyAnimeListSyncService
 
     # TODO: @nuck is there a better way to handle this?
     request_status(request) do |response|
-      # yield response
       # doesn't need to do anything if success
     end
     request.run
@@ -165,7 +164,7 @@ class MyAnimeListSyncService
 
     # TODO: @nuck is there a better way to handle this?
     request_status(request) do |response|
-      # yield response
+      # doesn't need to do anything if success
     end
     request.run
   end
@@ -199,6 +198,6 @@ class MyAnimeListSyncService
   end
 
   def simple_auth(profile)
-    "#{profile.external_user_id}:#{profile.token}" # add encrpyt
+    "#{profile.external_user_id}:#{profile.token}"
   end
 end

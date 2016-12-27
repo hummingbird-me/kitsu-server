@@ -33,7 +33,8 @@ RSpec.describe MyAnimeListSyncService do
       .with(
         headers: {
           Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-        })
+        }
+      )
       .to_return(body: fixture('my_anime_list/sync/anime/blood-lad.json'))
 
     # Boku no Pico, this is NOT on my list
@@ -42,7 +43,8 @@ RSpec.describe MyAnimeListSyncService do
       .with(
         headers: {
           Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-        })
+        }
+      )
       .to_return(body: fixture('my_anime_list/sync/anime/boku-no-pico.json'))
 
     # TODO: fix, not working like I thought it would
@@ -54,7 +56,6 @@ RSpec.describe MyAnimeListSyncService do
     #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
     #     })
     #   .to_return(status: 200)
-
   end
 
   context 'Anime/Manga' do
@@ -108,7 +109,8 @@ RSpec.describe MyAnimeListSyncService do
           .with(
             headers: {
               Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-            })
+            }
+          )
           .to_return(body: 'HI')
 
         expect { |b|
@@ -119,7 +121,8 @@ RSpec.describe MyAnimeListSyncService do
           .with(
             headers: {
               Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-            })
+            }
+          )
           .once
       end
 
@@ -129,7 +132,8 @@ RSpec.describe MyAnimeListSyncService do
             .with(
               headers: {
                 Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-              })
+              }
+            )
             .to_return(status: 404)
 
           expect { |b|
@@ -142,7 +146,8 @@ RSpec.describe MyAnimeListSyncService do
             .with(
               headers: {
                 Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-              })
+              }
+            )
             .once
         end
       end
@@ -155,11 +160,12 @@ RSpec.describe MyAnimeListSyncService do
             body: 'anime_id=11633&episodes=1&score&status=1',
             headers: {
               Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-            })
+            }
+          )
           .to_return(status: 200)
 
         body = {
-          anime_id: 11633,
+          anime_id: 11_633,
           status: 1,
           episodes: 1,
           score: nil
@@ -171,7 +177,8 @@ RSpec.describe MyAnimeListSyncService do
             body: 'anime_id=11633&episodes=1&score&status=1',
             headers: {
               Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-            })
+            }
+          )
           .once
       end
     end
@@ -183,7 +190,8 @@ RSpec.describe MyAnimeListSyncService do
             body: 'episodes=10&rewatch_count=0&score&status=1',
             headers: {
               Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-            })
+            }
+          )
           .to_return(status: 200)
 
         body = {
@@ -199,7 +207,8 @@ RSpec.describe MyAnimeListSyncService do
             body: 'episodes=10&rewatch_count=0&score&status=1',
             headers: {
               Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-            })
+            }
+          )
           .once
       end
     end
@@ -210,7 +219,8 @@ RSpec.describe MyAnimeListSyncService do
           .with(
             headers: {
               Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-            })
+            }
+          )
           .to_return(status: 200)
 
         subject.send(:delete, 'example.com', linked_profile)
@@ -219,7 +229,8 @@ RSpec.describe MyAnimeListSyncService do
           .with(
             headers: {
               Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-            })
+            }
+          )
           .once
       end
     end

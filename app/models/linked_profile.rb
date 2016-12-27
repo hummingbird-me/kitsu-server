@@ -35,11 +35,11 @@ class LinkedProfile < ApplicationRecord
 
   validates_presence_of :url, if: :private?
   validates_presence_of :external_user_id
+  validate :verify_mal_credentials
 
-  before_save do
+  def verify_mal_credentials
     # Check to make sure username/password is valid
-    # I don't know how to test/check this is actually valid,
-    # but it should work
+
     # host = MyAnimeListSyncService::ATARASHII_API_HOST
     # request = Typhoeus::Request.new(
     #   "#{host}account/verify_credentials",
@@ -47,9 +47,13 @@ class LinkedProfile < ApplicationRecord
     #   userpwd: "#{external_user_id}:#{token}"
     # )
     # request.run
-    # # should be a 403 I think if it fails
-    # return false if request.response.code != 200
-    #
+
+    # response = request.response
+
+    # if response.code != 200
+    #   errors.add(:token, "#{response.code}: #{response.body}")
+    # end
+
     # true
   end
 
