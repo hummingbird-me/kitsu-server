@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/cerebris/jsonapi-resources.git
-  revision: d7a2380435847ff904a3fc40851ffb1bbcc0bdc7
+  revision: f272f806172b47b6c5bd5c10929ddcef5a2d7eb1
   branch: beta
   specs:
     jsonapi-resources (0.9.0.beta1)
@@ -92,7 +92,7 @@ GEM
     codeclimate-test-reporter (0.6.0)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.1)
-    concurrent-ruby (1.0.2)
+    concurrent-ruby (1.0.4)
     connection_pool (2.2.0)
     counter_culture (0.2.2)
       activerecord (>= 3.0.0)
