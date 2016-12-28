@@ -82,7 +82,7 @@ class Feed
     end
 
     def where_id(operator, id)
-      self.data["id_#{operator}"] = id
+      data["id_#{operator}"] = id
       self
     end
 
@@ -147,7 +147,7 @@ class Feed
     end
 
     def apply_select(activities)
-      activities.lazy.map do |act|
+      activities.lazy.map { |act|
         if act.respond_to?(:activities)
           catch(:remove_group) do
             act.activities = apply_select(act.activities)
@@ -157,7 +157,7 @@ class Feed
           next unless @selects.all? { |proc| proc.call(act) }
           act
         end
-      end.reject(&:blank?).to_a
+      }.reject(&:blank?).to_a
     end
 
     def apply_maps(activities)
@@ -166,7 +166,7 @@ class Feed
           act.activities = apply_maps(act.activities)
           act
         else
-          @maps.reduce(act) { |act, proc| proc.call(act) }
+          @maps.reduce(act) { |a, e| e.call(a) }
         end
       end
     end
@@ -175,7 +175,7 @@ class Feed
       res = enrich(results)
       res = apply_select(res)
       res = apply_maps(res)
-      return res.compact
+      res.compact
     end
 
     def empty?
