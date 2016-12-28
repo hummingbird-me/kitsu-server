@@ -50,10 +50,10 @@ class Feed
       blocked = Set.new(users)
       select do |act|
         user_id = if act.actor.respond_to?(:id)
-          act.actor.id
-        else
-          act.actor.split(':')[1].to_i
-        end
+                    act.actor.id
+                  elsif act.actor
+                    act.actor.split(':')[1].to_i
+                  end
         will_block = blocked.include?(user_id)
         throw :remove_group if will_block && act.verb == 'post'
         !will_block
