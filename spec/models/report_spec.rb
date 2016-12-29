@@ -33,7 +33,7 @@ RSpec.describe Report, type: :model do
   subject { build(:report) }
 
   it { should define_enum_for(:reason).with(%i[nsfw offensive spoiler bullying
-                                                other]) }
+                                                other spam]) }
   it { should define_enum_for(:status).with(%i[reported resolved declined]) }
   it { should belong_to(:naughty) }
   it { should validate_presence_of(:naughty) }

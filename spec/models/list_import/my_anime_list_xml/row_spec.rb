@@ -5,8 +5,8 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     fail 'Media must be saved' unless media.persisted?
     prefix = media.class.name.underscore
     fake_id = rand(1..50_000)
-    create(:mapping, media: media, external_site: 'myanimelist',
-                                   external_id: "#{prefix}/#{fake_id}")
+    create(:mapping, media: media, external_site: "myanimelist/#{prefix}",
+                                   external_id: fake_id)
   end
 
   context 'with an invalid node name' do
@@ -46,7 +46,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
         it 'should return the Anime instance from the Mapping' do
           row = described_class.new(xml)
           expect(Mapping).to receive(:lookup)
-            .with('myanimelist', mapping.external_id)
+            .with('myanimelist/anime', mapping.external_id.to_i)
             .and_return(anime)
           expect(row.media).to eq(anime)
         end
@@ -329,7 +329,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
         it 'should return the Manga instance from the Mapping' do
           row = described_class.new(xml)
           expect(Mapping).to receive(:lookup)
-            .with('myanimelist', mapping.external_id)
+            .with('myanimelist/manga', mapping.external_id.to_i)
             .and_return(manga)
           expect(row.media).to eq(manga)
         end

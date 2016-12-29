@@ -41,9 +41,6 @@ RSpec.describe Feed::ActivityList, type: :model do
     it 'should set the limit in the query' do
       expect(subject.data[:limit]).to eq(20)
     end
-    it 'should not mutate the original instance' do
-      expect(list.data[:limit]).to be_nil
-    end
   end
 
   describe '#offset' do
@@ -51,18 +48,12 @@ RSpec.describe Feed::ActivityList, type: :model do
     it 'should set the offset in the query' do
       expect(subject.data[:offset]).to eq(20)
     end
-    it 'should not mutate the original instance' do
-      expect(list.data[:offset]).to be_nil
-    end
   end
 
   describe '#ranking' do
     subject { list.ranking('cool_ranking') }
     it 'should set the ranking in the query' do
       expect(subject.data[:ranking]).to eq('cool_ranking')
-    end
-    it 'should not mutate the original instance' do
-      expect(list.data[:ranking]).to be_nil
     end
   end
 
