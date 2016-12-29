@@ -24,6 +24,7 @@ script:
 # Postgres v9.4 and ElasticSearch 2.x
 services:
   - elasticsearch
+  - redis-server
 addons:
   apt:
     sources:
