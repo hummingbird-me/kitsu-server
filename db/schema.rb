@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161220092016) do
+ActiveRecord::Schema.define(version: 20161229130815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -694,11 +694,9 @@ ActiveRecord::Schema.define(version: 20161220092016) do
     t.datetime "updated_at",                                    null: false
     t.float    "rating",                                        null: false
     t.string   "source",            limit: 255
-    t.string   "summary",           limit: 255
     t.integer  "likes_count",                   default: 0
     t.string   "media_type"
     t.text     "content_formatted",                             null: false
-    t.boolean  "legacy",                        default: false, null: false
     t.integer  "library_entry_id"
     t.integer  "progress"
     t.boolean  "spoiler",                       default: false, null: false

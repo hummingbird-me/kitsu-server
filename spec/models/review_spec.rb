@@ -6,14 +6,12 @@
 #  content           :text             not null
 #  content_formatted :text             not null
 #  deleted_at        :datetime         indexed
-#  legacy            :boolean          default(FALSE), not null
 #  likes_count       :integer          default(0), indexed
 #  media_type        :string
 #  progress          :integer
 #  rating            :float            not null
 #  source            :string(255)
 #  spoiler           :boolean          default(FALSE), not null
-#  summary           :string(255)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  library_entry_id  :integer
@@ -48,14 +46,4 @@ RSpec.describe Review, type: :model do
   it { should belong_to(:library_entry) }
   it { should validate_presence_of(:library_entry) }
   it { should validate_presence_of(:content) }
-
-  context 'in a legacy review' do
-    subject { build(:review, legacy: true) }
-    it { should validate_presence_of(:summary) }
-  end
-
-  context 'in a new review' do
-    subject { build(:review, legacy: false) }
-    it { should validate_absence_of(:summary) }
-  end
 end

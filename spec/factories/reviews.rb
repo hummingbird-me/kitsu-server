@@ -6,14 +6,12 @@
 #  content           :text             not null
 #  content_formatted :text             not null
 #  deleted_at        :datetime         indexed
-#  legacy            :boolean          default(FALSE), not null
 #  likes_count       :integer          default(0), indexed
 #  media_type        :string
 #  progress          :integer
 #  rating            :float            not null
 #  source            :string(255)
 #  spoiler           :boolean          default(FALSE), not null
-#  summary           :string(255)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  library_entry_id  :integer
