@@ -76,7 +76,7 @@ class LibraryEntry < ApplicationRecord
   def progress_limit
     return unless progress
     progress_cap = media&.progress_limit
-    default_cap = media&.default_progress_limit
+    default_cap = [media&.default_progress_limit, 50].compact.max
 
     if progress_cap&.nonzero?
       if progress > progress_cap

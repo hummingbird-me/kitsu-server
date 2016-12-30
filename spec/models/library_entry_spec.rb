@@ -67,14 +67,20 @@ RSpec.describe LibraryEntry, type: :model do
     context 'without known progress_limit' do
       let(:anime) { create(:anime, episode_count: nil) }
       it 'should fail when progress > default_progress_limit' do
-        library_entry = build(:library_entry, media: anime, progress: 6)
-        expect(anime).to receive(:default_progress_limit).and_return(5).once
+        library_entry = build(:library_entry, media: anime, progress: 200)
+        expect(anime).to receive(:default_progress_limit).and_return(100).once
         expect(library_entry).not_to be_valid
         expect(library_entry.errors[:progress]).to be_present
       end
       it 'should pass when progress <= default_progress_limit' do
-        library_entry = build(:library_entry, media: anime, progress: 4)
-        expect(anime).to receive(:default_progress_limit).and_return(5).once
+        library_entry = build(:library_entry, media: anime, progress: 70)
+        expect(anime).to receive(:default_progress_limit).and_return(100).once
+        library_entry.valid?
+        expect(library_entry.errors[:progress]).to be_blank
+      end
+      it 'should ignore default progress limits below 50' do
+        library_entry = build(:library_entry, media: anime, progress: 40)
+        expect(anime).to receive(:default_progress_limit).and_return(10).once
         library_entry.valid?
         expect(library_entry.errors[:progress]).to be_blank
       end
