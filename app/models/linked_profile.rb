@@ -60,8 +60,6 @@ class LinkedProfile < ApplicationRecord
   end
 
   after_save do
-    if sync_to_mal?
-      MyAnimeListListWorker.perform_async(user_id)
-    end
+    MyAnimeListListWorker.perform_async(user_id) if sync_to_mal?
   end
 end
