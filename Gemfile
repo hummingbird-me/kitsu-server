@@ -53,6 +53,7 @@ gem 'acts_as_list' # Sortables!
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'counter_culture' # Fancier counter caches
 gem 'stream_rails' # Feeds
+gem 'stream-ruby', github: 'getstream/stream-ruby', branch: 'master'
 gem 'hashie' # Souped-up Hashes
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
