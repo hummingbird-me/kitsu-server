@@ -133,9 +133,9 @@ RSpec.describe MyAnimeListSyncService do
           )
           .to_return(status: 404)
 
-          expect {
-            subject.send(:get, 'example.com', linked_profile)
-          }.to raise_error(/failed/)
+        expect {
+          subject.send(:get, 'example.com', linked_profile)
+        }.to raise_error(/failed/)
 
         expect(WebMock).to have_requested(:get, "#{@host}example.com")
           .with(

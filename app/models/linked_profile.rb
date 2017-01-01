@@ -31,7 +31,7 @@ class LinkedProfile < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :linked_site, required: true
 
-  attr_encrypted :token, key: Base64.decode64(ENV['ATTR_ENCRYPT_KEY'])
+  attr_encrypted :token, key: Base64.encode64(ENV['ATTR_ENCRYPT_KEY'])
 
   validates_presence_of :url, if: :private?
   validates_presence_of :external_user_id
