@@ -2,91 +2,52 @@ class MyAnimeListSyncService
   ATARASHII_API_HOST = 'https://hbv3-mal-api.herokuapp.com/2.1/'.freeze
   MINE = '?mine=1'.freeze
 
-  attr_reader :le, :method
+  attr_reader :library_entry, :method
 
-  def initialize(le, method)
-    @le = le
+  def initialize(library_entry, method)
+    @library_entry = library_entry
     @method = method
   end
 
   def execute_method
-    # anime or manga
-    media_type = le.media_type.underscore
-    # convert kitsu data -> mal data
-    mal_media = le.media.mappings.find_by(site: "myanimelist/#{media_type}")
-    # user mal profile information
-    profile = LinkedProfile.find_by(
-      user_id: le.user_id,
-      url: 'myanimelist'
-    )
-    mal_media_id = mal_media.external_id
-
     case method
     when 'delete'
-      delete(
-        "#{animelist}/#{mal_media_type}/#{mal_media_id}",
-        profile
-      )
-    else
+      delete("#{media_type}list/#{media_type}/#{mal_media_id}", linked_profile)
+    when 'create/update'
       # find the anime or manga
-      get("#{media_type}/#{mal_media_id}#{MINE}", profile) do |response|
-        # need to check watched_status OR read_status
-        if media_type == 'anime'
-          if response['watched_status']
-            put(
-              "animelist/#{media_type}/#{mal_media_id}",
-              profile,
-              {
-                status: format_status(le.status),
-                episodes: le.progress,
-                score: format_score(le.rating),
-                rewatch_count: le.reconsume_count
-              }
-            )
-          else
-            post(
-              "animelist/#{media_type}",
-              profile,
-              {
-                anime_id: mal_media_id,
-                status: format_status(le.status),
-                episodes: le.progress,
-                score: format_score(le.rating)
-              }
-            )
-          end
+      # it will raise an error if it fails the http request
+      response = get("#{media_type}/#{mal_media_id}#{MINE}", linked_profile)
+
+      if media_type == 'anime'
+        if response['watched_status']
+          put("animelist/anime/#{mal_media_id}", linked_profile,
+            status: format_status(library_entry.status),
+            episodes: library_entry.progress,
+            score: format_score(library_entry.rating),
+            rewatch_count: library_entry.reconsume_count)
         else
-          # manga
-          if response['read_status']
-            put(
-              "mangalist/#{media_type}/#{mal_media_id}",
-              profile,
-              {
-                status: format_status(le.status),
-                chapters: le.progress,
-                score: format_score(le.rating),
-                reread_count: le.reconsume_count
-              }
-            )
-          else
-            post(
-              "mangalist/#{media_type}",
-              profile,
-              {
-                manga_id: mal_media_id,
-                status: format_status(le.status),
-                chapters: le.progress,
-                score: format_score(le.rating)
-              }
-            )
-          end
+          post('animelist/anime', linked_profile,
+            anime_id: mal_media_id,
+            status: format_status(library_entry.status),
+            episodes: library_entry.progress,
+            score: format_score(library_entry.rating))
+        end
+      else
+        # manga
+        if response['read_status']
+          put("mangalist/manga/#{mal_media_id}", linked_profile,
+            status: format_status(library_entry.status),
+            chapters: library_entry.progress,
+            score: format_score(library_entry.rating),
+            reread_count: library_entry.reconsume_count)
+        else
+          post('mangalist/manga', linked_profile,
+            manga_id: mal_media_id,
+            status: format_status(library_entry.status),
+            chapters: library_entry.progress,
+            score: format_score(library_entry.rating))
         end
       end
-
-      # if block is not executed because
-      # response.code was not a 200
-      # TODO: check timing
-      # return nil
     end
   end
 
@@ -105,92 +66,94 @@ class MyAnimeListSyncService
   # ie: &score&anythingelse
   # it will not set the score
   def format_score(score)
-    return nil if score.nil?
-
-    (score * 2).floor
+    (score * 2).to_i if score
   end
 
   private
 
   def get(url, profile)
-    request = Typhoeus::Request.new(
+    res = Typhoeus::Request.new(
       build_url(url),
       method: :get,
       userpwd: simple_auth(profile)
-    )
+    ).run
 
-    request_status(request) do |response|
-      yield response
-    end
-    request.run
+    # will raise an error if something is wrong
+    # otherwise will return true
+    check_response_status(res)
+
+    res.response_body
   end
 
   def post(url, profile, body)
-    request = Typhoeus::Request.new(
+    res = Typhoeus::Request.new(
       build_url(url),
       method: :post,
       userpwd: simple_auth(profile),
       body: body
-    )
+    ).run
 
-    # TODO: @nuck is there a better way to handle this?
-    request_status(request) do |response|
-      # doesn't need to do anything if success
-    end
-    request.run
+    check_response_status(res)
+
+    res.response_body
   end
 
   def put(url, profile, body)
-    request = Typhoeus::Request.new(
+    res = Typhoeus::Request.new(
       build_url(url),
       method: :put,
       userpwd: simple_auth(profile),
       body: body
-    )
+    ).run
 
-    # TODO: @nuck is there a better way to handle this?
-    request_status(request) do |response|
-      # doesn't need to do anything if success
-    end
-    request.run
+    check_response_status(res)
+
+    res.response_body
   end
 
   def delete(url, profile)
-    request = Typhoeus::Request.new(
+    res = Typhoeus::Request.new(
       build_url(url),
       method: :delete,
       userpwd: simple_auth(profile)
-    )
+    ).run
 
-    # TODO: @nuck is there a better way to handle this?
-    request_status(request) do |response|
-      # doesn't need to do anything if success
-    end
-    request.run
+    check_response_status(res)
+
+    res.response_body
   end
 
-  def request_status(request)
-    # will return request or nil
-    request.on_complete do |response|
-      if response.success?
-        # this is being sent up to either
-        # get/create/update/delete
-        # afterwards the chosen method will send it up
-        # to the parent request under my_anime_list.rb
+  def check_response_status(response)
+    return true if response.success?
 
-        # delete will not have a body so need try catch
-        yield response&.body
-      elsif response.timed_out?
-        # aw hell no
-        $stderr.puts('got a time out')
-      elsif response.code.zero?
-        # Could not get an http response, something's wrong.
-        $stderr.puts(response.return_message)
-      else
-        # Received a non-successful http response.
-        $stderr.puts('HTTP request failed: ' + response.code.to_s)
-      end
-    end
+    # timed out
+    raise 'Request Timed Out' if response.timed_out?
+    # could not get an http response
+    raise response.return_message.to_s if response.code.zero?
+    # received a non-successfull http response
+    raise "HTTP request failed: #{response.code}"
+  end
+
+  def media_type
+    # anime or manga
+    @media_type ||= library_entry.media_type.underscore
+  end
+
+  def mal_media
+    # convert kitsu data -> mal data
+    @mal_media ||= library_entry.media.mappings.find_by(
+      site: "myanimelist/#{media_type}"
+    )
+  end
+
+  def mal_media_id
+    mal_media.external_id
+  end
+
+  def linked_profile
+    @profile ||= User.find(library_entry.user_id).linked_profiles.where(
+      linked_site: LinkedSite.find_by(name: 'myanimelist')
+    )
   end
 
   def build_url(path)

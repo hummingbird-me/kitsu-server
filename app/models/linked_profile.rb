@@ -31,7 +31,7 @@ class LinkedProfile < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :linked_site, required: true
 
-  attr_encrypted :token, key: ENV['LP_TOKEN_KEY']
+  attr_encrypted :token, key: Base64.decode64(ENV['ATTR_ENCRYPT_KEY'])
 
   validates_presence_of :url, if: :private?
   validates_presence_of :external_user_id
@@ -39,27 +39,29 @@ class LinkedProfile < ApplicationRecord
 
   def verify_mal_credentials
     # Check to make sure username/password is valid
+    host = MyAnimeListSyncService::ATARASHII_API_HOST
+    response = Typhoeus::Request.new(
+      "#{host}account/verify_credentials",
+      method: :get,
+      userpwd: "#{external_user_id}:#{token}"
+    ).run
 
-    # host = MyAnimeListSyncService::ATARASHII_API_HOST
-    # request = Typhoeus::Request.new(
-    #   "#{host}account/verify_credentials",
-    #   method: :get,
-    #   userpwd: "#{external_user_id}:#{token}"
-    # )
-    # request.run
+    unless response.code == 200
+      errors.add(:token, "#{response.code}: #{response.body}")
+    end
 
-    # response = request.response
+    true
+  end
 
-    # if response.code != 200
-    #   errors.add(:token, "#{response.code}: #{response.body}")
-    # end
-
-    # true
+  def sync_to_mal?
+    User.find(user_id).linked_profiles.where(
+      linked_site: LinkedSite.find_by(name: 'myanimelist')
+    ).present?
   end
 
   after_save do
-    if url == 'myanimelist'
-      MyAnimeListListComparisonWorker.perform_async(user_id)
+    if sync_to_mal?
+      MyAnimeListListWorker.perform_async(user_id)
     end
   end
 end

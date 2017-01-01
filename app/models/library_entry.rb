@@ -130,7 +130,6 @@ class LibraryEntry < ApplicationRecord
     MediaActivityService.new(self)
   end
 
-<<<<<<< 3fe4679949869ca92bfae50a24f6aa0bc29705c1
   def kind
     if anime.present?
       :anime
@@ -150,11 +149,6 @@ class LibraryEntry < ApplicationRecord
       kind = media_type&.underscore
       send("#{kind}=", media) if kind
     end
-=======
-  def linked_profile_exists?
-    LinkedProfile.find_by(user_id: user_id, url: 'myanimelist').present?
->>>>>>> remove request.method and add after_destroy method
-  end
 
   before_save do
     if status_changed? && completed? && media&.progress_limit
@@ -189,17 +183,15 @@ class LibraryEntry < ApplicationRecord
 
     # Sync MAL updates if linked profile exists
     if linked_profile_exists?
-      return unless media_type.in? %w[anime manga]
-
       MyAnimeListSyncWorker.perform_async(self, 'create/update')
     end
   end
 
   after_destroy do
     if linked_profile_exists?
-      return unless media_type.in? %w[anime manga]
-
       MyAnimeListSyncWorker.perform_async(self, 'delete')
     end
   end
+
+
 end

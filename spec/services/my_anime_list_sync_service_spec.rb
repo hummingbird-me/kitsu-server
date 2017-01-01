@@ -8,8 +8,7 @@ RSpec.describe MyAnimeListSyncService do
   end
 
   let(:linked_profile) do
-    build(:linked_profile,
-      url: 'myanimelist',
+    create(:linked_profile,
       external_user_id: 'toyhammered',
       token: 'fakefake')
   end
@@ -50,12 +49,13 @@ RSpec.describe MyAnimeListSyncService do
     # TODO: fix, not working like I thought it would
     # related to commented out before_save code
     # in linked_profile
-    # stub_request(:get, "#{@host}account/verify_credentials")
-    #   .with(
-    #     headers: {
-    #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-    #     })
-    #   .to_return(status: 200)
+    stub_request(:get, "#{@host}account/verify_credentials")
+      .with(
+        headers: {
+          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+        }
+      )
+      .to_return(status: 200)
   end
 
   context 'Anime/Manga' do
@@ -113,9 +113,7 @@ RSpec.describe MyAnimeListSyncService do
           )
           .to_return(body: 'HI')
 
-        expect { |b|
-          subject.send(:get, 'example.com', linked_profile, &b)
-        }.to yield_with_args('HI')
+        subject.send(:get, 'example.com', linked_profile)
 
         expect(WebMock).to have_requested(:get, "#{@host}example.com")
           .with(
@@ -126,30 +124,26 @@ RSpec.describe MyAnimeListSyncService do
           .once
       end
 
-      context 'which returns an error' do
-        it 'should output a message and never call the block' do
-          stub_request(:get, "#{@host}example.com")
-            .with(
-              headers: {
-                Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-              }
-            )
-            .to_return(status: 404)
+      it 'should raise an error message' do
+        stub_request(:get, "#{@host}example.com")
+          .with(
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            }
+          )
+          .to_return(status: 404)
 
-          expect { |b|
-            expect {
-              subject.send(:get, 'example.com', linked_profile, &b)
-            }.to output(/failed/).to_stderr
-          }.not_to yield_control
+          expect {
+            subject.send(:get, 'example.com', linked_profile)
+          }.to raise_error(/failed/)
 
-          expect(WebMock).to have_requested(:get, "#{@host}example.com")
-            .with(
-              headers: {
-                Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-              }
-            )
-            .once
-        end
+        expect(WebMock).to have_requested(:get, "#{@host}example.com")
+          .with(
+            headers: {
+              Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+            }
+          )
+          .once
       end
     end
 
