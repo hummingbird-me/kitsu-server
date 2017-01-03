@@ -12,3 +12,7 @@ if ENV['STREAM_API_KEY']
     config.api_secret = ENV['STREAM_API_SECRET']
   end
 end
+
+StreamRails.configure do |config|
+  config.timeout = 20
+end

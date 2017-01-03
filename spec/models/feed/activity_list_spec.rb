@@ -66,9 +66,8 @@ RSpec.describe Feed::ActivityList, type: :model do
   describe '#add' do
     let(:activity) { Feed::Activity.new(subject) }
     it 'should tell Stream to add the activity by JSON' do
-      res = OpenStruct.new(parsed_response: {})
-      expect(subject.feed.stream_feed).to receive(:add_activity).
-        with(Hash).once.and_return(res)
+      expect(subject.feed.stream_feed).to receive(:add_activity)
+        .with(Hash).once.and_return({})
       subject.add(activity)
     end
   end
@@ -133,13 +132,13 @@ RSpec.describe Feed::ActivityList, type: :model do
     subject { list.limit(50) }
     it 'should get the activities using the query and read the results' do
       expect(subject.feed.stream_feed).to receive(:get).with(limit: 50)
-        .and_return({'results' => []})
+        .and_return('results' => [])
       expect(subject.to_a).to eq([])
     end
     context 'for an aggregated feed' do
       subject { Feed::ActivityList.new(Feed.new('user_aggr', '1')) }
       it 'should return an Array of ActivityGroup instances' do
-        expect(subject.feed.stream_feed).to receive(:get).and_return({
+        expect(subject.feed.stream_feed).to receive(:get).and_return(
           'results' => [
             {
               'activities' => [{}]
@@ -147,16 +146,16 @@ RSpec.describe Feed::ActivityList, type: :model do
               'activities' => [{}]
             }
           ]
-        })
+        )
         expect(subject.to_a).to all(be_a(Feed::ActivityGroup))
       end
     end
     context 'for a flat feed' do
       subject { Feed::ActivityList.new(Feed.new('user', '1')) }
       it 'should return an Array of Activity instances' do
-        expect(subject.feed.stream_feed).to receive(:get).and_return({
+        expect(subject.feed.stream_feed).to receive(:get).and_return(
           'results' => [{}, {}]
-        })
+        )
         expect(subject.to_a).to all(be_a(Feed::Activity))
       end
     end
