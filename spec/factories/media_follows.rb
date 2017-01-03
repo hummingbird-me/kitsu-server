@@ -19,6 +19,6 @@
 FactoryGirl.define do
   factory :media_follow do
     user
-    association :media, factory: :anime
+    association :media, factory: :anime, strategy: :build
   end
 end
