@@ -1,4 +1,4 @@
-class LinkedProfilePolicy < ApplicationPolicy
+class LinkedAccountPolicy < ApplicationPolicy
   alias_method :create?, :is_owner?
   alias_method :update?, :is_owner?
   alias_method :destroy?, :is_owner?
@@ -6,7 +6,7 @@ class LinkedProfilePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       return scope.where(private: false) unless user
-      t = LinkedProfile.arel_table
+      t = LinkedAccount.arel_table
       private, user_id = t[:private], t[:user_id]
 
       # Don't apply privacy if user is admin

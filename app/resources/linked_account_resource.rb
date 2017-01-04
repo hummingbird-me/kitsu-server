@@ -1,9 +1,10 @@
-class LinkedProfileResource < BaseResource
+class LinkedAccountResource < BaseResource
   attribute :token
-  attributes :external_user_id, :url, :share_to, :share_from
+  attributes :external_user_id, :share_to, :share_from,
+    :private, :sync_to
+  # :type is reserved for STI
 
   has_one :user
-  has_one :linked_site
 
   def fetchable_fields
     if current_user == _model

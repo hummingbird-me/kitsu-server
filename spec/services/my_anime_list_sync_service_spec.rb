@@ -7,11 +7,7 @@ RSpec.describe MyAnimeListSyncService do
       progress: 10)
   end
 
-  let(:linked_profile) do
-    create(:linked_profile,
-      external_user_id: 'toyhammered',
-      token: 'fakefake')
-  end
+  let(:linked_account) { build(:linked_account)}
 
   let(:mapping) do
     build(:mapping,
@@ -45,17 +41,17 @@ RSpec.describe MyAnimeListSyncService do
         }
       )
       .to_return(body: fixture('my_anime_list/sync/anime/boku-no-pico.json'))
-
-    # TODO: fix, not working like I thought it would
-    # related to commented out before_save code
-    # in linked_profile
-    stub_request(:get, "#{@host}account/verify_credentials")
-      .with(
-        headers: {
-          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-        }
-      )
-      .to_return(status: 200)
+    #
+    # # TODO: fix, not working like I thought it would
+    # # related to commented out before_save code
+    # # in linked_profile
+    # stub_request(:get, "#{@host}account/verify_credentials")
+    #   .with(
+    #     headers: {
+    #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
+    #     }
+    #   )
+    #   .to_return(status: 200)
   end
 
   context 'Anime/Manga' do
@@ -113,7 +109,7 @@ RSpec.describe MyAnimeListSyncService do
           )
           .to_return(body: 'HI')
 
-        subject.send(:get, 'example.com', linked_profile)
+        subject.send(:get, 'example.com', linked_account)
 
         expect(WebMock).to have_requested(:get, "#{@host}example.com")
           .with(
@@ -134,7 +130,7 @@ RSpec.describe MyAnimeListSyncService do
           .to_return(status: 404)
 
         expect {
-          subject.send(:get, 'example.com', linked_profile)
+          subject.send(:get, 'example.com', linked_account)
         }.to raise_error(/failed/)
 
         expect(WebMock).to have_requested(:get, "#{@host}example.com")
@@ -164,7 +160,7 @@ RSpec.describe MyAnimeListSyncService do
           episodes: 1,
           score: nil
         }
-        subject.send(:post, 'example.com', linked_profile, body)
+        subject.send(:post, 'example.com', linked_account, body)
 
         expect(WebMock).to have_requested(:post, "#{@host}example.com")
           .with(
@@ -194,7 +190,7 @@ RSpec.describe MyAnimeListSyncService do
           score: nil,
           rewatch_count: 0
         }
-        subject.send(:put, 'example.com', linked_profile, body)
+        subject.send(:put, 'example.com', linked_account, body)
 
         expect(WebMock).to have_requested(:put, "#{@host}example.com")
           .with(
@@ -217,7 +213,7 @@ RSpec.describe MyAnimeListSyncService do
           )
           .to_return(status: 200)
 
-        subject.send(:delete, 'example.com', linked_profile)
+        subject.send(:delete, 'example.com', linked_account)
 
         expect(WebMock).to have_requested(:delete, "#{@host}example.com")
           .with(

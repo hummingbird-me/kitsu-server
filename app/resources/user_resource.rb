@@ -18,7 +18,7 @@ class UserResource < BaseResource
   has_many :followers
   has_many :following
   has_many :blocks
-  has_many :linked_profiles
+  has_many :linked_accounts
   has_many :media_follows
   has_many :user_roles
   has_many :library_entries

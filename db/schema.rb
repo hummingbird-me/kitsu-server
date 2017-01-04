@@ -368,11 +368,9 @@ ActiveRecord::Schema.define(version: 20170108054725) do
   add_index "library_entries", ["user_id", "status"], name: "index_library_entries_on_user_id_and_status", using: :btree
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
 
-  create_table "linked_profiles", force: :cascade do |t|
+  create_table "linked_accounts", force: :cascade do |t|
     t.integer  "user_id",                            null: false
-    t.integer  "linked_site_id",                     null: false
     t.string   "external_user_id",                   null: false
-    t.string   "url"
     t.boolean  "share_to",           default: false, null: false
     t.boolean  "share_from",         default: false, null: false
     t.boolean  "private",            default: true,  null: false
@@ -380,19 +378,11 @@ ActiveRecord::Schema.define(version: 20170108054725) do
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
     t.string   "encrypted_token_iv"
+    t.string   "type",                               null: false
+    t.boolean  "sync_to",            default: false, null: false
   end
 
-  add_index "linked_profiles", ["linked_site_id"], name: "index_linked_profiles_on_linked_site_id", using: :btree
-  add_index "linked_profiles", ["user_id"], name: "index_linked_profiles_on_user_id", using: :btree
-
-  create_table "linked_sites", force: :cascade do |t|
-    t.string   "name",                       null: false
-    t.boolean  "share_to",   default: false, null: false
-    t.boolean  "share_from", default: false, null: false
-    t.integer  "link_type",                  null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-  end
+  add_index "linked_accounts", ["user_id"], name: "index_linked_accounts_on_user_id", using: :btree
 
   create_table "list_imports", force: :cascade do |t|
     t.string   "type",                                null: false
@@ -634,17 +624,50 @@ ActiveRecord::Schema.define(version: 20170108054725) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "profile_link_sites", force: :cascade do |t|
+    t.string   "name",                       null: false
+    t.boolean  "share_to",   default: false, null: false
+    t.boolean  "share_from", default: false, null: false
+    t.integer  "link_type",                  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "profile_links", force: :cascade do |t|
+    t.integer "user_id",              null: false
+    t.integer "profile_link_site_id", null: false
+    t.string  "url",                  null: false
+  end
+
+  add_index "profile_links", ["profile_link_site_id"], name: "index_profile_links_on_profile_link_site_id", using: :btree
+  add_index "profile_links", ["user_id", "profile_link_site_id"], name: "index_profile_links_on_user_id_and_profile_link_site_id", unique: true, using: :btree
+  add_index "profile_links", ["user_id"], name: "index_profile_links_on_user_id", using: :btree
+
+  create_table "quote_likes", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "quote_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "quote_likes", ["quote_id"], name: "index_quote_likes_on_quote_id", using: :btree
+  add_index "quote_likes", ["user_id"], name: "index_quote_likes_on_user_id", using: :btree
+
   create_table "quotes", force: :cascade do |t|
-    t.integer  "anime_id"
-    t.text     "content"
-    t.string   "character_name", limit: 255
+    t.integer  "media_id",                               null: false
+    t.text     "content",                                null: false
+    t.string   "character_name", limit: 255,             null: false
     t.integer  "user_id"
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
-    t.integer  "positive_votes",             default: 0, null: false
+    t.integer  "likes_count",                default: 0, null: false
+    t.string   "media_type",                             null: false
+    t.integer  "character_id"
   end
 
-  add_index "quotes", ["anime_id"], name: "index_quotes_on_anime_id", using: :btree
+  add_index "quotes", ["character_id"], name: "index_quotes_on_character_id", using: :btree
+  add_index "quotes", ["media_id", "media_type"], name: "index_quotes_on_media_id_and_media_type", using: :btree
+  add_index "quotes", ["media_id"], name: "index_quotes_on_media_id", using: :btree
 
   create_table "rails_admin_histories", force: :cascade do |t|
     t.text     "message"
@@ -847,6 +870,7 @@ ActiveRecord::Schema.define(version: 20170108054725) do
     t.integer  "reviews_count",                           default: 0,           null: false
     t.inet     "ip_addresses",                            default: [],                       array: true
     t.string   "previous_email"
+    t.integer  "quotes_count",                            default: 0,           null: false
     t.integer  "pinned_post_id"
     t.string   "time_zone"
     t.string   "language"
@@ -915,15 +939,20 @@ ActiveRecord::Schema.define(version: 20170108054725) do
   add_foreign_key "comment_likes", "comments"
   add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"
-  add_foreign_key "linked_profiles", "linked_sites"
-  add_foreign_key "linked_profiles", "users"
+  add_foreign_key "linked_accounts", "users"
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
   add_foreign_key "media_follows", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
+  add_foreign_key "profile_links", "profile_link_sites"
+  add_foreign_key "profile_links", "users"
+  add_foreign_key "quote_likes", "quotes"
+  add_foreign_key "quote_likes", "users"
+  add_foreign_key "quotes", "characters"
   add_foreign_key "reports", "users"
   add_foreign_key "reports", "users", column: "moderator_id"
+  add_foreign_key "review_likes", "reviews"
   add_foreign_key "review_likes", "users"
   add_foreign_key "reviews", "library_entries"
   add_foreign_key "streaming_links", "streamers"

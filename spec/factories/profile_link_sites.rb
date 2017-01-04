@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/LineLength
 # == Schema Information
 #
-# Table name: linked_sites
+# Table name: profile_link_sites
 #
 #  id         :integer          not null, primary key
 #  link_type  :integer          not null
@@ -13,9 +13,9 @@
 #
 # rubocop:enable Metrics/LineLength
 
-require 'rails_helper'
-
-RSpec.describe LinkedSite, type: :model do
-  it { should validate_presence_of(:name) }
-  it { should validate_presence_of(:link_type) }
+FactoryGirl.define do
+  factory :profile_link_site do
+    name { Faker::Company.name }
+    link_type { ProfileLinkSite.link_types.keys.sample }
+  end
 end

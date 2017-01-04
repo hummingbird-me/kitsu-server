@@ -113,7 +113,8 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :media_follows, dependent: :destroy
   has_many :blocks, dependent: :destroy
-  has_many :linked_profiles, dependent: :destroy
+  has_many :linked_accounts, dependent: :destroy
+  has_many :profile_links, dependent: :destroy
   has_many :user_roles, dependent: :destroy
   has_many :library_entries, dependent: :destroy
   has_many :favorites, dependent: :destroy

@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/LineLength
 # == Schema Information
 #
-# Table name: linked_sites
+# Table name: profile_link_sites
 #
 #  id         :integer          not null, primary key
 #  link_type  :integer          not null
@@ -13,9 +13,9 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
-  factory :linked_site do
-    name { Faker::Company.name }
-    link_type { LinkedSite.link_types.keys.sample }
-  end
+class ProfileLinkSite < ApplicationRecord
+  enum link_type: %i[username oauth2]
+
+  validates_presence_of :name
+  validates_presence_of :link_type
 end

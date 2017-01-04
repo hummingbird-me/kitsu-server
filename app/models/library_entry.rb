@@ -140,6 +140,13 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  def sync_to_mal?
+    User.find(user_id).linked_accounts.where(
+      sync_to: true,
+      type: 'LinkedAccount::MyAnimeList'
+    ).present?
+  end
+
   before_validation do
     # TEMPORARY: If media is set, copy it to kind_id, otherwise if kind_id is
     # set, copy it to media!

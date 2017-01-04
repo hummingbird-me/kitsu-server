@@ -12,13 +12,16 @@ class RenameLinkedProfilesAndLinkedSites < ActiveRecord::Migration
     add_column :linked_accounts, :sync_to, :boolean, default: false, null: false
 
     # Rename LinkedSite -> ProfileLinkedSite
-    rename_table :linked_sites, :profile_linked_sites
+    rename_table :linked_sites, :profile_link_sites
     # Create ProfileLink Table
     create_table(:profile_links) do |t|
-      t.references :user, index: true
-      t.references :profile_linked_site, index: true
+      t.references :user, null: false, index: true
+      t.references :profile_link_site, null: false, index: true
       t.string :url, null: false
+
       t.index [:user_id, :profile_link_site_id], unique: true
     end
+    add_foreign_key :profile_links, :users
+    add_foreign_key :profile_links, :profile_link_sites
   end
 end
