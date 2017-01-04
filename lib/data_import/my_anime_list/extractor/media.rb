@@ -74,10 +74,14 @@ module DataImport
 
         def start_date
           data['start_date']&.to_date
+        rescue ArgumentError
+          nil
         end
 
         def end_date
           data['end_date']&.to_date
+        rescue ArgumentError
+          nil
         end
 
         def titles
