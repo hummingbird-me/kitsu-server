@@ -55,6 +55,7 @@ gem 'counter_culture' # Fancier counter caches
 gem 'stream_rails' # Feeds
 gem 'hashie' # Souped-up Hashes
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
+gem 'sitemap_generator' # Generate Sitemaps
 
 # Rack Middleware
 gem 'rack-cors'

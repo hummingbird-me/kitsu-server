@@ -394,6 +394,8 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
+    sitemap_generator (5.2.0)
+      builder (~> 3.0)
     skylight (1.0.1)
       activesupport (>= 3.0.0)
     slop (3.6.0)
@@ -506,6 +508,7 @@ DEPENDENCIES
   sidekiq (~> 3.4.2)
   sidetiq
   simplecov
+  sitemap_generator
   skylight
   spring
   stream_rails
