@@ -14,7 +14,8 @@ module DataImport
     end
 
     def get_media(external_id) # anime/1234 or manga/1234
-      media = Mapping.lookup('myanimelist', external_id)
+      type, id = external_id.split('/')
+      media = Mapping.lookup("myanimelist/#{type}", id)
       # should return Anime or Manga
       klass = external_id.split('/').first.classify.constantize
       # initialize the class
