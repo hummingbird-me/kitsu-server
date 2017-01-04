@@ -33,13 +33,14 @@
 # rubocop:enable Metrics/LineLength
 
 class LibraryEntry < ApplicationRecord
-  # TODO: apply this globally so that we can easily update it to add the
-  # totally definitely happening 1000-point scale.  Or just because it's good
-  # practice.
   VALID_RATINGS = (0.5..5).step(0.5).to_a.freeze
+  MEDIA_ASSOCIATIONS = %i[anime manga drama].freeze
 
   belongs_to :user, touch: true
-  belongs_to :media, polymorphic: true, counter_cache: 'user_count'
+  belongs_to :media, polymorphic: true
+  belongs_to :anime, counter_cache: 'user_count'
+  belongs_to :manga, counter_cache: 'user_count'
+  belongs_to :drama, counter_cache: 'user_count'
   has_one :review, dependent: :destroy
   has_many :marathons, dependent: :destroy
 
@@ -54,10 +55,11 @@ class LibraryEntry < ApplicationRecord
   }
   attr_accessor :imported
 
-  validates :user, :media, :status, :progress, :reconsume_count,
-    presence: true
-  validates :media, polymorphism: { type: Media }
-  validates :user_id, uniqueness: { scope: %i[media_type media_id] }
+  validates :user, :status, :progress, :reconsume_count, presence: true
+  validates :media, polymorphism: { type: Media }, presence: true
+  validates :anime_id, uniqueness: { scope: :user_id }, allow_nil: true
+  validates :manga_id, uniqueness: { scope: :user_id }, allow_nil: true
+  validates :drama_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :rating, numericality: {
     greater_than: 0,
     less_than_or_equal_to: 5
@@ -68,6 +70,7 @@ class LibraryEntry < ApplicationRecord
   }
   validate :progress_limit
   validate :rating_on_halves
+  validate :one_media_present
 
   counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating }
   scope :rated, -> { where.not(rating: nil) }
@@ -90,6 +93,14 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  def one_media_present
+    media_present = MEDIA_ASSOCIATIONS.select { |col| send(col).present? }
+    return if media_present.count == 1
+    media_present.each do |col|
+      errors.add(col, 'must have exactly one media present')
+    end
+  end
+
   def unit
     media.unit(progress)
   end
@@ -107,11 +118,32 @@ class LibraryEntry < ApplicationRecord
     MediaActivityService.new(self)
   end
 
+  def kind
+    if anime.present?
+      :anime
+    elsif manga.present?
+      :manga
+    elsif drama.present?
+      :drama
+    end
+  end
+
+  before_validation do
+    # TEMPORARY: If media is set, copy it to kind_id, otherwise if kind_id is
+    # set, copy it to media!
+    if kind && send(kind).present?
+      self.media = send(kind)
+    else
+      kind = media_type&.underscore
+      send("#{kind}=", media) if kind
+    end
+  end
+
   before_save do
-    if status_changed? && completed? && media.progress_limit
+    if status_changed? && completed? && media&.progress_limit
       # When marked completed, we try to update progress to the cap
       self.progress = media.progress_limit
-    elsif progress == media.progress_limit
+    elsif progress == media&.progress_limit
       # When in current and progress equals total episodes
       self.status = :completed
     end
