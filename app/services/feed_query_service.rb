@@ -13,7 +13,7 @@ class FeedQueryService
     return @list if @list
     list = feed.activities
     list = list.page(id_lt: cursor) if cursor
-    list = list.limit(limit) if limit
+    list = list.per(limit) if limit
     list = list.where_id(*id_query) if id_query
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
