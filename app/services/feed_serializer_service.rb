@@ -39,11 +39,11 @@ class FeedSerializerService
   attr_reader :activity_list, :including, :fields, :context, :base_url
 
   def initialize(list, including: nil, fields: nil, context: nil, base_url:)
-    @activity_list = list.includes(stream_enrichment_fields)
     @including = including || []
     @fields = fields || {}
     @context = context || {}
     @base_url = base_url
+    @activity_list = list.includes(stream_enrichment_fields)
   end
 
   def as_json(*)
