@@ -1,7 +1,10 @@
 class MediaIndex < Chewy::Index
   class << self
     def sfw
-      filter { age_rating(:or) == AgeRatings::SAFE_AGE_RATINGS.map(&:downcase) }
+      safe_ratings = AgeRatings::SAFE_AGE_RATINGS.map(&:downcase)
+      filter do
+        age_rating(:or) == safe_ratings + [nil]
+      end
     end
 
     # Convert from [[id, name], ...] to id => [names...]
@@ -56,13 +59,13 @@ class MediaIndex < Chewy::Index
       field :start_date, :end_date, :created_at, type: 'date'
       field :season, type: 'string'
       field :year, type: 'short' # Update this before year 32,000
-      field :genres, value: -> (a) { a.genres.map(&:name) }
+      field :genres, value: ->(a) { a.genres.map(&:name) }
       field :user_count, type: 'integer'
       # Castings
-      field :people, value: -> (a, crutch) { crutch.people[a.id] }
-      field :characters, value: -> (a, crutch) { crutch.characters[a.id] }
+      field :people, value: ->(a, crutch) { crutch.people[a.id] }
+      field :characters, value: ->(a, crutch) { crutch.characters[a.id] }
       # Where to watch
-      field :streamers, value: -> (a, crutch) { crutch.streamers[a.id] }
+      field :streamers, value: ->(a, crutch) { crutch.streamers[a.id] }
     end
   end
 
@@ -85,11 +88,11 @@ class MediaIndex < Chewy::Index
       field :average_rating, type: 'float'
       field :start_date, :end_date, :created_at, type: 'date'
       field :year, type: 'short' # Update this before year 32,000
-      field :genres, value: -> (a) { a.genres.map(&:name) }
+      field :genres, value: ->(a) { a.genres.map(&:name) }
       field :user_count, type: 'integer'
       # Castings
-      field :people, value: -> (a, crutch) { crutch.people[a.id] }
-      field :characters, value: -> (a, crutch) { crutch.characters[a.id] }
+      field :people, value: ->(a, crutch) { crutch.people[a.id] }
+      field :characters, value: ->(a, crutch) { crutch.characters[a.id] }
     end
   end
 
@@ -117,13 +120,13 @@ class MediaIndex < Chewy::Index
       field :average_rating, type: 'float'
       field :start_date, :end_date, :created_at, type: 'date'
       field :year, type: 'short' # Update this before year 32,000
-      field :genres, value: -> (a) { a.genres.map(&:name) }
+      field :genres, value: ->(a) { a.genres.map(&:name) }
       field :user_count, type: 'integer'
       # Castings
-      field :people, value: -> (a, crutch) { crutch.people[a.id] }
-      field :characters, value: -> (a, crutch) { crutch.characters[a.id] }
+      field :people, value: ->(a, crutch) { crutch.people[a.id] }
+      field :characters, value: ->(a, crutch) { crutch.characters[a.id] }
       # Where to watch
-      field :streamers, value: -> (a, crutch) { crutch.streamers[a.id] }
+      field :streamers, value: ->(a, crutch) { crutch.streamers[a.id] }
     end
   end
 end

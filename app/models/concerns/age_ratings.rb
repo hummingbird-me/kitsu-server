@@ -6,7 +6,7 @@ module AgeRatings
 
   # SFW-ness is whitelist, not blacklist
   def sfw?
-    age_rating.in? SAFE_AGE_RATINGS
+    age_rating.in? SAFE_AGE_RATINGS || age_rating.nil?
   end
 
   def nsfw?
@@ -17,7 +17,7 @@ module AgeRatings
     enum age_rating: AGE_RATINGS
 
     scope :sfw, -> {
-      where(age_rating: age_ratings.values_at(*SAFE_AGE_RATINGS))
+      where(age_rating: age_ratings.values_at(*SAFE_AGE_RATINGS) + [nil])
     }
   end
 end
