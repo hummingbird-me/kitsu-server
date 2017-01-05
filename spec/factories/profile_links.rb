@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: profile_links
@@ -18,6 +19,7 @@
 #  fk_rails_16f7039808  (profile_link_site_id => profile_link_sites.id)
 #  fk_rails_740c28bcae  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :profile_link do
