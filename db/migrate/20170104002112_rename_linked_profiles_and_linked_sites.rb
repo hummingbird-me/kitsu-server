@@ -6,6 +6,8 @@ class RenameLinkedProfilesAndLinkedSites < ActiveRecord::Migration
     remove_column :linked_accounts, :linked_site_id, :integer
     # remove url
     remove_column :linked_accounts, :url, :string
+    # remove private (was used with url)
+    remove_column :linked_accounts, :private, :boolean
     # add type for STI
     add_column :linked_accounts, :type, :string, null: false
     # add sync_to (for any external services like mal)

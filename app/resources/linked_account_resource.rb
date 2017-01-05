@@ -1,7 +1,8 @@
 class LinkedAccountResource < BaseResource
+  model_hint model: LinkedAccount::MyAnimeList
+
   attribute :token
-  attributes :external_user_id, :share_to, :share_from,
-    :private, :sync_to
+  attributes :external_user_id, :share_to, :share_from, :sync_to
   # :type is reserved for STI
 
   has_one :user

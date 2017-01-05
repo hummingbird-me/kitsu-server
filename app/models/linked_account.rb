@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: linked_accounts
@@ -23,37 +24,12 @@
 #
 #  fk_rails_166e103170  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class LinkedAccount < ApplicationRecord
   belongs_to :user, required: true
-
+  # encyrpt the token
   attr_encrypted :token, key: Base64.encode64(ENV['ATTR_ENCRYPT_KEY'])
-
   # validates_presence_of :url, if: :private?
-  validates_presence_of :external_user_id
-  validate :verify_mal_credentials, if: :sync_to_mal?
-
-  def verify_mal_credentials
-    # Check to make sure username/password is valid
-    host = MyAnimeListSyncService::ATARASHII_API_HOST
-    response = Typhoeus::Request.new(
-      "#{host}account/verify_credentials",
-      method: :get,
-      userpwd: "#{external_user_id}:#{token}"
-    ).run
-
-    unless response.code == 200
-      errors.add(:token, "#{response.code}: #{response.body}")
-    end
-
-    true
-  end
-
-  def sync_to_mal?
-    sync_to == true && type == 'LinkedAccount::MyAnimeList'
-  end
-
-  after_save do
-    MyAnimeListListWorker.perform_async(user_id) if sync_to_mal?
-  end
+  validates_presence_of :external_user_id, :type
 end

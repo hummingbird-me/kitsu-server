@@ -373,7 +373,6 @@ ActiveRecord::Schema.define(version: 20170108054725) do
     t.string   "external_user_id",                   null: false
     t.boolean  "share_to",           default: false, null: false
     t.boolean  "share_from",         default: false, null: false
-    t.boolean  "private",            default: true,  null: false
     t.string   "encrypted_token"
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
