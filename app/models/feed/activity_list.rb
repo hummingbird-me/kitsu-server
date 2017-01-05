@@ -114,9 +114,54 @@ class Feed
       end
     end
 
-    def results
+    # @attr [Float] ratio The expected percentage of posts that will be matched
+    #                     by this selector
+    def select(ratio = 1.0, &block)
+      @limit_ratio *= ratio
+      @selects << block
+      self
+    end
+
+    def map(&block)
+      @maps << block
+      self
+    end
+
+    def to_a
+      results = []
+      requested_count = page_size || data[:limit]
+      last_id = nil
+      loop.with_index do |_, i|
+        page = get_page(id_gt: last_id)
+        return results if page.nil?
+        results += page
+        return results[0..requested_count] if results.count >= requested_count
+        return results if i >= 4
+      end
+    end
+
+    def empty?
+      to_a.empty?
+    end
+
+    private
+
+    def get_page(id_gt: nil)
+      # Extract non-pagination payload data
+      data = @data.slice(:ranking, :mark_seen, :mark_read, :limit)
+      # Apply our id_gt for pagination
+      data = data.merge(id_gt: id_gt) if id_gt
+      # Apply the limit ratio, apply it to the data
       data[:limit] = (data[:limit] / @limit_ratio).to_i
-      feed.stream_feed.get(data)['results']
+      # Actually load results
+      res = feed.stream_feed.get(data)['results']
+      return nil if res.count.zero?
+      # Enrich them, apply select and map filters to them
+      res = enrich(res)
+      res = apply_select(res)
+      res = apply_maps(res)
+      # Remove any nils just to be safe
+      res.compact
     end
 
     # Loads in included associations, converts to Feed::Activity[Group]
@@ -131,19 +176,6 @@ class Feed
         activities = activities.map { |a| Feed::Activity.new(feed, a) }
       end
       activities.map { |act| strip_unfound(act) }
-    end
-
-    # @attr [Float] ratio The expected percentage of posts that will be matched
-    #                     by this selector
-    def select(ratio = 1.0, &block)
-      @limit_ratio *= ratio
-      @selects << block
-      self
-    end
-
-    def map(&block)
-      @maps << block
-      self
     end
 
     def apply_select(activities)
@@ -166,23 +198,10 @@ class Feed
           act.activities = apply_maps(act.activities)
           act
         else
-          @maps.reduce(act) { |a, e| e.call(a) }
+          @maps.reduce(act) { |acc, elem| elem.call(acc) }
         end
       end
     end
-
-    def to_a
-      res = enrich(results)
-      res = apply_select(res)
-      res = apply_maps(res)
-      res.compact
-    end
-
-    def empty?
-      to_a.empty?
-    end
-
-    private
 
     # Strips unfound
     def strip_unfound(activity)
