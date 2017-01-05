@@ -2,8 +2,10 @@ class MediaIndex < Chewy::Index
   class << self
     def sfw
       safe_ratings = AgeRatings::SAFE_AGE_RATINGS.map(&:downcase)
+      age_ratings = AgeRatings::AGE_RATINGS.map(&:to_s).map(&:downcase)
+      unsafe_ratings = age_ratings - safe_ratings
       filter do
-        age_rating(:or) == safe_ratings + [nil]
+        age_rating(:or) != unsafe_ratings
       end
     end
 
