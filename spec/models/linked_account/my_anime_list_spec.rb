@@ -31,5 +31,4 @@ RSpec.describe LinkedAccount::MyAnimeList do
       end
     end
   end
-
 end

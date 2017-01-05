@@ -18,35 +18,30 @@ class MyAnimeListSyncService
       # it will raise an error if it fails the http request
       response = get("#{media_type}/#{mal_media_id}#{MINE}", linked_profile)
 
-      if media_type == 'anime'
-        if response['watched_status']
-          put("animelist/anime/#{mal_media_id}", linked_profile,
-            status: format_status(library_entry.status),
-            episodes: library_entry.progress,
-            score: format_score(library_entry.rating),
-            rewatch_count: library_entry.reconsume_count)
-        else
-          post('animelist/anime', linked_profile,
-            anime_id: mal_media_id,
-            status: format_status(library_entry.status),
-            episodes: library_entry.progress,
-            score: format_score(library_entry.rating))
-        end
-      else
-        # manga
-        if response['read_status']
-          put("mangalist/manga/#{mal_media_id}", linked_profile,
-            status: format_status(library_entry.status),
-            chapters: library_entry.progress,
-            score: format_score(library_entry.rating),
-            reread_count: library_entry.reconsume_count)
-        else
-          post('mangalist/manga', linked_profile,
-            manga_id: mal_media_id,
-            status: format_status(library_entry.status),
-            chapters: library_entry.progress,
-            score: format_score(library_entry.rating))
-        end
+      if media_type == 'anime' && response['watched_status']
+        put("animelist/anime/#{mal_media_id}", linked_profile,
+          status: format_status(library_entry.status),
+          episodes: library_entry.progress,
+          score: format_score(library_entry.rating),
+          rewatch_count: library_entry.reconsume_count)
+      elsif media_type == 'anime'
+        post('animelist/anime', linked_profile,
+          anime_id: mal_media_id,
+          status: format_status(library_entry.status),
+          episodes: library_entry.progress,
+          score: format_score(library_entry.rating))
+      elsif media_type == 'manga' && response['read_status']
+        put("mangalist/manga/#{mal_media_id}", linked_profile,
+          status: format_status(library_entry.status),
+          chapters: library_entry.progress,
+          score: format_score(library_entry.rating),
+          reread_count: library_entry.reconsume_count)
+      else # should I use else to catch errors?
+        post('mangalist/manga', linked_profile,
+          manga_id: mal_media_id,
+          status: format_status(library_entry.status),
+          chapters: library_entry.progress,
+          score: format_score(library_entry.rating))
       end
     end
   end

@@ -7,7 +7,7 @@ RSpec.describe MyAnimeListSyncService do
       progress: 10)
   end
 
-  let(:linked_account) { build(:linked_account)}
+  let(:linked_account) { build(:linked_account) }
 
   let(:mapping) do
     build(:mapping,
