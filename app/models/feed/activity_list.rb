@@ -141,9 +141,11 @@ class Feed
       loop.with_index do |_, i|
         page = get_page(id_lt: last_id)
         results += page if page
-        break if results.count >= requested_count || i >= 10 || !more?
+        if results.count >= requested_count || i >= 10 || !more?
+          @results = results[0..(requested_count - 1)]
+          return @results
+        end
       end
-      @results = results[0..(requested_count - 1)]
     end
 
     def empty?
