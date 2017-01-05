@@ -130,9 +130,9 @@ class Feed
     def to_a
       results = []
       requested_count = page_size || data[:limit]
-      last_id = nil
+      last_id = data[:id_lt]
       loop.with_index do |_, i|
-        page = get_page(id_gt: last_id)
+        page = get_page(id_lt: last_id)
         return results if page.nil?
         results += page
         return results[0..requested_count] if results.count >= requested_count
@@ -146,11 +146,11 @@ class Feed
 
     private
 
-    def get_page(id_gt: nil)
+    def get_page(id_lt: nil)
       # Extract non-pagination payload data
       data = @data.slice(:ranking, :mark_seen, :mark_read, :limit)
       # Apply our id_gt for pagination
-      data = data.merge(id_gt: id_gt) if id_gt
+      data = data.merge(id_lt: id_lt) if id_lt
       # Apply the limit ratio, apply it to the data
       data[:limit] = (data[:limit] / @limit_ratio).to_i
       # Actually load results
