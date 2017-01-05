@@ -71,7 +71,7 @@ class FeedSerializerService
   end
 
   def links
-    if activity_list.more? && activity_list.count != 0
+    if activity_list.more? && activities.count != 0
       { next: url_for_params('page[cursor]' => activities.last.id) }
     else
       {}
