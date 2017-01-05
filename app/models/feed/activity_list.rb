@@ -129,20 +129,20 @@ class Feed
     end
 
     def more?
-      to_a
+      to_a if @results.nil?
       @more
     end
 
     def to_a
       return @results if @results
-      results = []
+      @results = []
       requested_count = page_size || data[:limit]
       last_id = data[:id_lt]
       loop.with_index do |_, i|
         page = get_page(id_lt: last_id)
-        results += page if page
-        if results.count >= requested_count || i >= 10 || !more?
-          @results = results[0..(requested_count - 1)]
+        @results += page if page
+        if @results.count >= requested_count || i >= 10 || !more?
+          @results = @results[0..(requested_count - 1)]
           return @results
         end
       end
