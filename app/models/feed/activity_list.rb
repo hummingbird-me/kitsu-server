@@ -17,6 +17,7 @@ class Feed
       @maps = []
       @selects = []
       @limit_ratio = 1.0
+      @more = true
       @data[:limit] = 25
     end
 
@@ -127,17 +128,22 @@ class Feed
       self
     end
 
+    def more?
+      to_a
+      @more
+    end
+
     def to_a
+      return @results if @results
       results = []
       requested_count = page_size || data[:limit]
       last_id = data[:id_lt]
       loop.with_index do |_, i|
         page = get_page(id_lt: last_id)
-        return results if page.nil?
-        results += page
-        return results[0..requested_count] if results.count >= requested_count
-        return results if i >= 4
+        results += page if page
+        break if results.count >= requested_count || i >= 10 || !more?
       end
+      @results = results[0..(requested_count - 1)]
     end
 
     def empty?
@@ -155,6 +161,8 @@ class Feed
       data[:limit] = (data[:limit] / @limit_ratio).to_i
       # Actually load results
       res = feed.stream_feed.get(data)['results']
+      # If the page we got is the right number, there's more to grab
+      @more = res.count == data[:limit]
       return nil if res.count.zero?
       # Enrich them, apply select and map filters to them
       res = enrich(res)
