@@ -55,21 +55,25 @@ class ListImport
     private
 
     def data
-      @data ||= loop.with_index.reduce([]) do |data, (_, index)|
-        page = get(index)
+      @data ||= %w[animelist mangalist].map { |l| list(l) }.reduce(&:+)
+    end
+
+    def list(list)
+      loop.with_index.reduce([]) do |data, (_, index)|
+        page = get(list, index)
         break data if page.blank?
         data + page
       end
     end
 
-    def get(page)
-      request = Typhoeus::Request.get(build_url(page))
+    def get(list, page)
+      request = Typhoeus::Request.get(build_url(list, page))
       JSON.parse(request.body)
     end
 
-    def build_url(page)
+    def build_url(list, page)
       offset = page * 300
-      "#{MAL_HOST}/animelist/#{input_text}/load.json?offset=#{offset}&status=7"
+      "#{MAL_HOST}/#{list}/#{input_text}/load.json?offset=#{offset}&status=7"
     end
   end
 end
