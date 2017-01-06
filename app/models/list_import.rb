@@ -60,15 +60,7 @@ class ListImport < ApplicationRecord
     )
 
     # Last-ditch check for validity
-    unless valid?
-      yield({
-        status: :failed,
-        total: count,
-        progress: 0,
-        error_message: 'Parameters were invalid'
-      })
-      return
-    end
+    raise 'Import is invalid' unless valid?
 
     yield({ status: :running, total: count, progress: 0 })
     Chewy.strategy(:atomic) do
