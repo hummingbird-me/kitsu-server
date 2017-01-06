@@ -50,7 +50,17 @@ class ListImport < ApplicationRecord
 
   # Apply the ListImport
   def apply
-    fail 'No each method defined' unless respond_to? :each
+    raise 'No each method defined' unless respond_to? :each
+
+    # Last-ditch check for validity
+    unless valid?
+      yield({
+        status: :failed,
+        total: count,
+        progress: 0,
+        error_message: 'Parameters were invalid'
+      })
+    end
 
     yield({ status: :running, total: count, progress: 0 })
     Chewy.strategy(:atomic) do
@@ -61,9 +71,9 @@ class ListImport < ApplicationRecord
           limit = media.progress_limit || media.default_progress_limit
           data[:progress] = [data[:progress], limit].compact.min
           # Merge the library entries
-          entry = LibraryEntry.where(user: user, media: media).first_or_initialize
-          entry.imported = true
-          merged_entry(entry, data).save!
+          le = LibraryEntry.where(user: user, media: media).first_or_initialize
+          le.imported = true
+          merged_entry(le, data).save!
           yield({ status: :running, total: count, progress: index + 1 })
         end
       end
@@ -82,7 +92,7 @@ class ListImport < ApplicationRecord
   def apply!(frequency: 20)
     apply do |info|
       # Apply every [frequency] updates unless the status is not :running
-      if info[:status] != :running || info[:progress] % frequency == 0
+      if info[:status] != :running || (info[:progress] % frequency).zero?
         update info
         yield info if block_given?
       end
