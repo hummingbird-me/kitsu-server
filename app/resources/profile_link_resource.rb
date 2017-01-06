@@ -1,5 +1,4 @@
 class ProfileLinkResource < BaseResource
-  immutable
   attribute :url
 
   has_one :user

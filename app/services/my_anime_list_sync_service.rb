@@ -10,6 +10,9 @@ class MyAnimeListSyncService
   end
 
   def execute_method
+    # TODO: add errors later on if we can't find mal data
+    return if mal_media.nil?
+
     case method
     when 'delete'
       delete("#{media_type}list/#{media_type}/#{mal_media_id}", linked_profile)

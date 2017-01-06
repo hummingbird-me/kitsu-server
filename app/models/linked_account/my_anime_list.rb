@@ -11,9 +11,13 @@ class LinkedAccount
         userpwd: "#{external_user_id}:#{token}"
       ).run
 
-      return true if response.code == 200
-
-      errors.add(:token, "#{response.code}: #{response.body}")
+      if reponse.code == 200
+        true
+      elsif response.code == 403
+        errors.add(:token, 'Username or password was incorrect.')
+      else
+        errors.add(:token, "#{response.code}: #{response.body}")
+      end
     end
 
     def sync_to_mal?

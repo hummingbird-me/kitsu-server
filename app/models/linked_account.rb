@@ -29,7 +29,9 @@
 class LinkedAccount < ApplicationRecord
   belongs_to :user, required: true
   # encyrpt the token
-  attr_encrypted :token, key: Base64.encode64(ENV['ATTR_ENCRYPT_KEY'])
-  # validates_presence_of :url, if: :private?
+  attr_encrypted :token, key: Base64.decode64(ENV['ATTR_ENCRYPT_KEY'])
+  # expose for jsonapi
+  alias_attribute :kind, :type
+
   validates_presence_of :external_user_id, :type
 end

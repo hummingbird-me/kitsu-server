@@ -624,12 +624,9 @@ ActiveRecord::Schema.define(version: 20170108054725) do
   end
 
   create_table "profile_link_sites", force: :cascade do |t|
-    t.string   "name",                       null: false
-    t.boolean  "share_to",   default: false, null: false
-    t.boolean  "share_from", default: false, null: false
-    t.integer  "link_type",                  null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "profile_links", force: :cascade do |t|

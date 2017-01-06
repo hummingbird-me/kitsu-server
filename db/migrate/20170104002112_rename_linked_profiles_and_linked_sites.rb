@@ -15,6 +15,11 @@ class RenameLinkedProfilesAndLinkedSites < ActiveRecord::Migration
 
     # Rename LinkedSite -> ProfileLinkedSite
     rename_table :linked_sites, :profile_link_sites
+    # remove share_to, share_from, link_type
+    remove_column :profile_link_sites, :share_to, :boolean
+    remove_column :profile_link_sites, :share_from, :boolean
+    remove_column :profile_link_sites, :link_type, :string
+
     # Create ProfileLink Table
     create_table(:profile_links) do |t|
       t.references :user, null: false, index: true
