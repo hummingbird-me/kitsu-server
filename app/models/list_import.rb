@@ -116,7 +116,7 @@ class ListImport < ApplicationRecord
       ours = [entry.reconsume_count || 0, entry.progress || 0]
 
       # -1 if ours, 1 if theirs
-      entry.assign_attributes(data) if (theirs <=> ours).positive?
+      entry.assign_attributes(data) unless (theirs <=> ours).negative?
     when :obliterate
       entry.assign_attributes(data)
     end
