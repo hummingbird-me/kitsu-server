@@ -33,6 +33,15 @@ class ListImport
     }, presence: true
     # does not accept file uploads
     validates :input_file, absence: true
+    validate :ensure_user_exists, on: :create
+
+    def ensure_user_exists
+      request = Typhoeus::Request.get(build_url("#{input_text}/anime", 1))
+      case request.code
+      when 404
+        errors.add(:input_text, 'Anime-Planet user not found')
+      end
+    end
 
     def count
       %w[anime manga].map { |type|
