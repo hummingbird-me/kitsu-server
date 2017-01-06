@@ -52,7 +52,7 @@ class ListImport
       end
 
       def rating
-        tooltip.css('.ttRating')&.last&.text&.to_f
+        node.css('.ttRating')&.last&.text&.to_f
       end
 
       def reconsume_count
@@ -123,11 +123,7 @@ class ListImport
 
       # Status
       def media_status
-        status = tooltip.at_css('.myListBar').xpath('./text()').to_s.strip
-
-        return status unless status.include?('-')
-
-        status.split('-').first.strip
+        node.at_css('.statusArea').content.strip.tap { |s| p s }
       end
 
       # Progress
