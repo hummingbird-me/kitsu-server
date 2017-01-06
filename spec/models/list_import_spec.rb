@@ -27,12 +27,13 @@ require 'rails_helper'
 RSpec.describe ListImport do
   class FakeImport < ListImport
     def each
-      media = FactoryGirl.create_list(:anime, 100)
+      media = FactoryGirl.create_list(:anime, 10)
       100.times do |i|
         yield media[i], status: :current, progress: 1
       end
     end
-    def count; 100; end
+    def count; 10; end
+    def valid?(*); true; end
   end
 
   subject { build(:list_import) }
@@ -75,7 +76,7 @@ RSpec.describe ListImport do
       it 'should yield repeatedly with the status' do
         expect { |b|
           subject.apply(&b)
-        }.to yield_successive_args(*Array.new(102, Hash))
+        }.to yield_successive_args(*Array.new(12, Hash))
       end
     end
 
@@ -83,6 +84,7 @@ RSpec.describe ListImport do
       class ErrorFakeImport < ListImport
         def each; raise 'An error'; end
         def count; 7; end
+        def valid?(*); true; end
       end
       subject { ErrorFakeImport.create(user: user, input_text: 'hi') }
 
