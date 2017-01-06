@@ -396,8 +396,6 @@ GEM
     simplecov-html (0.10.0)
     sitemap_generator (5.2.0)
       builder (~> 3.0)
-    skylight (1.0.1)
-      activesupport (>= 3.0.0)
     slop (3.6.0)
     spring (1.7.2)
     sprockets (3.7.0)
@@ -509,7 +507,6 @@ DEPENDENCIES
   sidetiq
   simplecov
   sitemap_generator
-  skylight
   spring
   stream_rails
   timecop

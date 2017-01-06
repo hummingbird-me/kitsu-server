@@ -36,8 +36,6 @@ class FeedSerializerService
     end
   end
 
-  include Skylight::Helpers
-
   attr_reader :activity_list, :including, :fields, :context, :base_url
 
   def initialize(list, including: nil, fields: nil, context: nil, base_url:)
@@ -48,17 +46,14 @@ class FeedSerializerService
     @base_url = base_url
   end
 
-  instrument_method
   def as_json(*)
     serializer.serialize_to_hash(resources).merge(meta: meta, links: links)
   end
 
-  instrument_method
   def resources
     activities.map { |activity| resource_class.new(activity, context) }
   end
 
-  instrument_method
   def activities
     @activities ||= activity_list.includes(stream_enrichment_fields).to_a
   end

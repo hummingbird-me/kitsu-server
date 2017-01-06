@@ -1,5 +1,4 @@
 class FeedsController < ApplicationController
-  include Skylight::Helpers
   include Pundit
   skip_after_action :enforce_policy_use
   before_action :authorize_feed!
@@ -51,7 +50,6 @@ class FeedsController < ApplicationController
     }
   end
 
-  instrument_method
   def stringify_activities(list)
     Oj.dump(serialize_activities(list))
   end
