@@ -71,7 +71,9 @@ RSpec.describe ListImport do
     let(:user) { create(:user) }
 
     context 'with a proper #each method' do
-      subject { FakeImport.create(user: user, input_text: 'hi', strategy: :greater) }
+      subject do
+        FakeImport.create(user: user, input_text: 'hi', strategy: :greater)
+      end
 
       it 'should yield repeatedly with the status' do
         expect { |b|
@@ -86,7 +88,9 @@ RSpec.describe ListImport do
         def count; 7; end
         def valid?(*); true; end
       end
-      subject { ErrorFakeImport.create(user: user, input_text: 'hi') }
+      subject do
+        ErrorFakeImport.create(user: user, input_text: 'hi', strategy: :greater)
+      end
 
       it 'should yield once for running and once for error' do
         expect { |b|
