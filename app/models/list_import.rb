@@ -67,6 +67,7 @@ class ListImport < ApplicationRecord
         progress: 0,
         error_message: 'Parameters were invalid'
       })
+      return
     end
 
     yield({ status: :running, total: count, progress: 0 })
