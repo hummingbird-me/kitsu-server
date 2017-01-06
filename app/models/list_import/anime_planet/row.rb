@@ -30,12 +30,12 @@ class ListImport
         @status ||= media_status
 
         case @status
-        when /ing\z/ then :current
-        when /\AWant/ then :planned
-        when /\AWon't/ then nil
-        when 'Stalled' then :on_hold
-        when 'Dropped' then :dropped
-        when 'Watched', /Read([0-9.]+)?/ then :completed
+        when 'status1' then :completed
+        when 'status2' then :current
+        when 'status3' then :dropped
+        when 'status4' then :planned
+        when 'status5' then :on_hold
+        when 'status6' then nil
         end
       end
 
@@ -123,7 +123,7 @@ class ListImport
 
       # Status
       def media_status
-        node.at_css('.statusArea').content.strip
+        node.at_css('.statusArea [class^=status]')['class']
       end
 
       # Progress
