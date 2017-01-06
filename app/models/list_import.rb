@@ -80,6 +80,7 @@ class ListImport < ApplicationRecord
     end
     yield({ status: :completed, total: count, progress: count })
   rescue StandardError => e
+    Raven.capture_exception(e)
     yield({
       status: :failed,
       total: count,
