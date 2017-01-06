@@ -36,6 +36,7 @@ class ListImport
     validate :ensure_user_exists, on: :create
 
     def ensure_user_exists
+      return if input_text.blank?
       request = Typhoeus::Request.get(build_url("#{input_text}/anime", 1))
       case request.code
       when 404
