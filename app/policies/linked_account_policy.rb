@@ -5,7 +5,7 @@ class LinkedAccountPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope.where(user: user)
+      scope.where(user: user)
     end
   end
 end
