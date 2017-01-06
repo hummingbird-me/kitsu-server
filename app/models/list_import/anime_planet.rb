@@ -44,7 +44,7 @@ class ListImport
     end
 
     def count
-      %w[anime manga].map { |type|
+      @count ||= %w[anime manga].map { |type|
         page = get("#{input_text}/#{type}")
         return 0 if page.css('h3:contains("doesn\'t have")').present?
         page.css('.pagination + p').children.first.text.to_i

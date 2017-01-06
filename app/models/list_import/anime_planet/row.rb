@@ -123,7 +123,7 @@ class ListImport
 
       # Status
       def media_status
-        node.at_css('.statusArea').content.strip.tap { |s| p s }
+        node.at_css('.statusArea').content.strip
       end
 
       # Progress
