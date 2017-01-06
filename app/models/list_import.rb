@@ -52,6 +52,13 @@ class ListImport < ApplicationRecord
   def apply
     raise 'No each method defined' unless respond_to? :each
 
+    # Send info to Sentry
+    Raven.user_context(id: user.id, email: user.email, username: user.name)
+    Raven.extra_context(
+      input_text: input_text.to_s,
+      input_file: input_file.to_s
+    )
+
     # Last-ditch check for validity
     unless valid?
       yield({
