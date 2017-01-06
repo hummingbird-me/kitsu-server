@@ -11,8 +11,5 @@
 # rubocop:enable Metrics/LineLength
 
 class ProfileLinkSite < ApplicationRecord
-  enum link_type: %i[username oauth2]
-
   validates_presence_of :name
-  validates_presence_of :link_type
 end
