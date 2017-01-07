@@ -22,10 +22,10 @@
 #  poster_image_file_size    :integer
 #  poster_image_updated_at   :datetime
 #  rating_frequencies        :hstore           default({}), not null
-#  show_type                 :integer          default(1), not null
 #  slug                      :string(255)      indexed
 #  start_date                :date
 #  started_airing_date_known :boolean          default(TRUE), not null
+#  subtype                   :integer          default(1), not null
 #  synopsis                  :text             default(""), not null
 #  titles                    :hstore           default({}), not null
 #  user_count                :integer          default(0), not null, indexed
@@ -49,8 +49,9 @@ class Anime < ApplicationRecord
   include AgeRatings
   include Episodic
 
-  enum show_type: %i[TV special OVA ONA movie music]
+  enum subtype: %i[TV special OVA ONA movie music]
   has_many :streaming_links, as: 'media', dependent: :destroy
+  alias_attribute :show_type, :subtype
 
   update_index('media#anime') { self }
 
@@ -60,15 +61,15 @@ class Anime < ApplicationRecord
       -> { canonical_title }, # attack-on-titan
       -> { titles[:en_jp] } # shingeki-no-kyojin
     ]
-    if show_type == :TV
+    if subtype == :TV
       # If it's a TV show with a name collision, common practice is to
       # specify the year (ex: kanon-2006)
       candidates << -> { [titles[:en_jp], year] }
     else
       # If it's not TV and it's having a name collision, it's probably the
       # movie or OVA for a series (ex: shingeki-no-kyojin-movie)
-      candidates << -> { [titles[:en_jp], show_type] }
-      candidates << -> { [titles[:en_jp], show_type, year] }
+      candidates << -> { [titles[:en_jp], subtype] }
+      candidates << -> { [titles[:en_jp], subtype, year] }
     end
     candidates
   end

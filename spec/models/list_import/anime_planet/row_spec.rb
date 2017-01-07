@@ -26,7 +26,7 @@ RSpec.describe ListImport::AnimePlanet::Row do
         expect(Mapping).to receive(:guess).with(Anime, {
           id: 2353,
           title: '07-Ghost',
-          show_type: 'TV',
+          subtype: 'TV',
           episode_count: 25
         }).and_return('hello')
 
@@ -42,8 +42,8 @@ RSpec.describe ListImport::AnimePlanet::Row do
         expect(subject.media_info[:title]).to eq('07-Ghost')
       end
 
-      it 'should return show_type' do
-        expect(subject.media_info[:show_type]).to eq('TV')
+      it 'should return subtype' do
+        expect(subject.media_info[:subtype]).to eq('TV')
       end
 
       it 'should return total episodes' do
@@ -195,8 +195,8 @@ RSpec.describe ListImport::AnimePlanet::Row do
         expect(subject.media_info[:title]).to eq('1/2 Prince')
       end
 
-      it 'should return show_type' do
-        expect(subject.media_info[:show_type]).to eq(nil)
+      it 'should return subtype' do
+        expect(subject.media_info[:subtype]).to eq(nil)
       end
 
       it 'should not return total amount of episodes' do

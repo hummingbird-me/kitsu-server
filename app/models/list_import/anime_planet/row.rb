@@ -20,7 +20,7 @@ class ListImport
         {
           id: node.attr('data-id')&.to_i,
           title: media_title,
-          show_type: show_type,
+          subtype: subtype,
           episode_count: total_episodes,
           chapter_count: total_chapters
         }.compact
@@ -91,7 +91,7 @@ class ListImport
         tooltip.at_css('h5')&.text
       end
 
-      def show_type
+      def subtype
         return if type == 'manga'
 
         episodes = tooltip.at_css('.entryBar .type').text

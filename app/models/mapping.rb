@@ -50,11 +50,8 @@ class Mapping < ApplicationRecord
                 boost: 1.2,
               } },
               ({ match: {
-                show_type: info[:show_type]
-              } } if info[:show_type].present?),
-              ({ match: {
-                manga_type: info[:manga_type]
-              } } if info[:manga_type].present?),
+                subtype: info[:subtype]
+              } } if info[:subtype].present?),
               ({ fuzzy: {
                 episode_count: {
                   value: info[:episode_count],

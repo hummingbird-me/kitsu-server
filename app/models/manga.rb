@@ -14,7 +14,6 @@
 #  cover_image_top_offset    :integer          default(0)
 #  cover_image_updated_at    :datetime
 #  end_date                  :date
-#  manga_type                :integer          default(1), not null
 #  poster_image_content_type :string(255)
 #  poster_image_file_name    :string(255)
 #  poster_image_file_size    :integer
@@ -24,6 +23,7 @@
 #  slug                      :string(255)
 #  start_date                :date
 #  status                    :integer
+#  subtype                   :integer          default(1), not null
 #  synopsis                  :text
 #  titles                    :hstore           default({}), not null
 #  user_count                :integer          default(0), not null
@@ -36,9 +36,10 @@
 class Manga < ApplicationRecord
   include Media
 
-  enum manga_type: %i[manga novel manhua oneshot doujin]
+  enum subtype: %i[manga novel manhua oneshot doujin]
   enum status: %i[not_published publishing finished]
   alias_attribute :progress_limit, :chapter_count
+  alias_attribute :manga_type, :subtype
 
   has_many :chapters
 
@@ -58,7 +59,7 @@ class Manga < ApplicationRecord
       -> { canonical_title }, # attack-on-titan
       -> { titles[:en_jp] }, # shingeki-no-kyojin
       -> { [titles[:en_jp], year] }, # shingeki-no-kyojin-2004
-      -> { [titles[:en_jp], year, manga_type] } # shingeki-no-kyojin-2004-doujin
+      -> { [titles[:en_jp], year, subtype] } # shingeki-no-kyojin-2004-doujin
     ]
   end
 end
