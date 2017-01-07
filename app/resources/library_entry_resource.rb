@@ -26,4 +26,8 @@ class LibraryEntryResource < BaseResource
   has_one :next_unit, polymorphic: true, eager_load_on_include: false
 
   paginator :unlimited
+
+  def self.sortable_fields(context)
+    super + %i[anime.subtype manga.subtype drama.subtype]
+  end
 end
