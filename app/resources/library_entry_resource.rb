@@ -1,6 +1,26 @@
 require 'unlimited_paginator'
 
 class LibraryEntryResource < BaseResource
+  TITLE_SORT = /\A([^\.]+)\.titles\.([^\.]+)\z/
+
+  class TitleSortableFields
+    def initialize(whitelist)
+      @whitelist = whitelist
+    end
+
+    def include?(key)
+      return true if @whitelist.include?(key)
+      # Magic match-handling code
+      match = TITLE_SORT.match(key.to_s)
+      return false unless match
+      media, title = match[1..-1]
+      return false unless %w[anime manga drama].include?(media.downcase)
+      return true if title.casecmp('canonical')
+      return false unless /[a-z]{2}(_[a-z]{2})?/ =~ title
+      true
+    end
+  end
+
   caching
 
   attributes :status, :progress, :reconsuming, :reconsume_count, :notes,
@@ -28,6 +48,57 @@ class LibraryEntryResource < BaseResource
   paginator :unlimited
 
   def self.sortable_fields(context)
-    super + %i[anime.subtype manga.subtype drama.subtype]
+    fields = super + %i[anime.subtype manga.subtype drama.subtype]
+    TitleSortableFields.new(fields)
+  end
+
+  def self.apply_sort(records, order_options, context = {})
+    # For each requested sort option, decide whether to use the title sort logic
+    order_options = order_options.map do |field, dir|
+      [(TITLE_SORT =~ field ? :title : :other), field, dir]
+    end
+    # Combine consecutive sort options of the same type into lists
+    order_options = order_options.each_with_object([]) do |curr, acc|
+      type, field, dir = curr
+      acc << [type, {}] unless acc.last&.first == type
+      acc.last[1][field] = dir
+    end
+    # Send each list to either apply_title_sort or super
+    order_options.each do |(type, sorts)|
+      records = if type == :title
+                  apply_title_sort(records, sorts, context)
+                else
+                  super(records, sorts, context)
+                end
+    end
+    records
+  end
+
+  def self.apply_title_sort(records, order_options, _context = {})
+    order_options.each_pair do |field, direction|
+      media, title = TITLE_SORT.match(field.to_s)[1..-1]
+      direction = direction.upcase
+
+      records = records.joins(<<-EOF.squish)
+        LEFT JOIN #{media} AS #{media}_sort
+        ON #{media}_sort.id = library_entries.#{media}_id
+      EOF
+
+      if title == 'canonical'
+        records = records.order(<<~EOF)
+          #{media}_sort.titles->canonical_title #{direction}
+        EOF
+      elsif /[a-z]{2}(_[a-z]{2})?/i =~ title
+        records = records.order(<<~EOF.squish)
+          COALESCE(
+            NULLIF(#{media}_sort.titles->'#{title}', ''),
+            NULLIF(#{media}_sort.titles->canonical_title, ''),
+            NULLIF(#{media}_sort.titles->'en_jp', '')
+          ) #{direction}
+        EOF
+      end
+    end
+
+    records
   end
 end
