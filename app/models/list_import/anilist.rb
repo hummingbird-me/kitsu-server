@@ -33,6 +33,19 @@ class ListImport
     }, presence: true
     # does not accept file uploads
     validates :input_file, absence: true
+    validate :ensure_user_exists, on: :create
+
+    def ensure_user_exists
+      return if input_text.blank?
+
+      @auth_token ||= get_auth_token
+      request = Typhoeus::Request.get(build_url(input_text))
+
+      case request.code
+      when 404
+        errors.add(:input_text, 'Anilist user not found.')
+      end
+    end
 
     def count
       # animelist will get me everything
