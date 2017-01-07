@@ -33,6 +33,12 @@ RSpec.describe ListImport::Anilist do
     stub_request(:post, "#{host}auth/access_token")
       .to_return(body: fixture('list_import/anilist/access_token.json'))
 
+    # Ensure User Exists
+    stub_request(:get, "#{host}user/toyhammered?access_token=#{access_token}")
+      .to_return(status: 200)
+    stub_request(:get, "#{host}user/nuck?access_token=#{access_token}")
+      .to_return(status: 200)
+
     # Anime List
     stub_request(:get,
       "#{host}user/toyhammered/animelist?access_token=#{access_token}")
@@ -52,11 +58,15 @@ RSpec.describe ListImport::Anilist do
       .to_return(body: fixture('list_import/anilist/nuck-manga.json'))
   end
 
-  it { should validate_presence_of(:input_text) }
-  it { should validate_length_of(:input_text)
-    .is_at_least(3)
-    .is_at_most(20)
-  }
+  describe 'validations' do
+    before { stub_request(:get, %r{.*/user.*}) }
+
+    it { should validate_presence_of(:input_text) }
+    it { should validate_length_of(:input_text)
+      .is_at_least(3)
+      .is_at_most(20)
+    }
+  end
 
   context 'with a list' do
     subject do
