@@ -26,12 +26,17 @@ class LibraryEntryResource < BaseResource
   attributes :status, :progress, :reconsuming, :reconsume_count, :notes,
     :private, :rating, :updated_at
 
-  filters :user_id, :media_id, :media_type, :status
+  filters :user_id, :media_id, :media_type, :status, :anime_id, :manga_id,
+    :drama_id
 
   filter :status, apply: ->(records, values, _options) {
     statuses = LibraryEntry.statuses.values_at(*values).compact
     statuses = values if statuses.empty?
     records.where(status: statuses)
+  }
+
+  filter :kind, apply: ->(records, values, _options) {
+    records.by_kind(*values)
   }
 
   filter :since, apply: ->(records, values, _options) {
@@ -40,6 +45,9 @@ class LibraryEntryResource < BaseResource
   }
 
   has_one :user
+  has_one :anime
+  has_one :manga
+  has_one :drama
   has_one :review, eager_load_on_include: false
   has_one :media, polymorphic: true
   has_one :unit, polymorphic: true, eager_load_on_include: false
