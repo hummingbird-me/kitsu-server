@@ -1,5 +1,6 @@
 class MangaResource < MediaResource
-  attributes :manga_type, :chapter_count, :volume_count, :serialization
+  attributes :subtype, :chapter_count, :volume_count, :serialization
+  attribute :manga_type # DEPRECATED
 
   # ElasticSearch hookup
   index MediaIndex::Manga

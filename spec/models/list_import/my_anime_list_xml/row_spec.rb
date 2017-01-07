@@ -40,7 +40,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
             #{mapping.external_id.split('/').last}
           </series_animedb_id>
           <series_title>#{anime.canonical_title}</series_title>
-          <series_type>#{anime.show_type}</series_type>
+          <series_type>#{anime.subtype}</series_type>
           <series_episodes>#{anime.episode_count}</series_episodes>
         EOF
         it 'should return the Anime instance from the Mapping' do
@@ -55,7 +55,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
         let(:xml) { wrap_row <<~EOF }
           <series_animedb_id>#{rand(1..50_000)}</series_animedb_id>
           <series_title>#{anime.canonical_title}</series_title>
-          <series_type>#{anime.show_type}</series_type>
+          <series_type>#{anime.subtype}</series_type>
           <series_episodes>#{anime.episode_count}</series_episodes>
         EOF
         it 'should guess the Anime instance using Mapping.guess' do
@@ -70,7 +70,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
       let(:xml) { wrap_row <<~EOF }
         <series_animedb_id>#{anime.id}</series_animedb_id>
         <series_title><![CDATA[#{anime.canonical_title}]]></series_title>
-        <series_type>#{anime.show_type}</series_type>
+        <series_type>#{anime.subtype}</series_type>
         <series_episodes>#{anime.episode_count}</series_episodes>
       EOF
       subject { described_class.new(xml) }
@@ -81,7 +81,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
         expect(subject.media_info[:title]).to eq(anime.canonical_title)
       end
       it 'should return the show type from series_type' do
-        expect(subject.media_info[:show_type]).to eq(anime.show_type)
+        expect(subject.media_info[:subtype]).to eq(anime.subtype)
       end
       it 'should return the episode count from series_episdes' do
         expect(subject.media_info[:episode_count]).to eq(anime.episode_count)

@@ -23,10 +23,10 @@
 #  poster_image_file_size    :integer
 #  poster_image_updated_at   :datetime
 #  rating_frequencies        :hstore           default({}), not null
-#  show_type                 :integer
 #  slug                      :string           not null, indexed
 #  start_date                :date
 #  started_airing_date_known :boolean          default(TRUE), not null
+#  subtype                   :integer
 #  synopsis                  :text
 #  titles                    :hstore           default({}), not null
 #  user_count                :integer          default(0), not null
@@ -45,7 +45,7 @@ class Drama < ApplicationRecord
   include AgeRatings
   include Episodic
 
-  enum show_type: %i[drama movie special]
+  enum subtype: %i[drama movie special]
 
   has_attached_file :cover_image,
     url: '/:class/:attachment/:id/:style.:content_type_extension'

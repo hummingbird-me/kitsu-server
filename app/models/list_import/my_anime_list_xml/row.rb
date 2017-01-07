@@ -4,7 +4,7 @@ class ListImport
       attr_reader :node
 
       def initialize(node)
-        fail "Invalid type #{node.name}" unless node.name.in? %w[anime manga]
+        raise "Invalid type #{node.name}" unless node.name.in? %w[anime manga]
         @node = node
       end
 
@@ -21,7 +21,7 @@ class ListImport
         @media_info ||= {
           id: node.at_css('manga_mediadb_id, series_animedb_id').content.to_i,
           title: node.at_css('manga_title, series_title').content,
-          show_type: node.at_css('series_type')&.content,
+          subtype: node.at_css('series_type')&.content,
           episode_count: node.at_css('series_episodes')&.content&.to_i,
           chapter_count: node.at_css('manga_chapters')&.content&.to_i
         }.compact

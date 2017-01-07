@@ -54,7 +54,7 @@ class MediaIndex < Chewy::Index
       field :abbreviated_titles, type: 'string'
       field :synopsis, type: 'string', analyzer: 'english'
       # Enumerated values
-      field :age_rating, :show_type, type: 'string'
+      field :age_rating, :subtype, type: 'string'
       # Various Data
       field :episode_count, type: 'short' # Max of 32k or so is reasonable
       field :average_rating, type: 'float'
@@ -84,7 +84,7 @@ class MediaIndex < Chewy::Index
       field :abbreviated_titles, type: 'string'
       field :synopsis, type: 'string', analyzer: 'english'
       # Enumerated values
-      field :manga_type, type: 'string'
+      field :subtype, type: 'string'
       # Various Data
       field :chapter_count, type: 'integer' # Manga run for a really long time
       field :average_rating, type: 'float'
@@ -116,7 +116,7 @@ class MediaIndex < Chewy::Index
       field :abbreviated_titles, type: 'string'
       field :synopsis, type: 'string', analyzer: 'english'
       # Enumerated values
-      field :age_rating, :show_type, type: 'string'
+      field :age_rating, :subtype, type: 'string'
       # Various Data
       field :episode_count, type: 'short' # Max of 32k or so is reasonable
       field :average_rating, type: 'float'

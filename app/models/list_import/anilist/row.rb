@@ -19,7 +19,7 @@ class ListImport
         {
           id: node[type]['id'],
           title: node[type]['title_romaji'],
-          show_type: node[type]['type'],
+          subtype: node[type]['type'],
           episode_count: node[type]['total_episodes'],
           chapter_count: node[type]['total_chapters']
         }.compact

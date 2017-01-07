@@ -26,7 +26,7 @@ RSpec.describe ListImport::Anilist::Row do
         expect(Mapping).to receive(:guess).with(Anime, {
           id: 1,
           title: 'COWBOY BEBOP',
-          show_type: 'TV',
+          subtype: 'TV',
           episode_count: 26
         }).and_return('hello')
 
@@ -42,8 +42,8 @@ RSpec.describe ListImport::Anilist::Row do
         expect(subject.media_info[:title]).to eq('COWBOY BEBOP')
       end
 
-      it 'should return show_type' do
-        expect(subject.media_info[:show_type]).to eq('TV')
+      it 'should return subtype' do
+        expect(subject.media_info[:subtype]).to eq('TV')
       end
 
       it 'should return total episodes' do
@@ -280,7 +280,7 @@ RSpec.describe ListImport::Anilist::Row do
         expect(Mapping).to receive(:guess).with(Manga, {
           id: 30_933,
           title: 'Elfen Lied',
-          show_type: 'Manga',
+          subtype: 'Manga',
           chapter_count: 113
         }).and_return('hello')
 
@@ -296,8 +296,8 @@ RSpec.describe ListImport::Anilist::Row do
         expect(subject.media_info[:title]).to eq('Elfen Lied')
       end
 
-      it 'should return show_type' do
-        expect(subject.media_info[:show_type]).to eq('Manga')
+      it 'should return subtype' do
+        expect(subject.media_info[:subtype]).to eq('Manga')
       end
 
       it 'should not return any episodes' do

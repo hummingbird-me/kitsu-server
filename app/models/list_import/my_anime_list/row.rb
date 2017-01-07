@@ -27,7 +27,7 @@ class ListImport
         {
           id: media_key(:id),
           title: media_key(:title),
-          show_type: media_key(:media_type_string),
+          subtype: media_key(:media_type_string),
           episode_count: media_key(:num_episodes),
           chapter_count: media_key(:num_chapters)
         }.compact
