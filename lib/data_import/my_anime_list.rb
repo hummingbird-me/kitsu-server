@@ -24,10 +24,14 @@ module DataImport
       get(ATARASHII_API_HOST, external_id) do |response|
         details = Extractor::Media.new(response)
 
-        media.assign_attributes(details.to_h.compact)
+        media.update(details.to_h.compact)
         media.genres = details.genres.map { |genre|
           Genre.find_by(name: genre)
         }.compact
+        media.mappings.create(
+          external_site: "myanimelist/#{type}",
+          external_id: id
+        )
 
         yield media
       end
