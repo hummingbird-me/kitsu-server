@@ -191,10 +191,10 @@ class LibraryEntry < ApplicationRecord
     end
 
     # Sync MAL updates if linked profile exists
-    MyAnimeListSyncWorker.perform_async(self, 'create/update') if sync_to_mal?
+    MyAnimeListSyncWorker.perform_async(id, 'create/update') if sync_to_mal?
   end
 
   after_destroy do
-    MyAnimeListSyncWorker.perform_async(self, 'delete') if sync_to_mal?
+    MyAnimeListSyncWorker.perform_async(id, 'delete') if sync_to_mal?
   end
 end
