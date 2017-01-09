@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170107034610) do
+ActiveRecord::Schema.define(version: 20170108054725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -360,6 +360,9 @@ ActiveRecord::Schema.define(version: 20170107034610) do
     t.integer  "drama_id"
   end
 
+  add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
+  add_index "library_entries", ["drama_id"], name: "index_library_entries_on_drama_id", using: :btree
+  add_index "library_entries", ["manga_id"], name: "index_library_entries_on_manga_id", using: :btree
   add_index "library_entries", ["private"], name: "index_library_entries_on_private", using: :btree
   add_index "library_entries", ["user_id", "media_type", "media_id"], name: "index_library_entries_on_user_id_and_media_type_and_media_id", unique: true, using: :btree
   add_index "library_entries", ["user_id", "media_type"], name: "index_library_entries_on_user_id_and_media_type", using: :btree
