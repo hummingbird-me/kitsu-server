@@ -158,6 +158,7 @@ class LibraryEntry < ApplicationRecord
       kind = media_type&.underscore
       send("#{kind}=", media) if kind
     end
+  end
 
   before_save do
     if status_changed? && completed? && media&.progress_limit
