@@ -13,6 +13,7 @@ gem 'redis', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
 gem 'connection_pool' # Pool our Redises
 gem 'chewy' # ElasticSearch
+gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens
 
 # Auth{entication,orization}
 gem 'bcrypt'

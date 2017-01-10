@@ -140,6 +140,15 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  def sync_to_mal?
+    return unless media_type.in? %w[Anime Manga]
+
+    User.find(user_id).linked_accounts.where(
+      sync_to: true,
+      type: 'LinkedAccount::MyAnimeList'
+    ).present?
+  end
+
   before_validation do
     # TEMPORARY: If media is set, copy it to kind_id, otherwise if kind_id is
     # set, copy it to media!
@@ -181,5 +190,12 @@ class LibraryEntry < ApplicationRecord
       user.update_feed_completed!
       user.update_profile_completed!
     end
+
+    # Sync MAL updates if linked profile exists
+    MyAnimeListSyncWorker.perform_async(id, 'create/update') if sync_to_mal?
+  end
+
+  after_destroy do
+    MyAnimeListSyncWorker.perform_async(id, 'delete') if sync_to_mal?
   end
 end
