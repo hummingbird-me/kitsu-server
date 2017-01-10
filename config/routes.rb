@@ -607,6 +607,7 @@ Rails.application.routes.draw do
     jsonapi_resources :reports
     jsonapi_resources :linked_accounts
     jsonapi_resources :profile_links
+    jsonapi_resources :profile_link_sites
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
