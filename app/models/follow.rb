@@ -26,6 +26,13 @@ class Follow < ApplicationRecord
 
   validates :followed, uniqueness: { scope: :follower_id }
 
+  def self.following_all(*users)
+    users = users.map { |u| u.id if u.respond_to? :id }
+    expected_count = users.count
+    where(followed_id: users).group(:follower_id)
+                             .having('count(*) = ?', expected_count).count.keys
+  end
+
   def stream_activity
     follower.aggregated_feed.activities.new(
       actor: follower,

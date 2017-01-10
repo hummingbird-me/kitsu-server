@@ -55,4 +55,19 @@ RSpec.describe Follow, type: :model do
     follower_feed = subject.follower.aggregated_feed
     expect(subject.stream_activity.feed).to eq(follower_feed)
   end
+
+  describe '.following_all' do
+    it 'should return all users who follow all users passed in' do
+      source_user = create(:user)
+      target_user = create(:user)
+      users = create_list(:user, 2)
+      users.each do |user|
+        create(:follow, follower: user, followed: source_user)
+        create(:follow, follower: user, followed: target_user)
+      end
+
+      followers = Follow.following_all(source_user, target_user)
+      expect(followers.sort).to eq(users.map(&:id).sort)
+    end
+  end
 end
