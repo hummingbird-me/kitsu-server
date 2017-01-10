@@ -34,4 +34,13 @@ class LinkedAccount < ApplicationRecord
   alias_attribute :kind, :type
 
   validates_presence_of :external_user_id, :type
+  validate :type_is_subclass
+
+  def type_is_subclass
+    in_namespace = type.start_with?('LinkedAccount')
+    is_descendant = type.safe_constantize <= LinkedAccount
+    unless in_namespace && is_descendant
+      errors.add(:type, 'must be a LinkedAccount class')
+    end
+  end
 end
