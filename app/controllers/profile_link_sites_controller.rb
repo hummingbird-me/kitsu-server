@@ -1,0 +1,2 @@
+class ProfileLinkSitesController < ApplicationController
+end
