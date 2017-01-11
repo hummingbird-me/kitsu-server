@@ -70,7 +70,7 @@ class Post < ApplicationRecord
       # Get their timelines
       target_timelines = double_followers.map { |uid| Feed.timeline(uid) }
       # Add that to our target feeds
-      [media&.feed, target_user&.aggregated_feed, *target_timelines].compact
+      [media&.feed, *target_timelines].compact
     else
       [media&.feed].compact
     end
@@ -84,7 +84,7 @@ class Post < ApplicationRecord
   end
 
   def stream_activity
-    target_feed = target_user.present? ? user.aggregated_feed : user.feed
+    target_feed = target_user.present? ? target_user.aggregated_feed : user.feed
     target_feed.activities.new(
       post_id: id,
       updated_at: updated_at,
