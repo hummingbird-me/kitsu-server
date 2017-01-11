@@ -6,7 +6,7 @@ module AgeRatings
 
   # SFW-ness is whitelist, not blacklist
   def sfw?
-    age_rating.in? SAFE_AGE_RATINGS || age_rating.nil?
+    age_rating.in?(SAFE_AGE_RATINGS) || age_rating.nil?
   end
 
   def nsfw?
