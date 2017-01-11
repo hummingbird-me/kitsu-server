@@ -95,8 +95,8 @@ class Feed
     end
 
     def add(activity)
-      req = feed.stream_feed.add_activity(activity.as_json)
-      res = req.parsed_response.symbolize_keys.except(:duration)
+      res = feed.stream_feed.add_activity(activity.as_json)
+      res = res.symbolize_keys.except(:duration)
       Feed::Activity.new(feed, res)
     end
     alias_method :<<, :add
