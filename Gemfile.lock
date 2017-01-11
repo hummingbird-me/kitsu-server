@@ -9,16 +9,6 @@ GIT
       railties (>= 4.1)
 
 GIT
-  remote: git://github.com/getstream/stream-ruby.git
-  revision: 4d965ecdd02e42b889e7a25512e6cd819099e8ae
-  branch: master
-  specs:
-    stream-ruby (2.5.0)
-      faraday (~> 0.10.0)
-      http_signatures (~> 0)
-      jwt (= 1.5.2)
-
-GIT
   remote: git://github.com/vevix/twemoji.git
   revision: 00b98685e46faa92d7d0109293ca8092e34735c5
   specs:
@@ -408,6 +398,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    stream-ruby (2.5.1)
+      faraday (~> 0.10.0)
+      http_signatures (~> 0)
+      jwt (= 1.5.2)
     stream_rails (2.5.0)
       actionpack (>= 3.0.0)
       activerecord (>= 3.0.0)
@@ -505,7 +499,7 @@ DEPENDENCIES
   simplecov
   sitemap_generator
   spring
-  stream-ruby!
+  stream-ruby (~> 2.5.1)
   stream_rails
   timecop
   twemoji!

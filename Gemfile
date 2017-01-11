@@ -54,7 +54,7 @@ gem 'nokogiri' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'stream-ruby', github: 'getstream/stream-ruby', branch: 'master'
+gem 'stream-ruby', '~> 2.5.1'
 gem 'stream_rails' # Feeds
 gem 'typhoeus' # Parallelize scraping tasks
 
