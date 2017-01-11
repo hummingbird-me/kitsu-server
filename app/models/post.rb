@@ -64,10 +64,16 @@ class Post < ApplicationRecord
   end
 
   def stream_feeds
-    [
-      media&.feed,
-      target_user&.feed,
-    ].compact
+    if target_user.present? # Fan out manually if it's A => B
+      # Find users who follow both the sorce and target
+      double_followers = Follow.following_all(user, target_user)
+      # Get their timelines
+      target_timelines = double_followers.map { |uid| Feed.timeline(uid) }
+      # Add that to our target feeds
+      [media&.feed, target_user&.aggregated_feed, *target_timelines].compact
+    else
+      [media&.feed].compact
+    end
   end
 
   def stream_notified
@@ -78,7 +84,8 @@ class Post < ApplicationRecord
   end
 
   def stream_activity
-    user.feed.activities.new(
+    target_feed = target_user.present? ? user.aggregated_feed : user.feed
+    target_feed.activities.new(
       post_id: id,
       updated_at: updated_at,
       post_likes_count: post_likes_count,
