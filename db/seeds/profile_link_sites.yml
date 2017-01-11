@@ -1,0 +1,57 @@
+twitter:
+  id: 1
+  name: Twitter
+facebook:
+  id: 2
+  name: Facebook
+youtube:
+  id: 3
+  name: YouTube
+google:
+  id: 4
+  name: Google
+instagram:
+  id: 5
+  name: Instagram
+twitch:
+  id: 6
+  name: Twitch
+vimeo:
+  id: 7
+  name: Vimeo
+github:
+  id: 8
+  name: GitHub
+battlenet:
+  id: 9
+  name: Battle.net
+steam:
+  id: 10
+  name: Steam
+raptr:
+  id: 11
+  name: Raptr
+discord:
+  id: 12
+  name: Discord
+tumblr:
+  id: 13
+  name: Tumblr
+soundcloud:
+  id: 14
+  name: SoundCloud
+dailymotion:
+  id: 15
+  name: Dailymotion
+kickstarter:
+  id: 16
+  name: Kickstarter
+mobcrush:
+  id: 17
+  name: Mobcrush
+osu:
+  id: 18
+  name: Osu!
+patreon:
+  id: 19
+  name: Patreon

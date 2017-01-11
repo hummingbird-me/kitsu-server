@@ -16,14 +16,17 @@
 #  volumes_owned   :integer          default(0), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  anime_id        :integer
-#  drama_id        :integer
-#  manga_id        :integer
+#  anime_id        :integer          indexed
+#  drama_id        :integer          indexed
+#  manga_id        :integer          indexed
 #  media_id        :integer          not null, indexed => [user_id, media_type]
 #  user_id         :integer          not null, indexed, indexed => [media_type], indexed => [media_type, media_id], indexed => [status]
 #
 # Indexes
 #
+#  index_library_entries_on_anime_id                             (anime_id)
+#  index_library_entries_on_drama_id                             (drama_id)
+#  index_library_entries_on_manga_id                             (manga_id)
 #  index_library_entries_on_private                              (private)
 #  index_library_entries_on_user_id                              (user_id)
 #  index_library_entries_on_user_id_and_media_type               (user_id,media_type)
@@ -137,6 +140,15 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  def sync_to_mal?
+    return unless media_type.in? %w[Anime Manga]
+
+    User.find(user_id).linked_accounts.where(
+      sync_to: true,
+      type: 'LinkedAccount::MyAnimeList'
+    ).present?
+  end
+
   before_validation do
     # TEMPORARY: If media is set, copy it to kind_id, otherwise if kind_id is
     # set, copy it to media!
@@ -178,5 +190,12 @@ class LibraryEntry < ApplicationRecord
       user.update_feed_completed!
       user.update_profile_completed!
     end
+
+    # Sync MAL updates if linked profile exists
+    MyAnimeListSyncWorker.perform_async(id, 'create/update') if sync_to_mal?
+  end
+
+  after_destroy do
+    MyAnimeListSyncWorker.perform_async(id, 'delete') if sync_to_mal?
   end
 end

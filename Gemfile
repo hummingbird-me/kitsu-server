@@ -7,6 +7,7 @@ gem 'rails', '4.2.1'
 gem 'rails-api'
 
 # Database Stuff
+gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis

@@ -158,11 +158,11 @@
 #                                        PUT|PATCH /edge/users/:user_id/relationships/blocks(.:format)                       users#update_relationship {:relationship=>"blocks"}
 #                                        DELETE    /edge/users/:user_id/relationships/blocks(.:format)                       users#destroy_relationship {:relationship=>"blocks"}
 #                            user_blocks GET       /edge/users/:user_id/blocks(.:format)                                     blocks#get_related_resources {:relationship=>"blocks", :source=>"users"}
-#     user_relationships_linked_profiles GET       /edge/users/:user_id/relationships/linked-profiles(.:format)              users#show_relationship {:relationship=>"linked_profiles"}
-#                                        POST      /edge/users/:user_id/relationships/linked-profiles(.:format)              users#create_relationship {:relationship=>"linked_profiles"}
-#                                        PUT|PATCH /edge/users/:user_id/relationships/linked-profiles(.:format)              users#update_relationship {:relationship=>"linked_profiles"}
-#                                        DELETE    /edge/users/:user_id/relationships/linked-profiles(.:format)              users#destroy_relationship {:relationship=>"linked_profiles"}
-#                   user_linked_profiles GET       /edge/users/:user_id/linked-profiles(.:format)                            linked_profiles#get_related_resources {:relationship=>"linked_profiles", :source=>"users"}
+#     user_relationships_linked_accounts GET       /edge/users/:user_id/relationships/linked-accounts(.:format)              users#show_relationship {:relationship=>"linked_accounts"}
+#                                        POST      /edge/users/:user_id/relationships/linked-accounts(.:format)              users#create_relationship {:relationship=>"linked_accounts"}
+#                                        PUT|PATCH /edge/users/:user_id/relationships/linked-accounts(.:format)              users#update_relationship {:relationship=>"linked_accounts"}
+#                                        DELETE    /edge/users/:user_id/relationships/linked-accounts(.:format)              users#destroy_relationship {:relationship=>"linked_accounts"}
+#                   user_linked_accounts GET       /edge/users/:user_id/linked-accounts(.:format)                            linked_accounts#get_related_resources {:relationship=>"linked_accounts", :source=>"users"}
 #       user_relationships_media_follows GET       /edge/users/:user_id/relationships/media-follows(.:format)                users#show_relationship {:relationship=>"media_follows"}
 #                                        POST      /edge/users/:user_id/relationships/media-follows(.:format)                users#create_relationship {:relationship=>"media_follows"}
 #                                        PUT|PATCH /edge/users/:user_id/relationships/media-follows(.:format)                users#update_relationship {:relationship=>"media_follows"}
@@ -605,6 +605,9 @@ Rails.application.routes.draw do
     jsonapi_resources :roles
     jsonapi_resources :user_roles
     jsonapi_resources :reports
+    jsonapi_resources :linked_accounts
+    jsonapi_resources :profile_links
+    jsonapi_resources :profile_link_sites
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'

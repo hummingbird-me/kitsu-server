@@ -16,14 +16,17 @@
 #  volumes_owned   :integer          default(0), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  anime_id        :integer
-#  drama_id        :integer
-#  manga_id        :integer
+#  anime_id        :integer          indexed
+#  drama_id        :integer          indexed
+#  manga_id        :integer          indexed
 #  media_id        :integer          not null, indexed => [user_id, media_type]
 #  user_id         :integer          not null, indexed, indexed => [media_type], indexed => [media_type, media_id], indexed => [status]
 #
 # Indexes
 #
+#  index_library_entries_on_anime_id                             (anime_id)
+#  index_library_entries_on_drama_id                             (drama_id)
+#  index_library_entries_on_manga_id                             (manga_id)
 #  index_library_entries_on_private                              (private)
 #  index_library_entries_on_user_id                              (user_id)
 #  index_library_entries_on_user_id_and_media_type               (user_id,media_type)
@@ -37,6 +40,8 @@ FactoryGirl.define do
     association :media, factory: :anime, strategy: :build
     user
     status 'planned'
+    progress 0
+    rating 5
 
     trait :nsfw do
       association :media, :nsfw, factory: :anime, strategy: :build
