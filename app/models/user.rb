@@ -113,6 +113,8 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :media_follows, dependent: :destroy
   has_many :blocks, dependent: :destroy
+  has_many :blocked, class_name: 'Block', foreign_key: 'blocked_id',
+                     dependent: :destroy
   has_many :linked_accounts, dependent: :destroy
   has_many :profile_links, dependent: :destroy
   has_many :user_roles, dependent: :destroy
@@ -173,6 +175,9 @@ class User < ApplicationRecord
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
+  scope :alts_of, ->(user) do
+    where('ip_addresses && ARRAY[?]::inet', user.ip_addresses)
+  end
 
   # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
@@ -208,6 +213,10 @@ class User < ApplicationRecord
       update_attribute(:ip_addresses, ips)
     end
     ip_addresses
+  end
+
+  def alts
+    User.alts_of(self)
   end
 
   def update_title(_role)
