@@ -30,8 +30,8 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :twitter)
 
           urls.each do |url|
-            Regexp.new(site.validate_find) =~ url
-            expect($1).to eq("toyhammered")
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq("toyhammered")
           end
         end
       end
@@ -49,8 +49,8 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :facebook)
 
           urls.each do |url|
-            Regexp.new(site.validate_find) =~ url
-            expect($1).to eq("toyhammered")
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
           end
         end
 
@@ -62,8 +62,8 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :facebook)
 
           urls.each do |url|
-            Regexp.new(site.validate_find) =~ url
-            expect($1).to eq("toy.hammered")
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toy.hammered')
           end
         end
       end
@@ -81,8 +81,8 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :youtube)
 
           urls.each do |url|
-            Regexp.new(site.validate_find) =~ url
-            expect($1).to eq("UC_-Zt4dWU1bT52tG-DHGftg")
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('UC_-Zt4dWU1bT52tG-DHGftg')
           end
         end
       end
