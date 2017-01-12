@@ -7,6 +7,7 @@ class PostPolicy < ApplicationPolicy
 
   def create?
     return false if user&.blocked?(record.target_user)
+    return false if user&.has_role?(:banned)
     is_owner?
   end
 
