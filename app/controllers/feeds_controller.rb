@@ -4,8 +4,9 @@ class FeedsController < ApplicationController
   before_action :authorize_feed!
 
   def show
-    render_jsonapi stringify_activities(query.list)
+    response_json = stringify_activities(query.list)
     response.headers['X-Feed-Reason'] = query.list.termination_reason
+    render_jsonapi response_json
   end
 
   def mark_read
