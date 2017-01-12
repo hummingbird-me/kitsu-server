@@ -85,31 +85,13 @@ RSpec.describe Post, type: :model do
   end
 
   context 'with a target user' do
-    let(:source_user) { create(:user) }
-    let(:target_user) { create(:user) }
-    subject { build(:post, user: source_user, target_user: target_user) }
+    let(:user) { create(:user) }
+    subject { build(:post, target_user: user) }
     let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
-    let(:single_follower) { create(:follow, followed: source_user).follower }
-    let(:followers) do
-      users = create_list(:user, 2)
-      users.each do |user|
-        create(:follow, follower: user, followed: source_user)
-        create(:follow, follower: user, followed: target_user)
-      end
-      users
-    end
 
     describe '#stream_activity' do
-      it "should have the mentioned user's aggregated feed in the to field" do
-        expect(activity[:to]).to include(target_user.aggregated_feed.stream_id)
-      end
-      it 'should have the intersection of their followers in the to field' do
-        follower_feeds = followers.map { |u| u.timeline.stream_id }
-        expect(activity[:to]).to include(*follower_feeds)
-      end
-      it 'should not have users who do not follow both' do
-        single_follower_timeline = single_follower.timeline.stream_id
-        expect(activity[:to]).not_to include(single_follower_timeline)
+      it "should have the mentioned user's feed in the to field" do
+        expect(activity[:to]).to include(user.feed.stream_id)
       end
     end
   end
