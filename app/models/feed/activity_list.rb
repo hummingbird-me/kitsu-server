@@ -133,13 +133,18 @@ class Feed
       @more
     end
 
+    def real_page_size
+      [(data[:limit] / @limit_ratio).to_i, 100].min
+    end
+
     def to_a
       return @results if @results
       @results = []
       requested_count = page_size || data[:limit]
       last_id = data[:id_lt]
       loop.with_index do |_, i|
-        page = get_page(id_lt: last_id)
+        page_size = [(real_page_size * (1.2**i)).to_i, 100].min
+        page = get_page(id_lt: last_id, limit: page_size)
         @results += page if page
         puts 'PAGE IS NIL' if page.nil?
         puts 'GAVE UP' if i >= 10
@@ -157,13 +162,13 @@ class Feed
 
     private
 
-    def get_page(id_lt: nil)
+    def get_page(id_lt: nil, limit: nil)
       # Extract non-pagination payload data
       data = @data.slice(:ranking, :mark_seen, :mark_read, :limit)
       # Apply our id_gt for pagination
       data = data.merge(id_lt: id_lt) if id_lt
       # Apply the limit ratio, apply it to the data
-      data[:limit] = (data[:limit] / @limit_ratio).to_i
+      data[:limit] = limit || real_page_size
       # Actually load results
       res = feed.stream_feed.get(data)['results']
       # If the page we got is the right number, there's more to grab
