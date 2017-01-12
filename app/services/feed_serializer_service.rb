@@ -39,11 +39,11 @@ class FeedSerializerService
   attr_reader :activity_list, :including, :fields, :context, :base_url
 
   def initialize(list, including: nil, fields: nil, context: nil, base_url:)
-    @activity_list = list
     @including = including || []
     @fields = fields || {}
     @context = context || {}
     @base_url = base_url
+    @activity_list = list.includes(stream_enrichment_fields)
   end
 
   def as_json(*)
@@ -55,7 +55,7 @@ class FeedSerializerService
   end
 
   def activities
-    @activities ||= activity_list.includes(stream_enrichment_fields).to_a
+    @activities ||= activity_list.to_a
   end
 
   def including
@@ -71,10 +71,10 @@ class FeedSerializerService
   end
 
   def links
-    if activities.empty?
-      {}
-    else
+    if activity_list.more? && activities.count != 0
       { next: url_for_params('page[cursor]' => activities.last.id) }
+    else
+      {}
     end
   end
 
@@ -84,7 +84,7 @@ class FeedSerializerService
 
   def serializer
     @serializer ||= FeedSerializer.new(resource_class, include: including,
-                                       fields: fields)
+                                                       fields: fields)
   end
 
   def resource_class

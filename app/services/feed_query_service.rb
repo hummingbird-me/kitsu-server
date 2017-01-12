@@ -1,6 +1,6 @@
 class FeedQueryService
-  MEDIA_VERBS = %w[updated rated progressed reviewed]
-  POST_VERBS = %w[post comment follow]
+  MEDIA_VERBS = %w[updated rated progressed reviewed].freeze
+  POST_VERBS = %w[post comment follow].freeze
 
   attr_reader :params, :user
 
@@ -13,7 +13,7 @@ class FeedQueryService
     return @list if @list
     list = feed.activities
     list = list.page(id_lt: cursor) if cursor
-    list = list.limit(limit) if limit
+    list = list.per(limit) if limit
     list = list.where_id(*id_query) if id_query
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
@@ -50,30 +50,31 @@ class FeedQueryService
 
   def kind_filter
     kind = params.dig(:filter, :kind)
-    @kind_filter ||= case kind
+    @kind_filter ||=
+      case kind
       when 'media'
         {
           ratio: 0.8,
-          proc: -> (act) {
+          proc: ->(act) do
             if MEDIA_VERBS.include?(act.verb)
               true
             else
               throw :remove_group
             end
-          }
+          end
         }
       when 'posts'
         {
           ratio: 0.2,
-          proc: -> (act) {
+          proc: ->(act) do
             if POST_VERBS.include?(act.verb)
               true
             else
               throw :remove_group
             end
-          }
+          end
         }
-    end
+      end
   end
 
   def blocked

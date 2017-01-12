@@ -1,7 +1,7 @@
 class Feed
   class ActivityList
     attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :limit_ratio
+      :limit_ratio, :termination_reason
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
@@ -17,6 +17,7 @@ class Feed
       @maps = []
       @selects = []
       @limit_ratio = 1.0
+      @more = true
       @data[:limit] = 25
     end
 
@@ -114,9 +115,71 @@ class Feed
       end
     end
 
-    def results
-      data[:limit] = (data[:limit] / @limit_ratio).to_i
-      feed.stream_feed.get(data)['results']
+    # @attr [Float] ratio The expected percentage of posts that will be matched
+    #                     by this selector
+    def select(ratio = 1.0, &block)
+      @limit_ratio *= ratio
+      @selects << block
+      self
+    end
+
+    def map(&block)
+      @maps << block
+      self
+    end
+
+    def more?
+      to_a if @results.nil?
+      @more
+    end
+
+    def real_page_size
+      [(data[:limit] / @limit_ratio).to_i, 100].min
+    end
+
+    def to_a
+      return @results if @results
+      @results = []
+      requested_count = page_size || data[:limit]
+      last_id = data[:id_lt]
+      loop.with_index do |_, i|
+        page_size = [(real_page_size * (1.2**i)).to_i, 100].min
+        page = get_page(id_lt: last_id, limit: page_size)
+        @results += page if page
+        @termination_reason = 'empty' if page.nil?
+        @termination_reason = 'iterations' if i >= 10
+        @termination_reason = 'full' if @results.count >= requested_count
+        if @results.count >= requested_count || i >= 10 || page.nil?
+          @results = @results[0..(requested_count - 1)]
+          return @results
+        end
+      end
+    end
+
+    def empty?
+      to_a.empty?
+    end
+
+    private
+
+    def get_page(id_lt: nil, limit: nil)
+      # Extract non-pagination payload data
+      data = @data.slice(:ranking, :mark_seen, :mark_read, :limit)
+      # Apply our id_gt for pagination
+      data = data.merge(id_lt: id_lt) if id_lt
+      # Apply the limit ratio, apply it to the data
+      data[:limit] = limit || real_page_size
+      # Actually load results
+      res = feed.stream_feed.get(data)['results']
+      # If the page we got is the right number, there's more to grab
+      @more = res.count == data[:limit]
+      return nil if res.count.zero?
+      # Enrich them, apply select and map filters to them
+      res = enrich(res)
+      res = apply_select(res)
+      res = apply_maps(res)
+      # Remove any nils just to be safe
+      res.compact
     end
 
     # Loads in included associations, converts to Feed::Activity[Group]
@@ -131,19 +194,6 @@ class Feed
         activities = activities.map { |a| Feed::Activity.new(feed, a) }
       end
       activities.map { |act| strip_unfound(act) }
-    end
-
-    # @attr [Float] ratio The expected percentage of posts that will be matched
-    #                     by this selector
-    def select(ratio = 1.0, &block)
-      @limit_ratio *= ratio
-      @selects << block
-      self
-    end
-
-    def map(&block)
-      @maps << block
-      self
     end
 
     def apply_select(activities)
@@ -166,23 +216,10 @@ class Feed
           act.activities = apply_maps(act.activities)
           act
         else
-          @maps.reduce(act) { |a, e| e.call(a) }
+          @maps.reduce(act) { |acc, elem| elem.call(acc) }
         end
       end
     end
-
-    def to_a
-      res = enrich(results)
-      res = apply_select(res)
-      res = apply_maps(res)
-      res.compact
-    end
-
-    def empty?
-      to_a.empty?
-    end
-
-    private
 
     # Strips unfound
     def strip_unfound(activity)
