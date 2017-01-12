@@ -141,6 +141,9 @@ class Feed
       loop.with_index do |_, i|
         page = get_page(id_lt: last_id)
         @results += page if page
+        puts 'PAGE IS NIL' if page.nil?
+        puts 'GAVE UP' if i >= 10
+        puts 'HIT NUMBER' if @results.count >= requested_count
         if @results.count >= requested_count || i >= 10 || page.nil?
           @results = @results[0..(requested_count - 1)]
           return @results
