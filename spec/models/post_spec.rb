@@ -100,8 +100,8 @@ RSpec.describe Post, type: :model do
     end
 
     describe '#stream_activity' do
-      it "should have the target user's aggregated feed as the feed" do
-        expect(subject.stream_activity.feed).to eq(target_user.aggregated_feed)
+      it "should have the mentioned user's aggregated feed in the to field" do
+        expect(activity[:to]).to include(target_user.aggregated_feed.stream_id)
       end
       it 'should have the intersection of their followers in the to field' do
         follower_feeds = followers.map { |u| u.timeline.stream_id }
