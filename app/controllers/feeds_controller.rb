@@ -5,6 +5,7 @@ class FeedsController < ApplicationController
 
   def show
     render_jsonapi stringify_activities(query.list)
+    response.headers['X-Feed-Reason'] = query.list.termination_reason
   end
 
   def mark_read

@@ -1,7 +1,7 @@
 class Feed
   class ActivityList
     attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :limit_ratio
+      :limit_ratio, :termination_reason
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
@@ -146,9 +146,9 @@ class Feed
         page_size = [(real_page_size * (1.2**i)).to_i, 100].min
         page = get_page(id_lt: last_id, limit: page_size)
         @results += page if page
-        puts 'PAGE IS NIL' if page.nil?
-        puts 'GAVE UP' if i >= 10
-        puts 'HIT NUMBER' if @results.count >= requested_count
+        @termination_reason = 'empty' if page.nil?
+        @termination_reason = 'iterations' if i >= 10
+        @termination_reason = 'full' if @results.count >= requested_count
         if @results.count >= requested_count || i >= 10 || page.nil?
           @results = @results[0..(requested_count - 1)]
           return @results
