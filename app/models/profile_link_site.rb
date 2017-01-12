@@ -11,5 +11,5 @@
 # rubocop:enable Metrics/LineLength
 
 class ProfileLinkSite < ApplicationRecord
-  validates_presence_of :name
+  validates_presence_of :name, :validate_find, :validate_replace
 end
