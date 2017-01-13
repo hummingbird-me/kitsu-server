@@ -15,32 +15,34 @@ class MyAnimeListSyncService
 
     case method
     when 'delete'
-      delete("#{media_type}list/#{media_type}/#{mal_media_id}", linked_profile)
+      delete("#{media_type}list/#{media_type}/#{mal_media_id}", linked_account)
     when 'create/update'
       # find the anime or manga
       # it will raise an error if it fails the http request
-      response = get("#{media_type}/#{mal_media_id}#{MINE}", linked_profile)
+      response = get("#{media_type}/#{mal_media_id}#{MINE}", linked_account)
 
       if media_type == 'anime' && response['watched_status']
-        put("animelist/anime/#{mal_media_id}", linked_profile,
+        p 'PUT anime'
+        put("animelist/anime/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating),
           rewatch_count: library_entry.reconsume_count)
       elsif media_type == 'anime'
-        post('animelist/anime', linked_profile,
+        p 'POST anime'
+        post('animelist/anime', linked_account,
           anime_id: mal_media_id,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating))
       elsif media_type == 'manga' && response['read_status']
-        put("mangalist/manga/#{mal_media_id}", linked_profile,
+        put("mangalist/manga/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
           score: format_score(library_entry.rating),
           reread_count: library_entry.reconsume_count)
       else # should I use else to catch errors?
-        post('mangalist/manga', linked_profile,
+        post('mangalist/manga', linked_account,
           manga_id: mal_media_id,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
@@ -97,12 +99,12 @@ class MyAnimeListSyncService
   end
 
   def put(url, profile, body)
-    res = Typhoeus::Request.new(
+    p res = Typhoeus::Request.put(
       build_url(url),
-      method: :put,
+      headers: {'Content-Type'=> 'application/x-www-form-urlencoded'},
       userpwd: simple_auth(profile),
       body: body
-    ).run
+    )
 
     check_response_status(res)
 
@@ -140,7 +142,7 @@ class MyAnimeListSyncService
   def mal_media
     # convert kitsu data -> mal data
     @mal_media ||= library_entry.media.mappings.find_by(
-      site: "myanimelist/#{media_type}"
+      external_site: "myanimelist/#{media_type}"
     )
   end
 
@@ -148,9 +150,10 @@ class MyAnimeListSyncService
     mal_media.external_id
   end
 
-  def linked_profile
-    @profile ||= User.find(library_entry.user_id).linked_profiles.where(
-      linked_site: LinkedSite.find_by(name: 'myanimelist')
+  def linked_account
+    @profile ||= User.find(library_entry.user_id).linked_accounts.find_by(
+      sync_to: true,
+      type: 'LinkedAccount::MyAnimeList'
     )
   end
 
@@ -159,6 +162,6 @@ class MyAnimeListSyncService
   end
 
   def simple_auth(profile)
-    "#{profile.external_user_id}:#{profile.token}"
+    p "#{profile.external_user_id}:#{profile.token}"
   end
 end

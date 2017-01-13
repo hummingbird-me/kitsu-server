@@ -2,8 +2,8 @@ class MyAnimeListListWorker
   include Sidekiq::Worker
 
   def perform(user_id)
-    kitsu_library(user_id).each do |library_entry_ids|
-      MyAnimeListSyncWorker.perform_async(library_entry_ids, 'create/update')
+    kitsu_library(user_id).each do |library_entry_id|
+      MyAnimeListSyncWorker.perform_async(library_entry_id, 'create/update')
     end
   end
 
