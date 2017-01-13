@@ -16,7 +16,8 @@ RSpec.describe ProfileLinkSite, type: :model do
   it { should validate_presence_of(:validate_replace) }
 
   context 'validate profile_link url' do
-    describe 'twitter' do
+    # Twitter
+    describe 'Twitter' do
       context 'success' do
         it 'should return a username' do
           urls = %w[
@@ -37,7 +38,8 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
 
-    describe 'facebook' do
+    # Facebook
+    describe 'Facebook' do
       context 'success' do
         it 'should return a username' do
           urls = %w[
@@ -69,7 +71,8 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
 
-    describe 'youtube' do
+    # Youtube
+    describe 'Youtube' do
       context 'success' do
         it 'should return a username' do
           urls = %w[
@@ -87,5 +90,303 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
+
+    # TODO: figure out how to deal with custom url (having +)
+    # Google+
+    describe 'Google+' do
+      context 'success' do
+        it 'should work without custom url' do
+          urls = %w[
+            https://plus.google.com/115819863396302953172
+            plus.google.com/115819863396302953172
+            115819863396302953172
+          ]
+          site = build(:profile_link_site, :google)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('115819863396302953172')
+          end
+        end
+        it 'should work with custom url' do
+          urls = %w[
+            https://plus.google.com/+toyhammered
+            plus.google.com/+toyhammered
+            +toyhammered
+          ]
+          site = build(:profile_link_site, :google)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('+toyhammered')
+          end
+        end
+      end
+    end
+
+    # Instagram
+    describe 'Instagram' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            instagram.com/rassiner/
+            https://www.instagram.com/rassiner/
+            https://instagram.com/rassiner/
+            rassiner
+          ]
+          site = build(:profile_link_site, :instagram)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('rassiner')
+          end
+        end
+      end
+    end
+
+    # Twitch
+    describe 'Twitch' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            twitch.tv/toyhammered
+            https://www.twitch.tv/toyhammered
+            https://www.twitch.tv/#toyhammered
+            https://twitch.tv/toyhammered
+            toyhammered
+            #toyhammered
+          ]
+          site = build(:profile_link_site, :twitch)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # Vimeo
+    describe 'Vimeo' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            vimeo.com/toyhammered
+            https://www.vimeo.com/toyhammered
+            https://vimeo.com/toyhammered
+            toyhammered
+          ]
+          site = build(:profile_link_site, :vimeo)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # Github
+    describe 'Github' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            github.com/toyhammered
+            https://www.github.com/toyhammered
+            https://www.github.com/@toyhammered
+            https://github.com/toyhammered
+            toyhammered
+            @toyhammered
+          ]
+          site = build(:profile_link_site, :github)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # TODO: need to figure out the proper format
+    # Battlenet
+    describe 'Battlenet' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            github.com/toyhammered
+            https://www.github.com/toyhammered
+            https://www.github.com/@toyhammered
+            https://github.com/toyhammered
+            toyhammered
+            @toyhammered
+          ]
+          site = build(:profile_link_site, :github)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # Steam
+    describe 'Steam' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            steamcommunity.com/id/toyhammered/
+            http://steamcommunity.com/id/toyhammered/
+            https://steamcommunity.com/id/toyhammered/
+            http://www.steamcommunity.com/id/toyhammered/
+            toyhammered
+          ]
+          site = build(:profile_link_site, :steam)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # Raptr
+    describe 'Raptr' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            raptr.com/toyhammered/
+            http://raptr.com/toyhammered/
+            https://raptr.com/toyhammered/
+            http://www.raptr.com/toyhammered/
+            toyhammered
+          ]
+          site = build(:profile_link_site, :raptr)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # Discord
+    describe 'Discord' do
+      context 'success' do
+        it 'should return a username' do
+          url = 'toyhammered#0718'
+          site = build(:profile_link_site, :discord)
+
+          temp = Regexp.new(site.validate_find).match(url)
+          expect(temp[1]).to eq('toyhammered#0718')
+        end
+      end
+    end
+
+    # TODO: What the hell are we actually validating?
+    # Tumblr
+    # describe 'Tumblr' do
+    #   context 'success' do
+    #
+    #   end
+    # end
+
+    # SoundCloud
+    describe 'soundcloud' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            soundcloud.com/toyhammered/
+            https://www.soundcloud.com/toyhammered/
+            https://soundcloud.com/toyhammered/
+            toyhammered
+          ]
+          site = build(:profile_link_site, :soundcloud)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # Dailymotion
+    describe 'Dailymotion' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            dailymotion.com/toyhammered
+            https://www.dailymotion.com/toyhammered
+            https://dailymotion.com/toyhammered
+            toyhammered
+          ]
+          site = build(:profile_link_site, :dailymotion)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # TODO: WHY the hell do we actually have this?
+    # Kickstarter
+    # describe 'Kickstarter' do
+    #   context 'success' do
+    #
+    #   end
+    # end
+
+    # Mobcrush
+    describe 'Mobcrush' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            mobcrush.com/toyhammered
+            https://www.mobcrush.com/toyhammered
+            https://mobcrush.com/toyhammered
+            toyhammered
+          ]
+          site = build(:profile_link_site, :mobcrush)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
+
+    # Osu!
+    describe 'Osu!' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            https://osu.ppy.sh/u/1234567
+            https://www.osu.ppy.sh/u/1234567
+            osu.ppy.sh/u/1234567
+            1234567
+          ]
+          site = build(:profile_link_site, :osu)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('1234567')
+          end
+        end
+      end
+    end
+
+    # Patreon
+    # describe 'Patreon' do
+    #   context 'success' do
+    #
+    #   end
+    # end
   end # end of validate context
 end
