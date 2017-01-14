@@ -16,8 +16,10 @@ class TrendingService
     key = trending_key
     update_score(key, id, change_for(weight))
     trim(key, limit: ITEM_LIMIT) if rand < TRIM_PROBABILITY
-    TrendingFanoutWorker.perform_async(namespace, half_life, user&.id, id,
-      weight)
+    if user
+      TrendingFanoutWorker.perform_async(namespace, half_life, user&.id, id,
+        weight)
+    end
   end
 
   def fanout_vote(id, weight = 1.0)
