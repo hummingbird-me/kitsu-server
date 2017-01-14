@@ -2,7 +2,7 @@ module Trendable
   extend ActiveSupport::Concern
 
   def trending_service(user = nil)
-    TrendingService.new(self.class, user)
+    TrendingService.new(self.class, user: user)
   end
 
   def trending(limit = 5)
