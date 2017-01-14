@@ -58,11 +58,11 @@ class TrendingService
     results
   end
 
-  def trending_key(user = nil)
+  def trending_key(uid = nil)
     ns = namespace
     ns = ns.table_name if enrichable?
     key = "trending:#{ns}"
-    key += ":user:#{user_id}" if user
+    key += ":user:#{uid}" if uid
     key
   end
 
