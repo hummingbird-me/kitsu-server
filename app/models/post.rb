@@ -104,6 +104,6 @@ class Post < ApplicationRecord
   end
 
   after_create do
-    media.trending_vote(user, 2.0) if media_present?
+    media.trending_vote(user, 2.0) if media.present?
   end
 end

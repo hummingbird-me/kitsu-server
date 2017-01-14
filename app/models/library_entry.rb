@@ -202,7 +202,7 @@ class LibraryEntry < ApplicationRecord
     media.trending_vote(user, 1.0) if status_changed?
 
     # Sync MAL updates if linked profile exists
-    MyAnimeListSyncWorter.perform_async(id, 'create/update') if sync_to_mal?
+    MyAnimeListSyncWorker.perform_async(id, 'create/update') if sync_to_mal?
   end
 
   after_destroy do
