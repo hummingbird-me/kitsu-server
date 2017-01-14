@@ -4,7 +4,7 @@ class TrendingService
   NETWORK_LIMIT = 20
   TRIM_PROBABILITY = 0.1
 
-  attr_reader :namespace, :half_life
+  attr_reader :namespace, :half_life, :user
 
   def initialize(namespace, half_life: 7.days.to_i, user: nil)
     @namespace = namespace
@@ -13,24 +13,23 @@ class TrendingService
   end
 
   def vote(id, weight = 1.0)
-    $redis.with do |conn|
-      key = trending_key
-      update_score(key, change, id)
-      trim(key, limit: ITEM_LIMIT) if rand < TRIM_PROBABILITY
-    end
+    key = trending_key
+    update_score(key, id, change_for(weight))
+    trim(key, limit: ITEM_LIMIT) if rand < TRIM_PROBABILITY
+    # TrendingFanoutWorker.perform_async(namespace, half_life, user&.id)
   end
 
-  def fanout_vote
+  def fanout_vote(id, weight = 1.0)
     followers.each do |uid|
       key = trending_key(uid)
-      update_score(key)
+      update_score(key, id, change_for(weight))
       trim(key, limit: NETWORK_LIMIT) if rand < TRIM_PROBABILITY
     end
   end
 
   def get(limit = 5)
     results = $redis.with do |conn|
-      conn.zrevrange(key, 0, limit - 1).map(&:to_i)
+      conn.zrevrange(trending_key, 0, limit - 1).map(&:to_i)
     end
     results = enrich(results) if enrichable?
     results
@@ -45,14 +44,14 @@ class TrendingService
   private
 
   def trending_key(user = nil)
-    user = user.id if user.respond_to?(:id)
-    namespace = namespace.table_name if enrichable?
-    key = "trending:#{namespace}"
-    key += ":user:#{user}" if user
+    ns = namespace
+    ns = ns.table_name if enrichable?
+    key = "trending:#{ns}"
+    key += ":user:#{user_id}" if user
     key
   end
 
-  def update_score(key, weight = 1.0, id)
+  def update_score(key, id, weight = 1.0)
     $redis.with do |conn|
       conn.zincrby(key, change_for(weight), id)
     end
@@ -63,15 +62,19 @@ class TrendingService
   end
 
   def followers
-    user.followers.pluck(:follower_id)
+    Follow.where(followed_id: user_id).pluck(:follower_id)
   end
 
-  def enrich(list)
-    instances = namespace.where(id: list).index_by(&:id)
+  def enrich(ids)
+    instances = namespace.where(id: ids).index_by(&:id)
     ids.collect { |id| instances[id] }
   end
 
   def enrichable?
     namespace.respond_to? :table_name
+  end
+
+  def user_id
+    user.respond_to?(:id) ? user.id : user
   end
 end
