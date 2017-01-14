@@ -102,4 +102,8 @@ class Post < ApplicationRecord
     self.edited_at = Time.now if content_changed?
     true
   end
+
+  after_create do
+    media.trending_vote(user, 2.0) if media_present?
+  end
 end

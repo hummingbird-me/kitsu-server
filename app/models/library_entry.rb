@@ -191,6 +191,9 @@ class LibraryEntry < ApplicationRecord
       user.update_profile_completed!
     end
 
+    media.trending_vote(user, 0.5) if progress_changed?
+    media.trending_vote(user, 1.0) if status_changed?
+
     # Sync MAL updates if linked profile exists
     MyAnimeListSyncWorker.perform_async(id, 'create/update') if sync_to_mal?
   end
