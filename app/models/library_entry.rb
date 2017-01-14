@@ -88,10 +88,10 @@ class LibraryEntry < ApplicationRecord
   scope :rated, -> { where.not(rating: nil) }
   scope :following, ->(user) do
     user_id = user.respond_to?(:id) ? user.id : user
+    user_id = sanitize(user_id) # Juuuuuust to be safe
     follows = Follow.arel_table
-    where(user:
-      follows.where(follows[:followed_id].eq(user_id)).project(:follower_id)
-    )
+    sql = follows.where(follows[:followed_id].eq(user_id)).project(:follower_id)
+    where("user_id IN (#{sql.to_sql})")
   end
 
   def current_marathon
