@@ -81,6 +81,7 @@ class TrendingService
   end
 
   def enrich(ids)
+    ids = ids.map(&:to_i)
     instances = namespace.where(id: ids).index_by(&:id)
     ids.collect { |id| instances[id] }.compact
   end
