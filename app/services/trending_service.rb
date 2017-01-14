@@ -82,7 +82,7 @@ class TrendingService
 
   def enrich(ids)
     instances = namespace.where(id: ids).index_by(&:id)
-    ids.collect { |id| instances[id] }
+    ids.collect { |id| instances[id] }.compact
   end
 
   def enrichable?
