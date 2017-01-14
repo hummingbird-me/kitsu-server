@@ -16,7 +16,8 @@ class TrendingService
     key = trending_key
     update_score(key, id, change_for(weight))
     trim(key, limit: ITEM_LIMIT) if rand < TRIM_PROBABILITY
-    # TrendingFanoutWorker.perform_async(namespace, half_life, user&.id)
+    TrendingFanoutWorker.perform_async(namespace, half_life, user&.id, id,
+      weight)
   end
 
   def fanout_vote(id, weight = 1.0)
@@ -28,11 +29,14 @@ class TrendingService
   end
 
   def get(limit = 5)
-    results = $redis.with do |conn|
-      conn.zrevrange(trending_key, 0, limit - 1).map(&:to_i)
-    end
-    results = enrich(results) if enrichable?
+    key = trending_key(user_id)
+    results_for(key, limit)
     results
+  end
+
+  def get_network(limit = 5)
+    key = trending_key(user_id)
+    results_for(key, limit)
   end
 
   def trim(key, limit: 100)
@@ -42,6 +46,16 @@ class TrendingService
   end
 
   private
+
+  def results_for(key, limit = 5, offset = 0)
+    start = offset
+    stop = offset + limit - 1
+    results = $redis.with do |conn|
+      conn.zrevrange(key, start, stop)
+    end
+    results = enrich(results) if enrichable?
+    results
+  end
 
   def trending_key(user = nil)
     ns = namespace
