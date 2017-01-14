@@ -44,6 +44,10 @@ class LibraryEntryResource < BaseResource
     records.where('updated_at >= ?', time)
   }
 
+  filter :following, apply: ->(records, values, _options) {
+    records.following(values.join(','))
+  }
+
   has_one :user
   has_one :anime
   has_one :manga

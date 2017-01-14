@@ -86,6 +86,13 @@ class LibraryEntry < ApplicationRecord
 
   counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating }
   scope :rated, -> { where.not(rating: nil) }
+  scope :following, ->(user) do
+    user_id = user.respond_to?(:id) ? user.id : user
+    follows = Follow.arel_table
+    where(user:
+      follows.where(follows[:followed_id].eq(user_id)).project(:follower_id)
+    )
+  end
 
   def current_marathon
     marathons.current.first_or_create
@@ -195,7 +202,7 @@ class LibraryEntry < ApplicationRecord
     media.trending_vote(user, 1.0) if status_changed?
 
     # Sync MAL updates if linked profile exists
-    MyAnimeListSyncWorker.perform_async(id, 'create/update') if sync_to_mal?
+    MyAnimeListSyncWorter.perform_async(id, 'create/update') if sync_to_mal?
   end
 
   after_destroy do
