@@ -613,6 +613,7 @@ Rails.application.routes.draw do
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
     post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
     delete '/feeds/:group/:id/activities/:uuid', to: 'feeds#destroy_activity'
+    get '/trending/:namespace', to: 'trending#index'
     post '/users/_recover', to: 'users#recover'
   end
 
