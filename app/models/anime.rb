@@ -83,6 +83,15 @@ class Anime < ApplicationRecord
     end
   end
 
+  # Season year is the year, adjusted so that December is part of the next year
+  def season_year
+    if start_date.try(:month) == 12
+      year + 1
+    else
+      year
+    end
+  end
+
   def self.fuzzy_find(title)
     MediaIndex::Anime.query(multi_match: {
       fields: %w[titles.* abbreviated_titles synopsis actors characters],

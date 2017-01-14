@@ -61,6 +61,7 @@ class MediaIndex < Chewy::Index
       field :start_date, :end_date, :created_at, type: 'date'
       field :season, type: 'string'
       field :year, type: 'short' # Update this before year 32,000
+      field :season_year, type: 'short' # ^
       field :genres, value: ->(a) { a.genres.map(&:name) }
       field :user_count, type: 'integer'
       # Castings
