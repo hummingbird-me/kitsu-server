@@ -33,7 +33,6 @@ class TrendingService
   def get(limit = 5)
     key = trending_key(user_id)
     results_for(key, limit)
-    results
   end
 
   def get_network(limit = 5)
