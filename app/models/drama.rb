@@ -18,11 +18,13 @@
 #  end_date                  :date
 #  episode_count             :integer
 #  episode_length            :integer
+#  popularity_rank           :integer
 #  poster_image_content_type :string
 #  poster_image_file_name    :string
 #  poster_image_file_size    :integer
 #  poster_image_updated_at   :datetime
 #  rating_frequencies        :hstore           default({}), not null
+#  rating_rank               :integer
 #  slug                      :string           not null, indexed
 #  start_date                :date
 #  started_airing_date_known :boolean          default(TRUE), not null
