@@ -1,6 +1,6 @@
 class LinkedAccount
   class MyAnimeList < LinkedAccount
-    validate :verify_mal_credentials, if: :sync_to_mal?
+    validate :verify_mal_credentials
 
     def verify_mal_credentials
       # Check to make sure username/password is valid
@@ -11,7 +11,7 @@ class LinkedAccount
         userpwd: "#{external_user_id}:#{token}"
       ).run
 
-      if reponse.code == 200
+      if response.code == 200
         true
       elsif response.code == 403
         errors.add(:token, 'Username or password was incorrect.')
@@ -20,12 +20,8 @@ class LinkedAccount
       end
     end
 
-    def sync_to_mal?
-      sync_to == true && type == 'LinkedAccount::MyAnimeList'
-    end
-
     after_save do
-      MyAnimeListListWorker.perform_async(user_id) if sync_to_mal?
+      MyAnimeListListWorker.perform_async(user_id) if sync_to?
     end
   end
 end
