@@ -101,8 +101,9 @@ class ApplicationPolicy
   #
   # @return [Boolean] Whether the current user is the owner of the record
   def is_owner?
-    return false if record.user_id && record.user_id != user.id
-    return false if record.user_id_was && record.user_id_was != user.id
+    return false unless user && record.respond_to?(:user)
+    return false unless record.user == user
+    return false unless record.user_id_was == user.id
     true
   end
 
