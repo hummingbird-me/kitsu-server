@@ -4,6 +4,7 @@ class BaseResource < JSONAPI::Resource
   include AuthenticatedResource
   include Pundit::Resource
   include SearchableResource
+  include ResourceInheritance
 
   def respond_to?(method_name, include_private = false)
     if method_name.to_s.end_with?('_id')
