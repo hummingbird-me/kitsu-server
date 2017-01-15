@@ -17,16 +17,16 @@ RSpec.describe LinkedAccount::MyAnimeList do
 
   context 'validates' do
     describe '#verify_mal_credentials' do
-      context '#sync_to_mal?' do
+      context 'with the server returning 200' do
         it 'should pass validation' do
           subject = described_class.new(
             sync_to: true,
-            type: 'LinkedAccount::MyAnimeList'
+            type: 'LinkedAccount::MyAnimeList',
+            external_user_id: 'toyhammered',
+            token: 'fakefake'
           )
-          expect(subject.sync_to_mal?).to be true
-        end
-        it 'should fail validation' do
-          expect(subject.sync_to_mal?).to be false
+          subject.valid?
+          expect(subject.errors[:token]).to be_empty
         end
       end
     end
