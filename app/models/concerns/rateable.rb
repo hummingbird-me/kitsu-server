@@ -92,7 +92,7 @@ module Rateable
           r = media_total_ratings[media.id] * 1.0 / votes
           media.update_column(:average_rating, (r * votes + c * min) / (votes + min))
         else
-          media.update_column(:average_rating, 0)
+          media.update_column(:average_rating, nil)
         end
       end
     end
