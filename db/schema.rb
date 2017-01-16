@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170115234206) do
+ActiveRecord::Schema.define(version: 20170116102736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,13 +63,14 @@ ActiveRecord::Schema.define(version: 20170115234206) do
   add_index "anime_genres", ["anime_id"], name: "index_anime_genres_on_anime_id", using: :btree
   add_index "anime_genres", ["genre_id"], name: "index_anime_genres_on_genre_id", using: :btree
 
-  create_table "anime_producers", id: false, force: :cascade do |t|
-    t.integer "anime_id",    null: false
-    t.integer "producer_id", null: false
+  create_table "anime_productions", id: false, force: :cascade do |t|
+    t.integer "anime_id",                null: false
+    t.integer "producer_id",             null: false
+    t.integer "role",        default: 0
   end
 
-  add_index "anime_producers", ["anime_id"], name: "index_anime_producers_on_anime_id", using: :btree
-  add_index "anime_producers", ["producer_id"], name: "index_anime_producers_on_producer_id", using: :btree
+  add_index "anime_productions", ["anime_id"], name: "index_anime_productions_on_anime_id", using: :btree
+  add_index "anime_productions", ["producer_id"], name: "index_anime_productions_on_producer_id", using: :btree
 
   create_table "blocks", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -472,6 +473,16 @@ ActiveRecord::Schema.define(version: 20170115234206) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "media_relationships", force: :cascade do |t|
+    t.integer "source_id",        null: false
+    t.string  "source_type",      null: false
+    t.integer "destination_id",   null: false
+    t.string  "destination_type", null: false
+    t.integer "role",             null: false
+  end
+
+  add_index "media_relationships", ["source_type", "source_id"], name: "index_media_relationships_on_source_type_and_source_id", using: :btree
 
   create_table "not_interesteds", force: :cascade do |t|
     t.integer  "user_id"
