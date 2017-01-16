@@ -1,6 +1,5 @@
 # == Route Map
 #
-# I, [2017-01-16T11:05:28.538785 #45]  INFO -- sentry: ** [Raven] Raven 2.2.0 configured not to capture errors: No server specified, No host specified, No path specified, No public_key specified, No secret_key specified, No project_id specified
 #                                       Prefix Verb      URI Pattern                                                                    Controller#Action
 #             library_entry_relationships_user GET       /edge/library-entries/:library_entry_id/relationships/user(.:format)           library_entries#show_relationship {:relationship=>"user"}
 #                                              PUT|PATCH /edge/library-entries/:library_entry_id/relationships/user(.:format)           library_entries#update_relationship {:relationship=>"user"}
