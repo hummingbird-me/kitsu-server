@@ -90,9 +90,9 @@ module Rateable
         votes = media_total_votes[media.id]
         if votes >= min
           r = media_total_ratings[media.id] * 1.0 / votes
-          media.update(average_rating: (r * votes + c * min) / (votes + min))
+          media.update_column(:average_rating, (r * votes + c * min) / (votes + min))
         else
-          media.update(average_rating: 0)
+          media.update_column(:average_rating, 0)
         end
       end
     end
