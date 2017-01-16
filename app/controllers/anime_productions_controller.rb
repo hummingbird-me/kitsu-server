@@ -1,0 +1,1 @@
+class AnimeProductionsController < ApplicationController; end
