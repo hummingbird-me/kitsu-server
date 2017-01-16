@@ -162,6 +162,6 @@ class MyAnimeListSyncService
   end
 
   def simple_auth(profile)
-    p "#{profile.external_user_id}:#{profile.token}"
+    "#{profile.external_user_id}:#{profile.token}"
   end
 end
