@@ -103,7 +103,7 @@ class ApplicationPolicy
   def is_owner?
     return false unless user && record.respond_to?(:user)
     return false unless record.user == user
-    return false unless record.user_id_was == user.id
+    return false if record.user_id_was && record.user_id_was != user.id
     true
   end
 
