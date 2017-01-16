@@ -5,6 +5,7 @@ module Media
     extend FriendlyId
     include Titleable
     include Rateable
+    include Rankable
     include Trendable
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
