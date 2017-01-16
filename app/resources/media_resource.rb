@@ -42,7 +42,9 @@ class MediaResource < BaseResource
     # Ratings
     :average_rating, :rating_frequencies,
     # Dates
-    :start_date, :end_date
+    :start_date, :end_date,
+    # Rankings
+    :popularity_rank, :rating_rank
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
