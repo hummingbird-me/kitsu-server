@@ -86,13 +86,17 @@ module Rateable
 
       c = global_total_rating * 1.0 / global_total_votes
 
+      now = Time.now
       find_each do |media|
         votes = media_total_votes[media.id]
         if votes >= min
           r = media_total_ratings[media.id] * 1.0 / votes
-          media.update_column(:average_rating, (r * votes + c * min) / (votes + min))
+          media.update_columns(
+            average_rating: (r * votes + c * min) / (votes + min),
+            updated_at: now
+          )
         else
-          media.update_column(:average_rating, nil)
+          media.update_columns(average_rating: nil, updated_at: now)
         end
       end
     end
