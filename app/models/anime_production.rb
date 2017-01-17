@@ -3,6 +3,7 @@
 #
 # Table name: anime_productions
 #
+#  id          :integer          not null, primary key
 #  role        :integer          default(0)
 #  anime_id    :integer          not null, indexed
 #  producer_id :integer          not null, indexed
