@@ -678,7 +678,9 @@
 Rails.application.routes.draw do
   scope '/edge' do
     jsonapi_resources :library_entries
-    jsonapi_resources :anime
+    jsonapi_resources :anime do
+      get '_languages', to: 'anime#languages'
+    end
     jsonapi_resources :manga
     jsonapi_resources :drama
     jsonapi_resources :users
