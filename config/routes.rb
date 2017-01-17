@@ -1,6 +1,5 @@
 # == Route Map
 #
-# I, [2017-01-17T02:19:31.735437 #45]  INFO -- sentry: ** [Raven] Raven 2.2.0 configured not to capture errors: No server specified, No host specified, No path specified, No public_key specified, No secret_key specified, No project_id specified
 #                                       Prefix Verb      URI Pattern                                                                          Controller#Action
 #             library_entry_relationships_user GET       /edge/library-entries/:library_entry_id/relationships/user(.:format)                 library_entries#show_relationship {:relationship=>"user"}
 #                                              PUT|PATCH /edge/library-entries/:library_entry_id/relationships/user(.:format)                 library_entries#update_relationship {:relationship=>"user"}
@@ -678,9 +677,7 @@
 Rails.application.routes.draw do
   scope '/edge' do
     jsonapi_resources :library_entries
-    jsonapi_resources :anime do
-      get '_languages', to: 'anime#languages'
-    end
+    jsonapi_resources :anime
     jsonapi_resources :manga
     jsonapi_resources :drama
     jsonapi_resources :users
@@ -724,6 +721,7 @@ Rails.application.routes.draw do
     delete '/feeds/:group/:id/activities/:uuid', to: 'feeds#destroy_activity'
     get '/trending/:namespace', to: 'trending#index'
     post '/users/_recover', to: 'users#recover'
+    get '/anime/:anime_id/_languages', to: 'anime#languages'
   end
 
   get '/debug/dump_all', to: 'debug#dump_all'
