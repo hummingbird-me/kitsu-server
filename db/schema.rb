@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117004835) do
+ActiveRecord::Schema.define(version: 20170117232818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -436,6 +436,8 @@ ActiveRecord::Schema.define(version: 20170117004835) do
     t.integer  "user_count",                            default: 0,       null: false
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
+    t.integer  "age_rating"
+    t.string   "age_rating_guide"
   end
 
   create_table "mappings", force: :cascade do |t|
