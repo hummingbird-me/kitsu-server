@@ -21,7 +21,10 @@ class MyAnimeListSyncService
 
       return if mal_media_id_d.nil?
 
-      delete("#{media_type_d}list/#{media_type_d}/#{mal_media_id_d}", linked_account)
+      delete(
+        "#{media_type_d}list/#{media_type_d}/#{mal_media_id_d}",
+        linked_account
+      )
     when 'create/update'
       return if mal_media.nil?
 
@@ -41,7 +44,8 @@ class MyAnimeListSyncService
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating))
-      elsif media_type == 'manga' && (response['id'].nil? || response['read_status'])
+      elsif media_type == 'manga' &&
+            (response['id'].nil? || response['read_status'])
         put("mangalist/manga/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
