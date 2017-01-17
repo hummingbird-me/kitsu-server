@@ -1,0 +1,2 @@
+class MediaRelationshipPolicy < ApplicationPolicy
+end

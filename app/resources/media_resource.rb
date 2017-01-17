@@ -53,6 +53,7 @@ class MediaResource < BaseResource
   has_many :installments
   has_many :mappings
   has_many :reviews
+  has_many :media_relationships
 
   filter :slug, apply: -> (records, value, _options) { records.by_slug(value) }
 
