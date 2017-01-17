@@ -53,6 +53,8 @@ class Anime < ApplicationRecord
 
   enum subtype: %i[TV special OVA ONA movie music]
   has_many :streaming_links, as: 'media', dependent: :destroy
+  has_many :producers, through: :anime_productions
+  has_many :anime_productions
   alias_attribute :show_type, :subtype
 
   update_index('media#anime') { self }

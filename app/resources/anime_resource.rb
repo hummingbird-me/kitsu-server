@@ -5,6 +5,7 @@ class AnimeResource < MediaResource
   attribute :show_type # DEPRECATED
   attribute :nsfw, delegate: :nsfw?
   has_many :streaming_links
+  has_many :anime_productions
 
   # ElasticSearch hookup
   index MediaIndex::Anime
