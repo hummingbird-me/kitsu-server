@@ -276,6 +276,7 @@ GEM
     paperclip-optimizer (2.0.0)
       image_optim (~> 0.19)
       paperclip (>= 3.4)
+    parallel (1.10.0)
     paranoia (2.1.5)
       activerecord (~> 4.0)
     pg (0.18.4)
@@ -501,6 +502,7 @@ DEPENDENCIES
   onebox
   paperclip (~> 5.0)
   paperclip-optimizer
+  parallel
   paranoia (~> 2.0)
   pg
   pry-rails
