@@ -3,7 +3,10 @@ class MyAnimeListListWorker
 
   def perform(user_id)
     kitsu_library(user_id).each do |library_entry_id|
-      MyAnimeListSyncWorker.perform_async(library_entry_id, 'create/update')
+      MyAnimeListSyncWorker.perform_async(
+        library_entry_id: library_entry_id,
+        method: 'create/update'
+      )
     end
   end
 

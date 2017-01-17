@@ -11,31 +11,37 @@ class MyAnimeListSyncService
 
   def execute_method
     # TODO: add errors later on if we can't find mal data
-    return if mal_media.nil?
-
     case method
     when 'delete'
-      delete("#{media_type}list/#{media_type}/#{mal_media_id}", linked_account)
+      media_type_d = library_entry['media_type'].underscore
+      mal_media_id_d = Mapping.find_by(
+        external_site: "myanimelist/#{media_type_d}",
+        media_id: library_entry['media_id']
+      ).external_id
+
+      return if mal_media_id_d.nil?
+
+      delete("#{media_type_d}list/#{media_type_d}/#{mal_media_id_d}", linked_account)
     when 'create/update'
+      return if mal_media.nil?
+
       # find the anime or manga
       # it will raise an error if it fails the http request
       response = get("#{media_type}/#{mal_media_id}#{MINE}", linked_account)
 
       if media_type == 'anime' && response['watched_status']
-        p 'PUT anime'
         put("animelist/anime/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating),
           rewatch_count: library_entry.reconsume_count)
       elsif media_type == 'anime'
-        p 'POST anime'
         post('animelist/anime', linked_account,
           anime_id: mal_media_id,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating))
-      elsif media_type == 'manga' && response['read_status']
+      elsif media_type == 'manga' && (response['id'].nil? || response['read_status'])
         put("mangalist/manga/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
@@ -72,11 +78,10 @@ class MyAnimeListSyncService
   private
 
   def get(url, profile)
-    res = Typhoeus::Request.new(
+    res = Typhoeus::Request.get(
       build_url(url),
-      method: :get,
       userpwd: simple_auth(profile)
-    ).run
+    )
 
     # will raise an error if something is wrong
     # otherwise will return true
@@ -86,12 +91,11 @@ class MyAnimeListSyncService
   end
 
   def post(url, profile, body)
-    res = Typhoeus::Request.new(
+    res = Typhoeus::Request.post(
       build_url(url),
-      method: :post,
       userpwd: simple_auth(profile),
       body: body
-    ).run
+    )
 
     check_response_status(res)
 
@@ -99,9 +103,9 @@ class MyAnimeListSyncService
   end
 
   def put(url, profile, body)
-    p res = Typhoeus::Request.put(
+    res = Typhoeus::Request.put(
       build_url(url),
-      headers: {'Content-Type'=> 'application/x-www-form-urlencoded'},
+      headers: { 'Content-Type' => 'application/x-www-form-urlencoded' },
       userpwd: simple_auth(profile),
       body: body
     )
@@ -112,11 +116,10 @@ class MyAnimeListSyncService
   end
 
   def delete(url, profile)
-    res = Typhoeus::Request.new(
+    res = Typhoeus::Request.delete(
       build_url(url),
-      method: :delete,
       userpwd: simple_auth(profile)
-    ).run
+    )
 
     check_response_status(res)
 
@@ -125,6 +128,9 @@ class MyAnimeListSyncService
 
   def check_response_status(response)
     return true if response.success?
+    # this will happen if you have the score set to 0
+    # once you update the score, this error will stop happening
+    return true if response.code == 500 && media_type == 'manga'
 
     # timed out
     raise 'Request Timed Out' if response.timed_out?
@@ -151,7 +157,7 @@ class MyAnimeListSyncService
   end
 
   def linked_account
-    @profile ||= User.find(library_entry.user_id).linked_accounts.find_by(
+    @profile ||= User.find(library_entry['user_id']).linked_accounts.find_by(
       sync_to: true,
       type: 'LinkedAccount::MyAnimeList'
     )
