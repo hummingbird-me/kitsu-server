@@ -206,22 +206,22 @@ class LibraryEntry < ApplicationRecord
   after_commit :create_or_update_library_entry, on: %i[create update]
 
   def create_or_update_library_entry
-    if sync_to_mal?
-      MyAnimeListSyncWorker.perform_async(
-        library_entry_id: id,
-        method: 'create/update'
-      )
-    end
+    return unless sync_to_mal?
+
+    MyAnimeListSyncWorker.perform_async(
+      library_entry_id: id,
+      method: 'create/update'
+    )
   end
 
   after_destroy do
-    if sync_to_mal?
-      MyAnimeListSyncWorker.perform_async(
-        user_id: user_id,
-        media_id: media_id,
-        media_type: media_type,
-        method: 'delete'
-      )
-    end
+    return unless sync_to_mal?
+
+    MyAnimeListSyncWorker.perform_async(
+      user_id: user_id,
+      media_id: media_id,
+      media_type: media_type,
+      method: 'delete'
+    )
   end
 end
