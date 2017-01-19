@@ -4,12 +4,13 @@ class TrendingService
   NETWORK_LIMIT = 20
   TRIM_PROBABILITY = 0.1
 
-  attr_reader :namespace, :half_life, :user
+  attr_reader :namespace, :half_life, :user, :token
 
-  def initialize(namespace, half_life: 7.days.to_i, user: nil)
+  def initialize(namespace, half_life: 7.days.to_i, user: nil, token: nil)
     @namespace = namespace
     @half_life = half_life
-    @user = user
+    @token = token
+    @user = user || token&.resource_owner
   end
 
   def vote(id, weight = 1.0)
@@ -81,7 +82,8 @@ class TrendingService
 
   def enrich(ids)
     ids = ids.map(&:to_i)
-    instances = namespace.where(id: ids).index_by(&:id)
+    scope = Pundit.policy_scope!(token, namespace)
+    instances = scope.where(id: ids).index_by(&:id)
     ids.collect { |id| instances[id] }.compact
   end
 
