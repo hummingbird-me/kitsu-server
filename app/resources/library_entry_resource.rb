@@ -41,7 +41,7 @@ class LibraryEntryResource < BaseResource
 
   filter :since, apply: ->(records, values, _options) {
     time = values.join.to_time
-    records.where('updated_at >= ?', time)
+    records.where('library_entries.updated_at >= ?', time)
   }
 
   filter :following, apply: ->(records, values, _options) {
