@@ -15,7 +15,7 @@ class TrendingService
 
   def vote(id, weight = 1.0)
     key = trending_key
-    update_score(key, id, change_for(weight))
+    update_score(key, id, weight)
     trim(key, limit: ITEM_LIMIT) if rand < TRIM_PROBABILITY
     if user
       TrendingFanoutWorker.perform_async(namespace, half_life, user&.id, id,
@@ -26,7 +26,7 @@ class TrendingService
   def fanout_vote(id, weight = 1.0)
     followers.each do |uid|
       key = trending_key(uid)
-      update_score(key, id, change_for(weight))
+      update_score(key, id, weight)
       trim(key, limit: NETWORK_LIMIT) if rand < TRIM_PROBABILITY
     end
   end
