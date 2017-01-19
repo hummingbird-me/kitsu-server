@@ -18,7 +18,7 @@ class TrendingController < ApplicationController
   end
 
   def trending_service
-    TrendingService.new(namespace_class, user: user)
+    TrendingService.new(namespace_class, token: doorkeeper_token)
   end
 
   def trending

@@ -4,12 +4,13 @@ class TrendingService
   NETWORK_LIMIT = 20
   TRIM_PROBABILITY = 0.1
 
-  attr_reader :namespace, :half_life, :user
+  attr_reader :namespace, :half_life, :user, :token
 
-  def initialize(namespace, half_life: 7.days.to_i, user: nil)
+  def initialize(namespace, half_life: 7.days.to_i, user: nil, token: nil)
     @namespace = namespace
     @half_life = half_life
-    @user = user
+    @token = token
+    @user = user || token&.resource_owner
   end
 
   def vote(id, weight = 1.0)
@@ -48,13 +49,22 @@ class TrendingService
   private
 
   def results_for(key, limit = 5, offset = 0)
-    start = offset
-    stop = offset + limit - 1
-    results = $redis.with do |conn|
-      conn.zrevrange(key, start, stop)
+    results = []
+    loop.with_index do |_, index|
+      break if index > 5
+      page = raw_results_for(key, limit, offset)
+      results += enrich(page) if enrichable?
+      break if results.count > limit
+      offset += limit
     end
-    results = enrich(results) if enrichable?
-    results
+    results[0...limit]
+  end
+
+  def raw_results_for(key, limit = 5, offset = 0)
+    stop = offset + limit - 1
+    $redis.with do |conn|
+      conn.zrevrange(key, offset, stop)
+    end
   end
 
   def trending_key(uid = nil)
@@ -72,7 +82,7 @@ class TrendingService
   end
 
   def change_for(weight)
-    weight * (2.0**(Time.now.to_i - EPOCH))
+    weight * (2.0**((Time.now.to_i - EPOCH).to_f / half_life))
   end
 
   def followers
@@ -81,7 +91,8 @@ class TrendingService
 
   def enrich(ids)
     ids = ids.map(&:to_i)
-    instances = namespace.where(id: ids).index_by(&:id)
+    scope = Pundit.policy_scope!(token, namespace)
+    instances = scope.where(id: ids).index_by(&:id)
     ids.collect { |id| instances[id] }.compact
   end
 

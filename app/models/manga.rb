@@ -5,6 +5,8 @@
 #
 #  id                        :integer          not null, primary key
 #  abbreviated_titles        :string           is an Array
+#  age_rating                :integer
+#  age_rating_guide          :string
 #  average_rating            :float
 #  canonical_title           :string           default("en_jp"), not null
 #  chapter_count             :integer
@@ -37,6 +39,7 @@
 
 class Manga < ApplicationRecord
   include Media
+  include AgeRatings
 
   enum subtype: %i[manga novel manhua oneshot doujin]
   enum status: %i[not_published publishing finished]

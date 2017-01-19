@@ -44,7 +44,9 @@ class MediaResource < BaseResource
     # Dates
     :start_date, :end_date,
     # Rankings
-    :popularity_rank, :rating_rank
+    :popularity_rank, :rating_rank,
+    # Age Ratings
+    :age_rating, :age_rating_guide
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
