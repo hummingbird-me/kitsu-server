@@ -5,6 +5,7 @@ module UpdateInBatches
       relation = self
       relation = relation.reorder(batch_order).limit(of)
       batch_relation = relation
+      updated_total = 0
 
       loop do
         # Optimization: we only need to know if there's > 1, so we `limit 1`
@@ -13,11 +14,13 @@ module UpdateInBatches
         offset = batch_relation.offset(of - 1).limit(1).pluck(:id)[0]
         # Perform the update and store the update count returned by Postgres
         updated_count = batch_relation.update_all(updates)
+        updated_total += updated_count
         # If it's less than we expect, we've hit the last page
         break if updated_count < of
         # Set up the next batch
         batch_relation = relation.where(table[primary_key].gt(offset))
       end
+      updated_total
     end
 
     private
