@@ -13,47 +13,49 @@ class MyAnimeListSyncService
     # TODO: add errors later on if we can't find mal data
     case method
     when 'delete'
-      media_type_d = library_entry['media_type'].underscore
-      mal_media_id_d = Mapping.find_by(
-        external_site: "myanimelist/#{media_type_d}",
+      mal_media_id = Mapping.find_by(
+        external_site: "myanimelist/#{media_type}",
         media_id: library_entry['media_id']
       ).external_id
 
-      return if mal_media_id_d.nil?
+      return if mal_media_id.nil?
 
       delete(
-        "#{media_type_d}list/#{media_type_d}/#{mal_media_id_d}",
+        "#{media_type}list/#{media_type}/#{mal_media_id}",
         linked_account
       )
     when 'create/update'
-      return if mal_media.nil?
+      return if entry_mal_media.nil?
 
       # find the anime or manga
       # it will raise an error if it fails the http request
-      response = get("#{media_type}/#{mal_media_id}#{MINE}", linked_account)
+      response = get(
+        "#{media_type}/#{entry_mal_media_id}#{MINE}",
+        linked_account
+      )
 
       if media_type == 'anime' && response['watched_status']
-        put("animelist/anime/#{mal_media_id}", linked_account,
+        put("animelist/anime/#{entry_mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating),
           rewatch_count: library_entry.reconsume_count)
       elsif media_type == 'anime'
         post('animelist/anime', linked_account,
-          anime_id: mal_media_id,
+          anime_id: entry_mal_media_id,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating))
       elsif media_type == 'manga' &&
             (response['id'].nil? || response['read_status'])
-        put("mangalist/manga/#{mal_media_id}", linked_account,
+        put("mangalist/manga/#{entry_mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
           score: format_score(library_entry.rating),
           reread_count: library_entry.reconsume_count)
       else # should I use else to catch errors?
         post('mangalist/manga', linked_account,
-          manga_id: mal_media_id,
+          manga_id: entry_mal_media_id,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
           score: format_score(library_entry.rating))
@@ -146,18 +148,18 @@ class MyAnimeListSyncService
 
   def media_type
     # anime or manga
-    @media_type ||= library_entry.media_type.underscore
+    @media_type ||= library_entry['media_type'].underscore
   end
 
-  def mal_media
+  def entry_mal_media
     # convert kitsu data -> mal data
-    @mal_media ||= library_entry.media.mappings.find_by(
+    @entry_mal_media ||= library_entry.media.mappings.find_by(
       external_site: "myanimelist/#{media_type}"
     )
   end
 
-  def mal_media_id
-    mal_media.external_id
+  def entry_mal_media_id
+    entry_mal_media.external_id
   end
 
   def linked_account

@@ -203,9 +203,9 @@ class LibraryEntry < ApplicationRecord
   end
 
   # TODO: will rename this if I think of a better one
-  after_commit :create_or_update_library_entry, on: %i[create update]
+  after_commit :sync_entry_update, on: %i[create update]
 
-  def create_or_update_library_entry
+  def sync_entry_update
     return unless sync_to_mal?
 
     MyAnimeListSyncWorker.perform_async(
