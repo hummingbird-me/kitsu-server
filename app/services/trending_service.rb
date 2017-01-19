@@ -49,13 +49,22 @@ class TrendingService
   private
 
   def results_for(key, limit = 5, offset = 0)
-    start = offset
-    stop = offset + limit - 1
-    results = $redis.with do |conn|
-      conn.zrevrange(key, start, stop)
+    results = []
+    loop.with_index do |_, index|
+      break if index > 5
+      page = raw_results_for(key, limit, offset)
+      results += enrich(page) if enrichable?
+      break if results.count > limit
+      offset += limit
     end
-    results = enrich(results) if enrichable?
-    results
+    results[0...limit]
+  end
+
+  def raw_results_for(key, limit = 5, offset = 0)
+    stop = offset + limit - 1
+    $redis.with do |conn|
+      conn.zrevrange(key, offset, stop)
+    end
   end
 
   def trending_key(uid = nil)
