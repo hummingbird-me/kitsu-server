@@ -82,7 +82,7 @@ class TrendingService
   end
 
   def change_for(weight)
-    weight * (2.0**(Time.now.to_i - EPOCH))
+    weight * (2.0**((Time.now.to_i - EPOCH).to_f / half_life))
   end
 
   def followers
