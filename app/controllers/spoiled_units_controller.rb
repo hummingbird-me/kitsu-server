@@ -1,0 +1,1 @@
+class SpoiledUnitsController < ApplicationController; end

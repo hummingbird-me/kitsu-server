@@ -1,9 +1,8 @@
 module DoorkeeperHelpers
   extend ActiveSupport::Concern
 
-  # Returns the current user
   def current_user
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+    doorkeeper_token
   end
 
   # Return boolean representing whether there is a user signed in
@@ -11,8 +10,20 @@ module DoorkeeperHelpers
     current_user.present?
   end
 
+  # Validate token
+  def validate_token!
+    # If we have a token, but it's not valid, explode
+    if doorkeeper_token && !doorkeeper_token.accessible?
+      render json: {
+        errors: [
+          { title: 'Invalid token', status: "403"}
+        ]
+      }, status: 403
+    end
+  end
+
   # Provide context of current user to JR
   def context
-    { user: current_user, token: doorkeeper_token }
+    { current_user: current_user }
   end
 end

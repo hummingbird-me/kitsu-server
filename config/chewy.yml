@@ -9,6 +9,10 @@ test:
   <<: *default
   prefix: 'test'
 
+staging:
+  <<: *default
+  prefix: 'production'
+
 production:
   <<: *default
   prefix: 'production'

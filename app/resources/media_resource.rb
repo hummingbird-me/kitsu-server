@@ -2,22 +2,37 @@ class MediaResource < BaseResource
   # This regex accepts a numerical range or single number
   # $1 = start, $2 = dot representing closed/open, $3 = end
   NUMBER = /(\d+(?:\.\d+)?)/
-  NUMERIC_RANGE = /\A#{NUMBER}(?:(?:\.\.(\.)?)#{NUMBER})?\z/
+  NUMERIC_RANGE = /\A#{NUMBER}?(\.{2,3})?#{NUMBER}?\z/
   NUMERIC_QUERY = {
-    valid: -> (value, _ctx) { NUMERIC_RANGE.match(value) },
+    valid: -> (value, _ctx) {
+      matches = NUMERIC_RANGE.match(value)
+      # You gotta provide at least *one* number
+      matches && (matches[1].present? || matches[3].present?)
+    },
     apply: -> (values, _ctx) {
       # We only accept the first value
       values.map do |value|
         matches = NUMERIC_RANGE.match(value)
+        inclusive = matches[2] == '..'
 
-        if matches[3] # Range
-          Range.new(matches[1].to_f, matches[3].to_f, matches[2] == '.')
+        if matches[2] # Range
+          if matches[1] && matches[3] # Double-ended
+            Range.new(matches[1].to_f, matches[3].to_f, !inclusive)
+          elsif matches[1] # start...
+            key = inclusive ? 'gte' : 'gt'
+            { range: { '$field' => { key => matches[1] } } }
+          else # ...end
+            key = inclusive ? 'lte' : 'lt'
+            { range: { '$field' => { key => matches[3] } } }
+          end
         else # Scalar
           matches[1]
         end
       end
     }
   }.freeze
+
+  caching
 
   attributes :slug, :synopsis,
     # Cover image location
@@ -27,7 +42,11 @@ class MediaResource < BaseResource
     # Ratings
     :average_rating, :rating_frequencies,
     # Dates
-    :start_date, :end_date
+    :start_date, :end_date,
+    # Rankings
+    :popularity_rank, :rating_rank,
+    # Age Ratings
+    :age_rating, :age_rating_guide
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
@@ -35,6 +54,8 @@ class MediaResource < BaseResource
   has_many :castings
   has_many :installments
   has_many :mappings
+  has_many :reviews
+  has_many :media_relationships
 
   filter :slug, apply: -> (records, value, _options) { records.by_slug(value) }
 
@@ -51,19 +72,28 @@ class MediaResource < BaseResource
     apply: -> (values, _ctx) {
       {
         function_score: {
-          field_value_factor: {
-            field: 'user_count',
-            modifier: 'log1p'
+          script_score: {
+            lang: 'expression',
+            script: "max(log10(doc['user_count'].value), 1) * _score",
           },
           query: {
-            multi_match: {
-              fields: %w[
-                titles.* abbreviated_titles synopsis actors characters
-              ],
-              query: values.join(','),
-              fuzziness: 2,
-              max_expansions: 15,
-              prefix_length: 2
+            bool: {
+              should: [
+                { multi_match: {
+                  fields: %w[
+                    titles.* abbreviated_titles synopsis people characters
+                  ],
+                  query: values.join(' '),
+                  fuzziness: 2,
+                  max_expansions: 15,
+                  prefix_length: 2
+                } },
+                { multi_match: {
+                  fields: %w[titles.* abbreviated_titles],
+                  query: values.join(' '),
+                  boost: 1.2
+                } }
+              ]
             }
           }
         }

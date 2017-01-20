@@ -46,11 +46,12 @@ RSpec.describe ListImport::AnimePlanet do
       .to_return(body: fixture('list_import/anime_planet/sierra-manga.html'))
   end
 
-  it { should validate_presence_of(:input_text) }
-  it { should validate_length_of(:input_text)
-    .is_at_least(3)
-    .is_at_most(20)
-  }
+  describe 'validations' do
+    before { stub_request(:get, %r{.*/anime.*}) }
+
+    it { should validate_presence_of(:input_text) }
+    it { should validate_length_of(:input_text).is_at_least(3).is_at_most(20) }
+  end
 
   context 'with a list' do
     subject do

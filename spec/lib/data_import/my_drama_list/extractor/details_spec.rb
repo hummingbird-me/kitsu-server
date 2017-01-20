@@ -76,12 +76,12 @@ RSpec.describe DataImport::MyDramaList::Extractor::Details do
     end
   end
 
-  describe '#show_type' do
+  describe '#subtype' do
     it 'should return a Symbol' do
-      expect(subject.show_type).to be_a(Symbol)
+      expect(subject.subtype).to be_a(Symbol)
     end
     it 'should return the type' do
-      expect(subject.show_type).to eq(:movie)
+      expect(subject.subtype).to eq(:movie)
     end
   end
 

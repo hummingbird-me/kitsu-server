@@ -5,26 +5,43 @@ module Media
     extend FriendlyId
     include Titleable
     include Rateable
-
-    # HACK: we need to return a relation but want to handle historical slugs
-    scope :by_slug, -> (slug) {
-      record = where(slug: slug)
-      record = where(id: friendly.find(slug).id) if record.empty?
-      record
-    }
+    include Rankable
+    include Trendable
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
-    has_attached_file :cover_image
-    has_attached_file :poster_image
+    has_attached_file :cover_image, styles: {
+      small: ['1680x400#', :jpg],
+      large: ['3360x800#', :jpg]
+    }, convert_options: {
+      small: '-quality 75 -strip',
+      large: '-quality 50 -strip'
+    }
+    has_attached_file :poster_image, styles: {
+      tiny: ['110x156#', :jpg],
+      small: ['284x402#', :jpg],
+      medium: ['390x554#', :jpg],
+      large: ['550x780#', :jpg]
+    }, convert_options: {
+      tiny: '-quality 90 -strip',
+      small: '-quality 75 -strip',
+      medium: '-quality 50 -strip',
+      large: '-quality 40 -strip'
+    }
+
     update_index("media##{name.underscore}") { self }
 
     has_and_belongs_to_many :genres
     has_many :castings, as: 'media'
     has_many :installments, as: 'media'
     has_many :franchises, through: :installments
-    has_many :library_entries, as: 'media', dependent: :destroy
+    has_many :library_entries, as: 'media', dependent: :destroy,
+      inverse_of: :media
     has_many :mappings, as: 'media', dependent: :destroy
+    has_many :reviews, as: 'media', dependent: :destroy
+    has_many :media_relationships, as: 'source', dependent: :destroy
+    has_many :inverse_media_relationships, as: 'destination',
+                                           dependent: :destroy
     delegate :year, to: :start_date, allow_nil: true
 
     validates_attachment :cover_image, content_type: {
@@ -35,6 +52,17 @@ module Media
     }
 
     after_create :follow_self
+  end
+
+  class_methods do
+    # HACK: we need to return a relation but want to handle historical slugs
+    def by_slug(slug)
+      record = where(slug: slug)
+      record = where(id: friendly.find(slug).id) if record.empty?
+      record
+    rescue
+      none
+    end
   end
 
   def slug_candidates

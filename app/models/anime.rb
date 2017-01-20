@@ -17,15 +17,17 @@
 #  end_date                  :date
 #  episode_count             :integer
 #  episode_length            :integer
+#  popularity_rank           :integer
 #  poster_image_content_type :string(255)
 #  poster_image_file_name    :string(255)
 #  poster_image_file_size    :integer
 #  poster_image_updated_at   :datetime
 #  rating_frequencies        :hstore           default({}), not null
-#  show_type                 :integer
+#  rating_rank               :integer
 #  slug                      :string(255)      indexed
 #  start_date                :date
 #  started_airing_date_known :boolean          default(TRUE), not null
+#  subtype                   :integer          default(1), not null
 #  synopsis                  :text             default(""), not null
 #  titles                    :hstore           default({}), not null
 #  user_count                :integer          default(0), not null, indexed
@@ -49,8 +51,11 @@ class Anime < ApplicationRecord
   include AgeRatings
   include Episodic
 
-  enum show_type: %i[TV special OVA ONA movie music]
+  enum subtype: %i[TV special OVA ONA movie music]
   has_many :streaming_links, as: 'media', dependent: :destroy
+  has_many :producers, through: :anime_productions
+  has_many :anime_productions
+  alias_attribute :show_type, :subtype
 
   update_index('media#anime') { self }
 
@@ -60,15 +65,15 @@ class Anime < ApplicationRecord
       -> { canonical_title }, # attack-on-titan
       -> { titles[:en_jp] } # shingeki-no-kyojin
     ]
-    if show_type == :TV
+    if subtype == :TV
       # If it's a TV show with a name collision, common practice is to
       # specify the year (ex: kanon-2006)
       candidates << -> { [titles[:en_jp], year] }
     else
       # If it's not TV and it's having a name collision, it's probably the
       # movie or OVA for a series (ex: shingeki-no-kyojin-movie)
-      candidates << -> { [titles[:en_jp], show_type] }
-      candidates << -> { [titles[:en_jp], show_type, year] }
+      candidates << -> { [titles[:en_jp], subtype] }
+      candidates << -> { [titles[:en_jp], subtype, year] }
     end
     candidates
   end
@@ -79,6 +84,15 @@ class Anime < ApplicationRecord
     when 3, 4, 5 then :spring
     when 6, 7, 8 then :summer
     when 9, 10, 11 then :fall
+    end
+  end
+
+  # Season year is the year, adjusted so that December is part of the next year
+  def season_year
+    if start_date.try(:month) == 12
+      year + 1
+    else
+      year
     end
   end
 

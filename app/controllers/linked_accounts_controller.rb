@@ -1,0 +1,2 @@
+class LinkedAccountsController < ApplicationController
+end

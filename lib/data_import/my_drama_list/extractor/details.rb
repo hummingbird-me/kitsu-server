@@ -18,7 +18,7 @@ module DataImport
           'Hong Kong' => 'zh',
           'Thailand' => 'th'
         }.freeze
-        SHOW_TYPES = {
+        SUBTYPES = {
           'Drama' => :drama,
           'Movie' => :movie,
           'Drama Special' => :special
@@ -62,8 +62,8 @@ module DataImport
           (parts['hr'].to_i * 60) + parts['min'].to_i
         end
 
-        def show_type
-          SHOW_TYPES[details['Type']]
+        def subtype
+          SUBTYPES[details['Type']]
         end
 
         def poster_image
@@ -85,7 +85,7 @@ module DataImport
         def to_h
           %i[
             titles canonical_title abbreviated_titles synopsis episode_count
-            episode_length show_type poster_image start_date end_date country
+            episode_length subtype poster_image start_date end_date country
           ].map { |k| [k, send(k)] }.to_h
         end
 

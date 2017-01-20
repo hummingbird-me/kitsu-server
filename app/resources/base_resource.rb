@@ -4,6 +4,15 @@ class BaseResource < JSONAPI::Resource
   include AuthenticatedResource
   include Pundit::Resource
   include SearchableResource
+  include ResourceInheritance
+
+  def respond_to?(method_name, include_private = false)
+    if method_name.to_s.end_with?('_id')
+      _model.respond_to?(method_name, include_private)
+    else
+      super
+    end
+  end
 
   def self.apply_filter(records, filter, value, options)
     if value == '_none' || (value.is_a?(Array) && value[0] == '_none')

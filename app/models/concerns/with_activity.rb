@@ -2,7 +2,10 @@ module WithActivity
   extend ActiveSupport::Concern
 
   included do
-    after_commit ->(obj) { obj.complete_stream_activity&.update }, on: :update
+    after_commit ->(obj) {
+      real_action = obj.try(:deleted_at).nil? ? :update : :destroy
+      obj.complete_stream_activity.try(real_action)
+    }, on: :update
     after_commit ->(obj) { obj.complete_stream_activity&.create }, on: :create
     after_commit ->(obj) { obj.complete_stream_activity&.destroy }, on: :destroy
   end

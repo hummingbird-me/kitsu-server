@@ -19,7 +19,11 @@
 require 'rails_helper'
 
 RSpec.describe Follow, type: :model do
-  subject { build(:follow) }
+  let(:user_follower) { create(:user) }
+  let(:user_followed) { create(:user) }
+
+  subject { build(:follow, follower: user_follower, followed: user_followed) }
+
   it { should belong_to(:follower).class_name('User')
     .counter_cache(:following_count).touch(true) }
   it { should validate_presence_of(:follower) }

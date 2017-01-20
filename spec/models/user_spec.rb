@@ -15,30 +15,29 @@
 #  bio                         :string(140)      default(""), not null
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
-#  confirmation_sent_at        :datetime
-#  confirmation_token          :string(255)      indexed
 #  confirmed_at                :datetime
+#  country                     :string(2)
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
-#  current_sign_in_ip          :string(255)
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
-#  encrypted_password          :string(255)      default(""), not null
 #  favorites_count             :integer          default(0), not null
+#  feed_completed              :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
 #  gender                      :string
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
+#  ip_addresses                :inet             default([]), is an Array
+#  language                    :string
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
-#  last_sign_in_ip             :string(255)
 #  life_spent_on_anime         :integer          default(0), not null
 #  likes_given_count           :integer          default(0), not null
 #  likes_received_count        :integer          default(0), not null
@@ -46,28 +45,32 @@
 #  mal_username                :string(255)
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
-#  onboarded                   :boolean          default(FALSE), not null
+#  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
+#  previous_email              :string
 #  pro_expires_at              :datetime
+#  profile_completed           :boolean          default(FALSE), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
-#  reset_password_sent_at      :datetime
-#  reset_password_token        :string(255)
+#  reviews_count               :integer          default(0), not null
 #  sfw_filter                  :boolean          default(TRUE)
+#  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
+#  time_zone                   :string
+#  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
-#  unconfirmed_email           :string(255)
 #  waifu_or_husbando           :string(255)
 #  website                     :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  facebook_id                 :string(255)      indexed
+#  pinned_post_id              :integer
 #  pro_membership_plan_id      :integer
 #  stripe_customer_id          :string(255)
 #  twitter_id                  :string
@@ -75,11 +78,14 @@
 #
 # Indexes
 #
-#  index_users_on_confirmation_token  (confirmation_token) UNIQUE
-#  index_users_on_email               (email) UNIQUE
-#  index_users_on_facebook_id         (facebook_id) UNIQUE
-#  index_users_on_to_follow           (to_follow)
-#  index_users_on_waifu_id            (waifu_id)
+#  index_users_on_email        (email) UNIQUE
+#  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_to_follow    (to_follow)
+#  index_users_on_waifu_id     (waifu_id)
+#
+# Foreign Keys
+#
+#  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
 # rubocop:enable Metrics/LineLength
 
@@ -91,7 +97,8 @@ RSpec.describe User, type: :model do
 
   it { should have_db_index(:facebook_id) }
   it { should belong_to(:waifu) }
-  it { should have_many(:linked_profiles) }
+  it { should have_many(:linked_accounts).dependent(:destroy) }
+  it { should have_many(:profile_links).dependent(:destroy) }
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }

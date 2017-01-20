@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Authorization::Assertion::TwitterAuth do
+RSpec.describe Authorization::Assertion::Twitter do
   let(:twitter_auth_response) do
     file_name = 'twitter_auth_response.json'
     open_file(file_name)
@@ -56,7 +56,7 @@ RSpec.describe Authorization::Assertion::TwitterAuth do
         body: twitter_followers_response,
         headers: {}
       )
-    Authorization::Assertion::TwitterAuth.new(
+    Authorization::Assertion::Twitter.new(
       'any token',
       'any token secret'
     )

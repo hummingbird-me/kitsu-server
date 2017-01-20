@@ -9,17 +9,18 @@ class ListImport
       end
 
       def media
+        return @media if @media
         key = "#{type}/#{media_info[:id]}"
 
-        Mapping.lookup('animeplanet', key) ||
-          Mapping.guess(type.classify.safe_constantize, media_info)
+        @media = Mapping.lookup('animeplanet', key) ||
+                 Mapping.guess(type.classify.safe_constantize, media_info)
       end
 
       def media_info
         {
           id: node.attr('data-id')&.to_i,
           title: media_title,
-          show_type: show_type,
+          subtype: subtype,
           episode_count: total_episodes,
           chapter_count: total_chapters
         }.compact
@@ -29,12 +30,12 @@ class ListImport
         @status ||= media_status
 
         case @status
-        when /ing\z/ then :current
-        when /\AWant/ then :planned
-        when /\AWon't/ then nil
-        when 'Stalled' then :on_hold
-        when 'Dropped' then :dropped
-        when 'Watched', /Read([0-9.]+)?/ then :completed
+        when 'status1' then :completed
+        when 'status2' then :current
+        when 'status3' then :dropped
+        when 'status4' then :planned
+        when 'status5' then :on_hold
+        when 'status6' then nil
         end
       end
 
@@ -51,7 +52,7 @@ class ListImport
       end
 
       def rating
-        tooltip.css('.ttRating')&.last&.text&.to_f
+        node.css('.ttRating')&.last&.text&.to_f
       end
 
       def reconsume_count
@@ -72,9 +73,9 @@ class ListImport
       end
 
       def data
-        %i[status progress rating reconsume_count volumes].map { |k|
+        %i[status progress rating reconsume_count].map { |k|
           [k, send(k)]
-        }.to_h
+        }.to_h.compact
       end
 
       private
@@ -90,7 +91,7 @@ class ListImport
         tooltip.at_css('h5')&.text
       end
 
-      def show_type
+      def subtype
         return if type == 'manga'
 
         episodes = tooltip.at_css('.entryBar .type').text
@@ -103,8 +104,7 @@ class ListImport
 
         episodes = tooltip.at_css('.entryBar .type').text
 
-        episodes.match(/\d+/)[0].to_i
-        # episodes&.split(' (')&.last&.gsub(/(ep?s)+/, '')&.to_i
+        episodes.match(/\d+/).try(:[], 0).to_i
       end
 
       def total_chapters
@@ -112,10 +112,7 @@ class ListImport
 
         chapters = tooltip.at_css('.entryBar .iconVol').text
 
-        chapters.match(/Ch:(\s\d+)/)[1].to_i
-      rescue NameError
-        # regex returned nil
-        0
+        chapters.match(/Ch:(\s\d+)/).try(:[], 1).to_i
       end
 
       def total_volumes
@@ -126,11 +123,7 @@ class ListImport
 
       # Status
       def media_status
-        status = tooltip.at_css('.myListBar').xpath('./text()').to_s.strip
-
-        return status unless status.include?('-')
-
-        status.split('-').first.strip
+        node.at_css('.statusArea [class^=status]')['class']
       end
 
       # Progress

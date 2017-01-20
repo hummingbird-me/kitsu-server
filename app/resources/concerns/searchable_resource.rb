@@ -52,7 +52,7 @@ module SearchableResource
       return [] if filters.values.any?(&:nil?)
 
       # Apply scopes and load
-      apply_scopes(filters, opts).load
+      apply_scopes(filters, opts).load.to_a
     end
 
     # Count all search results
@@ -78,9 +78,21 @@ module SearchableResource
 
     private
 
+    def pluck_arel_attributes(relation, *attrs)
+      if relation.is_a?(Chewy::Query)
+        attr_names = attrs.map { |a| a.name.to_s }
+        relation = relation.only(*attr_names)
+        relation.map { |row| row.attributes.values_at(*attr_names) }
+      elsif relation.is_a?(Array)
+        attr_names = attrs.map { |a| a.name.to_s }
+        relation.map { |row| row.attributes.values_at(*attr_names) }
+      else
+        super
+      end
+    end
+
     def apply_scopes(filters, opts = {})
-      # TODO: actually apply policy somehow
-      opts[:context][:policy_used]&.call
+      context = opts[:context]
       # Generate query
       query = generate_query(filters)
       query = query.reduce(@chewy_index) do |scope, subquery|
@@ -97,7 +109,13 @@ module SearchableResource
       else
         query = query.order('_score' => :desc)
       end
+      query = search_policy_scope.new(context[:current_user], query).resolve
+      context[:policy_used]&.call
       query
+    end
+
+    def search_policy_scope
+      Pundit::PolicyFinder.new(_model_class.new).scope!
     end
 
     def generate_query(filters)
@@ -128,6 +146,8 @@ module SearchableResource
           matchers = value.map { |v| auto_query(field, v) }
           { bool: { should: matchers } }
         end
+      when Hash
+        value.deep_transform_keys { |key| key.to_s == '$field' ? field : key }
       else
         value
       end

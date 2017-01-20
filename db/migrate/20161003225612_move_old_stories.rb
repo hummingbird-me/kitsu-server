@@ -12,12 +12,12 @@ class MoveOldStories < ActiveRecord::Migration
     belongs_to :target, polymorphic: true
     belongs_to :story
     has_many :notifications, as: :source
-    enum substory_type: %i[followed watchlist_status_update comment reply
-                           watched_episode]
+    enum substory_type: %i[followed watchlist_status_update comment
+                           watched_episode reply]
   end
 
   def change
-    ### Add some columns we forgoet (oops)
+    ### Add some columns we forgot (oops)
     # For paranoia
     add_column :posts, :deleted_at, :datetime, index: true
     add_column :comments, :deleted_at, :datetime, index: true
@@ -40,66 +40,45 @@ class MoveOldStories < ActiveRecord::Migration
     # Text: User A --> User B
     execute <<-SQL.squish
       INSERT INTO posts (
-        id, target_group_id, user_id, content, content_formatted, created_at,
+        id, target_user_id, user_id, content, content_formatted, created_at,
         updated_at, deleted_at
       ) SELECT
         stories.id,
-        stories.user_id AS target_group_id,
+        stories.user_id AS target_user_id,
         stories.target_id AS user_id,
         coalesce(substories.data->'comment', '') AS content,
         coalesce(substories.data->'formatted_comment', '') AS content_formatted,
         stories.created_at,
         stories.updated_at,
         stories.deleted_at
-      FROM stories
-      JOIN substories
+      FROM substories
+      JOIN stories
         ON stories.id = substories.story_id
-        AND substories.substory_type = #{Substory.substory_types[:comment]}
-      WHERE story_type = 'comment'
+      WHERE substories.substory_type = #{Substory.substory_types[:comment]}
         AND stories.target_type = 'User'
+        AND stories.target_id != stories.user_id
+        AND stories.group_id IS NULL
     SQL
     # Text: User A
     execute <<-SQL.squish
       INSERT INTO posts (
-        id, user_id, content, content_formatted, created_at, updated_at,
-        deleted_at
+        id, user_id, target_group_id, content, content_formatted, created_at,
+        updated_at, deleted_at
       ) SELECT
         stories.id,
         stories.user_id,
+        stories.group_id AS target_group_id,
         coalesce(substories.data->'comment', '') AS content,
         coalesce(substories.data->'formatted_comment', '') AS content_formatted,
         stories.created_at,
         stories.updated_at,
         stories.deleted_at
-      FROM stories
-      JOIN substories
-        ON substories.id = substories.story_id
-        AND substories.substory_type = #{Substory.substory_types[:comment]}
-      WHERE story_type = 'comment'
-        AND stories.target_type != 'User'
-    SQL
-
-    # Replies
-    execute <<-SQL.squish
-      INSERT INTO comments (
-        id, user_id, content, content_formatted, created_at, updated_at,
-        deleted_at, post_id
-      ) SELECT
-        comment.id,
-        comment.user_id,
-        coalesce(comment.data->'reply', '') AS content,
-        coalesce(comment.data->'reply', '') AS content_formatted,
-        comment.created_at,
-        comment.updated_at,
-        comment.deleted_at,
-        post.id AS post_id
-      FROM substories comment
+      FROM substories
       JOIN stories
-        ON comment.story_id = stories.id
-      JOIN substories post
-        ON post.story_id = stories.id
-        AND post.substory_type = #{Substory.substory_types[:comment]}
-      WHERE comment.substory_type = #{Substory.substory_types[:reply]}
+        ON stories.id = substories.story_id
+      WHERE substories.substory_type = #{Substory.substory_types[:comment]}
+        AND stories.target_type = 'User'
+        AND stories.target_id = stories.user_id
     SQL
 
     # Likes
@@ -110,9 +89,7 @@ class MoveOldStories < ActiveRecord::Migration
       WHERE target_type = 'Story'
     SQL
 
-    # And now, fix the counters
-    %w[comments posts].each do |table|
-      execute "SELECT setval('#{table}_id_seq', (SELECT MAX(id) FROM #{table}))"
-    end
+    # And now, fix the counter
+    execute "SELECT setval('posts_id_seq', (SELECT MAX(id) FROM posts))"
   end
 end

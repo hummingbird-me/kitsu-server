@@ -34,6 +34,7 @@ class Character < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png]
   }
   validates :name, presence: true
+  validates :primary_media, polymorphism: { type: Media }, allow_blank: true
 
   belongs_to :primary_media, polymorphic: true
   has_many :castings

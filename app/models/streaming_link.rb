@@ -27,6 +27,7 @@ class StreamingLink < ApplicationRecord
   belongs_to :streamer
 
   validates :media, :streamer, :url, :subs, :dubs, presence: true
+  validates :media, polymorphism: { type: Media }
 
   scope :dubbed, -> (langs) { where('dubs @> ARRAY[?]::varchar[]', langs) }
   scope :subbed, -> (langs) { where('subs @> ARRAY[?]::varchar[]', langs) }

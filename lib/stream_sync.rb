@@ -32,8 +32,6 @@ module StreamSync
     end
   end
 
-  private
-
   def mass_follow(name, list, &map_block)
     puts "#{name}:"
     print " => generating"

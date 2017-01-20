@@ -50,20 +50,40 @@ class ListImport < ApplicationRecord
 
   # Apply the ListImport
   def apply
-    fail 'No each method defined' unless respond_to? :each
+    raise 'No each method defined' unless respond_to? :each
 
-    yield({ status: :running, total: count, current: 0 })
-    LibraryEntry.transaction do
-      each_with_index do |(media, data), index|
-        entry = LibraryEntry.where(user: user, media: media).first_or_create
-        merged_entry(entry, data).save!
-        yield({ status: :running, total: count, current: index + 1 })
+    # Send info to Sentry
+    Raven.user_context(id: user.id, email: user.email, username: user.name)
+    Raven.extra_context(
+      input_text: input_text.to_s,
+      input_file: input_file.to_s
+    )
+
+    # Last-ditch check for validity
+    raise 'Import is invalid' unless valid?
+
+    yield({ status: :running, total: count, progress: 0 })
+    Chewy.strategy(:atomic) do
+      LibraryEntry.transaction do
+        each_with_index do |(media, data), index|
+          next unless media.present?
+          # Cap the progress
+          limit = media.progress_limit || media.default_progress_limit
+          data[:progress] = [data[:progress], limit].compact.min
+          # Merge the library entries
+          le = LibraryEntry.where(user: user, media: media).first_or_initialize
+          le.imported = true
+          le = merged_entry(le, data)
+          le.save! unless le.status == nil
+          yield({ status: :running, total: count, progress: index + 1 })
+        end
       end
     end
-    yield({ status: :completed, total: count, current: count })
+    yield({ status: :completed, total: count, progress: count })
   rescue StandardError => e
+    Raven.capture_exception(e)
     yield({
-      status: :error,
+      status: :failed,
       total: count,
       error_message: e.message,
       error_trace: e.backtrace.join("\n")
@@ -74,7 +94,7 @@ class ListImport < ApplicationRecord
   def apply!(frequency: 20)
     apply do |info|
       # Apply every [frequency] updates unless the status is not :running
-      if info[:status] != :running || info[:current] % frequency == 0
+      if info[:status] != :running || (info[:progress] % frequency).zero?
         update info
         yield info if block_given?
       end
@@ -89,7 +109,7 @@ class ListImport < ApplicationRecord
       ours = [entry.reconsume_count || 0, entry.progress || 0]
 
       # -1 if ours, 1 if theirs
-      entry.assign_attributes(data) if (theirs <=> ours).positive?
+      entry.assign_attributes(data) unless (theirs <=> ours).negative?
     when :obliterate
       entry.assign_attributes(data)
     end
@@ -97,7 +117,13 @@ class ListImport < ApplicationRecord
   end
 
   def stream_activity
-    user.notifications.activities.new(status: status) if failed? || completed?
+    if failed? || completed?
+      user.notifications.activities.new(
+        verb: 'imported',
+        kind: self.class.name,
+        status: status
+      )
+    end
   end
 
   after_create do

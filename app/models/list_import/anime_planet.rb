@@ -33,11 +33,22 @@ class ListImport
     }, presence: true
     # does not accept file uploads
     validates :input_file, absence: true
+    validate :ensure_user_exists, on: :create
+
+    def ensure_user_exists
+      return if input_text.blank?
+      request = Typhoeus::Request.get(build_url("#{input_text}/anime", 1))
+      case request.code
+      when 404
+        errors.add(:input_text, 'Anime-Planet user not found')
+      end
+    end
 
     def count
-      %w[anime manga].map { |type|
-        get("#{input_text}/#{type}").css('.pagination + p')
-                                    .children.first.text.to_i
+      @count ||= %w[anime manga].map { |type|
+        page = get("#{input_text}/#{type}")
+        return 0 if page.css('h3:contains("doesn\'t have")').present?
+        page.css('.pagination + p').children.first.text.to_i
       }.inject(&:+)
     end
 

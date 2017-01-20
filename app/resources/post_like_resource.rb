@@ -1,4 +1,6 @@
 class PostLikeResource < BaseResource
+  caching
+
   has_one :post
   has_one :user
 

@@ -75,3 +75,7 @@ Doorkeeper.configure do
   # WWW-Authenticate Realm
   realm 'Kitsu'
 end
+
+Doorkeeper::AccessToken.class_eval do
+  belongs_to :resource_owner, class_name: 'User'
+end

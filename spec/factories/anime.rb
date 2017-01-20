@@ -17,15 +17,17 @@
 #  end_date                  :date
 #  episode_count             :integer
 #  episode_length            :integer
+#  popularity_rank           :integer
 #  poster_image_content_type :string(255)
 #  poster_image_file_name    :string(255)
 #  poster_image_file_size    :integer
 #  poster_image_updated_at   :datetime
 #  rating_frequencies        :hstore           default({}), not null
-#  show_type                 :integer
+#  rating_rank               :integer
 #  slug                      :string(255)      indexed
 #  start_date                :date
 #  started_airing_date_known :boolean          default(TRUE), not null
+#  subtype                   :integer          default(1), not null
 #  synopsis                  :text             default(""), not null
 #  titles                    :hstore           default({}), not null
 #  user_count                :integer          default(0), not null, indexed
@@ -47,7 +49,7 @@ FactoryGirl.define do
     titles { { en_jp: Faker::Name.name } }
     canonical_title 'en_jp'
     average_rating { rand(1.0..10.0) / 2 }
-    show_type { Anime.show_types.keys.sample }
+    subtype { Anime.subtypes.keys.sample }
     age_rating 'G'
 
     trait :nsfw do

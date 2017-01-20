@@ -1,3 +1,5 @@
 ApplicationController.class_eval do
-  skip_before_action :ensure_correct_media_type
+  def verify_content_type_header
+    true
+  end
 end

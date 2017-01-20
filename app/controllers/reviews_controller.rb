@@ -1,0 +1,1 @@
+class ReviewsController < ApplicationController; end

@@ -1,5 +1,14 @@
 class MediaIndex < Chewy::Index
   class << self
+    def sfw
+      safe_ratings = AgeRatings::SAFE_AGE_RATINGS.map(&:downcase)
+      age_ratings = AgeRatings::AGE_RATINGS.map(&:to_s).map(&:downcase)
+      unsafe_ratings = age_ratings - safe_ratings
+      filter do
+        age_rating(:or) != unsafe_ratings
+      end
+    end
+
     # Convert from [[id, name], ...] to id => [names...]
     def groupify(plucks)
       plucks.each.with_object({}) do |(id, name), out|
@@ -39,25 +48,27 @@ class MediaIndex < Chewy::Index
     root date_detection: false do
       include IndexTranslatable
 
+      field :updated_at
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
       field :synopsis, type: 'string', analyzer: 'english'
       # Enumerated values
-      field :age_rating, :show_type, type: 'string'
+      field :age_rating, :subtype, type: 'string'
       # Various Data
       field :episode_count, type: 'short' # Max of 32k or so is reasonable
       field :average_rating, type: 'float'
       field :start_date, :end_date, :created_at, type: 'date'
       field :season, type: 'string'
       field :year, type: 'short' # Update this before year 32,000
-      field :genres, value: -> (a) { a.genres.map(&:name) }
+      field :season_year, type: 'short' # ^
+      field :genres, value: ->(a) { a.genres.map(&:name) }
       field :user_count, type: 'integer'
       # Castings
-      field :people, value: -> (a, crutch) { crutch.people[a.id] }
-      field :characters, value: -> (a, crutch) { crutch.characters[a.id] }
+      field :people, value: ->(a, crutch) { crutch.people[a.id] }
+      field :characters, value: ->(a, crutch) { crutch.characters[a.id] }
       # Where to watch
-      field :streamers, value: -> (a, crutch) { crutch.streamers[a.id] }
+      field :streamers, value: ->(a, crutch) { crutch.streamers[a.id] }
     end
   end
 
@@ -68,22 +79,23 @@ class MediaIndex < Chewy::Index
     root date_detection: false do
       include IndexTranslatable
 
+      field :updated_at
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
       field :synopsis, type: 'string', analyzer: 'english'
       # Enumerated values
-      field :manga_type, type: 'string'
+      field :age_rating, :subtype, type: 'string'
       # Various Data
       field :chapter_count, type: 'integer' # Manga run for a really long time
       field :average_rating, type: 'float'
       field :start_date, :end_date, :created_at, type: 'date'
       field :year, type: 'short' # Update this before year 32,000
-      field :genres, value: -> (a) { a.genres.map(&:name) }
+      field :genres, value: ->(a) { a.genres.map(&:name) }
       field :user_count, type: 'integer'
       # Castings
-      field :people, value: -> (a, crutch) { crutch.people[a.id] }
-      field :characters, value: -> (a, crutch) { crutch.characters[a.id] }
+      field :people, value: ->(a, crutch) { crutch.people[a.id] }
+      field :characters, value: ->(a, crutch) { crutch.characters[a.id] }
     end
   end
 
@@ -99,24 +111,25 @@ class MediaIndex < Chewy::Index
     root date_detection: false do
       include IndexTranslatable
 
+      field :updated_at
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
       field :synopsis, type: 'string', analyzer: 'english'
       # Enumerated values
-      field :age_rating, :show_type, type: 'string'
+      field :age_rating, :subtype, type: 'string'
       # Various Data
       field :episode_count, type: 'short' # Max of 32k or so is reasonable
       field :average_rating, type: 'float'
       field :start_date, :end_date, :created_at, type: 'date'
       field :year, type: 'short' # Update this before year 32,000
-      field :genres, value: -> (a) { a.genres.map(&:name) }
+      field :genres, value: ->(a) { a.genres.map(&:name) }
       field :user_count, type: 'integer'
       # Castings
-      field :people, value: -> (a, crutch) { crutch.people[a.id] }
-      field :characters, value: -> (a, crutch) { crutch.characters[a.id] }
+      field :people, value: ->(a, crutch) { crutch.people[a.id] }
+      field :characters, value: ->(a, crutch) { crutch.characters[a.id] }
       # Where to watch
-      field :streamers, value: -> (a, crutch) { crutch.streamers[a.id] }
+      field :streamers, value: ->(a, crutch) { crutch.streamers[a.id] }
     end
   end
 end

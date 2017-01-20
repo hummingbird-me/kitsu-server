@@ -20,12 +20,22 @@ namespace :stream do
   namespace :dump do
     desc 'Dump posts in the mass import format for Stream'
     task :posts => :environment do
-      StreamDump.posts.each { |instr| puts instr.to_json }
+      StreamDump.posts.each { |instr| STDOUT.puts instr.to_json }
     end
 
     desc 'Dump all stories in the mass import format for Stream'
     task :stories => :environment do
-      StreamDump.stories.each { |instr| puts instr.to_json }
+      StreamDump.stories.each { |instr| STDOUT.puts instr.to_json }
+    end
+
+    desc 'Dump automatic follows'
+    task :auto_follows => :environment do
+      StreamDump.auto_follows.each { |instr| STDOUT.puts instr.to_json }
+    end
+
+    desc 'Dump follows'
+    task :follows => :environment do
+      StreamDump.follows.each { |instr| STDOUT.puts instr.to_json }
     end
   end
 end

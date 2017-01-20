@@ -21,7 +21,8 @@ class Installment < ApplicationRecord
   acts_as_list
 
   validates :tag, length: { maximum: 40 }
+  validates :media, polymorphism: { type: Media }
 
-  belongs_to :franchise
-  belongs_to :media, polymorphic: true
+  belongs_to :franchise, required: true
+  belongs_to :media, polymorphic: true, required: true
 end

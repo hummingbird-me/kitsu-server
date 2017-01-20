@@ -24,43 +24,58 @@
 
 class ListImport
   class MyAnimeList < ListImport
-    # We can only accept files as input right now, not usernames
-    validates :input_text, absence: true
-    # Accept .gz or .xml.gz
-    validates_attachment :input_file, content_type: {
-      content_type: %w[application/gzip application/xml]
-    }, presence: true
+    MAL_HOST = 'https://myanimelist.net'.freeze
+
+    # Only accept usernames, not XML exports
+    validates :input_text, presence: true
+    validates :input_file, absence: true
+    validate :ensure_list_is_public, on: :create
 
     def count
-      xml.css('user_total_anime, user_total_manga').map(&:content).map(&:to_i).
-        sum
+      data.length
+    end
+
+    def ensure_list_is_public
+      %w[anime manga].each do |kind|
+        request = Typhoeus::Request.get("#{MAL_HOST}/#{kind}list/#{input_text}")
+        case request.code
+        when 403
+          errors.add(:input_text, "Your MyAnimeList #{kind} list must be public to import")
+        when 404
+          errors.add(:input_text, 'MyAnimeList user not found')
+        end
+      end
     end
 
     def each
-      xml.css('anime, manga').each do |media|
-        row = Row.new(media)
+      data.each do |row|
+        row = Row.new(row)
         yield row.media, row.data
       end
     end
 
     private
 
-    def gzipped?
-      input_file.content_type.include? 'gzip'
+    def data
+      @data ||= %w[animelist mangalist].map { |l| list(l) }.reduce(&:+)
     end
 
-    def xml
-      return @xml if @xml
+    def list(list)
+      loop.with_index.reduce([]) do |data, (_, index)|
+        page = get(list, index)
+        break data if page.blank?
+        data + page
+      end
+    end
 
-      data = open(input_file.path)
-      data = Zlib::GzipReader.new(data) if gzipped?         # Unzip
-      data = data.read
-      # We can't fix Xinil, but we can fix his mess.
-      data.scrub!                                           # Scrub encoding
-      data.gsub!(/&(?!(?:amp|lt|gt|quot|apos);)/, '&amp;')  # Fix escaping
+    def get(list, page)
+      request = Typhoeus::Request.get(build_url(list, page))
+      JSON.parse(request.body)
+    end
 
-      @xml = Nokogiri::XML(data)
-      @xml
+    def build_url(list, page)
+      offset = page * 300
+      "#{MAL_HOST}/#{list}/#{input_text}/load.json?offset=#{offset}&status=7"
     end
   end
 end

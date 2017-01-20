@@ -13,6 +13,7 @@ class CleanAnimeMore < ActiveRecord::Migration
       WHEN 'ONA' THEN 4
       WHEN 'Movie' THEN 5
       WHEN 'Music' THEN 6
+      ELSE 1
       END
     )"
     # Migrate jp_title into hstore

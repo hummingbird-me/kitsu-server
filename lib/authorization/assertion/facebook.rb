@@ -25,19 +25,20 @@ module Authorization
       end
 
       def user!
-        User.where(facebook_id: @user_data['id']).first if @user_data.present?
+        return if @user_data.blank? || @user_data['id'].blank?
+        User.where(facebook_id: @user_data['id']).first
       end
 
       def import_friends
-        return unless @user_data.present?
         user = user!
-        @user_data['friends']['data'].each do |friend|
+        return unless user.present?
+        @user_data['friends']['data'].map do |friend|
           followed = User.where(facebook_id: friend['id']).first
           Follow.find_or_create_by(
             follower: user,
             followed: followed
           ) if followed.present?
-        end
+        end.compact
       end
     end
   end

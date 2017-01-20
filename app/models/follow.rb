@@ -20,9 +20,11 @@ class Follow < ApplicationRecord
   include WithActivity
 
   belongs_to :follower, class_name: 'User', required: true,
-    counter_cache: :following_count, touch: true
+                        counter_cache: :following_count, touch: true
   belongs_to :followed, class_name: 'User', required: true,
-    counter_cache: :followers_count, touch: true
+                        counter_cache: :followers_count, touch: true
+
+  validates :followed, uniqueness: { scope: :follower_id }
 
   def stream_activity
     follower.aggregated_feed.activities.new(
@@ -44,4 +46,6 @@ class Follow < ApplicationRecord
   after_destroy do
     follower.timeline.unfollow(followed.feed)
   end
+
+  after_create { follower.update_feed_completed! }
 end

@@ -26,9 +26,14 @@ class CommentLike < ApplicationRecord
   include WithActivity
 
   belongs_to :user, required: true
-  belongs_to :comment, required: true, counter_cache: :likes_count
+  belongs_to :comment, required: true, counter_cache: :likes_count, touch: true
+
+  validates :comment, uniqueness: { scope: :user_id }
 
   def stream_activity
-    comment.post.feed.activities.new
+    comment.post.feed.activities.new(
+      target: comment,
+      to: [comment.user.notifications]
+    )
   end
 end

@@ -18,6 +18,14 @@ class Feed
       json.compact
     end
 
+    def sfw?
+      !nsfw?
+    end
+
+    def nsfw?
+      nsfw
+    end
+
     def subject
       object
     end

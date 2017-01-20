@@ -1,0 +1,1 @@
+class ProducersController < ApplicationController; end

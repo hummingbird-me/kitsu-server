@@ -10,5 +10,19 @@ class Feed
       end
       super(data)
     end
+
+    def empty?
+      return true if activities.nil?
+      activities.empty?
+    end
+    alias_method :blank?, :empty?
+
+    def sfw?
+      activities.all?(&:sfw?)
+    end
+
+    def nsfw?
+      !sfw?
+    end
   end
 end

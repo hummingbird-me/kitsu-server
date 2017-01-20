@@ -2,14 +2,26 @@ class PostPolicy < ApplicationPolicy
   def update?
     return true if is_admin?
     return false if record.created_at&.<(30.minutes.ago)
-    record.user == user
+    is_owner?
   end
 
   def create?
-    record.user == user
+    return false if user&.blocked?(record.target_user)
+    return false if user&.has_role?(:banned)
+    is_owner?
   end
 
   def destroy?
-    record.user == user || is_admin?
+    is_owner? || is_admin?
+  end
+
+  def editable_attributes(all)
+    all - [:content_formatted]
+  end
+
+  class Scope < Scope
+    def resolve
+      scope.where.not(user_id: blocked_users)
+    end
   end
 end

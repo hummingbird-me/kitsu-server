@@ -1,7 +1,12 @@
 class BlockPolicy < ApplicationPolicy
-  def update?
+  def create?
     record.user == user
   end
-  alias_method :create?, :update?
-  alias_method :destroy?, :update?
+  alias_method :destroy?, :create?
+
+  class Scope < Scope
+    def resolve
+      scope.where(user: user)
+    end
+  end
 end

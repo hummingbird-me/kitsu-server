@@ -41,9 +41,6 @@ RSpec.describe Feed::ActivityList, type: :model do
     it 'should set the limit in the query' do
       expect(subject.data[:limit]).to eq(20)
     end
-    it 'should not mutate the original instance' do
-      expect(list.data[:limit]).to be_nil
-    end
   end
 
   describe '#offset' do
@@ -51,18 +48,12 @@ RSpec.describe Feed::ActivityList, type: :model do
     it 'should set the offset in the query' do
       expect(subject.data[:offset]).to eq(20)
     end
-    it 'should not mutate the original instance' do
-      expect(list.data[:offset]).to be_nil
-    end
   end
 
   describe '#ranking' do
     subject { list.ranking('cool_ranking') }
     it 'should set the ranking in the query' do
       expect(subject.data[:ranking]).to eq('cool_ranking')
-    end
-    it 'should not mutate the original instance' do
-      expect(list.data[:ranking]).to be_nil
     end
   end
 
@@ -75,7 +66,8 @@ RSpec.describe Feed::ActivityList, type: :model do
   describe '#add' do
     let(:activity) { Feed::Activity.new(subject) }
     it 'should tell Stream to add the activity by JSON' do
-      expect(subject.feed.stream_feed).to receive(:add_activity).with(Hash).once
+      expect(subject.feed.stream_feed).to receive(:add_activity)
+        .with(Hash).once.and_return({})
       subject.add(activity)
     end
   end
@@ -110,36 +102,63 @@ RSpec.describe Feed::ActivityList, type: :model do
         subject.destroy(activity)
       end
     end
+
+    context 'with uuid' do
+      it 'should tell Stream to remove the activity' do
+        activity = list.new(
+          actor: 'User:1',
+          object: 'Object:1',
+          verb: 'test'
+        ).create
+        expect(subject.feed.stream_feed).to receive(:remove_activity)
+          .with(activity.id)
+        subject.destroy(activity.id, uuid: true)
+      end
+    end
+  end
+
+  describe '#find' do
+    it 'should return a single Activity' do
+      act = list.new(
+        actor: 'User:1',
+        object: 'Object:1',
+        verb: 'test'
+      ).create
+      expect(list.find(act.id)).to eq(act)
+    end
   end
 
   describe '#to_a' do
     subject { list.limit(50) }
+
     it 'should get the activities using the query and read the results' do
       expect(subject.feed.stream_feed).to receive(:get).with(limit: 50)
-        .and_return({'results' => []})
+        .at_least(:once).and_return('results' => [])
       expect(subject.to_a).to eq([])
     end
+
     context 'for an aggregated feed' do
       subject { Feed::ActivityList.new(Feed.new('user_aggr', '1')) }
       it 'should return an Array of ActivityGroup instances' do
-        expect(subject.feed.stream_feed).to receive(:get).and_return({
-          'results' => [
-            {
-              'activities' => [{}]
-            }, {
-              'activities' => [{}]
-            }
-          ]
-        })
+        expect(subject.feed.stream_feed).to receive(:get).at_least(:once)
+          .and_return(
+            'results' => [
+              {
+                'activities' => [{}]
+              }, {
+                'activities' => [{}]
+              }
+            ]
+          )
         expect(subject.to_a).to all(be_a(Feed::ActivityGroup))
       end
     end
+
     context 'for a flat feed' do
       subject { Feed::ActivityList.new(Feed.new('user', '1')) }
       it 'should return an Array of Activity instances' do
-        expect(subject.feed.stream_feed).to receive(:get).and_return({
-          'results' => [{}, {}]
-        })
+        expect(subject.feed.stream_feed).to receive(:get).at_least(:once)
+          .and_return('results' => [{}, {}])
         expect(subject.to_a).to all(be_a(Feed::Activity))
       end
     end

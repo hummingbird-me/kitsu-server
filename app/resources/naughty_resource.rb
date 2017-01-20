@@ -1,0 +1,1 @@
+class NaughtyResource < BaseResource; end
