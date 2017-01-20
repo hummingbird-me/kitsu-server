@@ -1,7 +1,7 @@
-MAL_DUMP_DIRECTORY = ENV['MAL_DUMP_DIRECTORY']
-
 class MalAnimeDump
   class DumpFile
+    attr_reader :data
+
     def initialize(filename)
       @data = JSON.parse(open(filename).read).deep_symbolize_keys
     end
@@ -15,44 +15,121 @@ class MalAnimeDump
     end
 
     def producers
-      data[:producers].map { |pro| Producer.where(name: pro).first_or_create }
+      %i[producer licensor studio].map { |role|
+        key = role.to_s.pluralize.to_sym
+        data[key].map do |producer_name|
+          producer = Producer.where(name: producer_name).first_or_initialize
+          production = anime.anime_productions.where(producer: producer)
+                            .first_or_initialize
+          production.role = role
+          production
+        end
+      }.flatten
     end
 
-    def licensors
-      data[:licensors].map { |pro| Producer.where(name: pro).first_or_create }
+    def genres
+      Genre.where(name: data[:genres])
     end
 
-    def studios
-      data[:studios].map { |pro| Producer.where(name: pro).first_or_create }
-    end
+    def age_rating
+      return [nil, nil] unless data['classification']
+      rating, reason = data['classification'].split(' - ')
 
-    def productions
-
-      pro = anime.anime_productions.create(producer: )
+      rating = case rating[0]
+               when 'G', 'TV-Y7' then :G
+               when 'PG', 'PG13', 'PG-13' then :PG
+               when 'R', 'R+' then :R
+               when 'Rx' then :R18
+               end
+      [rating, reason]
     end
 
     def anime
-      return @anime if @anime
-      @anime = Mapping.lookup('myanimelist', "anime/#{mal_id}") ||
-               Mapping.guess('Anime', info) ||
-               Anime.new
-      @anime.mappings.create(external_site: 'myanimelist',
-                             external_id: "anime/#{mal_id}")
-      @anime
+      @anime ||= Mapping.lookup('myanimelist', "anime/#{mal_id}") ||
+                 Mapping.guess('Anime', info) ||
+                 Anime.new
+    end
+
+    def mal_id
+      data[:id]
+    end
+
+    def youtube_video_id
+      data[:preview]&.split('/')&.last
+    end
+
+    def subtype
+      return unless data[:type]
+      type = data[:type].downcase
+      case type
+      when 'tv' then :TV
+      when 'ova' then :OVA
+      when 'ona' then :ONA
+      else type.to_sym
+      end
+    end
+
+    def episode_count
+      return nil if data[:episodes] == 0
+      data[:episodes]
     end
 
     def apply!
+      puts "#{data[:title]} => #{anime.canonical_title || 'new'}"
       anime.assign_attributes(
-
+        synopsis: Nokogiri::HTML.fragment(data[:synopsis]).text,
+        episode_count: episode_count,
+        episode_length: data[:duration],
+        subtype: subtype,
+        start_date: parse_date(data[:start_date]),
+        end_date: parse_date(data[:end_date]),
+        age_rating: age_rating[0],
+        age_rating_guide: age_rating[1],
+        youtube_video_id: youtube_video_id,
+        genres: genres,
+        titles: {
+          ja_jp: data[:other_titles][:japanese],
+          ja_en: data[:title],
+          en: data[:other_titles][:english]
+        },
+        canonical_title: 'ja_en'
       )
+      producers
+      anime.genres = genres
+      anime.save!
+      anime.mappings.where(external_site: 'myanimelist',
+                           external_id: "anime/#{mal_id}").first_or_create
+      anime
+    end
+
+    private
+
+    def parse_date(date)
+      Date.new(*date.split('-').map(&:to_i)) if date
     end
   end
-  def find_anime(mal_id, info)
+
+  def initialize(dir)
+    @dir = dir || ENV['MAL_DUMP_DIRECTORY']
   end
 
-  def load_file(mal_id)
-
-  def update_anime(mal_id)
-    anime = find_anime(mal_id, info)
+  def run!
+    dir = @dir
+    files = Dir.entries(@dir)
+    ActiveRecord::Base.logger = Logger.new(nil)
+    Chewy.logger = Logger.new(nil)
+    Chewy.strategy(:bypass)
+    bar = ProgressBar.create(
+      title: 'Importing',
+      total: files.count,
+      output: STDERR,
+      format: '%a (%p%%) |%B| %E %t'
+    )
+    files.each do |filename|
+      filename = File.join(dir, filename)
+      DumpFile.new(filename).apply! if File.file?(filename)
+      bar.increment
+    end
+    Anime.connection.reconnect!
   end
 end
