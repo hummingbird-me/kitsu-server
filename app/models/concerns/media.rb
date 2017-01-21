@@ -35,6 +35,7 @@ module Media
     has_many :reviews, as: 'media', dependent: :destroy
     has_many :media_relationships, as: 'source', dependent: :destroy
     has_many :inverse_media_relationships, as: 'destination',
+                                           class_name: 'MediaRelationship',
                                            dependent: :destroy
     has_many :favorites, as: 'item', dependent: :destroy,
                          inverse_of: :item
