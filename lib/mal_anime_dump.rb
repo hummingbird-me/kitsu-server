@@ -6,14 +6,6 @@ class MalAnimeDump
       @data = JSON.parse(open(filename).read).deep_symbolize_keys
     end
 
-    def info
-      {
-        episode_count: data[:episodes],
-        title: data[:title],
-        type: data[:type]
-      }
-    end
-
     def producers
       %i[producer licensor studio].map { |role|
         key = role.to_s.pluralize.to_sym
@@ -46,7 +38,7 @@ class MalAnimeDump
 
     def anime
       @anime ||= Mapping.lookup('myanimelist', "anime/#{mal_id}") ||
-                 Mapping.guess('Anime', info) ||
+                 Anime.where('avals(titles) @> ARRAY[?]', data[:title]) ||
                  Anime.new
     end
 
@@ -70,7 +62,7 @@ class MalAnimeDump
     end
 
     def episode_count
-      return nil if data[:episodes] == 0
+      return nil if data[:episodes].zero?
       data[:episodes]
     end
 
@@ -101,7 +93,7 @@ class MalAnimeDump
                            external_id: "anime/#{mal_id}").first_or_create
       anime
     rescue ActiveRecord::RecordNotUnique
-      puts "Uniqueness failed"
+      puts 'Uniqueness failed'
     end
 
     private
