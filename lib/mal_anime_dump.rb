@@ -38,8 +38,12 @@ class MalAnimeDump
 
     def anime
       @anime ||= Mapping.lookup('myanimelist', "anime/#{mal_id}") ||
-                 Anime.where('avals(titles) @> ARRAY[?]', data[:title]).first ||
+                 Anime.where('avals(titles) @> ARRAY[?]', titles).first ||
                  Anime.new
+    end
+
+    def titles
+      [data[:title]] + data[:other_titles].values.flatten
     end
 
     def mal_id
@@ -84,9 +88,11 @@ class MalAnimeDump
           ja_en: data[:title],
           en: data[:other_titles][:english]
         },
+        abbreviated_titles: data[:other_titles][:synonyms],
         canonical_title: 'ja_en'
       )
       producers
+      anime.poster_image = data[:image_url] if anime.poster_image.blank?
       anime.genres = genres
       anime.save!
       anime.mappings.where(external_site: 'myanimelist',
