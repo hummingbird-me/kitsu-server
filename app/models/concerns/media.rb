@@ -41,7 +41,7 @@ module Media
     delegate :year, to: :start_date, allow_nil: true
 
     validates_attachment :poster_image, content_type: {
-      content_type: %w[image/jpg image/jpeg image/png]
+      content_type: %w[image/jpg image/jpeg image/png image/gif]
     }
 
     after_create :follow_self
