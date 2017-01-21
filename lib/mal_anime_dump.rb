@@ -38,7 +38,7 @@ class MalAnimeDump
 
     def anime
       @anime ||= Mapping.lookup('myanimelist', "anime/#{mal_id}") ||
-                 Anime.where('avals(titles) @> ARRAY[?]', data[:title]) ||
+                 Anime.where('avals(titles) @> ARRAY[?]', data[:title]).first ||
                  Anime.new
     end
 
