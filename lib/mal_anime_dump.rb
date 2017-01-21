@@ -37,8 +37,8 @@ class MalAnimeDump
     end
 
     def anime
-      @anime ||= Mapping.lookup('myanimelist', "anime/#{mal_id}") ||
-                 Anime.where('avals(titles) @> ARRAY[?]', titles).first ||
+      @anime ||= Mapping.lookup('myanimelist/anime', mal_id) ||
+                 Anime.where('avals(titles) && ARRAY[?]', titles).first ||
                  Anime.new
     end
 
@@ -95,8 +95,8 @@ class MalAnimeDump
       anime.poster_image = data[:image_url] if anime.poster_image.blank?
       anime.genres = genres
       anime.save!
-      anime.mappings.where(external_site: 'myanimelist',
-                           external_id: "anime/#{mal_id}").first_or_create
+      anime.mappings.where(external_site: 'myanimelist/anime',
+                           external_id: mal_id).first_or_create
       anime
     rescue ActiveRecord::RecordNotUnique
       puts 'Uniqueness failed'
