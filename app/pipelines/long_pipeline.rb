@@ -5,6 +5,7 @@ LongPipeline = HTML::Pipeline.new [
   HTML::Pipeline::SanitizationFilter,
   HTML::Pipeline::KitsuMentionFilter,
   HTML::Pipeline::AutolinkFilter,
+  HTML::Pipeline::GifFilter,
   HTML::Pipeline::OneboxFilter
 ], base_url: '/user/',
    link_attr: 'target="_blank" rel="nofollow" class="autolink"'
