@@ -100,6 +100,8 @@ class MalAnimeDump
       anime.mappings.where(external_site: 'myanimelist',
                            external_id: "anime/#{mal_id}").first_or_create
       anime
+    rescue ActiveRecord::RecordNotUnique
+      puts "Uniqueness failed"
     end
 
     private
