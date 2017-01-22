@@ -4,5 +4,5 @@ class FavoriteResource < BaseResource
   has_one :user
   has_one :item, polymorphic: true
 
-  filters :user_id, :item_type
+  filters :user_id, :item_type, :item_id
 end
