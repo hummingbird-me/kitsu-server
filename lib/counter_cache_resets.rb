@@ -10,8 +10,8 @@ module CounterCacheResets
   end
 
   def media_user_counts
-    execute sql_for(Anime, :library_entries)
-    execute sql_for(Manga, :library_entries)
+    execute sql_for(Anime, :library_entries, counter_cache_column: 'user_count')
+    execute sql_for(Manga, :library_entries, counter_cache_column: 'user_count')
   end
 
   def users
@@ -41,6 +41,7 @@ module CounterCacheResets
     poly_where = "#{inverse.foreign_type} = '#{model.name}'" if is_polymorphic
     where = [where, poly_where].compact.join(' AND ')
     [
+      "DROP TABLE IF EXISTS #{temp_table}",
       <<-SQL.squish,
         CREATE TEMP TABLE #{temp_table} AS
         SELECT #{is_polymorphic && "#{inverse.foreign_type}, "}

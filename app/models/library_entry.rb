@@ -41,9 +41,9 @@ class LibraryEntry < ApplicationRecord
 
   belongs_to :user, touch: true
   belongs_to :media, polymorphic: true
-  belongs_to :anime, counter_cache: 'user_count'
-  belongs_to :manga, counter_cache: 'user_count'
-  belongs_to :drama, counter_cache: 'user_count'
+  belongs_to :anime
+  belongs_to :manga
+  belongs_to :drama
   has_one :review, dependent: :destroy
   has_many :marathons, dependent: :destroy
 
