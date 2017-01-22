@@ -10,9 +10,9 @@ class MalAnimeDump
       %i[producer licensor studio].map { |role|
         key = role.to_s.pluralize.to_sym
         data[key].map do |producer_name|
-          producer = Producer.where(name: producer_name).first_or_initialize
+          producer = Producer.where(name: producer_name).first_or_create
           production = anime.anime_productions.where(producer: producer)
-                            .first_or_initialize
+                            .first_or_create
           production.role = role
           production
         end
@@ -77,6 +77,7 @@ class MalAnimeDump
     def apply!
       puts "#{data[:title]} => #{anime.canonical_title || 'new'}"
       anime.assign_attributes({
+        synopsis: Nokogiri::HTML.fragment(data[:synopsis]).text,
         episode_count: episode_count,
         episode_length: data[:duration],
         subtype: subtype,
@@ -87,7 +88,6 @@ class MalAnimeDump
         youtube_video_id: youtube_video_id,
         genres: genres
       }.compact)
-      producers
       anime.titles['ja_jp'] = data[:other_titles][:japanese]&.first
       anime.titles['en_jp'] = data[:title]
       anime.titles['en'] = data[:other_titles][:english]&.first
@@ -100,6 +100,7 @@ class MalAnimeDump
       anime.poster_image = data[:image_url] if anime.poster_image.blank?
       anime.genres = genres
       anime.save!
+      producers
       anime.mappings.where(external_site: 'myanimelist/anime',
                            external_id: mal_id).first_or_create
       anime
