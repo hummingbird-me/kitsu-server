@@ -26,7 +26,7 @@ class MediaRelationship < ApplicationRecord
     parent_story: 5,
     summary: 6,
     full_story: 7,
-    spinoff: 8,
+    spin_off: 8,
     adaptation: 9,
     character: 10,
     other: 11
