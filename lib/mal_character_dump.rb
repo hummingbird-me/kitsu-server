@@ -17,7 +17,7 @@ class MalCharacterDump
       character.image = data[:image] if character.image.blank?
       character.name ||= data[:titles][:canonical]
       character.mal_id ||= data[:id]
-      character.save!
+      character.save
     rescue ActiveRecord::RecordNotUnique
       puts 'Uniqueness failed'
     rescue OpenURI::HTTPError
