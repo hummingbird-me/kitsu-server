@@ -82,17 +82,18 @@ class MalAnimeDump
         age_rating: age_rating[0],
         age_rating_guide: age_rating[1],
         youtube_video_id: youtube_video_id,
-        genres: genres,
-        canonical_title: 'en_jp'
+        genres: genres
       )
       producers
-      anime.titles['ja_jp'] = data[:other_titles][:japanese].first
+      anime.titles['ja_jp'] = data[:other_titles][:japanese]&.first
       anime.titles['en_jp'] = data[:title]
-      anime.titles['en'] = data[:other_titles][:english].first
+      anime.titles['en'] = data[:other_titles][:english]&.first
       anime.abbreviated_titles = [
         anime.abbreviated_titles,
         data[:other_titles][:synonyms]
       ].flatten.compact
+      anime.canonical_title ||= 'en_jp'
+      anime.titles.compact!
       anime.poster_image = data[:image_url] if anime.poster_image.blank?
       anime.genres = genres
       anime.save!
