@@ -15,32 +15,51 @@ class MyAnimeListSyncService
 
     case method
     when 'delete'
-      delete("#{media_type}list/#{media_type}/#{mal_media_id}", linked_profile)
+      delete(
+        "#{media_type}list/#{media_type}/#{mal_media_id}",
+        linked_account
+      )
     when 'create/update'
       # find the anime or manga
       # it will raise an error if it fails the http request
-      response = get("#{media_type}/#{mal_media_id}#{MINE}", linked_profile)
+      response = get(
+        "#{media_type}/#{mal_media_id}#{MINE}",
+        linked_account
+      )
 
       if media_type == 'anime' && response['watched_status']
-        put("animelist/anime/#{mal_media_id}", linked_profile,
+        # anime already exists in their list
+        put("animelist/anime/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating),
           rewatch_count: library_entry.reconsume_count)
       elsif media_type == 'anime'
-        post('animelist/anime', linked_profile,
+        # anime does not exist in their list
+        post('animelist/anime', linked_account,
           anime_id: mal_media_id,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
           score: format_score(library_entry.rating))
-      elsif media_type == 'manga' && response['read_status']
-        put("mangalist/manga/#{mal_media_id}", linked_profile,
+      elsif media_type == 'manga' &&
+            (response['id'].nil? || response['read_status'])
+        # manga already exists in their list
+
+        # HACK: this is related to what check_response_status will return
+        # due to some bug, it will just return an error message,
+        # so this checks to see if an id exists in the object,
+        # (every object will have an id regardless of anime/manga,
+        # but as of right now it won't).
+        # Once fixed, it should be checking for read_status like
+        # anime does with watched_status
+        put("mangalist/manga/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
           score: format_score(library_entry.rating),
           reread_count: library_entry.reconsume_count)
-      else # should I use else to catch errors?
-        post('mangalist/manga', linked_profile,
+      else
+        # manga does not exist in their list
+        post('mangalist/manga', linked_account,
           manga_id: mal_media_id,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
@@ -70,11 +89,10 @@ class MyAnimeListSyncService
   private
 
   def get(url, profile)
-    res = Typhoeus::Request.new(
+    res = Typhoeus::Request.get(
       build_url(url),
-      method: :get,
       userpwd: simple_auth(profile)
-    ).run
+    )
 
     # will raise an error if something is wrong
     # otherwise will return true
@@ -84,12 +102,11 @@ class MyAnimeListSyncService
   end
 
   def post(url, profile, body)
-    res = Typhoeus::Request.new(
+    res = Typhoeus::Request.post(
       build_url(url),
-      method: :post,
       userpwd: simple_auth(profile),
       body: body
-    ).run
+    )
 
     check_response_status(res)
 
@@ -97,12 +114,12 @@ class MyAnimeListSyncService
   end
 
   def put(url, profile, body)
-    res = Typhoeus::Request.new(
+    res = Typhoeus::Request.put(
       build_url(url),
-      method: :put,
+      headers: { 'Content-Type' => 'application/x-www-form-urlencoded' },
       userpwd: simple_auth(profile),
       body: body
-    ).run
+    )
 
     check_response_status(res)
 
@@ -110,11 +127,10 @@ class MyAnimeListSyncService
   end
 
   def delete(url, profile)
-    res = Typhoeus::Request.new(
+    res = Typhoeus::Request.delete(
       build_url(url),
-      method: :delete,
       userpwd: simple_auth(profile)
-    ).run
+    )
 
     check_response_status(res)
 
@@ -123,6 +139,11 @@ class MyAnimeListSyncService
 
   def check_response_status(response)
     return true if response.success?
+    # HACK: this will only happen with manga
+    # if you have the score set to 0 and this manga
+    # already exists on your list (PUT request).
+    # Once you update the score, this error will stop happening.
+    return true if response.code == 500 && media_type == 'manga'
 
     # timed out
     raise 'Request Timed Out' if response.timed_out?
@@ -134,23 +155,26 @@ class MyAnimeListSyncService
 
   def media_type
     # anime or manga
-    @media_type ||= library_entry.media_type.underscore
+    @media_type ||= library_entry['media_type'].underscore
   end
 
   def mal_media
     # convert kitsu data -> mal data
-    @mal_media ||= library_entry.media.mappings.find_by(
-      site: "myanimelist/#{media_type}"
+    @mal_media ||= Mapping.find_by(
+      external_site: "myanimelist/#{media_type}",
+      media_id: library_entry['media_id']
     )
   end
 
   def mal_media_id
+    # will always exist because return at top
     mal_media.external_id
   end
 
-  def linked_profile
-    @profile ||= User.find(library_entry.user_id).linked_profiles.where(
-      linked_site: LinkedSite.find_by(name: 'myanimelist')
+  def linked_account
+    @profile ||= User.find(library_entry['user_id']).linked_accounts.find_by(
+      sync_to: true,
+      type: 'LinkedAccount::MyAnimeList'
     )
   end
 

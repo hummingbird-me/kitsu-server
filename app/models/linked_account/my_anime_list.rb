@@ -5,11 +5,10 @@ class LinkedAccount
     def verify_mal_credentials
       # Check to make sure username/password is valid
       host = MyAnimeListSyncService::ATARASHII_API_HOST
-      response = Typhoeus::Request.new(
+      response = Typhoeus::Request.get(
         "#{host}account/verify_credentials",
-        method: :get,
         userpwd: "#{external_user_id}:#{token}"
-      ).run
+      )
 
       if response.code == 200
         true

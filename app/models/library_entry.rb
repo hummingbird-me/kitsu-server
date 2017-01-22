@@ -200,12 +200,28 @@ class LibraryEntry < ApplicationRecord
 
     media.trending_vote(user, 0.5) if progress_changed?
     media.trending_vote(user, 1.0) if status_changed?
+  end
 
-    # Sync MAL updates if linked profile exists
-    MyAnimeListSyncWorker.perform_async(id, 'create/update') if sync_to_mal?
+  # TODO: will rename this if I think of a better one
+  after_commit :sync_entry_update, on: %i[create update]
+
+  def sync_entry_update
+    return unless sync_to_mal?
+
+    MyAnimeListSyncWorker.perform_async(
+      library_entry_id: id,
+      method: 'create/update'
+    )
   end
 
   after_destroy do
-    MyAnimeListSyncWorker.perform_async(id, 'delete') if sync_to_mal?
+    return unless sync_to_mal?
+
+    MyAnimeListSyncWorker.perform_async(
+      user_id: user_id,
+      media_id: media_id,
+      media_type: media_type,
+      method: 'delete'
+    )
   end
 end
