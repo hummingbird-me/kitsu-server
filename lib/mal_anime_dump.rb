@@ -37,9 +37,13 @@ class MalAnimeDump
     end
 
     def anime
-      @anime ||= Mapping.lookup('myanimelist/anime', mal_id) ||
-                 Anime.where('avals(titles) && ARRAY[?]', titles).first ||
-                 Anime.new
+      return @anime if @anime
+      @anime = Mapping.lookup('myanimelist/anime', mal_id) ||
+               Anime.where('avals(titles) && ARRAY[?]', titles).first
+      external_id = @anime&.mappings&.where(external_site: 'myanimelist/anime')
+                          &.pluck(:external_id)&.first
+      @anime = Anime.new if @anime.nil? || external_id.to_s != mal_id.to_s
+      @anime
     end
 
     def titles
@@ -72,8 +76,7 @@ class MalAnimeDump
 
     def apply!
       puts "#{data[:title]} => #{anime.canonical_title || 'new'}"
-      anime.assign_attributes(
-        synopsis: Nokogiri::HTML.fragment(data[:synopsis]).text,
+      anime.assign_attributes({
         episode_count: episode_count,
         episode_length: data[:duration],
         subtype: subtype,
@@ -83,7 +86,7 @@ class MalAnimeDump
         age_rating_guide: age_rating[1],
         youtube_video_id: youtube_video_id,
         genres: genres
-      )
+      }.compact)
       producers
       anime.titles['ja_jp'] = data[:other_titles][:japanese]&.first
       anime.titles['en_jp'] = data[:title]
