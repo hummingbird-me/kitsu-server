@@ -45,10 +45,11 @@ class MyAnimeListSyncService
             (response['id'].nil? || response['read_status'])
         # manga already exists in their list
 
-        # HACK: this is related to what check_resposne_status will return
+        # HACK: this is related to what check_response_status will return
         # due to some bug, it will just return an error message,
         # so this checks to see if an id exists in the object,
-        # every object will have an id regardless of anime/manga.
+        # (every object will have an id regardless of anime/manga,
+        # but as of right now it won't).
         # Once fixed, it should be checking for read_status like
         # anime does with watched_status
         put("mangalist/manga/#{mal_media_id}", linked_account,
