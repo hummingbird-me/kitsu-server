@@ -5,8 +5,8 @@ module CounterCacheResets
     execute sql_for(Post, :post_likes)
     execute sql_for(Post, :comments)
     execute sql_for(Post, :comments,
-                    counter_cache_column: 'top_level_comments_count',
-                    where: 'parent_id IS NULL')
+      counter_cache_column: 'top_level_comments_count',
+      where: 'parent_id IS NULL')
   end
 
   def media_user_counts
@@ -16,10 +16,10 @@ module CounterCacheResets
 
   def users
     execute sql_for(User, :library_entries,
-                    counter_cache_column: 'ratings_count',
-                    where: 'rating IS NOT NULL')
+      counter_cache_column: 'ratings_count',
+      where: 'rating IS NOT NULL')
     execute sql_for(User, :post_likes,
-                    counter_cache_column: 'likes_given_count')
+      counter_cache_column: 'likes_given_count')
     execute sql_for(User, :favorites)
   end
 
@@ -75,7 +75,7 @@ module CounterCacheResets
     if sql.respond_to?(:each)
       say_with_time(title) do
         sql.each do |query|
-          say("#{query}", true)
+          say(query.to_s, true)
           ActiveRecord::Base.connection.execute(query)
         end
       end
@@ -87,8 +87,8 @@ module CounterCacheResets
   end
 
   # Method pulled from ActiveRecord::Migration (under MIT, not Apache)
-  def say(message, subitem=false)
-    puts "#{subitem ? "   ->" : "--"} #{message}"
+  def say(message, subitem = false)
+    puts "#{subitem ? '   ->' : '--'} #{message}"
   end
 
   # Method pulled from ActiveRecord::Migration (under MIT, not Apache)
@@ -96,7 +96,7 @@ module CounterCacheResets
     say(message)
     result = nil
     time = Benchmark.measure { result = yield }
-    say "%.4fs" % time.real, :subitem
+    say '%.4fs'.format(time.real), :subitem
     say("#{result} rows", :subitem) if result.is_a?(Integer)
     result
   end
