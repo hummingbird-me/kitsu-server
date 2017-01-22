@@ -20,6 +20,8 @@ class MalCharacterDump
       character.save!
     rescue ActiveRecord::RecordNotUnique
       puts 'Uniqueness failed'
+    rescue OpenURI::HTTPError
+      puts 'OpenURI Error'
     end
   end
 
