@@ -96,7 +96,7 @@ module CounterCacheResets
     say(message)
     result = nil
     time = Benchmark.measure { result = yield }
-    say '%.4fs'.format(time.real), :subitem
+    say format('%.4fs', time.real), :subitem
     say("#{result} rows", :subitem) if result.is_a?(Integer)
     result
   end
