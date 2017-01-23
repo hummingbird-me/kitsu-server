@@ -215,13 +215,11 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_destroy do
-    return unless sync_to_mal?
-
     MyAnimeListSyncWorker.perform_async(
       user_id: user_id,
       media_id: media_id,
       media_type: media_type,
       method: 'delete'
-    )
+    ) if sync_to_mal?
   end
 end
