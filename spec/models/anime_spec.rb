@@ -17,6 +17,7 @@
 #  end_date                  :date
 #  episode_count             :integer
 #  episode_length            :integer
+#  favorites_count           :integer          default(0), not null
 #  popularity_rank           :integer
 #  poster_image_content_type :string(255)
 #  poster_image_file_name    :string(255)

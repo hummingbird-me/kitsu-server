@@ -650,6 +650,7 @@
 #                                              DELETE    /edge/feeds/:group/:id/activities/:uuid(.:format)                                    feeds#destroy_activity
 #                                              GET       /edge/trending/:namespace(.:format)                                                  trending#index
 #                               users__recover POST      /edge/users/_recover(.:format)                                                       users#recover
+#                                              GET       /edge/anime/:anime_id/_languages(.:format)                                           anime#languages
 #                               debug_dump_all GET       /debug/dump_all(.:format)                                                            debug#dump_all
 #                               debug_trace_on POST      /debug/trace_on(.:format)                                                            debug#trace_on
 #                                debug_gc_info GET       /debug/gc_info(.:format)                                                             debug#gc_info

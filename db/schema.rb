@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118222403) do
+ActiveRecord::Schema.define(version: 20170122224414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20170118222403) do
     t.string   "abbreviated_titles",                                                   array: true
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
+    t.integer  "favorites_count",                       default: 0,       null: false
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -195,6 +196,7 @@ ActiveRecord::Schema.define(version: 20170118222403) do
     t.datetime "updated_at",                                  null: false
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
+    t.integer  "favorites_count",           default: 0,       null: false
   end
 
   add_index "dramas", ["slug"], name: "index_dramas_on_slug", using: :btree
@@ -438,6 +440,7 @@ ActiveRecord::Schema.define(version: 20170118222403) do
     t.integer  "rating_rank"
     t.integer  "age_rating"
     t.string   "age_rating_guide"
+    t.integer  "favorites_count",                       default: 0,       null: false
   end
 
   create_table "mappings", force: :cascade do |t|

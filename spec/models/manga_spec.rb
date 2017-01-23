@@ -16,6 +16,7 @@
 #  cover_image_top_offset    :integer          default(0)
 #  cover_image_updated_at    :datetime
 #  end_date                  :date
+#  favorites_count           :integer          default(0), not null
 #  popularity_rank           :integer
 #  poster_image_content_type :string(255)
 #  poster_image_file_name    :string(255)
