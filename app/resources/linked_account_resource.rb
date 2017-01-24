@@ -8,4 +8,8 @@ class LinkedAccountResource < BaseResource
   has_one :user
 
   filters :user_id
+
+  before_save do
+    @model.kind = "LinkedAccount::#{@model.kind}"
+  end
 end
