@@ -24,8 +24,8 @@ class MalAnimeDump
     end
 
     def age_rating
-      return [nil, nil] unless data['classification']
-      rating, reason = data['classification'].split(' - ')
+      return [nil, nil] unless data[:classification]
+      rating, reason = data[:classification].split(' - ')
 
       rating = case rating[0]
                when 'G', 'TV-Y7' then :G
