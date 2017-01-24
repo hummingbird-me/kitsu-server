@@ -14,6 +14,11 @@ module CounterCacheResets
     execute sql_for(Manga, :library_entries, counter_cache_column: 'user_count')
   end
 
+  def favorite_counts
+    execute sql_for(Anime, :favorites, counter_cache_column: 'favorites_count')
+    execute sql_for(Manga, :favorites, counter_cache_column: 'favorites_count')
+  end
+
   def users
     execute sql_for(User, :library_entries,
       counter_cache_column: 'ratings_count',
