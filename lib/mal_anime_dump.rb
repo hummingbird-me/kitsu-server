@@ -27,7 +27,7 @@ class MalAnimeDump
       return [nil, nil] unless data[:classification]
       rating, reason = data[:classification].split(' - ')
 
-      rating = case rating[0]
+      rating = case rating
                when 'G', 'TV-Y7' then :G
                when 'PG', 'PG13', 'PG-13' then :PG
                when 'R', 'R+' then :R
