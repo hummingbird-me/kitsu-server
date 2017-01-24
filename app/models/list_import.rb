@@ -60,7 +60,7 @@ class ListImport < ApplicationRecord
     )
 
     # Last-ditch check for validity
-    raise 'Import is invalid' unless valid?
+    raise 'Import is invalid' unless valid?(:create)
 
     yield({ status: :running, total: count, progress: 0 })
     Chewy.strategy(:atomic) do
