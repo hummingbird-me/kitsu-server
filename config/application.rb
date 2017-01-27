@@ -72,5 +72,12 @@ module Kitsu
 
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
+
+    # Configure Scaffold Generators
+    config.generators do |g|
+      g.authorization :policy
+      g.serialization :jsonapi_resource
+      g.resource_controller :resource_controller
+    end
   end
 end
