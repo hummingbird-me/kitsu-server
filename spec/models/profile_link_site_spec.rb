@@ -32,7 +32,7 @@ RSpec.describe ProfileLinkSite, type: :model do
 
           urls.each do |url|
             temp = Regexp.new(site.validate_find).match(url)
-            expect(temp[:username]).to eq("toyhammered")
+            expect(temp[:username]).to eq('toyhammered')
           end
         end
       end
@@ -53,19 +53,6 @@ RSpec.describe ProfileLinkSite, type: :model do
           urls.each do |url|
             temp = Regexp.new(site.validate_find).match(url)
             expect(temp[:username]).to eq('toyhammered')
-          end
-        end
-
-        it 'should allow usernames with a "."' do
-          urls = %w[
-            facebook.com/toy.hammered
-            toy.hammered
-          ]
-          site = build(:profile_link_site, :facebook)
-
-          urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
-            expect(temp[:username]).to eq('toy.hammered')
           end
         end
       end
@@ -334,13 +321,39 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
 
-    # TODO: WHY the hell do we actually have this?
     # Kickstarter
-    # describe 'Kickstarter' do
-    #   context 'success' do
-    #
-    #   end
-    # end
+    describe 'Kickstarter' do
+      context 'success' do
+        it 'should work with a custom username' do
+          urls = %w[
+            kickstarter.com/profile/toyhammered
+            https://www.kickstarter.com/profile/toyhammered
+            https://kickstarter.com/profile/toyhammered
+            toyhammered
+          ]
+          site = build(:profile_link_site, :kickstarter)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+        it 'should work with a non-custom username' do
+          urls = %w[
+            kickstarter.com/profile/111759513
+            https://www.kickstarter.com/profile/111759513
+            https://kickstarter.com/profile/111759513
+            111759513
+          ]
+          site = build(:profile_link_site, :kickstarter)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('111759513')
+          end
+        end
+      end
+    end
 
     # Mobcrush
     describe 'Mobcrush' do

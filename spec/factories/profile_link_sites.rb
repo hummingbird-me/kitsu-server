@@ -37,7 +37,7 @@ FactoryGirl.define do
 
     # Google
     trait :google do
-      validate_find 'will skip for now'
+      validate_find '(https://)?(www.)?(plus.google.com/)?(?<username>[.]+)'
       validate_replace 'https://plus.google.com/\k<username>'
     end
 
@@ -85,7 +85,7 @@ FactoryGirl.define do
 
     # Discord
     trait :discord do
-      validate_find '([A-Za-z0-9]+#[0-9]+)'
+      validate_find '([.]+#[0-9]+)'
       validate_replace '\1'
     end
 
@@ -108,6 +108,10 @@ FactoryGirl.define do
     end
 
     # Kickstarter will go here
+    trait :kickstarter do
+      validate_find '(https://)?(www.)?(kickstarter.com/profile/)?(?<username>[a-zA-z0-9_.\-]+)'
+      validate_replace 'https://www.kickstarter.com/profile/\k<username>'
+    end
 
     # Mobcrush
     trait :mobcrush do
