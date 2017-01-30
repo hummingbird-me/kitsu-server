@@ -37,7 +37,7 @@ FactoryGirl.define do
 
     # Google
     trait :google do
-      validate_find '(https://)?(www.)?(plus.google.com/)?(?<username>[.]+)'
+      validate_find '(https://)?(www.)?(plus.google.com/)?(?<username>.+)'
       validate_replace 'https://plus.google.com/\k<username>'
     end
 
@@ -85,7 +85,7 @@ FactoryGirl.define do
 
     # Discord
     trait :discord do
-      validate_find '([.]+#[0-9]+)'
+      validate_find '(.+#[0-9]+)'
       validate_replace '\1'
     end
 
