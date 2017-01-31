@@ -2,10 +2,12 @@
 #
 # Table name: profile_link_sites
 #
-#  id         :integer          not null, primary key
-#  name       :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id               :integer          not null, primary key
+#  name             :string           not null
+#  validate_find    :string           not null
+#  validate_replace :string           not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 
 require 'rails_helper'
