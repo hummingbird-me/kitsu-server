@@ -1,0 +1,2 @@
+class AnimeCharacterPolicy < ApplicationPolicy
+end

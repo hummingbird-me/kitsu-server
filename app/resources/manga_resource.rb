@@ -4,4 +4,7 @@ class MangaResource < MediaResource
 
   # ElasticSearch hookup
   index MediaIndex::Manga
+
+  has_many :manga_characters
+  has_many :manga_staff
 end

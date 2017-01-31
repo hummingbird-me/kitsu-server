@@ -1,0 +1,2 @@
+class DramaStaffController < ApplicationController
+end
