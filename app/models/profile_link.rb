@@ -29,8 +29,8 @@ class ProfileLink < ApplicationRecord
 
   def url=(value)
     self.attributes[:url] = value.gsub(
-      Regexp.new(profile_link_site_id.validate_find),
-      Regexp.new(profile_link_site_id.validate_replace)
+      profile_link_site.validate_find,
+      profile_link_site.validate_replace
     )
   end
 end
