@@ -24,6 +24,7 @@ class Person < ApplicationRecord
   has_attached_file :image
 
   has_many :castings, dependent: :destroy
+  has_many :anime_castings, dependent: :destroy
 
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]

@@ -38,6 +38,7 @@ class Character < ApplicationRecord
 
   belongs_to :primary_media, polymorphic: true
   has_many :castings
+  has_many :anime_characters, dependent: :destroy
 
   def slug_candidates
     [
