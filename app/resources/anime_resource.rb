@@ -6,6 +6,8 @@ class AnimeResource < MediaResource
   attribute :nsfw, delegate: :nsfw?
   has_many :streaming_links
   has_many :anime_productions
+  has_many :anime_characters
+  has_many :anime_staff
 
   # ElasticSearch hookup
   index MediaIndex::Anime

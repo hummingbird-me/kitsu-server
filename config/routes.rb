@@ -84,6 +84,16 @@
 #                                              PUT|PATCH /edge/anime/:anime_id/relationships/anime-productions(.:format)                      anime#update_relationship {:relationship=>"anime_productions"}
 #                                              DELETE    /edge/anime/:anime_id/relationships/anime-productions(.:format)                      anime#destroy_relationship {:relationship=>"anime_productions"}
 #                      anime_anime_productions GET       /edge/anime/:anime_id/anime-productions(.:format)                                    anime_productions#get_related_resources {:relationship=>"anime_productions", :source=>"anime"}
+#         anime_relationships_anime_characters GET       /edge/anime/:anime_id/relationships/anime-characters(.:format)                       anime#show_relationship {:relationship=>"anime_characters"}
+#                                              POST      /edge/anime/:anime_id/relationships/anime-characters(.:format)                       anime#create_relationship {:relationship=>"anime_characters"}
+#                                              PUT|PATCH /edge/anime/:anime_id/relationships/anime-characters(.:format)                       anime#update_relationship {:relationship=>"anime_characters"}
+#                                              DELETE    /edge/anime/:anime_id/relationships/anime-characters(.:format)                       anime#destroy_relationship {:relationship=>"anime_characters"}
+#                       anime_anime_characters GET       /edge/anime/:anime_id/anime-characters(.:format)                                     anime_characters#get_related_resources {:relationship=>"anime_characters", :source=>"anime"}
+#              anime_relationships_anime_staff GET       /edge/anime/:anime_id/relationships/anime-staff(.:format)                            anime#show_relationship {:relationship=>"anime_staff"}
+#                                              POST      /edge/anime/:anime_id/relationships/anime-staff(.:format)                            anime#create_relationship {:relationship=>"anime_staff"}
+#                                              PUT|PATCH /edge/anime/:anime_id/relationships/anime-staff(.:format)                            anime#update_relationship {:relationship=>"anime_staff"}
+#                                              DELETE    /edge/anime/:anime_id/relationships/anime-staff(.:format)                            anime#destroy_relationship {:relationship=>"anime_staff"}
+#                            anime_anime_staff GET       /edge/anime/:anime_id/anime-staff(.:format)                                          anime_staff#get_related_resources {:relationship=>"anime_staff", :source=>"anime"}
 #                                  anime_index GET       /edge/anime(.:format)                                                                anime#index
 #                                              POST      /edge/anime(.:format)                                                                anime#create
 #                                        anime GET       /edge/anime/:id(.:format)                                                            anime#show
@@ -120,6 +130,16 @@
 #                                              PUT|PATCH /edge/manga/:manga_id/relationships/media-relationships(.:format)                    manga#update_relationship {:relationship=>"media_relationships"}
 #                                              DELETE    /edge/manga/:manga_id/relationships/media-relationships(.:format)                    manga#destroy_relationship {:relationship=>"media_relationships"}
 #                    manga_media_relationships GET       /edge/manga/:manga_id/media-relationships(.:format)                                  media_relationships#get_related_resources {:relationship=>"media_relationships", :source=>"manga"}
+#         manga_relationships_manga_characters GET       /edge/manga/:manga_id/relationships/manga-characters(.:format)                       manga#show_relationship {:relationship=>"manga_characters"}
+#                                              POST      /edge/manga/:manga_id/relationships/manga-characters(.:format)                       manga#create_relationship {:relationship=>"manga_characters"}
+#                                              PUT|PATCH /edge/manga/:manga_id/relationships/manga-characters(.:format)                       manga#update_relationship {:relationship=>"manga_characters"}
+#                                              DELETE    /edge/manga/:manga_id/relationships/manga-characters(.:format)                       manga#destroy_relationship {:relationship=>"manga_characters"}
+#                       manga_manga_characters GET       /edge/manga/:manga_id/manga-characters(.:format)                                     manga_characters#get_related_resources {:relationship=>"manga_characters", :source=>"manga"}
+#              manga_relationships_manga_staff GET       /edge/manga/:manga_id/relationships/manga-staff(.:format)                            manga#show_relationship {:relationship=>"manga_staff"}
+#                                              POST      /edge/manga/:manga_id/relationships/manga-staff(.:format)                            manga#create_relationship {:relationship=>"manga_staff"}
+#                                              PUT|PATCH /edge/manga/:manga_id/relationships/manga-staff(.:format)                            manga#update_relationship {:relationship=>"manga_staff"}
+#                                              DELETE    /edge/manga/:manga_id/relationships/manga-staff(.:format)                            manga#destroy_relationship {:relationship=>"manga_staff"}
+#                            manga_manga_staff GET       /edge/manga/:manga_id/manga-staff(.:format)                                          manga_staff#get_related_resources {:relationship=>"manga_staff", :source=>"manga"}
 #                                  manga_index GET       /edge/manga(.:format)                                                                manga#index
 #                                              POST      /edge/manga(.:format)                                                                manga#create
 #                                        manga GET       /edge/manga/:id(.:format)                                                            manga#show
@@ -161,6 +181,16 @@
 #                                              PUT|PATCH /edge/drama/:drama_id/relationships/episodes(.:format)                               dramas#update_relationship {:relationship=>"episodes"}
 #                                              DELETE    /edge/drama/:drama_id/relationships/episodes(.:format)                               dramas#destroy_relationship {:relationship=>"episodes"}
 #                               drama_episodes GET       /edge/drama/:drama_id/episodes(.:format)                                             episodes#get_related_resources {:relationship=>"episodes", :source=>"dramas"}
+#         drama_relationships_drama_characters GET       /edge/drama/:drama_id/relationships/drama-characters(.:format)                       dramas#show_relationship {:relationship=>"drama_characters"}
+#                                              POST      /edge/drama/:drama_id/relationships/drama-characters(.:format)                       dramas#create_relationship {:relationship=>"drama_characters"}
+#                                              PUT|PATCH /edge/drama/:drama_id/relationships/drama-characters(.:format)                       dramas#update_relationship {:relationship=>"drama_characters"}
+#                                              DELETE    /edge/drama/:drama_id/relationships/drama-characters(.:format)                       dramas#destroy_relationship {:relationship=>"drama_characters"}
+#                       drama_drama_characters GET       /edge/drama/:drama_id/drama-characters(.:format)                                     drama_characters#get_related_resources {:relationship=>"drama_characters", :source=>"dramas"}
+#              drama_relationships_drama_staff GET       /edge/drama/:drama_id/relationships/drama-staff(.:format)                            dramas#show_relationship {:relationship=>"drama_staff"}
+#                                              POST      /edge/drama/:drama_id/relationships/drama-staff(.:format)                            dramas#create_relationship {:relationship=>"drama_staff"}
+#                                              PUT|PATCH /edge/drama/:drama_id/relationships/drama-staff(.:format)                            dramas#update_relationship {:relationship=>"drama_staff"}
+#                                              DELETE    /edge/drama/:drama_id/relationships/drama-staff(.:format)                            dramas#destroy_relationship {:relationship=>"drama_staff"}
+#                            drama_drama_staff GET       /edge/drama/:drama_id/drama-staff(.:format)                                          drama_staff#get_related_resources {:relationship=>"drama_staff", :source=>"dramas"}
 #                                  drama_index GET       /edge/drama(.:format)                                                                drama#index
 #                                              POST      /edge/drama(.:format)                                                                drama#create
 #                                        drama GET       /edge/drama/:id(.:format)                                                            drama#show
