@@ -44,13 +44,13 @@ FactoryGirl.define do
     # Instagram
     trait :instagram do
       validate_find '(https://)?(www.)?(instagram.com/)?(?<username>[a-zA-z0-9_.]+)'
-      validate_replace 'https://www.instagram.com/\k<username>'
+      validate_replace 'https://instagram.com/\k<username>'
     end
 
     # Twitch
     trait :twitch do
       validate_find '(https://)?(www.)?(twitch.tv/)?(#)?(?<username>[a-zA-z0-9_]+)'
-      validate_replace 'https://www.twitch.tv/\k<username>'
+      validate_replace 'https://twitch.tv/\k<username>'
     end
 
     # Vimeo
@@ -67,8 +67,8 @@ FactoryGirl.define do
 
     # Battlenet
     trait :battlenet do
-      validate_find 'will figure out'
-      validate_replace 'will figure out'
+      validate_find '(.+#[0-9]+)'
+      validate_replace '\1'
     end
 
     # Steam
@@ -91,8 +91,8 @@ FactoryGirl.define do
 
     # Tumblr
     trait :tumblr do
-      validate_find 'will figure out'
-      validate_replace 'will figure out'
+      validate_find '((http|https)://)?(www.)?(?<username>[a-zA-z0-9]+)(.tumblr.com)?'
+      validate_replace '\k<username>.tumbler.com'
     end
 
     # SoundCloud
@@ -110,7 +110,7 @@ FactoryGirl.define do
     # Kickstarter will go here
     trait :kickstarter do
       validate_find '(https://)?(www.)?(kickstarter.com/profile/)?(?<username>[a-zA-z0-9_.\-]+)'
-      validate_replace 'https://www.kickstarter.com/profile/\k<username>'
+      validate_replace 'https://kickstarter.com/profile/\k<username>'
     end
 
     # Mobcrush
@@ -127,8 +127,8 @@ FactoryGirl.define do
 
     # Patreon
     trait :patreon do
-      validate_find 'will figure out'
-      validate_replace 'will figure out'
+      validate_find '(https://)?(www.)?(patreon.com/)?(?<username>[a-zA-z0-9_\-]+)'
+      validate_replace 'https://patreon.com/\k<username>'
     end
     # rubocop:enable Metrics/LineLength
   end

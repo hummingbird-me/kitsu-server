@@ -195,25 +195,15 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
 
-    # TODO: need to figure out the proper format
     # Battlenet
     describe 'Battlenet' do
       context 'success' do
         it 'should return a username' do
-          urls = %w[
-            github.com/toyhammered
-            https://www.github.com/toyhammered
-            https://www.github.com/@toyhammered
-            https://github.com/toyhammered
-            toyhammered
-            @toyhammered
-          ]
-          site = build(:profile_link_site, :github)
+          url = 'toyhammered#0718'
+          site = build(:profile_link_site, :discord)
 
-          urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
-            expect(temp[:username]).to eq('toyhammered')
-          end
+          temp = Regexp.new(site.validate_find).match(url)
+          expect(temp[1]).to eq('toyhammered#0718')
         end
       end
     end
@@ -273,13 +263,27 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
 
-    # TODO: What the hell are we actually validating?
     # Tumblr
-    # describe 'Tumblr' do
-    #   context 'success' do
-    #
-    #   end
-    # end
+    describe 'tumblr' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            https://toyhammered.tumblr.com
+            http://toyhammered.tumblr.com
+            https://www.toyhammered.tumblr.com
+            www.toyhammered.tumblr.com
+            toyhammered.tumblr.com
+            toyhammered
+          ]
+          site = build(:profile_link_site, :tumblr)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
 
     # SoundCloud
     describe 'soundcloud' do
@@ -396,10 +400,23 @@ RSpec.describe ProfileLinkSite, type: :model do
     end
 
     # Patreon
-    # describe 'Patreon' do
-    #   context 'success' do
-    #
-    #   end
-    # end
+    describe 'Patreon' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            patreon.com/toyhammered
+            https://www.patreon.com/toyhammered
+            https://patreon.com/toyhammered
+            toyhammered
+          ]
+          site = build(:profile_link_site, :patreon)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+      end
+    end
   end # end of validate context
 end
