@@ -48,6 +48,8 @@ class Manga < ApplicationRecord
   alias_attribute :manga_type, :subtype
 
   has_many :chapters
+  has_many :manga_castings, dependent: :destroy
+  has_many :manga_staff, dependent: :destroy
 
   validates :chapter_count, numericality: { greater_than: 0 }, allow_nil: true
 

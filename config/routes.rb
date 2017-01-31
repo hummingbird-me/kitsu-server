@@ -694,6 +694,34 @@
 #                                              PATCH     /edge/anime-staff/:id(.:format)                                                      anime_staff#update
 #                                              PUT       /edge/anime-staff/:id(.:format)                                                      anime_staff#update
 #                                              DELETE    /edge/anime-staff/:id(.:format)                                                      anime_staff#destroy
+#          manga_character_relationships_manga GET       /edge/manga-characters/:manga_character_id/relationships/manga(.:format)             manga_characters#show_relationship {:relationship=>"manga"}
+#                                              PUT|PATCH /edge/manga-characters/:manga_character_id/relationships/manga(.:format)             manga_characters#update_relationship {:relationship=>"manga"}
+#                                              DELETE    /edge/manga-characters/:manga_character_id/relationships/manga(.:format)             manga_characters#destroy_relationship {:relationship=>"manga"}
+#                        manga_character_manga GET       /edge/manga-characters/:manga_character_id/manga(.:format)                           manga#get_related_resource {:relationship=>"manga", :source=>"manga_characters"}
+#      manga_character_relationships_character GET       /edge/manga-characters/:manga_character_id/relationships/character(.:format)         manga_characters#show_relationship {:relationship=>"character"}
+#                                              PUT|PATCH /edge/manga-characters/:manga_character_id/relationships/character(.:format)         manga_characters#update_relationship {:relationship=>"character"}
+#                                              DELETE    /edge/manga-characters/:manga_character_id/relationships/character(.:format)         manga_characters#destroy_relationship {:relationship=>"character"}
+#                    manga_character_character GET       /edge/manga-characters/:manga_character_id/character(.:format)                       characters#get_related_resource {:relationship=>"character", :source=>"manga_characters"}
+#                             manga_characters GET       /edge/manga-characters(.:format)                                                     manga_characters#index
+#                                              POST      /edge/manga-characters(.:format)                                                     manga_characters#create
+#                              manga_character GET       /edge/manga-characters/:id(.:format)                                                 manga_characters#show
+#                                              PATCH     /edge/manga-characters/:id(.:format)                                                 manga_characters#update
+#                                              PUT       /edge/manga-characters/:id(.:format)                                                 manga_characters#update
+#                                              DELETE    /edge/manga-characters/:id(.:format)                                                 manga_characters#destroy
+#              manga_staff_relationships_manga GET       /edge/manga-staff/:manga_staff_id/relationships/manga(.:format)                      manga_staff#show_relationship {:relationship=>"manga"}
+#                                              PUT|PATCH /edge/manga-staff/:manga_staff_id/relationships/manga(.:format)                      manga_staff#update_relationship {:relationship=>"manga"}
+#                                              DELETE    /edge/manga-staff/:manga_staff_id/relationships/manga(.:format)                      manga_staff#destroy_relationship {:relationship=>"manga"}
+#                            manga_staff_manga GET       /edge/manga-staff/:manga_staff_id/manga(.:format)                                    manga#get_related_resource {:relationship=>"manga", :source=>"manga_staff"}
+#             manga_staff_relationships_person GET       /edge/manga-staff/:manga_staff_id/relationships/person(.:format)                     manga_staff#show_relationship {:relationship=>"person"}
+#                                              PUT|PATCH /edge/manga-staff/:manga_staff_id/relationships/person(.:format)                     manga_staff#update_relationship {:relationship=>"person"}
+#                                              DELETE    /edge/manga-staff/:manga_staff_id/relationships/person(.:format)                     manga_staff#destroy_relationship {:relationship=>"person"}
+#                           manga_staff_person GET       /edge/manga-staff/:manga_staff_id/person(.:format)                                   people#get_related_resource {:relationship=>"person", :source=>"manga_staff"}
+#                            manga_staff_index GET       /edge/manga-staff(.:format)                                                          manga_staff#index
+#                                              POST      /edge/manga-staff(.:format)                                                          manga_staff#create
+#                                  manga_staff GET       /edge/manga-staff/:id(.:format)                                                      manga_staff#show
+#                                              PATCH     /edge/manga-staff/:id(.:format)                                                      manga_staff#update
+#                                              PUT       /edge/manga-staff/:id(.:format)                                                      manga_staff#update
+#                                              DELETE    /edge/manga-staff/:id(.:format)                                                      manga_staff#destroy
 #                                     activity DELETE    /edge/activities/:id(.:format)                                                       activities#destroy
 #                                              GET       /edge/feeds/:group/:id(.:format)                                                     feeds#show
 #                                              POST      /edge/feeds/:group/:id/_read(.:format)                                               feeds#mark_read
@@ -769,6 +797,8 @@ Rails.application.routes.draw do
     jsonapi_resources :anime_characters
     jsonapi_resources :anime_castings
     jsonapi_resources :anime_staff
+    jsonapi_resources :manga_characters
+    jsonapi_resources :manga_staff
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'

@@ -1,0 +1,2 @@
+class MangaCharacterPolicy < ApplicationPolicy
+end

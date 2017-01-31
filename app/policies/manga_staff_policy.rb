@@ -1,0 +1,2 @@
+class MangaStaffPolicy < ApplicationPolicy
+end
