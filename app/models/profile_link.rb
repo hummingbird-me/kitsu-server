@@ -27,10 +27,10 @@ class ProfileLink < ApplicationRecord
 
   validates :url, presence: true
 
-  # def url=(value)
-  #   self.attributes[:url] = value.gsub(
-  #     profile_link_site_id.validate_find,
-  #     profile_link_site_id.validate_replace
-  #   )
-  # end
+  def url=(value)
+    self.attributes[:url] = value.gsub(
+      Regexp.new(profile_link_site_id.validate_find),
+      Regexp.new(profile_link_site_id.validate_replace)
+    )
+  end
 end
