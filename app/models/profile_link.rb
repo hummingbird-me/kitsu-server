@@ -26,4 +26,11 @@ class ProfileLink < ApplicationRecord
   belongs_to :profile_link_site, required: true
 
   validates :url, presence: true
+
+  def url=(value)
+    super value&.gsub(
+      profile_link_site.validate_find,
+      profile_link_site.validate_replace
+    )
+  end
 end
