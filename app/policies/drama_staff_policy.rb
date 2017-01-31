@@ -1,0 +1,2 @@
+class DramaStaffPolicy < ApplicationPolicy
+end

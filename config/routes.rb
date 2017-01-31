@@ -694,6 +694,57 @@
 #                                              PATCH     /edge/anime-staff/:id(.:format)                                                      anime_staff#update
 #                                              PUT       /edge/anime-staff/:id(.:format)                                                      anime_staff#update
 #                                              DELETE    /edge/anime-staff/:id(.:format)                                                      anime_staff#destroy
+#          drama_character_relationships_drama GET       /edge/drama-characters/:drama_character_id/relationships/drama(.:format)             drama_characters#show_relationship {:relationship=>"drama"}
+#                                              PUT|PATCH /edge/drama-characters/:drama_character_id/relationships/drama(.:format)             drama_characters#update_relationship {:relationship=>"drama"}
+#                                              DELETE    /edge/drama-characters/:drama_character_id/relationships/drama(.:format)             drama_characters#destroy_relationship {:relationship=>"drama"}
+#                        drama_character_drama GET       /edge/drama-characters/:drama_character_id/drama(.:format)                           dramas#get_related_resource {:relationship=>"drama", :source=>"drama_characters"}
+#      drama_character_relationships_character GET       /edge/drama-characters/:drama_character_id/relationships/character(.:format)         drama_characters#show_relationship {:relationship=>"character"}
+#                                              PUT|PATCH /edge/drama-characters/:drama_character_id/relationships/character(.:format)         drama_characters#update_relationship {:relationship=>"character"}
+#                                              DELETE    /edge/drama-characters/:drama_character_id/relationships/character(.:format)         drama_characters#destroy_relationship {:relationship=>"character"}
+#                    drama_character_character GET       /edge/drama-characters/:drama_character_id/character(.:format)                       characters#get_related_resource {:relationship=>"character", :source=>"drama_characters"}
+#       drama_character_relationships_castings GET       /edge/drama-characters/:drama_character_id/relationships/castings(.:format)          drama_characters#show_relationship {:relationship=>"castings"}
+#                                              POST      /edge/drama-characters/:drama_character_id/relationships/castings(.:format)          drama_characters#create_relationship {:relationship=>"castings"}
+#                                              PUT|PATCH /edge/drama-characters/:drama_character_id/relationships/castings(.:format)          drama_characters#update_relationship {:relationship=>"castings"}
+#                                              DELETE    /edge/drama-characters/:drama_character_id/relationships/castings(.:format)          drama_characters#destroy_relationship {:relationship=>"castings"}
+#                     drama_character_castings GET       /edge/drama-characters/:drama_character_id/castings(.:format)                        drama_castings#get_related_resources {:relationship=>"castings", :source=>"drama_characters"}
+#                             drama_characters GET       /edge/drama-characters(.:format)                                                     drama_characters#index
+#                                              POST      /edge/drama-characters(.:format)                                                     drama_characters#create
+#                              drama_character GET       /edge/drama-characters/:id(.:format)                                                 drama_characters#show
+#                                              PATCH     /edge/drama-characters/:id(.:format)                                                 drama_characters#update
+#                                              PUT       /edge/drama-characters/:id(.:format)                                                 drama_characters#update
+#                                              DELETE    /edge/drama-characters/:id(.:format)                                                 drama_characters#destroy
+#  drama_casting_relationships_drama_character GET       /edge/drama-castings/:drama_casting_id/relationships/drama-character(.:format)       drama_castings#show_relationship {:relationship=>"drama_character"}
+#                                              PUT|PATCH /edge/drama-castings/:drama_casting_id/relationships/drama-character(.:format)       drama_castings#update_relationship {:relationship=>"drama_character"}
+#                                              DELETE    /edge/drama-castings/:drama_casting_id/relationships/drama-character(.:format)       drama_castings#destroy_relationship {:relationship=>"drama_character"}
+#                drama_casting_drama_character GET       /edge/drama-castings/:drama_casting_id/drama-character(.:format)                     drama_characters#get_related_resource {:relationship=>"drama_character", :source=>"drama_castings"}
+#           drama_casting_relationships_person GET       /edge/drama-castings/:drama_casting_id/relationships/person(.:format)                drama_castings#show_relationship {:relationship=>"person"}
+#                                              PUT|PATCH /edge/drama-castings/:drama_casting_id/relationships/person(.:format)                drama_castings#update_relationship {:relationship=>"person"}
+#                                              DELETE    /edge/drama-castings/:drama_casting_id/relationships/person(.:format)                drama_castings#destroy_relationship {:relationship=>"person"}
+#                         drama_casting_person GET       /edge/drama-castings/:drama_casting_id/person(.:format)                              people#get_related_resource {:relationship=>"person", :source=>"drama_castings"}
+#         drama_casting_relationships_licensor GET       /edge/drama-castings/:drama_casting_id/relationships/licensor(.:format)              drama_castings#show_relationship {:relationship=>"licensor"}
+#                                              PUT|PATCH /edge/drama-castings/:drama_casting_id/relationships/licensor(.:format)              drama_castings#update_relationship {:relationship=>"licensor"}
+#                                              DELETE    /edge/drama-castings/:drama_casting_id/relationships/licensor(.:format)              drama_castings#destroy_relationship {:relationship=>"licensor"}
+#                       drama_casting_licensor GET       /edge/drama-castings/:drama_casting_id/licensor(.:format)                            producers#get_related_resource {:relationship=>"licensor", :source=>"drama_castings"}
+#                                              GET       /edge/drama-castings(.:format)                                                       drama_castings#index
+#                                              POST      /edge/drama-castings(.:format)                                                       drama_castings#create
+#                                drama_casting GET       /edge/drama-castings/:id(.:format)                                                   drama_castings#show
+#                                              PATCH     /edge/drama-castings/:id(.:format)                                                   drama_castings#update
+#                                              PUT       /edge/drama-castings/:id(.:format)                                                   drama_castings#update
+#                                              DELETE    /edge/drama-castings/:id(.:format)                                                   drama_castings#destroy
+#              drama_staff_relationships_drama GET       /edge/drama-staff/:drama_staff_id/relationships/drama(.:format)                      drama_staff#show_relationship {:relationship=>"drama"}
+#                                              PUT|PATCH /edge/drama-staff/:drama_staff_id/relationships/drama(.:format)                      drama_staff#update_relationship {:relationship=>"drama"}
+#                                              DELETE    /edge/drama-staff/:drama_staff_id/relationships/drama(.:format)                      drama_staff#destroy_relationship {:relationship=>"drama"}
+#                            drama_staff_drama GET       /edge/drama-staff/:drama_staff_id/drama(.:format)                                    dramas#get_related_resource {:relationship=>"drama", :source=>"drama_staff"}
+#             drama_staff_relationships_person GET       /edge/drama-staff/:drama_staff_id/relationships/person(.:format)                     drama_staff#show_relationship {:relationship=>"person"}
+#                                              PUT|PATCH /edge/drama-staff/:drama_staff_id/relationships/person(.:format)                     drama_staff#update_relationship {:relationship=>"person"}
+#                                              DELETE    /edge/drama-staff/:drama_staff_id/relationships/person(.:format)                     drama_staff#destroy_relationship {:relationship=>"person"}
+#                           drama_staff_person GET       /edge/drama-staff/:drama_staff_id/person(.:format)                                   people#get_related_resource {:relationship=>"person", :source=>"drama_staff"}
+#                            drama_staff_index GET       /edge/drama-staff(.:format)                                                          drama_staff#index
+#                                              POST      /edge/drama-staff(.:format)                                                          drama_staff#create
+#                                  drama_staff GET       /edge/drama-staff/:id(.:format)                                                      drama_staff#show
+#                                              PATCH     /edge/drama-staff/:id(.:format)                                                      drama_staff#update
+#                                              PUT       /edge/drama-staff/:id(.:format)                                                      drama_staff#update
+#                                              DELETE    /edge/drama-staff/:id(.:format)                                                      drama_staff#destroy
 #          manga_character_relationships_manga GET       /edge/manga-characters/:manga_character_id/relationships/manga(.:format)             manga_characters#show_relationship {:relationship=>"manga"}
 #                                              PUT|PATCH /edge/manga-characters/:manga_character_id/relationships/manga(.:format)             manga_characters#update_relationship {:relationship=>"manga"}
 #                                              DELETE    /edge/manga-characters/:manga_character_id/relationships/manga(.:format)             manga_characters#destroy_relationship {:relationship=>"manga"}
@@ -797,6 +848,9 @@ Rails.application.routes.draw do
     jsonapi_resources :anime_characters
     jsonapi_resources :anime_castings
     jsonapi_resources :anime_staff
+    jsonapi_resources :drama_characters
+    jsonapi_resources :drama_castings
+    jsonapi_resources :drama_staff
     jsonapi_resources :manga_characters
     jsonapi_resources :manga_staff
     resources :activities, only: %i[destroy]
