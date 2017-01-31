@@ -17,7 +17,7 @@ module HTML
         when %r{https?://.*\.imgur.com/([^\?]+).gifv?}
           "https://imgur.com/#{Regexp.last_match(1)}"
         # this is useless until giphy supports embedding video
-        when %r{https?://.*\.giphy.com/media/([^\?]+)/giphy.gif}
+        when %r{https?://.*\.giphy.com/(?:media/)?([^\?]+)(?:/giphy)?.gif}
           "https://giphy.com/gifs/#{Regexp.last_match(1)}"
         when %r{https?://.*\.gifs.com/([^\?]+).gif}
           "https://gifs.com/gif/#{Regexp.last_match(1)}"
