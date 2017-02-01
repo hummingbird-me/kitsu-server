@@ -101,6 +101,7 @@ class User < ApplicationRecord
 
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
+  update_index('users#user') { self }
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
