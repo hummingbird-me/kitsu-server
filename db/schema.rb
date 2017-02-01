@@ -734,8 +734,8 @@ ActiveRecord::Schema.define(version: 20170125231710) do
     t.string   "name",             null: false
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.string   "validate_find",    null: false
-    t.string   "validate_replace", null: false
+    t.string   "validate_find"
+    t.string   "validate_replace"
   end
 
   create_table "profile_links", force: :cascade do |t|
