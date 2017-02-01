@@ -5,8 +5,8 @@
 #
 #  id               :integer          not null, primary key
 #  name             :string           not null
-#  validate_find    :string           not null
-#  validate_replace :string           not null
+#  validate_find    :string
+#  validate_replace :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
