@@ -7,16 +7,10 @@ module Media
     include Rateable
     include Rankable
     include Trendable
+    include WithCoverImage
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
-    has_attached_file :cover_image, styles: {
-      small: ['1680x400#', :jpg],
-      large: ['3360x800#', :jpg]
-    }, convert_options: {
-      small: '-quality 75 -strip',
-      large: '-quality 50 -strip'
-    }
     has_attached_file :poster_image, styles: {
       tiny: ['110x156#', :jpg],
       small: ['284x402#', :jpg],
@@ -36,7 +30,7 @@ module Media
     has_many :installments, as: 'media'
     has_many :franchises, through: :installments
     has_many :library_entries, as: 'media', dependent: :destroy,
-      inverse_of: :media
+                               inverse_of: :media
     has_many :mappings, as: 'media', dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
     has_many :media_relationships, as: 'source', dependent: :destroy
@@ -46,9 +40,6 @@ module Media
                          inverse_of: :item
     delegate :year, to: :start_date, allow_nil: true
 
-    validates_attachment :cover_image, content_type: {
-      content_type: %w[image/jpg image/jpeg image/png]
-    }
     validates_attachment :poster_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
     }
