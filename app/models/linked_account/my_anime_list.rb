@@ -20,7 +20,7 @@ class LinkedAccount
     end
 
     after_save do
-      MyAnimeListListWorker.perform_async(user_id) if sync_to?
+      MyAnimeListListWorker.perform_async(id, user_id) if sync_to?
     end
   end
 end
