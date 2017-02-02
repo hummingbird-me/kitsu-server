@@ -96,7 +96,7 @@ class User < ApplicationRecord
     admin administrator connect dashboard developer developers edit favorites
     feature featured features feed follow followers following hummingbird index
     javascript json kitsu sysadmin sysadministrator system unfollow user users
-    wiki you
+    wiki you staff mod
   ].freeze
 
   rolify after_add: :update_title, after_remove: :update_title
@@ -146,7 +146,6 @@ class User < ApplicationRecord
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false },
                    length: { minimum: 3, maximum: 20 },
-                   exclusion: RESERVED_NAMES,
                    format: {
                      with: /\A[_A-Za-z0-9]+\z/,
                      message: <<-EOF.squish
@@ -161,6 +160,7 @@ class User < ApplicationRecord
     without: /\A[0-9]*\z/,
     message: 'cannot be entirely numbers'
   }
+  validate :not_reserved_username
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
   validates :password_digest, presence: true
@@ -184,6 +184,10 @@ class User < ApplicationRecord
   def self.find_for_auth(identification)
     identification = [identification.downcase]
     where('lower(email)=? OR lower(name)=?', *(identification * 2)).first
+  end
+
+  def not_reserved_username
+    errors.add(:name, 'is reserved') if RESERVED_NAMES.include?(name.downcase)
   end
 
   def pro?

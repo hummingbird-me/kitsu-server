@@ -112,6 +112,12 @@ RSpec.describe User, type: :model do
     end
   end
 
+  it 'should reserve certain names case-insensitively' do
+    user = User.new(name: 'admin')
+    expect(user).to be_invalid
+    expect(user.errors[:name]).not_to be_empty
+  end
+
   describe 'find_for_auth' do
     it 'should be able to query by username' do
       u = User.find_for_auth(persisted_user.name)
