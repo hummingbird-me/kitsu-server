@@ -42,7 +42,7 @@ class Manga < ApplicationRecord
   include Media
   include AgeRatings
 
-  enum subtype: %i[manga novel manhua oneshot doujin]
+  enum subtype: %i[manga novel manhua oneshot doujin manwha oel]
   enum status: %i[not_published publishing finished]
   alias_attribute :progress_limit, :chapter_count
   alias_attribute :manga_type, :subtype
