@@ -19,8 +19,8 @@ module Media
     }, convert_options: {
       tiny: '-quality 90 -strip',
       small: '-quality 75 -strip',
-      medium: '-quality 50 -strip',
-      large: '-quality 40 -strip'
+      medium: '-quality 70 -strip',
+      large: '-quality 60 -strip'
     }
 
     update_index("media##{name.underscore}") { self }
