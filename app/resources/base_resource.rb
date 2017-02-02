@@ -29,7 +29,7 @@ class BaseResource < JSONAPI::Resource
   end
 
   def self.apply_sort(records, order_options, context = {})
-    return unless order_options.any?
+    return records unless order_options.any?
 
     order_options = order_options.map { |key, direction|
       [key, "#{direction} nulls last"]
