@@ -130,6 +130,11 @@ FactoryGirl.define do
       validate_find '\A(https?://)?(www.)?(patreon.com/)?(?<username>[a-zA-Z0-9_\-]+)\z'
       validate_replace 'https://patreon.com/\k<username>'
     end
+
+    trait :website do
+      validate_find '(?<protocol>https?://)(www.)?(?<url>(.)+\.(.)+)'
+      validate_replace '\k<protocol\k<url>'
+    end
     # rubocop:enable Metrics/LineLength
   end
 end

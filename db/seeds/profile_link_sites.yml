@@ -93,3 +93,8 @@ patreon:
   name: Patreon
   validate_find: '\A(https?://)?(www.)?(patreon.com/)?(?<username>[a-zA-z0-9_\-]+)\z'
   validate_replace: 'https://patreon.com/\k<username>'
+website:
+  id: 20
+  name: Website
+  validate_find: (?<protocol>https?://)(www.)?(?<url>(.)+\.(.)+)
+  validate_replace: \k<protocol\k<url>
