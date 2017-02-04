@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125231710) do
+ActiveRecord::Schema.define(version: 20170204005149) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -439,6 +440,24 @@ ActiveRecord::Schema.define(version: 20170125231710) do
   add_index "library_entries", ["user_id", "media_type"], name: "index_library_entries_on_user_id_and_media_type", using: :btree
   add_index "library_entries", ["user_id", "status"], name: "index_library_entries_on_user_id_and_status", using: :btree
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
+
+  create_table "library_entry_logs", force: :cascade do |t|
+    t.integer  "linked_account_id",                                            null: false
+    t.string   "media_type"
+    t.integer  "media_id"
+    t.integer  "progress"
+    t.decimal  "rating",            precision: 2, scale: 1
+    t.integer  "reconsume_count"
+    t.boolean  "reconsuming"
+    t.integer  "status"
+    t.integer  "volumes_owned"
+    t.string   "action_performed",                          default: "create", null: false
+    t.integer  "sync_status",                               default: 0,        null: false
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
+  end
+
+  add_index "library_entry_logs", ["linked_account_id"], name: "index_library_entry_logs_on_linked_account_id", using: :btree
 
   create_table "linked_accounts", force: :cascade do |t|
     t.integer  "user_id",                            null: false
@@ -931,7 +950,6 @@ ActiveRecord::Schema.define(version: 20170125231710) do
     t.boolean  "avatar_processing"
     t.boolean  "subscribed_to_newsletter",                default: true
     t.string   "location",                    limit: 255
-    t.string   "website",                     limit: 255
     t.string   "waifu_or_husbando",           limit: 255
     t.integer  "waifu_id"
     t.boolean  "to_follow",                               default: false
