@@ -5,6 +5,7 @@ ruby '2.3.1'
 gem 'puma'
 gem 'rails', '4.2.1'
 gem 'rails-api'
+gem 'rails_admin'
 
 # Database Stuff
 gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens

@@ -16,6 +16,10 @@ Bundler.require(*Rails.groups)
 
 module Kitsu
   class Application < Rails::Application
+    config.relative_url_root = "/api"
+    config.action_controller.relative_url_root = "/api"
+    ENV['RAILS_RELATIVE_URL_ROOT']  = "/api"
+    ENV['ROOT_URL']  = "/api"
     # Settings in config/environments/* take precedence over those specified
     # here.  Application configuration should go into files in
     # config/initializers -- all .rb files in that directory are automatically

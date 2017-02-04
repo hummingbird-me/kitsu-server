@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: posts
@@ -30,10 +29,9 @@
 #
 # Foreign Keys
 #
-#  fk_rails_43023491e6  (target_user_id => users.id)
 #  fk_rails_5b5ddfd518  (user_id => users.id)
+#  fk_rails_6fac2de613  (target_user_id => users.id)
 #
-# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :post do

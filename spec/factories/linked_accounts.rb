@@ -5,7 +5,6 @@
 #  id                 :integer          not null, primary key
 #  encrypted_token    :string
 #  encrypted_token_iv :string
-#  private            :boolean          default(TRUE), not null
 #  share_from         :boolean          default(FALSE), not null
 #  share_to           :boolean          default(FALSE), not null
 #  sync_to            :boolean          default(FALSE), not null
@@ -21,7 +20,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_166e103170  (user_id => users.id)
+#  fk_rails_d68dcf73fa  (user_id => users.id)
 #
 
 FactoryGirl.define do

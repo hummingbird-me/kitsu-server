@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: post_likes
@@ -13,12 +12,6 @@
 #
 #  index_post_likes_on_post_id  (post_id)
 #
-# Foreign Keys
-#
-#  fk_rails_a04bfa7e81  (post_id => posts.id)
-#  fk_rails_d07653f350  (user_id => users.id)
-#
-# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :post_like do
