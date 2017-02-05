@@ -1,8 +1,8 @@
 module AdminHelper
   def url_for(options = nil)
-    x = super.split("/admin")
-    y = x.join("/api/admin")
-    puts y
-    y
+    split_url = super.split("/admin")
+    joined_url = x.join("/api/admin")
+    #for some reason it's necessary to split and rejoin, otherwise we either get /admin or /api/api/admin
+    joined_url
   end
 end
