@@ -1,5 +1,5 @@
 RailsAdmin.config do |config|
-  # config.parent_controller = '::ApplicationController'
+  config.parent_controller = '::AdminController'
 
 
   config.navigation_static_links = {

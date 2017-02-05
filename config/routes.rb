@@ -746,5 +746,5 @@ Rails.application.routes.draw do
   post '/user/_prodsync', to: 'users#prod_sync'
   use_doorkeeper
 
-  root to: 'home#index'
+  root to: 'api/home#index'
 end
