@@ -1,6 +1,8 @@
 module AdminHelper
   def url_for(options = nil)
-    puts options
-    "123"
+    x = super.split("/admin")
+    y = x.join("/api/admin")
+    puts y
+    y
   end
 end

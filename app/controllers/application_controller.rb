@@ -7,10 +7,6 @@ class ApplicationController < JSONAPI::ResourceController
     super + '/api/edge'
   end
 
-  def url_for(options = {}, *params)
-   '/api' + super
-  end
-
   before_action :validate_token!
 
   force_ssl if Rails.env.production?
