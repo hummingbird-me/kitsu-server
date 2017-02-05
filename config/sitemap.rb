@@ -23,7 +23,7 @@ SitemapGenerator::Sitemap.create do
   end
   group(filename: 'users') do
     User.find_each do |user|
-      add "/user/#{user.name}", lastmod: user.updated_at, images: [
+      add "/users/#{user.name}", lastmod: user.updated_at, images: [
         { loc: user.avatar.to_s, caption: "#{user.name} Avatar" },
         { loc: user.cover_image.to_s, caption: "#{user.name} Banner" }
       ]
