@@ -29,7 +29,7 @@ class MalCastingDump
 
     def apply!
       puts "=> #{anime.canonical_title}"
-      data[:Characters].map do |char|
+      data[:Characters]&.map do |char|
         puts "  -> #{char[:name]}"
         character = character_for(char)
         AnimeCharacter.where(
@@ -38,7 +38,7 @@ class MalCastingDump
         ).first_or_create(role: char[:role].downcase)
         castings_for(character, char[:actors]) if char[:actors].present?
       end
-      data[:Staff].map do |staff|
+      data[:Staff]&.map do |staff|
         puts "=> #{staff[:name]}"
         person = person_for(staff)
         AnimeStaff.where(
