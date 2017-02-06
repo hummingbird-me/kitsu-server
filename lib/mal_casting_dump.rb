@@ -28,7 +28,7 @@ class MalCastingDump
     end
 
     def apply!
-      puts "=> #{anime.canonical_title}"
+      puts "=> #{anime&.canonical_title}"
       data[:Characters]&.map do |char|
         puts "  -> #{char[:name]}"
         character = character_for(char)
