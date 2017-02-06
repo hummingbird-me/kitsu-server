@@ -36,7 +36,7 @@ class MalCastingDump
           anime: anime,
           character: character,
         ).first_or_create(role: char[:role].downcase)
-        castings_for(character, char[:actors])
+        castings_for(character, char[:actors]) if char[:actors].present?
       end
       data[:Staff].map do |staff|
         puts "=> #{staff[:name]}"
