@@ -15,6 +15,11 @@ namespace :stream do
         StreamSync.follow_media_aggr(type)
       end
     end
+
+    desc 'Synchronize media genres'
+    task :media_genres => :environment do
+      StreamSync.media_genres
+    end
   end
 
   namespace :dump do
