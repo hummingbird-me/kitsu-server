@@ -272,7 +272,7 @@ class User < ApplicationRecord
   end
 
   after_create do
-    UserMailer.confirmation(self).deliver_now
+    UserMailer.confirmation(self).deliver_later
     aggregated_feed.follow(feed)
     timeline.follow(feed)
     Feed.global.follow(feed)
@@ -297,7 +297,7 @@ class User < ApplicationRecord
     if email_changed? && !Rails.env.staging?
       self.previous_email = email_was
       self.confirmed_at = nil
-      UserMailer.confirmation(self).deliver_now
+      UserMailer.confirmation(self).deliver_later
     end
     update_profile_completed
     update_feed_completed
