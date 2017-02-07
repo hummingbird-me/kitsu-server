@@ -12,7 +12,7 @@ module Stream
       def call(req)
         req[:request_headers]['authorization'] = jwt_token
         req[:request_headers]['stream-auth-type'] = 'jwt'
-        params = parse_query(req.url.query)
+        params = parse_query(req.url.query) || {}
         params['api_key'] = @options.api_key
         req[:url].query = build_query(params)
         if req.body.present?
@@ -28,7 +28,7 @@ module Stream
       private
 
       def jwt_token
-        Stream::Signer.create_jwt_token('*', '*', @options.api_secret)
+        Stream::Signer.create_jwt_token('*', '*', @options.api_secret, nil, '*')
       end
     end
 
@@ -53,7 +53,7 @@ module Stream
     end
 
     def upload_meta(metadata)
-      post 'meta', data: metadata
+      post 'meta/', data: metadata
     end
   end
 end
