@@ -6,6 +6,6 @@ class CounterCacheResetWorker
 
   def perform
     CounterCacheResets.media_user_counts
-    CounterCacheResets.favorites_count
+    CounterCacheResets.favorite_counts
   end
 end
