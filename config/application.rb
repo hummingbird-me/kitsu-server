@@ -16,6 +16,9 @@ Bundler.require(*Rails.groups)
 
 module Kitsu
   class Application < Rails::Application
+    # initializer "myinitializer", :after => "add_routing_paths" do |app|
+    #   app.routes_reloader.paths.delete_if{ |path| path.include?("rails_admin") }
+    # end
     config.relative_url_root = "/api"
     config.action_controller.relative_url_root = "/api"
     ENV['RAILS_RELATIVE_URL_ROOT']  = "/api"
