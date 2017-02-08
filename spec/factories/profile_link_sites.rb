@@ -10,15 +10,13 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
-# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :profile_link_site do
     name { Faker::Company.name }
-    validate_find 'use trait'
-    validate_replace 'use trait'
+    validate_find '\A(https?://)?(www.)?(twitter.com/)?(@)?(?<username>[a-zA-Z0-9_]+)\z'
+    validate_replace 'https://twitter.com/\k<username>'
 
-    # rubocop:disable Metrics/LineLength
     # Twitter
     trait :twitter do
       validate_find '\A(https?://)?(www.)?(twitter.com/)?(@)?(?<username>[a-zA-Z0-9_]+)\z'
