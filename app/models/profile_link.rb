@@ -26,12 +26,12 @@ class ProfileLink < ApplicationRecord
   belongs_to :profile_link_site, required: true
 
   validates :url, presence: true
-  validate :updated_url
+  validate :updated_url, if: :url
 
   before_validation do
     # updates the url to the expected output
     # Twitter, ie: toyhammered -> https://twitter.com/toyhammered
-    self.url = url.sub(
+    self.url = url&.sub(
       profile_link_site.validate_find,
       profile_link_site.validate_replace
     )
