@@ -14,6 +14,7 @@
 
 class Streamer < ApplicationRecord
   has_attached_file :logo
+  has_paper_trail
 
   validates :site_name, presence: true
   validates_attachment :logo, content_type: {

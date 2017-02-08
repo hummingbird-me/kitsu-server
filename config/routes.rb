@@ -1,6 +1,6 @@
 # == Route Map
 #
-# I, [2017-02-03T23:47:37.443303 #45]  INFO -- sentry: ** [Raven] Raven 2.2.0 configured not to capture errors: No server specified, No host specified, No path specified, No public_key specified, No secret_key specified, No project_id specified
+# I, [2017-02-08T01:52:02.717571 #46]  INFO -- sentry: ** [Raven] Raven 2.2.0 configured not to capture errors: No server specified, No host specified, No path specified, No public_key specified, No secret_key specified, No project_id specified
 #                                       Prefix Verb      URI Pattern                                                                          Controller#Action
 #                                  rails_admin           /admin                                                                               RailsAdmin::Engine
 #             library_entry_relationships_user GET       /edge/library-entries/:library_entry_id/relationships/user(.:format)                 library_entries#show_relationship {:relationship=>"user"}
@@ -677,16 +677,18 @@
 #                                         root GET       /                                                                                    home#index
 #
 # Routes for RailsAdmin::Engine:
-#   dashboard GET         /                                      rails_admin/main#dashboard
-#       index GET|POST    /:model_name(.:format)                 rails_admin/main#index
-#         new GET|POST    /:model_name/new(.:format)             rails_admin/main#new
-#      export GET|POST    /:model_name/export(.:format)          rails_admin/main#export
-# bulk_delete POST|DELETE /:model_name/bulk_delete(.:format)     rails_admin/main#bulk_delete
-# bulk_action POST        /:model_name/bulk_action(.:format)     rails_admin/main#bulk_action
-#        show GET         /:model_name/:id(.:format)             rails_admin/main#show
-#        edit GET|PUT     /:model_name/:id/edit(.:format)        rails_admin/main#edit
-#      delete GET|DELETE  /:model_name/:id/delete(.:format)      rails_admin/main#delete
-# show_in_app GET         /:model_name/:id/show_in_app(.:format) rails_admin/main#show_in_app
+#     dashboard GET         /                                      rails_admin/main#dashboard
+#         index GET|POST    /:model_name(.:format)                 rails_admin/main#index
+# history_index GET         /:model_name/history(.:format)         rails_admin/main#history_index
+#           new GET|POST    /:model_name/new(.:format)             rails_admin/main#new
+#        export GET|POST    /:model_name/export(.:format)          rails_admin/main#export
+#   bulk_delete POST|DELETE /:model_name/bulk_delete(.:format)     rails_admin/main#bulk_delete
+#   bulk_action POST        /:model_name/bulk_action(.:format)     rails_admin/main#bulk_action
+#  history_show GET         /:model_name/:id/history(.:format)     rails_admin/main#history_show
+#          show GET         /:model_name/:id(.:format)             rails_admin/main#show
+#          edit GET|PUT     /:model_name/:id/edit(.:format)        rails_admin/main#edit
+#        delete GET|DELETE  /:model_name/:id/delete(.:format)      rails_admin/main#delete
+#   show_in_app GET         /:model_name/:id/show_in_app(.:format) rails_admin/main#show_in_app
 #
 
 Rails.application.routes.draw do

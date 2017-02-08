@@ -269,6 +269,9 @@ GEM
       multi_json (~> 1.11)
       mustache
       nokogiri (~> 1.6.6)
+    paper_trail (6.0.2)
+      activerecord (>= 4.0, < 5.2)
+      request_store (~> 1.1)
     paperclip (5.1.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -375,6 +378,7 @@ GEM
     redis-store (1.2.0)
       redis (>= 2.2)
     remotipart (1.3.1)
+    request_store (1.3.2)
     rinku (2.0.2)
     rolify (5.1.0)
     rspec (3.4.0)
@@ -522,6 +526,7 @@ DEPENDENCIES
   oj
   oj_mimic_json
   onebox
+  paper_trail
   paperclip (~> 5.0)
   paperclip-optimizer
   paranoia (~> 2.0)
