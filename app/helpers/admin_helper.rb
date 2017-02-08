@@ -14,25 +14,5 @@ module AdminHelper
     joined_url
   end
 
-  def index_path(index, options = {})
-    return super if super.include?('/api/')
-    split_url = super.split('/admin')
-    joined_url = split_url.join('/api/admin')
-    joined_url
-  end
-
-  def redirect_path(redirect, options = {})
-    return super if super.include?('/api/')
-    split_url = super.split('/admin')
-    joined_url = split_url.join('/api/admin')
-    joined_url
-  end
-
-  def edit_path(edit, options = {})
-    return super if super.include?('/api/')
-    split_url = super.split('/admin')
-    joined_url = split_url.join('/api/admin')
-    joined_url
-  end
 
 end
