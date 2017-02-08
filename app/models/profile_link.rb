@@ -26,7 +26,7 @@ class ProfileLink < ApplicationRecord
   belongs_to :profile_link_site, required: true
 
   validates :url, presence: true
-  validate :updated_url, if: :url
+  validate :url_formatted, if: :url
 
   before_validation do
     # updates the url to the expected output
@@ -37,7 +37,7 @@ class ProfileLink < ApplicationRecord
     )
   end
 
-  def updated_url
+  def url_formatted
     errors.add(:url, 'is invalid') unless profile_link_site.validate_find =~ url
   end
 end
