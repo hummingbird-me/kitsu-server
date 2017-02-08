@@ -16,20 +16,13 @@ module DataImport
 
     # get a bunch of anime
     def get_anime(ids)
-      fail 'Must use APIv2' unless apiv2?
       ids = [ids] unless ids.is_a? Array
 
       ids.each_slice(100) do |batch|
-        req = get("/api/v2/anime/#{batch.join(',')}", headers: {
-          'X-Client-Id' => client_id
-        })
+        req = get("/api/edge/anime/?filter[id]=#{batch.join(',')}")
         req.on_complete do |res|
-          begin
-            anime = JSON.parse(res.body)['anime']
-            anime.each { |a| yield a }
-          rescue
-            get_anime(ids, &Proc.new)
-          end
+          anime = JSON.parse(res.body)['data']
+          anime.each { |a| yield a }
         end
       end
     end
@@ -41,21 +34,12 @@ module DataImport
       get_anime(ids) do |anime|
         file = Tempfile.new("anime_#{anime['id']}")
         file.binmode
-        req = get(anime['poster_image'].sub('https:', 'http:'))
+        req = get(anime['attributes']['posterImage']['original'].sub('https:', 'http:'))
         req.on_complete { |res| file.write(res.body); yield anime, file.flush }
       end
     end
 
     private
-
-    def client_id
-      #@opts[:client_id]
-      '284b9b980a2b3d0749bb'
-    end
-
-    def apiv2?
-      client_id.present?
-    end
 
     def get(path, opts = {})
       opts = opts.merge(accept_encoding: :gzip)
