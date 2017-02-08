@@ -34,8 +34,12 @@ module DataImport
       get_anime(ids) do |anime|
         file = Tempfile.new("anime_#{anime['id']}")
         file.binmode
-        req = get(anime['attributes']['posterImage']['original'].sub('https:', 'http:'))
-        req.on_complete { |res| file.write(res.body); yield anime, file.flush }
+        poster_path = %w[attributes posterImage original]
+        req = get(anime.dig(*poster_path)&.sub('https:', 'http:'))
+        req.on_complete do |res|
+          file.write(res.body)
+          yield anime, file.flush
+        end
       end
     end
 
@@ -45,7 +49,7 @@ module DataImport
       opts = opts.merge(accept_encoding: :gzip)
       req = Typhoeus::Request.new(build_url(path), opts)
       req.on_failure do |res|
-        puts "Request failed (#{request_url(res)} => #{res.return_code.to_s})"
+        puts "Request failed (#{request_url(res)} => #{res.return_code})"
       end
       req.on_headers do |res|
         unless res.code == 200
