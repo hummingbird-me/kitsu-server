@@ -33,7 +33,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :twitter)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -53,7 +53,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :facebook)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -73,7 +73,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :youtube)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('UC_-Zt4dWU1bT52tG-DHGftg')
           end
         end
@@ -93,7 +93,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :google)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('115819863396302953172')
           end
         end
@@ -106,7 +106,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :google)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('+toyhammered')
           end
         end
@@ -118,15 +118,15 @@ RSpec.describe ProfileLinkSite, type: :model do
       context 'success' do
         it 'should return a username' do
           urls = %w[
-            instagram.com/rassiner/
-            https://www.instagram.com/rassiner/
-            https://instagram.com/rassiner/
+            instagram.com/rassiner
+            https://www.instagram.com/rassiner
+            https://instagram.com/rassiner
             rassiner
           ]
           site = build(:profile_link_site, :instagram)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('rassiner')
           end
         end
@@ -148,7 +148,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :twitch)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -168,7 +168,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :vimeo)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -190,7 +190,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :github)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -204,7 +204,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           url = 'toyhammered#0718'
           site = build(:profile_link_site, :discord)
 
-          temp = Regexp.new(site.validate_find).match(url)
+          temp = site.validate_find.match(url)
           expect(temp[1]).to eq('toyhammered#0718')
         end
       end
@@ -215,16 +215,16 @@ RSpec.describe ProfileLinkSite, type: :model do
       context 'success' do
         it 'should return a username' do
           urls = %w[
-            steamcommunity.com/id/toyhammered/
-            http://steamcommunity.com/id/toyhammered/
-            https://steamcommunity.com/id/toyhammered/
-            http://www.steamcommunity.com/id/toyhammered/
+            steamcommunity.com/id/toyhammered
+            http://steamcommunity.com/id/toyhammered
+            https://steamcommunity.com/id/toyhammered
+            http://www.steamcommunity.com/id/toyhammered
             toyhammered
           ]
           site = build(:profile_link_site, :steam)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -236,16 +236,16 @@ RSpec.describe ProfileLinkSite, type: :model do
       context 'success' do
         it 'should return a username' do
           urls = %w[
-            raptr.com/toyhammered/
-            http://raptr.com/toyhammered/
-            https://raptr.com/toyhammered/
-            http://www.raptr.com/toyhammered/
+            raptr.com/toyhammered
+            http://raptr.com/toyhammered
+            https://raptr.com/toyhammered
+            http://www.raptr.com/toyhammered
             toyhammered
           ]
           site = build(:profile_link_site, :raptr)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -259,7 +259,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           url = 'toyhammered#0718'
           site = build(:profile_link_site, :discord)
 
-          temp = Regexp.new(site.validate_find).match(url)
+          temp = site.validate_find.match(url)
           expect(temp[1]).to eq('toyhammered#0718')
         end
       end
@@ -280,7 +280,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :tumblr)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -292,15 +292,15 @@ RSpec.describe ProfileLinkSite, type: :model do
       context 'success' do
         it 'should return a username' do
           urls = %w[
-            soundcloud.com/toyhammered/
-            https://www.soundcloud.com/toyhammered/
-            https://soundcloud.com/toyhammered/
+            soundcloud.com/toyhammered
+            https://www.soundcloud.com/toyhammered
+            https://soundcloud.com/toyhammered
             toyhammered
           ]
           site = build(:profile_link_site, :soundcloud)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -320,7 +320,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :dailymotion)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -340,7 +340,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :kickstarter)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -354,7 +354,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :kickstarter)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('111759513')
           end
         end
@@ -374,7 +374,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :mobcrush)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
@@ -394,7 +394,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :osu)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('1234567')
           end
         end
@@ -414,7 +414,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           site = build(:profile_link_site, :patreon)
 
           urls.each do |url|
-            temp = Regexp.new(site.validate_find).match(url)
+            temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
           end
         end
