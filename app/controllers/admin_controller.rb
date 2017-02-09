@@ -1,6 +1,7 @@
 class AdminController < ActionController::Base
   helper AdminHelper
   protect_from_forgery with: :null_session
+  before_action :set_paper_trail_whodunnit
   def handle_unverified_request
     # super # call the default behaviour, including Devise override
     # authenticate_user!
@@ -8,5 +9,13 @@ class AdminController < ActionController::Base
 
   rescue_from ActionController::InvalidAuthenticityToken do
     render text: 'Token expired/invalid', status: 498
+  end
+
+
+  def current_user
+    puts "hi"
+    puts request.authorization
+    puts "bye"
+    "waddup"
   end
 end

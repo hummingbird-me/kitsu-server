@@ -1,7 +1,17 @@
 RailsAdmin.config do |config|
   config.parent_controller = '::AdminController'
-  config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
-  PAPER_TRAIL_AUDIT_MODEL = %w(Streamer).freeze
+
+  # config.authorize_with do
+  #   authenticate_or_request_with_http_basic('Login required') do |username, password|
+  #     user = User.where(email: username, password: password, admin: true).first
+  #     user
+  #   end
+  # end
+
+  config.authorize_with do
+    redirect_to main_app.root_path unless current_user
+  end
+
   ### Popular gems integration
 
   ## == Devise ==
@@ -17,7 +27,8 @@ RailsAdmin.config do |config|
   # config.authorize_with :pundit
 
   ## == PaperTrail ==
-  # config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
+  config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
+  PAPER_TRAIL_AUDIT_MODEL = %w(Streamer).freeze
 
   ### More at https://github.com/sferik/rails_admin/wiki/Base-configuration
 

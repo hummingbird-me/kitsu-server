@@ -225,6 +225,10 @@ class User < ApplicationRecord
     end
   end
 
+  def admin?
+    self.title == 'Staff' || self.title == 'Mod'
+  end
+
   def feed
     @feed ||= Feed.user(id)
   end

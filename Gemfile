@@ -6,10 +6,6 @@ gem 'puma'
 gem 'rails', '4.2.1'
 gem 'rails-api'
 
-# Admin Panel
-gem 'rails_admin'
-gem 'paper_trail'
-
 # Database Stuff
 gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch
@@ -73,6 +69,11 @@ gem 'oj' # Blazing-fast JSON parsing
 gem 'oj_mimic_json' # Hook it in place of JSON gem
 
 gem 'sentry-raven' # Send error data to Sentry
+
+# Admin Panel
+gem 'rails_admin' #admin panel
+# gem "rails_admin_pundit", :github => "sudosu/rails_admin_pundit" #pundit
+gem 'paper_trail' #admin history
 
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
