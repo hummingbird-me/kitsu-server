@@ -63,20 +63,18 @@ class ListImport < ApplicationRecord
     raise 'Import is invalid' unless valid?(:create)
 
     yield({ status: :running, total: count, progress: 0 })
-    Chewy.strategy(:atomic) do
-      LibraryEntry.transaction do
-        each_with_index do |(media, data), index|
-          next unless media.present?
-          # Cap the progress
-          limit = media.progress_limit || media.default_progress_limit
-          data[:progress] = [data[:progress], limit].compact.min
-          # Merge the library entries
-          le = LibraryEntry.where(user: user, media: media).first_or_initialize
-          le.imported = true
-          le = merged_entry(le, data)
-          le.save! unless le.status == nil
-          yield({ status: :running, total: count, progress: index + 1 })
-        end
+    LibraryEntry.transaction do
+      each_with_index do |(media, data), index|
+        next unless media.present?
+        # Cap the progress
+        limit = media.progress_limit || media.default_progress_limit
+        data[:progress] = [data[:progress], limit].compact.min
+        # Merge the library entries
+        le = LibraryEntry.where(user: user, media: media).first_or_initialize
+        le.imported = true
+        le = merged_entry(le, data)
+        le.save! unless le.status == nil
+        yield({ status: :running, total: count, progress: index + 1 })
       end
     end
     yield({ status: :completed, total: count, progress: count })
