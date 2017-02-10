@@ -693,6 +693,7 @@
 
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  resources :sessions, only: [:index, :create]
   scope '/edge' do
     jsonapi_resources :library_entries
     jsonapi_resources :anime

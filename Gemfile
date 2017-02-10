@@ -72,7 +72,6 @@ gem 'sentry-raven' # Send error data to Sentry
 
 # Admin Panel
 gem 'rails_admin' #admin panel
-# gem "rails_admin_pundit", :github => "sudosu/rails_admin_pundit" #pundit
 gem 'paper_trail' #admin history
 
 group :development, :test do

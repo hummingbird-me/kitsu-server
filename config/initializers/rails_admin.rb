@@ -9,7 +9,9 @@ RailsAdmin.config do |config|
   # end
 
   config.authorize_with do
-    redirect_to main_app.root_path unless current_user
+    puts "current user"
+    puts current_user
+    # redirect_to main_app.root_path unless current_user
   end
 
   ### Popular gems integration
@@ -25,6 +27,9 @@ RailsAdmin.config do |config|
 
   ## == Pundit ==
   # config.authorize_with :pundit
+
+  ## == method to call for current_user ==
+  # config.current_user_method(&:current_user)
 
   ## == PaperTrail ==
   config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0

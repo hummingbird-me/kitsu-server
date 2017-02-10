@@ -1,4 +1,6 @@
 class AdminController < ActionController::Base
+  include Pundit
+  include DoorkeeperHelpers
   helper AdminHelper
   protect_from_forgery with: :null_session
   before_action :set_paper_trail_whodunnit
@@ -13,9 +15,7 @@ class AdminController < ActionController::Base
 
 
   def current_user
-    puts "hi"
-    puts request.authorization
-    puts "bye"
-    "waddup"
+    puts session[:token]
+    session[:token]
   end
 end
