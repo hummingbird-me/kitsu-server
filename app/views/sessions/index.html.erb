@@ -1,19 +1,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<h1 class="link-to-admin"></h1>
-
 <script type="text/javascript">
   var emberAuth = JSON.parse(localStorage['ember_simple_auth:session']);
-  if (emberAuth) {
-    $(".link-to-admin").html("<a href='/api/admin'>User detected. Click to enter admin panel, or return to home if you are not staff.</a>")
-  } else {
-    $(".link-to-admin").html("<a href='/'>User not detected. Click to return to Kitsu.</a>")
-  }
   $.ajax({
     url: '/api/sessions',
     data: {
       token: emberAuth.authenticated.access_token
     },
     type: 'post'
+  }).then(function(){
+    window.location.replace('/api/admin');
   })
 </script>
