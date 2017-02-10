@@ -44,6 +44,8 @@ module Kitsu
     # Allow autoloading any lib files
     config.autoload_paths << "#{Rails.root}/lib"
 
+    config.api_only = false
+
     # Eable CORS
     config.middleware.insert_before 0, 'Rack::Cors' do
       allow do

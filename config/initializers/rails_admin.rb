@@ -9,9 +9,7 @@ RailsAdmin.config do |config|
   # end
 
   config.authorize_with do
-    puts "current user"
-    puts current_user
-    # redirect_to main_app.root_path unless current_user
+    redirect_to main_app.root_path unless current_user.admin?
   end
 
   ### Popular gems integration

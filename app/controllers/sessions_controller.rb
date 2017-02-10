@@ -5,6 +5,6 @@ class SessionsController < ActionController::Base
 
   def create
     session[:token] = params[:token]
-    redirect_to "/api/admin"
+    head :ok
   end
 end
