@@ -90,6 +90,9 @@
 # rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
+  include WithCoverImage
+  include WithAvatar
+
   PAST_NAMES_LIMIT = 10
   PAST_IPS_LIMIT = 20
   RESERVED_NAMES = %w[
@@ -127,20 +130,6 @@ class User < ApplicationRecord
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
 
-  has_attached_file :avatar, styles: {
-    tiny: '40x40#',
-    small: '64x64#',
-    medium: '100x100#',
-    large: '200x200#'
-  }, convert_options: {
-    tiny: '-quality 100 -strip',
-    small: '-quality 80 -strip',
-    medium: '-quality 70 -strip',
-    large: '-quality 60 -strip'
-  }
-  has_attached_file :cover_image
-  process_in_background :cover_image
-
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
   validates :name, presence: true,
@@ -165,9 +154,6 @@ class User < ApplicationRecord
   validates :gender, length: { maximum: 20 }
   validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
-  validates_attachment :avatar, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png image/gif]
-  }
 
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))

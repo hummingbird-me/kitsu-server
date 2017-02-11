@@ -14,5 +14,6 @@ module WithCoverImage
     validates_attachment :cover_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
     }
+    process_in_background :cover_image
   end
 end
