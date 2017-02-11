@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125231710) do
+ActiveRecord::Schema.define(version: 20170211082904) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_trgm"
 
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
@@ -381,10 +381,9 @@ ActiveRecord::Schema.define(version: 20170125231710) do
   add_index "group_members", ["user_id"], name: "index_group_members_on_user_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
-    t.string   "name",                     limit: 255,              null: false
-    t.string   "slug",                     limit: 255,              null: false
-    t.string   "bio",                      limit: 255, default: "", null: false
-    t.text     "about",                                default: "", null: false
+    t.string   "name",                     limit: 255,                 null: false
+    t.string   "slug",                     limit: 255,                 null: false
+    t.text     "about",                                default: "",    null: false
     t.string   "avatar_file_name",         limit: 255
     t.string   "avatar_content_type",      limit: 255
     t.integer  "avatar_file_size"
@@ -393,12 +392,19 @@ ActiveRecord::Schema.define(version: 20170125231710) do
     t.string   "cover_image_content_type", limit: 255
     t.integer  "cover_image_file_size"
     t.datetime "cover_image_updated_at"
-    t.integer  "confirmed_members_count",              default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "avatar_processing"
-    t.text     "about_formatted"
+    t.integer  "members_count",                        default: 0
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
+    t.boolean  "avatar_processing",                    default: false, null: false
+    t.text     "rules"
+    t.text     "rules_formatted"
+    t.boolean  "nsfw",                                 default: false, null: false
+    t.integer  "privacy",                              default: 0,     null: false
+    t.string   "locale"
+    t.string   "tags",                                 default: [],    null: false, array: true
   end
+
+  add_index "groups", ["slug"], name: "index_groups_on_slug", unique: true, using: :btree
 
   create_table "installments", force: :cascade do |t|
     t.integer "media_id"

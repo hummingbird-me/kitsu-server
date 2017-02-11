@@ -803,6 +803,12 @@
 #                                              PATCH     /edge/manga-staff/:id(.:format)                                                      manga_staff#update
 #                                              PUT       /edge/manga-staff/:id(.:format)                                                      manga_staff#update
 #                                              DELETE    /edge/manga-staff/:id(.:format)                                                      manga_staff#destroy
+#                                       groups GET       /edge/groups(.:format)                                                               groups#index
+#                                              POST      /edge/groups(.:format)                                                               groups#create
+#                                        group GET       /edge/groups/:id(.:format)                                                           groups#show
+#                                              PATCH     /edge/groups/:id(.:format)                                                           groups#update
+#                                              PUT       /edge/groups/:id(.:format)                                                           groups#update
+#                                              DELETE    /edge/groups/:id(.:format)                                                           groups#destroy
 #                                     activity DELETE    /edge/activities/:id(.:format)                                                       activities#destroy
 #                                              GET       /edge/feeds/:group/:id(.:format)                                                     feeds#show
 #                                              POST      /edge/feeds/:group/:id/_read(.:format)                                               feeds#mark_read
@@ -883,6 +889,8 @@ Rails.application.routes.draw do
     jsonapi_resources :drama_staff
     jsonapi_resources :manga_characters
     jsonapi_resources :manga_staff
+    jsonapi_resources :groups
+
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
