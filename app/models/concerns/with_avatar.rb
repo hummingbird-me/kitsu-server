@@ -16,6 +16,11 @@ module WithAvatar
     validates_attachment :avatar, content_type: {
       content_type: %w[image/jpg image/jpeg image/png image/gif]
     }
-    process_in_background :avatar
+    process_in_background :avatar,
+      only_process: %i[tiny small medium],
+      processing_image_url: ->() {
+        interpolator = avatar.options[:interpolator]
+        interpolator.interpolate(options[:url], avatar, :large)
+      }
   end
 end
