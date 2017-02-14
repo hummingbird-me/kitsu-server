@@ -1,6 +1,6 @@
 class SessionsController < ActionController::Base
 
-  def index
+  def new
   end
 
   def create
