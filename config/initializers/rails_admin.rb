@@ -1,43 +1,15 @@
 RailsAdmin.config do |config|
   config.parent_controller = '::AdminController'
 
-  # config.authorize_with do
-  #   authenticate_or_request_with_http_basic('Login required') do |username, password|
-  #     user = User.where(email: username, password: password, admin: true).first
-  #     user
-  #   end
-  # end
-
   config.authorize_with do
     redirect_to main_app.root_path unless current_user.admin?
   end
 
-  ### Popular gems integration
-
-  ## == Devise ==
-  # config.authenticate_with do
-  #   warden.authenticate! scope: :user
-  # end
-  # config.current_user_method(&:current_user)
-
-  ## == Cancan ==
-  # config.authorize_with :cancan
-
-  ## == Pundit ==
-  # config.authorize_with :pundit
-
-  ## == method to call for current_user ==
-  # config.current_user_method(&:current_user)
 
   ## == PaperTrail ==
   config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
   PAPER_TRAIL_AUDIT_MODEL = %w(Streamer).freeze
 
-  ### More at https://github.com/sferik/rails_admin/wiki/Base-configuration
-
-  ## == Gravatar integration ==
-  ## To disable Gravatar integration in Navigation Bar set to false
-  # config.show_gravatar true
 
   config.actions do
     dashboard                     # mandatory
@@ -83,8 +55,5 @@ RailsAdmin.config do |config|
     end
     show_in_app
 
-    ## With an audit adapter, you can add:
-    # history_index
-    # history_show
   end
 end
