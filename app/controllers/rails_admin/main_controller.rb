@@ -3,7 +3,6 @@ module RailsAdmin
     include ActionView::Helpers::TextHelper
     include RailsAdmin::MainHelper
     include RailsAdmin::ApplicationHelper
-    # helper AdminHelper
 
     layout :get_layout
 
