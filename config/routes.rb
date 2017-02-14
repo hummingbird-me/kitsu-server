@@ -803,12 +803,31 @@
 #                                              PATCH     /edge/manga-staff/:id(.:format)                                                      manga_staff#update
 #                                              PUT       /edge/manga-staff/:id(.:format)                                                      manga_staff#update
 #                                              DELETE    /edge/manga-staff/:id(.:format)                                                      manga_staff#destroy
+#                  group_relationships_members GET       /edge/groups/:group_id/relationships/members(.:format)                               groups#show_relationship {:relationship=>"members"}
+#                                              POST      /edge/groups/:group_id/relationships/members(.:format)                               groups#create_relationship {:relationship=>"members"}
+#                                              PUT|PATCH /edge/groups/:group_id/relationships/members(.:format)                               groups#update_relationship {:relationship=>"members"}
+#                                              DELETE    /edge/groups/:group_id/relationships/members(.:format)                               groups#destroy_relationship {:relationship=>"members"}
+#                                group_members GET       /edge/groups/:group_id/members(.:format)                                             group_members#get_related_resources {:relationship=>"members", :source=>"groups"}
 #                                       groups GET       /edge/groups(.:format)                                                               groups#index
 #                                              POST      /edge/groups(.:format)                                                               groups#create
 #                                        group GET       /edge/groups/:id(.:format)                                                           groups#show
 #                                              PATCH     /edge/groups/:id(.:format)                                                           groups#update
 #                                              PUT       /edge/groups/:id(.:format)                                                           groups#update
 #                                              DELETE    /edge/groups/:id(.:format)                                                           groups#destroy
+#             group_member_relationships_group GET       /edge/group-members/:group_member_id/relationships/group(.:format)                   group_members#show_relationship {:relationship=>"group"}
+#                                              PUT|PATCH /edge/group-members/:group_member_id/relationships/group(.:format)                   group_members#update_relationship {:relationship=>"group"}
+#                                              DELETE    /edge/group-members/:group_member_id/relationships/group(.:format)                   group_members#destroy_relationship {:relationship=>"group"}
+#                           group_member_group GET       /edge/group-members/:group_member_id/group(.:format)                                 groups#get_related_resource {:relationship=>"group", :source=>"group_members"}
+#              group_member_relationships_user GET       /edge/group-members/:group_member_id/relationships/user(.:format)                    group_members#show_relationship {:relationship=>"user"}
+#                                              PUT|PATCH /edge/group-members/:group_member_id/relationships/user(.:format)                    group_members#update_relationship {:relationship=>"user"}
+#                                              DELETE    /edge/group-members/:group_member_id/relationships/user(.:format)                    group_members#destroy_relationship {:relationship=>"user"}
+#                            group_member_user GET       /edge/group-members/:group_member_id/user(.:format)                                  users#get_related_resource {:relationship=>"user", :source=>"group_members"}
+#                                              GET       /edge/group-members(.:format)                                                        group_members#index
+#                                              POST      /edge/group-members(.:format)                                                        group_members#create
+#                                 group_member GET       /edge/group-members/:id(.:format)                                                    group_members#show
+#                                              PATCH     /edge/group-members/:id(.:format)                                                    group_members#update
+#                                              PUT       /edge/group-members/:id(.:format)                                                    group_members#update
+#                                              DELETE    /edge/group-members/:id(.:format)                                                    group_members#destroy
 #                                     activity DELETE    /edge/activities/:id(.:format)                                                       activities#destroy
 #                                              GET       /edge/feeds/:group/:id(.:format)                                                     feeds#show
 #                                              POST      /edge/feeds/:group/:id/_read(.:format)                                               feeds#mark_read
@@ -890,6 +909,7 @@ Rails.application.routes.draw do
     jsonapi_resources :manga_characters
     jsonapi_resources :manga_staff
     jsonapi_resources :groups
+    jsonapi_resources :group_members
 
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'

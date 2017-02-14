@@ -41,5 +41,13 @@ class Group < ApplicationRecord
   enum privacy: %i[open closed restricted]
   scope :sfw, ->() { where(nsfw: false) }
 
+  has_many :members, class_name: 'GroupMember', dependent: :destroy
+  has_many :owners, ->() { admin }, class_name: 'GroupMember'
+
   validates :name, presence: true, length: { in: 4..50 }
+  validates :owners, length: { minimum: 1 }
+
+  def member_for(user)
+    members.where(user: user)
+  end
 end
