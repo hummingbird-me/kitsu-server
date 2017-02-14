@@ -1,4 +1,4 @@
-class GroupMembersPolicy < ApplicationPolicy
+class GroupMemberPolicy < ApplicationPolicy
   def edit?
     current_member.admin? || is_owner?
   end
