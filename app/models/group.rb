@@ -31,10 +31,10 @@
 #
 
 class Group < ApplicationRecord
-  extend FriendlyId
   include WithAvatar
   include WithCoverImage
   include ContentProcessable
+  include Sluggable
 
   friendly_id :name, use: %i[slugged finders history]
   processable :rules, RulesPipeline
