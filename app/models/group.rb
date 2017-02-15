@@ -45,7 +45,6 @@ class Group < ApplicationRecord
   has_many :owners, ->() { admin }, class_name: 'GroupMember'
 
   validates :name, presence: true, length: { in: 4..50 }
-  validates :owners, length: { minimum: 1 }
 
   def member_for(user)
     members.where(user: user)
