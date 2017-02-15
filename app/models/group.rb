@@ -50,4 +50,12 @@ class Group < ApplicationRecord
   def member_for(user)
     members.where(user: user)
   end
+
+  def feed
+    Feed.group(id)
+  end
+
+  def aggregated_feed
+    Feed.group_aggr(id)
+  end
 end
