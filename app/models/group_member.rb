@@ -3,12 +3,13 @@
 #
 # Table name: group_members
 #
-#  id         :integer          not null, primary key
-#  rank       :integer          default(0), not null, indexed
-#  created_at :datetime
-#  updated_at :datetime
-#  group_id   :integer          not null, indexed, indexed => [user_id]
-#  user_id    :integer          not null, indexed, indexed => [group_id]
+#  id           :integer          not null, primary key
+#  rank         :integer          default(0), not null, indexed
+#  unread_count :integer          default(0), not null
+#  created_at   :datetime
+#  updated_at   :datetime
+#  group_id     :integer          not null, indexed, indexed => [user_id]
+#  user_id      :integer          not null, indexed, indexed => [group_id]
 #
 # Indexes
 #
