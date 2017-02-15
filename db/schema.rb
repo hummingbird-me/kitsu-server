@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170211082904) do
+ActiveRecord::Schema.define(version: 20170214075641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -367,16 +367,28 @@ ActiveRecord::Schema.define(version: 20170211082904) do
 
   add_index "genres_manga", ["manga_id"], name: "index_genres_manga_on_manga_id", using: :btree
 
+  create_table "group_invites", force: :cascade do |t|
+    t.integer  "group_id",   null: false
+    t.integer  "user_id",    null: false
+    t.integer  "sender_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "group_invites", ["group_id"], name: "index_group_invites_on_group_id", using: :btree
+  add_index "group_invites", ["sender_id"], name: "index_group_invites_on_sender_id", using: :btree
+  add_index "group_invites", ["user_id"], name: "index_group_invites_on_user_id", using: :btree
+
   create_table "group_members", force: :cascade do |t|
-    t.integer  "user_id",                   null: false
-    t.integer  "group_id",                  null: false
-    t.boolean  "pending",    default: true, null: false
+    t.integer  "user_id",                null: false
+    t.integer  "group_id",               null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "rank",       default: 0,    null: false
+    t.integer  "rank",       default: 0, null: false
   end
 
   add_index "group_members", ["group_id"], name: "index_group_members_on_group_id", using: :btree
+  add_index "group_members", ["rank"], name: "index_group_members_on_rank", using: :btree
   add_index "group_members", ["user_id", "group_id"], name: "index_group_members_on_user_id_and_group_id", unique: true, using: :btree
   add_index "group_members", ["user_id"], name: "index_group_members_on_user_id", using: :btree
 
@@ -1049,6 +1061,9 @@ ActiveRecord::Schema.define(version: 20170211082904) do
   add_foreign_key "drama_characters", "dramas"
   add_foreign_key "drama_staff", "dramas"
   add_foreign_key "drama_staff", "people"
+  add_foreign_key "group_invites", "groups"
+  add_foreign_key "group_invites", "users"
+  add_foreign_key "group_invites", "users", column: "sender_id"
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"

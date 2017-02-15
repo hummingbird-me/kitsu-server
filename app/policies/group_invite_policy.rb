@@ -1,0 +1,2 @@
+class GroupInvitePolicy < ApplicationPolicy
+end

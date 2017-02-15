@@ -828,6 +828,24 @@
 #                                              PATCH     /edge/group-members/:id(.:format)                                                    group_members#update
 #                                              PUT       /edge/group-members/:id(.:format)                                                    group_members#update
 #                                              DELETE    /edge/group-members/:id(.:format)                                                    group_members#destroy
+#              group_invite_relationships_user GET       /edge/group-invites/:group_invite_id/relationships/user(.:format)                    group_invites#show_relationship {:relationship=>"user"}
+#                                              PUT|PATCH /edge/group-invites/:group_invite_id/relationships/user(.:format)                    group_invites#update_relationship {:relationship=>"user"}
+#                                              DELETE    /edge/group-invites/:group_invite_id/relationships/user(.:format)                    group_invites#destroy_relationship {:relationship=>"user"}
+#                            group_invite_user GET       /edge/group-invites/:group_invite_id/user(.:format)                                  users#get_related_resource {:relationship=>"user", :source=>"group_invites"}
+#             group_invite_relationships_group GET       /edge/group-invites/:group_invite_id/relationships/group(.:format)                   group_invites#show_relationship {:relationship=>"group"}
+#                                              PUT|PATCH /edge/group-invites/:group_invite_id/relationships/group(.:format)                   group_invites#update_relationship {:relationship=>"group"}
+#                                              DELETE    /edge/group-invites/:group_invite_id/relationships/group(.:format)                   group_invites#destroy_relationship {:relationship=>"group"}
+#                           group_invite_group GET       /edge/group-invites/:group_invite_id/group(.:format)                                 groups#get_related_resource {:relationship=>"group", :source=>"group_invites"}
+#            group_invite_relationships_sender GET       /edge/group-invites/:group_invite_id/relationships/sender(.:format)                  group_invites#show_relationship {:relationship=>"sender"}
+#                                              PUT|PATCH /edge/group-invites/:group_invite_id/relationships/sender(.:format)                  group_invites#update_relationship {:relationship=>"sender"}
+#                                              DELETE    /edge/group-invites/:group_invite_id/relationships/sender(.:format)                  group_invites#destroy_relationship {:relationship=>"sender"}
+#                          group_invite_sender GET       /edge/group-invites/:group_invite_id/sender(.:format)                                users#get_related_resource {:relationship=>"sender", :source=>"group_invites"}
+#                                group_invites GET       /edge/group-invites(.:format)                                                        group_invites#index
+#                                              POST      /edge/group-invites(.:format)                                                        group_invites#create
+#                                 group_invite GET       /edge/group-invites/:id(.:format)                                                    group_invites#show
+#                                              PATCH     /edge/group-invites/:id(.:format)                                                    group_invites#update
+#                                              PUT       /edge/group-invites/:id(.:format)                                                    group_invites#update
+#                                              DELETE    /edge/group-invites/:id(.:format)                                                    group_invites#destroy
 #                                     activity DELETE    /edge/activities/:id(.:format)                                                       activities#destroy
 #                                              GET       /edge/feeds/:group/:id(.:format)                                                     feeds#show
 #                                              POST      /edge/feeds/:group/:id/_read(.:format)                                               feeds#mark_read
@@ -910,6 +928,7 @@ Rails.application.routes.draw do
     jsonapi_resources :manga_staff
     jsonapi_resources :groups
     jsonapi_resources :group_members
+    jsonapi_resources :group_invites
 
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
