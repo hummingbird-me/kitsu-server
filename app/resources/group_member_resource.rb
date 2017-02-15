@@ -5,4 +5,5 @@ class GroupMemberResource < BaseResource
 
   has_one :group
   has_one :user
+  has_many :permissions
 end

@@ -23,6 +23,7 @@
 class GroupMember < ApplicationRecord
   belongs_to :group, required: true
   belongs_to :user, required: true
+  has_many :permissions, class_name: 'GroupPermission', dependent: :destroy
 
   enum rank: %i[pleb mod admin]
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170215210450) do
+ActiveRecord::Schema.define(version: 20170215211048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -392,6 +392,15 @@ ActiveRecord::Schema.define(version: 20170215210450) do
   add_index "group_members", ["rank"], name: "index_group_members_on_rank", using: :btree
   add_index "group_members", ["user_id", "group_id"], name: "index_group_members_on_user_id_and_group_id", unique: true, using: :btree
   add_index "group_members", ["user_id"], name: "index_group_members_on_user_id", using: :btree
+
+  create_table "group_permissions", force: :cascade do |t|
+    t.integer  "group_member_id", null: false
+    t.integer  "permission",      null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "group_permissions", ["group_member_id"], name: "index_group_permissions_on_group_member_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",                     limit: 255,                 null: false
@@ -1065,6 +1074,7 @@ ActiveRecord::Schema.define(version: 20170215210450) do
   add_foreign_key "group_invites", "groups"
   add_foreign_key "group_invites", "users"
   add_foreign_key "group_invites", "users", column: "sender_id"
+  add_foreign_key "group_permissions", "group_members"
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"

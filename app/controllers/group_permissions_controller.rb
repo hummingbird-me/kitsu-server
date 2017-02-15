@@ -1,0 +1,2 @@
+class GroupPermissionsController < ApplicationController
+end
