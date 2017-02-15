@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125231710) do
+ActiveRecord::Schema.define(version: 20170215225213) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(version: 20170125231710) do
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
     t.integer  "favorites_count",                       default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -261,6 +263,7 @@ ActiveRecord::Schema.define(version: 20170125231710) do
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
     t.integer  "favorites_count",           default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "dramas", ["slug"], name: "index_dramas_on_slug", using: :btree
@@ -505,6 +508,7 @@ ActiveRecord::Schema.define(version: 20170125231710) do
     t.integer  "age_rating"
     t.string   "age_rating_guide"
     t.integer  "favorites_count",                       default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   create_table "manga_characters", force: :cascade do |t|
@@ -969,6 +973,7 @@ ActiveRecord::Schema.define(version: 20170125231710) do
     t.string   "title"
     t.boolean  "profile_completed",                       default: false,       null: false
     t.boolean  "feed_completed",                          default: false,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

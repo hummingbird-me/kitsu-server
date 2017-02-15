@@ -12,6 +12,7 @@
 #  cover_image_content_type  :string(255)
 #  cover_image_file_name     :string(255)
 #  cover_image_file_size     :integer
+#  cover_image_processing    :boolean
 #  cover_image_top_offset    :integer          default(0), not null
 #  cover_image_updated_at    :datetime
 #  end_date                  :date

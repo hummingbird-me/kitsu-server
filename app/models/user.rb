@@ -20,6 +20,7 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  dropbox_secret              :string(255)
