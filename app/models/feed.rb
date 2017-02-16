@@ -33,6 +33,10 @@ class Feed
     stream_feed.unfollow(feed.group, feed.id)
   end
 
+  def ==(other)
+    stream_id == other.stream_id
+  end
+
   def self.follow_many(follows, scrollback: 100)
     follows = follows.map(&:to_a).map(&:flatten)
     stream_follows = follows.map do |(source, target)|
