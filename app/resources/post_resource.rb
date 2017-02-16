@@ -7,6 +7,7 @@ class PostResource < BaseResource
 
   has_one :user
   has_one :target_user
+  has_one :target_group
   has_one :media, polymorphic: true
   has_one :spoiled_unit, polymorphic: true
   has_many :post_likes

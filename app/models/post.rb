@@ -45,6 +45,7 @@ class Post < ApplicationRecord
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'
+  belongs_to :target_group, class_name: 'Group'
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
   has_many :post_likes, dependent: :destroy
@@ -58,33 +59,41 @@ class Post < ApplicationRecord
   }, if: :spoiled_unit
   validates :content, length: { maximum: 9_000 }
   validates :media, polymorphism: { type: Media }, allow_blank: true
+  validates :target_user, absence: true, if: :target_group
 
   def feed
     Feed.post(id)
   end
 
-  def stream_feeds
-    [
-      media&.feed,
-      target_user&.feed,
-    ].compact
+  def other_feeds
+    [media&.feed].compact
   end
 
-  def stream_notified
+  def notified_feeds
     [
       target_user&.notifications,
       *mentioned_users.map(&:notifications)
     ].compact - [user.notifications]
   end
 
+  def target_feed
+    if target_user
+      target_user.feed
+    elsif target_group
+      target_group.feed
+    else
+      user.feed
+    end
+  end
+
   def stream_activity
-    user.feed.activities.new(
+    target_feed.activities.new(
       post_id: id,
       updated_at: updated_at,
       post_likes_count: post_likes_count,
       comments_count: comments_count,
       nsfw: nsfw,
-      to: stream_feeds + stream_notified
+      to: other_feeds + notified_feeds
     )
   end
 
@@ -95,6 +104,7 @@ class Post < ApplicationRecord
   before_save do
     # Always check if the media is NSFW and try to force into NSFWness
     self.nsfw = media.try(:nsfw?) || false unless nsfw
+    self.nsfw = target_group.try(:nsfw?) || false unless nsfw
     true
   end
 
