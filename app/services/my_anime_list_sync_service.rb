@@ -12,16 +12,22 @@ class MyAnimeListSyncService
   end
 
   def execute_method
-    # TODO: add errors later on if we can't find mal data
-    return if mal_media.nil?
+    # Logs the error so the user can see what didn't sync.
+    if mal_media.nil?
+      library_entry_log.update(
+        sync_status: :error, action_performed: method,
+        error_message: 'Unable to convert Kitsu data to Mal data'
+      )
+      return
+    end
 
     case method
-    when 'delete'
+    when :delete
       delete(
         "#{media_type}list/#{media_type}/#{mal_media_id}",
         linked_account
       )
-    when 'create', 'update'
+    when :create, :update
       # find the anime or manga
       # it will raise an error if it fails the http request
       response = get(
@@ -149,7 +155,10 @@ class MyAnimeListSyncService
       return true
     end
 
-    library_entry_log.update(sync_status: :error, action_performed: method)
+    library_entry_log.update(
+      sync_status: :error, action_performed: method,
+      error_message: response.return_message.to_s
+    )
     # timed out
     raise 'Request Timed Out' if response.timed_out?
     # could not get an http response

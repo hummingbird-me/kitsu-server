@@ -16,6 +16,7 @@ class CreateLibraryEntryLogs < ActiveRecord::Migration
       # new fields being added
       t.string :action_performed, null: false, default: 'create'
       t.integer :sync_status, null: false, default: 0
+      t.text :error_message
 
       t.timestamps null: false
     end

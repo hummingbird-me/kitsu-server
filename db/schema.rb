@@ -455,6 +455,7 @@ ActiveRecord::Schema.define(version: 20170215225213) do
     t.integer  "volumes_owned"
     t.string   "action_performed",                          default: "create", null: false
     t.integer  "sync_status",                               default: 0,        null: false
+    t.text     "error_message"
     t.datetime "created_at",                                                   null: false
     t.datetime "updated_at",                                                   null: false
   end

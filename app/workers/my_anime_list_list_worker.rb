@@ -13,7 +13,8 @@ class MyAnimeListListWorker
         # mal list. For now everything will be a create action,
         # but at some point we can update to get the correct action.
         # Same issue with the LibraryEntryLog performed_action
-        method: 'create',
+
+        method: :create,
         library_entry_log_id: library_entry_log.id
       )
     end
@@ -38,7 +39,7 @@ class MyAnimeListListWorker
       volumes_owned: library_entry.volumes_owned,
       # action_performed is either create, update, destroy
       # TODO: this is related to hack above
-      action_performed: 'create',
+      action_performed: :create,
       linked_account_id: linked_account_id
     )
   end

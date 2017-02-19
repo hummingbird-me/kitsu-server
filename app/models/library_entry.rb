@@ -193,21 +193,21 @@ class LibraryEntry < ApplicationRecord
     media.trending_vote(user, 1.0) if status_changed?
   end
 
-  after_commit ->() { sync_entry('create') }, on: :create
-  after_commit ->() { sync_entry('update') }, on: :update
-  after_destroy ->() { sync_entry('delete') }
+  after_commit ->() { sync_entry(:create) }, on: :create
+  after_commit ->() { sync_entry(:update) }, on: :update
+  after_destroy ->() { sync_entry(:delete) }
 
   def sync_to_mal?
     return unless media_type.in? %w[Anime Manga]
 
-    linked_account.present?
+    myanimelist_linked_account.present?
   end
 
   def sync_entry(method)
     return unless sync_to_mal?
 
     # create log
-    library_entry_log = create_log(method)
+    library_entry_log = LibraryEntryLog.create_for(method, library_entry)
 
     MyAnimeListSyncWorker.perform_async(
       # for create & update
@@ -222,24 +222,8 @@ class LibraryEntry < ApplicationRecord
     )
   end
 
-  def create_log(method)
-    LibraryEntryLog.create(
-      media_type: media_type,
-      media_id: media_id,
-      progress: progress,
-      rating: rating,
-      reconsume_count: reconsume_count,
-      reconsuming: reconsuming,
-      status: status,
-      volumes_owned: volumes_owned,
-      # action_performed is either create, update, destroy
-      action_performed: method,
-      linked_account_id: linked_account.id
-    )
-  end
-
-  def linked_account
-    @linked_account ||= User.find(user_id).linked_accounts.find_by(
+  def myanimelist_linked_account
+    @mal_linked_account ||= User.find(user_id).linked_accounts.find_by(
       sync_to: true,
       type: 'LinkedAccount::MyAnimeList'
     )
