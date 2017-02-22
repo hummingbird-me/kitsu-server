@@ -7,7 +7,7 @@ class AdminController < ActionController::Base
   before_action :set_paper_trail_whodunnit
 
   rescue_from ActionController::InvalidAuthenticityToken do
-    render text: 'Token expired/invalid', status: 498
+    render text: 'Token expired/invalid', status: 403
   end
 
 

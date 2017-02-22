@@ -36,11 +36,13 @@ module Media
     has_many :installments, as: 'media'
     has_many :franchises, through: :installments
     has_many :library_entries, as: 'media', dependent: :destroy,
-      inverse_of: :media
+                               inverse_of: :media
     has_many :mappings, as: 'media', dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
-    has_many :media_relationships, class_name: 'MediaRelationship', as: 'source', dependent: :destroy
-    has_many :inverse_media_relationships, class_name: 'MediaRelationship', as: 'destination', dependent: :destroy
+    has_many :media_relationships, class_name: 'MediaRelationship',
+                                  as: 'source', dependent: :destroy
+    has_many :inverse_media_relationships, class_name: 'MediaRelationship',
+                            as: 'destination', dependent: :destroy
     has_many :favorites, as: 'item', dependent: :destroy,
                          inverse_of: :item
     delegate :year, to: :start_date, allow_nil: true
