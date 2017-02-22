@@ -5,11 +5,9 @@ RailsAdmin.config do |config|
     redirect_to main_app.root_path unless current_user.admin?
   end
 
-
   ## == PaperTrail ==
   config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
   PAPER_TRAIL_AUDIT_MODEL = %w(Streamer).freeze
-
 
   config.actions do
     dashboard                     # mandatory
@@ -40,10 +38,12 @@ RailsAdmin.config do |config|
             redirect_path = nil
             @auditing_adapter && @auditing_adapter.delete_object(@object, @abstract_model, _current_user)
             if @object.destroy
-              flash[:success] = t('admin.flash.successful', name: @model_config.label, action: t('admin.actions.delete.done'))
+              flash[:success] = t('admin.flash.successful',
+                name: @model_config.label, action: t('admin.actions.delete.done'))
               redirect_path = '/api' + index_path
             else
-              flash[:error] = t('admin.flash.error', name: @model_config.label, action: t('admin.actions.delete.done'))
+              flash[:error] = t('admin.flash.error',
+                name: @model_config.label, action: t('admin.actions.delete.done'))
               redirect_path = '/api' + back_or_index
             end
 
