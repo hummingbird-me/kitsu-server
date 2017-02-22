@@ -1,5 +1,5 @@
 RailsAdmin::ApplicationHelper.module_eval do
-  def menu_for(parent, abstract_model = nil, object = nil, only_icon = false) # perf matters here (no action view trickery)
+  def menu_for(parent, abstract_model = nil, object = nil, only_icon = false)
     actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) }
     actions.collect do |action|
       wording = wording_for(:menu, action)

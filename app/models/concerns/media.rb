@@ -40,9 +40,9 @@ module Media
     has_many :mappings, as: 'media', dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
     has_many :media_relationships, class_name: 'MediaRelationship',
-                                  as: 'source', dependent: :destroy
+                                   as: 'source', dependent: :destroy
     has_many :inverse_media_relationships, class_name: 'MediaRelationship',
-                            as: 'destination', dependent: :destroy
+                                           as: 'destination', dependent: :destroy
     has_many :favorites, as: 'item', dependent: :destroy,
                          inverse_of: :item
     delegate :year, to: :start_date, allow_nil: true
