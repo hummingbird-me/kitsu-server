@@ -14,5 +14,4 @@ module AdminHelper
     joined_url
   end
 
-
 end
