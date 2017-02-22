@@ -1,6 +1,5 @@
 class SessionsController < ActionController::Base
-  def new
-  end
+  def new; end
 
   def create
     session[:token] = params[:token]
