@@ -10,7 +10,6 @@ class AdminController < ActionController::Base
     render text: 'Token expired/invalid', status: 403
   end
 
-
   def pundit_user
     Doorkeeper::AccessToken.by_token(session[:token])
   end
