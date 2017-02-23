@@ -8,13 +8,15 @@ RailsAdmin.config do |config|
 
   ## == PaperTrail ==
   config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
-  PAPER_TRAIL_AUDIT_MODEL = %w[AnimeProduction Anime Block Casting
-    Chapter Character CommentLike Comment Drama Episode Favorite
-    Follow Franchise Genre Installment LibraryEntry LinkedAccount
-    ListImport Manga Mapping MarathonEvent Marathon MediaFollow
-    MediaRelationship Person PostLike Post ProMembership Producer
-    ProfileLinkSite ProfileLink Report ReviewLike Review Role
-    Streamer StreamingLink UserRole User].freeze
+  PAPER_TRAIL_AUDIT_MODEL =
+    %w[AnimeProduction Anime Block Casting Chapter Character
+       CommentLike Comment Drama Episode Favorite
+       Follow Franchise Genre Installment LibraryEntry
+       LinkedAccount ListImport Manga Mapping MarathonEvent
+       Marathon MediaFollow MediaRelationship Person PostLike
+       Post ProMembership Producer ProfileLinkSite ProfileLink
+       Report ReviewLike Review Role Streamer StreamingLink UserRole User]
+       .freeze
 
   config.actions do
     dashboard                     # mandatory
@@ -43,7 +45,8 @@ RailsAdmin.config do |config|
           elsif request.delete? # DESTROY
 
             redirect_path = nil
-            @auditing_adapter&.delete_object(@object, @abstract_model, _current_user)
+            @auditing_adapter&.delete_object(@object, @abstract_model,
+                                             _current_user)
             if @object.destroy
               flash[:success] = t('admin.flash.successful',
                 name: @model_config.label,
