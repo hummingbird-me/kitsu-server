@@ -22,6 +22,7 @@
 # rubocop:enable Metrics/LineLength
 
 class ProfileLink < ApplicationRecord
+  has_paper_trail
   belongs_to :user, required: true
   belongs_to :profile_link_site, required: true
 

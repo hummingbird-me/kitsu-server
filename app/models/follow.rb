@@ -17,6 +17,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Follow < ApplicationRecord
+  has_paper_trail
   include WithActivity
 
   belongs_to :follower, class_name: 'User', required: true,

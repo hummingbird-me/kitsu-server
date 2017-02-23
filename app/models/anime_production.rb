@@ -16,6 +16,7 @@
 # rubocop:enable Metrics/LineLength
 
 class AnimeProduction < ApplicationRecord
+  has_paper_trail
   enum role: %i[producer licensor studio]
 
   belongs_to :anime

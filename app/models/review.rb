@@ -31,6 +31,7 @@
 #
 
 class Review < ApplicationRecord
+  has_paper_trail
   include WithActivity
   include ContentProcessable
 

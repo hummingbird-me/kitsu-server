@@ -24,6 +24,7 @@
 #
 
 class LinkedAccount < ApplicationRecord
+  has_paper_trail
   belongs_to :user, required: true
   # encyrpt the token
   attr_encrypted :token, key: Base64.decode64(ENV['ATTR_ENCRYPT_KEY'])

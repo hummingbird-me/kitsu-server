@@ -44,6 +44,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Drama < ApplicationRecord
+  has_paper_trail
   include Media
   include AgeRatings
   include Episodic

@@ -12,6 +12,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Franchise < ApplicationRecord
+  has_paper_trail
   include Titleable
 
   has_many :installments, dependent: :destroy

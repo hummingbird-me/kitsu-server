@@ -25,6 +25,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Casting < ApplicationRecord
+  has_paper_trail
   belongs_to :media, polymorphic: true, touch: true
   belongs_to :character, touch: true
   belongs_to :person, touch: true

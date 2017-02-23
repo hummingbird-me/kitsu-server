@@ -46,6 +46,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Anime < ApplicationRecord
+  has_paper_trail
   SEASONS = %w[winter spring summer fall].freeze
 
   include Media

@@ -18,6 +18,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Marathon < ActiveRecord::Base
+  has_paper_trail
   has_many :marathon_events, dependent: :destroy
   belongs_to :library_entry, required: true
 

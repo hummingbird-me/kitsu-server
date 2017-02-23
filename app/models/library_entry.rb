@@ -36,6 +36,7 @@
 # rubocop:enable Metrics/LineLength
 
 class LibraryEntry < ApplicationRecord
+  has_paper_trail
   VALID_RATINGS = (0.5..5).step(0.5).to_a.freeze
   MEDIA_ASSOCIATIONS = %i[anime manga drama].freeze
 

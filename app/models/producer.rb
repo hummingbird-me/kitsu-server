@@ -12,6 +12,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Producer < ApplicationRecord
+  has_paper_trail
   extend FriendlyId
 
   friendly_id :name, use: %i[slugged finders history]

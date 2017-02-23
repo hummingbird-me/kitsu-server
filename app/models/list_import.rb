@@ -23,6 +23,7 @@
 # rubocop:enable Metrics/LineLength
 
 class ListImport < ApplicationRecord
+  has_paper_trail
   include Enumerable
   include WithActivity
 

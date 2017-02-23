@@ -14,6 +14,7 @@
 #
 
 class PostLike < ApplicationRecord
+  has_paper_trail
   include WithActivity
 
   belongs_to :user, required: true

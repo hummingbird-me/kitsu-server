@@ -21,6 +21,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Favorite < ApplicationRecord
+  has_paper_trail
   acts_as_list column: 'fav_rank', scope: %i[user_id item_type]
 
   belongs_to :user, required: true, counter_cache: true

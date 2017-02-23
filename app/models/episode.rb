@@ -27,6 +27,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Episode < ApplicationRecord
+  has_paper_trail
   include Titleable
 
   belongs_to :media, polymorphic: true, touch: true

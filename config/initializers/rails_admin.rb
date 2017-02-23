@@ -1,5 +1,6 @@
 RailsAdmin.config do |config|
   config.parent_controller = '::AdminController'
+  config.current_user_method(&:current_user)
 
   config.authorize_with do
     redirect_to main_app.root_path unless current_user.admin?
@@ -7,7 +8,13 @@ RailsAdmin.config do |config|
 
   ## == PaperTrail ==
   config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
-  PAPER_TRAIL_AUDIT_MODEL = %w[Streamer].freeze
+  PAPER_TRAIL_AUDIT_MODEL = %w[AnimeProduction Anime Block Casting
+    Chapter Character CommentLike Comment Drama Episode Favorite
+    Follow Franchise Genre Installment LibraryEntry LinkedAccount
+    ListImport Manga Mapping MarathonEvent Marathon MediaFollow
+    MediaRelationship Person PostLike Post ProMembership Producer
+    ProfileLinkSite ProfileLink Report ReviewLike Review Role
+    Streamer StreamingLink UserRole User].freeze
 
   config.actions do
     dashboard                     # mandatory
@@ -36,7 +43,7 @@ RailsAdmin.config do |config|
           elsif request.delete? # DESTROY
 
             redirect_path = nil
-            @auditing_adapter && @auditing_adapter.delete_object(@object, @abstract_model, _current_user)
+            @auditing_adapter&.delete_object(@object, @abstract_model, _current_user)
             if @object.destroy
               flash[:success] = t('admin.flash.successful',
                 name: @model_config.label,
@@ -56,6 +63,5 @@ RailsAdmin.config do |config|
       end
     end
     show_in_app
-
   end
 end

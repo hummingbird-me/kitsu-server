@@ -22,6 +22,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Chapter < ApplicationRecord
+  has_paper_trail
   belongs_to :manga
 
   validates :manga, presence: true

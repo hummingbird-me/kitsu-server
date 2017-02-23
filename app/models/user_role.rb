@@ -14,6 +14,7 @@
 # rubocop:enable Metrics/LineLength
 
 class UserRole < ApplicationRecord
+  has_paper_trail
   self.table_name = 'users_roles'
 
   belongs_to :user, required: true

@@ -23,6 +23,7 @@
 # rubocop:enable Metrics/LineLength
 
 class StreamingLink < ApplicationRecord
+  has_paper_trail
   belongs_to :media, polymorphic: true, touch: true
   belongs_to :streamer
 

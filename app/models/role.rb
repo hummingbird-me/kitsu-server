@@ -18,6 +18,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Role < ApplicationRecord
+  has_paper_trail
   has_and_belongs_to_many :users, join_table: :users_roles
   belongs_to :resource, polymorphic: true
   has_many :user_roles, dependent: :destroy

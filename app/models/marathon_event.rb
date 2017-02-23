@@ -19,6 +19,7 @@
 # rubocop:enable Metrics/LineLength
 
 class MarathonEvent < ActiveRecord::Base
+  has_paper_trail
   include WithActivity
   belongs_to :marathon, required: true
 

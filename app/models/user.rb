@@ -88,6 +88,7 @@
 #
 
 class User < ApplicationRecord
+  has_paper_trail
   PAST_NAMES_LIMIT = 10
   PAST_IPS_LIMIT = 20
   RESERVED_NAMES = %w[

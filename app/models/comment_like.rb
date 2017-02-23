@@ -23,6 +23,7 @@
 # rubocop:enable Metrics/LineLength
 
 class CommentLike < ApplicationRecord
+  has_paper_trail
   include WithActivity
 
   belongs_to :user, required: true

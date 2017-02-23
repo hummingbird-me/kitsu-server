@@ -16,6 +16,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Mapping < ApplicationRecord
+  has_paper_trail
   belongs_to :media, polymorphic: true, required: true
 
   validates :external_site, :external_id, presence: true

@@ -22,6 +22,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Block < ApplicationRecord
+  has_paper_trail
   belongs_to :user, required: true
   belongs_to :blocked, class_name: 'User', required: true
 

@@ -17,6 +17,7 @@
 # rubocop:enable Metrics/LineLength
 
 class MediaRelationship < ApplicationRecord
+  has_paper_trail
   enum role: {
     sequel: 0,
     prequel: 1,

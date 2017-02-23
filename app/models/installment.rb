@@ -18,6 +18,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Installment < ApplicationRecord
+  has_paper_trail
   acts_as_list
 
   validates :tag, length: { maximum: 40 }

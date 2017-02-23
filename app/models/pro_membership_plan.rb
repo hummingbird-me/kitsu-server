@@ -14,6 +14,7 @@
 # rubocop:enable Metrics/LineLength
 
 class ProMembershipPlan < ApplicationRecord
+  has_paper_trail
   scope :recurring, -> { where(recurring: true) }
   scope :nonrecurring, -> { where(recurring: false) }
 end

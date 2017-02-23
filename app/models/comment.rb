@@ -30,6 +30,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Comment < ApplicationRecord
+  has_paper_trail
   include WithActivity
   include ContentProcessable
 
