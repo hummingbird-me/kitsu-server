@@ -16,7 +16,7 @@ RailsAdmin.config do |config|
        Marathon MediaFollow MediaRelationship Person PostLike
        Post ProMembership Producer ProfileLinkSite ProfileLink
        Report ReviewLike Review Role Streamer StreamingLink UserRole User]
-       .freeze
+    .freeze
 
   config.actions do
     dashboard                     # mandatory
