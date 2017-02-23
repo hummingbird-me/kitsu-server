@@ -64,8 +64,20 @@ class Feed
 
     def includes(*relationships)
       including = [relationships].flatten.map(&:to_s)
-      # Hardwire subject->object, convert to symbols
-      including.map! { |inc| inc.sub('subject', 'object').to_sym }
+      # Hardwire subject->object
+      including.map! { |inc| inc.sub('subject', 'object') }
+
+      with_subreferences = including.inject({}) do |subs, inc|
+        field, reference = inc.split('.')
+        (subs[field.to_sym] ||= []) << reference&.to_sym
+        subs
+      end
+
+      including = with_subreferences.map do |field, references|
+        references = references&.compact
+        references&.any? ? [field, references.uniq] : field
+      end
+
       @including += including
       self
     end
@@ -232,6 +244,7 @@ class Feed
         activity.dup.tap do |act|
           # For each field we've asked to have included
           including.each do |key|
+            key = key.first if key.is_a? Array
             # Delete it if it's still a String
             act.delete_field(key) if act[key].is_a? String
           end

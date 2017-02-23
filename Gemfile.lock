@@ -1,4 +1,15 @@
 GIT
+  remote: git://github.com/GetStream/stream-rails.git
+  revision: 6e9a74d08516e3cc820c8dc866de659193bd56bc
+  branch: feature/subreference-enrichment
+  specs:
+    stream_rails (2.5.1)
+      actionpack (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      railties (>= 3.0.0)
+      stream-ruby (~> 2.4)
+
+GIT
   remote: git://github.com/vevix/twemoji.git
   revision: 00b98685e46faa92d7d0109293ca8092e34735c5
   specs:
@@ -395,15 +406,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stream-ruby (2.5.1)
+    stream-ruby (2.5.2)
       faraday (~> 0.10.0)
       http_signatures (~> 0)
       jwt (= 1.5.2)
-    stream_rails (2.5.0)
-      actionpack (>= 3.0.0)
-      activerecord (>= 3.0.0)
-      railties (>= 3.0.0)
-      stream-ruby (~> 2.4)
     thor (0.19.4)
     thread_safe (0.3.5)
     timecop (0.8.1)
@@ -498,8 +504,8 @@ DEPENDENCIES
   simplecov
   sitemap_generator
   spring
-  stream-ruby (~> 2.5.1)
-  stream_rails
+  stream-ruby (~> 2.5.2)
+  stream_rails!
   timecop
   twemoji!
   twitter
@@ -511,4 +517,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.5
+   1.14.5

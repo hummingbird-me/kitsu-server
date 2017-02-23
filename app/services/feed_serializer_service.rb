@@ -79,7 +79,17 @@ class FeedSerializerService
   end
 
   def stream_enrichment_fields
-    @including.map { |inc| inc.split('.').first }
+    @including.inject([]) do |includes, inc|
+      field, reference = inc.split('.')
+
+      if (field == 'subject' || field == 'target') && !reference.nil?
+        includes += non_polymorphic_references(reference)
+      else
+        includes << field
+      end
+
+      includes
+    end
   end
 
   def serializer
@@ -107,5 +117,16 @@ class FeedSerializerService
     uri.query = URI.encode_www_form(query.to_a)
     uri.path = "/api#{uri.path}"
     uri.to_s
+  end
+
+  def non_polymorphic_references(reference, models: nil)
+    models ||= [Post, Comment]
+
+    models.inject([]) do |references, model|
+      if model.reflections.keys.include?(reference)
+        references << "#{model.name.downcase}.#{reference}"
+      end
+      references
+    end
   end
 end
