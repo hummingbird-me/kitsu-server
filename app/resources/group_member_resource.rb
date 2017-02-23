@@ -1,7 +1,7 @@
 class GroupMemberResource < BaseResource
-  attributes :role, :created_at
+  attributes :rank, :created_at
 
-  filters :role, :group, :user
+  filters :rank, :group, :user
 
   has_one :group
   has_one :user
