@@ -23,6 +23,8 @@
 #
 
 class GroupInvite < ApplicationRecord
+  include WithActivity
+
   belongs_to :group, required: true
   belongs_to :user, required: true
   belongs_to :sender, class_name: 'User', required: true
@@ -33,4 +35,11 @@ class GroupInvite < ApplicationRecord
     groups = members.select(:group_id)
     where(group_id: groups).or(where(user: user))
   }
+
+  def stream_activity
+    user.notifications.activities.new(
+      verb: 'invited',
+      actor: sender
+    )
+  end
 end
