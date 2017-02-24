@@ -1,6 +1,6 @@
 class FeedsController < ApplicationController
-  include Pundit
-  skip_after_action :enforce_policy_use
+  include CustomControllerHelpers
+
   before_action :authorize_feed!
 
   def show
@@ -40,17 +40,6 @@ class FeedsController < ApplicationController
       context: context,
       base_url: request.url
     )
-  end
-
-  def serialize_error(status, message)
-    {
-      errors: [
-        {
-          status: status,
-          detail: message
-        }
-      ]
-    }
   end
 
   def stringify_activities(list)
@@ -94,22 +83,5 @@ class FeedsController < ApplicationController
       user && policy_for(user).update?
     else false
     end
-  end
-
-  def policy_for(model)
-    Pundit.policy!(current_user, model)
-  end
-
-  def scope_for(model)
-    Pundit.policy_scope!(current_user, model)
-  end
-
-  def show?(model)
-    scope = model.class.where(id: model.id)
-    scope_for(scope).exists?
-  end
-
-  def render_jsonapi(data, opts = {})
-    render opts.merge({ json: data, content_type: JSONAPI::MEDIA_TYPE })
   end
 end
