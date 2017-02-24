@@ -37,4 +37,7 @@ class GroupPermission < ApplicationRecord
   enum permission: %i[owner tickets members leaders community content]
 
   scope :for_permission, ->(perm) { send(perm).or(owner) }
+
+  after_create { group_member.regenerate_rank! }
+  after_destroy { group_member.regenerate_rank! }
 end

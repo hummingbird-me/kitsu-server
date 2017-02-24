@@ -34,4 +34,11 @@ class GroupMember < ApplicationRecord
   def has_permission?(perm)
     permissions.for_permission(perm).exists?
   end
+
+  def regenerate_rank!
+    rank = :pleb
+    rank = :mod if permissions.present?
+    rank = :admin if has_permission?(:owner)
+    update(rank: rank)
+  end
 end
