@@ -891,6 +891,8 @@
 #                                              GET       /edge/feeds/:group/:id(.:format)                                                     feeds#show
 #                                              POST      /edge/feeds/:group/:id/_read(.:format)                                               feeds#mark_read
 #                                              POST      /edge/feeds/:group/:id/_seen(.:format)                                               feeds#mark_seen
+#                                              POST      /edge/group-invites/:id/_accept(.:format)                                            group_invites#accept
+#                                              POST      /edge/group-invites/:id/_decline(.:format)                                           group_invites#decline
 #                                              DELETE    /edge/feeds/:group/:id/activities/:uuid(.:format)                                    feeds#destroy_activity
 #                                              GET       /edge/trending/:namespace(.:format)                                                  trending#index
 #                               users__recover POST      /edge/users/_recover(.:format)                                                       users#recover
@@ -977,6 +979,8 @@ Rails.application.routes.draw do
     get '/feeds/:group/:id', to: 'feeds#show'
     post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
     post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
+    post '/group-invites/:id/_accept', to: 'group_invites#accept'
+    post '/group-invites/:id/_decline', to: 'group_invites#decline'
     delete '/feeds/:group/:id/activities/:uuid', to: 'feeds#destroy_activity'
     get '/trending/:namespace', to: 'trending#index'
     post '/users/_recover', to: 'users#recover'
