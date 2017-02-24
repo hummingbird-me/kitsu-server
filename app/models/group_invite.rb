@@ -36,6 +36,27 @@ class GroupInvite < ApplicationRecord
     where(group_id: groups).or(where(user: user))
   }
 
+  def used?
+    false
+  end
+
+  def revoked?
+    false
+  end
+
+  def acceptable?
+    !(used? || revoked?)
+  end
+
+  def accept!
+    # TODO: update used field
+    GroupMember.create(group: group, user: user)
+  end
+
+  def decline!
+    # TODO: add column here
+  end
+
   def stream_activity
     user.notifications.activities.new(
       verb: 'invited',
