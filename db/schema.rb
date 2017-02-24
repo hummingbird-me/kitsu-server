@@ -402,6 +402,24 @@ ActiveRecord::Schema.define(version: 20170224050925) do
 
   add_index "group_permissions", ["group_member_id"], name: "index_group_permissions_on_group_member_id", using: :btree
 
+  create_table "group_reports", force: :cascade do |t|
+    t.text     "explanation"
+    t.integer  "reason",                   null: false
+    t.integer  "status",       default: 0, null: false
+    t.integer  "group_id",                 null: false
+    t.integer  "user_id",                  null: false
+    t.integer  "naughty_id",               null: false
+    t.string   "naughty_type",             null: false
+    t.integer  "moderator_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "group_reports", ["group_id"], name: "index_group_reports_on_group_id", using: :btree
+  add_index "group_reports", ["naughty_type", "naughty_id"], name: "index_group_reports_on_naughty_type_and_naughty_id", using: :btree
+  add_index "group_reports", ["status"], name: "index_group_reports_on_status", using: :btree
+  add_index "group_reports", ["user_id"], name: "index_group_reports_on_user_id", using: :btree
+
   create_table "groups", force: :cascade do |t|
     t.string   "name",                     limit: 255,                 null: false
     t.string   "slug",                     limit: 255,                 null: false
@@ -1075,6 +1093,9 @@ ActiveRecord::Schema.define(version: 20170224050925) do
   add_foreign_key "group_invites", "users"
   add_foreign_key "group_invites", "users", column: "sender_id"
   add_foreign_key "group_permissions", "group_members"
+  add_foreign_key "group_reports", "groups"
+  add_foreign_key "group_reports", "users"
+  add_foreign_key "group_reports", "users", column: "moderator_id"
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"

@@ -1,0 +1,2 @@
+class GroupReportsController < ApplicationController
+end
