@@ -26,4 +26,11 @@ class GroupInvite < ApplicationRecord
   belongs_to :group, required: true
   belongs_to :user, required: true
   belongs_to :sender, class_name: 'User', required: true
+
+  scope :visible_for, ->(user) {
+    # user == user || has members or owner priv
+    members = GroupMember.with_permission(:members).for_user(user)
+    groups = members.select(:group_id)
+    where(group_id: groups).or(where(user: user))
+  }
 end

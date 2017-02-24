@@ -26,4 +26,12 @@ class GroupMember < ApplicationRecord
   has_many :permissions, class_name: 'GroupPermission', dependent: :destroy
 
   enum rank: %i[pleb mod admin]
+  scope :with_permission, ->(perm) {
+    joins(:permissions).merge(GroupPermission.for_permission(perm))
+  }
+  scope :for_user, ->(user) { where(user: user) }
+
+  def has_permission?(perm)
+    permissions.for_permission(perm).exists?
+  end
 end

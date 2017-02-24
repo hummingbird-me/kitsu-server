@@ -129,6 +129,7 @@ class User < ApplicationRecord
   has_many :post_likes, dependent: :destroy
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
+  has_many :group_members, dependent: :destroy
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }

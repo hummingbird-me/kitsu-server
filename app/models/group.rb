@@ -39,7 +39,14 @@ class Group < ApplicationRecord
   friendly_id :name, use: %i[slugged finders history]
   processable :rules, RulesPipeline
   enum privacy: %i[open closed restricted]
+
+  scope :public_visible, ->() { open.or(restricted) }
   scope :sfw, ->() { where(nsfw: false) }
+  scope :visible_for, ->(user) {
+    # private == false || is a member
+    members = user.group_members.select(:group_id)
+    where(id: members.arel).or(public_visible)
+  }
 
   has_many :members, class_name: 'GroupMember', dependent: :destroy
   has_many :owners, ->() { admin }, class_name: 'GroupMember'
@@ -47,7 +54,7 @@ class Group < ApplicationRecord
   validates :name, presence: true, length: { in: 4..50 }
 
   def member_for(user)
-    members.where(user: user)
+    members.where(user: user).first
   end
 
   def feed
