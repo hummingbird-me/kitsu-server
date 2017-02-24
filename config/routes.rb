@@ -401,6 +401,10 @@
 #                                              PUT|PATCH /edge/posts/:post_id/relationships/target-user(.:format)                             posts#update_relationship {:relationship=>"target_user"}
 #                                              DELETE    /edge/posts/:post_id/relationships/target-user(.:format)                             posts#destroy_relationship {:relationship=>"target_user"}
 #                             post_target_user GET       /edge/posts/:post_id/target-user(.:format)                                           users#get_related_resource {:relationship=>"target_user", :source=>"posts"}
+#              post_relationships_target_group GET       /edge/posts/:post_id/relationships/target-group(.:format)                            posts#show_relationship {:relationship=>"target_group"}
+#                                              PUT|PATCH /edge/posts/:post_id/relationships/target-group(.:format)                            posts#update_relationship {:relationship=>"target_group"}
+#                                              DELETE    /edge/posts/:post_id/relationships/target-group(.:format)                            posts#destroy_relationship {:relationship=>"target_group"}
+#                            post_target_group GET       /edge/posts/:post_id/target-group(.:format)                                          groups#get_related_resource {:relationship=>"target_group", :source=>"posts"}
 #                     post_relationships_media GET       /edge/posts/:post_id/relationships/media(.:format)                                   posts#show_relationship {:relationship=>"media"}
 #                                              PUT|PATCH /edge/posts/:post_id/relationships/media(.:format)                                   posts#update_relationship {:relationship=>"media"}
 #                                              DELETE    /edge/posts/:post_id/relationships/media(.:format)                                   posts#destroy_relationship {:relationship=>"media"}
@@ -822,6 +826,11 @@
 #                                              PUT|PATCH /edge/group-members/:group_member_id/relationships/user(.:format)                    group_members#update_relationship {:relationship=>"user"}
 #                                              DELETE    /edge/group-members/:group_member_id/relationships/user(.:format)                    group_members#destroy_relationship {:relationship=>"user"}
 #                            group_member_user GET       /edge/group-members/:group_member_id/user(.:format)                                  users#get_related_resource {:relationship=>"user", :source=>"group_members"}
+#       group_member_relationships_permissions GET       /edge/group-members/:group_member_id/relationships/permissions(.:format)             group_members#show_relationship {:relationship=>"permissions"}
+#                                              POST      /edge/group-members/:group_member_id/relationships/permissions(.:format)             group_members#create_relationship {:relationship=>"permissions"}
+#                                              PUT|PATCH /edge/group-members/:group_member_id/relationships/permissions(.:format)             group_members#update_relationship {:relationship=>"permissions"}
+#                                              DELETE    /edge/group-members/:group_member_id/relationships/permissions(.:format)             group_members#destroy_relationship {:relationship=>"permissions"}
+#                     group_member_permissions GET       /edge/group-members/:group_member_id/permissions(.:format)                           group_permissions#get_related_resources {:relationship=>"permissions", :source=>"group_members"}
 #                                              GET       /edge/group-members(.:format)                                                        group_members#index
 #                                              POST      /edge/group-members(.:format)                                                        group_members#create
 #                                 group_member GET       /edge/group-members/:id(.:format)                                                    group_members#show
@@ -846,6 +855,16 @@
 #                                              PATCH     /edge/group-invites/:id(.:format)                                                    group_invites#update
 #                                              PUT       /edge/group-invites/:id(.:format)                                                    group_invites#update
 #                                              DELETE    /edge/group-invites/:id(.:format)                                                    group_invites#destroy
+#  group_permission_relationships_group_member GET       /edge/group-permissions/:group_permission_id/relationships/group-member(.:format)    group_permissions#show_relationship {:relationship=>"group_member"}
+#                                              PUT|PATCH /edge/group-permissions/:group_permission_id/relationships/group-member(.:format)    group_permissions#update_relationship {:relationship=>"group_member"}
+#                                              DELETE    /edge/group-permissions/:group_permission_id/relationships/group-member(.:format)    group_permissions#destroy_relationship {:relationship=>"group_member"}
+#                group_permission_group_member GET       /edge/group-permissions/:group_permission_id/group-member(.:format)                  group_members#get_related_resource {:relationship=>"group_member", :source=>"group_permissions"}
+#                            group_permissions GET       /edge/group-permissions(.:format)                                                    group_permissions#index
+#                                              POST      /edge/group-permissions(.:format)                                                    group_permissions#create
+#                             group_permission GET       /edge/group-permissions/:id(.:format)                                                group_permissions#show
+#                                              PATCH     /edge/group-permissions/:id(.:format)                                                group_permissions#update
+#                                              PUT       /edge/group-permissions/:id(.:format)                                                group_permissions#update
+#                                              DELETE    /edge/group-permissions/:id(.:format)                                                group_permissions#destroy
 #                                     activity DELETE    /edge/activities/:id(.:format)                                                       activities#destroy
 #                                              GET       /edge/feeds/:group/:id(.:format)                                                     feeds#show
 #                                              POST      /edge/feeds/:group/:id/_read(.:format)                                               feeds#mark_read
@@ -929,6 +948,7 @@ Rails.application.routes.draw do
     jsonapi_resources :groups
     jsonapi_resources :group_members
     jsonapi_resources :group_invites
+    jsonapi_resources :group_permissions
 
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
