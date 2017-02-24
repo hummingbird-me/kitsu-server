@@ -14,6 +14,7 @@ gem 'hiredis' # Faster redis
 gem 'pg' # Postgres
 gem 'redis', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
+gem 'where-or' # RAILS-5: Remove this, it just backports AR#where
 
 # Auth{entication,orization}
 gem 'bcrypt'

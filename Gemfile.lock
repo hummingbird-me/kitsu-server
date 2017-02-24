@@ -436,6 +436,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
+    where-or (0.1.5)
 
 PLATFORMS
   ruby
@@ -510,6 +511,7 @@ DEPENDENCIES
   twitter
   typhoeus
   webmock
+  where-or
 
 RUBY VERSION
    ruby 2.3.1p112
