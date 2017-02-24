@@ -8,4 +8,10 @@ class GroupResource < BaseResource
   attributes :avatar, :cover_image, format: :attachment
 
   has_many :members
+
+  after_create do
+    # Make the current user into an owner when they create it
+    member = _model.members.create!(user: actual_current_user)
+    member.permissions.create!(permission: :owner)
+  end
 end
