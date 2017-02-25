@@ -50,6 +50,8 @@ class Group < ApplicationRecord
 
   has_many :members, class_name: 'GroupMember', dependent: :destroy
   has_many :owners, ->() { admin }, class_name: 'GroupMember'
+  has_many :neighbors, class_name: 'GroupNeighbor', dependent: :destroy,
+                       foreign_key: 'source_id'
 
   validates :name, presence: true, length: { in: 4..50 }
 

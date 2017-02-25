@@ -812,6 +812,11 @@
 #                                              PUT|PATCH /edge/groups/:group_id/relationships/members(.:format)                               groups#update_relationship {:relationship=>"members"}
 #                                              DELETE    /edge/groups/:group_id/relationships/members(.:format)                               groups#destroy_relationship {:relationship=>"members"}
 #                                group_members GET       /edge/groups/:group_id/members(.:format)                                             group_members#get_related_resources {:relationship=>"members", :source=>"groups"}
+#                group_relationships_neighbors GET       /edge/groups/:group_id/relationships/neighbors(.:format)                             groups#show_relationship {:relationship=>"neighbors"}
+#                                              POST      /edge/groups/:group_id/relationships/neighbors(.:format)                             groups#create_relationship {:relationship=>"neighbors"}
+#                                              PUT|PATCH /edge/groups/:group_id/relationships/neighbors(.:format)                             groups#update_relationship {:relationship=>"neighbors"}
+#                                              DELETE    /edge/groups/:group_id/relationships/neighbors(.:format)                             groups#destroy_relationship {:relationship=>"neighbors"}
+#                              group_neighbors GET       /edge/groups/:group_id/neighbors(.:format)                                           group_neighbors#get_related_resources {:relationship=>"neighbors", :source=>"groups"}
 #                                       groups GET       /edge/groups(.:format)                                                               groups#index
 #                                              POST      /edge/groups(.:format)                                                               groups#create
 #                                        group GET       /edge/groups/:id(.:format)                                                           groups#show
@@ -887,6 +892,20 @@
 #                                              PATCH     /edge/group-reports/:id(.:format)                                                    group_reports#update
 #                                              PUT       /edge/group-reports/:id(.:format)                                                    group_reports#update
 #                                              DELETE    /edge/group-reports/:id(.:format)                                                    group_reports#destroy
+#          group_neighbor_relationships_source GET       /edge/group-neighbors/:group_neighbor_id/relationships/source(.:format)              group_neighbors#show_relationship {:relationship=>"source"}
+#                                              PUT|PATCH /edge/group-neighbors/:group_neighbor_id/relationships/source(.:format)              group_neighbors#update_relationship {:relationship=>"source"}
+#                                              DELETE    /edge/group-neighbors/:group_neighbor_id/relationships/source(.:format)              group_neighbors#destroy_relationship {:relationship=>"source"}
+#                        group_neighbor_source GET       /edge/group-neighbors/:group_neighbor_id/source(.:format)                            groups#get_related_resource {:relationship=>"source", :source=>"group_neighbors"}
+#     group_neighbor_relationships_destination GET       /edge/group-neighbors/:group_neighbor_id/relationships/destination(.:format)         group_neighbors#show_relationship {:relationship=>"destination"}
+#                                              PUT|PATCH /edge/group-neighbors/:group_neighbor_id/relationships/destination(.:format)         group_neighbors#update_relationship {:relationship=>"destination"}
+#                                              DELETE    /edge/group-neighbors/:group_neighbor_id/relationships/destination(.:format)         group_neighbors#destroy_relationship {:relationship=>"destination"}
+#                   group_neighbor_destination GET       /edge/group-neighbors/:group_neighbor_id/destination(.:format)                       groups#get_related_resource {:relationship=>"destination", :source=>"group_neighbors"}
+#                                              GET       /edge/group-neighbors(.:format)                                                      group_neighbors#index
+#                                              POST      /edge/group-neighbors(.:format)                                                      group_neighbors#create
+#                               group_neighbor GET       /edge/group-neighbors/:id(.:format)                                                  group_neighbors#show
+#                                              PATCH     /edge/group-neighbors/:id(.:format)                                                  group_neighbors#update
+#                                              PUT       /edge/group-neighbors/:id(.:format)                                                  group_neighbors#update
+#                                              DELETE    /edge/group-neighbors/:id(.:format)                                                  group_neighbors#destroy
 #                                     activity DELETE    /edge/activities/:id(.:format)                                                       activities#destroy
 #                                              GET       /edge/feeds/:group/:id(.:format)                                                     feeds#show
 #                                              POST      /edge/feeds/:group/:id/_read(.:format)                                               feeds#mark_read
@@ -974,6 +993,7 @@ Rails.application.routes.draw do
     jsonapi_resources :group_invites
     jsonapi_resources :group_permissions
     jsonapi_resources :group_reports
+    jsonapi_resources :group_neighbors
 
     resources :activities, only: %i[destroy]
     get '/feeds/:group/:id', to: 'feeds#show'
