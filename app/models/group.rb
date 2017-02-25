@@ -44,6 +44,7 @@ class Group < ApplicationRecord
   scope :sfw, ->() { where(nsfw: false) }
   scope :visible_for, ->(user) {
     # private == false || is a member
+    return public_visible unless user
     members = user.group_members.select(:group_id)
     where(id: members.arel).or(public_visible)
   }
