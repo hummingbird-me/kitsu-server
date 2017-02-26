@@ -13,9 +13,11 @@
 #  cover_image_file_name    :string(255)
 #  cover_image_file_size    :integer
 #  cover_image_updated_at   :datetime
+#  leaders_count            :integer          default(0), not null
 #  locale                   :string
 #  members_count            :integer          default(0)
 #  name                     :string(255)      not null
+#  neighbors_count          :integer          default(0), not null
 #  nsfw                     :boolean          default(FALSE), not null
 #  privacy                  :integer          default(0), not null
 #  rules                    :text
@@ -37,4 +39,5 @@ RSpec.describe Group, type: :model do
   it { should validate_length_of(:name).is_at_least(4).is_at_most(50) }
   it { should define_enum_for(:privacy) }
   it { should have_many(:members).dependent(:destroy) }
+  it { should have_many(:neighbors).dependent(:destroy) }
 end

@@ -24,7 +24,7 @@ require 'rails_helper'
 
 RSpec.describe GroupMember, type: :model do
   it { should belong_to(:user) }
-  it { should belong_to(:group) }
+  it { should belong_to(:group).counter_cache('members_count') }
   it { should have_many(:permissions).dependent(:destroy) }
   it { should define_enum_for(:rank) }
 end

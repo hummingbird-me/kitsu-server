@@ -23,7 +23,10 @@
 require 'rails_helper'
 
 RSpec.describe GroupNeighbor, type: :model do
-  it { should belong_to(:source).class_name('Group') }
+  it do
+    should belong_to(:source).class_name('Group')
+      .counter_cache('neighbors_count')
+  end
   it { should validate_presence_of(:source) }
   it { should belong_to(:destination).class_name('Group') }
   it { should validate_presence_of(:destination) }

@@ -21,10 +21,13 @@
 # rubocop:enable Metrics/LineLength
 
 class GroupMember < ApplicationRecord
-  belongs_to :group, required: true
+  belongs_to :group, required: true, counter_cache: 'members_count'
   belongs_to :user, required: true
   has_many :permissions, class_name: 'GroupPermission', dependent: :destroy
 
+  counter_culture :group, column_name: ->(model) {
+    model.pleb? ? nil : 'leaders_count'
+  }
   enum rank: %i[pleb mod admin]
   scope :with_permission, ->(perm) {
     joins(:permissions).merge(GroupPermission.for_permission(perm))
