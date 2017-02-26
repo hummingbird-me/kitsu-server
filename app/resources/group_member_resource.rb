@@ -1,4 +1,6 @@
 class GroupMemberResource < BaseResource
+  include SortableByFollowing
+
   attributes :rank, :created_at
 
   filters :rank, :group, :user

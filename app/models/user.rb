@@ -163,6 +163,14 @@ class User < ApplicationRecord
   scope :alts_of, ->(user) do
     where('ip_addresses && ARRAY[?]::inet', user.ip_addresses)
   end
+  scope :followed_first, ->(user) {
+    user_id = sanitize(user.id)
+    joins(<<-SQL.squish).order('(f.id IS NULL) DESC')
+      LEFT OUTER JOIN follows f
+      ON f.followed_id = users.id
+      AND f.follower_id = #{user_id}
+    SQL
+  }
 
   # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
