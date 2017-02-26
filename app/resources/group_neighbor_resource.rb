@@ -1,4 +1,4 @@
 class GroupNeighborResource < BaseResource
-  belongs_to :source
-  belongs_to :destination
+  has_one :source
+  has_one :destination
 end
