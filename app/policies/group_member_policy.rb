@@ -4,7 +4,8 @@ class GroupMemberPolicy < ApplicationPolicy
   end
 
   def create?
-    is_owner?
+    return false unless is_owner?
+    group.open? || group.restricted?
   end
 
   def destroy?
