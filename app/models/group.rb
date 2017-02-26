@@ -48,7 +48,7 @@ class Group < ApplicationRecord
     # private == false || is a member
     return public_visible unless user
     members = user.group_members.select(:group_id)
-    where(id: members.arel).or(public_visible)
+    where(id: members).or(public_visible)
   }
 
   has_many :members, class_name: 'GroupMember', dependent: :destroy
