@@ -1,0 +1,14 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+  var emberAuth = JSON.parse(localStorage['ember_simple_auth:session']);
+  $.ajax({
+    url: '/api/sessions',
+    data: {
+      token: emberAuth.authenticated.access_token
+    },
+    type: 'post'
+  }).then(function(){
+    window.location.replace('/api/admin');
+  })
+</script>

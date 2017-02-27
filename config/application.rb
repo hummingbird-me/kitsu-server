@@ -21,6 +21,10 @@ module Kitsu
     # config/initializers -- all .rb files in that directory are automatically
     # loaded.
 
+    # Admin Panel. This doesn't change any URLs but it lets the panel get assets
+    config.relative_url_root = '/api'
+    config.action_controller.relative_url_root = '/api'
+
     # UTC all the way
     config.time_zone = 'UTC'
 
@@ -38,6 +42,8 @@ module Kitsu
 
     # Allow autoloading any lib files
     config.autoload_paths << "#{Rails.root}/lib"
+
+    config.api_only = false
 
     # Eable CORS
     config.middleware.insert_before 0, 'Rack::Cors' do
