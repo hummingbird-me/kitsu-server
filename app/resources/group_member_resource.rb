@@ -3,7 +3,13 @@ class GroupMemberResource < BaseResource
 
   attributes :rank, :created_at
 
-  filters :rank, :group, :user
+  filter :rank, apply: ->(records, values, _options) {
+    ranks = GroupMember.ranks.values_at(*values).compact
+    ranks = values if ranks.empty?
+    records.where(rank: ranks)
+  }
+
+  filters :group, :user
 
   has_one :group
   has_one :user
