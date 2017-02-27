@@ -12,6 +12,7 @@
 #  cover_image_content_type  :string(255)
 #  cover_image_file_name     :string(255)
 #  cover_image_file_size     :integer
+#  cover_image_processing    :boolean
 #  cover_image_top_offset    :integer          default(0), not null
 #  cover_image_updated_at    :datetime
 #  end_date                  :date
@@ -53,6 +54,10 @@ RSpec.describe Anime, type: :model do
   include_examples 'media'
   include_examples 'episodic'
   include_examples 'age_ratings'
+
+  it { should have_many(:anime_characters).dependent(:destroy) }
+  it { should have_many(:anime_staff).dependent(:destroy) }
+  it { should have_many(:anime_productions).dependent(:destroy) }
 
   describe '#season' do
     it 'should return winter for shows starting in December through February' do

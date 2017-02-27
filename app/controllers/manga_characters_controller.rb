@@ -1,0 +1,2 @@
+class MangaCharactersController < ApplicationController
+end

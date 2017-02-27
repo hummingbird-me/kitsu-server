@@ -25,6 +25,6 @@ FactoryGirl.define do
   factory :profile_link do
     association :user, strategy: :build
     association :profile_link_site, strategy: :build
-    url 'will-change-later-on'
+    url 'toyhammered'
   end
 end

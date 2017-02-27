@@ -7,16 +7,10 @@ module Media
     include Rateable
     include Rankable
     include Trendable
+    include WithCoverImage
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
-    has_attached_file :cover_image, styles: {
-      small: ['1680x400#', :jpg],
-      large: ['3360x800#', :jpg]
-    }, convert_options: {
-      small: '-quality 75 -strip',
-      large: '-quality 50 -strip'
-    }
     has_attached_file :poster_image, styles: {
       tiny: ['110x156#', :jpg],
       small: ['284x402#', :jpg],
@@ -25,8 +19,8 @@ module Media
     }, convert_options: {
       tiny: '-quality 90 -strip',
       small: '-quality 75 -strip',
-      medium: '-quality 50 -strip',
-      large: '-quality 40 -strip'
+      medium: '-quality 70 -strip',
+      large: '-quality 60 -strip'
     }
 
     update_index("media##{name.underscore}") { self }
@@ -51,9 +45,6 @@ module Media
                          inverse_of: :item
     delegate :year, to: :start_date, allow_nil: true
 
-    validates_attachment :cover_image, content_type: {
-      content_type: %w[image/jpg image/jpeg image/png]
-    }
     validates_attachment :poster_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
     }

@@ -172,7 +172,7 @@ class LibraryEntry < ApplicationRecord
     if status_changed? && completed? && media&.progress_limit
       # When marked completed, we try to update progress to the cap
       self.progress = media.progress_limit
-    elsif progress == media&.progress_limit
+    elsif !status_changed? && progress == media&.progress_limit
       # When in current and progress equals total episodes
       self.status = :completed
     end

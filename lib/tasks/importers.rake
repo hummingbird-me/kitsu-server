@@ -30,7 +30,7 @@ namespace :importers do
         GC.start
 
         puts 'Downloading files...'
-        data = DataImport::Kitsu.new(host: 'https://hummingbird.me')
+        data = DataImport::Kitsu.new(host: 'https://kitsu.io')
         i = 0
         data.download_posters(ids) do |a, poster|
           i += 1

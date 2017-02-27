@@ -19,6 +19,7 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  dropbox_secret              :string(255)
@@ -108,6 +109,12 @@ RSpec.describe User, type: :model do
       u = User.by_name(persisted_user.name).first
       expect(u).to eq(persisted_user)
     end
+  end
+
+  it 'should reserve certain names case-insensitively' do
+    user = User.new(name: 'admin')
+    expect(user).to be_invalid
+    expect(user.errors[:name]).not_to be_empty
   end
 
   describe 'find_for_auth' do

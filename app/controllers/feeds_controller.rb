@@ -22,7 +22,8 @@ class FeedsController < ApplicationController
   def destroy_activity
     uuid = params[:uuid]
     activity = feed.activities.includes(:subject).find(params[:uuid])
-    if policy_for(activity.subject).destroy?
+    can_destroy = activity.subject && policy_for(activity.subject).destroy?
+    if feed_owner? || can_destroy
       feed.activities.destroy(params[:uuid], uuid: true)
       return render nothing: true, status: 204
     end
@@ -83,6 +84,15 @@ class FeedsController < ApplicationController
       user = User.find_by(id: params[:id])
       user == current_user.resource_owner
     when 'global' then true
+    end
+  end
+
+  def feed_owner?
+    case params[:group]
+    when 'user', 'user_aggr'
+      user = User.find_by(id: params[:id])
+      user && policy_for(user).update?
+    else false
     end
   end
 

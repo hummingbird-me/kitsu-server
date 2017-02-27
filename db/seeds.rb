@@ -11,9 +11,9 @@ Dir[Rails.root.join("#{SEED_DIR}/*.yml")].each do |f|
 
   yaml.each do |key, values|
     print "#{key} "
-    model.where(id: values['id']).first_or_create do |record|
-      record.assign_attributes(values)
-    end
+    row = model.where(id: values['id']).first_or_initialize
+    row.assign_attributes(values)
+    row.save!
   end
   print "\n"
 end

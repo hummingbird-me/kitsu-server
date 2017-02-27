@@ -19,6 +19,7 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  dropbox_secret              :string(255)
@@ -89,17 +90,21 @@
 
 class User < ApplicationRecord
   has_paper_trail
+  include WithCoverImage
+  include WithAvatar
+
   PAST_NAMES_LIMIT = 10
   PAST_IPS_LIMIT = 20
   RESERVED_NAMES = %w[
     admin administrator connect dashboard developer developers edit favorites
     feature featured features feed follow followers following hummingbird index
     javascript json kitsu sysadmin sysadministrator system unfollow user users
-    wiki you
+    wiki you staff mod
   ].freeze
 
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
+  update_index('users#user') { self }
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
@@ -125,26 +130,11 @@ class User < ApplicationRecord
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
 
-  has_attached_file :avatar, styles: {
-    tiny: '40x40#',
-    small: '64x64#',
-    medium: '100x100#',
-    large: '200x200#'
-  }, convert_options: {
-    tiny: '-quality 100 -strip',
-    small: '-quality 80 -strip',
-    medium: '-quality 70 -strip',
-    large: '-quality 60 -strip'
-  }
-  has_attached_file :cover_image
-  process_in_background :cover_image
-
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false },
                    length: { minimum: 3, maximum: 20 },
-                   exclusion: RESERVED_NAMES,
                    format: {
                      with: /\A[_A-Za-z0-9]+\z/,
                      message: <<-EOF.squish
@@ -159,16 +149,11 @@ class User < ApplicationRecord
     without: /\A[0-9]*\z/,
     message: 'cannot be entirely numbers'
   }
+  validate :not_reserved_username
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
   validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
-  validates_attachment :avatar, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png image/gif]
-  }
-  validates_attachment :cover_image, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png]
-  }
 
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
@@ -182,6 +167,10 @@ class User < ApplicationRecord
   def self.find_for_auth(identification)
     identification = [identification.downcase]
     where('lower(email)=? OR lower(name)=?', *(identification * 2)).first
+  end
+
+  def not_reserved_username
+    errors.add(:name, 'is reserved') if RESERVED_NAMES.include?(name.downcase)
   end
 
   def pro?
@@ -273,7 +262,7 @@ class User < ApplicationRecord
   end
 
   after_create do
-    UserMailer.confirmation(self).deliver_now
+    UserMailer.confirmation(self).deliver_later
     aggregated_feed.follow(feed)
     timeline.follow(feed)
     Feed.global.follow(feed)
@@ -298,7 +287,7 @@ class User < ApplicationRecord
     if email_changed? && !Rails.env.staging?
       self.previous_email = email_was
       self.confirmed_at = nil
-      UserMailer.confirmation(self).deliver_now
+      UserMailer.confirmation(self).deliver_later
     end
     update_profile_completed
     update_feed_completed

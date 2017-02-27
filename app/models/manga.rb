@@ -13,6 +13,7 @@
 #  cover_image_content_type  :string(255)
 #  cover_image_file_name     :string(255)
 #  cover_image_file_size     :integer
+#  cover_image_processing    :boolean
 #  cover_image_top_offset    :integer          default(0)
 #  cover_image_updated_at    :datetime
 #  end_date                  :date
@@ -43,12 +44,14 @@ class Manga < ApplicationRecord
   include Media
   include AgeRatings
 
-  enum subtype: %i[manga novel manhua oneshot doujin]
+  enum subtype: %i[manga novel manhua oneshot doujin manwha oel]
   enum status: %i[not_published publishing finished]
   alias_attribute :progress_limit, :chapter_count
   alias_attribute :manga_type, :subtype
 
   has_many :chapters
+  has_many :manga_characters, dependent: :destroy
+  has_many :manga_staff, dependent: :destroy
 
   validates :chapter_count, numericality: { greater_than: 0 }, allow_nil: true
 

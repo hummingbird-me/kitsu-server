@@ -32,6 +32,25 @@ module StreamSync
     end
   end
 
+  def media_genres
+    genres_for Anime
+    genres_for Manga
+    genres_for Drama
+  end
+
+  def genres_for(klass)
+    puts "#{klass.name}:"
+    print ' => generating'
+    data = klass.includes(:genres).map { |media|
+      print '.' if rand(1..100) > 98
+      [media.stream_id, media.genres.map(&:name)]
+    }.to_h
+    print "\n"
+    print ' => uploading'
+    custom_endpoint_client.upload_meta(data)
+    print "\n"
+  end
+
   def mass_follow(name, list, &map_block)
     puts "#{name}:"
     print " => generating"
@@ -47,5 +66,9 @@ module StreamSync
       Feed.follow_many(group, scrollback: 0)
     end
     print "\n"
+  end
+
+  def custom_endpoint_client
+    @client ||= Stream::CustomEndpointClient.new
   end
 end

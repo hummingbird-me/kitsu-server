@@ -1,6 +1,6 @@
 class FeedQueryService
-  MEDIA_VERBS = %w[updated rated progressed reviewed].freeze
-  POST_VERBS = %w[post comment follow].freeze
+  MEDIA_VERBS = %w[updated rated progressed].freeze
+  POST_VERBS = %w[post comment follow review].freeze
 
   attr_reader :params, :user
 

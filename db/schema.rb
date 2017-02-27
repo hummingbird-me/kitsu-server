@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170208015113) do
+ActiveRecord::Schema.define(version: 20170215225213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,12 +50,35 @@ ActiveRecord::Schema.define(version: 20170208015113) do
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
     t.integer  "favorites_count",                       default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
   add_index "anime", ["average_rating"], name: "index_anime_on_wilson_ci", order: {"average_rating"=>:desc}, using: :btree
   add_index "anime", ["slug"], name: "index_anime_on_slug", unique: true, using: :btree
   add_index "anime", ["user_count"], name: "index_anime_on_user_count", using: :btree
+
+  create_table "anime_castings", force: :cascade do |t|
+    t.integer "anime_character_id", null: false
+    t.integer "person_id",          null: false
+    t.string  "locale",             null: false
+    t.integer "licensor_id"
+    t.string  "notes"
+  end
+
+  add_index "anime_castings", ["anime_character_id", "person_id", "locale"], name: "index_anime_castings_on_character_person_locale", unique: true, using: :btree
+  add_index "anime_castings", ["anime_character_id"], name: "index_anime_castings_on_anime_character_id", using: :btree
+  add_index "anime_castings", ["person_id"], name: "index_anime_castings_on_person_id", using: :btree
+
+  create_table "anime_characters", force: :cascade do |t|
+    t.integer "anime_id",                 null: false
+    t.integer "character_id",             null: false
+    t.integer "role",         default: 1, null: false
+  end
+
+  add_index "anime_characters", ["anime_id", "character_id"], name: "index_anime_characters_on_anime_id_and_character_id", unique: true, using: :btree
+  add_index "anime_characters", ["anime_id"], name: "index_anime_characters_on_anime_id", using: :btree
+  add_index "anime_characters", ["character_id"], name: "index_anime_characters_on_character_id", using: :btree
 
   create_table "anime_genres", id: false, force: :cascade do |t|
     t.integer "anime_id", null: false
@@ -73,6 +96,16 @@ ActiveRecord::Schema.define(version: 20170208015113) do
 
   add_index "anime_productions", ["anime_id"], name: "index_anime_productions_on_anime_id", using: :btree
   add_index "anime_productions", ["producer_id"], name: "index_anime_productions_on_producer_id", using: :btree
+
+  create_table "anime_staff", force: :cascade do |t|
+    t.integer "anime_id",  null: false
+    t.integer "person_id", null: false
+    t.string  "role"
+  end
+
+  add_index "anime_staff", ["anime_id", "person_id"], name: "index_anime_staff_on_anime_id_and_person_id", unique: true, using: :btree
+  add_index "anime_staff", ["anime_id"], name: "index_anime_staff_on_anime_id", using: :btree
+  add_index "anime_staff", ["person_id"], name: "index_anime_staff_on_person_id", using: :btree
 
   create_table "blocks", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -165,6 +198,38 @@ ActiveRecord::Schema.define(version: 20170208015113) do
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["post_id"], name: "index_comments_on_post_id", using: :btree
 
+  create_table "drama_castings", force: :cascade do |t|
+    t.integer "drama_character_id", null: false
+    t.integer "person_id",          null: false
+    t.string  "locale",             null: false
+    t.integer "licensor_id"
+    t.string  "notes"
+  end
+
+  add_index "drama_castings", ["drama_character_id", "person_id", "locale"], name: "index_drama_castings_on_character_person_locale", unique: true, using: :btree
+  add_index "drama_castings", ["drama_character_id"], name: "index_drama_castings_on_drama_character_id", using: :btree
+  add_index "drama_castings", ["person_id"], name: "index_drama_castings_on_person_id", using: :btree
+
+  create_table "drama_characters", force: :cascade do |t|
+    t.integer "drama_id",                 null: false
+    t.integer "character_id",             null: false
+    t.integer "role",         default: 1, null: false
+  end
+
+  add_index "drama_characters", ["character_id"], name: "index_drama_characters_on_character_id", using: :btree
+  add_index "drama_characters", ["drama_id", "character_id"], name: "index_drama_characters_on_drama_id_and_character_id", unique: true, using: :btree
+  add_index "drama_characters", ["drama_id"], name: "index_drama_characters_on_drama_id", using: :btree
+
+  create_table "drama_staff", force: :cascade do |t|
+    t.integer "drama_id",  null: false
+    t.integer "person_id", null: false
+    t.string  "role"
+  end
+
+  add_index "drama_staff", ["drama_id", "person_id"], name: "index_drama_staff_on_drama_id_and_person_id", unique: true, using: :btree
+  add_index "drama_staff", ["drama_id"], name: "index_drama_staff_on_drama_id", using: :btree
+  add_index "drama_staff", ["person_id"], name: "index_drama_staff_on_person_id", using: :btree
+
   create_table "dramas", force: :cascade do |t|
     t.string   "slug",                                        null: false
     t.hstore   "titles",                    default: {},      null: false
@@ -198,6 +263,7 @@ ActiveRecord::Schema.define(version: 20170208015113) do
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
     t.integer  "favorites_count",           default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "dramas", ["slug"], name: "index_dramas_on_slug", using: :btree
@@ -442,7 +508,28 @@ ActiveRecord::Schema.define(version: 20170208015113) do
     t.integer  "age_rating"
     t.string   "age_rating_guide"
     t.integer  "favorites_count",                       default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
+
+  create_table "manga_characters", force: :cascade do |t|
+    t.integer "manga_id",                 null: false
+    t.integer "character_id",             null: false
+    t.integer "role",         default: 1, null: false
+  end
+
+  add_index "manga_characters", ["character_id"], name: "index_manga_characters_on_character_id", using: :btree
+  add_index "manga_characters", ["manga_id", "character_id"], name: "index_manga_characters_on_manga_id_and_character_id", unique: true, using: :btree
+  add_index "manga_characters", ["manga_id"], name: "index_manga_characters_on_manga_id", using: :btree
+
+  create_table "manga_staff", force: :cascade do |t|
+    t.integer "manga_id",  null: false
+    t.integer "person_id", null: false
+    t.string  "role"
+  end
+
+  add_index "manga_staff", ["manga_id", "person_id"], name: "index_manga_staff_on_manga_id_and_person_id", unique: true, using: :btree
+  add_index "manga_staff", ["manga_id"], name: "index_manga_staff_on_manga_id", using: :btree
+  add_index "manga_staff", ["person_id"], name: "index_manga_staff_on_person_id", using: :btree
 
   create_table "mappings", force: :cascade do |t|
     t.string  "external_site", null: false
@@ -648,9 +735,11 @@ ActiveRecord::Schema.define(version: 20170208015113) do
   end
 
   create_table "profile_link_sites", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",             null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.string   "validate_find"
+    t.string   "validate_replace"
   end
 
   create_table "profile_links", force: :cascade do |t|
@@ -884,6 +973,7 @@ ActiveRecord::Schema.define(version: 20170208015113) do
     t.string   "title"
     t.boolean  "profile_completed",                       default: false,       null: false
     t.boolean  "feed_completed",                          default: false,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -951,12 +1041,30 @@ ActiveRecord::Schema.define(version: 20170208015113) do
   add_index "wiki_versions", ["item_type", "item_id"], name: "index_wiki_versions_on_item_type_and_item_id", using: :btree
   add_index "wiki_versions", ["user_id"], name: "index_wiki_versions_on_user_id", using: :btree
 
+  add_foreign_key "anime_castings", "anime_characters"
+  add_foreign_key "anime_castings", "people"
+  add_foreign_key "anime_castings", "producers", column: "licensor_id"
+  add_foreign_key "anime_characters", "anime"
+  add_foreign_key "anime_characters", "characters"
+  add_foreign_key "anime_staff", "anime"
+  add_foreign_key "anime_staff", "people"
   add_foreign_key "blocks", "users"
   add_foreign_key "blocks", "users", column: "blocked_id"
   add_foreign_key "comment_likes", "comments"
   add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"
+  add_foreign_key "drama_castings", "drama_characters"
+  add_foreign_key "drama_castings", "people"
+  add_foreign_key "drama_castings", "producers", column: "licensor_id"
+  add_foreign_key "drama_characters", "characters"
+  add_foreign_key "drama_characters", "dramas"
+  add_foreign_key "drama_staff", "dramas"
+  add_foreign_key "drama_staff", "people"
   add_foreign_key "linked_accounts", "users"
+  add_foreign_key "manga_characters", "characters"
+  add_foreign_key "manga_characters", "manga"
+  add_foreign_key "manga_staff", "manga"
+  add_foreign_key "manga_staff", "people"
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
   add_foreign_key "media_follows", "users"
