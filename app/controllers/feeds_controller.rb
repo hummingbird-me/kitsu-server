@@ -69,6 +69,10 @@ class FeedsController < ApplicationController
     when 'user', 'user_aggr'
       user = User.find_by(id: params[:id])
       user && show?(user)
+    when 'group', 'group_aggr'
+      group = Group.find_by(id: params[:id])
+      return true if group && !group.closed?
+      group && current_user && group.member_for(current_user.resource_owner)
     when 'notifications', 'timeline'
       user = User.find_by(id: params[:id])
       user == current_user.resource_owner
