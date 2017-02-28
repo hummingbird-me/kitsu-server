@@ -22,12 +22,12 @@ class MyAnimeListSyncService
     end
 
     case method
-    when :delete
+    when 'delete'
       delete(
         "#{media_type}list/#{media_type}/#{mal_media_id}",
         linked_account
       )
-    when :create, :update
+    when 'create', 'update'
       # find the anime or manga
       # it will raise an error if it fails the http request
       response = get(

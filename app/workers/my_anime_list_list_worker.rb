@@ -14,7 +14,7 @@ class MyAnimeListListWorker
         # but at some point we can update to get the correct action.
         # Same issue with the LibraryEntryLog performed_action
 
-        method: :create,
+        method: 'create',
         library_entry_log_id: library_entry_log.id
       )
     end
