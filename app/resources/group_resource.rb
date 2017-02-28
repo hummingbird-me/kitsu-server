@@ -4,7 +4,7 @@ class GroupResource < BaseResource
   caching
 
   attributes :about, :locale, :members_count, :name, :nsfw, :privacy, :rules,
-    :rules_formatted, :tags
+    :rules_formatted, :tags, :leaders_count, :neighbors_count
   attributes :avatar, :cover_image, format: :attachment
 
   has_many :members
