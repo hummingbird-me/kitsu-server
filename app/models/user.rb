@@ -165,7 +165,7 @@ class User < ApplicationRecord
   end
   scope :followed_first, ->(user) {
     user_id = sanitize(user.id)
-    joins(<<-SQL.squish).order('(f.id IS NULL) DESC')
+    joins(<<-SQL.squish).order('(f.id IS NULL) ASC')
       LEFT OUTER JOIN follows f
       ON f.followed_id = users.id
       AND f.follower_id = #{user_id}
