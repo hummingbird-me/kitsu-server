@@ -147,15 +147,6 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
-  def sync_to_mal?
-    return unless media_type.in? %w[Anime Manga]
-
-    User.find(user_id).linked_accounts.where(
-      sync_to: true,
-      type: 'LinkedAccount::MyAnimeList'
-    ).present?
-  end
-
   before_validation do
     # TEMPORARY: If media is set, copy it to kind_id, otherwise if kind_id is
     # set, copy it to media!
@@ -202,24 +193,39 @@ class LibraryEntry < ApplicationRecord
     media.trending_vote(user, 1.0) if status_changed?
   end
 
-  # TODO: will rename this if I think of a better one
-  after_commit :sync_entry_update, on: %i[create update]
+  after_commit ->() { sync_entry(:create) }, on: :create
+  after_commit ->() { sync_entry(:update) }, on: :update
+  after_destroy ->() { sync_entry(:delete) }
 
-  def sync_entry_update
-    return unless sync_to_mal?
+  def sync_to_mal?
+    return unless media_type.in? %w[Anime Manga]
 
-    MyAnimeListSyncWorker.perform_async(
-      library_entry_id: id,
-      method: 'create/update'
-    )
+    myanimelist_linked_account.present?
   end
 
-  after_destroy do
+  def sync_entry(method)
+    return unless sync_to_mal?
+
+    # create log
+    library_entry_log = LibraryEntryLog.create_for(method, library_entry)
+
     MyAnimeListSyncWorker.perform_async(
+      # for create & update
+      library_entry_id: id,
+      # for delete
       user_id: user_id,
       media_id: media_id,
       media_type: media_type,
-      method: 'delete'
-    ) if sync_to_mal?
+      # for all
+      method: method,
+      library_entry_log_id: library_entry_log.id
+    )
+  end
+
+  def myanimelist_linked_account
+    @mal_linked_account ||= User.find(user_id).linked_accounts.find_by(
+      sync_to: true,
+      type: 'LinkedAccount::MyAnimeList'
+    )
   end
 end

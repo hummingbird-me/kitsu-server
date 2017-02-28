@@ -8,50 +8,18 @@ RSpec.describe MyAnimeListSyncService do
   end
 
   let(:linked_account) { build(:linked_account) }
-
   let(:mapping) do
     build(:mapping,
       external_site: 'myanimelist',
       external_id: 11_633)
   end
+  let(:library_entry_log) { build(:library_entry_log) }
 
-  # delete or create/update
-  subject { described_class.new(library_entry, 'create/update') }
+  # create, update, delete
+  subject { described_class.new(library_entry, 'create', library_entry_log) }
 
   before do
     @host = described_class::ATARASHII_API_HOST
-    mine = '?mine=1'
-
-    # Blood Lad, this is on my list
-    # authorized
-    stub_request(:get, "#{@host}anime/11633#{mine}")
-      .with(
-        headers: {
-          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-        }
-      )
-      .to_return(body: fixture('my_anime_list/sync/anime/blood-lad.json'))
-
-    # Boku no Pico, this is NOT on my list
-    # authorized
-    stub_request(:get, "#{@host}anime/1639#{mine}")
-      .with(
-        headers: {
-          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-        }
-      )
-      .to_return(body: fixture('my_anime_list/sync/anime/boku-no-pico.json'))
-    #
-    # # TODO: fix, not working like I thought it would
-    # # related to commented out before_save code
-    # # in linked_profile
-    # stub_request(:get, "#{@host}account/verify_credentials")
-    #   .with(
-    #     headers: {
-    #       Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-    #     }
-    #   )
-    #   .to_return(status: 200)
   end
 
   context 'Anime/Manga' do
