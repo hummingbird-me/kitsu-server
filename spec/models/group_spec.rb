@@ -35,9 +35,24 @@
 require 'rails_helper'
 
 RSpec.describe Group, type: :model do
+  subject { build(:group) }
+
   it { should validate_presence_of(:name) }
   it { should validate_length_of(:name).is_at_least(4).is_at_most(50) }
   it { should define_enum_for(:privacy) }
   it { should have_many(:members).dependent(:destroy) }
   it { should have_many(:neighbors).dependent(:destroy) }
+
+  it 'should send the follow to Stream on save' do
+    expect(subject.aggregated_feed).to receive(:follow).with(subject.feed)
+    expect(Feed.global).to receive(:follow).with(subject.feed)
+    subject.save!
+  end
+
+  it 'should remove the follow from Stream on save' do
+    subject.save!
+    expect(subject.aggregated_feed).to receive(:unfollow).with(subject.feed)
+    expect(Feed.global).to receive(:unfollow).with(subject.feed)
+    subject.destroy!
+  end
 end
