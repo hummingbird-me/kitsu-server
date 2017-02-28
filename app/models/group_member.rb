@@ -45,4 +45,12 @@ class GroupMember < ApplicationRecord
     rank = :admin if has_permission?(:owner)
     update(rank: rank)
   end
+
+  after_create do
+    user.timeline.follow(group.feed)
+  end
+
+  after_destroy do
+    user.timeline.unfollow(group.feed)
+  end
 end

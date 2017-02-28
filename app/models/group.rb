@@ -69,4 +69,14 @@ class Group < ApplicationRecord
   def aggregated_feed
     Feed.group_aggr(id)
   end
+
+  after_create do
+    aggregated_feed.follow(feed)
+    Feed.global.follow(feed) unless closed?
+  end
+
+  after_destroy do
+    aggregated_feed.unfollow(feed)
+    Feed.global.unfollow(feed) unless closed?
+  end
 end
