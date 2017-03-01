@@ -85,6 +85,7 @@ Rails.application.routes.draw do
     jsonapi_resources :group_invites
     post '/group-invites/:id/_accept', to: 'group_invites#accept'
     post '/group-invites/:id/_decline', to: 'group_invites#decline'
+    get '/groups/:id/_stats', to: 'groups#stats'
   end
 
   ### Debug APIs

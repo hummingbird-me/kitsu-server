@@ -33,6 +33,7 @@ class GroupMember < ApplicationRecord
     joins(:permissions).merge(GroupPermission.for_permission(perm))
   }
   scope :for_user, ->(user) { where(user: user) }
+  scope :in_group, ->(group) { where(group: group) }
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
 
   def has_permission?(perm)

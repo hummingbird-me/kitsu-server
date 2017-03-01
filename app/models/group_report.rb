@@ -43,6 +43,7 @@ class GroupReport < ApplicationRecord
     groups = members.select(:group_id)
     where(group_id: groups).or(where(user: user))
   }
+  scope :in_group, ->(group) { where(group: group) }
 
   validates :explanation, presence: true, if: :other?
   validates :reason, :status, presence: true
