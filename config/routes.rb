@@ -1,3 +1,79 @@
+Rails.application.routes.draw do
+  scope '/edge' do
+    jsonapi_resources :library_entries
+    jsonapi_resources :anime
+    jsonapi_resources :manga
+    jsonapi_resources :drama
+    jsonapi_resources :users
+    jsonapi_resources :follows do
+      post :import_from_facebook, on: :collection
+      post :import_from_twitter, on: :collection
+    end
+    jsonapi_resources :media_follows
+    jsonapi_resources :characters
+    jsonapi_resources :people
+    jsonapi_resources :castings
+    jsonapi_resources :genres
+    jsonapi_resources :streamers
+    jsonapi_resources :streaming_links
+    jsonapi_resources :franchises
+    jsonapi_resources :installments
+    jsonapi_resources :mappings
+    jsonapi_resources :posts
+    jsonapi_resources :comments
+    jsonapi_resources :post_likes
+    jsonapi_resources :comment_likes
+    jsonapi_resources :blocks
+    jsonapi_resources :favorites
+    jsonapi_resources :episodes
+    jsonapi_resources :list_imports
+    jsonapi_resources :reviews
+    jsonapi_resources :review_likes
+    jsonapi_resources :roles
+    jsonapi_resources :user_roles
+    jsonapi_resources :reports
+    jsonapi_resources :linked_accounts
+    jsonapi_resources :profile_links
+    jsonapi_resources :profile_link_sites
+    jsonapi_resources :producers
+    jsonapi_resources :anime_productions
+    jsonapi_resources :media_relationships
+    jsonapi_resources :anime_characters
+    jsonapi_resources :anime_castings
+    jsonapi_resources :anime_staff
+    jsonapi_resources :drama_characters
+    jsonapi_resources :drama_castings
+    jsonapi_resources :drama_staff
+    jsonapi_resources :manga_characters
+    jsonapi_resources :manga_staff
+    jsonapi_resources :groups
+    jsonapi_resources :group_members
+    jsonapi_resources :group_invites
+    jsonapi_resources :group_permissions
+    jsonapi_resources :group_reports
+    jsonapi_resources :group_neighbors
+
+    resources :activities, only: %i[destroy]
+    get '/feeds/:group/:id', to: 'feeds#show'
+    post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
+    post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
+    post '/group-invites/:id/_accept', to: 'group_invites#accept'
+    post '/group-invites/:id/_decline', to: 'group_invites#decline'
+    delete '/feeds/:group/:id/activities/:uuid', to: 'feeds#destroy_activity'
+    get '/trending/:namespace', to: 'trending#index'
+    post '/users/_recover', to: 'users#recover'
+    get '/anime/:anime_id/_languages', to: 'anime#languages'
+  end
+
+  get '/debug/dump_all', to: 'debug#dump_all'
+  post '/debug/trace_on', to: 'debug#trace_on'
+  get '/debug/gc_info', to: 'debug#gc_info'
+  post '/user/_prodsync', to: 'users#prod_sync'
+  use_doorkeeper
+
+  root to: 'home#index'
+end
+
 # == Route Map
 #
 #                                       Prefix Verb      URI Pattern                                                                          Controller#Action
@@ -939,79 +1015,3 @@
 #                             oauth_token_info GET       /oauth/token/info(.:format)                                                          doorkeeper/token_info#show
 #                                         root GET       /                                                                                    home#index
 #
-
-Rails.application.routes.draw do
-  scope '/edge' do
-    jsonapi_resources :library_entries
-    jsonapi_resources :anime
-    jsonapi_resources :manga
-    jsonapi_resources :drama
-    jsonapi_resources :users
-    jsonapi_resources :follows do
-      post :import_from_facebook, on: :collection
-      post :import_from_twitter, on: :collection
-    end
-    jsonapi_resources :media_follows
-    jsonapi_resources :characters
-    jsonapi_resources :people
-    jsonapi_resources :castings
-    jsonapi_resources :genres
-    jsonapi_resources :streamers
-    jsonapi_resources :streaming_links
-    jsonapi_resources :franchises
-    jsonapi_resources :installments
-    jsonapi_resources :mappings
-    jsonapi_resources :posts
-    jsonapi_resources :comments
-    jsonapi_resources :post_likes
-    jsonapi_resources :comment_likes
-    jsonapi_resources :blocks
-    jsonapi_resources :favorites
-    jsonapi_resources :episodes
-    jsonapi_resources :list_imports
-    jsonapi_resources :reviews
-    jsonapi_resources :review_likes
-    jsonapi_resources :roles
-    jsonapi_resources :user_roles
-    jsonapi_resources :reports
-    jsonapi_resources :linked_accounts
-    jsonapi_resources :profile_links
-    jsonapi_resources :profile_link_sites
-    jsonapi_resources :producers
-    jsonapi_resources :anime_productions
-    jsonapi_resources :media_relationships
-    jsonapi_resources :anime_characters
-    jsonapi_resources :anime_castings
-    jsonapi_resources :anime_staff
-    jsonapi_resources :drama_characters
-    jsonapi_resources :drama_castings
-    jsonapi_resources :drama_staff
-    jsonapi_resources :manga_characters
-    jsonapi_resources :manga_staff
-    jsonapi_resources :groups
-    jsonapi_resources :group_members
-    jsonapi_resources :group_invites
-    jsonapi_resources :group_permissions
-    jsonapi_resources :group_reports
-    jsonapi_resources :group_neighbors
-
-    resources :activities, only: %i[destroy]
-    get '/feeds/:group/:id', to: 'feeds#show'
-    post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
-    post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
-    post '/group-invites/:id/_accept', to: 'group_invites#accept'
-    post '/group-invites/:id/_decline', to: 'group_invites#decline'
-    delete '/feeds/:group/:id/activities/:uuid', to: 'feeds#destroy_activity'
-    get '/trending/:namespace', to: 'trending#index'
-    post '/users/_recover', to: 'users#recover'
-    get '/anime/:anime_id/_languages', to: 'anime#languages'
-  end
-
-  get '/debug/dump_all', to: 'debug#dump_all'
-  post '/debug/trace_on', to: 'debug#trace_on'
-  get '/debug/gc_info', to: 'debug#gc_info'
-  post '/user/_prodsync', to: 'users#prod_sync'
-  use_doorkeeper
-
-  root to: 'home#index'
-end
