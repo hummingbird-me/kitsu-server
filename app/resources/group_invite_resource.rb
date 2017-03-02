@@ -3,6 +3,5 @@ class GroupInviteResource < BaseResource
   has_one :group
   has_one :sender
 
-  filter :sender
-  filter :user
+  filters :group, :sender, :user
 end
