@@ -59,6 +59,7 @@ class Group < ApplicationRecord
   has_many :invites, class_name: 'GroupInvite', dependent: :destroy
   has_many :reports, class_name: 'GroupReport', dependent: :destroy
   has_many :leader_chat_messages, dependent: :destroy
+  has_many :bans, class_name: 'GroupBan', dependent: :destroy
 
   validates :name, presence: true, length: { in: 4..50 }
 

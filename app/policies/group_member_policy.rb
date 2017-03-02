@@ -1,24 +1,17 @@
 class GroupMemberPolicy < ApplicationPolicy
-  def edit?
-    current_member.admin? || is_owner?
+  include GroupPermissionsHelpers
+
+  def update?
+    has_group_permission?(:members)
   end
 
   def create?
     return false unless is_owner?
+    return false if banned_from_group?
     group.open? || group.restricted?
   end
 
   def destroy?
-    is_owner? || current_member.admin? || admin?
-  end
-
-  private
-
-  def current_member
-    group.member_for(user)
-  end
-
-  def group
-    record.group
+    is_owner? || has_group_permission?(:members)
   end
 end

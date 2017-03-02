@@ -27,6 +27,13 @@ module GroupPermissionsHelpers
     member.leader?
   end
 
+  # Is the current user banned from the group?
+  #
+  # @return [Boolean] whether the current user is banned from the group
+  def banned_from_group?
+    GroupBan.where(user: user, group: group).exists?
+  end
+
   # Does the current member have the permission requested?
   #
   # @param [Symbol] permission what permission we are inquiring about

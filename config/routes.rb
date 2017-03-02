@@ -83,8 +83,9 @@ Rails.application.routes.draw do
     # Tickets
     jsonapi_resources :group_tickets
     jsonapi_resources :group_ticket_messages
-    # Reports
+    # Reports and Bans
     jsonapi_resources :group_reports
+    jsonapi_resources :group_bans
     # Leader Chat
     jsonapi_resources :leader_chat_messages
     # Invites
@@ -1064,6 +1065,24 @@ end
 #                                              PATCH     /edge/group-reports/:id(.:format)                                                    group_reports#update
 #                                              PUT       /edge/group-reports/:id(.:format)                                                    group_reports#update
 #                                              DELETE    /edge/group-reports/:id(.:format)                                                    group_reports#destroy
+#                group_ban_relationships_group GET       /edge/group-bans/:group_ban_id/relationships/group(.:format)                         group_bans#show_relationship {:relationship=>"group"}
+#                                              PUT|PATCH /edge/group-bans/:group_ban_id/relationships/group(.:format)                         group_bans#update_relationship {:relationship=>"group"}
+#                                              DELETE    /edge/group-bans/:group_ban_id/relationships/group(.:format)                         group_bans#destroy_relationship {:relationship=>"group"}
+#                              group_ban_group GET       /edge/group-bans/:group_ban_id/group(.:format)                                       groups#get_related_resource {:relationship=>"group", :source=>"group_bans"}
+#                 group_ban_relationships_user GET       /edge/group-bans/:group_ban_id/relationships/user(.:format)                          group_bans#show_relationship {:relationship=>"user"}
+#                                              PUT|PATCH /edge/group-bans/:group_ban_id/relationships/user(.:format)                          group_bans#update_relationship {:relationship=>"user"}
+#                                              DELETE    /edge/group-bans/:group_ban_id/relationships/user(.:format)                          group_bans#destroy_relationship {:relationship=>"user"}
+#                               group_ban_user GET       /edge/group-bans/:group_ban_id/user(.:format)                                        users#get_related_resource {:relationship=>"user", :source=>"group_bans"}
+#            group_ban_relationships_moderator GET       /edge/group-bans/:group_ban_id/relationships/moderator(.:format)                     group_bans#show_relationship {:relationship=>"moderator"}
+#                                              PUT|PATCH /edge/group-bans/:group_ban_id/relationships/moderator(.:format)                     group_bans#update_relationship {:relationship=>"moderator"}
+#                                              DELETE    /edge/group-bans/:group_ban_id/relationships/moderator(.:format)                     group_bans#destroy_relationship {:relationship=>"moderator"}
+#                          group_ban_moderator GET       /edge/group-bans/:group_ban_id/moderator(.:format)                                   users#get_related_resource {:relationship=>"moderator", :source=>"group_bans"}
+#                                   group_bans GET       /edge/group-bans(.:format)                                                           group_bans#index
+#                                              POST      /edge/group-bans(.:format)                                                           group_bans#create
+#                                    group_ban GET       /edge/group-bans/:id(.:format)                                                       group_bans#show
+#                                              PATCH     /edge/group-bans/:id(.:format)                                                       group_bans#update
+#                                              PUT       /edge/group-bans/:id(.:format)                                                       group_bans#update
+#                                              DELETE    /edge/group-bans/:id(.:format)                                                       group_bans#destroy
 #      leader_chat_message_relationships_group GET       /edge/leader-chat-messages/:leader_chat_message_id/relationships/group(.:format)     leader_chat_messages#show_relationship {:relationship=>"group"}
 #                                              PUT|PATCH /edge/leader-chat-messages/:leader_chat_message_id/relationships/group(.:format)     leader_chat_messages#update_relationship {:relationship=>"group"}
 #                                              DELETE    /edge/leader-chat-messages/:leader_chat_message_id/relationships/group(.:format)     leader_chat_messages#destroy_relationship {:relationship=>"group"}
