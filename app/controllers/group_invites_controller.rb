@@ -5,10 +5,12 @@ class GroupInvitesController < ApplicationController
 
   def accept
     invite.accept!
+    render json: {}, status: 201
   end
 
   def decline
     invite.decline!
+    render json: {}, status: 200
   end
 
   private
@@ -20,6 +22,6 @@ class GroupInvitesController < ApplicationController
   end
 
   def invite
-    GroupInvite.find(params[:group_invite_id])
+    GroupInvite.find(params[:id])
   end
 end
