@@ -37,6 +37,12 @@ class GroupMember < ApplicationRecord
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
   scope :leaders, -> { where.not(rank: :pleb) }
 
+  validate(on: :destroy) do
+    if admin? && group.owners.count == 1
+      errors.add(:group, 'must always have at least one owner')
+    end
+  end
+
   def has_permission?(perm)
     permissions.for_permission(perm).exists?
   end
