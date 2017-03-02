@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302192915) do
+ActiveRecord::Schema.define(version: 20170302195631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -366,6 +366,18 @@ ActiveRecord::Schema.define(version: 20170302192915) do
   end
 
   add_index "genres_manga", ["manga_id"], name: "index_genres_manga_on_manga_id", using: :btree
+
+  create_table "group_action_logs", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "group_id",    null: false
+    t.string   "verb",        null: false
+    t.integer  "target_id",   null: false
+    t.string   "target_type", null: false
+    t.datetime "created_at",  null: false
+  end
+
+  add_index "group_action_logs", ["created_at"], name: "index_group_action_logs_on_created_at", using: :btree
+  add_index "group_action_logs", ["group_id"], name: "index_group_action_logs_on_group_id", using: :btree
 
   create_table "group_bans", force: :cascade do |t|
     t.integer  "group_id",     null: false
@@ -1151,6 +1163,8 @@ ActiveRecord::Schema.define(version: 20170302192915) do
   add_foreign_key "drama_characters", "dramas"
   add_foreign_key "drama_staff", "dramas"
   add_foreign_key "drama_staff", "people"
+  add_foreign_key "group_action_logs", "groups"
+  add_foreign_key "group_action_logs", "users"
   add_foreign_key "group_bans", "groups"
   add_foreign_key "group_bans", "users"
   add_foreign_key "group_bans", "users", column: "moderator_id"

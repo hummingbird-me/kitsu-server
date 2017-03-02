@@ -88,6 +88,8 @@ Rails.application.routes.draw do
     jsonapi_resources :group_bans
     # Leader Chat
     jsonapi_resources :leader_chat_messages
+    # Action logs
+    jsonapi_resources :group_action_logs
     # Invites
     jsonapi_resources :group_invites
     post '/group-invites/:id/_accept', to: 'group_invites#accept'
@@ -957,6 +959,11 @@ end
 #                                              PUT|PATCH /edge/groups/:group_id/relationships/leader-chat-messages(.:format)                  groups#update_relationship {:relationship=>"leader_chat_messages"}
 #                                              DELETE    /edge/groups/:group_id/relationships/leader-chat-messages(.:format)                  groups#destroy_relationship {:relationship=>"leader_chat_messages"}
 #                   group_leader_chat_messages GET       /edge/groups/:group_id/leader-chat-messages(.:format)                                leader_chat_messages#get_related_resources {:relationship=>"leader_chat_messages", :source=>"groups"}
+#              group_relationships_action_logs GET       /edge/groups/:group_id/relationships/action-logs(.:format)                           groups#show_relationship {:relationship=>"action_logs"}
+#                                              POST      /edge/groups/:group_id/relationships/action-logs(.:format)                           groups#create_relationship {:relationship=>"action_logs"}
+#                                              PUT|PATCH /edge/groups/:group_id/relationships/action-logs(.:format)                           groups#update_relationship {:relationship=>"action_logs"}
+#                                              DELETE    /edge/groups/:group_id/relationships/action-logs(.:format)                           groups#destroy_relationship {:relationship=>"action_logs"}
+#                            group_action_logs GET       /edge/groups/:group_id/action-logs(.:format)                                         group_action_logs#get_related_resources {:relationship=>"action_logs", :source=>"groups"}
 #                                       groups GET       /edge/groups(.:format)                                                               groups#index
 #                                              POST      /edge/groups(.:format)                                                               groups#create
 #                                        group GET       /edge/groups/:id(.:format)                                                           groups#show
@@ -1097,6 +1104,24 @@ end
 #                                              PATCH     /edge/leader-chat-messages/:id(.:format)                                             leader_chat_messages#update
 #                                              PUT       /edge/leader-chat-messages/:id(.:format)                                             leader_chat_messages#update
 #                                              DELETE    /edge/leader-chat-messages/:id(.:format)                                             leader_chat_messages#destroy
+#          group_action_log_relationships_user GET       /edge/group-action-logs/:group_action_log_id/relationships/user(.:format)            group_action_logs#show_relationship {:relationship=>"user"}
+#                                              PUT|PATCH /edge/group-action-logs/:group_action_log_id/relationships/user(.:format)            group_action_logs#update_relationship {:relationship=>"user"}
+#                                              DELETE    /edge/group-action-logs/:group_action_log_id/relationships/user(.:format)            group_action_logs#destroy_relationship {:relationship=>"user"}
+#                        group_action_log_user GET       /edge/group-action-logs/:group_action_log_id/user(.:format)                          users#get_related_resource {:relationship=>"user", :source=>"group_action_logs"}
+#         group_action_log_relationships_group GET       /edge/group-action-logs/:group_action_log_id/relationships/group(.:format)           group_action_logs#show_relationship {:relationship=>"group"}
+#                                              PUT|PATCH /edge/group-action-logs/:group_action_log_id/relationships/group(.:format)           group_action_logs#update_relationship {:relationship=>"group"}
+#                                              DELETE    /edge/group-action-logs/:group_action_log_id/relationships/group(.:format)           group_action_logs#destroy_relationship {:relationship=>"group"}
+#                       group_action_log_group GET       /edge/group-action-logs/:group_action_log_id/group(.:format)                         groups#get_related_resource {:relationship=>"group", :source=>"group_action_logs"}
+#        group_action_log_relationships_target GET       /edge/group-action-logs/:group_action_log_id/relationships/target(.:format)          group_action_logs#show_relationship {:relationship=>"target"}
+#                                              PUT|PATCH /edge/group-action-logs/:group_action_log_id/relationships/target(.:format)          group_action_logs#update_relationship {:relationship=>"target"}
+#                                              DELETE    /edge/group-action-logs/:group_action_log_id/relationships/target(.:format)          group_action_logs#destroy_relationship {:relationship=>"target"}
+#                      group_action_log_target GET       /edge/group-action-logs/:group_action_log_id/target(.:format)                        targets#get_related_resource {:relationship=>"target", :source=>"group_action_logs"}
+#                                              GET       /edge/group-action-logs(.:format)                                                    group_action_logs#index
+#                                              POST      /edge/group-action-logs(.:format)                                                    group_action_logs#create
+#                             group_action_log GET       /edge/group-action-logs/:id(.:format)                                                group_action_logs#show
+#                                              PATCH     /edge/group-action-logs/:id(.:format)                                                group_action_logs#update
+#                                              PUT       /edge/group-action-logs/:id(.:format)                                                group_action_logs#update
+#                                              DELETE    /edge/group-action-logs/:id(.:format)                                                group_action_logs#destroy
 #              group_invite_relationships_user GET       /edge/group-invites/:group_invite_id/relationships/user(.:format)                    group_invites#show_relationship {:relationship=>"user"}
 #                                              PUT|PATCH /edge/group-invites/:group_invite_id/relationships/user(.:format)                    group_invites#update_relationship {:relationship=>"user"}
 #                                              DELETE    /edge/group-invites/:group_invite_id/relationships/user(.:format)                    group_invites#destroy_relationship {:relationship=>"user"}

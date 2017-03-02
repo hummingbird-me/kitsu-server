@@ -60,6 +60,7 @@ class Group < ApplicationRecord
   has_many :reports, class_name: 'GroupReport', dependent: :destroy
   has_many :leader_chat_messages, dependent: :destroy
   has_many :bans, class_name: 'GroupBan', dependent: :destroy
+  has_many :action_logs, class_name: 'GroupActionLog', dependent: :destroy
 
   validates :name, presence: true, length: { in: 4..50 }
 
