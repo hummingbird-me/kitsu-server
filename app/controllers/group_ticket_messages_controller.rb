@@ -1,0 +1,2 @@
+class GroupTicketMessagesController < ApplicationController
+end
