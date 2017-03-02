@@ -35,9 +35,14 @@ class GroupMember < ApplicationRecord
   scope :for_user, ->(user) { where(user: user) }
   scope :in_group, ->(group) { where(group: group) }
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
+  scope :leaders, -> { where.not(rank: :pleb) }
 
   def has_permission?(perm)
     permissions.for_permission(perm).exists?
+  end
+
+  def leader?
+    !model.pleb?
   end
 
   def regenerate_rank!

@@ -38,6 +38,21 @@ RSpec.describe Group, type: :model do
   it { should validate_presence_of(:name) }
   it { should validate_length_of(:name).is_at_least(4).is_at_most(50) }
   it { should define_enum_for(:privacy) }
-  it { should have_many(:members).dependent(:destroy) }
-  it { should have_many(:neighbors).dependent(:destroy) }
+  it do
+    should have_many(:members).class_name('GroupMember').dependent(:destroy)
+  end
+  it do
+    should have_many(:neighbors).class_name('GroupNeighbor').dependent(:destroy)
+      .with_foreign_key('source_id')
+  end
+  it do
+    should have_many(:tickets).class_name('GroupTicket').dependent(:destroy)
+  end
+  it do
+    should have_many(:invites).class_name('GroupInvite').dependent(:destroy)
+  end
+  it do
+    should have_many(:reports).class_name('GroupReport').dependent(:destroy)
+  end
+  it { should have_many(:leader_chat_messages).dependent(:destroy) }
 end

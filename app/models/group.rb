@@ -55,6 +55,10 @@ class Group < ApplicationRecord
   has_many :owners, ->() { admin }, class_name: 'GroupMember'
   has_many :neighbors, class_name: 'GroupNeighbor', dependent: :destroy,
                        foreign_key: 'source_id'
+  has_many :tickets, class_name: 'GroupTicket', dependent: :destroy
+  has_many :invites, class_name: 'GroupInvite', dependent: :destroy
+  has_many :reports, class_name: 'GroupReport', dependent: :destroy
+  has_many :leader_chat_messages, dependent: :destroy
 
   validates :name, presence: true, length: { in: 4..50 }
 

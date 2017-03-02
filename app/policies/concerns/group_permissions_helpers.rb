@@ -20,6 +20,13 @@ module GroupPermissionsHelpers
     member.present?
   end
 
+  # Is the current user a leader of any type?
+  #
+  # @return [Boolean] whether the current user is a leader
+  def leader?
+    member.leader?
+  end
+
   # Does the current member have the permission requested?
   #
   # @param [Symbol] permission what permission we are inquiring about

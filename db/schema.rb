@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302012154) do
+ActiveRecord::Schema.define(version: 20170302181054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -494,6 +494,19 @@ ActiveRecord::Schema.define(version: 20170302012154) do
 
   add_index "installments", ["franchise_id"], name: "index_installments_on_franchise_id", using: :btree
   add_index "installments", ["media_type", "media_id"], name: "index_installments_on_media_type_and_media_id", using: :btree
+
+  create_table "leader_chat_messages", force: :cascade do |t|
+    t.integer  "user_id",           null: false
+    t.integer  "group_id",          null: false
+    t.text     "content",           null: false
+    t.text     "content_formatted", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "edited_at"
+  end
+
+  add_index "leader_chat_messages", ["group_id"], name: "index_leader_chat_messages_on_group_id", using: :btree
+  add_index "leader_chat_messages", ["user_id"], name: "index_leader_chat_messages_on_user_id", using: :btree
 
   create_table "library_entries", force: :cascade do |t|
     t.integer  "user_id",                                                 null: false
@@ -1139,6 +1152,8 @@ ActiveRecord::Schema.define(version: 20170302012154) do
   add_foreign_key "group_tickets", "groups"
   add_foreign_key "group_tickets", "users"
   add_foreign_key "group_tickets", "users", column: "assignee_id"
+  add_foreign_key "leader_chat_messages", "groups"
+  add_foreign_key "leader_chat_messages", "users"
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"

@@ -9,6 +9,10 @@ class GroupResource < BaseResource
 
   has_many :members
   has_many :neighbors
+  has_many :tickets
+  has_many :invites
+  has_many :reports
+  has_many :leader_chat_messages
 
   after_create do
     # Make the current user into an owner when they create it
