@@ -10,7 +10,7 @@ module GroupPermissionsHelpers
   #
   # @return [GroupMember, nil] the membership of the current user in the group
   def member
-    group.member_for(current_user)
+    group.member_for(user)
   end
 
   # Is the current user a member of the group?
