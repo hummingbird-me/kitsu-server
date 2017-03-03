@@ -8,6 +8,8 @@ class GroupTicketResource < BaseResource
   has_one :assignee
   has_many :messages
 
+  filters :group, :user, :assignee
+
   log_verb do |action|
     status if action == :update
   end
