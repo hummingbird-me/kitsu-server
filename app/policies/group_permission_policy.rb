@@ -1,4 +1,4 @@
-class GroupPermissionsPolicy < ApplicationPolicy
+class GroupPermissionPolicy < ApplicationPolicy
   include GroupPermissionsHelpers
 
   def update?

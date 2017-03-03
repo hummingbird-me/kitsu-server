@@ -1,4 +1,4 @@
-class GroupActionLogsPolicy < ApplicationPolicy
+class GroupActionLogPolicy < ApplicationPolicy
   def update?
     false
   end
