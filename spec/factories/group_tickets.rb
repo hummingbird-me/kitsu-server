@@ -5,6 +5,7 @@
 #
 #  id          :integer          not null, primary key
 #  status      :integer          default(0), not null, indexed
+#  title       :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  assignee_id :integer          indexed
@@ -28,6 +29,7 @@
 
 FactoryGirl.define do
   factory :group_ticket do
+    title { Faker::Lorem.sentence }
     association :group, strategy: :build
     association :user, strategy: :build
   end
