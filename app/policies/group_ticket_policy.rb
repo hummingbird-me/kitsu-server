@@ -1,4 +1,4 @@
-class GroupTicketsPolicy < ApplicationPolicy
+class GroupTicketPolicy < ApplicationPolicy
   include GroupPermissionsHelpers
 
   def create?

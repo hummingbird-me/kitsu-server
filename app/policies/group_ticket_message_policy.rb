@@ -1,4 +1,4 @@
-class GroupTicketMessagesPolicy < ApplicationPolicy
+class GroupTicketMessagePolicy < ApplicationPolicy
   def create?
     policy_for(record.ticket).update?
   end
