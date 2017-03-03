@@ -3,7 +3,7 @@ class GroupActionLogResource < BaseResource
 
   has_one :user
   has_one :group
-  has_one :target
+  has_one :target, polymorphic: true
 
   filter :group
 end
