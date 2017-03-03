@@ -1,4 +1,6 @@
 class GroupBanPolicy < ApplicationPolicy
+  include GroupPermissionsHelpers
+
   def create?
     has_group_permission?(:members)
   end
