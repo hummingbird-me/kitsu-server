@@ -56,4 +56,8 @@ RSpec.describe Group, type: :model do
   end
   it { should have_many(:leader_chat_messages).dependent(:destroy) }
   it { should have_many(:bans).class_name('GroupBan').dependent(:destroy) }
+  it do
+    should have_many(:action_logs).class_name('GroupActionLog')
+      .dependent(:destroy)
+  end
 end
