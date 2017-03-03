@@ -16,7 +16,7 @@ class GroupPermissionPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where(group: Group.visible_for(user))
+      scope.visible_for(user)
     end
   end
 end
