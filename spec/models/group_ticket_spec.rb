@@ -40,4 +40,5 @@ RSpec.describe GroupTicket, type: :model do
     should have_many(:messages).class_name('GroupTicketMessage')
       .with_foreign_key('ticket_id')
   end
+  it { should validate_presence_of(:title) }
 end

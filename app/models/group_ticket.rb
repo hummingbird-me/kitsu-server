@@ -33,6 +33,8 @@ class GroupTicket < ApplicationRecord
   belongs_to :assignee, class_name: 'User'
   has_many :messages, class_name: 'GroupTicketMessage', foreign_key: 'ticket_id'
 
+  validates :title, presence: true
+
   enum status: %i[created assigned resolved]
 
   scope :visible_for, ->(user) {
