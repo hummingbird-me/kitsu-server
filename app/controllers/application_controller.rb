@@ -12,9 +12,7 @@ class ApplicationController < JSONAPI::ResourceController
   force_ssl if Rails.env.production?
 
   if Raven.configuration.capture_allowed?
-    on_server_error do |error|
-      Raven.capture_exception(error)
-    end
+    on_server_error { |error| Raven.capture_exception(error) }
 
     before_action :tag_sentry_context
 
