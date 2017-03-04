@@ -13,10 +13,4 @@ class GroupPermissionPolicy < ApplicationPolicy
   def group
     record.group
   end
-
-  class Scope < Scope
-    def resolve
-      scope.visible_for(user)
-    end
-  end
 end
