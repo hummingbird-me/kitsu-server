@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302234018) do
+ActiveRecord::Schema.define(version: 20170304203731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -504,6 +504,7 @@ ActiveRecord::Schema.define(version: 20170302234018) do
     t.string   "tags",                                 default: [],    null: false, array: true
     t.integer  "leaders_count",                        default: 0,     null: false
     t.integer  "neighbors_count",                      default: 0,     null: false
+    t.boolean  "featured",                             default: false, null: false
   end
 
   add_index "groups", ["slug"], name: "index_groups_on_slug", unique: true, using: :btree
