@@ -1,0 +1,2 @@
+class ReblogPolicy < ApplicationPolicy
+end

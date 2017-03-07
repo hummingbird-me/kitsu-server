@@ -60,6 +60,7 @@ class Post < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :uploads, as: 'owner', dependent: :destroy
   has_one :ama, foreign_key: 'original_post_id'
+  has_many :reblogs, dependent: :destroy
 
   scope :in_group, ->(group) { where(target_group: group) }
   scope :visible_for, ->(user) {

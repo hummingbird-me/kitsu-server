@@ -106,6 +106,7 @@ Rails.application.routes.draw do
       jsonapi_resources :comments
       jsonapi_resources :comment_likes
       jsonapi_resources :reports
+      jsonapi_resources :reblogs
       resources :activities, only: %i[destroy]
       get '/feeds/:group/:id', to: 'feeds#show'
       post '/feeds/:group/:id/_read', to: 'feeds#mark_read'

@@ -1,0 +1,2 @@
+class ReblogsController < ApplicationController
+end

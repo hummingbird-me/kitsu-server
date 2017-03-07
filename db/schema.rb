@@ -1196,6 +1196,16 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "reblogs", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "post_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "reblogs", ["post_id"], name: "index_reblogs_on_post_id", using: :btree
+  add_index "reblogs", ["user_id"], name: "index_reblogs_on_user_id", using: :btree
+
   create_table "recommendations", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "created_at",      null: false
@@ -1574,6 +1584,8 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "profile_links", "profile_link_sites"
   add_foreign_key "profile_links", "users"
+  add_foreign_key "reblogs", "posts"
+  add_foreign_key "reblogs", "users"
   add_foreign_key "reports", "users"
   add_foreign_key "reports", "users", column: "moderator_id"
   add_foreign_key "review_likes", "users"
