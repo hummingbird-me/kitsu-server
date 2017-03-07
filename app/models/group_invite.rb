@@ -32,10 +32,10 @@ class GroupInvite < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :sender, class_name: 'User', required: true
 
-  # Limit to one active invite per user per group
+  # Limit to one pending invite per user per group
   validates :user, uniqueness: {
     scope: :group_id,
-    conditions: -> { acceptable }
+    conditions: -> { pending }
   }
   validate :not_inviting_self
 
@@ -45,8 +45,15 @@ class GroupInvite < ApplicationRecord
     groups = members.select(:group_id)
     where(group_id: groups).or(where(user: user))
   }
-  scope :acceptable, -> {
+  scope :pending, -> {
     where(accepted_at: nil, revoked_at: nil, declined_at: nil)
+  }
+  scope :accepted, -> { where.not(accepted_at: nil) }
+  scope :declined, -> { where.not(declined_at: nil) }
+  scope :revoked, -> { where.not(revoked_at: nil) }
+  scope :by_status, ->(status) {
+    return none unless status.in? %i[accepted declined revoked pending]
+    send(status)
   }
 
   def accepted?
