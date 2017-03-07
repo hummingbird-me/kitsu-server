@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe 'FactoryGirl' do
-  it 'should pass lint' do
-    begin
-      DatabaseCleaner.start
-      FactoryGirl.lint traits: true
-    ensure
-      DatabaseCleaner.clean
+  before(:all) { DatabaseCleaner.start }
+  after(:all) { DatabaseCleaner.clean }
+
+  FactoryGirl.factories.each do |factory|
+    it "#{factory.name} should pass lint" do
+      FactoryGirl::Linter.new([factory], :factory).lint!
     end
   end
 end
