@@ -52,7 +52,7 @@ class GroupInvite < ApplicationRecord
   end
 
   def unacceptable?
-    used? || revoked? || declined?
+    accepted? || revoked? || declined?
   end
 
   def acceptable?
@@ -60,16 +60,16 @@ class GroupInvite < ApplicationRecord
   end
 
   def accept!
-    update(accepted: Time.now)
+    update(accepted_at: Time.now)
     GroupMember.create(group: group, user: user)
   end
 
   def decline!
-    update(declined: Time.now)
+    update(declined_at: Time.now)
   end
 
   def revoke!
-    update(declined: Time.now)
+    update(declined_at: Time.now)
   end
 
   def stream_activity
