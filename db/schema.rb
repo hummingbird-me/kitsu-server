@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170305071424) do
+ActiveRecord::Schema.define(version: 20170307020211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -513,8 +513,10 @@ ActiveRecord::Schema.define(version: 20170305071424) do
     t.integer  "leaders_count",                        default: 0,     null: false
     t.integer  "neighbors_count",                      default: 0,     null: false
     t.boolean  "featured",                             default: false, null: false
+    t.integer  "category_id",                                          null: false
   end
 
+  add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
   add_index "groups", ["slug"], name: "index_groups_on_slug", unique: true, using: :btree
 
   create_table "installments", force: :cascade do |t|
@@ -1190,6 +1192,7 @@ ActiveRecord::Schema.define(version: 20170305071424) do
   add_foreign_key "group_tickets", "groups"
   add_foreign_key "group_tickets", "users"
   add_foreign_key "group_tickets", "users", column: "assignee_id"
+  add_foreign_key "groups", "group_categories", column: "category_id"
   add_foreign_key "leader_chat_messages", "groups"
   add_foreign_key "leader_chat_messages", "users"
   add_foreign_key "linked_accounts", "users"

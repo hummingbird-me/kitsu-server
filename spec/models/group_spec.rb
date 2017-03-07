@@ -27,10 +27,16 @@
 #  tags                     :string           default([]), not null, is an Array
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  category_id              :integer          not null, indexed
 #
 # Indexes
 #
-#  index_groups_on_slug  (slug) UNIQUE
+#  index_groups_on_category_id  (category_id)
+#  index_groups_on_slug         (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_a61500b09c  (category_id => group_categories.id)
 #
 
 require 'rails_helper'

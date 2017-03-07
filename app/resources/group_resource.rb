@@ -11,6 +11,9 @@ class GroupResource < BaseResource
     # If the values seem falsy, treat them as false.  Otherwise probably true.
     !(/false|f|0|no/ =~ values.join.downcase)
   }
+  filter :category, verify: ->(values, _) {
+    values.map { |v| GroupCategory.by_slug(v).or(GroupCategory.where(id: v)) }
+  }
 
   has_many :members
   has_many :neighbors
@@ -19,6 +22,7 @@ class GroupResource < BaseResource
   has_many :reports
   has_many :leader_chat_messages
   has_many :action_logs
+  has_one :category
 
   after_create do
     # Make the current user into an owner when they create it

@@ -27,10 +27,16 @@
 #  tags                     :string           default([]), not null, is an Array
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  category_id              :integer          not null, indexed
 #
 # Indexes
 #
-#  index_groups_on_slug  (slug) UNIQUE
+#  index_groups_on_category_id  (category_id)
+#  index_groups_on_slug         (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_a61500b09c  (category_id => group_categories.id)
 #
 
 class Group < ApplicationRecord
@@ -62,6 +68,7 @@ class Group < ApplicationRecord
   has_many :leader_chat_messages, dependent: :destroy
   has_many :bans, class_name: 'GroupBan', dependent: :destroy
   has_many :action_logs, class_name: 'GroupActionLog', dependent: :destroy
+  belongs_to :category, class_name: 'GroupCategory'
 
   validates :name, presence: true, length: { in: 4..50 }
 
