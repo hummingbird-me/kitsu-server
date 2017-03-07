@@ -30,4 +30,8 @@ class GroupResource < BaseResource
     member = _model.members.create!(user: actual_current_user)
     member.permissions.create!(permission: :owner)
   end
+
+  def self.sortable_fields(context)
+    super(context) << :created_at
+  end
 end
