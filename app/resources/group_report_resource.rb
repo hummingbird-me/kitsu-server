@@ -10,7 +10,7 @@ class GroupReportResource < BaseResource
 
   filters :group, :user, :naughty, :naughty_type, :status, :reason
 
-  log_verb do
+  log_verb do |action|
     status if action == :update
   end
   log_target []
