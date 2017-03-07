@@ -8,4 +8,6 @@ class ApplicationRecord < ActiveRecord::Base
   def self.paperclip_definitions
     attachment_definitions
   end
+
+  scope :created_today, -> { where(created_at: Date.today..Date.tomorrow) }
 end

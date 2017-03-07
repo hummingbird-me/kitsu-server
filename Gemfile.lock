@@ -1,14 +1,4 @@
 GIT
-  remote: git://github.com/cerebris/jsonapi-resources.git
-  revision: f272f806172b47b6c5bd5c10929ddcef5a2d7eb1
-  branch: beta
-  specs:
-    jsonapi-resources (0.9.0.beta1)
-      activerecord (>= 4.1)
-      concurrent-ruby
-      railties (>= 4.1)
-
-GIT
   remote: git://github.com/vevix/twemoji.git
   revision: 00b98685e46faa92d7d0109293ca8092e34735c5
   specs:
@@ -199,6 +189,10 @@ GEM
     jmespath (1.3.0)
     json (1.8.3)
     json_expressions (0.8.3)
+    jsonapi-resources (0.9.0)
+      activerecord (>= 4.1)
+      concurrent-ruby
+      railties (>= 4.1)
     jwt (1.5.2)
     kramdown (1.12.0)
     listen (3.1.5)
@@ -469,7 +463,7 @@ DEPENDENCIES
   image_optim
   image_optim_pack
   json_expressions
-  jsonapi-resources!
+  jsonapi-resources (= 0.9.0)
   kramdown
   nokogiri
   oauth2

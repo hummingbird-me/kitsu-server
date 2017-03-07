@@ -1,0 +1,2 @@
+class LeaderChatMessagesController < ApplicationController
+end

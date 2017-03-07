@@ -1,4 +1,6 @@
 class GroupReportResource < BaseResource
+  include GroupActionLogger
+
   attributes :reason, :status, :explanation
 
   has_one :group
@@ -6,5 +8,14 @@ class GroupReportResource < BaseResource
   has_one :user
   has_one :moderator
 
-  filters :user_id, :naughty_id, :naughty_type, :status, :reason
+  filters :group, :user, :naughty, :naughty_type, :status, :reason
+
+  log_verb do |action|
+    status if action == :update
+  end
+  log_target []
+
+  def self.sortable_fields(context)
+    super(context) << :created_at
+  end
 end

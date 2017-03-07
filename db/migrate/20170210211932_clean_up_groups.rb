@@ -1,5 +1,9 @@
 class CleanUpGroups < ActiveRecord::Migration
   def change
+    # Get rid of old trending stuff
+    execute 'DROP VIEW group_members_histogram CASCADE'
+
+    # Clean up Groups
     change_table :groups do |t|
       t.text :rules
       t.text :rules_formatted

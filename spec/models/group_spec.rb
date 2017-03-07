@@ -13,6 +13,7 @@
 #  cover_image_file_name    :string(255)
 #  cover_image_file_size    :integer
 #  cover_image_updated_at   :datetime
+#  featured                 :boolean          default(FALSE), not null
 #  leaders_count            :integer          default(0), not null
 #  locale                   :string
 #  members_count            :integer          default(0)
@@ -23,13 +24,20 @@
 #  rules                    :text
 #  rules_formatted          :text
 #  slug                     :string(255)      not null, indexed
+#  tagline                  :string(60)
 #  tags                     :string           default([]), not null, is an Array
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  category_id              :integer          not null, indexed
 #
 # Indexes
 #
-#  index_groups_on_slug  (slug) UNIQUE
+#  index_groups_on_category_id  (category_id)
+#  index_groups_on_slug         (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_a61500b09c  (category_id => group_categories.id)
 #
 
 require 'rails_helper'
@@ -40,8 +48,30 @@ RSpec.describe Group, type: :model do
   it { should validate_presence_of(:name) }
   it { should validate_length_of(:name).is_at_least(4).is_at_most(50) }
   it { should define_enum_for(:privacy) }
-  it { should have_many(:members).dependent(:destroy) }
-  it { should have_many(:neighbors).dependent(:destroy) }
+  it do
+    should have_many(:members).class_name('GroupMember').dependent(:destroy)
+  end
+  it do
+    should have_many(:neighbors).class_name('GroupNeighbor').dependent(:destroy)
+      .with_foreign_key('source_id')
+  end
+  it do
+    should have_many(:tickets).class_name('GroupTicket').dependent(:destroy)
+  end
+  it do
+    should have_many(:invites).class_name('GroupInvite').dependent(:destroy)
+  end
+  it do
+    should have_many(:reports).class_name('GroupReport').dependent(:destroy)
+  end
+  it { should have_many(:leader_chat_messages).dependent(:destroy) }
+  it { should have_many(:bans).class_name('GroupBan').dependent(:destroy) }
+  it do
+    should have_many(:action_logs).class_name('GroupActionLog')
+      .dependent(:destroy)
+  end
+  it { should belong_to(:category).class_name('GroupCategory') }
+  it { should validate_length_of(:tagline).is_at_most(60) }
 
   it 'should send the follow to Stream on save' do
     expect(subject.aggregated_feed).to receive(:follow).with(subject.feed)
@@ -54,5 +84,4 @@ RSpec.describe Group, type: :model do
     expect(subject.aggregated_feed).to receive(:unfollow).with(subject.feed)
     expect(Feed.global).to receive(:unfollow).with(subject.feed)
     subject.destroy!
-  end
-end
+  endend

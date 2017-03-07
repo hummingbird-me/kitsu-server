@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170226192407) do
+ActiveRecord::Schema.define(version: 20170307023205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -367,12 +367,46 @@ ActiveRecord::Schema.define(version: 20170226192407) do
 
   add_index "genres_manga", ["manga_id"], name: "index_genres_manga_on_manga_id", using: :btree
 
+  create_table "group_action_logs", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "group_id",    null: false
+    t.string   "verb",        null: false
+    t.integer  "target_id",   null: false
+    t.string   "target_type", null: false
+    t.datetime "created_at",  null: false
+  end
+
+  add_index "group_action_logs", ["created_at"], name: "index_group_action_logs_on_created_at", using: :btree
+  add_index "group_action_logs", ["group_id"], name: "index_group_action_logs_on_group_id", using: :btree
+
+  create_table "group_bans", force: :cascade do |t|
+    t.integer  "group_id",     null: false
+    t.integer  "user_id",      null: false
+    t.integer  "moderator_id", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "group_bans", ["group_id"], name: "index_group_bans_on_group_id", using: :btree
+  add_index "group_bans", ["user_id"], name: "index_group_bans_on_user_id", using: :btree
+
+  create_table "group_categories", force: :cascade do |t|
+    t.string   "name",        null: false
+    t.string   "slug",        null: false
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "group_invites", force: :cascade do |t|
-    t.integer  "group_id",   null: false
-    t.integer  "user_id",    null: false
-    t.integer  "sender_id",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "group_id",    null: false
+    t.integer  "user_id",     null: false
+    t.integer  "sender_id",   null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.datetime "revoked_at"
+    t.datetime "accepted_at"
+    t.datetime "declined_at"
   end
 
   add_index "group_invites", ["group_id"], name: "index_group_invites_on_group_id", using: :btree
@@ -430,6 +464,33 @@ ActiveRecord::Schema.define(version: 20170226192407) do
   add_index "group_reports", ["status"], name: "index_group_reports_on_status", using: :btree
   add_index "group_reports", ["user_id"], name: "index_group_reports_on_user_id", using: :btree
 
+  create_table "group_ticket_messages", force: :cascade do |t|
+    t.integer  "ticket_id",                     null: false
+    t.integer  "user_id",                       null: false
+    t.integer  "kind",              default: 0, null: false
+    t.text     "content",                       null: false
+    t.text     "content_formatted",             null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "group_ticket_messages", ["ticket_id"], name: "index_group_ticket_messages_on_ticket_id", using: :btree
+
+  create_table "group_tickets", force: :cascade do |t|
+    t.integer  "user_id",                 null: false
+    t.integer  "group_id",                null: false
+    t.integer  "assignee_id"
+    t.integer  "status",      default: 0, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "title",                   null: false
+  end
+
+  add_index "group_tickets", ["assignee_id"], name: "index_group_tickets_on_assignee_id", using: :btree
+  add_index "group_tickets", ["group_id"], name: "index_group_tickets_on_group_id", using: :btree
+  add_index "group_tickets", ["status"], name: "index_group_tickets_on_status", using: :btree
+  add_index "group_tickets", ["user_id"], name: "index_group_tickets_on_user_id", using: :btree
+
   create_table "groups", force: :cascade do |t|
     t.string   "name",                     limit: 255,                 null: false
     t.string   "slug",                     limit: 255,                 null: false
@@ -454,8 +515,12 @@ ActiveRecord::Schema.define(version: 20170226192407) do
     t.string   "tags",                                 default: [],    null: false, array: true
     t.integer  "leaders_count",                        default: 0,     null: false
     t.integer  "neighbors_count",                      default: 0,     null: false
+    t.boolean  "featured",                             default: false, null: false
+    t.integer  "category_id",                                          null: false
+    t.string   "tagline",                  limit: 60
   end
 
+  add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
   add_index "groups", ["slug"], name: "index_groups_on_slug", unique: true, using: :btree
 
   create_table "installments", force: :cascade do |t|
@@ -468,6 +533,19 @@ ActiveRecord::Schema.define(version: 20170226192407) do
 
   add_index "installments", ["franchise_id"], name: "index_installments_on_franchise_id", using: :btree
   add_index "installments", ["media_type", "media_id"], name: "index_installments_on_media_type_and_media_id", using: :btree
+
+  create_table "leader_chat_messages", force: :cascade do |t|
+    t.integer  "user_id",           null: false
+    t.integer  "group_id",          null: false
+    t.text     "content",           null: false
+    t.text     "content_formatted", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "edited_at"
+  end
+
+  add_index "leader_chat_messages", ["group_id"], name: "index_leader_chat_messages_on_group_id", using: :btree
+  add_index "leader_chat_messages", ["user_id"], name: "index_leader_chat_messages_on_user_id", using: :btree
 
   create_table "library_entries", force: :cascade do |t|
     t.integer  "user_id",                                                 null: false
@@ -1101,6 +1179,11 @@ ActiveRecord::Schema.define(version: 20170226192407) do
   add_foreign_key "drama_characters", "dramas"
   add_foreign_key "drama_staff", "dramas"
   add_foreign_key "drama_staff", "people"
+  add_foreign_key "group_action_logs", "groups"
+  add_foreign_key "group_action_logs", "users"
+  add_foreign_key "group_bans", "groups"
+  add_foreign_key "group_bans", "users"
+  add_foreign_key "group_bans", "users", column: "moderator_id"
   add_foreign_key "group_invites", "groups"
   add_foreign_key "group_invites", "users"
   add_foreign_key "group_invites", "users", column: "sender_id"
@@ -1109,6 +1192,13 @@ ActiveRecord::Schema.define(version: 20170226192407) do
   add_foreign_key "group_reports", "groups"
   add_foreign_key "group_reports", "users"
   add_foreign_key "group_reports", "users", column: "moderator_id"
+  add_foreign_key "group_ticket_messages", "group_tickets", column: "ticket_id"
+  add_foreign_key "group_tickets", "groups"
+  add_foreign_key "group_tickets", "users"
+  add_foreign_key "group_tickets", "users", column: "assignee_id"
+  add_foreign_key "groups", "group_categories", column: "category_id"
+  add_foreign_key "leader_chat_messages", "groups"
+  add_foreign_key "leader_chat_messages", "users"
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"

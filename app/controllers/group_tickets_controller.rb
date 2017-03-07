@@ -1,0 +1,2 @@
+class GroupTicketsController < ApplicationController
+end

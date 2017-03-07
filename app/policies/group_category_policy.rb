@@ -1,0 +1,2 @@
+class GroupCategoryPolicy < ApplicationPolicy
+end

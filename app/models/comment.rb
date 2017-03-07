@@ -48,6 +48,8 @@ class Comment < ApplicationRecord
                      dependent: :destroy
   has_many :likes, class_name: 'CommentLike', dependent: :destroy
 
+  scope :in_group, ->(group) { joins(:post).merge(Post.in_group(group)) }
+
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
   validates :content, length: { maximum: 9_000 }

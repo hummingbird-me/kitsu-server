@@ -51,6 +51,8 @@ class Post < ApplicationRecord
   has_many :post_likes, dependent: :destroy
   has_many :comments, dependent: :destroy
 
+  scope :in_group, ->(group) { where(target_group: group) }
+
   validates :content, :content_formatted, presence: true
   validates :media, presence: true, if: :spoiled_unit
   validates :spoiler, acceptance: {

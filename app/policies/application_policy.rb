@@ -107,6 +107,13 @@ class ApplicationPolicy
     true
   end
 
+  # Get a policy instance for a different object, so we can delegate to it.
+  #
+  # @return [ApplicationPolicy] The policy instance for this object
+  def policy_for(model)
+    Pundit.policy!(user, model)
+  end
+
   # Provide access control and act as #show?
   class Scope
     attr_reader :user, :scope, :token

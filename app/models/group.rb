@@ -13,6 +13,7 @@
 #  cover_image_file_name    :string(255)
 #  cover_image_file_size    :integer
 #  cover_image_updated_at   :datetime
+#  featured                 :boolean          default(FALSE), not null
 #  leaders_count            :integer          default(0), not null
 #  locale                   :string
 #  members_count            :integer          default(0)
@@ -23,13 +24,20 @@
 #  rules                    :text
 #  rules_formatted          :text
 #  slug                     :string(255)      not null, indexed
+#  tagline                  :string(60)
 #  tags                     :string           default([]), not null, is an Array
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  category_id              :integer          not null, indexed
 #
 # Indexes
 #
-#  index_groups_on_slug  (slug) UNIQUE
+#  index_groups_on_category_id  (category_id)
+#  index_groups_on_slug         (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_a61500b09c  (category_id => group_categories.id)
 #
 
 class Group < ApplicationRecord
@@ -55,8 +63,16 @@ class Group < ApplicationRecord
   has_many :owners, ->() { admin }, class_name: 'GroupMember'
   has_many :neighbors, class_name: 'GroupNeighbor', dependent: :destroy,
                        foreign_key: 'source_id'
+  has_many :tickets, class_name: 'GroupTicket', dependent: :destroy
+  has_many :invites, class_name: 'GroupInvite', dependent: :destroy
+  has_many :reports, class_name: 'GroupReport', dependent: :destroy
+  has_many :leader_chat_messages, dependent: :destroy
+  has_many :bans, class_name: 'GroupBan', dependent: :destroy
+  has_many :action_logs, class_name: 'GroupActionLog', dependent: :destroy
+  belongs_to :category, class_name: 'GroupCategory'
 
   validates :name, presence: true, length: { in: 4..50 }
+  validates :tagline, length: { maximum: 60 }, allow_blank: true
 
   def member_for(user)
     members.where(user: user).first

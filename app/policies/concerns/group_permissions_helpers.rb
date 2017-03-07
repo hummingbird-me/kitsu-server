@@ -10,7 +10,7 @@ module GroupPermissionsHelpers
   #
   # @return [GroupMember, nil] the membership of the current user in the group
   def member
-    group.member_for(current_user)
+    group.member_for(user)
   end
 
   # Is the current user a member of the group?
@@ -18,6 +18,20 @@ module GroupPermissionsHelpers
   # @return [Boolean] whether the current user is a member or not
   def member?
     member.present?
+  end
+
+  # Is the current user a leader of any type?
+  #
+  # @return [Boolean] whether the current user is a leader
+  def leader?
+    member.leader?
+  end
+
+  # Is the current user banned from the group?
+  #
+  # @return [Boolean] whether the current user is banned from the group
+  def banned_from_group?
+    GroupBan.where(user: user, group: group).exists?
   end
 
   # Does the current member have the permission requested?

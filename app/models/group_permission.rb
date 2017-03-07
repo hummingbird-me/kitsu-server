@@ -37,7 +37,17 @@ class GroupPermission < ApplicationRecord
   enum permission: %i[owner tickets members leaders community content]
 
   scope :for_permission, ->(perm) { send(perm).or(owner) }
+  scope :visible_for, ->(user) {
+    # Only show permissions for members of groups you're a leader in
+    where(group_member_id: GroupMember.leaders.for_user(user).select(:id))
+  }
 
   after_create { group_member.regenerate_rank! }
   after_destroy { group_member.regenerate_rank! }
+
+  validate(on: :destroy) do
+    if owner? && group_member.group.owners.count == 1
+      errors.add(:group, 'must always have at least one owner')
+    end
+  end
 end

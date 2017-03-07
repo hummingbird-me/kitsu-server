@@ -1,6 +1,8 @@
 class MediaResource < BaseResource
   include SluggableResource
 
+  abstract
+
   # This regex accepts a numerical range or single number
   # $1 = start, $2 = dot representing closed/open, $3 = end
   NUMBER = /(\d+(?:\.\d+)?)/

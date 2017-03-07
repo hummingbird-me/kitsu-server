@@ -1,4 +1,4 @@
-class GroupPermissionsPolicy < ApplicationPolicy
+class GroupPermissionPolicy < ApplicationPolicy
   include GroupPermissionsHelpers
 
   def update?
@@ -12,11 +12,5 @@ class GroupPermissionsPolicy < ApplicationPolicy
 
   def group
     record.group
-  end
-
-  class Scope < Scope
-    def resolve
-      scope.where(group: Group.visible_for(user))
-    end
   end
 end

@@ -2,12 +2,15 @@
 #
 # Table name: group_invites
 #
-#  id         :integer          not null, primary key
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  group_id   :integer          not null, indexed
-#  sender_id  :integer          not null, indexed
-#  user_id    :integer          not null, indexed
+#  id          :integer          not null, primary key
+#  accepted_at :datetime
+#  declined_at :datetime
+#  revoked_at  :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  group_id    :integer          not null, indexed
+#  sender_id   :integer          not null, indexed
+#  user_id     :integer          not null, indexed
 #
 # Indexes
 #
@@ -29,32 +32,54 @@ class GroupInvite < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :sender, class_name: 'User', required: true
 
+  # Limit to one active invite per user per group
+  validates :user, uniqueness: {
+    scope: :group_id,
+    conditions: -> { acceptable }
+  }
+  validate :not_inviting_self
+
   scope :visible_for, ->(user) {
     # user == user || has members or owner priv
     members = GroupMember.with_permission(:members).for_user(user)
     groups = members.select(:group_id)
     where(group_id: groups).or(where(user: user))
   }
+  scope :acceptable, -> {
+    where(accepted_at: nil, revoked_at: nil, declined_at: nil)
+  }
 
-  def used?
-    false
+  def accepted?
+    accepted_at?
   end
 
   def revoked?
-    false
+    revoked_at?
+  end
+
+  def declined?
+    declined_at?
+  end
+
+  def unacceptable?
+    accepted? || revoked? || declined?
   end
 
   def acceptable?
-    !(used? || revoked?)
+    !unacceptable?
   end
 
   def accept!
-    # TODO: update used field
+    update(accepted_at: Time.now)
     GroupMember.create(group: group, user: user)
   end
 
   def decline!
-    # TODO: add column here
+    update(declined_at: Time.now)
+  end
+
+  def revoke!
+    update(declined_at: Time.now)
   end
 
   def stream_activity
@@ -62,5 +87,9 @@ class GroupInvite < ApplicationRecord
       verb: 'invited',
       actor: sender
     )
+  end
+
+  def not_inviting_self
+    errors.add(:user, 'cannot be same as sender') if user == sender
   end
 end
