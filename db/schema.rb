@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307020211) do
+ActiveRecord::Schema.define(version: 20170307022155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -514,6 +514,7 @@ ActiveRecord::Schema.define(version: 20170307020211) do
     t.integer  "neighbors_count",                      default: 0,     null: false
     t.boolean  "featured",                             default: false, null: false
     t.integer  "category_id",                                          null: false
+    t.string   "tagline",                  limit: 60
   end
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree

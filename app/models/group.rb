@@ -71,6 +71,7 @@ class Group < ApplicationRecord
   belongs_to :category, class_name: 'GroupCategory'
 
   validates :name, presence: true, length: { in: 4..50 }
+  validates :tagline, length: { maximum: 60 }, allow_blank: true
 
   def member_for(user)
     members.where(user: user).first

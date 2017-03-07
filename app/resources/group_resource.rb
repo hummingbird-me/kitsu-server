@@ -4,7 +4,8 @@ class GroupResource < BaseResource
   caching
 
   attributes :about, :locale, :members_count, :name, :nsfw, :privacy, :rules,
-    :rules_formatted, :tags, :leaders_count, :neighbors_count, :featured
+    :rules_formatted, :tags, :leaders_count, :neighbors_count, :featured,
+    :tagline
   attributes :avatar, :cover_image, format: :attachment
 
   filter :featured, verify: ->(values, _) {
