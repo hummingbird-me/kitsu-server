@@ -43,5 +43,6 @@
 FactoryGirl.define do
   factory :group do
     name { Faker::Business.name }
+    association :category, factory: :group_category, strategy: :build
   end
 end
