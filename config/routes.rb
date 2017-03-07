@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     jsonapi_resources :group_members
     jsonapi_resources :group_permissions
     jsonapi_resources :group_neighbors
+    jsonapi_resources :group_categories
     # Tickets
     jsonapi_resources :group_tickets
     jsonapi_resources :group_ticket_messages
@@ -1013,6 +1014,12 @@ end
 #                                              PATCH     /edge/group-neighbors/:id(.:format)                                                  group_neighbors#update
 #                                              PUT       /edge/group-neighbors/:id(.:format)                                                  group_neighbors#update
 #                                              DELETE    /edge/group-neighbors/:id(.:format)                                                  group_neighbors#destroy
+#                             group_categories GET       /edge/group-categories(.:format)                                                     group_categories#index
+#                                              POST      /edge/group-categories(.:format)                                                     group_categories#create
+#                               group_category GET       /edge/group-categories/:id(.:format)                                                 group_categories#show
+#                                              PATCH     /edge/group-categories/:id(.:format)                                                 group_categories#update
+#                                              PUT       /edge/group-categories/:id(.:format)                                                 group_categories#update
+#                                              DELETE    /edge/group-categories/:id(.:format)                                                 group_categories#destroy
 #              group_ticket_relationships_user GET       /edge/group-tickets/:group_ticket_id/relationships/user(.:format)                    group_tickets#show_relationship {:relationship=>"user"}
 #                                              PUT|PATCH /edge/group-tickets/:group_ticket_id/relationships/user(.:format)                    group_tickets#update_relationship {:relationship=>"user"}
 #                                              DELETE    /edge/group-tickets/:group_ticket_id/relationships/user(.:format)                    group_tickets#destroy_relationship {:relationship=>"user"}
