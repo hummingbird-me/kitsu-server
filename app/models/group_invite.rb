@@ -2,12 +2,15 @@
 #
 # Table name: group_invites
 #
-#  id         :integer          not null, primary key
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  group_id   :integer          not null, indexed
-#  sender_id  :integer          not null, indexed
-#  user_id    :integer          not null, indexed
+#  id          :integer          not null, primary key
+#  accepted_at :datetime
+#  declined_at :datetime
+#  revoked_at  :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  group_id    :integer          not null, indexed
+#  sender_id   :integer          not null, indexed
+#  user_id     :integer          not null, indexed
 #
 # Indexes
 #
@@ -36,25 +39,37 @@ class GroupInvite < ApplicationRecord
     where(group_id: groups).or(where(user: user))
   }
 
-  def used?
-    false
+  def accepted?
+    accepted_at?
   end
 
   def revoked?
-    false
+    revoked_at?
+  end
+
+  def declined?
+    declined_at?
+  end
+
+  def unacceptable?
+    used? || revoked? || declined?
   end
 
   def acceptable?
-    !(used? || revoked?)
+    !unacceptable?
   end
 
   def accept!
-    # TODO: update used field
+    update(accepted: Time.now)
     GroupMember.create(group: group, user: user)
   end
 
   def decline!
-    # TODO: add column here
+    update(declined: Time.now)
+  end
+
+  def revoke!
+    update(declined: Time.now)
   end
 
   def stream_activity
