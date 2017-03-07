@@ -35,7 +35,7 @@ class GroupMember < ApplicationRecord
   scope :for_user, ->(user) { where(user: user) }
   scope :in_group, ->(group) { where(group: group) }
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
-  scope :leaders, -> { where.not(rank: :pleb) }
+  scope :leaders, -> { where.not(rank: 'pleb') }
 
   validate(on: :destroy) do
     if admin? && group.owners.count == 1
