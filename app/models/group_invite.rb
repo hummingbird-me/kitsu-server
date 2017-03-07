@@ -32,11 +32,21 @@ class GroupInvite < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :sender, class_name: 'User', required: true
 
+  # Limit to one active invite per user per group
+  validates :user, uniqueness: {
+    scope: :group_id,
+    conditions: -> { acceptable }
+  }
+  validate :not_inviting_self
+
   scope :visible_for, ->(user) {
     # user == user || has members or owner priv
     members = GroupMember.with_permission(:members).for_user(user)
     groups = members.select(:group_id)
     where(group_id: groups).or(where(user: user))
+  }
+  scope :acceptable, -> {
+    where(accepted_at: nil, revoked_at: nil, declined_at: nil)
   }
 
   def accepted?
@@ -77,5 +87,9 @@ class GroupInvite < ApplicationRecord
       verb: 'invited',
       actor: sender
     )
+  end
+
+  def not_inviting_self
+    errors.add(:user, 'cannot be same as sender') if user == sender
   end
 end
