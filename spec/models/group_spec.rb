@@ -84,4 +84,5 @@ RSpec.describe Group, type: :model do
     expect(subject.aggregated_feed).to receive(:unfollow).with(subject.feed)
     expect(Feed.global).to receive(:unfollow).with(subject.feed)
     subject.destroy!
-  endend
+  end
+end
