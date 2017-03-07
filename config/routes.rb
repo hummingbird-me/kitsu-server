@@ -965,6 +965,10 @@ end
 #                                              PUT|PATCH /edge/groups/:group_id/relationships/action-logs(.:format)                           groups#update_relationship {:relationship=>"action_logs"}
 #                                              DELETE    /edge/groups/:group_id/relationships/action-logs(.:format)                           groups#destroy_relationship {:relationship=>"action_logs"}
 #                            group_action_logs GET       /edge/groups/:group_id/action-logs(.:format)                                         group_action_logs#get_related_resources {:relationship=>"action_logs", :source=>"groups"}
+#                 group_relationships_category GET       /edge/groups/:group_id/relationships/category(.:format)                              groups#show_relationship {:relationship=>"category"}
+#                                              PUT|PATCH /edge/groups/:group_id/relationships/category(.:format)                              groups#update_relationship {:relationship=>"category"}
+#                                              DELETE    /edge/groups/:group_id/relationships/category(.:format)                              groups#destroy_relationship {:relationship=>"category"}
+#                               group_category GET       /edge/groups/:group_id/category(.:format)                                            group_categories#get_related_resource {:relationship=>"category", :source=>"groups"}
 #                                       groups GET       /edge/groups(.:format)                                                               groups#index
 #                                              POST      /edge/groups(.:format)                                                               groups#create
 #                                        group GET       /edge/groups/:id(.:format)                                                           groups#show
@@ -1016,7 +1020,7 @@ end
 #                                              DELETE    /edge/group-neighbors/:id(.:format)                                                  group_neighbors#destroy
 #                             group_categories GET       /edge/group-categories(.:format)                                                     group_categories#index
 #                                              POST      /edge/group-categories(.:format)                                                     group_categories#create
-#                               group_category GET       /edge/group-categories/:id(.:format)                                                 group_categories#show
+#                                              GET       /edge/group-categories/:id(.:format)                                                 group_categories#show
 #                                              PATCH     /edge/group-categories/:id(.:format)                                                 group_categories#update
 #                                              PUT       /edge/group-categories/:id(.:format)                                                 group_categories#update
 #                                              DELETE    /edge/group-categories/:id(.:format)                                                 group_categories#destroy

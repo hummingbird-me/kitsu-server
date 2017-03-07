@@ -24,6 +24,7 @@
 #  rules                    :text
 #  rules_formatted          :text
 #  slug                     :string(255)      not null, indexed
+#  tagline                  :string(60)
 #  tags                     :string           default([]), not null, is an Array
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
