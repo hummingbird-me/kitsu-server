@@ -16,7 +16,7 @@ class GroupCategory < ApplicationRecord
   include Sluggable
 
   friendly_id :name, use: %i[slugged finders history]
-  has_many :groups
+  has_many :groups, foreign_key: 'category_id'
 
   before_destroy do
     misc = GroupCategory.where(slug: 'misc').first
