@@ -7,10 +7,11 @@ class Feed
     group: :flat,
     group_aggr: :aggregated,
     post: :flat,
+    reports_aggr: :aggregated,
     timeline: :aggregated,
     notifications: :notification,
     global: :aggregated
-  }
+  }.freeze
 
   attr_accessor :stream_feed, :group, :id
   delegate :readonly_token, to: :stream_feed

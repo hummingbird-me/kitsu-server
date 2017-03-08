@@ -31,6 +31,8 @@
 # rubocop:enable Metrics/LineLength
 
 class GroupReport < ApplicationRecord
+  include WithActivity
+
   belongs_to :group, required: true
   belongs_to :naughty, -> { with_deleted }, polymorphic: true, required: true
   belongs_to :user, required: true
@@ -49,4 +51,8 @@ class GroupReport < ApplicationRecord
 
   validates :explanation, presence: true, if: :other?
   validates :reason, :status, presence: true
+
+  def stream_activity
+    Feed.reports_aggr(group_id).activities.new(naughty: naughty)
+  end
 end

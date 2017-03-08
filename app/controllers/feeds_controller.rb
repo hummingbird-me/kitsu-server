@@ -76,6 +76,17 @@ class FeedsController < ApplicationController
       user = User.find_by(id: params[:id])
       user == current_user.resource_owner
     when 'global' then true
+    when 'reports_aggr'
+      user = current_user&.resource_owner
+      if params[:id] == 'global'
+        # Is admin of something?
+        user.roles.where(name: 'admin').exists?
+      else
+        # Has content rights in the group?
+        group = Group.find_by(id: params[:id])
+        member = group.member_for(user)
+        member && member.has_permission?(:content)
+      end
     end
   end
 
