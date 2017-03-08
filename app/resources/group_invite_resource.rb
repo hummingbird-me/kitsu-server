@@ -8,7 +8,7 @@ class GroupInviteResource < BaseResource
   has_one :sender
 
   filters :group, :sender, :user
-  filter :status, ->(records, values, _o) {
+  filter :status, apply: ->(records, values, _o) {
     records.by_status(values.first)
   }
 
