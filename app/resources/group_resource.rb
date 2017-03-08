@@ -12,7 +12,9 @@ class GroupResource < BaseResource
     !(/false|f|0|no/ =~ values.join.downcase)
   }
   filter :category, verify: ->(values, _) {
-    values.map { |v| GroupCategory.by_slug(v).or(GroupCategory.where(id: v)) }
+    values.map do |v|
+      GroupCategory.by_slug(v).or(GroupCategory.where(id: v)).first
+    end
   }
 
   has_many :members
