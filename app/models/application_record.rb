@@ -9,5 +9,7 @@ class ApplicationRecord < ActiveRecord::Base
     attachment_definitions
   end
 
-  scope :created_today, -> { where(created_at: Date.today..Date.tomorrow) }
+  def self.created_today
+    where(created_at: Date.today..Date.tomorrow)
+  end
 end
