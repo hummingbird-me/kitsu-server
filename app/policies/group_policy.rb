@@ -19,7 +19,7 @@ class GroupPolicy < ApplicationPolicy
     # Don't allow a closed group to change privacy setting
     going_public = model.closed? ? %i[privacy] : []
     all - %i[members_count leaders_count neighbors_count rules_formatted
-             featured] - going_public
+             featured name] - going_public
   end
 
   class Scope < Scope
