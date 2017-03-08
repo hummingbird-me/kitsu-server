@@ -1,7 +1,7 @@
 class GroupReportResource < BaseResource
   include GroupActionLogger
 
-  attributes :reason, :status, :explanation, :created_at
+  attributes :reason, :status, :explanation, :created_at, :naughty_type, :naughty_id
 
   has_one :group
   has_one :naughty, polymorphic: true
