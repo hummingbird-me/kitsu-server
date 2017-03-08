@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170308064349) do
+ActiveRecord::Schema.define(version: 20170308231654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -476,13 +476,12 @@ ActiveRecord::Schema.define(version: 20170308064349) do
   add_index "group_reports", ["user_id"], name: "index_group_reports_on_user_id", using: :btree
 
   create_table "group_ticket_messages", force: :cascade do |t|
-    t.integer  "ticket_id",                     null: false
-    t.integer  "user_id",                       null: false
-    t.integer  "kind",              default: 0, null: false
-    t.text     "content",                       null: false
-    t.text     "content_formatted",             null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.integer  "ticket_id",              null: false
+    t.integer  "user_id",                null: false
+    t.integer  "kind",       default: 0, null: false
+    t.text     "content",                null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   add_index "group_ticket_messages", ["ticket_id"], name: "index_group_ticket_messages_on_ticket_id", using: :btree

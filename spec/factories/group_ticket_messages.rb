@@ -3,14 +3,13 @@
 #
 # Table name: group_ticket_messages
 #
-#  id                :integer          not null, primary key
-#  content           :text             not null
-#  content_formatted :text             not null
-#  kind              :integer          default(0), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  ticket_id         :integer          not null, indexed
-#  user_id           :integer          not null
+#  id         :integer          not null, primary key
+#  content    :text             not null
+#  kind       :integer          default(0), not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  ticket_id  :integer          not null, indexed
+#  user_id    :integer          not null
 #
 # Indexes
 #
