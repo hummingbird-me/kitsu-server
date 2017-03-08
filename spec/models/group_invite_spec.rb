@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: group_invites
@@ -24,6 +25,7 @@
 #  fk_rails_7255dc4343  (group_id => groups.id)
 #  fk_rails_d969f0761c  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 

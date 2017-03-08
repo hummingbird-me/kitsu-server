@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: group_reports
@@ -27,6 +28,7 @@
 #  fk_rails_32fa0c6a2d  (moderator_id => users.id)
 #  fk_rails_8abfbfa356  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class GroupReport < ApplicationRecord
   belongs_to :group, required: true

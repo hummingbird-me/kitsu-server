@@ -84,7 +84,7 @@ Rails.application.routes.draw do
     # Tickets
     jsonapi_resources :group_tickets
     jsonapi_resources :group_ticket_messages
-    # Reports and Bans
+    # Moderation
     jsonapi_resources :group_reports
     jsonapi_resources :group_bans
     jsonapi_resources :group_member_notes

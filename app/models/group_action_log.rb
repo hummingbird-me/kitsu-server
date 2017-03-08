@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: group_action_logs
@@ -20,6 +21,7 @@
 #  fk_rails_315397a42e  (group_id => groups.id)
 #  fk_rails_45954c6dcd  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class GroupActionLog < ApplicationRecord
   belongs_to :target, required: true, polymorphic: true

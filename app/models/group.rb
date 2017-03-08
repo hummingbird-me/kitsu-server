@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: groups
@@ -39,6 +40,7 @@
 #
 #  fk_rails_a61500b09c  (category_id => group_categories.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class Group < ApplicationRecord
   include WithAvatar
