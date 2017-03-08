@@ -15,6 +15,7 @@
 #  cover_image_file_size    :integer
 #  cover_image_updated_at   :datetime
 #  featured                 :boolean          default(FALSE), not null
+#  last_activity_at         :datetime
 #  leaders_count            :integer          default(0), not null
 #  locale                   :string
 #  members_count            :integer          default(0)

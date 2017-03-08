@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170308043418) do
+ActiveRecord::Schema.define(version: 20170308064349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -529,6 +529,7 @@ ActiveRecord::Schema.define(version: 20170308043418) do
     t.boolean  "featured",                             default: false, null: false
     t.integer  "category_id",                                          null: false
     t.string   "tagline",                  limit: 60
+    t.datetime "last_activity_at"
   end
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
