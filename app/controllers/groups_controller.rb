@@ -14,8 +14,7 @@ class GroupsController < ApplicationController
       stats[:total][:openReports] = GroupReport.in_group(group).reported.count
     end
     if has_group_permission?(:tickets)
-      # TODO: build tickets
-      # stats[:total][:openTickets] = GroupTicket.in_group(group).count
+      stats[:total][:openTickets] = GroupTicket.in_group(group).created.count
     end
 
     render json: stats
