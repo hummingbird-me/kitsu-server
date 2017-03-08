@@ -54,7 +54,7 @@ class GroupInvite < ApplicationRecord
   scope :declined, -> { where.not(declined_at: nil) }
   scope :revoked, -> { where.not(revoked_at: nil) }
   scope :by_status, ->(status) {
-    return none unless status.in? %i[accepted declined revoked pending]
+    return none unless status.in? %w[accepted declined revoked pending]
     send(status)
   }
 
