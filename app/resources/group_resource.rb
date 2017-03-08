@@ -1,5 +1,6 @@
 class GroupResource < BaseResource
   include SluggableResource
+  include GroupActionLogger
 
   caching
 
@@ -66,8 +67,20 @@ class GroupResource < BaseResource
       }
     }
 
-
   def self.sortable_fields(context)
     super(context) << :created_at
   end
+
+  log_verb do |action|
+    return unless action == :update
+    return 'avatar_changed' if avatar_changed?
+    return 'cover_changed' if cover_image_changed?
+    return 'locale_changed' if locale_changed?
+    return 'rules_changed' if rules_changed?
+    return 'nsfw_changed' if nsfw_changed?
+    return 'about_changed' if about_changed?
+    return 'tagline_changed' if tagline_changed?
+    return 'category_changed' if category_id_changed?
+  end
+  log_target []
 end
