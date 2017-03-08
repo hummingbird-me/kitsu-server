@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307023205) do
+ActiveRecord::Schema.define(version: 20170308043418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -380,11 +380,13 @@ ActiveRecord::Schema.define(version: 20170307023205) do
   add_index "group_action_logs", ["group_id"], name: "index_group_action_logs_on_group_id", using: :btree
 
   create_table "group_bans", force: :cascade do |t|
-    t.integer  "group_id",     null: false
-    t.integer  "user_id",      null: false
-    t.integer  "moderator_id", null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "group_id",        null: false
+    t.integer  "user_id",         null: false
+    t.integer  "moderator_id",    null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.text     "notes"
+    t.text     "notes_formatted"
   end
 
   add_index "group_bans", ["group_id"], name: "index_group_bans_on_group_id", using: :btree
@@ -412,6 +414,15 @@ ActiveRecord::Schema.define(version: 20170307023205) do
   add_index "group_invites", ["group_id"], name: "index_group_invites_on_group_id", using: :btree
   add_index "group_invites", ["sender_id"], name: "index_group_invites_on_sender_id", using: :btree
   add_index "group_invites", ["user_id"], name: "index_group_invites_on_user_id", using: :btree
+
+  create_table "group_member_notes", force: :cascade do |t|
+    t.integer  "group_member_id",   null: false
+    t.integer  "user_id",           null: false
+    t.text     "content",           null: false
+    t.text     "content_formatted", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
 
   create_table "group_members", force: :cascade do |t|
     t.integer  "user_id",                  null: false
@@ -1187,6 +1198,8 @@ ActiveRecord::Schema.define(version: 20170307023205) do
   add_foreign_key "group_invites", "groups"
   add_foreign_key "group_invites", "users"
   add_foreign_key "group_invites", "users", column: "sender_id"
+  add_foreign_key "group_member_notes", "group_members"
+  add_foreign_key "group_member_notes", "users"
   add_foreign_key "group_neighbors", "groups", column: "destination_id"
   add_foreign_key "group_permissions", "group_members"
   add_foreign_key "group_reports", "groups"

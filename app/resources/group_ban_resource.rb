@@ -1,7 +1,7 @@
 class GroupBanResource < BaseResource
   include GroupActionLogger
 
-  attributes :created_at
+  attributes :created_at, :notes, :notes_formatted
 
   has_one :group
   has_one :user

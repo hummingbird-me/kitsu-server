@@ -1,0 +1,2 @@
+class GroupMemberNotesController < ApplicationController
+end

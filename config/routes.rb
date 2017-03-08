@@ -87,6 +87,7 @@ Rails.application.routes.draw do
     # Reports and Bans
     jsonapi_resources :group_reports
     jsonapi_resources :group_bans
+    jsonapi_resources :group_member_notes
     # Leader Chat
     jsonapi_resources :leader_chat_messages
     # Action logs
@@ -988,6 +989,11 @@ end
 #                                              PUT|PATCH /edge/group-members/:group_member_id/relationships/permissions(.:format)             group_members#update_relationship {:relationship=>"permissions"}
 #                                              DELETE    /edge/group-members/:group_member_id/relationships/permissions(.:format)             group_members#destroy_relationship {:relationship=>"permissions"}
 #                     group_member_permissions GET       /edge/group-members/:group_member_id/permissions(.:format)                           group_permissions#get_related_resources {:relationship=>"permissions", :source=>"group_members"}
+#             group_member_relationships_notes GET       /edge/group-members/:group_member_id/relationships/notes(.:format)                   group_members#show_relationship {:relationship=>"notes"}
+#                                              POST      /edge/group-members/:group_member_id/relationships/notes(.:format)                   group_members#create_relationship {:relationship=>"notes"}
+#                                              PUT|PATCH /edge/group-members/:group_member_id/relationships/notes(.:format)                   group_members#update_relationship {:relationship=>"notes"}
+#                                              DELETE    /edge/group-members/:group_member_id/relationships/notes(.:format)                   group_members#destroy_relationship {:relationship=>"notes"}
+#                           group_member_notes GET       /edge/group-members/:group_member_id/notes(.:format)                                 group_member_notes#get_related_resources {:relationship=>"notes", :source=>"group_members"}
 #                                              GET       /edge/group-members(.:format)                                                        group_members#index
 #                                              POST      /edge/group-members(.:format)                                                        group_members#create
 #                                 group_member GET       /edge/group-members/:id(.:format)                                                    group_members#show
@@ -1101,6 +1107,20 @@ end
 #                                              PATCH     /edge/group-bans/:id(.:format)                                                       group_bans#update
 #                                              PUT       /edge/group-bans/:id(.:format)                                                       group_bans#update
 #                                              DELETE    /edge/group-bans/:id(.:format)                                                       group_bans#destroy
+# group_member_note_relationships_group_member GET       /edge/group-member-notes/:group_member_note_id/relationships/group-member(.:format)  group_member_notes#show_relationship {:relationship=>"group_member"}
+#                                              PUT|PATCH /edge/group-member-notes/:group_member_note_id/relationships/group-member(.:format)  group_member_notes#update_relationship {:relationship=>"group_member"}
+#                                              DELETE    /edge/group-member-notes/:group_member_note_id/relationships/group-member(.:format)  group_member_notes#destroy_relationship {:relationship=>"group_member"}
+#               group_member_note_group_member GET       /edge/group-member-notes/:group_member_note_id/group-member(.:format)                group_members#get_related_resource {:relationship=>"group_member", :source=>"group_member_notes"}
+#         group_member_note_relationships_user GET       /edge/group-member-notes/:group_member_note_id/relationships/user(.:format)          group_member_notes#show_relationship {:relationship=>"user"}
+#                                              PUT|PATCH /edge/group-member-notes/:group_member_note_id/relationships/user(.:format)          group_member_notes#update_relationship {:relationship=>"user"}
+#                                              DELETE    /edge/group-member-notes/:group_member_note_id/relationships/user(.:format)          group_member_notes#destroy_relationship {:relationship=>"user"}
+#                       group_member_note_user GET       /edge/group-member-notes/:group_member_note_id/user(.:format)                        users#get_related_resource {:relationship=>"user", :source=>"group_member_notes"}
+#                                              GET       /edge/group-member-notes(.:format)                                                   group_member_notes#index
+#                                              POST      /edge/group-member-notes(.:format)                                                   group_member_notes#create
+#                            group_member_note GET       /edge/group-member-notes/:id(.:format)                                               group_member_notes#show
+#                                              PATCH     /edge/group-member-notes/:id(.:format)                                               group_member_notes#update
+#                                              PUT       /edge/group-member-notes/:id(.:format)                                               group_member_notes#update
+#                                              DELETE    /edge/group-member-notes/:id(.:format)                                               group_member_notes#destroy
 #      leader_chat_message_relationships_group GET       /edge/leader-chat-messages/:leader_chat_message_id/relationships/group(.:format)     leader_chat_messages#show_relationship {:relationship=>"group"}
 #                                              PUT|PATCH /edge/leader-chat-messages/:leader_chat_message_id/relationships/group(.:format)     leader_chat_messages#update_relationship {:relationship=>"group"}
 #                                              DELETE    /edge/leader-chat-messages/:leader_chat_message_id/relationships/group(.:format)     leader_chat_messages#destroy_relationship {:relationship=>"group"}

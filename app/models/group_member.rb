@@ -24,6 +24,7 @@ class GroupMember < ApplicationRecord
   belongs_to :group, required: true, counter_cache: 'members_count'
   belongs_to :user, required: true
   has_many :permissions, class_name: 'GroupPermission', dependent: :destroy
+  has_many :notes, class_name: 'GroupMemberNote', dependent: :destroy
 
   counter_culture :group, column_name: ->(model) {
     model.pleb? ? nil : 'leaders_count'

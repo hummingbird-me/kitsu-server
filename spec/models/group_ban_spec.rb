@@ -3,12 +3,14 @@
 #
 # Table name: group_bans
 #
-#  id           :integer          not null, primary key
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  group_id     :integer          not null, indexed
-#  moderator_id :integer          not null
-#  user_id      :integer          not null, indexed
+#  id              :integer          not null, primary key
+#  notes           :text
+#  notes_formatted :text
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  group_id        :integer          not null, indexed
+#  moderator_id    :integer          not null
+#  user_id         :integer          not null, indexed
 #
 # Indexes
 #

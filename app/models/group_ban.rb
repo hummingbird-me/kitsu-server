@@ -3,12 +3,14 @@
 #
 # Table name: group_bans
 #
-#  id           :integer          not null, primary key
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  group_id     :integer          not null, indexed
-#  moderator_id :integer          not null
-#  user_id      :integer          not null, indexed
+#  id              :integer          not null, primary key
+#  notes           :text
+#  notes_formatted :text
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  group_id        :integer          not null, indexed
+#  moderator_id    :integer          not null
+#  user_id         :integer          not null, indexed
 #
 # Indexes
 #
@@ -24,9 +26,13 @@
 # rubocop:enable Metrics/LineLength
 
 class GroupBan < ApplicationRecord
+  include ContentProcessable
+
   belongs_to :group, required: true
   belongs_to :user, required: true
   belongs_to :moderator, class_name: 'User', required: true
+
+  processable :notes, InlinePipeline
 
   scope :visible_for, ->(user) {
     members = GroupMember.with_permission(:members).for_user(user)

@@ -14,4 +14,5 @@ class GroupMemberResource < BaseResource
   has_one :group
   has_one :user
   has_many :permissions
+  has_many :notes
 end
