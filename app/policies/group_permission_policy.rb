@@ -11,6 +11,6 @@ class GroupPermissionPolicy < ApplicationPolicy
   alias_method :destroy?, :create?
 
   def group
-    record.group
+    record.group_member.group
   end
 end
