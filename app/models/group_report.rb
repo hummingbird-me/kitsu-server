@@ -55,4 +55,17 @@ class GroupReport < ApplicationRecord
   def stream_activity
     Feed.reports_aggr(group_id).activities.new(naughty: naughty)
   end
+
+  def escalate!
+    Report.create!(
+      naughty: naughty,
+      user: user,
+      reason: reason,
+      explanation: explanation
+    )
+  end
+
+  before_save do
+    escalate! if status_changed? && escalated?
+  end
 end
