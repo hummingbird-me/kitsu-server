@@ -32,6 +32,40 @@ class GroupResource < BaseResource
     member.permissions.create!(permission: :owner)
   end
 
+  index GroupsIndex::Group
+  query :query,
+    mode: :query,
+    apply: -> (values, _ctx) {
+      {
+        bool: {
+          should: [
+            {
+              multi_match: {
+                fields: %w[name^4 tagline^2 about],
+                query: values.join(' '),
+                fuzziness: 2,
+                max_expansions: 15,
+                prefix_length: 1
+              }
+            },
+            {
+              multi_match: {
+                fields: %w[name^4 tagline^2 about],
+                query: values.join(' '),
+                boost: 10
+              }
+            },
+            {
+              match_phrase_prefix: {
+                name: values.join(' ')
+              }
+            }
+          ]
+        }
+      }
+    }
+
+
   def self.sortable_fields(context)
     super(context) << :created_at
   end
