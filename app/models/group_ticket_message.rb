@@ -28,6 +28,11 @@ class GroupTicketMessage < ApplicationRecord
   enum kind: %i[message mod_note]
 
   scope :visible_for, ->(user) {
-    joins(:ticket).merge(GroupTicket.visible_for(user))
+    members = GroupMember.with_permission(:tickets).for_user(user)
+    groups = members.select(:group_id)
+    joins(:ticket).merge(GroupTicket.in_group(groups)).or(
+      GroupTicketMessage.message.joins(:ticket)
+        .merge(GroupTicket.visible_for(user))
+    )
   }
 end
