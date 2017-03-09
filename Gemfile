@@ -3,6 +3,7 @@ ruby '2.3.1'
 
 # Core Stuff
 gem 'puma'
+gem 'puma_worker_killer'
 gem 'rails', '4.2.1'
 gem 'rails-api'
 

@@ -165,6 +165,7 @@ GEM
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
     fspath (2.1.1)
+    get_process_mem (0.2.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     guard (2.14.0)
@@ -288,6 +289,9 @@ GEM
       pry (>= 0.9.10)
     public_suffix (2.0.4)
     puma (3.4.0)
+    puma_worker_killer (0.0.7)
+      get_process_mem (~> 0.2)
+      puma (>= 2.7, < 4)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     pundit-resources (1.1.1)
@@ -497,6 +501,7 @@ DEPENDENCIES
   pg
   pry-rails
   puma
+  puma_worker_killer
   pundit
   pundit-resources
   rack-attack
