@@ -73,8 +73,8 @@ class GroupResource < BaseResource
 
   log_verb do |action|
     return unless action == :update
-    return 'avatar_changed' if avatar_changed?
-    return 'cover_changed' if cover_image_changed?
+    return 'avatar_changed' if avatar_updated_at_changed?
+    return 'cover_changed' if cover_image_updated_at_changed?
     return 'locale_changed' if locale_changed?
     return 'rules_changed' if rules_changed?
     return 'nsfw_changed' if nsfw_changed?
@@ -83,4 +83,5 @@ class GroupResource < BaseResource
     return 'category_changed' if category_id_changed?
   end
   log_target []
+  log_group []
 end
