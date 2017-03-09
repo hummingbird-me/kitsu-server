@@ -12,7 +12,7 @@ gem 'chewy' # ElasticSearch
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
 gem 'pg' # Postgres
-gem 'redis', require: ['redis', 'redis/connection/hiredis'] # Redis
+gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
 gem 'where-or' # RAILS-5: Remove this, it just backports AR#where
 
@@ -34,7 +34,7 @@ gem 'paperclip', '~> 5.0'
 gem 'paperclip-optimizer'
 
 # Background tasks
-gem 'sidekiq', '~> 3.4.2'
+gem 'sidekiq', '~> 3.5.1'
 gem 'sidetiq'
 
 # Text pipeline
