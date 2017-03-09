@@ -22,6 +22,10 @@ class GroupPolicy < ApplicationPolicy
              featured name] - going_public
   end
 
+  def group
+    record
+  end
+
   class Scope < Scope
     def resolve
       scope.visible_for(user)
