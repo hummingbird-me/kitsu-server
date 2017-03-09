@@ -121,7 +121,7 @@ RSpec.describe Feed::ActivityList, type: :model do
     it 'should return a single Activity' do
       act = list.new(
         actor: 'User:1',
-        object: 'Object:1',
+        object: 'Post:1',
         verb: 'test'
       ).create
       expect(list.find(act.id)).to eq(act)

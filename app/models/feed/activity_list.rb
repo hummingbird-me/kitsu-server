@@ -18,7 +18,8 @@ class Feed
       @selects = []
       @limit_ratio = 1.0
       @more = true
-      @data[:limit] = 25
+      @page_size = @data[:limit] ||= 25
+      @page_number = 1
     end
 
     def page(page_number = nil, id_lt: nil)
@@ -161,7 +162,7 @@ class Feed
         @termination_reason = 'empty' if page.nil?
         @termination_reason = 'iterations' if i >= 10
         @termination_reason = 'full' if @results.count >= requested_count
-        if @results.count >= requested_count || i >= 10 || page.nil?
+        if @results.count >= requested_count || i >= 10 || page.nil? || page.count < requested_count
           @results = @results[0..(requested_count - 1)]
           return @results
         end
@@ -186,12 +187,28 @@ class Feed
       # If the page we got is the right number, there's more to grab
       @more = res.count == data[:limit]
       return nil if res.count.zero?
+
+      # Remove everything but the last activity in each group
+      # except for those that are for library entries
+      strip_unused!(res)
+
       # Enrich them, apply select and map filters to them
       res = enrich(res)
       res = apply_select(res)
       res = apply_maps(res)
       # Remove any nils just to be safe
       res.compact
+    end
+
+    def strip_unused!(activities)
+      activities.each do |group|
+        if group['activities'] && group['activities'].index { |activity|
+            activity['foreign_id']&.split(':')&.first == 'LibraryEntry' }
+
+          group['activities'] = [group['activities'].first]
+        end
+      end
+      activities
     end
 
     # Loads in included associations, converts to Feed::Activity[Group]

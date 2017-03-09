@@ -120,11 +120,11 @@ class FeedSerializerService
   end
 
   def non_polymorphic_references(reference, models: nil)
-    models ||= [Post, Comment]
+    models ||= [Post, Comment, LibraryEntry]
 
     models.inject([]) do |references, model|
       if model.reflections.keys.include?(reference)
-        references << "#{model.name.downcase}.#{reference}"
+        references << "#{model.name.underscore}.#{reference}"
       end
       references
     end
