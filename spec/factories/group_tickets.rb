@@ -5,7 +5,6 @@
 #
 #  id          :integer          not null, primary key
 #  status      :integer          default(0), not null, indexed
-#  title       :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  assignee_id :integer          indexed

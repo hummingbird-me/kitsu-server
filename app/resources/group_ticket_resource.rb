@@ -1,7 +1,7 @@
 class GroupTicketResource < BaseResource
   include GroupActionLogger
 
-  attributes :title, :status, :created_at
+  attributes :status, :created_at
 
   has_one :user
   has_one :group

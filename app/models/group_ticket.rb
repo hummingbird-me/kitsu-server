@@ -5,7 +5,6 @@
 #
 #  id          :integer          not null, primary key
 #  status      :integer          default(0), not null, indexed
-#  title       :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  assignee_id :integer          indexed
@@ -32,8 +31,6 @@ class GroupTicket < ApplicationRecord
   belongs_to :group, required: true
   belongs_to :assignee, class_name: 'User'
   has_many :messages, class_name: 'GroupTicketMessage', foreign_key: 'ticket_id'
-
-  validates :title, presence: true
 
   enum status: %i[created assigned resolved]
 
