@@ -111,7 +111,7 @@ class ApplicationPolicy
   #
   # @return [ApplicationPolicy] The policy instance for this object
   def policy_for(model)
-    Pundit.policy!(user, model)
+    Pundit.policy!(token, model)
   end
 
   # Provide access control and act as #show?
