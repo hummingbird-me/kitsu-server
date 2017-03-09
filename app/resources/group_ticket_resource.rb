@@ -15,6 +15,22 @@ class GroupTicketResource < BaseResource
     records.where(status: statuses)
   }
 
+  index GroupTicketsIndex::GroupTicket
+
+  query :query_group, apply: ->(values, _ctx) {
+    { term: { group_id: values.join(' ') } }
+  }
+  query :query,
+    mode: :query,
+    apply: ->(values, _ctx) {
+      {
+        multi_match: {
+          fields: %w[user assignee status messages],
+          query: values.join(' ')
+        }
+      }
+    }
+
   log_verb do |action|
     status if action == :update
   end
