@@ -22,6 +22,8 @@
 class GroupPermission < ApplicationRecord
   belongs_to :group_member, required: true
 
+  validates :permission, uniqueness: { scope: %i[group_member_id] }
+
   # Specifies which permission is provided by this.  Permissions are as follows:
   #
   #  * owner - has all permissions, can give owner status to another leader or
