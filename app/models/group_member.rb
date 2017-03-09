@@ -50,7 +50,7 @@ class GroupMember < ApplicationRecord
   end
 
   def leader?
-    !model.pleb?
+    !pleb?
   end
 
   def regenerate_rank!
