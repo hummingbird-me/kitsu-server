@@ -51,4 +51,8 @@ class GroupMemberResource < BaseResource
         }
       }
     }
+
+  def self.sortable_fields(context)
+    super(context) << :'group.last_activity_at'
+  end
 end
