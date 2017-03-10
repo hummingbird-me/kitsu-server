@@ -45,6 +45,7 @@ namespace :stream do
 
     desc 'Dump group stuff'
     task :groups => :environment do
+      ApplicationRecord.logger = Logger.new(nil)
       StreamDump.group_posts.each { |instr| STDOUT.puts instr.to_json }
       StreamDump.group_memberships.each { |instr| STDOUT.puts instr.to_json }
       StreamDump.group_auto_follows.each { |instr| STDOUT.puts instr.to_json }
