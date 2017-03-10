@@ -7,6 +7,12 @@ module StreamSync
     end
   end
 
+  def follow_group_aggr
+    mass_follow('group_aggr', Group.pluck(:id)) do |id|
+      { Feed.group_aggr(id) => Feed.group(id) }
+    end
+  end
+
   def follow_timeline
     mass_follow('timeline', User.pluck(:id)) do |id|
       { Feed.timeline(id) => Feed.user(id) }
