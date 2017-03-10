@@ -72,6 +72,7 @@ module StreamDump
       media_feed = Feed.media(media_type, media_id) if media_id
       as_post = becomes(Post)
       target_feed.activities.new(
+        time: updated_at,
         updated_at: updated_at,
         post_likes_count: post_likes_count,
         comments_count: comments_count,
@@ -140,6 +141,17 @@ module StreamDump
     end
   end
 
+  def group_memberships(scope = User)
+    each_user(scope) do |user_id|
+      groups = GroupMember.where(user: user_id).pluck(:group_id)
+      {
+        instruction: 'follow',
+        feedId: Feed.timeline(group_id).stream_id,
+        data: groups.map { |gid| Feed.user(gid).stream_id }
+      }
+    end
+  end
+
   def auto_follows
     users = each_user do |user_id|
       {
@@ -156,6 +168,16 @@ module StreamDump
       }
     end
     [users, media].lazy.flat_map { |list| list }
+  end
+
+  def group_auto_follows
+    each_group do |group_id|
+      {
+        instruction: 'follow',
+        feedId: Feed.group_aggr(group_id).stream_id,
+        data: [Feed.group(group_id).stream_id]
+      }
+    end
   end
 
   def each_user(scope = User, &block)
