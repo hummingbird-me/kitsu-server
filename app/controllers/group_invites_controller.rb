@@ -13,6 +13,11 @@ class GroupInvitesController < ApplicationController
     render json: {}, status: 200
   end
 
+  def revoke
+    invite.revoke!
+    render json: {}, status: 200
+  end
+
   private
 
   def authenticate!
