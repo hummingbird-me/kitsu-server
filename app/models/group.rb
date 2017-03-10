@@ -77,6 +77,10 @@ class Group < ApplicationRecord
 
   validates :name, presence: true, length: { in: 4..50 }
   validates :tagline, length: { maximum: 60 }, allow_blank: true
+  validates :privacy, inclusion: {
+    in: %w[closed],
+    message: 'cannot open a closed group'
+  }, if: ->(g) { g.privacy_was == 'closed' }
 
   def member_for(user)
     members.where(user: user).first

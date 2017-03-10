@@ -16,10 +16,8 @@ class GroupPolicy < ApplicationPolicy
   def editable_attributes(all)
     return all if is_admin?
 
-    # Don't allow a closed group to change privacy setting
-    going_public = record.closed? ? %i[privacy] : []
     all - %i[members_count leaders_count neighbors_count rules_formatted
-             featured name] - going_public
+             featured name]
   end
 
   def group
