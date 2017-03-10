@@ -7,15 +7,15 @@ class ConvertRankToPermissions < ActiveRecord::Migration
     belongs_to :group_member, required: true
     enum permission: %i[owner tickets members leaders community content]
   end
-  
+
   def up
-    GroupMember.where(rank: :mod).each do |mod|
+    GroupMember.mod.each do |mod|
       mod.permissions.create!(permission: :community)
       mod.permissions.create!(permission: :content)
       mod.permissions.create!(permission: :members)
       mod.permissions.create!(permission: :tickets)
     end
-    GroupMember.where(rank: :admin).each do |admin|
+    GroupMember.admin.each do |admin|
       admin.permissions.create(permission: :owner)
     end
   end
