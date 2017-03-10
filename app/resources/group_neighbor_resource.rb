@@ -13,4 +13,5 @@ class GroupNeighborResource < BaseResource
     end
   end
   log_target :destination
+  log_group :source
 end
