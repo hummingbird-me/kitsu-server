@@ -1,7 +1,7 @@
 class GroupMemberResource < BaseResource
   include SortableByFollowing
 
-  attributes :rank, :created_at
+  attributes :rank, :created_at, :unread_count
 
   filter :rank, apply: ->(records, values, _options) {
     ranks = GroupMember.ranks.values_at(*values).compact
