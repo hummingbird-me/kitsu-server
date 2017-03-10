@@ -146,8 +146,8 @@ module StreamDump
       groups = GroupMember.where(user: user_id).pluck(:group_id)
       {
         instruction: 'follow',
-        feedId: Feed.timeline(group_id).stream_id,
-        data: groups.map { |gid| Feed.user(gid).stream_id }
+        feedId: Feed.timeline(user_id).stream_id,
+        data: groups.map { |gid| Feed.group(gid).stream_id }
       }
     end
   end
