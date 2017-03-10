@@ -177,7 +177,7 @@ class Feed
 
     def get_page(id_lt: nil, limit: nil)
       # Extract non-pagination payload data
-      data = @data.slice(:ranking, :mark_seen, :mark_read, :limit)
+      data = @data.slice(:ranking, :mark_seen, :mark_read, :limit, :id_lte)
       # Apply our id_gt for pagination
       data = data.merge(id_lt: id_lt) if id_lt
       # Apply the limit ratio, apply it to the data
