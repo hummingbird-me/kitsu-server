@@ -28,7 +28,6 @@
 
 FactoryGirl.define do
   factory :group_ticket do
-    title { Faker::Lorem.sentence }
     association :group, strategy: :build
     association :user, strategy: :build
   end
