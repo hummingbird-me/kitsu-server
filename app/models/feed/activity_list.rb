@@ -162,7 +162,7 @@ class Feed
         @termination_reason = 'empty' if page.nil?
         @termination_reason = 'iterations' if i >= 10
         @termination_reason = 'full' if @results.count >= requested_count
-        if @results.count >= requested_count || i >= 10 || page.nil? || page.count < requested_count
+        if @results.count >= requested_count || i >= 10 || page.nil?
           @results = @results[0..(requested_count - 1)]
           return @results
         end
@@ -196,14 +196,15 @@ class Feed
       res = enrich(res)
       res = apply_select(res)
       res = apply_maps(res)
+
       # Remove any nils just to be safe
       res.compact
     end
 
     def strip_unused!(activities)
       activities.each do |group|
-        if group['activities'] && group['activities'].index { |activity|
-            activity['foreign_id']&.split(':')&.first == 'LibraryEntry' }
+        if group['activities'] &&
+          ['post', 'comment', 'follow', 'review'].include?(group['verb'])
 
           group['activities'] = [group['activities'].first]
         end
