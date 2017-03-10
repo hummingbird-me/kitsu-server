@@ -11,6 +11,7 @@ class GroupsIndex < Chewy::Index
     field :locale
     field :tagline
     field :privacy
+    field :last_activity_at
     field :category, value: ->(g) { g.category.name }
   end
 end
