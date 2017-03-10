@@ -13,7 +13,7 @@ class Feed
     def as_json(options = {})
       json = to_h.transform_values { |val| Feed.get_stream_id(val) }
       json.symbolize_keys!
-      json[:time] = json[:time]&.iso8601
+      json[:time] = json[:time]&.strftime('%Y-%m-%dT%H:%M:%S%:z')
       json[:to] = json[:to]&.compact&.map { |val| Feed.get_stream_id(val) }
       json.compact
     end
