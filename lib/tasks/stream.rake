@@ -42,5 +42,12 @@ namespace :stream do
     task :follows => :environment do
       StreamDump.follows.each { |instr| STDOUT.puts instr.to_json }
     end
+
+    desc 'Dump group stuff'
+    task :groups => :environment do
+      StreamDump.group_posts.each { |instr| STDOUT.puts instr.to_json }
+      StreamDump.group_memberships.each { |instr| STDOUT.puts instr.to_json }
+      StreamDump.group_auto_follows.each { |instr| STDOUT.puts instr.to_json }
+    end
   end
 end
