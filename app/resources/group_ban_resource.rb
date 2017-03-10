@@ -7,6 +7,8 @@ class GroupBanResource < BaseResource
   has_one :user
   has_one :moderator
 
+  filter :group
+
   log_verb do |action|
     case action
     when :create then 'banned'
