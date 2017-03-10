@@ -18,6 +18,11 @@ class GroupResource < BaseResource
       GroupCategory.by_slug(v).or(GroupCategory.where(id: v)).first
     end
   }
+  filter :privacy, apply: ->(records, values, _options) {
+    privacies = Group.privacies.values_at(*values).compact
+    privacies = values if privacies.empty?
+    records.where(privacy: privacies)
+  }
 
   has_many :members
   has_many :neighbors
