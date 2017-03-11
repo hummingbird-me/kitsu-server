@@ -16,5 +16,6 @@ class UsersIndex < Chewy::Index
     field :past_names, value: ->(mem) { mem.user.past_names }
     field :group_name, value: ->(mem) { mem.group.name }
     field :group_category, value: ->(mem) { mem.group.category }
+    field :created_at
   end
 end
