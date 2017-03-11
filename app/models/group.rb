@@ -95,4 +95,12 @@ class Group < ApplicationRecord
   def aggregated_feed
     Feed.group_aggr(id)
   end
+
+  after_create do
+    aggregated_feed.follow(feed)
+  end
+
+  after_destroy do
+    aggregated_feed.unfollow(feed)
+  end
 end
