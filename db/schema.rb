@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309124949) do
+ActiveRecord::Schema.define(version: 20170311043220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -487,12 +487,13 @@ ActiveRecord::Schema.define(version: 20170309124949) do
   add_index "group_ticket_messages", ["ticket_id"], name: "index_group_ticket_messages_on_ticket_id", using: :btree
 
   create_table "group_tickets", force: :cascade do |t|
-    t.integer  "user_id",                 null: false
-    t.integer  "group_id",                null: false
+    t.integer  "user_id",                      null: false
+    t.integer  "group_id",                     null: false
     t.integer  "assignee_id"
-    t.integer  "status",      default: 0, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "status",           default: 0, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "first_message_id"
   end
 
   add_index "group_tickets", ["assignee_id"], name: "index_group_tickets_on_assignee_id", using: :btree
@@ -1205,6 +1206,7 @@ ActiveRecord::Schema.define(version: 20170309124949) do
   add_foreign_key "group_reports", "users"
   add_foreign_key "group_reports", "users", column: "moderator_id"
   add_foreign_key "group_ticket_messages", "group_tickets", column: "ticket_id"
+  add_foreign_key "group_tickets", "group_ticket_messages", column: "first_message_id"
   add_foreign_key "group_tickets", "groups"
   add_foreign_key "group_tickets", "users"
   add_foreign_key "group_tickets", "users", column: "assignee_id"

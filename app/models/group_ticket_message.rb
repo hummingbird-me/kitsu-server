@@ -36,4 +36,8 @@ class GroupTicketMessage < ApplicationRecord
         .merge(GroupTicket.visible_for(user))
     )
   }
+
+  after_create do
+    ticket.first_message ||= self
+  end
 end

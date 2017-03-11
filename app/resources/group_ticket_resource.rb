@@ -7,6 +7,7 @@ class GroupTicketResource < BaseResource
   has_one :group
   has_one :assignee
   has_many :messages
+  has_one :first_message
 
   filters :group, :user, :assignee
   filter :status, apply: ->(records, values, _options) {
