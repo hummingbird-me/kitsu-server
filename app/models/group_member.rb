@@ -21,7 +21,7 @@
 # rubocop:enable Metrics/LineLength
 
 class GroupMember < ApplicationRecord
-  belongs_to :group, required: true, counter_cache: 'members_count'
+  belongs_to :group, required: true, counter_cache: 'members_count', touch: true
   belongs_to :user, required: true
   has_many :permissions, class_name: 'GroupPermission', dependent: :destroy
   has_many :notes, class_name: 'GroupMemberNote', dependent: :destroy
