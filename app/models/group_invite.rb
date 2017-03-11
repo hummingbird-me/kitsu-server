@@ -40,6 +40,7 @@ class GroupInvite < ApplicationRecord
     conditions: -> { pending }
   }
   validate :not_inviting_self
+  validate :not_banned
 
   scope :visible_for, ->(user) {
     # user == user || has members or owner priv
@@ -100,5 +101,11 @@ class GroupInvite < ApplicationRecord
 
   def not_inviting_self
     errors.add(:user, 'cannot be same as sender') if user == sender
+  end
+
+  def not_banned
+    if GroupBan.where(group: group, user: user).exist?
+      errors.add(:user, 'is banned')
+    end
   end
 end

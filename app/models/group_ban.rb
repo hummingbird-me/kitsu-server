@@ -44,5 +44,6 @@ class GroupBan < ApplicationRecord
   after_create do
     # Kick the user from the group
     GroupMember.where(user: user, group: group).first&.destroy!
+    GroupInvite.where(user: user, group: group).update_all(revoked_at: Time.now)
   end
 end
