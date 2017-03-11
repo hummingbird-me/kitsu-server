@@ -21,6 +21,19 @@
 # rubocop:enable Metrics/LineLength
 
 class GroupMember < ApplicationRecord
+  # WARNING: this before_destroy ***NEEDS*** to come before the permissions
+  # association, or else destruction of dependent rows occurs prior to the
+  # test of whether we can destroy (based on the permissions that just got
+  # destroyed!)
+  # RAILS-5: Switch to `throws :abort`
+  before_destroy do
+    if admin?
+      group.owners.count > 1
+    else
+      true
+    end
+  end
+
   belongs_to :group, required: true, counter_cache: 'members_count', touch: true
   belongs_to :user, required: true
   has_many :permissions, class_name: 'GroupPermission', dependent: :destroy
@@ -38,15 +51,6 @@ class GroupMember < ApplicationRecord
   scope :in_group, ->(group) { where(group: group) }
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
   scope :leaders, -> { where.not(rank: 'pleb') }
-
-  # RAILS-5: Switch to `throws :abort`
-  before_destroy do
-    if admin?
-      group.owners.count > 1
-    else
-      true
-    end
-  end
 
   def has_permission?(perm)
     permissions.for_permission(perm).exists?
