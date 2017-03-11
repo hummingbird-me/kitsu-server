@@ -34,6 +34,8 @@ class GroupBan < ApplicationRecord
 
   processable :notes, InlinePipeline
 
+  validates :user, uniqueness: { scope: %i[group_id] }
+
   scope :visible_for, ->(user) {
     members = GroupMember.with_permission(:members).for_user(user)
     where(group_id: members.select(:group_id))
