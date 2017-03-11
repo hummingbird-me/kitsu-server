@@ -14,4 +14,10 @@ class GroupMemberPolicy < ApplicationPolicy
   def destroy?
     is_owner? || has_group_permission?(:members)
   end
+
+  class Scope < Scope
+    def resolve
+      scope.where.not(user: blocked_users)
+    end
+  end
 end
