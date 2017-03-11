@@ -39,9 +39,12 @@ class GroupMember < ApplicationRecord
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
   scope :leaders, -> { where.not(rank: 'pleb') }
 
-  validate(on: :destroy) do
-    if admin? && group.owners.count == 1
-      errors.add(:group, 'must always have at least one owner')
+  # RAILS-5: Switch to `throws :abort`
+  before_destroy do
+    if admin?
+      group.owners.count > 1
+    else
+      true
     end
   end
 
