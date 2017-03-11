@@ -47,9 +47,7 @@ class GroupPermission < ApplicationRecord
   after_create { group_member.regenerate_rank! }
   after_destroy { group_member.regenerate_rank! }
 
-  validate(on: :destroy) do
-    if owner? && group_member.group.owners.count == 1
-      errors.add(:group, 'must always have at least one owner')
-    end
+  before_destroy do
+    false if owner? && group_member.group.owners.count == 1
   end
 end
