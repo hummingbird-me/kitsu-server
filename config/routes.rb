@@ -98,6 +98,7 @@ Rails.application.routes.draw do
     post '/group-invites/:id/_decline', to: 'group_invites#decline'
     post '/group-invites/:id/_revoke', to: 'group_invites#revoke'
     get '/groups/:id/_stats', to: 'groups#stats'
+    post '/groups/:id/_read', to: 'groups#read'
   end
 
   ### Debug APIs

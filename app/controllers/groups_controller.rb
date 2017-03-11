@@ -20,6 +20,11 @@ class GroupsController < ApplicationController
     render json: stats
   end
 
+  def read
+    member&.mark_read!
+    render json: {}, status: 200
+  end
+
   def group
     @group ||= Group.find(params[:id])
   end

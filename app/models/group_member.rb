@@ -60,6 +60,10 @@ class GroupMember < ApplicationRecord
     !pleb?
   end
 
+  def mark_read!
+    update(unread_count: 0)
+  end
+
   def regenerate_rank!
     rank = :pleb
     rank = :mod if permissions.present?
