@@ -52,7 +52,23 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
       return [] if filters.values.any?(&:nil?)
 
       # Apply scopes and load
-      apply_scopes(filters, opts).load.to_a
+      load_query_records(apply_scopes(filters, opts), opts)
+    end
+
+    def find_serialized_with_caching(filters, serializer, opts = {})
+      return super(filters, serializer, opts) unless should_query?(filters)
+      records = find_records(filters, opts)
+      cached_resources_for(records, serializer, opts)
+    end
+
+    def load_query_records(query, opts = {})
+      include_directives = opts[:include_directives]
+      return query.load.to_a unless include_directives
+
+      model_includes = resolve_relationship_names_to_relations(self,
+        include_directives.model_includes, opts)
+
+      query.load(scope: -> { includes(model_includes) }).to_a
     end
 
     # Count all search results
@@ -112,6 +128,11 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
       query = search_policy_scope.new(context[:current_user], query).resolve
       context[:policy_used]&.call
       query
+    end
+
+    def preload_included_fragments(resources, records, serializer, options)
+      return unless records.is_a?(ActiveRecord::Relation)
+      super(resources, records, serializer, options)
     end
 
     def search_policy_scope
