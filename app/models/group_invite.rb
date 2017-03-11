@@ -42,6 +42,7 @@ class GroupInvite < ApplicationRecord
   validate :not_inviting_self
   validate :not_banned
   validate :not_already_member
+  validate :invitee_following_sender
 
   scope :visible_for, ->(user) {
     # user == user || has members or owner priv
@@ -113,6 +114,12 @@ class GroupInvite < ApplicationRecord
   def not_already_member
     if GroupMember.where(group: group, user: user).exist?
       errors.add(:user, 'is already a member')
+    end
+  end
+
+  def invitee_following_sender
+    unless Follow.where(follower: user, followed: sender).exist?
+      errors.add(:user, 'does not follow you')
     end
   end
 end
