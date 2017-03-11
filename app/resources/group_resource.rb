@@ -78,14 +78,18 @@ class GroupResource < BaseResource
 
   log_verb do |action|
     next unless action == :update
-    next 'avatar_changed' if avatar_updated_at_changed?
-    next 'cover_changed' if cover_image_updated_at_changed?
-    next 'locale_changed' if locale_changed?
-    next 'rules_changed' if rules_changed?
-    next 'nsfw_changed' if nsfw_changed?
-    next 'about_changed' if about_changed?
-    next 'tagline_changed' if tagline_changed?
-    next 'category_changed' if category_id_changed?
+    previous_changes.keys.map { |key|
+      case key
+      when 'avatar_updated_at' then 'avatar_changed'
+      when 'cover_updated_at' then 'cover_changed'
+      when 'locale' then 'locale_changed'
+      when 'rules' then 'rules_changed'
+      when 'nsfw' then 'nsfw_changed'
+      when 'about' then 'about_changed'
+      when 'tagline' then 'tagline_changed'
+      when 'category_id' then 'category_changed'
+      end
+    }.compact
   end
   log_target []
   log_group []

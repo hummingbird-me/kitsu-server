@@ -6,15 +6,15 @@ module GroupActionLogger
     target = action_log_target.inject(_model, :public_send)
     group = (action_log_group || %i[group]).inject(_model, :public_send)
     # Execute to generate verb
-    verb = _model.instance_exec(action, &action_log_verb)
+    verbs = [_model.instance_exec(action, &action_log_verb)].flatten.compact
 
-    return unless verb
-
-    group.action_logs.create!(
-      target: target,
-      verb: verb,
-      user: actual_current_user
-    )
+    verbs.each do |verb|
+      group.action_logs.create!(
+        target: target,
+        verb: verb,
+        user: actual_current_user
+      )
+    end
   end
 
   included do
