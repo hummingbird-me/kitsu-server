@@ -20,6 +20,17 @@ class GroupMemberResource < BaseResource
   query :query_group, apply: ->(values, _ctx) {
     { term: { group_id: values.join(' ') } }
   }
+  query :group_category
+  query :rank
+  query :group_name,
+    mode: :query,
+    apply: ->(values, _ctx) {
+      {
+        match: {
+          group_name: values.join(' ')
+        }
+      }
+    }
   query :query,
     mode: :query,
     apply: ->(values, _ctx) { # rubocop:disable Metrics/BlockLength
