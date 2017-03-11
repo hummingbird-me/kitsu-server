@@ -5,5 +5,6 @@ namespace :counters do
     CounterCacheResets.media_user_counts
     CounterCacheResets.reviews
     CounterCacheResets.users
+    CounterCacheResets.groups
   end
 end
