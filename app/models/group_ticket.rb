@@ -41,5 +41,5 @@ class GroupTicket < ApplicationRecord
     groups = members.select(:group_id)
     where(group_id: groups).or(where(user: user))
   }
-  scope :in_group, ->(group) { where(group: group) }
+  scope :in_group, ->(group) { where(group_id: group) }
 end
