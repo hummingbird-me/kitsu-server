@@ -92,6 +92,7 @@ class GroupInvite < ApplicationRecord
 
   def revoke!
     update(revoked_at: Time.now)
+    complete_stream_activity.destroy
   end
 
   def stream_activity
