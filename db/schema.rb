@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170215225213) do
+ActiveRecord::Schema.define(version: 20170311003803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -445,8 +445,8 @@ ActiveRecord::Schema.define(version: 20170215225213) do
 
   create_table "library_entry_logs", force: :cascade do |t|
     t.integer  "linked_account_id",                                            null: false
-    t.string   "media_type"
-    t.integer  "media_id"
+    t.string   "media_type",                                                   null: false
+    t.integer  "media_id",                                                     null: false
     t.integer  "progress"
     t.decimal  "rating",            precision: 2, scale: 1
     t.integer  "reconsume_count"
