@@ -13,5 +13,6 @@ class GroupTicketsIndex < Chewy::Index
     field :assignee, value: ->(ticket) { ticket.assignee&.name }
     field :messages, value: ->(ticket) { ticket.messages.map(&:content) }
     field :status
+    field :created_at
   end
 end
