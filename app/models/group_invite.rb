@@ -41,6 +41,7 @@ class GroupInvite < ApplicationRecord
   }
   validate :not_inviting_self
   validate :not_banned
+  validate :not_already_member
 
   scope :visible_for, ->(user) {
     # user == user || has members or owner priv
@@ -106,6 +107,12 @@ class GroupInvite < ApplicationRecord
   def not_banned
     if GroupBan.where(group: group, user: user).exist?
       errors.add(:user, 'is banned')
+    end
+  end
+
+  def not_already_member
+    if GroupMember.where(group: group, user: user).exist?
+      errors.add(:user, 'is already a member')
     end
   end
 end
