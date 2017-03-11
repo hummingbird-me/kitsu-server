@@ -117,6 +117,8 @@ class Post < ApplicationRecord
 
   after_create do
     media.trending_vote(user, 2.0) if media.present?
-    GroupUnreadFanoutWorker.perform_async(target_group_id) if target_group.present?
+    if target_group.present?
+      GroupUnreadFanoutWorker.perform_async(target_group_id, user_id)
+    end
   end
 end
