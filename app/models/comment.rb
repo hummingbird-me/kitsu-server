@@ -60,7 +60,7 @@ class Comment < ApplicationRecord
     to << parent&.user&.notifications unless parent&.user == user
     to += mentioned_users.map(&:notifications)
     to += post.other_feeds
-    to += post.target_feed
+    to << post.target_feed
     to.compact!
     post.feed.activities.new(
       reply_to_user: (parent&.user || post&.user),
