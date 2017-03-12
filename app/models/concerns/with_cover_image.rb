@@ -10,7 +10,7 @@ module WithCoverImage
       tiny: '-quality 90 -strip',
       small: '-quality 75 -strip',
       large: '-quality 50 -strip'
-    }, only_process: %i[small]
+    }, only_process: %i[small original]
     validates_attachment :cover_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
     }

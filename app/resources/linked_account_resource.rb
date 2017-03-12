@@ -6,6 +6,7 @@ class LinkedAccountResource < BaseResource
   # :kind is aliased to :type in LinkedAccount
 
   has_one :user
+  has_many :library_entry_logs
 
   filters :user_id
 end

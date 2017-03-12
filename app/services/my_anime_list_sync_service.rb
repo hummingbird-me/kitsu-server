@@ -3,15 +3,23 @@ class MyAnimeListSyncService
   MINE = '?mine=1'.freeze
 
   attr_reader :library_entry, :method
+  attr_accessor :library_entry_log
 
-  def initialize(library_entry, method)
+  def initialize(library_entry, method, library_entry_log)
     @library_entry = library_entry
     @method = method
+    @library_entry_log = library_entry_log
   end
 
   def execute_method
-    # TODO: add errors later on if we can't find mal data
-    return if mal_media.nil?
+    # Logs the error so the user can see what didn't sync.
+    if mal_media.nil?
+      library_entry_log.update(
+        sync_status: :error, action_performed: method,
+        error_message: 'Unable to convert Kitsu data to Mal data'
+      )
+      return
+    end
 
     case method
     when 'delete'
@@ -19,7 +27,7 @@ class MyAnimeListSyncService
         "#{media_type}list/#{media_type}/#{mal_media_id}",
         linked_account
       )
-    when 'create/update'
+    when 'create', 'update'
       # find the anime or manga
       # it will raise an error if it fails the http request
       response = get(
@@ -96,7 +104,7 @@ class MyAnimeListSyncService
 
     # will raise an error if something is wrong
     # otherwise will return true
-    check_response_status(res)
+    check_response_status(res) unless res.success?
 
     res.response_body
   end
@@ -138,13 +146,19 @@ class MyAnimeListSyncService
   end
 
   def check_response_status(response)
-    return true if response.success?
     # HACK: this will only happen with manga
     # if you have the score set to 0 and this manga
     # already exists on your list (PUT request).
     # Once you update the score, this error will stop happening.
-    return true if response.code == 500 && media_type == 'manga'
+    if response.success? || (response.code == 500 && media_type == 'manga')
+      library_entry_log.update(sync_status: :success, action_performed: method)
+      return true
+    end
 
+    library_entry_log.update(
+      sync_status: :error, action_performed: method,
+      error_message: response.return_message.to_s
+    )
     # timed out
     raise 'Request Timed Out' if response.timed_out?
     # could not get an http response

@@ -12,7 +12,7 @@ module WithAvatar
       small: '-quality 80 -strip',
       medium: '-quality 70 -strip',
       large: '-quality 60 -strip'
-    }, only_process: %i[large]
+    }, only_process: %i[large original]
     validates_attachment :avatar, content_type: {
       content_type: %w[image/jpg image/jpeg image/png image/gif]
     }

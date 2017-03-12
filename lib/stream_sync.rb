@@ -46,20 +46,21 @@ module StreamSync
 
   def genres_for(klass)
     puts "#{klass.name}:"
-    print ' => generating'
-    data = klass.includes(:genres).map { |media|
-      print '.' if rand(1..100) > 98
-      [media.stream_id, media.genres.map(&:name)]
-    }.to_h
-    print "\n"
     print ' => uploading'
-    custom_endpoint_client.upload_meta(data)
+    klass.includes(:genres).in_groups_of(990, false).each do |items|
+      data = items.map { |media|
+        print '.' if rand(1..100) > 98
+        [media.stream_id, { genres: media.genres.map(&:slug) }]
+      }.to_h
+      custom_endpoint_client.upload_meta(data)
+      print '^'
+    end
     print "\n"
   end
 
   def mass_follow(name, list, &map_block)
     puts "#{name}:"
-    print " => generating"
+    print ' => generating'
     follows = list.map do |*args|
       print '.' if rand(1..100) > 98
       map_block.call(*args)

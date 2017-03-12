@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20170311043220) do
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
     t.integer  "favorites_count",                       default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -261,6 +262,7 @@ ActiveRecord::Schema.define(version: 20170311043220) do
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
     t.integer  "favorites_count",           default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "dramas", ["slug"], name: "index_dramas_on_slug", using: :btree
@@ -587,6 +589,25 @@ ActiveRecord::Schema.define(version: 20170311043220) do
   add_index "library_entries", ["user_id", "status"], name: "index_library_entries_on_user_id_and_status", using: :btree
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
 
+  create_table "library_entry_logs", force: :cascade do |t|
+    t.integer  "linked_account_id",                                            null: false
+    t.string   "media_type"
+    t.integer  "media_id"
+    t.integer  "progress"
+    t.decimal  "rating",            precision: 2, scale: 1
+    t.integer  "reconsume_count"
+    t.boolean  "reconsuming"
+    t.integer  "status"
+    t.integer  "volumes_owned"
+    t.string   "action_performed",                          default: "create", null: false
+    t.integer  "sync_status",                               default: 0,        null: false
+    t.text     "error_message"
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
+  end
+
+  add_index "library_entry_logs", ["linked_account_id"], name: "index_library_entry_logs_on_linked_account_id", using: :btree
+
   create_table "linked_accounts", force: :cascade do |t|
     t.integer  "user_id",                            null: false
     t.string   "external_user_id",                   null: false
@@ -652,6 +673,7 @@ ActiveRecord::Schema.define(version: 20170311043220) do
     t.integer  "age_rating"
     t.string   "age_rating_guide"
     t.integer  "favorites_count",                       default: 0,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   create_table "manga_characters", force: :cascade do |t|
@@ -1116,6 +1138,7 @@ ActiveRecord::Schema.define(version: 20170311043220) do
     t.string   "title"
     t.boolean  "profile_completed",                       default: false,       null: false
     t.boolean  "feed_completed",                          default: false,       null: false
+    t.boolean  "cover_image_processing"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

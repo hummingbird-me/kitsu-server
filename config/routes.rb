@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     # Imports & Linked Accounts
     jsonapi_resources :linked_accounts
     jsonapi_resources :list_imports
+    jsonapi_resources :library_entry_logs
     # Permissions
     jsonapi_resources :user_roles
     jsonapi_resources :roles
