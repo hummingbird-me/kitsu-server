@@ -12,7 +12,7 @@ class SSOController < ApplicationController
 
   def authenticate!
     unless signed_in?
-      render 403, json: serialize_error(403, 'Not authenticated')
+      render status: 403, json: serialize_error(403, 'Not authenticated')
     end
   end
 end
