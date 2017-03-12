@@ -39,6 +39,7 @@ module GroupPermissionsHelpers
   # @param [Symbol] permission what permission we are inquiring about
   # @return [Boolean] whether the current member has that permission
   def has_group_permission?(permission)
+    return true if is_admin?
     member? && member.has_permission?(permission)
   end
 end
