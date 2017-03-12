@@ -268,10 +268,14 @@ class User < ApplicationRecord
   end
 
   after_create do
+    # Send Confirmation Email
     UserMailer.confirmation(self).deliver_later
+    # Set up feeds
     aggregated_feed.follow(feed)
     timeline.follow(feed)
     Feed.global.follow(feed)
+    # Automatically join "Kitsu" group
+    GroupMember.create!(user: self, group: 1830)
   end
 
   after_save do
