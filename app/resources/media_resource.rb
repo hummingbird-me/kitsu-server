@@ -50,7 +50,9 @@ class MediaResource < BaseResource
     # Rankings
     :popularity_rank, :rating_rank,
     # Age Ratings
-    :age_rating, :age_rating_guide
+    :age_rating, :age_rating_guide,
+    # Subtype
+    :subtype
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
@@ -60,6 +62,11 @@ class MediaResource < BaseResource
   has_many :mappings
   has_many :reviews
   has_many :media_relationships
+
+  filter :subtype, apply: ->(records, values, _opts) {
+    values = values.map { |v| records.subtypes[v] || v }
+    records.where(subtype: values)
+  }
 
   # Common ElasticSearch stuff
   query :year, NUMERIC_QUERY
