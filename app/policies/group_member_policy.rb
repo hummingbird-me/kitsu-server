@@ -17,7 +17,7 @@ class GroupMemberPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where.not(user: blocked_users)
+      scope.blocking(blocked_users)
     end
   end
 end

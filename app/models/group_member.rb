@@ -51,6 +51,7 @@ class GroupMember < ApplicationRecord
   scope :in_group, ->(group) { where(group: group) }
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
   scope :leaders, -> { where.not(rank: 'pleb') }
+  scope :blocking, ->(users) { where.not(user_id: users) }
 
   def has_permission?(perm)
     permissions.for_permission(perm).exists?

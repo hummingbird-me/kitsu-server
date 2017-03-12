@@ -1,15 +1,16 @@
 class UsersIndex < Chewy::Index
-  class << self
-    def blocking(*user_ids)
+  define_type User do
+    def self.blocking(*user_ids)
       filter { _id(:or) != user_ids }
     end
-  end
-  define_type User do
     field :name
     field :past_names
     field :updated_at
   end
   define_type GroupMember.includes(:user, group: [:category]) do
+    def self.blocking(users)
+      filter { user_id(:ir) != user_ids }
+    end
     field :group_id
     field :user_id
     field :rank
