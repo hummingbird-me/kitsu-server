@@ -1,7 +1,7 @@
 class UsersIndex < Chewy::Index
   define_type User do
     def self.blocking(*user_ids)
-      filter { _id(:or) != user_ids }
+      filter { _id(:or) != user_ids.flatten }
     end
     field :name
     field :past_names
@@ -9,7 +9,7 @@ class UsersIndex < Chewy::Index
   end
   define_type GroupMember.includes(:user, group: [:category]) do
     def self.blocking(*user_ids)
-      filter { user_id(:or) != user_ids }
+      filter { user_id(:or) != user_ids.flatten }
     end
     field :group_id
     field :user_id
