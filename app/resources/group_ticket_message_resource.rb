@@ -3,4 +3,6 @@ class GroupTicketMessageResource < BaseResource
 
   has_one :ticket
   has_one :user
+
+  filter :ticket
 end
