@@ -1,0 +1,2 @@
+class GroupActionLogsController < ApplicationController
+end

@@ -1,5 +1,5 @@
 class ReportResource < BaseResource
-  attributes :reason, :status, :explanation
+  attributes :reason, :status, :explanation, :naughty_type, :naughty_id
 
   has_one :naughty, polymorphic: true
   has_one :user

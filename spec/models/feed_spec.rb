@@ -18,6 +18,17 @@ RSpec.describe Feed, type: :model do
     end
   end
 
+  describe '#==' do
+    it 'should return true if they refer to the same feed' do
+      expect(subject == subject.dup).to be true
+    end
+
+    it 'should return false if they refer to a different feed' do
+      other = Feed.new('global', 'global')
+      expect(subject == other).to be false
+    end
+  end
+
   describe '.user' do
     subject { Feed.user(1) }
     it 'should return a user feed' do

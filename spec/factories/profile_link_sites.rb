@@ -10,6 +10,7 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :profile_link_site do

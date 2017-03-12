@@ -1,0 +1,2 @@
+class GroupBansController < ApplicationController
+end

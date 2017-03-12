@@ -1,6 +1,6 @@
 require 'active_support/inflector'
 
-guard :rspec, cmd: 'bin/rspec' do
+guard :rspec, cmd: 'bin/rspec -f doc' do
   # spec/*_helper.rb -> all specs
   watch(%r{spec/.*_helper.rb})                        { 'spec' }
   # spec/support/*.rb -> all specs
@@ -18,4 +18,6 @@ guard :rspec, cmd: 'bin/rspec' do
   # app/resources/* and app/policies/* --> controller spec
   watch(%r{^app/resources/(.+)_resource\.rb$})        { |m| "spec/controllers/#{m[1].pluralize}_controller_spec.rb" }
   watch(%r{^app/policies/(.+)_policy\.rb$})           { |m| "spec/controllers/#{m[1].pluralize}_controller_spec.rb" }
+  # spec/factories/*.rb --> factories_spec & related model spec
+  watch(%r{^spec/factories/(.+).rb})                  { |m| ["spec/factories_spec.rb", "spec/models/#{m[1].singularize}_spec.rb"] }
 end

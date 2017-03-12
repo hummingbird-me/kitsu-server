@@ -25,6 +25,13 @@ module AuthenticatedResource
       all = super(context)
       policy.try(:editable_attributes, all) || all
     end
-    alias_method :creatable_fields, :updatable_fields
+
+    def creatable_fields(context)
+      policy = class_policy(context)
+      all = super(context)
+      policy.try(:creatable_attributes, all) ||
+        policy.try(:editable_attributes, all) ||
+        all
+    end
   end
 end

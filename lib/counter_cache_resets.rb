@@ -28,6 +28,13 @@ module CounterCacheResets
     execute sql_for(User, :favorites)
   end
 
+  def groups
+    execute sql_for(Group, :members)
+    execute sql_for(Group, :members,
+      counter_cache_column: 'leaders_count',
+      where: 'rank != 0')
+  end
+
   def reviews
     execute sql_for(User, :reviews)
   end

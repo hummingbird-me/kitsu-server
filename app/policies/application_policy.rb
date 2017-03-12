@@ -100,11 +100,18 @@ class ApplicationPolicy
   # Check the record.user association to see if it's owned by the current user.
   #
   # @return [Boolean] Whether the current user is the owner of the record
-  def is_owner?
+  def is_owner? # rubocop:disable Style/PredicateName
     return false unless user && record.respond_to?(:user)
     return false unless record.user == user
     return false if record.user_id_was && record.user_id_was != user.id
     true
+  end
+
+  # Get a policy instance for a different object, so we can delegate to it.
+  #
+  # @return [ApplicationPolicy] The policy instance for this object
+  def policy_for(model)
+    Pundit.policy!(token, model)
   end
 
   # Provide access control and act as #show?

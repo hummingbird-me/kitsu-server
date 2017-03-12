@@ -14,6 +14,7 @@ gem 'hiredis' # Faster redis
 gem 'pg' # Postgres
 gem 'redis', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
+gem 'where-or' # RAILS-5: Remove this, it just backports AR#where
 
 # Auth{entication,orization}
 gem 'bcrypt'
@@ -50,7 +51,7 @@ gem 'acts_as_list' # Sortables!
 gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
 gem 'hashie' # Souped-up Hashes
-gem 'jsonapi-resources', github: 'cerebris/jsonapi-resources', branch: 'beta'
+gem 'jsonapi-resources', '0.9.0'
 gem 'nokogiri' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks

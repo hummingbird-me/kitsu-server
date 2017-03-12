@@ -90,9 +90,34 @@ RSpec.describe Post, type: :model do
     let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
 
     describe '#stream_activity' do
-      it "should have the mentioned user's feed in the to field" do
-        expect(activity[:to]).to include(user.feed.stream_id)
+      it "should have the target user's feed as the target" do
+        expect(subject.stream_activity.feed).to eq(user.feed)
+      end
+      it "should have the target user's notifications in the to field" do
+        expect(activity[:to]).to include(user.notifications.stream_id)
       end
     end
+  end
+
+  context 'with a target group' do
+    let(:group) { create(:group) }
+    subject { build(:post, target_group: group) }
+
+    describe '#stream_activity' do
+      it "should have the group's feed as the target" do
+        expect(subject.stream_activity.feed).to eq(group.feed)
+      end
+    end
+
+    context 'which is NSFW' do
+      before { group.nsfw = true }
+
+      it 'should automatically be marked NSFW before save' do
+        subject.save!
+        expect(subject.nsfw).to eq(true)
+      end
+    end
+
+    it { should validate_absence_of(:target_user) }
   end
 end

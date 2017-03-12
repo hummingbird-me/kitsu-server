@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: linked_accounts
@@ -23,6 +24,7 @@
 #
 #  fk_rails_166e103170  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :linked_account do

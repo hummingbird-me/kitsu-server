@@ -4,11 +4,14 @@ class Feed
     user_aggr: :aggregated,
     media: :flat,
     media_aggr: :aggregated,
+    group: :flat,
+    group_aggr: :aggregated,
     post: :flat,
+    reports_aggr: :aggregated,
     timeline: :aggregated,
     notifications: :notification,
     global: :aggregated
-  }
+  }.freeze
 
   attr_accessor :stream_feed, :group, :id
   delegate :readonly_token, to: :stream_feed
@@ -29,6 +32,10 @@ class Feed
 
   def unfollow(feed)
     stream_feed.unfollow(feed.group, feed.id)
+  end
+
+  def ==(other)
+    stream_id == other.stream_id
   end
 
   def self.follow_many(follows, scrollback: 100)

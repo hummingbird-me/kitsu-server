@@ -1,4 +1,8 @@
 class MediaResource < BaseResource
+  include SluggableResource
+
+  abstract
+
   # This regex accepts a numerical range or single number
   # $1 = start, $2 = dot representing closed/open, $3 = end
   NUMBER = /(\d+(?:\.\d+)?)/
@@ -34,7 +38,7 @@ class MediaResource < BaseResource
 
   caching
 
-  attributes :slug, :synopsis,
+  attributes :synopsis,
     # Cover image location
     :cover_image_top_offset,
     # Titles
@@ -56,8 +60,6 @@ class MediaResource < BaseResource
   has_many :mappings
   has_many :reviews
   has_many :media_relationships
-
-  filter :slug, apply: -> (records, value, _options) { records.by_slug(value) }
 
   # Common ElasticSearch stuff
   query :year, NUMERIC_QUERY
