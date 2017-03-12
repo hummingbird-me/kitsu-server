@@ -8,11 +8,7 @@ class CannyToken
   end
 
   def to_s
-    cipher = OpenSSL::Cipher.new(ALGORITHM)
-    cipher.encrypt
-    cipher.key = Digest::MD5.digest(ENV['CANNY_SSO_KEY'])
-    encrypted = cipher.update(JSON.generate(user_data)) + cipher.final
-    encrypted.unpack('H*')
+    encrypt(JSON.generate(user_data))
   end
 
   def user_data
@@ -22,5 +18,24 @@ class CannyToken
       id: user.id,
       email: user.email
     }.compact
+  end
+
+  private
+
+  def encrypt(str)
+    encrypted = cipher.update(str) + cipher.final
+    encrypted.unpack('H*')
+  end
+
+  def cipher
+    return @cipher if @cipher
+    @cipher = OpenSSL::Cipher.new(ALGORITHM)
+    @cipher.encrypt
+    @cipher.key = cipher_key
+    @cipher
+  end
+
+  def cipher_key
+    Digest::MD5.digest(ENV['CANNY_SSO_KEY'])
   end
 end
