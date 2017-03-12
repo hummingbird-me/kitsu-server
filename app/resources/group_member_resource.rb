@@ -24,7 +24,7 @@ class GroupMemberResource < BaseResource
     { term: { user_id: values.join(' ') } }
   }
   query :query_rank, apply: ->(values, _ctx) {
-    { term: { rank: values.join(' ') } }
+    { match: { rank: values.join(' ') } }
   }
   query :group_category
   query :group_name,
