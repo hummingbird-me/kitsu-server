@@ -77,13 +77,17 @@ RSpec.describe Group, type: :model do
   it { should validate_length_of(:tagline).is_at_most(60) }
 
   it 'should send the follow to Stream on save' do
-    expect(subject.aggregated_feed).to receive(:follow).with(subject.feed)
+    feed = double('Feed')
+    allow(subject).to receive(:aggregated_feed).and_return(feed)
+    expect(feed).to receive(:follow)
     subject.save!
   end
 
   it 'should remove the follow from Stream on save' do
+    feed = double('Feed')
     subject.save!
-    expect(subject.aggregated_feed).to receive(:unfollow).with(subject.feed)
+    allow(subject).to receive(:aggregated_feed).and_return(feed)
+    expect(feed).to receive(:unfollow).with(subject.feed)
     subject.destroy!
   end
 end
