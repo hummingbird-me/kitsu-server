@@ -14,10 +14,10 @@ class UsersIndex < Chewy::Index
     field :group_id
     field :user_id
     field :rank
-    field :name, value: ->(mem) { mem.user.name }
-    field :past_names, value: ->(mem) { mem.user.past_names }
-    field :group_name, value: ->(mem) { mem.group.name }
-    field :group_category, value: ->(mem) { mem.group.category.slug }
+    field :name, value: ->(mem) { mem.user&.name }
+    field :past_names, value: ->(mem) { mem.user&.past_names }
+    field :group_name, value: ->(mem) { mem.group&.name }
+    field :group_category, value: ->(mem) { mem.group&.category&.slug }
     field :created_at
   end
 end
