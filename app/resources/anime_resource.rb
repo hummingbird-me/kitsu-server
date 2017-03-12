@@ -1,7 +1,7 @@
 class AnimeResource < MediaResource
   include EpisodicResource
 
-  attributes :subtype, :youtube_video_id
+  attributes :youtube_video_id
   attribute :show_type # DEPRECATED
   attribute :nsfw, delegate: :nsfw?
   has_many :streaming_links
