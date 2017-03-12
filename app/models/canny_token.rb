@@ -24,7 +24,7 @@ class CannyToken
 
   def encrypt(str)
     encrypted = cipher.update(str) + cipher.final
-    encrypted.unpack('H*')
+    encrypted.unpack('H*').join
   end
 
   def cipher
