@@ -38,6 +38,6 @@ class GroupTicketMessage < ApplicationRecord
   }
 
   after_create do
-    ticket.first_message ||= self
+    ticket.update(first_message: self) unless ticket.first_message
   end
 end
