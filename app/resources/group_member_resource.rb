@@ -1,5 +1,6 @@
 class GroupMemberResource < BaseResource
   include SortableByFollowing
+  include GroupActionLogger
 
   attributes :rank, :created_at, :unread_count
 
@@ -76,4 +77,9 @@ class GroupMemberResource < BaseResource
   def self.sortable_fields(context)
     super(context) << :'group.last_activity_at'
   end
+
+  log_verb do |action|
+    'kicked' if action == :destroy
+  end
+  log_target :user
 end
