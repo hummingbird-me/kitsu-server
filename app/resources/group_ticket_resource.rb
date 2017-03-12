@@ -33,7 +33,9 @@ class GroupTicketResource < BaseResource
     }
 
   log_verb do |action|
-    status if action == :update && previous_changes.include? 'status'
+    if action == :update && previous_changes.include?('status')
+      status
+    end
   end
   log_target []
 end
