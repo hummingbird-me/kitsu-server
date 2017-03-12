@@ -8,7 +8,7 @@ class UsersIndex < Chewy::Index
     field :updated_at
   end
   define_type GroupMember.includes(:user, group: [:category]) do
-    def self.blocking(users)
+    def self.blocking(*user_ids)
       filter { user_id(:or) != user_ids }
     end
     field :group_id
