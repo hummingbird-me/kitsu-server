@@ -275,7 +275,7 @@ class User < ApplicationRecord
     timeline.follow(feed)
     Feed.global.follow(feed)
     # Automatically join "Kitsu" group
-    GroupMember.create!(user: self, group: 1830) if Group.exists?(1830)
+    GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
   end
 
   after_save do
