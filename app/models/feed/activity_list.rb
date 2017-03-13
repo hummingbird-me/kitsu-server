@@ -18,7 +18,8 @@ class Feed
       @selects = []
       @limit_ratio = 1.0
       @more = true
-      @data[:limit] = 25
+      @page_size = @data[:limit] ||= 25
+      @page_number = 1
     end
 
     def page(page_number = nil, id_lt: nil)
@@ -64,8 +65,19 @@ class Feed
 
     def includes(*relationships)
       including = [relationships].flatten.map(&:to_s)
-      # Hardwire subject->object, convert to symbols
-      including.map! { |inc| inc.sub('subject', 'object').to_sym }
+      # Hardwire subject->object
+      including.map! { |inc| inc.sub('subject', 'object') }
+
+      with_subreferences = including.each_with_object({}) do |inc, subs|
+        field, reference = inc.split('.')
+        (subs[field.to_sym] ||= []) << reference&.to_sym
+      end
+
+      including = with_subreferences.map do |field, references|
+        references = references&.compact
+        references&.any? ? [field, references.uniq] : field
+      end
+
       @including += including
       self
     end
@@ -164,7 +176,7 @@ class Feed
 
     def get_page(id_lt: nil, limit: nil)
       # Extract non-pagination payload data
-      data = @data.slice(:ranking, :mark_seen, :mark_read, :limit)
+      data = @data.slice(:ranking, :mark_seen, :mark_read, :limit, :id_lte)
       # Apply our id_gt for pagination
       data = data.merge(id_lt: id_lt) if id_lt
       # Apply the limit ratio, apply it to the data
@@ -174,12 +186,28 @@ class Feed
       # If the page we got is the right number, there's more to grab
       @more = res.count == data[:limit]
       return nil if res.count.zero?
+
+      # Remove everything but the last activity in each group
+      # except for those that are for library entries
+      strip_unused!(res)
+
       # Enrich them, apply select and map filters to them
       res = enrich(res)
       res = apply_select(res)
       res = apply_maps(res)
+
       # Remove any nils just to be safe
       res.compact
+    end
+
+    def strip_unused!(activities)
+      activities.each do |group|
+        next unless group['activities'] &&
+                    %w[post comment follow review].include?(group['verb'])
+
+        group['activities'] = [group['activities'].first]
+      end
+      activities
     end
 
     # Loads in included associations, converts to Feed::Activity[Group]
@@ -232,6 +260,7 @@ class Feed
         activity.dup.tap do |act|
           # For each field we've asked to have included
           including.each do |key|
+            key = key.first if key.is_a? Array
             # Delete it if it's still a String
             act.delete_field(key) if act[key].is_a? String
           end

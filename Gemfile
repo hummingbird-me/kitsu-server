@@ -3,6 +3,7 @@ ruby '2.3.1'
 
 # Core Stuff
 gem 'puma'
+gem 'puma_worker_killer'
 gem 'rails', '4.2.1'
 gem 'rails-api'
 
@@ -12,7 +13,7 @@ gem 'chewy' # ElasticSearch
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
 gem 'pg' # Postgres
-gem 'redis', require: ['redis', 'redis/connection/hiredis'] # Redis
+gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
 gem 'where-or' # RAILS-5: Remove this, it just backports AR#where
 
@@ -34,7 +35,7 @@ gem 'paperclip', '~> 5.0'
 gem 'paperclip-optimizer'
 
 # Background tasks
-gem 'sidekiq', '~> 3.4.2'
+gem 'sidekiq', '~> 3.5.1'
 gem 'sidetiq'
 
 # Text pipeline
@@ -56,8 +57,8 @@ gem 'nokogiri' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'stream-ruby', '~> 2.5.1'
-gem 'stream_rails' # Feeds
+gem 'stream-ruby', '~> 2.5.2'
+gem 'stream_rails', github: 'GetStream/stream-rails', branch: 'feature/subreference-enrichment' # Feeds
 gem 'typhoeus' # Parallelize scraping tasks
 
 # Rack Middleware

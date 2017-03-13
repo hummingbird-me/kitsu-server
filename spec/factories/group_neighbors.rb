@@ -22,7 +22,7 @@
 
 FactoryGirl.define do
   factory :group_neighbor do
-    association :source, factory: :group, strategy: :build
-    association :destination, factory: :group, strategy: :build
+    association :source, factory: :group
+    association :destination, factory: :group
   end
 end

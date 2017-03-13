@@ -26,8 +26,8 @@
 FactoryGirl.define do
   factory :group_action_log do
     association :target, factory: :group_invite, strategy: :create
-    association :group, strategy: :build
-    association :user, strategy: :build
+    association :group
+    association :user
     verb { Faker::Lorem.word }
   end
 end

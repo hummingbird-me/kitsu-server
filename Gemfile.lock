@@ -1,4 +1,15 @@
 GIT
+  remote: git://github.com/GetStream/stream-rails.git
+  revision: 6e9a74d08516e3cc820c8dc866de659193bd56bc
+  branch: feature/subreference-enrichment
+  specs:
+    stream_rails (2.5.1)
+      actionpack (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      railties (>= 3.0.0)
+      stream-ruby (~> 2.4)
+
+GIT
   remote: git://github.com/vevix/twemoji.git
   revision: 00b98685e46faa92d7d0109293ca8092e34735c5
   specs:
@@ -73,8 +84,23 @@ GEM
     bcrypt (3.1.11)
     buftok (0.2.0)
     builder (3.2.2)
-    celluloid (0.16.0)
-      timers (~> 4.0.0)
+    celluloid (0.17.3)
+      celluloid-essentials
+      celluloid-extras
+      celluloid-fsm
+      celluloid-pool
+      celluloid-supervision
+      timers (>= 4.1.1)
+    celluloid-essentials (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-extras (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-fsm (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-pool (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-supervision (0.20.6)
+      timers (>= 4.1.1)
     chewy (0.8.4)
       activesupport (>= 3.2)
       elasticsearch (>= 1.0.0)
@@ -86,7 +112,7 @@ GEM
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.1)
     concurrent-ruby (1.0.4)
-    connection_pool (2.2.0)
+    connection_pool (2.2.1)
     counter_culture (0.2.2)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -139,6 +165,7 @@ GEM
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
     fspath (2.1.1)
+    get_process_mem (0.2.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     guard (2.14.0)
@@ -187,7 +214,7 @@ GEM
     image_size (1.4.2)
     in_threads (1.3.1)
     jmespath (1.3.0)
-    json (1.8.3)
+    json (1.8.6)
     json_expressions (0.8.3)
     jsonapi-resources (0.9.0)
       activerecord (>= 4.1)
@@ -262,6 +289,9 @@ GEM
       pry (>= 0.9.10)
     public_suffix (2.0.4)
     puma (3.4.0)
+    puma_worker_killer (0.0.7)
+      get_process_mem (~> 0.2)
+      puma (>= 2.7, < 4)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     pundit-resources (1.1.1)
@@ -311,7 +341,7 @@ GEM
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
-    redis (3.3.0)
+    redis (3.3.3)
     redis-actionpack (5.0.0)
       actionpack (>= 4.0.0, < 6)
       redis-rack (~> 2.0.0.pre)
@@ -319,7 +349,7 @@ GEM
     redis-activesupport (5.0.1)
       activesupport (>= 3, < 6)
       redis-store (~> 1.2.0)
-    redis-namespace (1.5.2)
+    redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
     redis-rack (2.0.0.pre)
       rack (> 1.5, < 3)
@@ -368,8 +398,8 @@ GEM
     shellany (0.0.1)
     shoulda-matchers (3.1.1)
       activesupport (>= 4.0.0)
-    sidekiq (3.4.2)
-      celluloid (~> 0.16.0)
+    sidekiq (3.5.4)
+      celluloid (~> 0.17.2)
       connection_pool (~> 2.2, >= 2.2.0)
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
@@ -395,19 +425,14 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stream-ruby (2.5.1)
+    stream-ruby (2.5.2)
       faraday (~> 0.10.0)
       http_signatures (~> 0)
       jwt (= 1.5.2)
-    stream_rails (2.5.0)
-      actionpack (>= 3.0.0)
-      activerecord (>= 3.0.0)
-      railties (>= 3.0.0)
-      stream-ruby (~> 2.4)
     thor (0.19.4)
     thread_safe (0.3.5)
     timecop (0.8.1)
-    timers (4.0.4)
+    timers (4.1.2)
       hitimes
     twitter (6.0.0)
       addressable (~> 2.5)
@@ -476,6 +501,7 @@ DEPENDENCIES
   pg
   pry-rails
   puma
+  puma_worker_killer
   pundit
   pundit-resources
   rack-attack
@@ -483,7 +509,7 @@ DEPENDENCIES
   rails (= 4.2.1)
   rails-api
   rails_12factor
-  redis
+  redis (> 3.3.0)
   redis-rails
   rinku
   rolify
@@ -493,13 +519,13 @@ DEPENDENCIES
   sanitize
   sentry-raven
   shoulda-matchers
-  sidekiq (~> 3.4.2)
+  sidekiq (~> 3.5.1)
   sidetiq
   simplecov
   sitemap_generator
   spring
-  stream-ruby (~> 2.5.1)
-  stream_rails
+  stream-ruby (~> 2.5.2)
+  stream_rails!
   timecop
   twemoji!
   twitter
@@ -511,4 +537,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.5
+   1.14.5
