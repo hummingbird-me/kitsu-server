@@ -68,10 +68,9 @@ class Feed
       # Hardwire subject->object
       including.map! { |inc| inc.sub('subject', 'object') }
 
-      with_subreferences = including.inject({}) do |subs, inc|
+      with_subreferences = including.each_with_object({}) do |inc, subs|
         field, reference = inc.split('.')
         (subs[field.to_sym] ||= []) << reference&.to_sym
-        subs
       end
 
       including = with_subreferences.map do |field, references|
@@ -188,7 +187,7 @@ class Feed
       @more = res.count == data[:limit]
       return nil if res.count.zero?
 
-      # Remove everything but the last activity in each group
+      # Remove everything but the last activity in each group
       # except for those that are for library entries
       strip_unused!(res)
 
@@ -203,11 +202,10 @@ class Feed
 
     def strip_unused!(activities)
       activities.each do |group|
-        if group['activities'] &&
-          ['post', 'comment', 'follow', 'review'].include?(group['verb'])
+        next unless group['activities'] &&
+                    %w[post comment follow review].include?(group['verb'])
 
-          group['activities'] = [group['activities'].first]
-        end
+        group['activities'] = [group['activities'].first]
       end
       activities
     end

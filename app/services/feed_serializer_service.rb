@@ -79,16 +79,14 @@ class FeedSerializerService
   end
 
   def stream_enrichment_fields
-    @including.inject([]) do |includes, inc|
+    @including.each_with_object([]) do |inc, includes|
       field, reference = inc.split('.')
 
       if (field == 'subject' || field == 'target') && !reference.nil?
-        includes += non_polymorphic_references(reference)
+        includes.push(*non_polymorphic_references(reference))
       else
         includes << field
       end
-
-      includes
     end
   end
 
@@ -122,11 +120,10 @@ class FeedSerializerService
   def non_polymorphic_references(reference, models: nil)
     models ||= [Post, Comment, LibraryEntry]
 
-    models.inject([]) do |references, model|
+    models.each_with_object([]) do |model, references|
       if model.reflections.keys.include?(reference)
         references << "#{model.name.underscore}.#{reference}"
       end
-      references
     end
   end
 end
