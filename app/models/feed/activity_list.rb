@@ -13,7 +13,12 @@ class Feed
     def initialize(feed, data = {})
       @feed = feed
       @data = data.with_indifferent_access
-      @including = []
+      # TODO: :target, :actor and :object are getting forced in by
+      # the subreference-enrichment branch of stream-rails.
+      # We need a PR for stream-rails to make it optional as it is
+      # in their master branch. Better yet, get subreference enrichment
+      # in master.
+      @including = %w[target actor object]
       @maps = []
       @selects = []
       @limit_ratio = 1.0
