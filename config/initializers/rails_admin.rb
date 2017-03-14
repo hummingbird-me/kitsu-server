@@ -54,7 +54,7 @@ RailsAdmin.config do |config|
   end
 
   # Omitted for security reasons (and Franchise/Casting/Installment deprecated)
-  config.excluded_models << %w[
+  config.excluded_models += %w[
     LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink
     ReviewLike UserRole Role GroupTicket Franchise Casting Report CommentLike
     Installment
