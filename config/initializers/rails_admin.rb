@@ -55,6 +55,9 @@ RailsAdmin.config do |config|
     show_in_app
   end
 
+  # Display canonical_title for label on media
+  config.label_methods << :canonical_title
+
   # Omitted for security reasons (and Franchise/Casting/Installment deprecated)
   config.excluded_models += %w[
     LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink
