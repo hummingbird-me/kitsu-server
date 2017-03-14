@@ -50,7 +50,9 @@ class MediaResource < BaseResource
     # Rankings
     :popularity_rank, :rating_rank,
     # Age Ratings
-    :age_rating, :age_rating_guide
+    :age_rating, :age_rating_guide,
+    # Subtype
+    :subtype
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
