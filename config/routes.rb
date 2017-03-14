@@ -1,4 +1,6 @@
 # rubocop:disable Metrics/BlockLength
+require 'sidekiq/web'
+require 'admin_constraint'
 
 Rails.application.routes.draw do
   scope '/edge' do
@@ -106,6 +108,7 @@ Rails.application.routes.draw do
 
   ### Admin Panel
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint
   resources :sessions, only: %i[new create]
 
   ### Debug APIs
