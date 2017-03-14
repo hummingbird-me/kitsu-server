@@ -52,4 +52,47 @@ RailsAdmin.config do |config|
     end
     show_in_app
   end
+
+  # Omitted for security reasons (and Franchise/Casting/Installment deprecated)
+  config.excluded_models << %w[
+    LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink
+    ReviewLike UserRole Role GroupTicket Franchise Casting Report CommentLike
+    Installment
+  ]
+
+  # Anime
+  config.model('AnimeCasting') { parent Anime }
+  config.model('AnimeCharacter') { parent Anime }
+  config.model('AnimeProduction') { parent Anime }
+  config.model('AnimeStaff') { parent Anime }
+  # Manga
+  config.model('MangaCharacter') { parent Manga }
+  config.model('MangaStaff') { parent Manga }
+  config.model('Chapter') { parent Manga }
+  # Drama
+  config.model('DramaCasting') { parent Drama }
+  config.model('DramaCharacter') { parent Drama }
+  config.model('DramaStaff') { parent Drama }
+
+  # Groups
+  config.model('GroupActionLog') { parent Group }
+  config.model('GroupBan') { parent Group }
+  config.model('GroupCategory') { parent Group }
+  config.model('GroupInvite') { parent Group }
+  config.model('GroupMember') { parent Group }
+  config.model('GroupMemberNote') { parent GroupMember }
+  config.model('GroupPermission') { parent GroupMember }
+  config.model('GroupNeighbor') { parent Group }
+  config.model('GroupReport') { parent Group }
+  config.model('GroupTicket') { parent Group }
+  config.model('GroupTicketMessage') { parent GroupTicket }
+
+  # Users
+  config.model('ListImport') { parent User }
+  config.model('Favorite') { parent User }
+  config.model('Marathon') { parent User }
+  config.model('MarathonEvent') { parent User }
+
+  # Feed
+  config.model('Comment') { parent Post }
 end
