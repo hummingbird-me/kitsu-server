@@ -62,7 +62,7 @@ RailsAdmin.config do |config|
   config.excluded_models += %w[
     LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink
     ReviewLike UserRole Role GroupTicket Franchise Casting Report CommentLike
-    Installment
+    Installment LinkedAccount::MyAnimeList
   ]
 
   # Anime
