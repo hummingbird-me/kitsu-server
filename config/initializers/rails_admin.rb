@@ -66,20 +66,32 @@ RailsAdmin.config do |config|
   ]
 
   # Anime
+  config.model 'Anime' do
+    navigation_label 'Anime'
+  end
   config.model('AnimeCasting') { parent Anime }
   config.model('AnimeCharacter') { parent Anime }
   config.model('AnimeProduction') { parent Anime }
   config.model('AnimeStaff') { parent Anime }
   # Manga
+  config.model 'Manga' do
+    navigation_label 'Manga'
+  end
   config.model('MangaCharacter') { parent Manga }
   config.model('MangaStaff') { parent Manga }
   config.model('Chapter') { parent Manga }
   # Drama
+  config.model 'Drama' do
+    navigation_label 'Drama'
+  end
   config.model('DramaCasting') { parent Drama }
   config.model('DramaCharacter') { parent Drama }
   config.model('DramaStaff') { parent Drama }
 
   # Groups
+  config.model 'Groups' do
+    navigation_label 'Groups'
+  end
   config.model('GroupActionLog') { parent Group }
   config.model('GroupBan') { parent Group }
   config.model('GroupCategory') { parent Group }
