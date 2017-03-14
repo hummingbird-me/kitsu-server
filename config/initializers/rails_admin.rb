@@ -10,7 +10,9 @@ RailsAdmin.config do |config|
   config.audit_with :history
 
   config.actions do
-    dashboard                     # mandatory
+    dashboard do                  # mandatory
+      statistics false
+    end
     index                         # mandatory
     new
     export
