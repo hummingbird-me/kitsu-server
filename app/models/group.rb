@@ -43,6 +43,8 @@
 #
 # rubocop:enable Metrics/LineLength
 
+require_dependency 'html/pipeline/kitsu_mention_filter'
+
 class Group < ApplicationRecord
   include WithAvatar
   include WithCoverImage

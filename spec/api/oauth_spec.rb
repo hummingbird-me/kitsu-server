@@ -1,3 +1,4 @@
+require 'rails_helper'
 require 'oauth2'
 
 RSpec.describe 'OAuth2', type: :request do

@@ -41,7 +41,8 @@ module Kitsu
     config.eager_load_paths.uniq!
 
     # Allow autoloading any lib files
-    config.autoload_paths << "#{Rails.root}/lib"
+    # TODO: fix or kill rails_admin, bring this back
+    # config.autoload_paths << "#{Rails.root}/lib"
 
     config.api_only = false
 
