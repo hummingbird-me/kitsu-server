@@ -35,7 +35,7 @@ class LibraryEntryLog < ApplicationRecord
   validates_presence_of :action_performed, :sync_status
 
   def self.create_for(method, library_entry, linked_account_id)
-    LibraryEntryLog.create(
+    LibraryEntryLog.create!(
       media_type: library_entry.media_type,
       media_id: library_entry.media_id,
       progress: library_entry.progress,
@@ -46,7 +46,7 @@ class LibraryEntryLog < ApplicationRecord
       volumes_owned: library_entry.volumes_owned,
       # action_performed is either create, update, destroy
       action_performed: method,
-      linked_account_id: linked_account_id
+      linked_account: linked_account_id
     )
   end
 end
