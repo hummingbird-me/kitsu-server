@@ -50,9 +50,7 @@ class MediaResource < BaseResource
     # Rankings
     :popularity_rank, :rating_rank,
     # Age Ratings
-    :age_rating, :age_rating_guide,
-    # Subtype
-    :subtype
+    :age_rating, :age_rating_guide
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
@@ -72,6 +70,7 @@ class MediaResource < BaseResource
   query :year, NUMERIC_QUERY
   query :average_rating, NUMERIC_QUERY
   query :user_count, NUMERIC_QUERY
+  query :subtype
   query :genres,
     apply: -> (values, _ctx) {
       { match: { genres: { query: values.join(' '), operator: 'and' } } }
