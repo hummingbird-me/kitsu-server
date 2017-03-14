@@ -158,11 +158,12 @@ class Feed
       return @results if @results
       @results = []
       requested_count = page_size || data[:limit]
-      last_id = data[:id_lt]
+      next_page = { id_lt: data[:id_lt] }
       loop.with_index do |_, i|
-        page_size = [(real_page_size * (1.2**i)).to_i, 100].min
-        page = get_page(id_lt: last_id, limit: page_size)
-        @results += page if page
+        next_page[:limit] = [(real_page_size * (1.2**i)).to_i, 100].min
+        page = get_page(next_page)
+        next_page = page[:next_page]
+        @results += page[:data] if page
         @termination_reason = 'empty' if page.nil?
         @termination_reason = 'iterations' if i >= 10
         @termination_reason = 'full' if @results.count >= requested_count
@@ -179,17 +180,26 @@ class Feed
 
     private
 
-    def get_page(id_lt: nil, limit: nil)
+    # Get a single page from the Stream API, using an `id_(l|g)te?` filter
+    #
+    # Used internally to get a single raw iteration of the filter loop for
+    # processing by the filter stuff.
+    #
+    # @return { next_page: { id_gt: } }
+    def get_page(page_opts)
+      opts = {}
       # Extract non-pagination payload data
-      data = @data.slice(:ranking, :mark_seen, :mark_read, :limit, :id_lte)
+      opts.merge!(@data.slice(:ranking, :mark_seen, :mark_read, :limit))
       # Apply our id_gt for pagination
-      data = data.merge(id_lt: id_lt) if id_lt
-      # Apply the limit ratio, apply it to the data
-      data[:limit] = limit || real_page_size
+      opts.merge!(page_opts)
+      opts.compact!
+
       # Actually load results
-      res = feed.stream_feed.get(data)['results']
+      res = feed.stream_feed.get(opts)['results']
+      # Store the last ID in the page
+      next_page = get_next_page(res)
       # If the page we got is the right number, there's more to grab
-      @more = res.count == data[:limit]
+      @more = res.count == opts[:limit]
       return nil if res.count.zero?
 
       # Remove everything but the last activity in each group
@@ -202,7 +212,23 @@ class Feed
       res = apply_maps(res)
 
       # Remove any nils just to be safe
-      res.compact
+      { next_page: next_page, data: res.compact }
+    end
+
+    def get_next_page(results)
+      if pagination_direction == :lt
+        { id_lt: results.last['id'] }
+      else
+        { id_gt: results.first['id'] }
+      end
+    end
+
+    def pagination_direction
+      if data[:id_gt] || data[:id_gte]
+        :gt
+      else
+        :lt
+      end
     end
 
     def strip_unused!(activities)
