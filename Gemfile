@@ -36,7 +36,7 @@ gem 'paperclip-optimizer'
 
 # Background tasks
 gem 'sidekiq', '~> 3.5.1'
-gem 'sidetiq'
+gem 'sidekiq-scheduler'
 
 # Text pipeline
 gem 'html-pipeline'
