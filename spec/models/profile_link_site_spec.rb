@@ -65,12 +65,11 @@ RSpec.describe ProfileLinkSite, type: :model do
     # Youtube
     describe 'Youtube' do
       context 'success' do
-        it 'should return a username' do
+        it 'should work with /channel (unique) channel' do
           urls = %w[
             youtube.com/channel/UC_-Zt4dWU1bT52tG-DHGftg
             https://www.youtube.com/channel/UC_-Zt4dWU1bT52tG-DHGftg
             https://youtube.com/channel/UC_-Zt4dWU1bT52tG-DHGftg
-            UC_-Zt4dWU1bT52tG-DHGftg
           ]
           site = build(:profile_link_site, :youtube)
 
@@ -78,6 +77,33 @@ RSpec.describe ProfileLinkSite, type: :model do
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('UC_-Zt4dWU1bT52tG-DHGftg')
           end
+        end
+
+        it 'should work with /c (custom) channel' do
+          url = 'youtube.com/c/toyhammered'
+          site = build(:profile_link_site, :youtube)
+
+          temp = site.validate_find.match(url)
+          expect(temp[:channel]).to eq('c')
+          expect(temp[:username]).to eq('toyhammered')
+        end
+
+        it 'should work with blank channel' do
+          url = 'youtube.com/toyhammered'
+          site = build(:profile_link_site, :youtube)
+
+          temp = site.validate_find.match(url)
+          expect(temp[:channel]).to eq(nil)
+          expect(temp[:username]).to eq('toyhammered')
+        end
+
+        it 'should work with /user channel' do
+          url = 'youtube.com/user/toyhammered'
+          site = build(:profile_link_site, :youtube)
+
+          temp = site.validate_find.match(url)
+          expect(temp[:channel]).to eq('user')
+          expect(temp[:username]).to eq('toyhammered')
         end
       end
     end

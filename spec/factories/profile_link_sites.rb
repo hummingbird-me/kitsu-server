@@ -32,8 +32,8 @@ FactoryGirl.define do
 
     # Youtube
     trait :youtube do
-      validate_find '\A(https?://)?(www.)?(youtube.com/channel/)?(?<username>[a-zA-Z0-9_\-]+)\z'
-      validate_replace 'https://youtube.com/channel/\k<username>'
+      validate_find '\A(https?://)?(www.)?(youtube.com/)?(?<channel>user|c|channel)?/?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://youtube.com/\k<channel>/\k<username>'
     end
 
     # Google
