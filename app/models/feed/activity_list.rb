@@ -134,7 +134,7 @@ class Feed
     #                                 enriched for this select to work
     def select(ratio = 1.0, including: nil, &block)
       @limit_ratio *= ratio
-      if includes
+      if including
         includes(including)
         @slow_selects << block
       else
