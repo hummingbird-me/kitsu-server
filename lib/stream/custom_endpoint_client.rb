@@ -55,5 +55,10 @@ module Stream
     def upload_meta(metadata)
       post 'meta/', data: metadata
     end
+
+    def profile_strength(user)
+      user = user.id if user.respond_to?(:id)
+      get("profile_strength/#{user}/").body
+    end
   end
 end
