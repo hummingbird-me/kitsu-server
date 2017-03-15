@@ -20,7 +20,8 @@ class Feed
       # in master.
       @including = %w[target actor object]
       @maps = []
-      @selects = []
+      @slow_selects = []
+      @fast_selects = []
       @limit_ratio = 1.0
       @page_size = @data[:limit] ||= 25
       @page_number = 1
