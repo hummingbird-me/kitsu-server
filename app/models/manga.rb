@@ -66,9 +66,8 @@ class Manga < ApplicationRecord
   def slug_candidates
     [
       -> { canonical_title }, # attack-on-titan
-      -> { titles[:en_jp] }, # shingeki-no-kyojin
-      -> { [titles[:en_jp], year] }, # shingeki-no-kyojin-2004
-      -> { [titles[:en_jp], year, subtype] } # shingeki-no-kyojin-2004-doujin
+      -> { [canonical_title, year] }, # attack-on-titan-2004
+      -> { [canonical_title, year, subtype] } # attack-on-titan-2004-doujin
     ]
   end
 end
