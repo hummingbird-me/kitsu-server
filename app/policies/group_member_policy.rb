@@ -2,7 +2,8 @@ class GroupMemberPolicy < ApplicationPolicy
   include GroupPermissionsHelpers
 
   def update?
-    has_group_permission?(:members)
+    required_permission = record.pleb? ? :members : :leaders
+    has_group_permission?(required_permission)
   end
 
   def create?
@@ -12,7 +13,8 @@ class GroupMemberPolicy < ApplicationPolicy
   end
 
   def destroy?
-    is_owner? || has_group_permission?(:members)
+    required_permission = record.pleb? ? :members : :leaders
+    is_owner? || has_group_permission?(required_permission)
   end
 
   class Scope < Scope
