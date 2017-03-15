@@ -22,7 +22,6 @@ class Feed
       @maps = []
       @selects = []
       @limit_ratio = 1.0
-      @more = true
       @page_size = @data[:limit] ||= 25
       @page_number = 1
     end
@@ -47,8 +46,8 @@ class Feed
 
     def sfw
       select do |act|
-        throw :remove_group if act.nsfw?
-        act.sfw?
+        throw :remove_group if act[:nsfw]
+        act[:nsfw] != true
       end
       self
     end
@@ -56,11 +55,7 @@ class Feed
     def blocking(users)
       blocked = Set.new(users)
       select do |act|
-        user_id = if act.actor.respond_to?(:id)
-                    act.actor.id
-                  elsif act.actor
-                    act.actor.split(':')[1].to_i
-                  end
+        user_id = act.actor.split(':')[1].to_i
         will_block = blocked.include?(user_id)
         throw :remove_group if will_block && act.verb == 'post'
         !will_block
@@ -134,9 +129,16 @@ class Feed
 
     # @attr [Float] ratio The expected percentage of posts that will be matched
     #                     by this selector
-    def select(ratio = 1.0, &block)
+    # @attr [Array<String>] including The attributes which will need to be
+    #                                 enriched for this select to work
+    def select(ratio = 1.0, including: nil, &block)
       @limit_ratio *= ratio
-      @selects << block
+      if includes
+        includes(including)
+        @slow_selects << block
+      else
+        @fast_selects << block
+      end
       self
     end
 
@@ -145,158 +147,36 @@ class Feed
       self
     end
 
-    def more?
-      to_a if @results.nil?
-      @more
-    end
-
-    def real_page_size
-      [(data[:limit] / @limit_ratio).to_i, 100].min
-    end
-
-    def to_a
-      return @results if @results
-      @results = []
-      requested_count = page_size || data[:limit]
-      next_page = { id_lt: data[:id_lt] }
-      loop.with_index do |_, i|
-        next_page[:limit] = [(real_page_size * (1.2**i)).to_i, 100].min
-        page = get_page(next_page)
-        next_page = page[:next_page]
-        @results += page[:data] if page
-        @termination_reason = 'empty' if page.nil?
-        @termination_reason = 'iterations' if i >= 10
-        @termination_reason = 'full' if @results.count >= requested_count
-        if @results.count >= requested_count || i >= 10 || page.nil?
-          @results = @results[0..(requested_count - 1)]
-          return @results
-        end
-      end
-    end
-
     def empty?
       to_a.empty?
     end
 
+    def to_a
+      fetcher.to_a
+    end
+
+    def more?
+      fetcher.more?
+    end
+
     private
 
-    # Get a single page from the Stream API, using an `id_(l|g)te?` filter
-    #
-    # Used internally to get a single raw iteration of the filter loop for
-    # processing by the filter stuff.
-    #
-    # @return { next_page: { id_gt: } }
-    def get_page(page_opts)
-      opts = {}
-      # Extract non-pagination payload data
-      opts.merge!(@data.slice(:ranking, :mark_seen, :mark_read, :limit))
-      # Apply our id_gt for pagination
-      opts.merge!(page_opts)
-      opts.compact!
-
-      # Actually load results
-      res = feed.stream_feed.get(opts)['results']
-      # Store the last ID in the page
-      next_page = get_next_page(res)
-      # If the page we got is the right number, there's more to grab
-      @more = res.count == opts[:limit]
-      return nil if res.count.zero?
-
-      # Remove everything but the last activity in each group
-      # except for those that are for library entries
-      strip_unused!(res)
-
-      # Enrich them, apply select and map filters to them
-      res = enrich(res)
-      res = apply_select(res)
-      res = apply_maps(res)
-
-      # Remove any nils just to be safe
-      { next_page: next_page, data: res.compact }
+    def fetcher
+      @fetcher ||= Fetcher.new(
+        stream_options: data,
+        fetcher_options: fetcher_options
+      )
     end
 
-    def get_next_page(results)
-      if pagination_direction == :lt
-        { id_lt: results.last['id'] }
-      else
-        { id_gt: results.first['id'] }
-      end
-    end
-
-    def pagination_direction
-      if data[:id_gt] || data[:id_gte]
-        :gt
-      else
-        :lt
-      end
-    end
-
-    def strip_unused!(activities)
-      activities.each do |group|
-        next unless group['activities'] &&
-                    %w[post comment follow review].include?(group['verb'])
-
-        group['activities'] = [group['activities'].first]
-      end
-      activities
-    end
-
-    # Loads in included associations, converts to Feed::Activity[Group]
-    # instances and removes any unfound association data to not break JR
-    def enrich(activities)
-      enricher = StreamRails::Enrich.new(including)
-      if feed.aggregated? || feed.notification?
-        activities = enricher.enrich_aggregated_activities(activities)
-        activities = activities.map { |ag| Feed::ActivityGroup.new(feed, ag) }
-      else
-        activities = enricher.enrich_activities(activities)
-        activities = activities.map { |a| Feed::Activity.new(feed, a) }
-      end
-      activities.map { |act| strip_unfound(act) }
-    end
-
-    def apply_select(activities)
-      activities.lazy.map { |act|
-        if act.respond_to?(:activities)
-          catch(:remove_group) do
-            act.activities = apply_select(act.activities)
-            act
-          end
-        else
-          next unless @selects.all? { |proc| proc.call(act) }
-          act
-        end
-      }.reject(&:blank?).to_a
-    end
-
-    def apply_maps(activities)
-      activities.map do |act|
-        if act.respond_to?(:activities)
-          act.activities = apply_maps(act.activities)
-          act
-        else
-          @maps.reduce(act) { |acc, elem| elem.call(acc) }
-        end
-      end
-    end
-
-    # Strips unfound
-    def strip_unfound(activity)
-      # Recurse into activities if we're passed an ActivityGroup
-      if activity.respond_to?(:activities)
-        activity.dup.tap do |ag|
-          ag.activities = activity.activities.map { |a| strip_unfound(a) }
-        end
-      else
-        activity.dup.tap do |act|
-          # For each field we've asked to have included
-          including.each do |key|
-            key = key.first if key.is_a? Array
-            # Delete it if it's still a String
-            act.delete_field(key) if act[key].is_a? String
-          end
-        end
-      end
+    def fetcher_options
+      {
+        slow_selects: @slow_selects,
+        fast_selects: @fast_selects,
+        maps: @maps,
+        limit_ratio: @limit_ratio,
+        includes: @including,
+        feed: @feed
+      }
     end
   end
 end
