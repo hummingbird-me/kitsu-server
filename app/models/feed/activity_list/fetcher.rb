@@ -81,9 +81,9 @@ class Feed
       # Gets the id_lt/id_gt of the next page, for a given page of data
       def get_next_page(data)
         if pagination_direction == :lt
-          { id_lt: data.last['id'] }
+          { id_lt: data.last&.[]('id') }
         else
-          { id_gt: data.first['id'] }
+          { id_gt: data.first&.[]('id') }
         end
       end
 

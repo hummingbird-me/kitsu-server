@@ -55,9 +55,9 @@ class Feed
     def blocking(users)
       blocked = Set.new(users)
       select do |act|
-        user_id = act.actor.split(':')[1].to_i
+        user_id = act['actor'].split(':')[1].to_i
         will_block = blocked.include?(user_id)
-        throw :remove_group if will_block && act.verb == 'post'
+        throw :remove_group if will_block && act['verb'] == 'post'
         !will_block
       end
       self
@@ -104,7 +104,8 @@ class Feed
     end
 
     def find(id)
-      where_id(:lte, id).limit(1).to_a.first
+      act = feed.stream_feed.get(id_lte: id, limit: 1)['results'].first
+      Feed::Activity.new(feed, act)
     end
 
     def add(activity)

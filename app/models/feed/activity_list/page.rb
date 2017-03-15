@@ -18,7 +18,6 @@ class Feed
         res = data
         res = apply_selects(res, opts[:fast_selects] || [])
         res = strip_unused(res)
-        p res
         res = enrich(res, opts[:includes] || [])
         res = strip_unenriched(res, opts[:includes] || [])
         res = apply_selects(res, opts[:slow_selects] || [])
