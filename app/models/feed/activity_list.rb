@@ -55,11 +55,19 @@ class Feed
 
     def blocking(users)
       blocked = Set.new(users)
+      # TODO: merge these
       select do |act|
         user_id = act['actor'].split(':')[1].to_i
         will_block = blocked.include?(user_id)
         throw :remove_group if will_block && act['verb'] == 'post'
         !will_block
+      end
+      # Handle blocked posts when the post activity isn't in the group
+      select includes: %i[target] do |act|
+        if act['target'].is_a?(Post)
+          user_id = act['target'].user_id
+          throw :remove_group if blocked.include?(user_id)
+        end
       end
       self
     end
