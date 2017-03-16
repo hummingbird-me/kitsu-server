@@ -21,9 +21,10 @@ module Kitsu
     # config/initializers -- all .rb files in that directory are automatically
     # loaded.
 
-    # Admin Panel. This doesn't change any URLs but it lets the panel get assets
-    config.relative_url_root = '/api'
-    config.action_controller.relative_url_root = '/api'
+    # Enable assets (used by rails_admin, emails)
+    config.assets.enabled = true
+    config.assets.prefix = '/api'
+    config.assets.digest = true
 
     # UTC all the way
     config.time_zone = 'UTC'

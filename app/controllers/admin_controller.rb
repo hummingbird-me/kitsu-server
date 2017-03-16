@@ -1,7 +1,6 @@
 class AdminController < ActionController::Base
   before_action :redirect_to_session
   include Pundit
-  helper AdminHelper
   protect_from_forgery with: :null_session
 
   rescue_from ActionController::InvalidAuthenticityToken do
