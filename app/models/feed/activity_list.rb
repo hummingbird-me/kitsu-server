@@ -68,6 +68,7 @@ class Feed
           user_id = act['target'].user_id
           throw :remove_group if blocked.include?(user_id)
         end
+        true
       end
       self
     end
