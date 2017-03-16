@@ -63,7 +63,7 @@ class Feed
         !will_block
       end
       # Handle blocked posts when the post activity isn't in the group
-      select includes: %i[target] do |act|
+      select including: %i[target] do |act|
         if act['target'].is_a?(Post)
           user_id = act['target'].user_id
           throw :remove_group if blocked.include?(user_id)
