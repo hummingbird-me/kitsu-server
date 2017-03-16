@@ -52,7 +52,7 @@ RailsAdmin.config do |config|
         end
       end
     end
-    show_in_app
+    history_show
   end
 
   # Display canonical_title for label on media
@@ -67,6 +67,8 @@ RailsAdmin.config do |config|
 
   # Anime
   config.model 'Anime' do
+    exclude_fields :library_entries, :inverse_media_relationships, :favorites,
+      :producers, :average_rating, :cover_image_top_offset
     navigation_label 'Anime'
   end
   config.model('AnimeCasting') { parent Anime }
@@ -105,6 +107,18 @@ RailsAdmin.config do |config|
   config.model('GroupTicketMessage') { parent GroupTicket }
 
   # Users
+  config.model 'User' do
+    fields :name, :email, :about, :avatar, :cover_image
+    include_all_fields
+    exclude_fields :password_digest, :remember_created_at, :current_sign_in_at,
+      :last_sign_in_at, :recommendations_up_to_date, :facebook_id, :twitter_id,
+      :mal_username, :life_spent_on_anime, :bio, :ninja_banned, :to_follow,
+      :dropbox_token, :dropbox_secret, :last_backup, :stripe_token,
+      :stripe_customer_id, :import_status, :import_from, :import_error,
+      :profile_completed, :feed_completed, :followers, :following, :comments,
+      :posts, :media_follows, :blocks, :last_recommendations_update, :title
+    navigation_label 'Users'
+  end
   config.model('ListImport') { parent User }
   config.model('Favorite') { parent User }
   config.model('Marathon') { parent User }
