@@ -42,6 +42,7 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
 
     # Determine if an ElasticSearch hit is required
     def should_query?(filters)
+      return false unless filters.respond_to?(:keys)
       @queryable_fields ||= {}
       filters.keys.any? { |key| @queryable_fields.include?(key) }
     end
