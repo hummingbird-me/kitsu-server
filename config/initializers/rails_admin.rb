@@ -19,44 +19,12 @@ RailsAdmin.config do |config|
     bulk_delete
     show
     edit
-    delete do
-      controller do
-        proc do
-          if request.get? # DELETE
-
-            respond_to do |format|
-              format.html { render @action.template_name }
-              format.js   { render @action.template_name, layout: false }
-            end
-
-          elsif request.delete? # DESTROY
-
-            redirect_path = nil
-            @auditing_adapter&.delete_object(@object, @abstract_model,
-                                             _current_user)
-            if @object.destroy
-              flash[:success] = t('admin.flash.successful',
-                name: @model_config.label,
-                action: t('admin.actions.delete.done'))
-              redirect_path = '/api' + index_path
-            else
-              flash[:error] = t('admin.flash.error',
-                name: @model_config.label,
-                action: t('admin.actions.delete.done'))
-              redirect_path = '/api' + back_or_index
-            end
-
-            redirect_to redirect_path
-
-          end
-        end
-      end
-    end
+    delete
     history_show
   end
 
   # Display canonical_title for label on media
-  config.label_methods << :canonical_title
+  config.label_methods += %i[canonical_title site_name]
 
   # Omitted for security reasons (and Franchise/Casting/Installment deprecated)
   config.excluded_models += %w[
@@ -70,6 +38,7 @@ RailsAdmin.config do |config|
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :producers, :average_rating, :cover_image_top_offset
     navigation_label 'Anime'
+    weight(-20)
   end
   config.model('AnimeCasting') { parent Anime }
   config.model('AnimeCharacter') { parent Anime }
@@ -78,6 +47,7 @@ RailsAdmin.config do |config|
   # Manga
   config.model 'Manga' do
     navigation_label 'Manga'
+    weight(-15)
   end
   config.model('MangaCharacter') { parent Manga }
   config.model('MangaStaff') { parent Manga }
@@ -85,6 +55,7 @@ RailsAdmin.config do |config|
   # Drama
   config.model 'Drama' do
     navigation_label 'Drama'
+    weight(0)
   end
   config.model('DramaCasting') { parent Drama }
   config.model('DramaCharacter') { parent Drama }
@@ -93,6 +64,7 @@ RailsAdmin.config do |config|
   # Groups
   config.model 'Groups' do
     navigation_label 'Groups'
+    weight(-5)
   end
   config.model('GroupActionLog') { parent Group }
   config.model('GroupBan') { parent Group }
@@ -118,12 +90,34 @@ RailsAdmin.config do |config|
       :profile_completed, :feed_completed, :followers, :following, :comments,
       :posts, :media_follows, :blocks, :last_recommendations_update, :title
     navigation_label 'Users'
+    weight(-10)
   end
   config.model('ListImport') { parent User }
   config.model('Favorite') { parent User }
   config.model('Marathon') { parent User }
   config.model('MarathonEvent') { parent User }
+  config.model('Block') { parent User }
+  config.model('Follow') { parent User }
+  config.model('MediaFollow') { parent User }
+  config.model('LibraryEntry') { parent User }
+
+  config.model('MediaRelationship') { visible false }
+  config.model('LibraryEntryLog') { visible false }
 
   # Feed
   config.model('Comment') { parent Post }
+
+  config.model 'Mapping' do
+    field(:external_id) { label 'External ID' }
+    field :external_site, :enum do
+      enum do
+        {
+          'MyAnimeList Anime' => 'myanimelist/anime',
+          'MyAnimeList Manga' => 'myanimelist/manga'
+        }
+        # %w[myanimelist/anime myanimelist/manga animenewsnetwork anidb
+        #    thetvdb/series thetvdb/season mydramalist ]
+      end
+    end
+  end
 end
