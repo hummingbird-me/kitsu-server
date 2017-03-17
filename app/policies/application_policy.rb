@@ -151,5 +151,11 @@ class ApplicationPolicy
     def blocked_users
       Block.hidden_for(user)
     end
+
+    def is_admin? # rubocop:disable Style/PredicateName
+      # Get the actual model instance
+      admin_scope = scope.respond_to?(:model) ? scope.model : scope
+      user&.has_role?(:admin, admin_scope)
+    end
   end
 end
