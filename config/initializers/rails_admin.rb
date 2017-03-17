@@ -52,6 +52,10 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
 
   # Anime
   config.model 'Anime' do
+    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
+      :cover_image, :age_rating, :age_rating_guide
+    include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :producers, :average_rating, :cover_image_top_offset
     navigation_label 'Anime'
@@ -63,6 +67,10 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('AnimeStaff') { parent Anime }
   # Manga
   config.model 'Manga' do
+    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
+      :cover_image, :age_rating, :age_rating_guide
+    include_all_fields
     navigation_label 'Manga'
     weight(-15)
   end
@@ -71,6 +79,10 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('Chapter') { parent Manga }
   # Drama
   config.model 'Drama' do
+    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
+      :cover_image, :age_rating, :age_rating_guide
+    include_all_fields
     navigation_label 'Drama'
     weight(0)
   end

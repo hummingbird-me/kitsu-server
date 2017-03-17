@@ -130,6 +130,10 @@ class ApplicationPolicy
     define_method(action) { is_any_admin? }
   end
 
+  def new?
+    create?
+  end
+
   # Provide access control and act as #show?
   class Scope
     attr_reader :user, :scope, :token
