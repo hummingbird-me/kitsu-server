@@ -3,8 +3,8 @@ module Rateable
 
   included do
     validates :average_rating, numericality: {
-      less_than_or_equal_to: 5,
-      greater_than: 0
+      less_than_or_equal_to: 10,
+      greater_than_or_equal_to: 1
     }, allow_nil: true
   end
 
