@@ -23,7 +23,7 @@ module Kitsu
 
     # Enable assets (used by rails_admin, emails)
     config.assets.enabled = true
-    config.assets.prefix = '/api'
+    config.assets.prefix = '/api/assets'
     config.assets.digest = true
 
     # UTC all the way
