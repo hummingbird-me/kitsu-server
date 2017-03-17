@@ -49,8 +49,8 @@ class ApplicationPolicy
 
   # @return [ApplicationPolicy::Scope] a utility class for applying a scope to
   #   an ActiveRecord::Relation based on the token + record
-  def scope
-    Pundit.policy_scope!(user, record.class)
+  def scope(base = record.class)
+    Pundit.policy_scope!(token, base)
   end
 
   # Check if the user can see NSFW stuff
@@ -97,6 +97,13 @@ class ApplicationPolicy
     user&.has_role?(:admin, scope)
   end
 
+  # Ask if the user has any admin roles, in general.
+  #
+  # @return [Boolean] Whether the current user has any admin roles
+  def is_any_admin? # rubocop:disable Style/PredicateName
+    user && user.roles.where(name: 'admin').count
+  end
+
   # Check the record.user association to see if it's owned by the current user.
   #
   # @return [Boolean] Whether the current user is the owner of the record
@@ -112,6 +119,15 @@ class ApplicationPolicy
   # @return [ApplicationPolicy] The policy instance for this object
   def policy_for(model)
     Pundit.policy!(token, model)
+  end
+
+  def show?
+    record_scope = record.class.where(id: record.id)
+    scope(record_scope).exists?
+  end
+
+  %i[dashboard? export? history?].each do |action|
+    define_method(action) { is_any_admin? }
   end
 
   # Provide access control and act as #show?

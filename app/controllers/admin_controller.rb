@@ -8,11 +8,11 @@ class AdminController < ActionController::Base
   end
 
   def pundit_user
-    Doorkeeper::AccessToken.by_token(session[:token])
+    @pundit_user ||= Doorkeeper::AccessToken.by_token(session[:token])
   end
 
   def current_user
-    User.find(pundit_user[:resource_owner_id]) if pundit_user
+    @current_user ||= User.find(pundit_user[:resource_owner_id]) if pundit_user
   end
 
   def redirect_to_session

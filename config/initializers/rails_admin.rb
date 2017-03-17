@@ -2,9 +2,7 @@ RailsAdmin.config do |config|
   config.parent_controller = '::AdminController'
   config.current_user_method(&:current_user)
 
-  config.authorize_with do
-    redirect_to main_app.root_path unless current_user.admin?
-  end
+  config.authorize_with :pundit
 
   ## == PaperTrail ==
   config.audit_with :history
