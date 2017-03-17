@@ -10,6 +10,7 @@ class BlockPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
+      return scope if is_admin?
       scope.where(user: user)
     end
   end
