@@ -14,6 +14,12 @@ module CounterCacheResets
     execute sql_for(Manga, :library_entries, counter_cache_column: 'user_count')
   end
 
+  def media_rating_frequencies
+    execute rating_frequencies_for(Anime)
+    execute rating_frequencies_for(Manga)
+    execute rating_frequencies_for(Drama)
+  end
+
   def favorite_counts
     execute sql_for(Anime, :favorites, counter_cache_column: 'favorites_count')
     execute sql_for(Manga, :favorites, counter_cache_column: 'favorites_count')
@@ -42,6 +48,41 @@ module CounterCacheResets
   def clean!
     tables = ActiveRecord::Base.connection.tables.grep(/_count\z/)
     execute tables.map { |t| "DROP TABLE #{t}" }
+  end
+
+  def rating_frequencies_for(model)
+    model_name = model.name.underscore
+    foreign_key = "#{model_name}_id"
+    temp_table = "#{model_name}_rating_frequencies"
+    [
+      "DROP TABLE IF EXISTS #{temp_table}",
+      <<-SQL.squish,
+        CREATE TEMP TABLE #{temp_table} AS
+        SELECT le.#{foreign_key}, rating, count(*)
+        FROM library_entries le
+        WHERE le.#{foreign_key} IS NOT NULL
+          AND le.rating IS NOT NULL
+        GROUP BY le.#{foreign_key}, rating
+      SQL
+      <<-SQL.squish,
+        CREATE INDEX ON #{temp_table} (#{foreign_key}, rating)
+      SQL
+      "VACUUM #{temp_table}",
+      <<-SQL.squish,
+        UPDATE #{model.table_name}
+        SET rating_frequencies = ARRAY[#{
+          LibraryEntry::VALID_RATINGS.map { |rating|
+            "'#{rating}', COALESCE((
+              SELECT count
+              FROM #{temp_table}
+              WHERE #{temp_table}.#{foreign_key} = #{model.table_name}.id
+                AND #{temp_table}.rating = #{rating}
+            ), 0)"
+          }.join(', ')
+        }]::text[]::hstore
+      SQL
+      "DROP TABLE #{temp_table}"
+    ]
   end
 
   def sql_for(model, association_name, counter_cache_column: nil, where: nil)
