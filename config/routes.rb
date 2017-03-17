@@ -108,8 +108,12 @@ Rails.application.routes.draw do
     end
 
     ### Admin Panel
-    mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-    mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint
+    constraints(AdminConstraint) do
+      mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+      mount Sidekiq::Web => '/sidekiq'
+    end
+    get '/admin', to: 'sessions#redirect'
+    get '/sidekiq', to: 'sessions#redirect'
     resources :sessions, only: %i[new create]
 
     ### Debug APIs

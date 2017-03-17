@@ -19,7 +19,7 @@
     }
   </style>
 </head>
-<body>
+<body data-redirect-to="<%= @redirect_to %>">
   <div>
     <h1 id="login-title">Logging Into Admin Panel</h1>
     <h2 id="login-subtitle">You will be redirected...</h2>
@@ -40,9 +40,9 @@
           token: emberAuth.authenticated.access_token
         },
         type: 'post'
-      }).then(function(){
-        window.location.replace('/api/admin');
-      }, function(xhr){
+      }).then(function() {
+        window.location.replace(document.body.getAttribute('data-redirect-to'));
+      }, function(xhr) {
         displayError(xhr.responseText);
       });
     } else {
