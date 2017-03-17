@@ -14,6 +14,7 @@ module WithCoverImage
     validates_attachment :cover_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
     }
+    validates :cover_image, image_dimensions: { ratio: 1..10 }
     process_in_background :cover_image,
       only_process: %i[tiny large],
       processing_image_url: ->(cover) {
