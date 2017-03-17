@@ -1,14 +1,6 @@
 RailsAdmin::ApplicationHelper.module_exec do
   def edit_user_link
-    abstract_model = RailsAdmin.config(_current_user.class).abstract_model
-    edit_action = RailsAdmin::Config::Actions.find(:edit,
-      controller: controller, abstract_model: abstract_model,
-      object: _current_user)
-    return nil unless abstract_model
-    link_to rails_admin.url_for(action: edit_action.action_name,
-                                model_name: abstract_model.to_param,
-                                id: _current_user.id,
-                                controller: 'rails_admin/main') do
+    link_to "/users/#{_current_user.name}" do
       html = []
       html << image_tag(_current_user.avatar.to_s(:small), height: 30, width: 30)
       html << content_tag(:span, _current_user.name)
