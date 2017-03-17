@@ -4,7 +4,11 @@ class MediaFollowPolicy < ApplicationPolicy
   end
 
   def create?
+    return false if record == MediaFollow
     record.user == user
   end
-  alias_method :destroy?, :create?
+
+  def destroy?
+    record.try(:user) == user || is_admin?
+  end
 end

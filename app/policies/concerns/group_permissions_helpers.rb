@@ -3,8 +3,11 @@ module GroupPermissionsHelpers
 
   private
 
-  # The Group of the current record
-  delegate :group, to: :record
+  # The Group of the current record.  Returns nil if the record isn't a record
+  def group
+    return if record.respond_to?(:where)
+    record.group
+  end
 
   # The GroupMember object for the current user
   #

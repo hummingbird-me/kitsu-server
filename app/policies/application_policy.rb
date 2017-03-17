@@ -131,7 +131,7 @@ class ApplicationPolicy
   end
 
   def new?
-    create?
+    is_any_admin?
   end
 
   # Provide access control and act as #show?
