@@ -74,7 +74,7 @@ class FeedsController < ApplicationController
       group && show?(group)
     when 'notifications', 'timeline'
       user = User.find_by(id: params[:id])
-      user == current_user.resource_owner
+      user == current_user&.resource_owner
     when 'global' then true
     when 'reports_aggr'
       user = current_user&.resource_owner
