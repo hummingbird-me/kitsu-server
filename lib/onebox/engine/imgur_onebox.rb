@@ -10,9 +10,9 @@ module Onebox
       def to_html
         return gif_html if /^.*\.gif$/ =~ @url
         og = get_opengraph
-        return video_html(og) if !Onebox::Helpers::blank?(og[:video])
+        return video_html(og) unless Onebox::Helpers::blank?(og[:video])
         return album_html(og) if album?
-        return image_html(og) if !Onebox::Helpers::blank?(og[:image])
+        return image_html(og) unless Onebox::Helpers::blank?(og[:image])
         nil
       end
 
