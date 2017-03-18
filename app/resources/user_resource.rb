@@ -2,7 +2,6 @@ class UserResource < BaseResource
   PRIVATE_FIELDS = %i[email password confirmed previous_email language time_zone
                       country share_to_global title_language_preference
                       sfw_filter rating_system].freeze
-
   caching
 
   attributes :name, :past_names, :about, :bio, :about_formatted, :location,
@@ -26,6 +25,7 @@ class UserResource < BaseResource
   has_many :library_entries
   has_many :favorites
   has_many :reviews
+  has_many :stats
 
   def self.attribute_caching_context(context)
     context[:current_user]&.resource_owner
