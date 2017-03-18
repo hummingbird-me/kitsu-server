@@ -3,7 +3,7 @@ module Rateable
 
   included do
     validates :average_rating, numericality: {
-      less_than_or_equal_to: 10,
+      less_than_or_equal_to: 19,
       greater_than_or_equal_to: 1
     }, allow_nil: true
   end
@@ -11,7 +11,7 @@ module Rateable
   def calculate_rating_frequencies
     base = LibraryEntry::VALID_RATINGS.map { |r| [r, 0] }.to_h
     freqs = LibraryEntry.where(media: self).group(:rating).count
-                        .transform_keys(&:to_f)
+                        .transform_keys(&:to_i)
                         .slice(*LibraryEntry::VALID_RATINGS)
     base.merge(freqs)
   end
