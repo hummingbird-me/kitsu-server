@@ -72,11 +72,6 @@ RSpec.describe LibraryEntry, type: :model do
   end
   it do
     expect(subject).to validate_numericality_of(:rating)
-      .is_less_than_or_equal_to(5)
-      .is_greater_than(0)
-  end
-  it do
-    expect(subject).to validate_numericality_of(:new_rating)
       .is_less_than_or_equal_to(20)
       .is_greater_than_or_equal_to(2)
   end
@@ -138,42 +133,30 @@ RSpec.describe LibraryEntry, type: :model do
     end
   end
 
-  describe 'rating_on_halves validation' do
-    it 'should fail when rating is not divisible by 0.5' do
-      library_entry = build(:library_entry, rating: 3.14)
-      expect(library_entry).not_to be_valid
-      expect(library_entry.errors[:rating]).to be_present
-    end
-    it 'should pass when rating is divisible by 0.5' do
-      library_entry = build(:library_entry, rating: 3.5)
-      expect(library_entry.errors[:rating]).to be_blank
-    end
-  end
-
   describe 'updating rating_frequencies on media after save' do
     context 'with a previous value' do
       it 'should decrement the previous frequency' do
-        library_entry = create(:library_entry, rating: 3.5)
+        library_entry = create(:library_entry, rating: 3)
         media = library_entry.media
         expect {
-          library_entry.rating = 4.0
+          library_entry.rating = 4
           library_entry.save!
-        }.to change { media.reload.rating_frequencies['3.5'].to_i }.by(-1)
+        }.to change { media.reload.rating_frequencies['3'].to_i }.by(-1)
       end
       it 'should increment the new frequency' do
-        library_entry = create(:library_entry, rating: 3.5)
+        library_entry = create(:library_entry, rating: 3)
         media = library_entry.media
         expect {
-          library_entry.rating = 4.0
+          library_entry.rating = 4
           library_entry.save!
-        }.to change { media.reload.rating_frequencies['4.0'].to_i }.by(1)
+        }.to change { media.reload.rating_frequencies['4'].to_i }.by(1)
       end
     end
     context 'without a previous value' do
       it 'should not send any frequencies negative' do
-        library_entry = create(:library_entry, rating: 3.5)
+        library_entry = create(:library_entry, rating: 3)
         media = library_entry.media
-        library_entry.rating = 4.0
+        library_entry.rating = 4
         library_entry.save!
         media.reload
         freqs = media.rating_frequencies.transform_values(&:to_i)

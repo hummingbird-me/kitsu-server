@@ -561,24 +561,23 @@ ActiveRecord::Schema.define(version: 20170325205929) do
   add_index "leader_chat_messages", ["user_id"], name: "index_leader_chat_messages_on_user_id", using: :btree
 
   create_table "library_entries", force: :cascade do |t|
-    t.integer  "user_id",                                                 null: false
-    t.integer  "media_id",                                                null: false
-    t.integer  "status",                                                  null: false
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.integer  "progress",                                default: 0,     null: false
-    t.decimal  "rating",          precision: 2, scale: 1
-    t.boolean  "private",                                 default: false, null: false
+    t.integer  "user_id",                         null: false
+    t.integer  "media_id",                        null: false
+    t.integer  "status",                          null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "progress",        default: 0,     null: false
+    t.boolean  "private",         default: false, null: false
     t.text     "notes"
-    t.integer  "reconsume_count",                         default: 0,     null: false
-    t.boolean  "reconsuming",                             default: false, null: false
-    t.string   "media_type",                                              null: false
-    t.integer  "volumes_owned",                           default: 0,     null: false
-    t.boolean  "nsfw",                                    default: false, null: false
+    t.integer  "reconsume_count", default: 0,     null: false
+    t.boolean  "reconsuming",     default: false, null: false
+    t.string   "media_type",                      null: false
+    t.integer  "volumes_owned",   default: 0,     null: false
+    t.boolean  "nsfw",            default: false, null: false
     t.integer  "anime_id"
     t.integer  "manga_id"
     t.integer  "drama_id"
-    t.integer  "new_rating"
+    t.integer  "rating"
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
