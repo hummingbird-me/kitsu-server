@@ -3,16 +3,19 @@ module Onebox
     class ImageOnebox
       include Engine
 
-      matches_regexp(/^(https?:)?\/\/(?!.*giphy.com)(?!.*imgur.com)(?!.*gifs.com).+\.(png|jpg|jpeg|gif|bmp|tif|tiff)(\?.*)?$/i)
+      matches_regexp(%r{(https?:)?//(?!.*giphy.com)(?!.*imgur.com)(?!.*gifs.com).+.(png|jpg|jpeg|gif|bmp|tif|tiff)(\?.*)?})
 
       def always_https?
-        WhitelistedGenericOnebox.host_matches(uri, WhitelistedGenericOnebox.https_hosts)
+        WhitelistedGenericOnebox.host_matches(
+          uri, WhitelistedGenericOnebox.https_hosts
+        )
       end
 
       def to_html
         # Fix Dropbox image links
-        if @url[/^https:\/\/www.dropbox.com\/s\//]
-          @url.sub!("https://www.dropbox.com", "https://dl.dropboxusercontent.com")
+        if @url[%r{https://www.dropbox.com/s/}]
+          @url.sub!('https://www.dropbox.com',
+            'https://dl.dropboxusercontent.com')
         end
 
         escaped_url = ::Onebox::Helpers.normalize_url_for_output(@url)

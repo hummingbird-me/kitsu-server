@@ -8,7 +8,8 @@ module Onebox
 
       def to_html
         escaped_url = ::Onebox::Helpers.normalize_url_for_output(@url)
-        %r{https?://(?:.*\.)?gifs.com/(?:gif/)?(?:[a-z]+-)*([0-9,a-z,A-Z]+)}.match(escaped_url)
+        %r{https?://(?:.*\.)?gifs.com/(?:gif/)?(?:[a-z]+-)*([0-9,a-z,A-Z]+)} =~
+          escaped_url
         src = "https://gifs.com/iembed/#{Regexp.last_match(1)}"
 
         <<-HTML
