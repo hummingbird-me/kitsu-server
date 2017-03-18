@@ -1,6 +1,6 @@
 class MediaRelationshipResource < BaseResource
   attribute :role
-  
+
   filter :role
 
   has_one :source, polymorphic: true
