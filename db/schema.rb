@@ -1010,11 +1010,11 @@ ActiveRecord::Schema.define(version: 20170325205929) do
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
   create_table "stats", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.string   "type",       null: false
-    t.jsonb    "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "user_id",                 null: false
+    t.string   "type",                    null: false
+    t.jsonb    "stats_data", default: {}, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   add_index "stats", ["user_id"], name: "index_stats_on_user_id", using: :btree

@@ -4,7 +4,7 @@ class CreateStats < ActiveRecord::Migration
       t.references :user, index: true, foreign_key: true, null: false
 
       t.string :type, null: false
-      t.jsonb :data
+      t.jsonb :stats_data, null: false, default: {}
 
       t.timestamps null: false
     end

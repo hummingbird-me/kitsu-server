@@ -1,4 +1,4 @@
-class Stat < ActiveRecord::Base
+class Stat < ApplicationRecord
   belongs_to :user, required: true
   # expose for jsonapi
   alias_attribute :kind, :type

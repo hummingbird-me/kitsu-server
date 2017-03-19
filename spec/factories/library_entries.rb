@@ -37,8 +37,8 @@
 
 FactoryGirl.define do
   factory :library_entry do
-    association :media, factory: :anime, strategy: :build
-    user
+    association :media, factory: :anime
+    association :user, strategy: :build
     status 'planned'
     progress 0
 

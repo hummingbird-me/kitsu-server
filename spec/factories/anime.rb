@@ -57,5 +57,15 @@ FactoryGirl.define do
     trait :nsfw do
       age_rating 'R18'
     end
+
+    trait :genres do
+      transient do
+        amount 5
+      end
+
+      after(:create) do |anime, evaluator|
+        anime.genres = create_list(:genre, evaluator.amount)
+      end
+    end
   end
 end
