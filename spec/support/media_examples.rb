@@ -6,7 +6,7 @@ RSpec.shared_examples 'media' do
   # Columns which are mandatory for all media
   it { should have_db_column(:slug).of_type(:string) }
   it { should have_db_column(:abbreviated_titles).of_type(:string) }
-  it { should have_db_column(:average_rating).of_type(:float) }
+  it { should have_db_column(:average_rating).of_type(:decimal) }
   it { should have_db_column(:rating_frequencies).of_type(:hstore) }
   it { should have_db_column(:start_date).of_type(:date) }
   it { should have_db_column(:end_date).of_type(:date) }
@@ -17,10 +17,10 @@ RSpec.shared_examples 'media' do
   it { should respond_to(:slug_candidates) }
   it { should respond_to(:progress_limit) }
   it { should delegate_method(:year).to(:start_date) }
-  it 'should ensure rating is within 1..19' do
+  it 'should ensure rating is within 0..100' do
     should validate_numericality_of(:average_rating)
-      .is_less_than_or_equal_to(19)
-      .is_greater_than_or_equal_to(1)
+      .is_less_than_or_equal_to(100)
+      .is_greater_than(0)
   end
 
   describe '#run_length' do

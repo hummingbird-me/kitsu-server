@@ -1,10 +1,11 @@
 module Rateable
   extend ActiveSupport::Concern
+  MIN_RATINGS = 50
 
   included do
     validates :average_rating, numericality: {
-      less_than_or_equal_to: 19,
-      greater_than_or_equal_to: 1
+      less_than_or_equal_to: 100,
+      greater_than: 0
     }, allow_nil: true
   end
 
@@ -41,58 +42,55 @@ module Rateable
   end
 
   class_methods do
-    def average_rating
-      LibraryEntry.where(media: self).rated.average(:rating)
-    end
-
     def update_average_ratings
       #
       # Bayesian rating:
       #
-      #     r * v / (v + m) + c * m / (v + m)
+      #     (total + (MIN * global_average)) / (count + MIN)
       #
       #   where:
-      #     r: average for the show
-      #     votes: number of votes for the show
-      #     min: minimum votes needed to display rating
-      #     c: average across all shows
+      #     total: sum of all ratings for this media
+      #     count: number of ratings for this media
+      #     MIN: minimum number of ratings needed to generate scores
+      #     global_average: average across all media
       #
+      # (total + (MIN * global_average)) / (count + MIN)
 
-      min = 50
-      global_total_rating = 0
-      global_total_votes  = 0
-      media_total_ratings = {}
-      media_total_votes   = {}
+      ratings_total = 0
+      ratings_count = 0
+      media_ratings_total = Hash.new { 0 }
+      media_ratings_count = Hash.new { 0 }
 
-      find_each do |media|
-        media_total_ratings[media.id] ||= 0
-        media_total_votes[media.id] ||= 0
-
-        media.rating_frequencies.each do |rating_s, count_s|
-          next if rating_s == 'nil'
-
-          rating = rating_s.to_f
-          count = count_s.to_f
-
-          next unless (rating % 0.5).zero?
-
-          global_total_rating += rating * count
-          global_total_votes += count
-
-          media_total_ratings[media.id] += rating * count
-          media_total_votes[media.id] += count
+      # Technically, we could use aggregate functions in SQL, but they're
+      # nowhere near as fast as this code, since they have to scan the entire
+      # LibraryEntry table.
+      select(:id, :rating_frequencies).find_each do |media|
+        media.rating_frequencies.each do |rating, count|
+          count = count.to_i
+          rating = rating.to_i
+          total = count * rating
+          media_ratings_total[media.id] += total
+          ratings_total += total
+          media_ratings_count[media.id] += count
+          ratings_count += count
         end
       end
 
-      c = global_total_rating * 1.0 / global_total_votes
+      average_rating = ratings_total.to_f / ratings_count
+      base = (average_rating * MIN_RATINGS)
 
       now = Time.now
       find_each do |media|
-        votes = media_total_votes[media.id]
-        if votes >= min
-          r = media_total_ratings[media.id] * 1.0 / votes
+        media_count = media_ratings_count[media.id]
+        if media_count >= MIN_RATINGS
+          media_total = media_ratings_total[media.id]
+          # Bayesian average on scale of 1..19
+          raw_score = (media_total + base).to_f / (media_count + MIN_RATINGS)
+          # Map to a scale of 5..100
+          percent_score = (4 + (raw_score.to_f / 20) * 95)
+
           media.update_columns(
-            average_rating: (r * votes + c * min) / (votes + min),
+            average_rating: percent_score,
             updated_at: now
           )
         else
