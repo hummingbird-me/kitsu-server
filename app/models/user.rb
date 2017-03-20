@@ -108,7 +108,8 @@ class User < ApplicationRecord
 
   enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
-  has_secure_password
+  has_secure_password validations: false
+  enum status: %i[unregistered registered]
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
   enum theme: %i[light dark]
@@ -157,12 +158,14 @@ class User < ApplicationRecord
   has_many :one_signal_players, dependent: :destroy
   has_many :reposts, dependent: :destroy
 
+  validates :email, :name, :password, absence: true, if: :unregistered?
   validates :email, presence: true,
-                    uniqueness: { case_sensitive: false }, if: :email_changed?
+                    uniqueness: { case_sensitive: false },
+                    if: ->(user) { user.registered? && user.email_changed? }
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false },
                    length: { minimum: 3, maximum: 20 },
-                   if: :name_changed?,
+                   if: ->(user) { user.registered? && user.name_changed? },
                    format: {
                      with: /\A[_A-Za-z0-9]+\z/,
                      message: <<-EOF.squish
@@ -172,15 +175,16 @@ class User < ApplicationRecord
   validates :name, format: {
     with: /\A[A-Za-z0-9]/,
     message: 'must begin with a letter or number'
-  }
+  }, if: :registered?
   validates :name, format: {
     without: /\A[0-9]*\z/,
     message: 'cannot be entirely numbers'
-  }
-  validate :not_reserved_username
+  }, if: :registered?
+  validate :not_reserved_username, if: :registered?
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
-  validates :password_digest, presence: true
+  validates :password, length: { maximum: 72 }, presence: true, if: :registered?
+  validates :password_digest, presence: true, if: :registered?
   validates :facebook_id, uniqueness: true, allow_nil: true
 
   scope :active, ->() { where(deleted_at: nil) }
@@ -207,7 +211,7 @@ class User < ApplicationRecord
   end
 
   def not_reserved_username
-    errors.add(:name, 'is reserved') if RESERVED_NAMES.include?(name.downcase)
+    errors.add(:name, 'is reserved') if RESERVED_NAMES.include?(name&.downcase)
   end
 
   def pro?

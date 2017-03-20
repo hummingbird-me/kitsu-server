@@ -1378,9 +1378,9 @@ ActiveRecord::Schema.define(version: 20170818204827) do
   add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                       limit: 255, default: "",          null: false
+    t.string   "email",                       limit: 255, default: ""
     t.string   "name",                        limit: 255
-    t.string   "password_digest",             limit: 255, default: "",          null: false
+    t.string   "password_digest",             limit: 255, default: ""
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                           default: 0
     t.datetime "current_sign_in_at"
