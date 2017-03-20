@@ -96,7 +96,7 @@ patreon:
 deviantart:
   id: 20
   name: DeviantArt
-  validate_find: '\A(https?://)?(www.)?(?<username>[a-zA-z0-9_\-]+)(.deviantart.com)?\z'
+  validate_find: '\A(https?://)?(?<username>[a-zA-z0-9]+)(.deviantart.com)?\z'
   validate_replace: 'https://\k<username>.deviantart.com'
 dribbble:
   id: 21
@@ -106,7 +106,7 @@ dribbble:
 imdb:
   id: 22
   name: IMDb
-  validate_find: '\A(https?://)?(www.)?(imdb.com/)?(user/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_find: '\A(https?://)?(www.)?(imdb.com/)?(user/)?(?<username>[a-zA-z0-9]+)\z'
   validate_replace: 'https://imdb.com/user/\k<username>'
 lastfm:
   id: 23
@@ -116,12 +116,12 @@ lastfm:
 letterboxd:
   id: 24
   name: Letterboxd
-  validate_find: '\A(https?://)?(www.)?(letterboxd.com/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_find: '\A(https?://)?(www.)?(letterboxd.com/)?(?<username>[a-zA-z0-9_]+)\z'
   validate_replace: 'https://letterboxd.com/\k<username>'
 medium:
   id: 25
   name: Medium
-  validate_find: '\A(https?://)?(www.)?(medium.com/)?(?<username>[a-zA-Z0-9@_\-]+)\z'
+  validate_find: '\A(https?://)?(www.)?(medium.com/)?(?<username>[a-zA-Z0-9@_.]+)\z'
   validate_replace: 'https://medium.com/\k<username>'
 playerme:
   id: 26
@@ -136,5 +136,5 @@ reddit:
 trakt:
   id: 28
   name: Trakt
-  validate_find: '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_find: '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>.+)\z'
   validate_replace: 'https://trakt.tv/users/\k<username>'
