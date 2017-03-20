@@ -235,4 +235,15 @@ class LibraryEntry < ApplicationRecord
       type: 'LinkedAccount::MyAnimeList'
     )
   end
+
+  after_commit ->() { create_stat }, on: :create
+  after_destroy ->() { delete_stat }
+
+  def create_stat
+    Stat::AnimeGenreBreakdown.increment_genres(user, media.genres)
+  end
+
+  def delete_stat
+    Stat::AnimeGenreBreakdown.decrement_genres(user, media.genres)
+  end
 end
