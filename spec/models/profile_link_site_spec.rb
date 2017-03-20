@@ -448,5 +448,190 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
+
+    # DeviantArt
+    describe 'DeviantArt' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            matthewdias.deviantart.com
+            http://www.matthewdias.deviantart.com
+            https://matthewdias.deviantart.com
+            matthewdias
+          ]
+          site = build(:profile_link_site, :deviantart)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
+
+    # Dribbble
+    describe 'Dribbble' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            dribbble.com/matthewdias
+            https://www.dribbble.com/matthewdias
+            https://dribbble.com/matthewdias
+            matthewdias
+          ]
+          site = build(:profile_link_site, :dribbble)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
+
+    # IMDb
+    describe 'IMDb' do
+      context 'success' do
+        it 'should return an id' do
+          urls = %w[
+            imdb.com/ur33598229
+            https://www.imdb.com/user/ur33598229
+            https://imdb.com/user/ur33598229
+            ur33598229
+          ]
+          site = build(:profile_link_site, :imdb)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('ur33598229')
+          end
+        end
+      end
+    end
+
+    # Last.fm
+    describe 'Last.fm' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            last.fm/matthewdias
+            https://www.last.fm/user/matthewdias
+            https://last.fm/user/matthewdias
+            matthewdias
+          ]
+          site = build(:profile_link_site, :lastfm)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
+
+    # Letterboxd
+    describe 'Letterboxd' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            letterboxd.com/matthewdias
+            https://www.letterboxd.com/matthewdias
+            https://letterboxd.com/matthewdias
+            matthewdias
+          ]
+          site = build(:profile_link_site, :letterboxd)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
+
+    # Medium
+    describe 'Medium' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            medium.com/matthewdias
+            medium.com/@matthewdias
+            https://www.medium.com/@matthewdias
+            https://medium.com/@matthewdias
+            matthewdias
+            @matthewdias
+          ]
+          site = build(:profile_link_site, :medium)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to be_in(['matthewdias', '@matthewdias'])
+          end
+        end
+      end
+    end
+
+    # Player.me
+    describe 'Player.me' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            player.me/matthewdias
+            https://www.player.me/matthewdias
+            https://player.me/matthewdias
+            matthewdias
+          ]
+          site = build(:profile_link_site, :playerme)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
+
+    # Reddit
+    describe 'Reddit' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            reddit.com/matthewdias
+            reddit.com/u/matthewdias
+            https://www.reddit.com/user/matthewdias
+            https://reddit.com/user/matthewdias
+            https://www.reddit.com/u/matthewdias
+            matthewdias
+            /u/matthewdias
+          ]
+          site = build(:profile_link_site, :reddit)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
+
+    # Trakt
+    describe 'Trakt' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            trakt.tv/matthewdias
+            https://www.trakt.tv/users/matthewdias
+            https://trakt.tv/users/matthewdias
+            matthewdias
+          ]
+          site = build(:profile_link_site, :trakt)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
   end # end of validate context
 end
