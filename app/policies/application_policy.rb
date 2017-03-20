@@ -94,14 +94,16 @@ class ApplicationPolicy
   # @return [Boolean] Whether the current user has the admin role for the
   #   requested scope
   def is_admin?(scope = record) # rubocop:disable Style/PredicateName
-    user&.has_role?(:admin, scope)
+    # TODO: get rid of global `mod` role and switch to local mod stuff
+    user&.has_role?(:admin, scope) || user&.has_role(:mod)
   end
 
   # Ask if the user has any admin roles, in general.
   #
   # @return [Boolean] Whether the current user has any admin roles
   def is_any_admin? # rubocop:disable Style/PredicateName
-    user && user.roles.where(name: 'admin').count
+    # TODO: get rid of global `mod` role and switch to local mod stuff
+    user && user.roles.where(name: %w[admin mod]).count
   end
 
   # Check the record.user association to see if it's owned by the current user.

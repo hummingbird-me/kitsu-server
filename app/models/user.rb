@@ -220,7 +220,7 @@ class User < ApplicationRecord
   def update_title(_role)
     if has_role?(:admin)
       update(title: 'Staff')
-    elsif has_role?(:admin, Anime)
+    elsif has_role?(:admin, Anime) || has_role?(:mod)
       update(title: 'Mod')
     end
   end
