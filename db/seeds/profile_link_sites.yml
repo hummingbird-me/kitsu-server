@@ -93,3 +93,48 @@ patreon:
   name: Patreon
   validate_find: '\A(https?://)?(www.)?(patreon.com/)?(?<username>[a-zA-z0-9_\-]+)\z'
   validate_replace: 'https://patreon.com/\k<username>'
+deviantart:
+  id: 20
+  name: DeviantArt
+  validate_find: '\A(https?://)?(www.)?(?<username>[a-zA-z0-9_\-]+)(.deviantart.com)?\z'
+  validate_replace: 'https://\k<username>.deviantart.com'
+dribbble:
+  id: 21
+  name: Dribbble
+  validate_find: '\A(https?://)?(www.)?(dribbble.com/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_replace: 'https://dribbble.com/\k<username>'
+imdb:
+  id: 22
+  name: IMDb
+  validate_find: '\A(https?://)?(www.)?(imdb.com/)?(user/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_replace: 'https://imdb.com/user/\k<username>'
+lastfm:
+  id: 23
+  name: Last.fm
+  validate_find: '\A(https?://)?(www.)?(last.fm/)?(user/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_replace: 'https://last.fm/user/\k<username>'
+letterboxd:
+  id: 24
+  name: Letterboxd
+  validate_find: '\A(https?://)?(www.)?(letterboxd.com/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_replace: 'https://letterboxd.com/\k<username>'
+medium:
+  id: 25
+  name: Medium
+  validate_find: '\A(https?://)?(www.)?(medium.com/)?(?<username>[a-zA-Z0-9@_\-]+)\z'
+  validate_replace: 'https://medium.com/\k<username>'
+playerme:
+  id: 26
+  name: Player.me
+  validate_find: '\A(https?://)?(www.)?(player.me/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_replace: 'https://player.me/\k<username>'
+reddit:
+  id: 27
+  name: Reddit
+  validate_find: '\A(https?://)?(www.)?(reddit.com/)?(user/|u/)?(/u/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_replace: 'https://reddit.com/user/\k<username>'
+trakt:
+  id: 28
+  name: Trakt
+  validate_find: '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>[a-zA-z0-9_\-]+)\z'
+  validate_replace: 'https://trakt.tv/users/\k<username>'
