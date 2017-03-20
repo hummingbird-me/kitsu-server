@@ -183,7 +183,7 @@ class User < ApplicationRecord
   validate :not_reserved_username, if: :registered?
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
-  validates :password, length: { maximum: 72 }, presence: true, if: :registered?
+  validates :password, length: { maximum: 72 }, if: :registered?
   validates :password_digest, presence: true, if: :registered?
   validates :facebook_id, uniqueness: true, allow_nil: true
 
