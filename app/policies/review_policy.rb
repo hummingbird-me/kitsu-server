@@ -1,5 +1,7 @@
 class ReviewPolicy < ApplicationPolicy
-  alias_method :create?, :is_owner?
+  def create?
+    user.registered? && is_owner?
+  end
 
   def update?
     is_owner? || is_admin?
