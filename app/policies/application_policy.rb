@@ -95,7 +95,7 @@ class ApplicationPolicy
   #   requested scope
   def is_admin?(scope = record) # rubocop:disable Style/PredicateName
     # TODO: get rid of global `mod` role and switch to local mod stuff
-    user&.has_role?(:admin, scope) || user&.has_role(:mod)
+    user&.has_role?(:admin, scope) || user&.has_role?(:mod)
   end
 
   # Ask if the user has any admin roles, in general.
