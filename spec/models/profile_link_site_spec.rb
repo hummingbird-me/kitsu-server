@@ -633,7 +633,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # MyAnimeList
     describe 'MyAnimeList' do
       context 'success' do
@@ -645,7 +645,7 @@ RSpec.describe ProfileLinkSite, type: :model do
             FukuchiChiisaia
           ]
           site = build(:profile_link_site, :myanimelist)
-          
+
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('FukuchiChiisaia')
@@ -653,7 +653,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # Annict
     describe 'Annict' do
       context 'success' do
@@ -666,7 +666,7 @@ RSpec.describe ProfileLinkSite, type: :model do
             creseca
           ]
           site = build(:profile_link_site, :myanimelist)
-          
+
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('creseca')
@@ -674,7 +674,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # MyFigureCollection
     describe 'MyFigureCollection' do
       context 'success' do
@@ -686,7 +686,7 @@ RSpec.describe ProfileLinkSite, type: :model do
             creseca
           ]
           site = build(:profile_link_site, :myfigurecollection)
-          
+
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('creseca')
@@ -694,7 +694,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # Pixiv
     describe 'Pixiv' do
       context 'success' do
@@ -706,7 +706,7 @@ RSpec.describe ProfileLinkSite, type: :model do
             19557969
           ]
           site = build(:profile_link_site, :pixiv)
-          
+
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('19557969')
@@ -714,7 +714,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # Booth.pm
     describe 'Booth.pm' do
       context 'success' do
@@ -725,7 +725,7 @@ RSpec.describe ProfileLinkSite, type: :model do
             creseca
           ]
           site = build(:profile_link_site, :boothpm)
-          
+
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('creseca')
@@ -733,7 +733,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # AniDB
     describe 'AniDB' do
       context 'success' do
@@ -745,7 +745,7 @@ RSpec.describe ProfileLinkSite, type: :model do
             637678
           ]
           site = build(:profile_link_site, :anidb)
-          
+
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('637678')
@@ -753,7 +753,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # AniList
     describe 'AniList' do
       context 'success' do
@@ -765,7 +765,7 @@ RSpec.describe ProfileLinkSite, type: :model do
             fukuchichiisaia
           ]
           site = build(:profile_link_site, :anilist)
-          
+
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('fukuchichiisaia')
@@ -773,7 +773,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # VNDB
     describe 'VNDB' do
       context 'success' do
@@ -785,7 +785,7 @@ RSpec.describe ProfileLinkSite, type: :model do
             70299
           ]
           site = build(:profile_link_site, :vndb)
-          
+
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('70299')
