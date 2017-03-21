@@ -2,6 +2,6 @@ require 'unlimited_paginator'
 
 class ProfileLinkSiteResource < BaseResource
   immutable
-  paginator UnlimitedPaginator
+  paginator :unlimited
   attribute :name
 end
