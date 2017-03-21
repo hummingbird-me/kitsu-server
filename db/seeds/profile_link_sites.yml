@@ -138,3 +138,43 @@ trakt:
   name: Trakt
   validate_find: '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>.+)\z'
   validate_replace: 'https://trakt.tv/users/\k<username>'
+myanimelist:
+  id: 29
+  name: MyAnimeList
+  validate_find: '\A(https?://)?(www.)?(myanimelist.net/)?(profile/)?(?<username>[a-zA-Z0-9_\-]+)\z'
+  validate_replace: 'https://myanimelist.net/profile/\k<username>'
+annict:
+  id: 30
+  name: Annict
+  validate_find: '\A(https?://)?(www.)?(annict.com/)?(@)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_replace: 'https://annict.com/\k<username>'
+myfigurecollection:
+  id: 31
+  name: MyFigureCollection
+  validate_find: '\A(https?://)?(www.)?(myfigurecollection.net/)?(profile/)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_replace: 'https://myfigurecollection.net/profile/\k<username>'
+pixiv:
+  id: 32
+  name: Pixiv
+  validate_find: 'A(https?://)?(www.)?(pixiv.net/)?(member.php?id=)?(?<username>[0-9]+)\z'
+  validate_replace: 'https://pixiv.net/member.php?id=\k<username>'
+boothpm:
+  id: 33
+  name: Booth.pm
+  validate_find: 'A(https://)?(?<username>[a-zA-z0-9]+)(.booth.pm)?\z'
+  validate_replace: 'http://\k<username>.booth.pm'
+anidb:
+  id: 34
+  name: AniDB
+  validate_find: 'A(https://)?(www.)?(anidb.net/)?(up)?(?<username>[0-9]+)\z'
+  validate_replace: 'https://anidb.net/up\k<username>'
+anilist:
+  id: 35
+  name: AniList
+  validate_find: 'A(https://)?(www.)?(anilist.co/)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_replace: 'https://anilist.co/\k<username>'
+vndb:
+  id: 36
+  name: VNDB
+  validate_find: 'A(https://)?(www.)?(vndb.org/)?(u)?(?<username>[0-9]+)\z'
+  validate_replace: 'https://vndb.org/\k<username>'

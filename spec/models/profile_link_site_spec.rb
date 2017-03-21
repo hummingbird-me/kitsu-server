@@ -633,5 +633,165 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
+    
+    # MyAnimeList
+    describe 'MyAnimeList' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            myanimelist.net/profile/FukuchiChiisaia
+            http://www.myanimelist.net/profile/FukuchiChiisaia
+            http://myanimelist.net/profile/FukuchiChiisaia
+            FukuchiChiisaia
+          ]
+          site = build(:profile_link_site, :myanimelist)
+          
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('FukuchiChiisaia')
+          end
+        end
+      end
+    end
+    
+    # Annict
+    describe 'Annict' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            annict.com/@creseca
+            http://www.annict.com/@creseca
+            http://annict.com/@creseca
+            @creseca
+            creseca
+          ]
+          site = build(:profile_link_site, :myanimelist)
+          
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('creseca')
+          end
+        end
+      end
+    end
+    
+    # MyFigureCollection
+    describe 'MyFigureCollection' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            myfigurecollection.net/profile/creseca
+            https://myfigurecollection.net/profile/creseca
+            https://www.myfigurecollection.net/profile/creseca
+            creseca
+          ]
+          site = build(:profile_link_site, :myfigurecollection)
+          
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('creseca')
+          end
+        end
+      end
+    end
+    
+    # Pixiv
+    describe 'Pixiv' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            pixiv.net/member.php?id=19557969
+            https://www.pixiv.net/member.php?id=19557969
+            https://pixiv.net/member.php?id=19557969
+            19557969
+          ]
+          site = build(:profile_link_site, :pixiv)
+          
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('19557969')
+          end
+        end
+      end
+    end
+    
+    # Booth.pm
+    describe 'Booth.pm' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            creseca.booth.pm
+            https://creseca.booth.pm/
+            creseca
+          ]
+          site = build(:profile_link_site, :boothpm)
+          
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('creseca')
+          end
+        end
+      end
+    end
+    
+    # AniDB
+    describe 'AniDB' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            anidb.net/up637678
+            https://www.anidb.net/up637678
+            https://anidb.net/up637678
+            637678
+          ]
+          site = build(:profile_link_site, :anidb)
+          
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('637678')
+          end
+        end
+      end
+    end
+    
+    # AniList
+    describe 'AniList' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            anilist.co/fukuchichiisaia
+            https://www.anilist.co/fukuchichiisaia
+            https://anilist.co/fukuchichiisaia
+            fukuchichiisaia
+          ]
+          site = build(:profile_link_site, :anilist)
+          
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('fukuchichiisaia')
+          end
+        end
+      end
+    end
+    
+    # VNDB
+    describe 'VNDB' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            vndb.org/u70299
+            https://www.vndb.org/u70299
+            https://vndb.org/u70299
+            70299
+          ]
+          site = build(:profile_link_site, :vndb)
+          
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('70299')
+          end
+        end
+      end
+    end
   end # end of validate context
 end
