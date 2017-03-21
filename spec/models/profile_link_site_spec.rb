@@ -640,8 +640,8 @@ RSpec.describe ProfileLinkSite, type: :model do
         it 'should return a username' do
           urls = %w[
             myanimelist.net/profile/FukuchiChiisaia
-            http://www.myanimelist.net/profile/FukuchiChiisaia
-            http://myanimelist.net/profile/FukuchiChiisaia
+            https://www.myanimelist.net/profile/FukuchiChiisaia
+            https://myanimelist.net/profile/FukuchiChiisaia
             FukuchiChiisaia
           ]
           site = build(:profile_link_site, :myanimelist)
@@ -660,8 +660,8 @@ RSpec.describe ProfileLinkSite, type: :model do
         it 'should return a username' do
           urls = %w[
             annict.com/@creseca
-            http://www.annict.com/@creseca
-            http://annict.com/@creseca
+            https://www.annict.com/@creseca
+            https://annict.com/@creseca
             @creseca
             creseca
           ]
