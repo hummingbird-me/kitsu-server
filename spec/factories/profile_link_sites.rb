@@ -234,5 +234,4 @@ FactoryGirl.define do
 
     # rubocop:enable Metrics/LineLength
   end
-
 end

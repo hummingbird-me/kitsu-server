@@ -793,5 +793,4 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
   end # end of validate context
-
 end
