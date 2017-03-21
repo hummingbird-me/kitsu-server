@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: profile_link_sites
@@ -9,8 +8,7 @@
 #  validate_replace :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#
-# rubocop:enable Metrics/LineLength
+# rubocop:disable Metrics/LineLength
 
 FactoryGirl.define do
   factory :profile_link_site do
@@ -236,4 +234,5 @@ FactoryGirl.define do
 
     # rubocop:enable Metrics/LineLength
   end
+
 end

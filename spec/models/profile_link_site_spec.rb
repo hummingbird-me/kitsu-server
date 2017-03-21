@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: profile_link_sites
@@ -10,7 +9,7 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
-# rubocop:enable Metrics/LineLength
+# rubocop:disable Metrics/LineLength
 
 require 'rails_helper'
 
@@ -794,4 +793,5 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
   end # end of validate context
+
 end
