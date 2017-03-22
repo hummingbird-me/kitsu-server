@@ -190,28 +190,16 @@ FactoryGirl.define do
       validate_replace 'https://myanimelist.net/profile/\k<username>'
     end
 
-    # Annict
-    trait :annict do
-      validate_find '\A(https?://)?(www.)?(annict.com/)?(@)?(?<username>[a-zA-Z0-9]+)\z'
-      validate_replace 'https://annict.com/\k<username>'
-    end
-
-    # MyFigureCollection
-    trait :myfigurecollection do
-      validate_find '\A(https?://)?(www.)?(myfigurecollection.net/)?(profile/)?(?<username>[a-zA-Z0-9]+)\z'
-      validate_replace 'https://myfigurecollection.net/profile/\k<username>'
+    # AnimePlanet
+    trait :animeplanet do
+      validate_find '\A(https?://)?(www.)?(anime-planet.com/)?(users/)?(?<username>[a-zA-Z0-9_\-]+)\z'
+      validate_replace 'https://anime-planet.com\users\k<username>'
     end
 
     # Pixiv
     trait :pixiv do
       validate_find '\A(https?://)?(www.)?(pixiv.net/)?(member.php?id=)?(?<username>[0-9]+)\z'
       validate_replace 'https://pixiv.net/member.php?id=\k<username>'
-    end
-
-    # Booth.pm
-    trait :boothpm do
-      validate_find '\A(https?://)?(?<username>[a-zA-z0-9]+)(.booth.pm)?\z'
-      validate_replace 'http://\k<username>.booth.pm'
     end
 
     # AniDB
@@ -228,7 +216,7 @@ FactoryGirl.define do
 
     # VNDB
     trait :vndb do
-      validate_find '\A(https://)?(www.)?(vndb.org/)?(u)?(?<username>[0-9]+)\z'
+      validate_find '\A(https://)?(www.)?(vndb.org/)?(?<username>[0-9]+)\z'
       validate_replace 'https://vndb.org/\k<username>'
     end
 

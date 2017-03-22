@@ -653,42 +653,21 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
 
-    # Annict
-    describe 'Annict' do
+    # AnimePlanet
+    describe 'AnimePlanet' do
       context 'success' do
         it 'should return a username' do
           urls = %w[
-            annict.com/@creseca
-            https://www.annict.com/@creseca
-            https://annict.com/@creseca
-            @creseca
-            creseca
+            anime-planet.com/users/FukuchiChiisaia
+            https://www.anime-planet.com/users/FukuchiChiisaia
+            https://anime-planet.com/users/FukuchiChiisaia
+            FukuchiChiisaia
           ]
-          site = build(:profile_link_site, :myanimelist)
+          site = build(:profile_link_site, :animeplanet)
 
           urls.each do |url|
             temp = site.validate_find.match(url)
-            expect(temp[:username]).to eq('creseca')
-          end
-        end
-      end
-    end
-
-    # MyFigureCollection
-    describe 'MyFigureCollection' do
-      context 'success' do
-        it 'should return a username' do
-          urls = %w[
-            myfigurecollection.net/profile/creseca
-            https://myfigurecollection.net/profile/creseca
-            https://www.myfigurecollection.net/profile/creseca
-            creseca
-          ]
-          site = build(:profile_link_site, :myfigurecollection)
-
-          urls.each do |url|
-            temp = site.validate_find.match(url)
-            expect(temp[:username]).to eq('creseca')
+            expect(temp[:username]).to eq('FukuchiChiisaia')
           end
         end
       end
@@ -709,25 +688,6 @@ RSpec.describe ProfileLinkSite, type: :model do
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('19557969')
-          end
-        end
-      end
-    end
-
-    # Booth.pm
-    describe 'Booth.pm' do
-      context 'success' do
-        it 'should return a username' do
-          urls = %w[
-            creseca.booth.pm
-            https://creseca.booth.pm/
-            creseca
-          ]
-          site = build(:profile_link_site, :boothpm)
-
-          urls.each do |url|
-            temp = site.validate_find.match(url)
-            expect(temp[:username]).to eq('creseca')
           end
         end
       end
@@ -781,13 +741,13 @@ RSpec.describe ProfileLinkSite, type: :model do
             vndb.org/u70299
             https://www.vndb.org/u70299
             https://vndb.org/u70299
-            70299
+            u70299
           ]
           site = build(:profile_link_site, :vndb)
 
           urls.each do |url|
             temp = site.validate_find.match(url)
-            expect(temp[:username]).to eq('70299')
+            expect(temp[:username]).to eq('u70299')
           end
         end
       end
