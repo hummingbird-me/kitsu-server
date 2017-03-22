@@ -156,15 +156,15 @@ pixiv:
 anidb:
   id: 32
   name: AniDB
-  validate_find: '\A(https://)?(www.)?(anidb.net/)?(up)?(?<username>[0-9]+)\z'
+  validate_find: '\A(https?://)?(www.)?(anidb.net/)?(up)?(?<username>[0-9]+)\z'
   validate_replace: 'https://anidb.net/up\k<username>'
 anilist:
   id: 33
   name: AniList
-  validate_find: '\A(https://)?(www.)?(anilist.co/)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_find: '\A(https?://)?(www.)?(anilist.co/)?(?<username>[a-zA-Z0-9]+)\z'
   validate_replace: 'https://anilist.co/\k<username>'
 vndb:
   id: 34
   name: VNDB
-  validate_find: '\A(https://)?(www.)?(vndb.org/)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_find: '\A(https?://)?(www.)?(vndb.org/)?(?<username>[a-zA-Z0-9]+)\z'
   validate_replace: 'https://vndb.org/\k<username>'

@@ -198,25 +198,25 @@ FactoryGirl.define do
 
     # Pixiv
     trait :pixiv do
-      validate_find '\A(https?://)?(www.)?(pixiv.me/)?(?<username>[0-9]+)\z'
+      validate_find '\A(https?://)?(www.)?(pixiv.me/)?(?<username>[a-zA-Z0-9]+)\z'
       validate_replace 'https://pixiv.me/\k<username>'
     end
 
     # AniDB
     trait :anidb do
-      validate_find '\A(https://)?(www.)?(anidb.net/)?(up)?(?<username>[0-9]+)\z'
+      validate_find '\A(https?://)?(www.)?(anidb.net/)?(up)?(?<username>[0-9]+)\z'
       validate_replace 'https://anidb.net/up\k<username>'
     end
 
     # AniList
     trait :anilist do
-      validate_find '\A(https://)?(www.)?(anilist.co/)?(?<username>[a-zA-Z0-9]+)\z'
+      validate_find '\A(https?://)?(www.)?(anilist.co/)?(?<username>[a-zA-Z0-9]+)\z'
       validate_replace 'https://anilist.co/\k<username>'
     end
 
     # VNDB
     trait :vndb do
-      validate_find '\A(https://)?(www.)?(vndb.org/)?(?<username>[a-zA-Z0-9]+)\z'
+      validate_find '\A(https?://)?(www.)?(vndb.org/)?(?<username>[a-zA-Z0-9]+)\z'
       validate_replace 'https://vndb.org/\k<username>'
     end
 
