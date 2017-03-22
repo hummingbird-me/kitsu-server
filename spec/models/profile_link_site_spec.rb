@@ -678,16 +678,16 @@ RSpec.describe ProfileLinkSite, type: :model do
       context 'success' do
         it 'should return a username' do
           urls = %w[
-            pixiv.net/member.php?id=19557969
-            https://www.pixiv.net/member.php?id=19557969
-            https://pixiv.net/member.php?id=19557969
-            19557969
+            pixiv.me/creseca
+            https://www.pixiv.me/creseca
+            https://pixiv.me/creseca
+            creseca
           ]
           site = build(:profile_link_site, :pixiv)
 
           urls.each do |url|
             temp = site.validate_find.match(url)
-            expect(temp[:username]).to eq('19557969')
+            expect(temp[:username]).to eq('creseca')
           end
         end
       end

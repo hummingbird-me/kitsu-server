@@ -151,8 +151,8 @@ animeplanet:
 pixiv:
   id: 31
   name: Pixiv
-  validate_find: '\A(https?://)?(www.)?(pixiv.net/)?(member.php?id=)?(?<username>[0-9]+)\z'
-  validate_replace: 'https://pixiv.net/member.php?id=\k<username>'
+  validate_find: '\A(https?://)?(www.)?(pixiv.me/)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_replace: 'https://pixiv.me\k<username>'
 anidb:
   id: 32
   name: AniDB
@@ -166,5 +166,5 @@ anilist:
 vndb:
   id: 34
   name: VNDB
-  validate_find: '\A(https://)?(www.)?(vndb.org/)?(?<username>[0-9]+)\z'
+  validate_find: '\A(https://)?(www.)?(vndb.org/)?(?<username>[a-zA-Z0-9]+)\z'
   validate_replace: 'https://vndb.org/\k<username>'
