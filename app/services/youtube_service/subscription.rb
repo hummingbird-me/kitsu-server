@@ -23,13 +23,11 @@ class YoutubeService
     end
 
     def topic_url
-      TOPIC_URL.expand(channel_id: channel_id)
+      TOPIC_URL.expand(channel_id: channel_id).to_s
     end
 
     def self.hmac(data)
-      digest = OpenSSL::Digest.new('sha1')
-      hmac = OpenSSL::HMAC.digest(digest, secret, data)
-      hmac.hexdigest
+      OpenSSL::HMAC.hexdigest('SHA1', secret, data)
     end
 
     def self.hmac_matches?(data, expected_hmac)
@@ -60,10 +58,13 @@ class YoutubeService
       CALLBACK_URL.expand(linked_account: linked_account.id)
     end
 
-    def secret
+    def self.secret
       ENV['YOUTUBE_PUBSUB_SECRET']
     end
-    module_function :secret
+
+    def secret
+      self.class.secret
+    end
 
     def channel_id
       linked_account.external_user_id
