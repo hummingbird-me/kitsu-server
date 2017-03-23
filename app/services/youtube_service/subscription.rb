@@ -1,0 +1,72 @@
+class YoutubeService
+  class Subscription
+    TOPIC_URL = Addressable::Template.new(
+      'https://www.youtube.com/xml/feeds/videos.xml{?channel_id}'
+    ).freeze
+    CALLBACK_URL = Addressable::Template.new(
+      'https://kitsu.io/api/hooks/{?linked_account}'
+    ).freeze
+    SUBSCRIBE_URL = 'https://pubsubhubbub.appspot.com/subscribe'.freeze
+
+    attr_reader :linked_account
+
+    def initialize(linked_account)
+      @linked_account = LinkedAccount.find(linked_account)
+    end
+
+    def subscribe
+      post form_for('subscribe')
+    end
+
+    def unsubscribe
+      post form_for('unsubscribe')
+    end
+
+    def topic_url
+      TOPIC_URL.expand(channel_id: channel_id)
+    end
+
+    def self.hmac(data)
+      digest = OpenSSL::Digest.new('sha1')
+      hmac = OpenSSL::HMAC.digest(digest, secret, data)
+      hmac.hexdigest
+    end
+
+    def self.hmac_matches?(data, expected_hmac)
+      ActiveSupport::SecurityUtils.secure_compare(hmac(data), expected_hmac)
+    end
+
+    private
+
+    def post(form)
+      body = URI.encode_www_form(form)
+      res = Typhoeus.post(SUBSCRIBE_URL,
+        headers: { 'Content-Type' => 'application/x-www-form-urlencoded' },
+        body: body)
+
+      res.success?
+    end
+
+    def form_for(action)
+      {
+        'hub.callback' => callback_url,
+        'hub.topic' => topic_url,
+        'hub.mode' => action,
+        'hub.secret' => secret
+      }
+    end
+
+    def callback_url
+      CALLBACK_URL.expand(linked_account: linked_account.id)
+    end
+
+    def secret
+      ENV['YOUTUBE_PUBSUB_SECRET']
+    end
+    module_function :secret
+
+    def channel_id
+      linked_account.external_user_id
+    end
+  end
+end
