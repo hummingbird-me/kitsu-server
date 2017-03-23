@@ -26,31 +26,22 @@
 # rubocop:enable Metrics/LineLength
 
 class LinkedAccount
-  class YouTubeChannel < LinkedAccount
-    API_PREFIX = 'https://www.googleapis.com/youtube/v3'.freeze
-    CHANNEL_URL = Addressable::Template.new(
-      "#{API_PREFIX}/channels.list?part=id&mine=true{&query*}"
-    ).freeze
-    VERIFY_URL = Addressable::Template.new(
-      "#{API_PREFIX}/tokeninfo{?query*}"
-    ).freeze
+  class YoutubeChannel < LinkedAccount
+    def client
+      @client ||= YoutubeService::Client.new(token)
+    end
 
     def subscription
-      @subscription ||= YouTubeSubscription.new(self, external_user_id)
+      @subscription ||= YoutubeService::Subscription.new(self)
+    end
+    delegate :topic_url, to: :subscription
+
+    before_validation do
+      self.external_user_id = client.channel_id
     end
 
     validate do
-      res = Typhoeus.get(VERIFY_URL.expand(query: { access_token: token }))
-      unless res.success? && res.aud == ENV['YOUTUBE_API_KEY']
-        errors.add(:token, 'could not be verified')
-      end
-    end
-
-    before_validation do
-      # Get the Channel ID with the token and save it
-      res = Typhoeus.get(CHANNEL_URL.expand(query: { access_token: token }))
-      data = JSON.parse(res.body)
-      self.external_user_id = data.id if res.success?
+      errors.add(:token, 'could not be verified') unless client.valid?
     end
 
     after_commit do
