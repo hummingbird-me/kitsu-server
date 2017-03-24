@@ -23,7 +23,7 @@ class FeedsController < ApplicationController
     activity = feed.activities.includes(:subject).find(params[:uuid])
     can_destroy = activity.subject && policy_for(activity.subject).destroy?
     if feed_owner?(activity.origin) || can_destroy
-      feed.activities.destroy_original(params[:uuid], uuid: true)
+      activity.destroy_original
       return render nothing: true, status: 204
     end
     render nothing: true, status: 401
