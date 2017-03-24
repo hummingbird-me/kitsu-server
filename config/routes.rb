@@ -121,6 +121,10 @@ Rails.application.routes.draw do
     post '/debug/trace_on', to: 'debug#trace_on'
     get '/debug/gc_info', to: 'debug#gc_info'
 
+    ### WebHooks
+    get '/hooks/youtube', to: 'webhooks#youtube_verify'
+    post '/hooks/youtube', to: 'webhooks#youtube_notify'
+
     ### Staging Sync
     post '/user/_prodsync', to: 'users#prod_sync'
 

@@ -20,7 +20,7 @@ class YoutubeService
 
     def post!(user)
       post = Post.where('content LIKE ?', content_like).where(user: user)
-      post.first_or_create!(content: content)
+      post.first_or_create!(content: post_content)
     end
 
     def post_content

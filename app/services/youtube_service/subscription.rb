@@ -10,8 +10,9 @@ class YoutubeService
 
     attr_reader :linked_account
 
-    def initialize(linked_account)
-      @linked_account = LinkedAccount.find(linked_account)
+    def initialize(link)
+      @linked_account = link
+      @linked_account = LinkedAccount.find(link) unless link.respond_to?(:id)
     end
 
     def subscribe
