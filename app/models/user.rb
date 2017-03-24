@@ -271,7 +271,7 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
-  after_create do
+  after_commit on: :create do
     # Send Confirmation Email
     UserMailer.confirmation(self).deliver_later
     # Set up feeds
