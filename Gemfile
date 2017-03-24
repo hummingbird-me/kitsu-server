@@ -55,7 +55,7 @@ gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'stream-ruby', '~> 2.5.2'
+gem 'stream-ruby', '~> 2.5.4'
 gem 'stream_rails', github: 'GetStream/stream-rails', branch: 'feature/subreference-enrichment' # Feeds
 gem 'typhoeus' # Parallelize scraping tasks
 
@@ -99,11 +99,13 @@ group :test do
   gem 'simplecov' # Local coverage
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
+  gem 'test_after_commit' # Rails 4 doesn't run commit callbacks on transactions
 
   # Libraries used to test our API itself
   gem 'oauth2'
 end
 
 group :production, :staging do
+  gem 'puma_worker_killer'
   gem 'rails_12factor' # Log to stdout, serve assets
 end

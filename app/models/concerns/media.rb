@@ -64,15 +64,30 @@ module Media
     (end_date || Date.today) - start_date if start_date
   end
 
-  def feed
-    @feed ||= Feed.media(self.class.name, id)
+  def posts_feed
+    @posts_feed ||= Feed.media_posts(self.class.name, id)
+  end
+
+  def media_feed
+    @media_feed ||= Feed.media_media(self.class.name, id)
   end
 
   def aggregated_feed
     @aggregated_feed ||= Feed.media_aggr(self.class.name, id)
   end
 
+  def posts_aggregated_feed
+    @posts_aggregated_feed ||= Feed.media_posts_aggr(self.class.name, id)
+  end
+
+  def media_aggregated_feed
+    @media_aggregated_feed ||= Feed.media_media_aggr(self.class.name, id)
+  end
+
   def follow_self
-    aggregated_feed.follow(feed)
+    aggregated_feed.follow(posts_feed)
+    aggregated_feed.follow(media_feed)
+    posts_aggregated_feed.follow(posts_feed)
+    media_aggregated_feed.follow(media_feed)
   end
 end

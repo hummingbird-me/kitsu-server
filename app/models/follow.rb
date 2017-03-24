@@ -40,11 +40,17 @@ class Follow < ApplicationRecord
   validate :validate_not_yourself
 
   after_create do
-    follower.timeline.follow(followed.feed)
+    follower.timeline.follow(followed.posts_feed)
+    follower.timeline.follow(followed.media_feed)
+    follower.posts_timeline.follow(followed.posts_feed)
+    follower.media_timeline.follow(followed.media_feed)
   end
 
   after_destroy do
-    follower.timeline.unfollow(followed.feed)
+    follower.timeline.unfollow(followed.posts_feed)
+    follower.timeline.unfollow(followed.media_feed)
+    follower.posts_timeline.unfollow(followed.posts_feed)
+    follower.media_timeline.unfollow(followed.media_feed)
   end
 
   after_create { follower.update_feed_completed! }
