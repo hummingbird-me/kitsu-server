@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe LinkedAccountPolicy do
-  let(:owner) { token_for build(:user) }
-  let(:user) { token_for build(:user) }
+  let(:owner) { token_for build(:user, id: 1) }
+  let(:user) { token_for build(:user, id: 2) }
   let(:admin) { token_for create(:user, :admin) }
   let(:linked_account) do
     build(:linked_account, user: owner.resource_owner)

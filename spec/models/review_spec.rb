@@ -35,7 +35,9 @@
 require 'rails_helper'
 
 RSpec.describe Review, type: :model do
-  subject { build(:review) }
+  let(:user) { build(:user, id: 1) }
+
+  subject { build(:review, user: user) }
   it { should have_many(:likes).class_name('ReviewLike') }
   it { should belong_to(:media) }
   it { should validate_presence_of(:media) }
@@ -48,4 +50,14 @@ RSpec.describe Review, type: :model do
   it { should belong_to(:library_entry) }
   it { should validate_presence_of(:library_entry) }
   it { should validate_presence_of(:content) }
+
+  describe '#steam_activity' do
+    it 'publishes the activity to the user\'s media feed' do
+      expect(subject.stream_activity.feed).to eq(subject.user.media_feed)
+    end
+
+    it 'copies the activity to the media\'s media feed' do
+      expect(subject.stream_activity[:to]).to include(subject.media.media_feed)
+    end
+  end
 end

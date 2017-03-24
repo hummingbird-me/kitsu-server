@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe FavoritePolicy do
-  let(:owner) { token_for build(:user) }
-  let(:other) { token_for build(:user) }
+  let(:owner) { token_for build(:user, id: 1) }
+  let(:other) { token_for build(:user, id: 2) }
   let(:favorite) { build(:favorite, user: owner.resource_owner) }
   subject { described_class }
 

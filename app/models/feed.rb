@@ -1,16 +1,26 @@
 class Feed
   FEED_GROUPS = {
-    user: :flat,
+    user_posts: :flat,
+    user_media: :flat,
     user_aggr: :aggregated,
-    media: :flat,
+    user_posts_aggr: :aggregated,
+    user_media_aggr: :aggregated,
+    media_posts: :flat,
+    media_media: :flat,
     media_aggr: :aggregated,
+    media_posts_aggr: :aggregated,
+    media_media_aggr: :aggregated,
     group: :flat,
     group_aggr: :aggregated,
     post: :flat,
     reports_aggr: :aggregated,
     timeline: :aggregated,
+    timeline_posts: :aggregated,
+    timeline_media: :aggregated,
     notifications: :notification,
-    global: :aggregated
+    global: :aggregated,
+    global_posts: :aggregated,
+    global_media: :aggregated
   }.freeze
 
   attr_accessor :stream_feed, :group, :id
@@ -61,7 +71,7 @@ class Feed
     "#{group}:#{id}"
   end
 
-  FEED_GROUPS.keys.each do |feed|
+  FEED_GROUPS.except(:global, :global_media, :global_posts).keys.each do |feed|
     define_singleton_method(feed) { |*args| new(feed, args.join('-')) }
   end
 
@@ -71,6 +81,14 @@ class Feed
 
   def self.global
     new('global', 'global')
+  end
+
+  def self.global_posts
+    new('global_posts', 'global')
+  end
+
+  def self.global_media
+    new('global_media', 'global')
   end
 
   def type

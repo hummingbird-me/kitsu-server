@@ -15,11 +15,13 @@ on_worker_boot do
 end
 
 before_fork do
-  PumaWorkerKiller.config do |config|
-    config.ram           = 1024  # mb
-    config.frequency     = 60    # seconds
-    config.percent_usage = 0.94
-    config.rolling_restart_frequency = 24 * 3600 # 12 hours in seconds
+  unless ENV['RACK_ENV'] == 'development'
+    PumaWorkerKiller.config do |config|
+      config.ram           = 1024  # mb
+      config.frequency     = 60    # seconds
+      config.percent_usage = 0.94
+      config.rolling_restart_frequency = 24 * 3600 # 12 hours in seconds
+    end
+    PumaWorkerKiller.start
   end
-  PumaWorkerKiller.start
 end

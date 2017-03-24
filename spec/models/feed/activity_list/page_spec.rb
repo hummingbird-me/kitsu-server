@@ -6,7 +6,7 @@ RSpec.describe Feed::ActivityList::Page do
   let(:opts) { { feed: feed } }
 
   context 'on a flat feed' do
-    let(:feed) { Feed.user(1) }
+    let(:feed) { Feed.user_posts(1) }
     let(:data) do
       [
         { nsfw: true, actor: user.stream_id },

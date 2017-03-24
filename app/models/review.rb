@@ -58,11 +58,11 @@ class Review < ApplicationRecord
   end
 
   def stream_activity
-    user.feed.activities.new(
+    user.media_feed.activities.new(
       progress: progress,
       updated_at: updated_at,
       likes_count: likes_count,
-      to: [media.feed]
+      to: [media.media_feed]
     )
   end
 end

@@ -3,6 +3,11 @@ require 'rails_helper'
 RSpec.shared_examples 'media' do
   include_examples 'titleable'
 
+  before do
+    allow_any_instance_of(Feed).to receive(:follow)
+    allow_any_instance_of(Feed).to receive(:unfollow)
+  end
+
   # Columns which are mandatory for all media
   it { should have_db_column(:slug).of_type(:string) }
   it { should have_db_column(:abbreviated_titles).of_type(:string) }
@@ -94,6 +99,75 @@ RSpec.shared_examples 'media' do
         subject.reload
         expect(subject.rating_frequencies['3']).to eq('1')
       end
+    end
+  end
+
+  describe '#posts_feed' do
+    it 'returns a posts feed for the media' do
+      expect(subject.posts_feed)
+        .to eq(Feed.media_posts(described_class, subject.id))
+    end
+  end
+
+  describe '#media_feed' do
+    it 'returns a media feed for the media' do
+      expect(subject.media_feed)
+        .to eq(Feed.media_media(described_class, subject.id))
+    end
+  end
+
+  describe '#aggregated_feed' do
+    it 'returns a general aggregated feed for the media' do
+      expect(subject.aggregated_feed)
+        .to eq(Feed.media_aggr(described_class, subject.id))
+    end
+  end
+
+  describe '#posts_aggregated_feed' do
+    it 'returns a posts aggregated feed for the media' do
+      expect(subject.posts_aggregated_feed)
+        .to eq(Feed.media_posts_aggr(described_class, subject.id))
+    end
+  end
+
+  describe '#media_aggregated_feed' do
+    it 'returns a media aggregated feed for the media' do
+      expect(subject.media_aggregated_feed)
+        .to eq(Feed.media_media_aggr(described_class, subject.id))
+    end
+  end
+
+  describe 'after creating' do
+    context 'setting up media feed' do
+      let(:aggregated_feed) { double(:feed).as_null_object }
+
+      before do
+        allow(subject).to receive(:aggregated_feed).and_return(aggregated_feed)
+      end
+
+      it 'sets the aggregated feed to follow the posts feed' do
+        expect(subject.aggregated_feed)
+          .to receive(:follow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'sets the aggregated feed to follow the media feed' do
+        expect(subject.aggregated_feed)
+          .to receive(:follow).with(subject.media_feed)
+        subject.save!
+      end
+    end
+
+    it 'sets the aggregated posts feed to follow the posts feed' do
+      expect(subject.posts_aggregated_feed)
+        .to receive(:follow).with(subject.posts_feed)
+      subject.save!
+    end
+
+    it 'sets the aggregated media feed to follow the media feed' do
+      expect(subject.media_aggregated_feed)
+        .to receive(:follow).with(subject.media_feed)
+      subject.save!
     end
   end
 end

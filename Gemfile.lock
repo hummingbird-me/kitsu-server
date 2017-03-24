@@ -473,10 +473,12 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stream-ruby (2.5.2)
+    stream-ruby (2.5.4)
       faraday (~> 0.10.0)
       http_signatures (~> 0)
       jwt (= 1.5.2)
+    test_after_commit (1.1.0)
+      activerecord (>= 3.2)
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.6)
@@ -574,8 +576,9 @@ DEPENDENCIES
   sinatra
   sitemap_generator
   spring
-  stream-ruby (~> 2.5.2)
+  stream-ruby (~> 2.5.4)
   stream_rails!
+  test_after_commit
   timecop
   twitter
   typhoeus
