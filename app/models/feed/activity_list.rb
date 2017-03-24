@@ -116,8 +116,8 @@ class Feed
     def find(id)
       act = feed.stream_feed.get(id_lte: id, limit: 1)['results'].first
       enricher = StreamRails::Enrich.new(%w[target actor object])
-      enriched_activity = enricher.enrich_activities(act)
-      Feed::Activity.new(feed, enriched_activity)
+      enriched_activities = enricher.enrich_activities([act])
+      Feed::Activity.new(feed, enriched_activities.first)
     end
 
     def add(activity)
