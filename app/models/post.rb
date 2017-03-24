@@ -82,12 +82,17 @@ class Post < ApplicationRecord
 
   def target_feed
     if target_user
-      target_user.feed
+      target_user.aggregated_feed
     elsif target_group
       target_group.feed
     else
       user.feed
     end
+  end
+
+  def target_timelines
+    return [] unless target_user
+    [user.timeline, target_user.timeline]
   end
 
   def stream_activity
@@ -97,7 +102,7 @@ class Post < ApplicationRecord
       post_likes_count: post_likes_count,
       comments_count: comments_count,
       nsfw: nsfw,
-      to: other_feeds + notified_feeds
+      to: other_feeds + notified_feeds + target_timelines
     )
   end
 
