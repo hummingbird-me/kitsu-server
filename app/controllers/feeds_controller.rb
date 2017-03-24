@@ -91,8 +91,8 @@ class FeedsController < ApplicationController
 
   def feed_owner?(feed_group = params[:group], id = params[:id])
     if feed_group.is_a?(Feed)
-      feed_group = feed_group.group
       id = feed_group.id
+      feed_group = feed_group.group
     end
 
     case feed_group
