@@ -10,7 +10,7 @@ class Feed
       super(data)
     end
 
-    def as_json(options = {})
+    def as_json(_options = {})
       json = to_h.transform_values { |val| Feed.get_stream_id(val) }
       json.symbolize_keys!
       json[:time] = json[:time]&.strftime('%Y-%m-%dT%H:%M:%S%:z')
@@ -35,8 +35,12 @@ class Feed
     end
 
     def origin
-      feed = super
-      Feed.new(*feed.split(':')) if feed
+      origin_feed = super
+      if origin_feed
+        Feed.new(*origin_feed.split(':'))
+      else
+        feed
+      end
     end
 
     def create
