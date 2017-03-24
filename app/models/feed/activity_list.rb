@@ -114,9 +114,18 @@ class Feed
     end
 
     def find(id)
-      act = feed.stream_feed.get(id_lte: id, limit: 1)['results'].first
+      # Try to get the activity from the flat equivalent (if there is one)
+      act = feed.flat.stream_feed.get(id_lte: id, limit: 1)['results'].first
+      # If there's no flat equivalent, try to find it in the group
+      if act.key?('activities')
+        act = act['activities'].select { |a| a['id'] == id }.compact.first
+      end
+      # If we got nothing, give up
+      return nil unless act
+      # Enrich it
       enricher = StreamRails::Enrich.new(%w[target actor object])
       enriched_activities = enricher.enrich_activities([act])
+      # Wrap it
       Feed::Activity.new(feed, enriched_activities.first)
     end
 

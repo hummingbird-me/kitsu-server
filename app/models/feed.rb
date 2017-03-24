@@ -38,6 +38,14 @@ class Feed
     stream_id == other.stream_id
   end
 
+  def flat
+    if group.end_with?('_aggr')
+      Feed.new(group.sub('_aggr', ''), id)
+    else
+      self
+    end
+  end
+
   def self.follow_many(follows, scrollback: 100)
     follows = follows.map(&:to_a).map(&:flatten)
     stream_follows = follows.map do |(source, target)|
