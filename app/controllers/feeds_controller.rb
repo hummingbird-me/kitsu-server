@@ -20,11 +20,9 @@ class FeedsController < ApplicationController
   end
 
   def destroy_activity
-    uuid = params[:uuid]
     activity = feed.activities.includes(:subject).find(params[:uuid])
     can_destroy = activity.subject && policy_for(activity.subject).destroy?
-    origin = activity.origin
-    if feed_owner?(origin.group, origin.id) || can_destroy
+    if feed_owner?(activity.origin) || can_destroy
       feed.activities.destroy_original(params[:uuid], uuid: true)
       return render nothing: true, status: 204
     end
@@ -92,6 +90,11 @@ class FeedsController < ApplicationController
   end
 
   def feed_owner?(feed_group = params[:group], id = params[:id])
+    if feed_group.is_a?(Feed)
+      feed_group = feed_group.group
+      id = feed_group.id
+    end
+
     case feed_group
     when 'user', 'user_aggr'
       user = User.find_by(id: id)
