@@ -45,8 +45,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Anime
   config.model 'Anime' do
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    field(:abbreviated_titles, :serialized) { html_attributes rows: '6',
-      cols: '70' }
+    field :abbreviated_titles, :serialized do
+      html_attributes rows: '6', cols: '70'
+    end
     fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
       :cover_image, :age_rating, :age_rating_guide
     include_all_fields
@@ -62,8 +63,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Manga
   config.model 'Manga' do
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    field(:abbreviated_titles, :serialized) { html_attributes rows: '6',
-      cols: '70' }
+    field :abbreviated_titles, :serialized do
+      html_attributes rows: '6', cols: '70'
+    end
     fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
       :cover_image, :age_rating, :age_rating_guide
     include_all_fields
@@ -76,8 +78,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Drama
   config.model 'Drama' do
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    field(:abbreviated_titles, :serialized) { html_attributes rows: '6',
-      cols: '70' }
+    field :abbreviated_titles, :serialized do
+      html_attributes rows: '6', cols: '70'
+    end
     fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
       :cover_image, :age_rating, :age_rating_guide
     include_all_fields
