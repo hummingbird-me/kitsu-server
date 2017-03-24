@@ -34,6 +34,11 @@ class Feed
       self.object = val
     end
 
+    def origin
+      feed = super
+      Feed.new(*feed.split(':')) if feed
+    end
+
     def create
       feed.activities.add(self)
     end
@@ -44,6 +49,10 @@ class Feed
 
     def destroy
       feed.activities.destroy(self)
+    end
+
+    def destroy_original
+      origin.activities.destroy(self)
     end
   end
 end
