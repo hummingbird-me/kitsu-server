@@ -91,7 +91,7 @@ RSpec.describe Post, type: :model do
 
     describe '#stream_activity' do
       it "should have the target user's feed as the target" do
-        expect(subject.stream_activity.feed).to eq(user.feed)
+        expect(subject.stream_activity.feed).to eq(user.aggregated_feed)
       end
       it "should have the target user's notifications in the to field" do
         expect(activity[:to]).to include(user.notifications.stream_id)
