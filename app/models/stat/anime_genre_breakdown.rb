@@ -27,17 +27,20 @@ class Stat
         record.stats_data['total'] += 1
       end
 
-      p record
       record.save
     end
 
     def self.decrement_genres(user, genres)
-      record = find_or_initialize_by(user: user)
+      record = find_by(user: user)
+      errors.add(:stat, "Stat doesn't exist, can't go negative.") unless record
 
       genres.each do |genre|
+        next unless record.stats_data[genre.slug]
+
         record.stats_data[genre.slug] -= 1
         record.stats_data['total'] -= 1
       end
+
       record.save
     end
   end
