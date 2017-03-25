@@ -76,7 +76,14 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
   config.model('MangaCharacter') { parent Manga }
   config.model('MangaStaff') { parent Manga }
-  config.model('Chapter') { parent Manga }
+  config.model 'Chapter' do
+    parent Manga
+    field :manga_id
+    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    fields :canonical_title, :number, :synopsis, :published, :volume, :length
+    include_all_fields
+    navigation_label 'Chapters'
+  end
   # Drama
   config.model 'Drama' do
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
