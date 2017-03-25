@@ -21,8 +21,9 @@ class FeedsController < ApplicationController
 
   def destroy_activity
     activity = feed.activities.includes(:subject).find(params[:uuid])
-    can_destroy = activity.subject && policy_for(activity.subject).destroy?
-    if feed_owner?(activity.origin) || can_destroy
+    subject_enriched = !activity.subject.is_a?(String)
+    can_destroy = subject_enriched && policy_for(activity.subject).destroy?
+    if can_destroy || feed_owner?(activity.origin)
       activity.destroy_original
       return render nothing: true, status: 204
     end
