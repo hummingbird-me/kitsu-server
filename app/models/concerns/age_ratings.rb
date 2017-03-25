@@ -3,6 +3,7 @@ module AgeRatings
 
   AGE_RATINGS = %i[G PG R R18].freeze
   SAFE_AGE_RATINGS = %w[G PG R].freeze
+  UNSAFE_AGE_RATINGS = (AGE_RATINGS - SAFE_AGE_RATINGS).freeze
 
   # SFW-ness is whitelist, not blacklist
   def sfw?
@@ -18,6 +19,9 @@ module AgeRatings
 
     scope :sfw, -> {
       where(age_rating: age_ratings.values_at(*SAFE_AGE_RATINGS) + [nil])
+    }
+    scope :nsfw, -> {
+      where(age_rating: age_ratings.values_at(*UNSAFE_AGE_RATINGS))
     }
   end
 end
