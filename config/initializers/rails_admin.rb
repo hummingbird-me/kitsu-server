@@ -30,6 +30,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     edit
     delete
     history_show
+    show_in_app do
+      only ['Anime', 'Manga', 'Groups', 'User']
+    end
   end
 
   # Display canonical_title for label on media
