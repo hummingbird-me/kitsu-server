@@ -31,7 +31,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     delete
     history_show
     show_in_app do
-      only ['Anime', 'Manga', 'Groups', 'User']
+      only %w[Anime Manga Groups User]
     end
   end
 
