@@ -69,6 +69,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
       :cover_image, :age_rating, :age_rating_guide
     include_all_fields
+    exclude_fields :library_entries, :inverse_media_relationships, :favorites,
+      :average_rating, :cover_image_top_offset
     navigation_label 'Manga'
     weight(-15)
   end
