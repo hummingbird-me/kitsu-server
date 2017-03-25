@@ -131,7 +131,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       :dropbox_token, :dropbox_secret, :last_backup, :stripe_token,
       :stripe_customer_id, :import_status, :import_from, :import_error,
       :profile_completed, :feed_completed, :followers, :following, :comments,
-      :posts, :media_follows, :blocks, :last_recommendations_update, :title
+      :posts, :media_follows, :blocks, :last_recommendations_update, :title,
+      :library_entries
     navigation_label 'Users'
     weight(-10)
   end
