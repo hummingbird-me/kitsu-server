@@ -33,7 +33,7 @@ class Feed
         return activities if selects.empty?
         # We use map+reject(blank) so that we can modify the activities in the
         # groups
-        activities.lazy.map { |act|
+        activities = activities.lazy.map { |act|
           if act['activities'] # recurse into activity groups
             catch(:remove_group) do
               act['activities'] = apply_selects(act['activities'], selects)
@@ -43,7 +43,11 @@ class Feed
             next unless selects.all? { |proc| proc.call(act) }
             act
           end
-        }.reject(&:blank?).to_a
+        }
+        activities = activities.reject { |act|
+          act.blank? || (act['activities'] && act['activities'].blank?)
+        }
+        activities.to_a
       end
 
       # Apply a list of maps to the list of activities
