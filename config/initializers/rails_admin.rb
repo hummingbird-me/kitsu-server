@@ -33,10 +33,11 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     show_in_app do
       only %w[Anime Manga Group User]
       controller do
-        model = bindings[:object]
-        namespace = bindings[:abstract_model].table_name.parameterize
-        slug = model.try(:slug) || model.try(:name)
-        redirect_to "https://kitsu.io/#{namespace}/#{slug}"
+        proc do
+          namespace = @abstract_model.table_name.parameterize
+          slug = @object.try(:slug) || @object.try(:name)
+          redirect_to "https://kitsu.io/#{namespace}/#{slug}"
+        end
       end
     end
   end
