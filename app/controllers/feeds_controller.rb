@@ -21,7 +21,7 @@ class FeedsController < ApplicationController
 
   def destroy_activity
     activity = feed.activities.includes(:subject).find(params[:uuid])
-    render nothing: true, status: 404 unless activity
+    return render nothing: true, status: 404 unless activity
 
     subject_enriched = !activity.subject.is_a?(String)
     can_destroy = subject_enriched && policy_for(activity.subject).destroy?
