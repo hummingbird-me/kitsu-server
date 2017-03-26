@@ -46,7 +46,7 @@ class LinkedAccount
       end
     end
 
-    after_commit do
+    after_commit(on: %i[create update]) do
       if share_from_changed?
         if share_from?
           raise 'Subscribe failed' unless subscription.subscribe
@@ -55,5 +55,7 @@ class LinkedAccount
         end
       end
     end
+
+    after_commit(on: :destroy) { subscription.unsubscribe }
   end
 end
