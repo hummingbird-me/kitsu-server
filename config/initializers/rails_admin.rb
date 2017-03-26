@@ -31,7 +31,12 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     delete
     history_show
     show_in_app do
-      only %w[Anime Manga Groups User]
+      only %w[Anime Manga Group User]
+      controller do
+        namespace = @object.class.table_name.parameterize
+        slug = @object.try(:slug) || @object.try(:name)
+        redirect_to "https://kitsu.io/#{namespace}/#{slug}"
+      end
     end
   end
 
