@@ -10,6 +10,7 @@ module STIResource
   end
 
   included do
+    attribute :kind
     filter :kind, apply: ->(records, values, _options) {
       prefix = self.class._model_name
       kinds = values.map { |v| "#{prefix}::#{v.underscore.classify}" }
