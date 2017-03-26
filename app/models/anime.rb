@@ -61,6 +61,8 @@ class Anime < ApplicationRecord
   has_many :anime_staff, dependent: :destroy
   alias_attribute :show_type, :subtype
 
+  rails_admin { fields :episode_count }
+
   update_index('media#anime') { self }
 
   def slug_candidates
