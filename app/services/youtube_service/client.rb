@@ -1,11 +1,11 @@
 class YoutubeService
   class Client
-    API_PREFIX = 'https://www.googleapis.com/youtube/v3'.freeze
+    API_PREFIX = 'https://www.googleapis.com'.freeze
     CHANNEL_URL = Addressable::Template.new(
-      "#{API_PREFIX}/channels.list{?query*}"
+      "#{API_PREFIX}/youtube/v3/channels{?query*}"
     ).freeze
     VERIFY_URL = Addressable::Template.new(
-      "#{API_PREFIX}/tokeninfo{?query*}"
+      "#{API_PREFIX}/oauth2/v3/tokeninfo{?query*}"
     ).freeze
 
     attr_reader :token
