@@ -511,6 +511,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list
+  addressable
   annotate
   attr_encrypted (~> 3.0.0)
   aws-sdk

@@ -47,7 +47,7 @@ gem 'sanitize'
 
 # Miscellaneous Utilities
 gem 'acts_as_list' # Sortables!
-# JSON-API resources
+gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
 gem 'jsonapi-resources', '0.9.0'
