@@ -89,6 +89,11 @@ RSpec.describe Feed::ActivityList::Page do
         end]
         subject.to_a
       end
+
+      it 'should remove empty activity groups' do
+        opts[:fast_selects] = [->(_) { false }]
+        expect(subject.to_a.size).to eq(0)
+      end
     end
 
     context 'with a map' do
