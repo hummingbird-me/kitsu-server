@@ -10,7 +10,7 @@ class RegenerateStatService
     def anime_amount_watched
       User.where(id: LibraryEntry.select(:user_id).where(media_type: 'Anime'))
           .find_each do |user|
-            user.stats.find_by(type: 'Stat::AnimeGenreBreakdown').recalculate!
+            user.stats.find_by(type: 'Stat::AnimeAmountWatched').recalculate!
           end
     end
   end
