@@ -9,39 +9,47 @@ class Stat
       self.stats_data = genres
       stats_data['total'] = genres.values.reduce(:+)
 
-      if new_record?
-        save
-      else
-        update_attribute(:stats_data, stats_data)
-      end
+      save_record
     end
 
-    def self.increment_genres(user, genres)
+    def self.increment(user, genres)
       record = find_or_initialize_by(user: user)
-
-      genres.each do |genre|
-        record.stats_data[genre.slug] = 0 unless record.stats_data[genre.slug]
-        record.stats_data['total'] = 0 unless record.stats_data['total']
-
-        record.stats_data[genre.slug] += 1
-        record.stats_data['total'] += 1
-      end
-
-      record.save
+      record = default_stats(record) if record.new_record?
+      record.increment(genres)
     end
 
-    def self.decrement_genres(user, genres)
+    def increment(genres)
+      genres.each do |genre|
+        stats_data[genre.slug] = 0 unless stats_data[genre.slug]
+
+        stats_data[genre.slug] += 1
+        stats_data['total'] += 1
+      end
+
+      save_record
+    end
+
+    def self.decrement(user, genres)
       record = find_by(user: user)
       errors.add(:stat, "Stat doesn't exist, can't go negative.") unless record
+      record.decrement(genres)
+    end
 
+    def decrement(genres)
       genres.each do |genre|
-        next unless record.stats_data[genre.slug]
+        next unless stats_data[genre.slug]
 
-        record.stats_data[genre.slug] -= 1
-        record.stats_data['total'] -= 1
+        stats_data[genre.slug] -= 1
+        stats_data['total'] -= 1
       end
 
-      record.save
+      save_record
+    end
+
+    private
+
+    def default_stats(record)
+      record.stats_data['total'] = 0
     end
   end
 end
