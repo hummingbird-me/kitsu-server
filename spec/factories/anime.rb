@@ -53,6 +53,7 @@ FactoryGirl.define do
     average_rating { rand(1.0..10.0) / 2 }
     subtype { Anime.subtypes.keys.sample }
     age_rating 'G'
+    episode_length 24
 
     trait :nsfw do
       age_rating 'R18'
