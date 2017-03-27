@@ -14,7 +14,7 @@ RSpec.describe Stat::AnimeGenreBreakdown do
     end
   end
 
-  describe '#increment' do
+  describe '#self.increment' do
     before do
       subject.recalculate!
     end
@@ -24,7 +24,7 @@ RSpec.describe Stat::AnimeGenreBreakdown do
     end
   end
 
-  describe '#decrement' do
+  describe '#self.decrement' do
     before do
       subject.recalculate!
     end

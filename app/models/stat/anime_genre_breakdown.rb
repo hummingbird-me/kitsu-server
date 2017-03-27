@@ -9,12 +9,14 @@ class Stat
       self.stats_data = genres
       stats_data['total'] = genres.values.reduce(:+)
 
-      save_record
+      save!
     end
 
     def self.increment(user, genres)
-      record = find_or_initialize_by(user: user)
-      record = default_stats(record) if record.new_record?
+      record = user.stats.find_or_initialize_by(
+        type: 'Stat::AnimeGenreBreakdown'
+      )
+      record = record.default_stats if record.new_record?
       record.increment(genres)
     end
 
@@ -26,30 +28,34 @@ class Stat
         stats_data['total'] += 1
       end
 
-      save_record
+      save!
     end
 
     def self.decrement(user, genres)
-      record = find_by(user: user)
-      errors.add(:stat, "Stat doesn't exist, can't go negative.") unless record
+      record = user.stats.find_by(type: 'Stat::AnimeGenreBreakdown')
+      # TODO: do we want to raise or return?
+      raise "Stat doesn't exist" unless record
       record.decrement(genres)
     end
 
     def decrement(genres)
       genres.each do |genre|
+        # TODO: do we want to skip, or somehow record this error?
+        # this should never happen but there is a chance of
+        # mistakes happening
         next unless stats_data[genre.slug]
 
         stats_data[genre.slug] -= 1
         stats_data['total'] -= 1
       end
 
-      save_record
+      save!
     end
 
-    private
+    def default_stats
+      stats_data['total'] = 0
 
-    def default_stats(record)
-      record.stats_data['total'] = 0
+      self
     end
   end
 end
