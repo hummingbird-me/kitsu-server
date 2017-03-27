@@ -15,8 +15,7 @@ class Stat
     end
 
     def self.increment(user, library_entry)
-      record = Stat.find_or_initialize_by(
-        user: user,
+      record = user.stats.find_or_initialize_by(
         type: 'Stat::AnimeAmountWatched'
       )
       record = record.default_stats if record.new_record?
@@ -34,7 +33,7 @@ class Stat
     end
 
     def self.decrement(user, library_entry)
-      record = Stat.find_by(user: user, type: 'Stat::AnimeAmountWatched')
+      record = user.stats.find_by(type: 'Stat::AnimeAmountWatched')
       # TODO: do we want to raise or return?
       raise "Stat doesn't exist" unless record
       record.decrement(library_entry)
