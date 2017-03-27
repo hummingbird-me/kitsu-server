@@ -51,7 +51,7 @@ class TrendingController < ApplicationController
   end
 
   def validate_namespace
-    if %w[Anime Manga Drama].include?(namespace)
+    unless %w[Anime Manga Drama].include?(namespace)
       render_jsonapi serialize_error(400, 'Invalid namespace'), status: 400
     end
   end
