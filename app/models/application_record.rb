@@ -30,4 +30,9 @@ class ApplicationRecord < ActiveRecord::Base
       end
     end
   end
+
+  def destroy_later
+    update(deleted_at: Time.now) if attributes.include?('deleted_at')
+    DestructionWorker.perform_async(self.class.name, id)
+  end
 end
