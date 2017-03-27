@@ -200,9 +200,21 @@ class LibraryEntry < ApplicationRecord
     media.trending_vote(user, 1.0) if status_changed?
   end
 
-  after_commit ->() { sync_entry(:create) }, on: :create
-  after_commit ->() { sync_entry(:update) }, on: :update
-  after_destroy ->() { sync_entry(:delete) }
+  after_commit(on: :create) do
+    sync_entry(:create) # mal exporter
+    # Stat STI
+    Stat::AnimeGenreBreakdown.increment(user, media.genres)
+  end
+
+  after_commit(on: :update) do
+    sync_entry(:update) # mal exporter
+  end
+
+  after_destroy do
+    sync_entry(:delete) # mal exporter
+    # Stat STI
+    Stat::AnimeGenreBreakdown.decrement(user, media.genres)
+  end
 
   def sync_to_mal?
     return unless media_type.in? %w[Anime Manga]
@@ -234,16 +246,5 @@ class LibraryEntry < ApplicationRecord
       sync_to: true,
       type: 'LinkedAccount::MyAnimeList'
     )
-  end
-
-  after_commit ->() { create_stat }, on: :create
-  after_destroy ->() { delete_stat }
-
-  def create_stat
-    Stat::AnimeGenreBreakdown.increment_genres(user, media.genres)
-  end
-
-  def delete_stat
-    Stat::AnimeGenreBreakdown.decrement_genres(user, media.genres)
   end
 end
