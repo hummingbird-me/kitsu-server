@@ -1,5 +1,11 @@
 class Stat
   class AnimeAmountWatched < Stat
+    DEFAULT_STATS = {
+        'total_anime' => 0,
+        'total_episodes' => 0,
+        'total_time' => 0
+    }
+
     # fully regenerate data.
     def recalculate!
       entries = user.library_entries.eager_load(:anime)
@@ -18,7 +24,7 @@ class Stat
       record = user.stats.find_or_initialize_by(
         type: 'Stat::AnimeAmountWatched'
       )
-      record = record.default_stats if record.new_record?
+      record.stats_data['all_time'] = DEFAULT_STATS if record.new_record?
       record.increment(library_entry)
     end
 
@@ -34,8 +40,7 @@ class Stat
 
     def self.decrement(user, library_entry)
       record = user.stats.find_by(type: 'Stat::AnimeAmountWatched')
-      # TODO: do we want to raise or return?
-      raise "Stat doesn't exist" unless record
+      return unless record
       record.decrement(library_entry)
     end
 
@@ -46,16 +51,6 @@ class Stat
         progress_to_time(library_entry, library_entry.progress)
 
       save!
-    end
-
-    def default_stats
-      stats_data['all_time'] = {
-        total_anime: 0,
-        total_episodes: 0,
-        total_time: 0
-      }
-
-      self
     end
 
     def progress_difference(le)

@@ -1,7 +1,6 @@
 class Stat < ApplicationRecord
   belongs_to :user, required: true
-  # expose for jsonapi
-  alias_attribute :kind, :type
 
-  validates :type, :stats_data, presence: true
+  validates :type, presence: true
+  # removed validation for stats_data.
 end

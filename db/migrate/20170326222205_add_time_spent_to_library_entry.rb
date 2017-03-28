@@ -9,8 +9,8 @@ class AddTimeSpentToLibraryEntry < ActiveRecord::Migration
     add_column :library_entries, :time_spent, :integer
 
     say_with_time 'Filling time_spent column' do
-      LibraryEntry.where(media_type: 'Anime').joins(:anime)
-        .update_in_batches('time_spent = anime.episode_length * progress')
+      LibraryEntry.by_kind(:anime).joins(:anime)
+        .update_in_batches('time_spent = progress * anime.episode_length')
     end
 
     change_column_default :library_entries, :time_spent, 0

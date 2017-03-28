@@ -33,16 +33,12 @@ class Stat
 
     def self.decrement(user, genres)
       record = user.stats.find_by(type: 'Stat::AnimeGenreBreakdown')
-      # TODO: do we want to raise or return?
-      raise "Stat doesn't exist" unless record
+      return unless record
       record.decrement(genres)
     end
 
     def decrement(genres)
       genres.each do |genre|
-        # TODO: do we want to skip, or somehow record this error?
-        # this should never happen but there is a chance of
-        # mistakes happening
         next unless stats_data[genre.slug]
 
         stats_data[genre.slug] -= 1

@@ -1,4 +1,6 @@
 class StatResource < BaseResource
+  immutable
+
   include STIResource
   # STI, put all inheritance here
   model_hint model: Stat::AnimeGenreBreakdown
