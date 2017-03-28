@@ -41,10 +41,12 @@ FactoryGirl.define do
     user
     status 'planned'
     progress 0
-    rating 5
 
     trait :nsfw do
       association :media, :nsfw, factory: :anime, strategy: :build
+    end
+    trait :with_rating do
+      rating { rand(1.0..10.0) / 2 }
     end
   end
 end
