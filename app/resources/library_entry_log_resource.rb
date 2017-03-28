@@ -1,5 +1,8 @@
+require 'unlimited_paginator'
+
 class LibraryEntryLogResource < BaseResource
   immutable
+  paginator :unlimited
   attributes :progress, :rating, :reconsume_count, :reconsuming,
     :status, :volumes_owned, :action_performed, :sync_status
 
