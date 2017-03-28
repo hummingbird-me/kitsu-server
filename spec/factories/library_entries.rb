@@ -41,6 +41,8 @@ FactoryGirl.define do
     association :user, strategy: :build
     status 'planned'
     progress 0
+    rating 5
+    time_spent { progress * 24 }
 
     trait :nsfw do
       association :media, :nsfw, factory: :anime, strategy: :build

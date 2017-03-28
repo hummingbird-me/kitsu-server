@@ -28,8 +28,7 @@ RSpec.describe Stat::AnimeAmountWatched do
 
       expect(record.stats_data['all_time']['total_anime']).to eq(2)
       expect(record.stats_data['all_time']['total_episodes']).to eq(15)
-      # need to wait on migration for time_spent
-      # expect(record.stats_data['all_time']['total_time']).to eq(360)
+      expect(record.stats_data['all_time']['total_time']).to eq(360)
     end
   end
 
@@ -43,8 +42,7 @@ RSpec.describe Stat::AnimeAmountWatched do
 
       expect(record.stats_data['all_time']['total_anime']).to eq(2)
       expect(record.stats_data['all_time']['total_episodes']).to eq(15)
-      # need to wait on migration for time_spent
-      # expect(record.stats_data['all_time']['total_time']).to eq(360)
+      expect(record.stats_data['all_time']['total_time']).to eq(360)
     end
   end
 
@@ -59,8 +57,7 @@ RSpec.describe Stat::AnimeAmountWatched do
 
       expect(record.stats_data['all_time']['total_anime']).to eq(1)
       expect(record.stats_data['all_time']['total_episodes']).to eq(5)
-      # need to wait on migration for time_spent
-      # expect(record.stats_data['all_time']['total_time']).to eq(0)
+      expect(record.stats_data['all_time']['total_time']).to eq(120)
     end
   end
 end
