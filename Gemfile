@@ -44,7 +44,6 @@ gem 'kramdown'
 gem 'onebox'
 gem 'rinku'
 gem 'sanitize'
-gem 'twemoji', github: 'vevix/twemoji'
 
 # Miscellaneous Utilities
 gem 'acts_as_list' # Sortables!

@@ -10,13 +10,6 @@ GIT
       stream-ruby (~> 2.4)
 
 GIT
-  remote: git://github.com/vevix/twemoji.git
-  revision: 00b98685e46faa92d7d0109293ca8092e34735c5
-  specs:
-    twemoji (2.0.1)
-      nokogiri (~> 1.6.2)
-
-GIT
   remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
   revision: 94b1e6345e63cb380a0185436f62f42a2d340491
   specs:
@@ -585,7 +578,6 @@ DEPENDENCIES
   stream-ruby (~> 2.5.2)
   stream_rails!
   timecop
-  twemoji!
   twitter
   typhoeus
   webmock
