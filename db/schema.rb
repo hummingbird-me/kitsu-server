@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170325205929) do
+ActiveRecord::Schema.define(version: 20170329203624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1140,7 +1140,11 @@ ActiveRecord::Schema.define(version: 20170325205929) do
     t.boolean  "profile_completed",                       default: false,       null: false
     t.boolean  "feed_completed",                          default: false,       null: false
     t.boolean  "cover_image_processing"
+<<<<<<< HEAD
     t.integer  "rating_system",                           default: 0,           null: false
+=======
+    t.integer  "theme",                                   default: 0,           null: false
+>>>>>>> Add theme column
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
