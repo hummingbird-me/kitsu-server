@@ -91,7 +91,7 @@ class MyAnimeListSyncService
   # ie: &score&anythingelse
   # it will not set the score
   def format_score(score)
-    (score * 2).to_i if score
+    (score / 2).floor if score
   end
 
   private
