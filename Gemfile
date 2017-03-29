@@ -52,7 +52,7 @@ gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
 gem 'hashie' # Souped-up Hashes
 gem 'jsonapi-resources', '0.9.0'
-gem 'nokogiri' # Parse MAL XML shit
+gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
