@@ -161,8 +161,6 @@ GEM
     ffi (1.9.18)
     font-awesome-rails (4.7.0.1)
       railties (>= 3.2, < 5.1)
-    foreman (0.82.0)
-      thor (~> 0.19.1)
     formatador (0.2.5)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
@@ -528,11 +526,9 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fast_blank
-  foreman
   friendly_id
   guard
   guard-rspec
-  hashie
   hiredis
   html-pipeline
   image_optim

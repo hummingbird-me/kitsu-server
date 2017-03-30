@@ -50,7 +50,6 @@ gem 'acts_as_list' # Sortables!
 # JSON-API resources
 gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
-gem 'hashie' # Souped-up Hashes
 gem 'jsonapi-resources', '0.9.0'
 gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
@@ -78,7 +77,6 @@ gem 'sinatra' # used by sidekiq/web
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
   gem 'dotenv-rails' # Load default ENV
-  gem 'foreman' # Start processes
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 
