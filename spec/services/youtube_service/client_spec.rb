@@ -45,9 +45,20 @@ RSpec.describe YoutubeService::Client do
 
   describe '#channel_id' do
     it 'should return the channel ID of the user' do
+      response = {
+        kind: 'youtube#channelListResponse',
+        pageInfo: {
+          totalResults: 1,
+          resultsPerPage: 1
+        },
+        items: [{
+          kind: 'youtube#channel',
+          id: 'CHANNEL_ID'
+        }]
+      }
       stub_request(:get, YoutubeService::Client::CHANNEL_URL)
         .with(query: hash_including(access_token: token))
-        .to_return(body: { id: 'CHANNEL_ID' }.to_json)
+        .to_return(body: response.to_json)
       expect(subject.channel_id).to eq('CHANNEL_ID')
     end
   end

@@ -26,7 +26,9 @@ class YoutubeService
         mine: 'true',
         access_token: token
       }))
-      JSON.parse(res.body)['id'] if res.success?
+      return unless res.success?
+      channels = JSON.parse(res.body)['items']
+      channels.first['id']
     end
 
     private
