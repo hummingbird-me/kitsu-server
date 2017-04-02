@@ -10,7 +10,7 @@ class YoutubeService
 
     attr_reader :token
 
-    def initialize(token, api_key:)
+    def initialize(token, api_key: nil)
       @token = token
       @api_key = api_key
     end
