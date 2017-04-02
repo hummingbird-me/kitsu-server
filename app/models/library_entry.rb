@@ -57,6 +57,17 @@ class LibraryEntry < ApplicationRecord
     end
     where(scope)
   end
+  scope :privacy, ->(privacy) { where(private: !(privacy == :public)) }
+  scope :visible_for, ->(user) {
+    scope = user && !user.sfw_filter? ? self : sfw
+
+    return scope.privacy(:public) unless user
+    return scope if user.has_role?(:admin)
+
+    scope.privacy(:public).or(
+      where(user_id: user).privacy(:private)
+    )
+  }
 
   enum status: {
     current: 1,
