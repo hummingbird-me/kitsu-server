@@ -16,6 +16,8 @@ module WithAvatar
     validates_attachment :avatar, content_type: {
       content_type: %w[image/jpg image/jpeg image/png image/gif]
     }
+    # Accept 1:10 through 10:1
+    validates :cover_image, image_dimensions: { aspect_ratio: 0.1..10 }
     process_in_background :avatar,
       only_process: %i[tiny small medium],
       processing_image_url: ->(avatar) {
