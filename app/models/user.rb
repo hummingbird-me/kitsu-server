@@ -103,6 +103,7 @@ class User < ApplicationRecord
     wiki you staff mod
   ].freeze
 
+  enum rating_system: %i[simple advanced]
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
   update_index('users#user') { self }

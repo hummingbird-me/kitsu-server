@@ -578,6 +578,7 @@ ActiveRecord::Schema.define(version: 20170325205929) do
     t.integer  "anime_id"
     t.integer  "manga_id"
     t.integer  "drama_id"
+    t.integer  "new_rating"
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -1139,6 +1140,7 @@ ActiveRecord::Schema.define(version: 20170325205929) do
     t.boolean  "profile_completed",                       default: false,       null: false
     t.boolean  "feed_completed",                          default: false,       null: false
     t.boolean  "cover_image_processing"
+    t.integer  "rating_system",                           default: 0,           null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
