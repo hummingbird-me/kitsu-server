@@ -3,7 +3,7 @@ module AgeRatings
 
   AGE_RATINGS = %i[G PG R R18].freeze
   SAFE_AGE_RATINGS = %w[G PG R].freeze
-  UNSAFE_AGE_RATINGS = (AGE_RATINGS - SAFE_AGE_RATINGS).freeze
+  UNSAFE_AGE_RATINGS = %w[R18].freeze
 
   # SFW-ness is whitelist, not blacklist
   def sfw?
