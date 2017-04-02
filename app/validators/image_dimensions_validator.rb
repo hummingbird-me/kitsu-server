@@ -1,14 +1,18 @@
 class ImageDimensionsValidator < ActiveModel::EachValidator
-  def validate_each(_record, attr, value)
-    size = dimensions_for(value)
+  def validate_each(record, attr, value)
+    return if value.blank?
+
+    actual = dimensions_for(value)
 
     height = options[:height]
     width = options[:width]
-    ratio = options[:width] / options[:height]
+    aspect = options[:aspect_ratio]
 
-    record.errors[attr] << validate_value('Height', height, size.height)
-    record.errors[attr] << validate_value('Width', width, size.width)
-    record.errors[attr] << validate_value('Aspect ratio', ratio, size.ratio)
+    record.errors[attr] << validate_value('height', actual.height, height)
+    record.errors[attr] << validate_value('width', actual.width, width)
+    record.errors[attr] << validate_value('aspect ratio', actual.aspect, aspect)
+
+    record.errors[attr].compact!
   end
 
   def dimensions_for(attachment)
@@ -17,8 +21,8 @@ class ImageDimensionsValidator < ActiveModel::EachValidator
   end
 
   def validate_value(name, value, target)
-    return true unless target
-    return true if target === value # rubocop:disable Style/CaseEquality
+    return unless target
+    return if target === value # rubocop:disable Style/CaseEquality
 
     if target.respond_to?(:begin) && target.respond_to?(:end)
       "#{name} must be between #{target.begin} and #{target.end}"
