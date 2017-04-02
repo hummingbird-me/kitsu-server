@@ -59,6 +59,9 @@ class LibraryEntryResource < BaseResource
 
   paginator :unlimited
 
+  search_with LibrarySearchService
+  query :title
+
   def self.sortable_fields(context)
     fields = super + %i[anime.subtype manga.subtype drama.subtype]
     TitleSortableFields.new(fields)
