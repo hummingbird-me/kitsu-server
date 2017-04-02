@@ -2,17 +2,21 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   class_methods do # rubocop:disable Metrics/BlockLength
-    attr_reader :chewy_index, :queryable_fields
+    attr_reader :_chewy_index, :_query_fields, :_search_service
 
     # Declare the Chewy index to use when searching this resource
     def index(index)
-      @chewy_index = index
+      @_chewy_index = index
+    end
+
+    def search_with(service)
+      @_search_service = service
     end
 
     def inherited(subclass)
-      subclass.instance_variable_set(:@chewy_index, @chewy_index.deep_dup)
-      subclass.instance_variable_set(:@queryable_fields,
-        @queryable_fields.deep_dup)
+      subclass.instance_variable_set(:@_chewy_index, @_chewy_index)
+      subclass.instance_variable_set(:@_search_service, @_search_service)
+      subclass.instance_variable_set(:@_query_fields, @_query_fields.deep_dup)
       super
     end
 
@@ -36,18 +40,18 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
         end
       end
 
-      @queryable_fields ||= {}
-      @queryable_fields[field] = opts
+      @_query_fields ||= {}
+      @_query_fields[field] = opts
     end
 
     # Determine if an ElasticSearch hit is required
     def should_query?(filters)
       return false unless filters.respond_to?(:keys)
-      @queryable_fields ||= {}
-      filters.keys.any? { |key| @queryable_fields.include?(key) }
+      return false unless @_query_fields
+      filters.keys.any? { |key| @_query_fields.include?(key) }
     end
 
-    # Override the #find method to search when called upon
+    # Override the #find_records method to search when called upon
     def find_records(filters, opts = {})
       return super(filters, opts) unless should_query?(filters)
       return [] if filters.values.any?(&:nil?)
@@ -69,7 +73,11 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
       model_includes = resolve_relationship_names_to_relations(self,
         include_directives.model_includes, opts)
 
-      query.load(scope: -> { includes(model_includes) }).to_a
+      if @_search_service
+        query.includes(model_includes).to_a
+      else
+        query.load(scope: -> { includes(model_includes) }).to_a
+      end
     end
 
     # Count all search results
@@ -81,16 +89,16 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
 
     # Allow sorting on anything queryable + _score
     def sortable_fields(context = nil)
-      @queryable_fields ||= {}
+      @_query_fields ||= {}
       if searchable?
-        super(context) + @queryable_fields.keys + ['_score']
+        super(context) + @_query_fields.keys + ['_score']
       else
         super(context)
       end
     end
 
     def searchable?
-      @queryable_fields.present?
+      @_query_fields.present?
     end
 
     private
@@ -110,10 +118,18 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
 
     def apply_scopes(filters, opts = {})
       context = opts[:context]
-      # Generate query
-      query = generate_query(filters)
-      query = query.reduce(@chewy_index) do |scope, subquery|
-        scope.public_send(*subquery.values_at(:mode, :query))
+      if @_search_service
+        # Separate queries from filters
+        queries = filters.select { |f| @_query_fields.include?(f) }
+        filters = filters.reject { |f| @_query_fields.include?(f) }
+        # Set up the search service
+        query = @_search_service.new(queries, filters)
+      else
+        # Generate query
+        query = generate_query(filters)
+        query = query.reduce(@_chewy_index) do |scope, subquery|
+          scope.public_send(*subquery.values_at(:mode, :query))
+        end
       end
       # Pagination
       query = opts[:paginator].apply(query, {}) if opts[:paginator]
@@ -126,8 +142,10 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
       else
         query = query.order('_score' => :desc)
       end
+      # Policy Scope
       query = search_policy_scope.new(context[:current_user], query).resolve
       context[:policy_used]&.call
+
       query
     end
 
@@ -143,7 +161,7 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
     def generate_query(filters)
       # For each queryable field, attempt to apply.  If there's no apply
       # specified, use auto_query to generate one.
-      queries = @queryable_fields.map do |field, opts|
+      queries = @_query_fields.map do |field, opts|
         next unless filters.key?(field) # Skip if we don't have a filter
 
         filter = filters[field]
