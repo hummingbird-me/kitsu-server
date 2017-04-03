@@ -24,7 +24,7 @@ class LibraryEntryResource < BaseResource
   caching
 
   attributes :status, :progress, :reconsuming, :reconsume_count, :notes,
-    :private, :rating, :updated_at
+    :private, :updated_at
 
   filters :user_id, :media_id, :media_type, :status, :anime_id, :manga_id,
     :drama_id
@@ -58,6 +58,26 @@ class LibraryEntryResource < BaseResource
   has_one :next_unit, polymorphic: true, eager_load_on_include: false
 
   paginator :unlimited
+
+  # DEPRECATED: These methods are for until all clients have switched to
+  # rating_twenty
+  attributes :rating, :rating_twenty
+  def rating
+    (_model.rating.to_f / 2).floor.to_f / 2
+  end
+
+  def rating=(value)
+    _model.rating = value * 4
+  end
+
+  def rating_twenty
+    _model.rating
+  end
+
+  def rating_twenty=(value)
+    _model.rating = value
+  end
+  # END DEPRECATED
 
   def self.sortable_fields(context)
     fields = super + %i[anime.subtype manga.subtype drama.subtype]
