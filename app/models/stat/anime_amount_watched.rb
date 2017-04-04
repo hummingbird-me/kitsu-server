@@ -1,9 +1,9 @@
 class Stat
   class AnimeAmountWatched < Stat
     DEFAULT_STATS = {
-        'total_anime' => 0,
-        'total_episodes' => 0,
-        'total_time' => 0
+      'total_anime' => 0,
+      'total_episodes' => 0,
+      'total_time' => 0
     }
 
     # fully regenerate data.
