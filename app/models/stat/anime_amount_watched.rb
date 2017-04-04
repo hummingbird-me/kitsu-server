@@ -24,8 +24,10 @@ class Stat
       record = user.stats.find_or_initialize_by(
         type: 'Stat::AnimeAmountWatched'
       )
-      record.stats_data['all_time'] =
-        DEFAULT_STATS.deep_dup if record.new_record?
+      if record.new_record?
+        record.stats_data['all_time'] = DEFAULT_STATS.deep_dup
+      end
+
       record.increment(library_entry)
     end
 
