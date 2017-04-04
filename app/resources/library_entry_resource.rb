@@ -63,11 +63,11 @@ class LibraryEntryResource < BaseResource
   # rating_twenty
   attributes :rating, :rating_twenty
   def rating
-    (_model.rating.to_f / 2).floor.to_f / 2
+    ((_model.rating.to_f / 2).floor.to_f / 2).to_s
   end
 
   def rating=(value)
-    _model.rating = value * 4
+    _model.rating = value.to_f * 4
   end
 
   def rating_twenty
