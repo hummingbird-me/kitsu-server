@@ -12,16 +12,17 @@ class Stat
       save!
     end
 
-    def self.increment(user, genres)
+    def self.increment(user, library_entry)
       record = user.stats.find_or_initialize_by(
         type: 'Stat::AnimeGenreBreakdown'
       )
-      record = record.default_stats if record.new_record?
-      record.increment(genres)
+      # set default to total if it doesn't exist
+      record.stats_data['total'] = 0 if record.new_record?
+      record.increment(library_entry)
     end
 
-    def increment(genres)
-      genres.each do |genre|
+    def increment(library_entry)
+      library_entry.media.genres.each do |genre|
         stats_data[genre.slug] = 0 unless stats_data[genre.slug]
 
         stats_data[genre.slug] += 1
@@ -31,14 +32,14 @@ class Stat
       save!
     end
 
-    def self.decrement(user, genres)
+    def self.decrement(user, library_entry)
       record = user.stats.find_by(type: 'Stat::AnimeGenreBreakdown')
       return unless record
-      record.decrement(genres)
+      record.decrement(library_entry)
     end
 
-    def decrement(genres)
-      genres.each do |genre|
+    def decrement(library_entry)
+      library_entry.media.genres.each do |genre|
         next unless stats_data[genre.slug]
 
         stats_data[genre.slug] -= 1
@@ -46,12 +47,6 @@ class Stat
       end
 
       save!
-    end
-
-    def default_stats
-      stats_data['total'] = 0
-
-      self
     end
   end
 end

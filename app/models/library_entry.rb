@@ -212,7 +212,7 @@ class LibraryEntry < ApplicationRecord
     # Stat STI
     case kind
     when :anime
-      Stat::AnimeGenreBreakdown.increment(user, media.genres)
+      Stat::AnimeGenreBreakdown.increment(user, self)
       Stat::AnimeAmountWatched.increment(user, self)
     when :manga
     end
@@ -223,7 +223,7 @@ class LibraryEntry < ApplicationRecord
     # Stat STI
     case kind
     when :anime
-      Stat::AnimeGenreBreakdown.decrement(user, media.genres)
+      Stat::AnimeGenreBreakdown.decrement(user, self)
       Stat::AnimeAmountWatched.decrement(user, self)
     when :manga
     end

@@ -24,7 +24,7 @@ RSpec.describe Stat::AnimeGenreBreakdown do
 
   describe '#self.decrement' do
     before do
-      Stat::AnimeGenreBreakdown.decrement(user, le.media.genres)
+      Stat::AnimeGenreBreakdown.decrement(user, le)
     end
     it 'should have 0 total' do
       record = Stat.find_by(user: user, type: 'Stat::AnimeGenreBreakdown')

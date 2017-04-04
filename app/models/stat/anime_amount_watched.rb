@@ -4,7 +4,7 @@ class Stat
       'total_anime' => 0,
       'total_episodes' => 0,
       'total_time' => 0
-    }
+    }.freeze
 
     # fully regenerate data.
     def recalculate!
@@ -24,7 +24,8 @@ class Stat
       record = user.stats.find_or_initialize_by(
         type: 'Stat::AnimeAmountWatched'
       )
-      record.stats_data['all_time'] = DEFAULT_STATS if record.new_record?
+      record.stats_data['all_time'] =
+        DEFAULT_STATS.deep_dup if record.new_record?
       record.increment(library_entry)
     end
 
