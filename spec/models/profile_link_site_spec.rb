@@ -497,6 +497,8 @@ RSpec.describe ProfileLinkSite, type: :model do
             imdb.com/ur33598229
             https://www.imdb.com/user/ur33598229
             https://imdb.com/user/ur33598229
+            http://www.imdb.com/user/ur33598229
+            http://imdb.com/user/ur33598229
             ur33598229
           ]
           site = build(:profile_link_site, :imdb)
