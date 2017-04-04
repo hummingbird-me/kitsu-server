@@ -146,8 +146,8 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#rating' do
-      it 'should return number as a float' do
-        expect(subject.rating).to eq(5.0)
+      it 'should return number quadrupled to match our 20-point scale' do
+        expect(subject.rating).to eq(20)
       end
     end
 
@@ -325,8 +325,8 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#rating' do
-      it 'should return number as a float' do
-        expect(subject.rating).to eq(2.5)
+      it 'should return number quadrupled' do
+        expect(subject.rating).to eq(10)
       end
     end
 

@@ -50,13 +50,13 @@ RSpec.describe MyAnimeListSyncService do
 
     describe '#format_score' do
       context 'converting from kitsu -> mal' do
-        it 'should convert 3 stars' do
-          le = build(:library_entry, rating: 3)
-          expect(subject.format_score(le.rating)).to eq(6)
+        it 'should halve an even rating' do
+          le = build(:library_entry, rating: 10)
+          expect(subject.format_score(le.rating)).to eq(5)
         end
-        it 'should convert 3.5 stars' do
-          le = build(:library_entry, rating: 3.5)
-          expect(subject.format_score(le.rating)).to eq(7)
+        it 'should halve and floor an odd rating' do
+          le = build(:library_entry, rating: 9)
+          expect(subject.format_score(le.rating)).to eq(4)
         end
         it 'should return nil if no score' do
           le = build(:library_entry, rating: nil)

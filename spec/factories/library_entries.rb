@@ -46,7 +46,7 @@ FactoryGirl.define do
       association :media, :nsfw, factory: :anime, strategy: :build
     end
     trait :with_rating do
-      rating { rand(1.0..10.0) / 2 }
+      rating { rand(1..19) }
     end
   end
 end

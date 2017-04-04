@@ -20,12 +20,13 @@ class MediaActivityService
       foreign_id: "LibraryEntry:#{library_entry.id}:rated",
       verb: 'rated',
       rating: rating,
+      nineteen_scale: true,
       time: Date.today.to_time
     )
   end
 
   def progress(progress, unit = nil)
-    return if progress == 0
+    return if progress.zero?
     fill_defaults user.feed.activities.new(
       verb: 'progressed',
       foreign_id: "LibraryEntry:#{library_entry.id}:progressed-#{progress}",
@@ -43,15 +44,15 @@ class MediaActivityService
   end
 
   def fill_defaults(activity)
-    activity.tap do |activity|
-      activity.actor ||= user
-      activity.object ||= library_entry
-      activity.to ||= []
-      activity.to << media&.feed
-      activity.media ||= media
-      activity.nsfw ||= media.try(:nsfw?)
-      activity.foreign_id ||= library_entry
-      activity.time ||= Time.now
+    activity.tap do |act|
+      act.actor ||= user
+      act.object ||= library_entry
+      act.to ||= []
+      act.to << media&.feed
+      act.media ||= media
+      act.nsfw ||= media.try(:nsfw?)
+      act.foreign_id ||= library_entry
+      act.time ||= Time.now
     end
   end
 end

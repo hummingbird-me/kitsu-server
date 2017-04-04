@@ -48,8 +48,8 @@ class ListImport
       def rating
         return nil if node['score_raw'].zero?
 
-        # 100-point scale to 5-point scale (raw)
-        ((node['score_raw'].to_f / 20) / 0.5).ceil * 0.5
+        # 100-point scale to 20-point scale (raw)
+        [(node['score_raw'].to_f / 5).ceil, 2].max
       end
 
       def reconsume_count

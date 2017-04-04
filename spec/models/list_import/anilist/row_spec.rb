@@ -120,31 +120,31 @@ RSpec.describe ListImport::Anilist::Row do
         expect(subject.rating).to eq(nil)
       end
 
-      it 'should return 3/100 as a float' do
+      it 'should convert 3/100 to the minimum score' do
         subject = described_class.new(
           JSON.parse(anime)['lists']['completed'][2],
           'anime'
         )
 
-        expect(subject.rating).to eq(0.5)
+        expect(subject.rating).to eq(2)
       end
 
-      it 'should return 90/20 as a float' do
+      it 'should convert 90/100 to 18/20' do
         subject = described_class.new(
           JSON.parse(anime)['lists']['completed'].first,
           'anime'
         )
 
-        expect(subject.rating).to eq(4.5)
+        expect(subject.rating).to eq(18)
       end
 
-      it 'should return 69/20 as a float rounded to nearest 0.5' do
+      it 'should convert 69/100 to 14/20' do
         subject = described_class.new(
           JSON.parse(anime)['lists']['completed'][1],
           'anime'
         )
 
-        expect(subject.rating).to eq(3.5)
+        expect(subject.rating).to eq(14)
       end
     end
 
