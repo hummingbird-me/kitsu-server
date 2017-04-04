@@ -36,8 +36,7 @@
 # rubocop:enable Metrics/LineLength
 
 class LibraryEntry < ApplicationRecord
-  VALID_RATINGS = (0.5..5).step(0.5).to_a.freeze
-  VALID_NEW_RATINGS = (2..20).to_a.freeze
+  VALID_RATINGS = (2..20).to_a.freeze
   MEDIA_ASSOCIATIONS = %i[anime manga drama].freeze
 
   belongs_to :user, touch: true
@@ -74,10 +73,6 @@ class LibraryEntry < ApplicationRecord
   validates :manga_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :drama_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :rating, numericality: {
-    greater_than: 0,
-    less_than_or_equal_to: 5
-  }, allow_blank: true
-  validates :new_rating, numericality: {
     greater_than_or_equal_to: 2,
     less_than_or_equal_to: 20
   }, allow_blank: true
@@ -86,7 +81,6 @@ class LibraryEntry < ApplicationRecord
     message: 'just... go outside'
   }
   validate :progress_limit
-  validate :rating_on_halves
   validate :one_media_present
 
   counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating }
@@ -133,11 +127,6 @@ class LibraryEntry < ApplicationRecord
     media.unit(progress + 1)
   end
 
-  def rating_on_halves
-    return unless rating
-    errors.add(:rating, 'must be a multiple of 0.5') unless rating % 0.5 == 0.0
-  end
-
   def activity
     MediaActivityService.new(self)
   end
@@ -161,8 +150,6 @@ class LibraryEntry < ApplicationRecord
       kind = media_type&.underscore
       send("#{kind}=", media) if kind
     end
-    # TEMPORARY: Copy rating into new_rating
-    self.new_rating = (rating * 4) if rating_changed? && rating
   end
 
   before_save do

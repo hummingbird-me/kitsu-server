@@ -11,8 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20170326222205) do
+ActiveRecord::Schema.define(version: 20170329203624) do
+  
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -23,33 +23,33 @@ ActiveRecord::Schema.define(version: 20170326222205) do
     t.integer  "age_rating"
     t.integer  "episode_count"
     t.integer  "episode_length"
-    t.text     "synopsis",                              default: "",      null: false
+    t.text     "synopsis",                                                      default: "",      null: false
     t.string   "youtube_video_id",          limit: 255
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
+    t.datetime "created_at",                                                                      null: false
+    t.datetime "updated_at",                                                                      null: false
     t.string   "cover_image_file_name",     limit: 255
     t.string   "cover_image_content_type",  limit: 255
     t.integer  "cover_image_file_size"
     t.datetime "cover_image_updated_at"
-    t.float    "average_rating"
-    t.integer  "user_count",                            default: 0,       null: false
+    t.decimal  "average_rating",                        precision: 5, scale: 2
+    t.integer  "user_count",                                                    default: 0,       null: false
     t.string   "age_rating_guide",          limit: 255
-    t.integer  "subtype",                               default: 1,       null: false
+    t.integer  "subtype",                                                       default: 1,       null: false
     t.date     "start_date"
     t.date     "end_date"
-    t.hstore   "rating_frequencies",                    default: {},      null: false
+    t.hstore   "rating_frequencies",                                            default: {},      null: false
     t.string   "poster_image_file_name",    limit: 255
     t.string   "poster_image_content_type", limit: 255
     t.integer  "poster_image_file_size"
     t.datetime "poster_image_updated_at"
-    t.integer  "cover_image_top_offset",                default: 0,       null: false
-    t.boolean  "started_airing_date_known",             default: true,    null: false
-    t.hstore   "titles",                                default: {},      null: false
-    t.string   "canonical_title",                       default: "en_jp", null: false
-    t.string   "abbreviated_titles",                                                   array: true
+    t.integer  "cover_image_top_offset",                                        default: 0,       null: false
+    t.boolean  "started_airing_date_known",                                     default: true,    null: false
+    t.hstore   "titles",                                                        default: {},      null: false
+    t.string   "canonical_title",                                               default: "en_jp", null: false
+    t.string   "abbreviated_titles",                                                                           array: true
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
-    t.integer  "favorites_count",                       default: 0,       null: false
+    t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
   end
 
@@ -231,10 +231,10 @@ ActiveRecord::Schema.define(version: 20170326222205) do
   add_index "drama_staff", ["person_id"], name: "index_drama_staff_on_person_id", using: :btree
 
   create_table "dramas", force: :cascade do |t|
-    t.string   "slug",                                        null: false
-    t.hstore   "titles",                    default: {},      null: false
-    t.string   "canonical_title",           default: "en_jp", null: false
-    t.string   "abbreviated_titles",                                       array: true
+    t.string   "slug",                                                                null: false
+    t.hstore   "titles",                                            default: {},      null: false
+    t.string   "canonical_title",                                   default: "en_jp", null: false
+    t.string   "abbreviated_titles",                                                               array: true
     t.integer  "age_rating"
     t.string   "age_rating_guide"
     t.integer  "episode_count"
@@ -242,10 +242,10 @@ ActiveRecord::Schema.define(version: 20170326222205) do
     t.integer  "subtype"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "started_airing_date_known", default: true,    null: false
+    t.boolean  "started_airing_date_known",                         default: true,    null: false
     t.text     "synopsis"
     t.string   "youtube_video_id"
-    t.string   "country",                   default: "ja",    null: false
+    t.string   "country",                                           default: "ja",    null: false
     t.string   "cover_image_file_name"
     t.string   "cover_image_content_type"
     t.integer  "cover_image_file_size"
@@ -254,15 +254,15 @@ ActiveRecord::Schema.define(version: 20170326222205) do
     t.string   "poster_image_content_type"
     t.integer  "poster_image_file_size"
     t.datetime "poster_image_updated_at"
-    t.integer  "cover_image_top_offset",    default: 0,       null: false
-    t.float    "average_rating"
-    t.hstore   "rating_frequencies",        default: {},      null: false
-    t.integer  "user_count",                default: 0,       null: false
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.integer  "cover_image_top_offset",                            default: 0,       null: false
+    t.decimal  "average_rating",            precision: 5, scale: 2
+    t.hstore   "rating_frequencies",                                default: {},      null: false
+    t.integer  "user_count",                                        default: 0,       null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
-    t.integer  "favorites_count",           default: 0,       null: false
+    t.integer  "favorites_count",                                   default: 0,       null: false
     t.boolean  "cover_image_processing"
   end
 
@@ -562,25 +562,25 @@ ActiveRecord::Schema.define(version: 20170326222205) do
   add_index "leader_chat_messages", ["user_id"], name: "index_leader_chat_messages_on_user_id", using: :btree
 
   create_table "library_entries", force: :cascade do |t|
-    t.integer  "user_id",                                                 null: false
-    t.integer  "media_id",                                                null: false
-    t.integer  "status",                                                  null: false
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.integer  "progress",                                default: 0,     null: false
-    t.decimal  "rating",          precision: 2, scale: 1
-    t.boolean  "private",                                 default: false, null: false
+    t.integer  "user_id",                         null: false
+    t.integer  "media_id",                        null: false
+    t.integer  "status",                          null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "progress",        default: 0,     null: false
+    t.boolean  "private",         default: false, null: false
     t.text     "notes"
-    t.integer  "reconsume_count",                         default: 0,     null: false
-    t.boolean  "reconsuming",                             default: false, null: false
-    t.string   "media_type",                                              null: false
-    t.integer  "volumes_owned",                           default: 0,     null: false
-    t.boolean  "nsfw",                                    default: false, null: false
+    t.integer  "reconsume_count", default: 0,     null: false
+    t.boolean  "reconsuming",     default: false, null: false
+    t.string   "media_type",                      null: false
+    t.integer  "volumes_owned",   default: 0,     null: false
+    t.boolean  "nsfw",            default: false, null: false
     t.integer  "anime_id"
     t.integer  "manga_id"
     t.integer  "drama_id"
     t.integer  "new_rating"
     t.integer  "time_spent",                              default: 0,     null: false
+    t.integer  "rating"
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -658,24 +658,24 @@ ActiveRecord::Schema.define(version: 20170326222205) do
     t.date     "start_date"
     t.date     "end_date"
     t.string   "serialization",             limit: 255
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
+    t.datetime "created_at",                                                                      null: false
+    t.datetime "updated_at",                                                                      null: false
     t.integer  "status"
-    t.integer  "cover_image_top_offset",                default: 0
+    t.integer  "cover_image_top_offset",                                        default: 0
     t.integer  "volume_count"
     t.integer  "chapter_count"
-    t.integer  "subtype",                               default: 1,       null: false
-    t.float    "average_rating"
-    t.hstore   "rating_frequencies",                    default: {},      null: false
-    t.hstore   "titles",                                default: {},      null: false
-    t.string   "canonical_title",                       default: "en_jp", null: false
-    t.string   "abbreviated_titles",                                                   array: true
-    t.integer  "user_count",                            default: 0,       null: false
+    t.integer  "subtype",                                                       default: 1,       null: false
+    t.decimal  "average_rating",                        precision: 5, scale: 2
+    t.hstore   "rating_frequencies",                                            default: {},      null: false
+    t.hstore   "titles",                                                        default: {},      null: false
+    t.string   "canonical_title",                                               default: "en_jp", null: false
+    t.string   "abbreviated_titles",                                                                           array: true
+    t.integer  "user_count",                                                    default: 0,       null: false
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
     t.integer  "age_rating"
     t.string   "age_rating_guide"
-    t.integer  "favorites_count",                       default: 0,       null: false
+    t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
   end
 
@@ -1153,6 +1153,7 @@ ActiveRecord::Schema.define(version: 20170326222205) do
     t.boolean  "feed_completed",                          default: false,       null: false
     t.boolean  "cover_image_processing"
     t.integer  "rating_system",                           default: 0,           null: false
+    t.integer  "theme",                                   default: 0,           null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

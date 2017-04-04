@@ -50,7 +50,7 @@ FactoryGirl.define do
   factory :anime do
     titles { { en_jp: Faker::Name.name } }
     canonical_title 'en_jp'
-    average_rating { rand(1.0..10.0) / 2 }
+    average_rating { rand(1.0..100.0) }
     subtype { Anime.subtypes.keys.sample }
     age_rating 'G'
     episode_length 24

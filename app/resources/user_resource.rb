@@ -1,7 +1,7 @@
 class UserResource < BaseResource
   PRIVATE_FIELDS = %i[email password confirmed previous_email language time_zone
                       country share_to_global title_language_preference
-                      sfw_filter rating_system].freeze
+                      sfw_filter rating_system theme].freeze
   caching
 
   attributes :name, :past_names, :about, :bio, :about_formatted, :location,
@@ -31,8 +31,8 @@ class UserResource < BaseResource
     context[:current_user]&.resource_owner
   end
 
-  filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
-  filter :self, apply: -> (records, _v, options) {
+  filter :name, apply: ->(records, value, _o) { records.by_name(value.first) }
+  filter :self, apply: ->(records, _v, options) {
     current_user = options[:context][:current_user]&.resource_owner
     records.where(id: current_user&.id) || User.none
   }
@@ -40,7 +40,7 @@ class UserResource < BaseResource
   index UsersIndex::User
   query :query,
     mode: :query,
-    apply: -> (values, _ctx) {
+    apply: ->(values, _ctx) {
       {
         bool: {
           should: [
