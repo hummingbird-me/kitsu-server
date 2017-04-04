@@ -147,7 +147,7 @@ FactoryGirl.define do
     # IMDb
     trait :imdb do
       validate_find '\A(https?://)?(www.)?(imdb.com/)?(user/)?(?<username>[a-zA-z0-9_\-]+)\z'
-      validate_replace 'https://imdb.com/user/\k<username>'
+      validate_replace 'https://www.imdb.com/user/\k<username>'
     end
 
     # Last.fm
