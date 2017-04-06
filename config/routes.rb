@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       jsonapi_resources :media_relationships
       jsonapi_resources :anime_productions
       jsonapi_resources :episodes
+      jsonapi_resources :stats
       # DEPRECATED: Legacy systems
       jsonapi_resources :castings
       get '/anime/:anime_id/_languages', to: 'anime#languages'

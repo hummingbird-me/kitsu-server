@@ -187,9 +187,34 @@ class LibraryEntry < ApplicationRecord
     media.trending_vote(user, 1.0) if status_changed?
   end
 
-  after_commit ->() { sync_entry(:create) }, on: :create
-  after_commit ->() { sync_entry(:update) }, on: :update
-  after_destroy ->() { sync_entry(:delete) }
+  after_commit(on: :create) do
+    sync_entry(:create) # mal exporter
+  end
+
+  after_commit(on: :update) do
+    sync_entry(:update) # mal exporter
+  end
+
+  after_create do
+    # Stat STI
+    case kind
+    when :anime
+      Stat::AnimeGenreBreakdown.increment(user, self)
+      Stat::AnimeAmountWatched.increment(user, self)
+    when :manga
+    end
+  end
+
+  after_destroy do
+    sync_entry(:delete) # mal exporter
+    # Stat STI
+    case kind
+    when :anime
+      Stat::AnimeGenreBreakdown.decrement(user, self)
+      Stat::AnimeAmountWatched.decrement(user, self)
+    when :manga
+    end
+  end
 
   def sync_to_mal?
     return unless media_type.in? %w[Anime Manga]
