@@ -10,6 +10,7 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :profile_link_site do
@@ -31,8 +32,8 @@ FactoryGirl.define do
 
     # Youtube
     trait :youtube do
-      validate_find '\A(https?://)?(www.)?(youtube.com/channel/)?(?<username>[a-zA-Z0-9_\-]+)\z'
-      validate_replace 'https://youtube.com/channel/\k<username>'
+      validate_find '\A(https?://)?(www.)?(youtube.com/)?(?<channel>user|c|channel)?/?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://youtube.com/\k<channel>/\k<username>'
     end
 
     # Google
@@ -129,6 +130,60 @@ FactoryGirl.define do
     trait :patreon do
       validate_find '\A(https?://)?(www.)?(patreon.com/)?(?<username>[a-zA-Z0-9_\-]+)\z'
       validate_replace 'https://patreon.com/\k<username>'
+    end
+
+    # DeviantArt
+    trait :deviantart do
+      validate_find '\A(https?://)?(www.)?(?<username>[a-zA-z0-9_\-]+)(.deviantart.com)?\z'
+      validate_replace 'https://\k<username>.deviantart.com'
+    end
+
+    # Dribbble
+    trait :dribbble do
+      validate_find '\A(https?://)?(www.)?(dribbble.com/)?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://dribbble.com/\k<username>'
+    end
+
+    # IMDb
+    trait :imdb do
+      validate_find '\A(https?://)?(www.)?(imdb.com/)?(user/)?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://www.imdb.com/user/\k<username>'
+    end
+
+    # Last.fm
+    trait :lastfm do
+      validate_find '\A(https?://)?(www.)?(last.fm/)?(user/)?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://last.fm/user/\k<username>'
+    end
+
+    # Letterboxd
+    trait :letterboxd do
+      validate_find '\A(https?://)?(www.)?(letterboxd.com/)?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://letterboxd.com/\k<username>'
+    end
+
+    # Medium
+    trait :medium do
+      validate_find '\A(https?://)?(www.)?(medium.com/)?(?<username>[a-zA-Z0-9@_\-]+)\z'
+      validate_replace 'https://medium.com/\k<username>'
+    end
+
+    # Player.me
+    trait :playerme do
+      validate_find '\A(https?://)?(www.)?(player.me/)?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://player.me/\k<username>'
+    end
+
+    # Reddit
+    trait :reddit do
+      validate_find '\A(https?://)?(www.)?(reddit.com/)?(user/|u/)?(/u/)?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://reddit.com/user/\k<username>'
+    end
+
+    # Trakt
+    trait :trakt do
+      validate_find '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>[a-zA-z0-9_\-]+)\z'
+      validate_replace 'https://trakt.tv/users/\k<username>'
     end
     # rubocop:enable Metrics/LineLength
   end

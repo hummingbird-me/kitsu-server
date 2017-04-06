@@ -1,7 +1,7 @@
-module SearchableResource
+module SearchableResource # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
-  class_methods do
+  class_methods do # rubocop:disable Metrics/BlockLength
     attr_reader :chewy_index, :queryable_fields
 
     # Declare the Chewy index to use when searching this resource
@@ -28,13 +28,13 @@ module SearchableResource
       #
       # If you must, you can still use #filter(verify:) to handle the entire
       # array all at once, or to modify values.
-      filter field, verify: opts[:verify] || -> (values, context) {
+      filter field, verify: opts[:verify] || ->(values, context) do
         if opts[:valid]
           values if values.all? { |v| opts[:valid].call(v, context) }
         else
           values
         end
-      }
+      end
 
       @queryable_fields ||= {}
       @queryable_fields[field] = opts
@@ -42,6 +42,7 @@ module SearchableResource
 
     # Determine if an ElasticSearch hit is required
     def should_query?(filters)
+      return false unless filters.respond_to?(:keys)
       @queryable_fields ||= {}
       filters.keys.any? { |key| @queryable_fields.include?(key) }
     end
@@ -52,7 +53,23 @@ module SearchableResource
       return [] if filters.values.any?(&:nil?)
 
       # Apply scopes and load
-      apply_scopes(filters, opts).load.to_a
+      load_query_records(apply_scopes(filters, opts), opts)
+    end
+
+    def find_serialized_with_caching(filters, serializer, opts = {})
+      return super(filters, serializer, opts) unless should_query?(filters)
+      records = find_records(filters, opts)
+      cached_resources_for(records, serializer, opts)
+    end
+
+    def load_query_records(query, opts = {})
+      include_directives = opts[:include_directives]
+      return query.load.to_a unless include_directives
+
+      model_includes = resolve_relationship_names_to_relations(self,
+        include_directives.model_includes, opts)
+
+      query.load(scope: -> { includes(model_includes) }).to_a
     end
 
     # Count all search results
@@ -65,14 +82,14 @@ module SearchableResource
     # Allow sorting on anything queryable + _score
     def sortable_fields(context = nil)
       @queryable_fields ||= {}
-      if is_searchable?
+      if searchable?
         super(context) + @queryable_fields.keys + ['_score']
       else
         super(context)
       end
     end
 
-    def is_searchable?
+    def searchable?
       @queryable_fields.present?
     end
 
@@ -103,7 +120,7 @@ module SearchableResource
       # Sorting
       if opts[:sort_criteria]
         query = opts[:sort_criteria].reduce(query) do |scope, sort|
-          field = (sort[:field] == 'id') ? '_score' : sort[:field]
+          field = sort[:field] == 'id' ? '_score' : sort[:field]
           scope.order(field => sort[:direction])
         end
       else
@@ -112,6 +129,11 @@ module SearchableResource
       query = search_policy_scope.new(context[:current_user], query).resolve
       context[:policy_used]&.call
       query
+    end
+
+    def preload_included_fragments(resources, records, serializer, options)
+      return unless records.is_a?(ActiveRecord::Relation)
+      super(resources, records, serializer, options)
     end
 
     def search_policy_scope
@@ -134,7 +156,7 @@ module SearchableResource
 
     def auto_query(field, value)
       case value
-      when String, Fixnum, Float, Date
+      when String, Integer, Float, Date
         { match: { field => value } }
       when Range
         { range: { field => { gte: value.min, lte: value.max } } }

@@ -43,10 +43,12 @@ class Manga < ApplicationRecord
   include Media
   include AgeRatings
 
-  enum subtype: %i[manga novel manhua oneshot doujin manwha oel]
+  enum subtype: %i[manga novel manhua oneshot doujin manhwa oel]
   enum status: %i[not_published publishing finished]
   alias_attribute :progress_limit, :chapter_count
   alias_attribute :manga_type, :subtype
+
+  rails_admin { fields :chapter_count, :volume_count }
 
   has_many :chapters
   has_many :manga_characters, dependent: :destroy
@@ -66,9 +68,8 @@ class Manga < ApplicationRecord
   def slug_candidates
     [
       -> { canonical_title }, # attack-on-titan
-      -> { titles[:en_jp] }, # shingeki-no-kyojin
-      -> { [titles[:en_jp], year] }, # shingeki-no-kyojin-2004
-      -> { [titles[:en_jp], year, subtype] } # shingeki-no-kyojin-2004-doujin
+      -> { [canonical_title, year] }, # attack-on-titan-2004
+      -> { [canonical_title, year, subtype] } # attack-on-titan-2004-doujin
     ]
   end
 end

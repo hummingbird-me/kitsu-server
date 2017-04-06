@@ -1,10 +1,13 @@
+require 'rails_helper'
 require 'oauth2'
 
 RSpec.describe 'OAuth2', type: :request do
   let(:oauth_app) { create(:oauth_application) }
   let(:user) { create(:user) }
   let(:client) do
-    OAuth2::Client.new(oauth_app.uid, oauth_app.secret) do |b|
+    OAuth2::Client.new(oauth_app.uid, oauth_app.secret,
+      authorize_url: '/api/oauth/authorize',
+      token_url: '/api/oauth/token') do |b|
       b.request :url_encoded
       b.adapter :rack, Rails.application
     end

@@ -52,7 +52,9 @@ class ListImport
       end
 
       def rating
-        node.css('.ttRating')&.last&.text&.to_f
+        ap_rating = node.css('.ttRating')&.last&.text&.to_f
+        return unless ap_rating
+        (ap_rating * 4).to_i
       end
 
       def reconsume_count

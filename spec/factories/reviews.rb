@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: reviews
@@ -29,6 +30,7 @@
 #
 #  fk_rails_150e554f22  (library_entry_id => library_entries.id)
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :review do

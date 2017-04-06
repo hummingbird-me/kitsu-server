@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'authorization/assertion/twitter'
 
 RSpec.describe Authorization::Assertion::Twitter do
   let(:twitter_auth_response) do

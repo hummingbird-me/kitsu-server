@@ -107,7 +107,7 @@ RSpec.describe Feed::ActivityList, type: :model do
       it 'should tell Stream to remove the activity' do
         activity = list.new(
           actor: 'User:1',
-          object: 'Object:1',
+          object: 'Post:1',
           verb: 'test'
         ).create
         expect(subject.feed.stream_feed).to receive(:remove_activity)
@@ -118,12 +118,23 @@ RSpec.describe Feed::ActivityList, type: :model do
   end
 
   describe '#find' do
+    let(:attrs) do
+      {
+        'id' => 'activity_id',
+        'verb' => 'test'
+      }
+    end
+    let(:act) { subject.new(attrs) }
+
+    before do
+      allow(subject.feed.stream_feed).to receive(:add_activity)
+        .and_return(attrs)
+      allow(subject.feed.stream_feed).to receive(:get)
+        .with(include(id_lte: attrs['id'], limit: 1))
+        .and_return('results' => [attrs])
+    end
+
     it 'should return a single Activity' do
-      act = list.new(
-        actor: 'User:1',
-        object: 'Object:1',
-        verb: 'test'
-      ).create
       expect(list.find(act.id)).to eq(act)
     end
   end
@@ -132,13 +143,14 @@ RSpec.describe Feed::ActivityList, type: :model do
     subject { list.limit(50) }
 
     it 'should get the activities using the query and read the results' do
-      expect(subject.feed.stream_feed).to receive(:get).with(limit: 50)
-        .at_least(:once).and_return('results' => [])
+      expect(subject.feed.stream_feed).to receive(:get).at_least(:once)
+        .and_return('results' => [])
       expect(subject.to_a).to eq([])
     end
 
     context 'for an aggregated feed' do
       subject { Feed::ActivityList.new(Feed.new('user_aggr', '1')) }
+
       it 'should return an Array of ActivityGroup instances' do
         expect(subject.feed.stream_feed).to receive(:get).at_least(:once)
           .and_return(
@@ -152,10 +164,104 @@ RSpec.describe Feed::ActivityList, type: :model do
           )
         expect(subject.to_a).to all(be_a(Feed::ActivityGroup))
       end
+
+      context 'for activities around post verbs' do
+        let(:activity_1) do
+          {
+            'target' => 'Post:1',
+            'object' => 'Comment:1',
+            'actor' => 'User:1',
+            'verb' => 'comment'
+          }
+        end
+
+        let(:activity_2) do
+          {
+            'target' => 'Post:1',
+            'object' => 'Comment:2',
+            'actor' => 'User:1',
+            'verb' => 'comment'
+          }
+        end
+
+        it 'should return the first activity of each group' do
+          allow(subject.feed.stream_feed).to receive(:get)
+            .and_return(
+              'results' => [
+                {
+                  'activities' => [activity_1, activity_2],
+                  'verb' => 'comment'
+                },
+                {
+                  'activities' => [activity_1, activity_2],
+                  'verb' => 'post'
+                },
+                {
+                  'activities' => [activity_1, activity_2],
+                  'verb' => 'follow'
+                },
+                {
+                  'activities' => [activity_1, activity_2],
+                  'verb' => 'review'
+                }
+              ]
+            )
+          expect(subject.to_a)
+            .to all(have_attributes(
+                      activities: [an_instance_of(Feed::Activity)]
+            ))
+        end
+      end
+
+      context 'for activities around media verbs' do
+        let(:activity_1) do
+          {
+            'media' => 'Anime:1',
+            'object' => 'LibraryEntry:2',
+            'actor' => 'User:1',
+            'verb' => 'rated'
+          }
+        end
+
+        let(:activity_2) do
+          {
+            'media' => 'Anime:1',
+            'object' => 'LibraryEntry:1',
+            'actor' => 'User:1',
+            'verb' => 'rated'
+          }
+        end
+
+        it 'should return all the activities of each group' do
+          allow(subject.feed.stream_feed).to receive(:get)
+            .and_return(
+              'results' => [
+                {
+                  'activities' => [activity_1, activity_2],
+                  'verb' => 'rated'
+                },
+                {
+                  'activities' => [activity_1, activity_2],
+                  'verb' => 'updated'
+                },
+                {
+                  'activities' => [activity_1, activity_2],
+                  'verb' => 'progressed'
+                }
+              ]
+            )
+          expect(subject.to_a)
+            .to all(have_attributes(
+                      activities: [an_instance_of(Feed::Activity),
+                                   an_instance_of(Feed::Activity)]
+            ))
+        end
+      end
     end
 
     context 'for a flat feed' do
       subject { Feed::ActivityList.new(Feed.new('user', '1')) }
+
       it 'should return an Array of Activity instances' do
         expect(subject.feed.stream_feed).to receive(:get).at_least(:once)
           .and_return('results' => [{}, {}])

@@ -28,6 +28,8 @@
 # rubocop:enable Metrics/LineLength
 
 class Report < ApplicationRecord
+  include WithActivity
+
   belongs_to :naughty, -> { with_deleted }, polymorphic: true, required: true
   belongs_to :user, required: true
   belongs_to :moderator, class_name: 'User', required: false
@@ -37,4 +39,8 @@ class Report < ApplicationRecord
 
   validates :explanation, presence: true, if: :other?
   validates :reason, :status, presence: true
+
+  def stream_activity
+    Feed.reports_aggr('global').activities.new(naughty: naughty)
+  end
 end

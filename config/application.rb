@@ -21,6 +21,11 @@ module Kitsu
     # config/initializers -- all .rb files in that directory are automatically
     # loaded.
 
+    # Enable assets (used by rails_admin, emails)
+    config.assets.enabled = true
+    config.assets.prefix = '/api/assets'
+    config.assets.digest = true
+
     # UTC all the way
     config.time_zone = 'UTC'
 
@@ -37,7 +42,10 @@ module Kitsu
     config.eager_load_paths.uniq!
 
     # Allow autoloading any lib files
-    config.autoload_paths << "#{Rails.root}/lib"
+    # TODO: fix or kill rails_admin, bring this back
+    # config.autoload_paths << "#{Rails.root}/lib"
+
+    config.api_only = false
 
     # Eable CORS
     config.middleware.insert_before 0, 'Rack::Cors' do

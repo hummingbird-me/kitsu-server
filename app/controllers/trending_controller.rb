@@ -1,10 +1,12 @@
 class TrendingController < ApplicationController
-  skip_after_action :enforce_policy_use
+  include CustomControllerHelpers
+
+  before_action :authenticate_for_in_network
+  before_action :validate_namespace
 
   def index
     serializer = JSONAPI::ResourceSerializer.new(resource_class)
-    json = serializer.serialize_to_hash(resources)
-    render json: json
+    render_jsonapi serializer.serialize_to_hash(resources)
   end
 
   private
@@ -23,7 +25,6 @@ class TrendingController < ApplicationController
 
   def trending
     if params[:in_network].present?
-      raise 'Must be logged in' unless user
       trending_service.get_network(params[:limit] || 10)
     else
       trending_service.get(params[:limit] || 10)
@@ -31,10 +32,7 @@ class TrendingController < ApplicationController
   end
 
   def namespace
-    return @namespace if @namespace
-    namespace = params[:namespace].classify
-    raise 'Bad namespace' unless %w[Anime Manga Drama].include? namespace
-    @namespace = namespace
+    @namespace ||= params[:namespace].classify
   end
 
   def namespace_class
@@ -43,5 +41,18 @@ class TrendingController < ApplicationController
 
   def resource_class
     "#{namespace}Resource".safe_constantize
+  end
+
+  def authenticate_for_in_network
+    if params[:in_network].present? && !user
+      render_jsonapi serialize_error(403, 'Must be logged in for in_network'),
+        status: 403
+    end
+  end
+
+  def validate_namespace
+    unless %w[Anime Manga Drama].include?(namespace)
+      render_jsonapi serialize_error(400, 'Invalid namespace'), status: 400
+    end
   end
 end

@@ -1,6 +1,6 @@
 class UserPolicy < ApplicationPolicy
   def create?
-    true unless Rails.env.staging?
+    true
   end
 
   def update?

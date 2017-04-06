@@ -6,7 +6,6 @@
 #  id                 :integer          not null, primary key
 #  encrypted_token    :string
 #  encrypted_token_iv :string
-#  private            :boolean          default(TRUE), not null
 #  share_from         :boolean          default(FALSE), not null
 #  share_to           :boolean          default(FALSE), not null
 #  sync_to            :boolean          default(FALSE), not null

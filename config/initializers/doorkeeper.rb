@@ -1,3 +1,7 @@
+require 'authorization/assertion/twitter'
+require 'authorization/assertion/facebook'
+require 'authorization/password'
+
 Doorkeeper.configure do
   orm :active_record
 

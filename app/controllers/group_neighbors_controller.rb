@@ -1,0 +1,2 @@
+class GroupNeighborsController < ApplicationController
+end

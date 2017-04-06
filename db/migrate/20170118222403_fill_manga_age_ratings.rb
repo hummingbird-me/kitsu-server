@@ -1,3 +1,5 @@
+require 'update_in_batches'
+
 class FillMangaAgeRatings < ActiveRecord::Migration
   using UpdateInBatches
 

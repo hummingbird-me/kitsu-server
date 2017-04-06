@@ -48,6 +48,8 @@ class Comment < ApplicationRecord
                      dependent: :destroy
   has_many :likes, class_name: 'CommentLike', dependent: :destroy
 
+  scope :in_group, ->(group) { joins(:post).merge(Post.in_group(group)) }
+
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
   validates :content, length: { maximum: 9_000 }
@@ -57,8 +59,9 @@ class Comment < ApplicationRecord
     to << post.user.notifications unless post.user == user
     to << parent&.user&.notifications unless parent&.user == user
     to += mentioned_users.map(&:notifications)
-    to += post.stream_feeds
-    to << post.user.feed
+    to += post.other_feeds
+    to += post.target_timelines
+    to << post.target_feed
     to.compact!
     post.feed.activities.new(
       reply_to_user: (parent&.user || post&.user),

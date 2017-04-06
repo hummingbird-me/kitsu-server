@@ -1,6 +1,6 @@
 class FeedsController < ApplicationController
-  include Pundit
-  skip_after_action :enforce_policy_use
+  include CustomControllerHelpers
+
   before_action :authorize_feed!
 
   def show
@@ -20,11 +20,13 @@ class FeedsController < ApplicationController
   end
 
   def destroy_activity
-    uuid = params[:uuid]
     activity = feed.activities.includes(:subject).find(params[:uuid])
-    can_destroy = activity.subject && policy_for(activity.subject).destroy?
-    if feed_owner? || can_destroy
-      feed.activities.destroy(params[:uuid], uuid: true)
+    return render nothing: true, status: 404 unless activity
+
+    subject_enriched = !activity.subject.is_a?(String)
+    can_destroy = subject_enriched && policy_for(activity.subject).destroy?
+    if can_destroy || feed_owner?(activity.origin)
+      activity.destroy_original
       return render nothing: true, status: 204
     end
     render nothing: true, status: 401
@@ -40,17 +42,6 @@ class FeedsController < ApplicationController
       context: context,
       base_url: request.url
     )
-  end
-
-  def serialize_error(status, message)
-    {
-      errors: [
-        {
-          status: status,
-          detail: message
-        }
-      ]
-    }
   end
 
   def stringify_activities(list)
@@ -80,36 +71,41 @@ class FeedsController < ApplicationController
     when 'user', 'user_aggr'
       user = User.find_by(id: params[:id])
       user && show?(user)
+    when 'group', 'group_aggr'
+      group = Group.find_by(id: params[:id])
+      group && show?(group)
     when 'notifications', 'timeline'
       user = User.find_by(id: params[:id])
-      user == current_user.resource_owner
+      user == current_user&.resource_owner
     when 'global' then true
+    when 'reports_aggr'
+      user = current_user&.resource_owner
+      if params[:id] == 'global'
+        # Is admin of something?
+        user.roles.where(name: 'admin').exists?
+      else
+        # Has content rights in the group?
+        group = Group.find_by(id: params[:id])
+        member = group.member_for(user)
+        member && member.has_permission?(:content)
+      end
     end
   end
 
-  def feed_owner?
-    case params[:group]
+  def feed_owner?(feed_group = params[:group], id = params[:id])
+    if feed_group.is_a?(Feed)
+      id = feed_group.id
+      feed_group = feed_group.group
+    end
+
+    case feed_group
     when 'user', 'user_aggr'
-      user = User.find_by(id: params[:id])
+      user = User.find_by(id: id)
       user && policy_for(user).update?
+    when 'group', 'group_aggr'
+      group = Group.find_by(id: id)
+      group && policy_for(group).update?
     else false
     end
-  end
-
-  def policy_for(model)
-    Pundit.policy!(current_user, model)
-  end
-
-  def scope_for(model)
-    Pundit.policy_scope!(current_user, model)
-  end
-
-  def show?(model)
-    scope = model.class.where(id: model.id)
-    scope_for(scope).exists?
-  end
-
-  def render_jsonapi(data, opts = {})
-    render opts.merge({ json: data, content_type: JSONAPI::MEDIA_TYPE })
   end
 end

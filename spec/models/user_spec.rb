@@ -100,6 +100,7 @@ RSpec.describe User, type: :model do
   it { should belong_to(:waifu) }
   it { should have_many(:linked_accounts).dependent(:destroy) }
   it { should have_many(:profile_links).dependent(:destroy) }
+  it { should have_many(:stats).dependent(:destroy) }
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }

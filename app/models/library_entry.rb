@@ -36,7 +36,7 @@
 # rubocop:enable Metrics/LineLength
 
 class LibraryEntry < ApplicationRecord
-  VALID_RATINGS = (0.5..5).step(0.5).to_a.freeze
+  VALID_RATINGS = (2..20).to_a.freeze
   MEDIA_ASSOCIATIONS = %i[anime manga drama].freeze
 
   belongs_to :user, touch: true
@@ -73,15 +73,14 @@ class LibraryEntry < ApplicationRecord
   validates :manga_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :drama_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :rating, numericality: {
-    greater_than: 0,
-    less_than_or_equal_to: 5
+    greater_than_or_equal_to: 2,
+    less_than_or_equal_to: 20
   }, allow_blank: true
   validates :reconsume_count, numericality: {
     less_than_or_equal_to: 50,
     message: 'just... go outside'
   }
   validate :progress_limit
-  validate :rating_on_halves
   validate :one_media_present
 
   counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating }
@@ -126,11 +125,6 @@ class LibraryEntry < ApplicationRecord
 
   def next_unit
     media.unit(progress + 1)
-  end
-
-  def rating_on_halves
-    return unless rating
-    errors.add(:rating, 'must be a multiple of 0.5') unless rating % 0.5 == 0.0
   end
 
   def activity
@@ -193,9 +187,34 @@ class LibraryEntry < ApplicationRecord
     media.trending_vote(user, 1.0) if status_changed?
   end
 
-  after_commit ->() { sync_entry(:create) }, on: :create
-  after_commit ->() { sync_entry(:update) }, on: :update
-  after_destroy ->() { sync_entry(:delete) }
+  after_commit(on: :create) do
+    sync_entry(:create) # mal exporter
+  end
+
+  after_commit(on: :update) do
+    sync_entry(:update) # mal exporter
+  end
+
+  after_create do
+    # Stat STI
+    case kind
+    when :anime
+      Stat::AnimeGenreBreakdown.increment(user, self)
+      Stat::AnimeAmountWatched.increment(user, self)
+    when :manga
+    end
+  end
+
+  after_destroy do
+    sync_entry(:delete) # mal exporter
+    # Stat STI
+    case kind
+    when :anime
+      Stat::AnimeGenreBreakdown.decrement(user, self)
+      Stat::AnimeAmountWatched.decrement(user, self)
+    when :manga
+    end
+  end
 
   def sync_to_mal?
     return unless media_type.in? %w[Anime Manga]

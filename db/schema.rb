@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170311003803) do
+ActiveRecord::Schema.define(version: 20170329203624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,33 +23,33 @@ ActiveRecord::Schema.define(version: 20170311003803) do
     t.integer  "age_rating"
     t.integer  "episode_count"
     t.integer  "episode_length"
-    t.text     "synopsis",                              default: "",      null: false
+    t.text     "synopsis",                                                      default: "",      null: false
     t.string   "youtube_video_id",          limit: 255
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
+    t.datetime "created_at",                                                                      null: false
+    t.datetime "updated_at",                                                                      null: false
     t.string   "cover_image_file_name",     limit: 255
     t.string   "cover_image_content_type",  limit: 255
     t.integer  "cover_image_file_size"
     t.datetime "cover_image_updated_at"
-    t.float    "average_rating"
-    t.integer  "user_count",                            default: 0,       null: false
+    t.decimal  "average_rating",                        precision: 5, scale: 2
+    t.integer  "user_count",                                                    default: 0,       null: false
     t.string   "age_rating_guide",          limit: 255
-    t.integer  "subtype",                               default: 1,       null: false
+    t.integer  "subtype",                                                       default: 1,       null: false
     t.date     "start_date"
     t.date     "end_date"
-    t.hstore   "rating_frequencies",                    default: {},      null: false
+    t.hstore   "rating_frequencies",                                            default: {},      null: false
     t.string   "poster_image_file_name",    limit: 255
     t.string   "poster_image_content_type", limit: 255
     t.integer  "poster_image_file_size"
     t.datetime "poster_image_updated_at"
-    t.integer  "cover_image_top_offset",                default: 0,       null: false
-    t.boolean  "started_airing_date_known",             default: true,    null: false
-    t.hstore   "titles",                                default: {},      null: false
-    t.string   "canonical_title",                       default: "en_jp", null: false
-    t.string   "abbreviated_titles",                                                   array: true
+    t.integer  "cover_image_top_offset",                                        default: 0,       null: false
+    t.boolean  "started_airing_date_known",                                     default: true,    null: false
+    t.hstore   "titles",                                                        default: {},      null: false
+    t.string   "canonical_title",                                               default: "en_jp", null: false
+    t.string   "abbreviated_titles",                                                                           array: true
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
-    t.integer  "favorites_count",                       default: 0,       null: false
+    t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
   end
 
@@ -231,10 +231,10 @@ ActiveRecord::Schema.define(version: 20170311003803) do
   add_index "drama_staff", ["person_id"], name: "index_drama_staff_on_person_id", using: :btree
 
   create_table "dramas", force: :cascade do |t|
-    t.string   "slug",                                        null: false
-    t.hstore   "titles",                    default: {},      null: false
-    t.string   "canonical_title",           default: "en_jp", null: false
-    t.string   "abbreviated_titles",                                       array: true
+    t.string   "slug",                                                                null: false
+    t.hstore   "titles",                                            default: {},      null: false
+    t.string   "canonical_title",                                   default: "en_jp", null: false
+    t.string   "abbreviated_titles",                                                               array: true
     t.integer  "age_rating"
     t.string   "age_rating_guide"
     t.integer  "episode_count"
@@ -242,10 +242,10 @@ ActiveRecord::Schema.define(version: 20170311003803) do
     t.integer  "subtype"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "started_airing_date_known", default: true,    null: false
+    t.boolean  "started_airing_date_known",                         default: true,    null: false
     t.text     "synopsis"
     t.string   "youtube_video_id"
-    t.string   "country",                   default: "ja",    null: false
+    t.string   "country",                                           default: "ja",    null: false
     t.string   "cover_image_file_name"
     t.string   "cover_image_content_type"
     t.integer  "cover_image_file_size"
@@ -254,15 +254,15 @@ ActiveRecord::Schema.define(version: 20170311003803) do
     t.string   "poster_image_content_type"
     t.integer  "poster_image_file_size"
     t.datetime "poster_image_updated_at"
-    t.integer  "cover_image_top_offset",    default: 0,       null: false
-    t.float    "average_rating"
-    t.hstore   "rating_frequencies",        default: {},      null: false
-    t.integer  "user_count",                default: 0,       null: false
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.integer  "cover_image_top_offset",                            default: 0,       null: false
+    t.decimal  "average_rating",            precision: 5, scale: 2
+    t.hstore   "rating_frequencies",                                default: {},      null: false
+    t.integer  "user_count",                                        default: 0,       null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
-    t.integer  "favorites_count",           default: 0,       null: false
+    t.integer  "favorites_count",                                   default: 0,       null: false
     t.boolean  "cover_image_processing"
   end
 
@@ -370,24 +370,144 @@ ActiveRecord::Schema.define(version: 20170311003803) do
 
   add_index "genres_manga", ["manga_id"], name: "index_genres_manga_on_manga_id", using: :btree
 
+  create_table "group_action_logs", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "group_id",    null: false
+    t.string   "verb",        null: false
+    t.integer  "target_id",   null: false
+    t.string   "target_type", null: false
+    t.datetime "created_at",  null: false
+  end
+
+  add_index "group_action_logs", ["created_at"], name: "index_group_action_logs_on_created_at", using: :btree
+  add_index "group_action_logs", ["group_id"], name: "index_group_action_logs_on_group_id", using: :btree
+
+  create_table "group_bans", force: :cascade do |t|
+    t.integer  "group_id",        null: false
+    t.integer  "user_id",         null: false
+    t.integer  "moderator_id",    null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.text     "notes"
+    t.text     "notes_formatted"
+  end
+
+  add_index "group_bans", ["group_id"], name: "index_group_bans_on_group_id", using: :btree
+  add_index "group_bans", ["user_id"], name: "index_group_bans_on_user_id", using: :btree
+
+  create_table "group_categories", force: :cascade do |t|
+    t.string   "name",        null: false
+    t.string   "slug",        null: false
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "group_invites", force: :cascade do |t|
+    t.integer  "group_id",    null: false
+    t.integer  "user_id",     null: false
+    t.integer  "sender_id",   null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.datetime "revoked_at"
+    t.datetime "accepted_at"
+    t.datetime "declined_at"
+  end
+
+  add_index "group_invites", ["group_id"], name: "index_group_invites_on_group_id", using: :btree
+  add_index "group_invites", ["sender_id"], name: "index_group_invites_on_sender_id", using: :btree
+  add_index "group_invites", ["user_id"], name: "index_group_invites_on_user_id", using: :btree
+
+  create_table "group_member_notes", force: :cascade do |t|
+    t.integer  "group_member_id",   null: false
+    t.integer  "user_id",           null: false
+    t.text     "content",           null: false
+    t.text     "content_formatted", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
   create_table "group_members", force: :cascade do |t|
-    t.integer  "user_id",                   null: false
-    t.integer  "group_id",                  null: false
-    t.boolean  "pending",    default: true, null: false
+    t.integer  "user_id",                  null: false
+    t.integer  "group_id",                 null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "rank",       default: 0,    null: false
+    t.integer  "rank",         default: 0, null: false
+    t.integer  "unread_count", default: 0, null: false
   end
 
   add_index "group_members", ["group_id"], name: "index_group_members_on_group_id", using: :btree
+  add_index "group_members", ["rank"], name: "index_group_members_on_rank", using: :btree
   add_index "group_members", ["user_id", "group_id"], name: "index_group_members_on_user_id_and_group_id", unique: true, using: :btree
   add_index "group_members", ["user_id"], name: "index_group_members_on_user_id", using: :btree
 
+  create_table "group_neighbors", force: :cascade do |t|
+    t.integer  "source_id",      null: false
+    t.integer  "destination_id", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "group_neighbors", ["destination_id"], name: "index_group_neighbors_on_destination_id", using: :btree
+  add_index "group_neighbors", ["source_id"], name: "index_group_neighbors_on_source_id", using: :btree
+
+  create_table "group_permissions", force: :cascade do |t|
+    t.integer  "group_member_id", null: false
+    t.integer  "permission",      null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "group_permissions", ["group_member_id"], name: "index_group_permissions_on_group_member_id", using: :btree
+
+  create_table "group_reports", force: :cascade do |t|
+    t.text     "explanation"
+    t.integer  "reason",                   null: false
+    t.integer  "status",       default: 0, null: false
+    t.integer  "group_id",                 null: false
+    t.integer  "user_id",                  null: false
+    t.integer  "naughty_id",               null: false
+    t.string   "naughty_type",             null: false
+    t.integer  "moderator_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "group_reports", ["group_id"], name: "index_group_reports_on_group_id", using: :btree
+  add_index "group_reports", ["naughty_type", "naughty_id"], name: "index_group_reports_on_naughty_type_and_naughty_id", using: :btree
+  add_index "group_reports", ["status"], name: "index_group_reports_on_status", using: :btree
+  add_index "group_reports", ["user_id"], name: "index_group_reports_on_user_id", using: :btree
+
+  create_table "group_ticket_messages", force: :cascade do |t|
+    t.integer  "ticket_id",              null: false
+    t.integer  "user_id",                null: false
+    t.integer  "kind",       default: 0, null: false
+    t.text     "content",                null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "group_ticket_messages", ["ticket_id"], name: "index_group_ticket_messages_on_ticket_id", using: :btree
+
+  create_table "group_tickets", force: :cascade do |t|
+    t.integer  "user_id",                      null: false
+    t.integer  "group_id",                     null: false
+    t.integer  "assignee_id"
+    t.integer  "status",           default: 0, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "first_message_id"
+  end
+
+  add_index "group_tickets", ["assignee_id"], name: "index_group_tickets_on_assignee_id", using: :btree
+  add_index "group_tickets", ["group_id"], name: "index_group_tickets_on_group_id", using: :btree
+  add_index "group_tickets", ["status"], name: "index_group_tickets_on_status", using: :btree
+  add_index "group_tickets", ["user_id"], name: "index_group_tickets_on_user_id", using: :btree
+
   create_table "groups", force: :cascade do |t|
-    t.string   "name",                     limit: 255,              null: false
-    t.string   "slug",                     limit: 255,              null: false
-    t.string   "bio",                      limit: 255, default: "", null: false
-    t.text     "about",                                default: "", null: false
+    t.string   "name",                     limit: 255,                 null: false
+    t.string   "slug",                     limit: 255,                 null: false
+    t.text     "about",                                default: "",    null: false
     t.string   "avatar_file_name",         limit: 255
     t.string   "avatar_content_type",      limit: 255
     t.integer  "avatar_file_size"
@@ -396,12 +516,26 @@ ActiveRecord::Schema.define(version: 20170311003803) do
     t.string   "cover_image_content_type", limit: 255
     t.integer  "cover_image_file_size"
     t.datetime "cover_image_updated_at"
-    t.integer  "confirmed_members_count",              default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "avatar_processing"
-    t.text     "about_formatted"
+    t.integer  "members_count",                        default: 0
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
+    t.boolean  "avatar_processing",                    default: false, null: false
+    t.text     "rules"
+    t.text     "rules_formatted"
+    t.boolean  "nsfw",                                 default: false, null: false
+    t.integer  "privacy",                              default: 0,     null: false
+    t.string   "locale"
+    t.string   "tags",                                 default: [],    null: false, array: true
+    t.integer  "leaders_count",                        default: 0,     null: false
+    t.integer  "neighbors_count",                      default: 0,     null: false
+    t.boolean  "featured",                             default: false, null: false
+    t.integer  "category_id",                                          null: false
+    t.string   "tagline",                  limit: 60
+    t.datetime "last_activity_at"
   end
+
+  add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
+  add_index "groups", ["slug"], name: "index_groups_on_slug", unique: true, using: :btree
 
   create_table "installments", force: :cascade do |t|
     t.integer "media_id"
@@ -414,24 +548,39 @@ ActiveRecord::Schema.define(version: 20170311003803) do
   add_index "installments", ["franchise_id"], name: "index_installments_on_franchise_id", using: :btree
   add_index "installments", ["media_type", "media_id"], name: "index_installments_on_media_type_and_media_id", using: :btree
 
+  create_table "leader_chat_messages", force: :cascade do |t|
+    t.integer  "user_id",           null: false
+    t.integer  "group_id",          null: false
+    t.text     "content",           null: false
+    t.text     "content_formatted", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "edited_at"
+  end
+
+  add_index "leader_chat_messages", ["group_id"], name: "index_leader_chat_messages_on_group_id", using: :btree
+  add_index "leader_chat_messages", ["user_id"], name: "index_leader_chat_messages_on_user_id", using: :btree
+
   create_table "library_entries", force: :cascade do |t|
-    t.integer  "user_id",                                                 null: false
-    t.integer  "media_id",                                                null: false
-    t.integer  "status",                                                  null: false
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.integer  "progress",                                default: 0,     null: false
-    t.decimal  "rating",          precision: 2, scale: 1
-    t.boolean  "private",                                 default: false, null: false
+    t.integer  "user_id",                         null: false
+    t.integer  "media_id",                        null: false
+    t.integer  "status",                          null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "progress",        default: 0,     null: false
+    t.boolean  "private",         default: false, null: false
     t.text     "notes"
-    t.integer  "reconsume_count",                         default: 0,     null: false
-    t.boolean  "reconsuming",                             default: false, null: false
-    t.string   "media_type",                                              null: false
-    t.integer  "volumes_owned",                           default: 0,     null: false
-    t.boolean  "nsfw",                                    default: false, null: false
+    t.integer  "reconsume_count", default: 0,     null: false
+    t.boolean  "reconsuming",     default: false, null: false
+    t.string   "media_type",                      null: false
+    t.integer  "volumes_owned",   default: 0,     null: false
+    t.boolean  "nsfw",            default: false, null: false
     t.integer  "anime_id"
     t.integer  "manga_id"
     t.integer  "drama_id"
+    t.integer  "new_rating"
+    t.integer  "time_spent",                              default: 0,     null: false
+    t.integer  "rating"
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -509,24 +658,24 @@ ActiveRecord::Schema.define(version: 20170311003803) do
     t.date     "start_date"
     t.date     "end_date"
     t.string   "serialization",             limit: 255
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
+    t.datetime "created_at",                                                                      null: false
+    t.datetime "updated_at",                                                                      null: false
     t.integer  "status"
-    t.integer  "cover_image_top_offset",                default: 0
+    t.integer  "cover_image_top_offset",                                        default: 0
     t.integer  "volume_count"
     t.integer  "chapter_count"
-    t.integer  "subtype",                               default: 1,       null: false
-    t.float    "average_rating"
-    t.hstore   "rating_frequencies",                    default: {},      null: false
-    t.hstore   "titles",                                default: {},      null: false
-    t.string   "canonical_title",                       default: "en_jp", null: false
-    t.string   "abbreviated_titles",                                                   array: true
-    t.integer  "user_count",                            default: 0,       null: false
+    t.integer  "subtype",                                                       default: 1,       null: false
+    t.decimal  "average_rating",                        precision: 5, scale: 2
+    t.hstore   "rating_frequencies",                                            default: {},      null: false
+    t.hstore   "titles",                                                        default: {},      null: false
+    t.string   "canonical_title",                                               default: "en_jp", null: false
+    t.string   "abbreviated_titles",                                                                           array: true
+    t.integer  "user_count",                                                    default: 0,       null: false
     t.integer  "popularity_rank"
     t.integer  "rating_rank"
     t.integer  "age_rating"
     t.string   "age_rating_guide"
-    t.integer  "favorites_count",                       default: 0,       null: false
+    t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
   end
 
@@ -862,6 +1011,16 @@ ActiveRecord::Schema.define(version: 20170311003803) do
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
+  create_table "stats", force: :cascade do |t|
+    t.integer  "user_id",                 null: false
+    t.string   "type",                    null: false
+    t.jsonb    "stats_data", default: {}, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "stats", ["user_id"], name: "index_stats_on_user_id", using: :btree
+
   create_table "stories", force: :cascade do |t|
     t.integer  "user_id"
     t.hstore   "data"
@@ -993,6 +1152,8 @@ ActiveRecord::Schema.define(version: 20170311003803) do
     t.boolean  "profile_completed",                       default: false,       null: false
     t.boolean  "feed_completed",                          default: false,       null: false
     t.boolean  "cover_image_processing"
+    t.integer  "rating_system",                           default: 0,           null: false
+    t.integer  "theme",                                   default: 0,           null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -1067,6 +1228,29 @@ ActiveRecord::Schema.define(version: 20170311003803) do
   add_foreign_key "drama_characters", "dramas"
   add_foreign_key "drama_staff", "dramas"
   add_foreign_key "drama_staff", "people"
+  add_foreign_key "group_action_logs", "groups"
+  add_foreign_key "group_action_logs", "users"
+  add_foreign_key "group_bans", "groups"
+  add_foreign_key "group_bans", "users"
+  add_foreign_key "group_bans", "users", column: "moderator_id"
+  add_foreign_key "group_invites", "groups"
+  add_foreign_key "group_invites", "users"
+  add_foreign_key "group_invites", "users", column: "sender_id"
+  add_foreign_key "group_member_notes", "group_members"
+  add_foreign_key "group_member_notes", "users"
+  add_foreign_key "group_neighbors", "groups", column: "destination_id"
+  add_foreign_key "group_permissions", "group_members"
+  add_foreign_key "group_reports", "groups"
+  add_foreign_key "group_reports", "users"
+  add_foreign_key "group_reports", "users", column: "moderator_id"
+  add_foreign_key "group_ticket_messages", "group_tickets", column: "ticket_id"
+  add_foreign_key "group_tickets", "group_ticket_messages", column: "first_message_id"
+  add_foreign_key "group_tickets", "groups"
+  add_foreign_key "group_tickets", "users"
+  add_foreign_key "group_tickets", "users", column: "assignee_id"
+  add_foreign_key "groups", "group_categories", column: "category_id"
+  add_foreign_key "leader_chat_messages", "groups"
+  add_foreign_key "leader_chat_messages", "users"
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"
@@ -1083,6 +1267,7 @@ ActiveRecord::Schema.define(version: 20170311003803) do
   add_foreign_key "reports", "users", column: "moderator_id"
   add_foreign_key "review_likes", "users"
   add_foreign_key "reviews", "library_entries"
+  add_foreign_key "stats", "users"
   add_foreign_key "streaming_links", "streamers"
   add_foreign_key "users", "posts", column: "pinned_post_id"
 end

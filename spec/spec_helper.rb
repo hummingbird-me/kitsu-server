@@ -13,7 +13,7 @@ RSpec.configure do |config|
 
   # Allow filtering by "focus" tag
   if ENV['CI']
-    config.before(focus: true) { fail "Bailing due to focused tests!" }
+    config.before(focus: true) { raise 'Bailing due to focused tests!' }
   else
     config.filter_run :focus
   end
