@@ -44,7 +44,7 @@ class MediaResource < BaseResource
     # Titles
     :titles, :canonical_title, :abbreviated_titles,
     # Ratings
-    :average_rating, :rating_frequencies, :favorites_count,
+    :average_rating, :rating_frequencies, :user_count, :favorites_count,
     # Dates
     :start_date, :end_date,
     # Rankings
