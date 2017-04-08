@@ -35,7 +35,6 @@ RSpec.describe Episode, type: :model do
   it { should validate_presence_of(:media) }
   it { should validate_presence_of(:number) }
   it { should validate_presence_of(:season_number) }
-  it { should validate_length_of(:synopsis).is_at_least(50).is_at_most(600) }
   it 'should strip XSS from synopsis' do
     subject.synopsis = '<script>prompt("PASSWORD:")</script>' * 3
     subject.save!
