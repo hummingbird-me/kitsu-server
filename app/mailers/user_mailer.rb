@@ -20,6 +20,8 @@ class UserMailer < ApplicationMailer
   end
 
   def client_url_for(path)
-    "#{root_url}#{path}".gsub(%r{([^:])/+}, '\1/')
-  end
+    # TODO: stop hardcoding this and fix root_url
+    # Also, this gsub collapses runs of more than one forward-slash (except in
+    # the protocol)
+    "https://kitsu.io/#{path}".gsub(%r{([^:])/+}, '\1/')  end
 end

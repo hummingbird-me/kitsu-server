@@ -20,6 +20,7 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  dropbox_secret              :string(255)
@@ -89,6 +90,9 @@
 # rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
+  include WithCoverImage
+  include WithAvatar
+
   PAST_NAMES_LIMIT = 10
   PAST_IPS_LIMIT = 20
   RESERVED_NAMES = %w[
@@ -98,9 +102,11 @@ class User < ApplicationRecord
     wiki you staff mod
   ].freeze
 
+  enum rating_system: %i[simple advanced]
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
   update_index('users#user') { self }
+  enum theme: %i[light dark]
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
@@ -125,20 +131,8 @@ class User < ApplicationRecord
   has_many :post_likes, dependent: :destroy
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
-
-  has_attached_file :avatar, styles: {
-    tiny: '40x40#',
-    small: '64x64#',
-    medium: '100x100#',
-    large: '200x200#'
-  }, convert_options: {
-    tiny: '-quality 100 -strip',
-    small: '-quality 80 -strip',
-    medium: '-quality 70 -strip',
-    large: '-quality 60 -strip'
-  }
-  has_attached_file :cover_image
-  process_in_background :cover_image
+  has_many :group_members, dependent: :destroy
+  has_many :stats, dependent: :destroy
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
@@ -164,9 +158,6 @@ class User < ApplicationRecord
   validates :gender, length: { maximum: 20 }
   validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
-  validates_attachment :avatar, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png image/gif]
-  }
 
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
@@ -175,6 +166,14 @@ class User < ApplicationRecord
   scope :alts_of, ->(user) do
     where('ip_addresses && ARRAY[?]::inet', user.ip_addresses)
   end
+  scope :followed_first, ->(user) {
+    user_id = sanitize(user.id)
+    joins(<<-SQL.squish).order('(f.id IS NULL) ASC')
+      LEFT OUTER JOIN follows f
+      ON f.followed_id = users.id
+      AND f.follower_id = #{user_id}
+    SQL
+  }
 
   # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
@@ -223,9 +222,13 @@ class User < ApplicationRecord
   def update_title(_role)
     if has_role?(:admin)
       update(title: 'Staff')
-    elsif has_role?(:admin, Anime)
+    elsif has_role?(:admin, Anime) || has_role?(:mod)
       update(title: 'Mod')
     end
+  end
+
+  def admin?
+    self.title == 'Staff' || self.title == 'Mod'
   end
 
   def feed
@@ -270,11 +273,15 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
-  after_create do
+  after_commit on: :create do
+    # Send Confirmation Email
     UserMailer.confirmation(self).deliver_later
+    # Set up feeds
     aggregated_feed.follow(feed)
     timeline.follow(feed)
     Feed.global.follow(feed)
+    # Automatically join "Kitsu" group
+    GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
   end
 
   after_save do

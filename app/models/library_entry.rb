@@ -36,7 +36,7 @@
 # rubocop:enable Metrics/LineLength
 
 class LibraryEntry < ApplicationRecord
-  VALID_RATINGS = (0.5..5).step(0.5).to_a.freeze
+  VALID_RATINGS = (2..20).to_a.freeze
   MEDIA_ASSOCIATIONS = %i[anime manga drama].freeze
 
   belongs_to :user, touch: true
@@ -73,15 +73,14 @@ class LibraryEntry < ApplicationRecord
   validates :manga_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :drama_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :rating, numericality: {
-    greater_than: 0,
-    less_than_or_equal_to: 5
+    greater_than_or_equal_to: 2,
+    less_than_or_equal_to: 20
   }, allow_blank: true
   validates :reconsume_count, numericality: {
     less_than_or_equal_to: 50,
     message: 'just... go outside'
   }
   validate :progress_limit
-  validate :rating_on_halves
   validate :one_media_present
 
   counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating }
@@ -128,11 +127,6 @@ class LibraryEntry < ApplicationRecord
     media.unit(progress + 1)
   end
 
-  def rating_on_halves
-    return unless rating
-    errors.add(:rating, 'must be a multiple of 0.5') unless rating % 0.5 == 0.0
-  end
-
   def activity
     MediaActivityService.new(self)
   end
@@ -145,15 +139,6 @@ class LibraryEntry < ApplicationRecord
     elsif drama.present?
       :drama
     end
-  end
-
-  def sync_to_mal?
-    return unless media_type.in? %w[Anime Manga]
-
-    User.find(user_id).linked_accounts.where(
-      sync_to: true,
-      type: 'LinkedAccount::MyAnimeList'
-    ).present?
   end
 
   before_validation do
@@ -202,24 +187,64 @@ class LibraryEntry < ApplicationRecord
     media.trending_vote(user, 1.0) if status_changed?
   end
 
-  # TODO: will rename this if I think of a better one
-  after_commit :sync_entry_update, on: %i[create update]
+  after_commit(on: :create) do
+    sync_entry(:create) # mal exporter
+  end
 
-  def sync_entry_update
-    return unless sync_to_mal?
+  after_commit(on: :update) do
+    sync_entry(:update) # mal exporter
+  end
 
-    MyAnimeListSyncWorker.perform_async(
-      library_entry_id: id,
-      method: 'create/update'
-    )
+  after_create do
+    # Stat STI
+    case kind
+    when :anime
+      Stat::AnimeGenreBreakdown.increment(user, self)
+      Stat::AnimeAmountWatched.increment(user, self)
+    when :manga
+    end
   end
 
   after_destroy do
+    sync_entry(:delete) # mal exporter
+    # Stat STI
+    case kind
+    when :anime
+      Stat::AnimeGenreBreakdown.decrement(user, self)
+      Stat::AnimeAmountWatched.decrement(user, self)
+    when :manga
+    end
+  end
+
+  def sync_to_mal?
+    return unless media_type.in? %w[Anime Manga]
+
+    myanimelist_linked_account.present?
+  end
+
+  def sync_entry(method)
+    return unless sync_to_mal?
+
+    # create log
+    library_entry_log = LibraryEntryLog.create_for(method, library_entry)
+
     MyAnimeListSyncWorker.perform_async(
+      # for create & update
+      library_entry_id: id,
+      # for delete
       user_id: user_id,
       media_id: media_id,
       media_type: media_type,
-      method: 'delete'
-    ) if sync_to_mal?
+      # for all
+      method: method,
+      library_entry_log_id: library_entry_log.id
+    )
+  end
+
+  def myanimelist_linked_account
+    @mal_linked_account ||= User.find(user_id).linked_accounts.find_by(
+      sync_to: true,
+      type: 'LinkedAccount::MyAnimeList'
+    )
   end
 end

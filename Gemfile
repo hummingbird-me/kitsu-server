@@ -3,7 +3,8 @@ ruby '2.3.1'
 
 # Core Stuff
 gem 'puma'
-gem 'rails', '4.2.1'
+gem 'puma_worker_killer'
+gem 'rails', '4.2.8'
 gem 'rails-api'
 
 # Database Stuff
@@ -12,8 +13,9 @@ gem 'chewy' # ElasticSearch
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
 gem 'pg' # Postgres
-gem 'redis', require: ['redis', 'redis/connection/hiredis'] # Redis
+gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
+gem 'where-or' # RAILS-5: Remove this, it just backports AR#where
 
 # Auth{entication,orization}
 gem 'bcrypt'
@@ -33,8 +35,8 @@ gem 'paperclip', '~> 5.0'
 gem 'paperclip-optimizer'
 
 # Background tasks
-gem 'sidekiq', '~> 3.4.2'
-gem 'sidetiq'
+gem 'sidekiq', '~> 3.5.1'
+gem 'sidekiq-scheduler'
 
 # Text pipeline
 gem 'html-pipeline'
@@ -42,21 +44,19 @@ gem 'kramdown'
 gem 'onebox'
 gem 'rinku'
 gem 'sanitize'
-gem 'twemoji', github: 'vevix/twemoji'
 
 # Miscellaneous Utilities
 gem 'acts_as_list' # Sortables!
 # JSON-API resources
 gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
-gem 'hashie' # Souped-up Hashes
-gem 'jsonapi-resources', github: 'cerebris/jsonapi-resources', branch: 'beta'
-gem 'nokogiri' # Parse MAL XML shit
+gem 'jsonapi-resources', '0.9.0'
+gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'stream-ruby', '~> 2.5.1'
-gem 'stream_rails' # Feeds
+gem 'stream-ruby', '~> 2.5.2'
+gem 'stream_rails', github: 'GetStream/stream-rails', branch: 'feature/subreference-enrichment' # Feeds
 gem 'typhoeus' # Parallelize scraping tasks
 
 # Rack Middleware
@@ -70,10 +70,13 @@ gem 'oj_mimic_json' # Hook it in place of JSON gem
 
 gem 'sentry-raven' # Send error data to Sentry
 
+# Admin Panel
+gem 'rails_admin'
+gem 'sinatra' # used by sidekiq/web
+
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
   gem 'dotenv-rails' # Load default ENV
-  gem 'foreman' # Start processes
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 

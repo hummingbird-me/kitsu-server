@@ -12,6 +12,7 @@
 #  cover_image_content_type  :string(255)
 #  cover_image_file_name     :string(255)
 #  cover_image_file_size     :integer
+#  cover_image_processing    :boolean
 #  cover_image_top_offset    :integer          default(0), not null
 #  cover_image_updated_at    :datetime
 #  end_date                  :date
@@ -60,23 +61,24 @@ class Anime < ApplicationRecord
   has_many :anime_staff, dependent: :destroy
   alias_attribute :show_type, :subtype
 
+  rails_admin { fields :episode_count }
+
   update_index('media#anime') { self }
 
   def slug_candidates
     # Prefer the canonical title or romaji title before anything else
     candidates = [
-      -> { canonical_title }, # attack-on-titan
-      -> { titles[:en_jp] } # shingeki-no-kyojin
+      -> { canonical_title } # attack-on-titan
     ]
     if subtype == :TV
       # If it's a TV show with a name collision, common practice is to
       # specify the year (ex: kanon-2006)
-      candidates << -> { [titles[:en_jp], year] }
+      candidates << -> { [canonical_title, year] }
     else
       # If it's not TV and it's having a name collision, it's probably the
-      # movie or OVA for a series (ex: shingeki-no-kyojin-movie)
-      candidates << -> { [titles[:en_jp], subtype] }
-      candidates << -> { [titles[:en_jp], subtype, year] }
+      # movie or OVA for a series (ex: attack-on-titan-movie)
+      candidates << -> { [canonical_title, subtype] }
+      candidates << -> { [canonical_title, subtype, year] }
     end
     candidates
   end

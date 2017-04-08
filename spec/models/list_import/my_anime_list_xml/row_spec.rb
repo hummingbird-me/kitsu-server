@@ -188,10 +188,10 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#rating' do
-      it 'should return half the value in my_score' do
+      it 'should return twice the value in my_score' do
         xml = wrap_row '<my_score>5</my_score>'
         row = described_class.new(xml)
-        expect(row.rating).to eq(2.5)
+        expect(row.rating).to eq(10)
       end
     end
 
@@ -467,10 +467,10 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#rating' do
-      it 'should return half the value in my_score' do
+      it 'should return twice the value in my_score' do
         xml = wrap_row '<my_score>5</my_score>'
         row = described_class.new(xml)
-        expect(row.rating).to eq(2.5)
+        expect(row.rating).to eq(10.0)
       end
     end
 

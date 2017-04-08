@@ -6,7 +6,6 @@
 #  id                 :integer          not null, primary key
 #  encrypted_token    :string
 #  encrypted_token_iv :string
-#  private            :boolean          default(TRUE), not null
 #  share_from         :boolean          default(FALSE), not null
 #  share_to           :boolean          default(FALSE), not null
 #  sync_to            :boolean          default(FALSE), not null
@@ -32,6 +31,7 @@ RSpec.describe LinkedAccount, type: :model do
   subject { described_class.new }
 
   it { should belong_to(:user) }
+  it { should have_many(:library_entry_logs) }
   it { should validate_presence_of(:external_user_id) }
   it { should validate_presence_of(:type) }
 end

@@ -20,6 +20,7 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  dropbox_secret              :string(255)
@@ -98,6 +99,7 @@ RSpec.describe User, type: :model do
   it { should belong_to(:waifu) }
   it { should have_many(:linked_accounts).dependent(:destroy) }
   it { should have_many(:profile_links).dependent(:destroy) }
+  it { should have_many(:stats).dependent(:destroy) }
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }

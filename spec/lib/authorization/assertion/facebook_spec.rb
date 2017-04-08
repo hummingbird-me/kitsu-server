@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'authorization/assertion/facebook'
 
 RSpec.describe Authorization::Assertion::Facebook do
   let(:facebook_responce) do

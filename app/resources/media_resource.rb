@@ -1,4 +1,8 @@
 class MediaResource < BaseResource
+  include SluggableResource
+
+  abstract
+
   # This regex accepts a numerical range or single number
   # $1 = start, $2 = dot representing closed/open, $3 = end
   NUMBER = /(\d+(?:\.\d+)?)/
@@ -34,7 +38,7 @@ class MediaResource < BaseResource
 
   caching
 
-  attributes :slug, :synopsis,
+  attributes :synopsis,
     # Cover image location
     :cover_image_top_offset,
     # Titles
@@ -46,7 +50,9 @@ class MediaResource < BaseResource
     # Rankings
     :popularity_rank, :rating_rank,
     # Age Ratings
-    :age_rating, :age_rating_guide
+    :age_rating, :age_rating_guide,
+    # Subtype
+    :subtype
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
@@ -57,12 +63,16 @@ class MediaResource < BaseResource
   has_many :reviews
   has_many :media_relationships
 
-  filter :slug, apply: -> (records, value, _options) { records.by_slug(value) }
+  filter :subtype, apply: ->(records, values, _opts) {
+    values = values.map { |v| records.subtypes[v] || v }
+    records.where(subtype: values)
+  }
 
   # Common ElasticSearch stuff
   query :year, NUMERIC_QUERY
   query :average_rating, NUMERIC_QUERY
   query :user_count, NUMERIC_QUERY
+  query :subtype
   query :genres,
     apply: -> (values, _ctx) {
       { match: { genres: { query: values.join(' '), operator: 'and' } } }

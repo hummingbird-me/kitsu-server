@@ -12,7 +12,9 @@ module Rails
         template 'policy.rb', template_file
       end
 
-      hook_for :test_framework
+      hook_for :test_framework do |instance, test|
+        instance.invoke test, [instance.name.singularize]
+      end
     end
   end
 end

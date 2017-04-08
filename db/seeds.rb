@@ -1,19 +1,19 @@
 # Load seeds from YAML files in db/seeds/*
 
+require 'seed_file'
+
 MAX_ID = 2 ** 30 - 1
 SEED_DIR = 'db/seeds'
 
-Dir[Rails.root.join("#{SEED_DIR}/*.yml")].each do |f|
-  basename = File.basename(f, File.extname(f))
-  yaml = YAML::load_file(f)
-  model = basename.classify.constantize
-  puts "==> Seeding: #{model.name}"
+previous_logger = ApplicationRecord.logger
+ApplicationRecord.logger = Logger.new(nil)
 
-  yaml.each do |key, values|
-    print "#{key} "
-    row = model.where(id: values['id']).first_or_initialize
-    row.assign_attributes(values)
-    row.save!
-  end
+Dir[Rails.root.join("#{SEED_DIR}/*.yml")].each do |f|
+  seed = SeedFile.new(f)
+  puts "==> Seeding: #{seed.model.name}"
+  print "  "
+  seed.import! { |key| print "#{key} | " }
   print "\n"
 end
+
+ApplicationRecord.logger = previous_logger

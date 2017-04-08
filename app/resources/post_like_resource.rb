@@ -1,5 +1,9 @@
 class PostLikeResource < BaseResource
+  include SortableByFollowing
+
   caching
+
+  attribute :created_at
 
   has_one :post
   has_one :user

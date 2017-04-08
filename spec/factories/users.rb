@@ -20,6 +20,7 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  dropbox_secret              :string(255)
@@ -93,7 +94,6 @@ FactoryGirl.define do
     name { Faker::Internet.user_name(nil, ['_'])[0..15] + rand(1000).to_s }
     email { Faker::Internet.email }
     password { Faker::Internet.password }
-    avatar { Faker::Company.logo }
 
     trait :admin do
       after(:create) { |user| user.add_role(:admin) }
@@ -101,6 +101,10 @@ FactoryGirl.define do
 
     trait :anime_admin do
       after(:create) { |user| user.add_role(:admin, Anime) }
+    end
+
+    trait :with_avatar do
+      avatar { Faker::Company.logo }
     end
   end
 end

@@ -7,6 +7,12 @@ module StreamSync
     end
   end
 
+  def follow_group_aggr
+    mass_follow('group_aggr', Group.pluck(:id)) do |id|
+      { Feed.group_aggr(id) => Feed.group(id) }
+    end
+  end
+
   def follow_timeline
     mass_follow('timeline', User.pluck(:id)) do |id|
       { Feed.timeline(id) => Feed.user(id) }
@@ -38,22 +44,51 @@ module StreamSync
     genres_for Drama
   end
 
+  def user_ratings
+    print ' => uploading'
+    User.ids.in_groups_of(990, false).each do |user_ids|
+      print '.'
+
+      entries = LibraryEntry.where(user_id: user_ids)
+                            .select(:media_type, :media_id, :status, :user_id,
+                              :rating)
+                            .group_by(&:user_id)
+
+      data = user_ids.map { |user_id|
+        ["User:#{user_id}", {
+          library: entries[user_id].map { |entry|
+            stream_id = "#{entry.media_type}:#{entry.media_id}"
+            [stream_id, {
+              status: entry.status,
+              rating: entry.rating
+            }]
+          }.to_h
+        }]
+      }.to_h
+
+      custom_endpoint_client.upload_meta(data)
+      print '^'
+    end
+    print "\n"
+  end
+
   def genres_for(klass)
     puts "#{klass.name}:"
-    print ' => generating'
-    data = klass.includes(:genres).map { |media|
-      print '.' if rand(1..100) > 98
-      [media.stream_id, media.genres.map(&:name)]
-    }.to_h
-    print "\n"
     print ' => uploading'
-    custom_endpoint_client.upload_meta(data)
+    klass.includes(:genres).in_groups_of(990, false).each do |items|
+      data = items.map { |media|
+        print '.' if rand(1..100) > 98
+        [media.stream_id, { genres: media.genres.map(&:slug) }]
+      }.to_h
+      custom_endpoint_client.upload_meta(data)
+      print '^'
+    end
     print "\n"
   end
 
   def mass_follow(name, list, &map_block)
     puts "#{name}:"
-    print " => generating"
+    print ' => generating'
     follows = list.map do |*args|
       print '.' if rand(1..100) > 98
       map_block.call(*args)

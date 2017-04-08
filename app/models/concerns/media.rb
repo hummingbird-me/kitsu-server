@@ -2,12 +2,12 @@ module Media
   extend ActiveSupport::Concern
 
   included do
-    extend FriendlyId
     include Titleable
     include Rateable
     include Rankable
     include Trendable
     include WithCoverImage
+    include Sluggable
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
@@ -33,9 +33,14 @@ module Media
                                inverse_of: :media
     has_many :mappings, as: 'media', dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
-    has_many :media_relationships, as: 'source', dependent: :destroy
-    has_many :inverse_media_relationships, as: 'destination',
-                                           dependent: :destroy
+    has_many :media_relationships,
+      class_name: 'MediaRelationship',
+      as: 'source',
+      dependent: :destroy
+    has_many :inverse_media_relationships,
+      class_name: 'MediaRelationship',
+      as: 'destination',
+      dependent: :destroy
     has_many :favorites, as: 'item', dependent: :destroy,
                          inverse_of: :item
     delegate :year, to: :start_date, allow_nil: true
@@ -45,17 +50,6 @@ module Media
     }
 
     after_create :follow_self
-  end
-
-  class_methods do
-    # HACK: we need to return a relation but want to handle historical slugs
-    def by_slug(slug)
-      record = where(slug: slug)
-      record = where(id: friendly.find(slug).id) if record.empty?
-      record
-    rescue
-      none
-    end
   end
 
   def slug_candidates

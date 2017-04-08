@@ -6,7 +6,6 @@
 #  id                 :integer          not null, primary key
 #  encrypted_token    :string
 #  encrypted_token_iv :string
-#  private            :boolean          default(TRUE), not null
 #  share_from         :boolean          default(FALSE), not null
 #  share_to           :boolean          default(FALSE), not null
 #  sync_to            :boolean          default(FALSE), not null
@@ -28,6 +27,7 @@
 
 class LinkedAccount < ApplicationRecord
   belongs_to :user, required: true
+  has_many :library_entry_logs
   # encyrpt the token
   attr_encrypted :token, key: Base64.decode64(ENV['ATTR_ENCRYPT_KEY'])
   # expose for jsonapi

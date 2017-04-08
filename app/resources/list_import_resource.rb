@@ -1,10 +1,12 @@
 class ListImportResource < BaseResource
+  include STIResource
+
   model_hint model: ListImport::MyAnimeList
   model_hint model: ListImport::AnimePlanet
   model_hint model: ListImport::Anilist
 
   # Parameters
-  attributes :input_text, :strategy, :kind, :created_at
+  attributes :input_text, :strategy, :created_at
   attribute :input_file, format: :attachment
   # Status
   attributes :progress, :status, :total

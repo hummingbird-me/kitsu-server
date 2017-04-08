@@ -4,4 +4,6 @@ class DramaCharacterResource < BaseResource
   has_one :drama
   has_one :character
   has_many :castings
+
+  filter :drama_id
 end

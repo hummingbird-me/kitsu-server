@@ -31,9 +31,10 @@ class CommentLike < ApplicationRecord
   validates :comment, uniqueness: { scope: :user_id }
 
   def stream_activity
+    notify = [comment.user.notifications] unless comment.user == user
     comment.post.feed.activities.new(
       target: comment,
-      to: [comment.user.notifications]
+      to: notify
     )
   end
 end

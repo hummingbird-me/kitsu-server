@@ -1,3 +1,8 @@
+require_dependency 'data_import/media'
+require_dependency 'data_import/http'
+require_dependency 'data_import/my_anime_list/extractor/media'
+require_dependency 'data_import/my_anime_list/extractor/character'
+
 module DataImport
   class MyAnimeList
     ATARASHII_API_HOST = 'https://hbv3-mal-api.herokuapp.com/2.1/'.freeze

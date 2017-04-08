@@ -49,8 +49,8 @@ class ApplicationPolicy
 
   # @return [ApplicationPolicy::Scope] a utility class for applying a scope to
   #   an ActiveRecord::Relation based on the token + record
-  def scope
-    Pundit.policy_scope!(user, record.class)
+  def scope(base = record.class)
+    Pundit.policy_scope!(token, base)
   end
 
   # Check if the user can see NSFW stuff
@@ -94,17 +94,46 @@ class ApplicationPolicy
   # @return [Boolean] Whether the current user has the admin role for the
   #   requested scope
   def is_admin?(scope = record) # rubocop:disable Style/PredicateName
-    user&.has_role?(:admin, scope)
+    # TODO: get rid of global `mod` role and switch to local mod stuff
+    user&.has_role?(:admin, scope) || user&.has_role?(:mod)
+  end
+
+  # Ask if the user has any admin roles, in general.
+  #
+  # @return [Boolean] Whether the current user has any admin roles
+  def is_any_admin? # rubocop:disable Style/PredicateName
+    # TODO: get rid of global `mod` role and switch to local mod stuff
+    user && user.roles.where(name: %w[admin mod]).count
   end
 
   # Check the record.user association to see if it's owned by the current user.
   #
   # @return [Boolean] Whether the current user is the owner of the record
-  def is_owner?
+  def is_owner? # rubocop:disable Style/PredicateName
     return false unless user && record.respond_to?(:user)
     return false unless record.user == user
     return false if record.user_id_was && record.user_id_was != user.id
     true
+  end
+
+  # Get a policy instance for a different object, so we can delegate to it.
+  #
+  # @return [ApplicationPolicy] The policy instance for this object
+  def policy_for(model)
+    Pundit.policy!(token, model)
+  end
+
+  def show?
+    record_scope = record.class.where(id: record.id)
+    scope(record_scope).exists?
+  end
+
+  %i[dashboard? export? history? show_in_app?].each do |action|
+    define_method(action) { is_any_admin? }
+  end
+
+  def new?
+    is_any_admin?
   end
 
   # Provide access control and act as #show?
@@ -123,6 +152,12 @@ class ApplicationPolicy
 
     def blocked_users
       Block.hidden_for(user)
+    end
+
+    def is_admin? # rubocop:disable Style/PredicateName
+      # Get the actual model instance
+      admin_scope = scope.respond_to?(:model) ? scope.model : scope
+      user&.has_role?(:admin, admin_scope)
     end
   end
 end

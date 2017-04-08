@@ -6,5 +6,5 @@ class EpisodeResource < BaseResource
   has_one :media, polymorphic: true
 
   filters :media_id, :media_type
-  filter :number, MediaResource::NUMERIC_QUERY
+  filter :number, verify: ->(values, _context) { values.map(&:to_i) }
 end

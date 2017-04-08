@@ -13,12 +13,18 @@ class Feed
     def initialize(feed, data = {})
       @feed = feed
       @data = data.with_indifferent_access
-      @including = []
+      # TODO: :target, :actor and :object are getting forced in by
+      # the subreference-enrichment branch of stream-rails.
+      # We need a PR for stream-rails to make it optional as it is
+      # in their master branch. Better yet, get subreference enrichment
+      # in master.
+      @including = %w[target actor object]
       @maps = []
-      @selects = []
+      @slow_selects = []
+      @fast_selects = []
       @limit_ratio = 1.0
-      @more = true
-      @data[:limit] = 25
+      @page_size = @data[:limit] ||= 25
+      @page_number = 1
     end
 
     def page(page_number = nil, id_lt: nil)
@@ -41,31 +47,47 @@ class Feed
 
     def sfw
       select do |act|
-        throw :remove_group if act.nsfw?
-        act.sfw?
+        throw :remove_group if act[:nsfw]
+        act[:nsfw] != true
       end
       self
     end
 
     def blocking(users)
       blocked = Set.new(users)
+      # TODO: merge these
       select do |act|
-        user_id = if act.actor.respond_to?(:id)
-                    act.actor.id
-                  elsif act.actor
-                    act.actor.split(':')[1].to_i
-                  end
+        user_id = act['actor'].split(':')[1].to_i
         will_block = blocked.include?(user_id)
-        throw :remove_group if will_block && act.verb == 'post'
+        throw :remove_group if will_block && act['verb'] == 'post'
         !will_block
+      end
+      # Handle blocked posts when the post activity isn't in the group
+      select including: %i[target] do |act|
+        if act['target'].is_a?(Post)
+          user_id = act['target'].user_id
+          throw :remove_group if blocked.include?(user_id)
+        end
+        true
       end
       self
     end
 
     def includes(*relationships)
       including = [relationships].flatten.map(&:to_s)
-      # Hardwire subject->object, convert to symbols
-      including.map! { |inc| inc.sub('subject', 'object').to_sym }
+      # Hardwire subject->object
+      including.map! { |inc| inc.sub('subject', 'object') }
+
+      with_subreferences = including.each_with_object({}) do |inc, subs|
+        field, reference = inc.split('.')
+        (subs[field.to_sym] ||= []) << reference&.to_sym
+      end
+
+      including = with_subreferences.map do |field, references|
+        references = references&.compact
+        references&.any? ? [field, references.uniq] : field
+      end
+
       @including += including
       self
     end
@@ -92,7 +114,18 @@ class Feed
     end
 
     def find(id)
-      where_id(:lte, id).limit(1).to_a.first
+      act = feed.stream_feed.get(id_lte: id, limit: 1)['results'].first
+      # If we got an ActivityGroup, get the first Activity in it
+      act = act['activities'].first if act.key?('activities')
+
+      # If the ID is wrong, the activity doesn't exist in this feed.
+      return nil unless act['id'] == id
+
+      # Enrich it
+      enricher = StreamRails::Enrich.new(@including)
+      enriched_activity = enricher.enrich_activities([act]).first
+      # Wrap it
+      Feed::Activity.new(feed, enriched_activity)
     end
 
     def add(activity)
@@ -117,9 +150,16 @@ class Feed
 
     # @attr [Float] ratio The expected percentage of posts that will be matched
     #                     by this selector
-    def select(ratio = 1.0, &block)
+    # @attr [Array<String>] including The attributes which will need to be
+    #                                 enriched for this select to work
+    def select(ratio = 1.0, including: nil, &block)
       @limit_ratio *= ratio
-      @selects << block
+      if including
+        includes(including)
+        @slow_selects << block
+      else
+        @fast_selects << block
+      end
       self
     end
 
@@ -128,115 +168,36 @@ class Feed
       self
     end
 
-    def more?
-      to_a if @results.nil?
-      @more
-    end
-
-    def real_page_size
-      [(data[:limit] / @limit_ratio).to_i, 100].min
-    end
-
-    def to_a
-      return @results if @results
-      @results = []
-      requested_count = page_size || data[:limit]
-      last_id = data[:id_lt]
-      loop.with_index do |_, i|
-        page_size = [(real_page_size * (1.2**i)).to_i, 100].min
-        page = get_page(id_lt: last_id, limit: page_size)
-        @results += page if page
-        @termination_reason = 'empty' if page.nil?
-        @termination_reason = 'iterations' if i >= 10
-        @termination_reason = 'full' if @results.count >= requested_count
-        if @results.count >= requested_count || i >= 10 || page.nil?
-          @results = @results[0..(requested_count - 1)]
-          return @results
-        end
-      end
-    end
-
     def empty?
       to_a.empty?
     end
 
+    def to_a
+      fetcher.to_a
+    end
+
+    def more?
+      fetcher.more?
+    end
+
     private
 
-    def get_page(id_lt: nil, limit: nil)
-      # Extract non-pagination payload data
-      data = @data.slice(:ranking, :mark_seen, :mark_read, :limit)
-      # Apply our id_gt for pagination
-      data = data.merge(id_lt: id_lt) if id_lt
-      # Apply the limit ratio, apply it to the data
-      data[:limit] = limit || real_page_size
-      # Actually load results
-      res = feed.stream_feed.get(data)['results']
-      # If the page we got is the right number, there's more to grab
-      @more = res.count == data[:limit]
-      return nil if res.count.zero?
-      # Enrich them, apply select and map filters to them
-      res = enrich(res)
-      res = apply_select(res)
-      res = apply_maps(res)
-      # Remove any nils just to be safe
-      res.compact
+    def fetcher
+      @fetcher ||= Fetcher.new(
+        stream_options: data,
+        fetcher_options: fetcher_options
+      )
     end
 
-    # Loads in included associations, converts to Feed::Activity[Group]
-    # instances and removes any unfound association data to not break JR
-    def enrich(activities)
-      enricher = StreamRails::Enrich.new(including)
-      if feed.aggregated? || feed.notification?
-        activities = enricher.enrich_aggregated_activities(activities)
-        activities = activities.map { |ag| Feed::ActivityGroup.new(feed, ag) }
-      else
-        activities = enricher.enrich_activities(activities)
-        activities = activities.map { |a| Feed::Activity.new(feed, a) }
-      end
-      activities.map { |act| strip_unfound(act) }
-    end
-
-    def apply_select(activities)
-      activities.lazy.map { |act|
-        if act.respond_to?(:activities)
-          catch(:remove_group) do
-            act.activities = apply_select(act.activities)
-            act
-          end
-        else
-          next unless @selects.all? { |proc| proc.call(act) }
-          act
-        end
-      }.reject(&:blank?).to_a
-    end
-
-    def apply_maps(activities)
-      activities.map do |act|
-        if act.respond_to?(:activities)
-          act.activities = apply_maps(act.activities)
-          act
-        else
-          @maps.reduce(act) { |acc, elem| elem.call(acc) }
-        end
-      end
-    end
-
-    # Strips unfound
-    def strip_unfound(activity)
-      # Recurse into activities if we're passed an ActivityGroup
-      if activity.respond_to?(:activities)
-        activity.dup.tap do |ag|
-          ag.activities = activity.activities.map { |a| strip_unfound(a) }
-        end
-      else
-        activity.dup.tap do |act|
-          # For each field we've asked to have included
-          including.each do |key|
-            # Delete it if it's still a String
-            act.delete_field(key) if act[key].is_a? String
-          end
-        end
-      end
+    def fetcher_options
+      {
+        slow_selects: @slow_selects,
+        fast_selects: @fast_selects,
+        maps: @maps,
+        limit_ratio: @limit_ratio,
+        includes: @including,
+        feed: @feed
+      }
     end
   end
 end

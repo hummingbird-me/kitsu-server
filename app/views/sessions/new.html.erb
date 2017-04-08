@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+      background-color: #FAFAFA;
+      color: #464646;
+      margin: 0;
+    }
+    h1, h2 {
+      margin: 0;
+    }
+  </style>
+</head>
+<body data-redirect-to="<%= @redirect_to %>">
+  <div>
+    <h1 id="login-title">Logging Into Admin Panel</h1>
+    <h2 id="login-subtitle">You will be redirected...</h2>
+    <noscript><p>Please enable JavaScript</p></noscript>
+    <progress id="spinner"></progress>
+  </div>
+  <script type="text/javascript">
+    function displayError(message) {
+      document.getElementById('login-title').innerText = 'An Error Occurred';
+      document.getElementById('login-subtitle').innerText = message;
+      document.getElementById('spinner').style.display = 'none';
+    }
+    var emberAuth = JSON.parse(localStorage['ember_simple_auth:session']);
+    if (emberAuth.authenticated.access_token) {
+      $.ajax({
+        url: '/api/sessions',
+        data: {
+          token: emberAuth.authenticated.access_token
+        },
+        type: 'post'
+      }).then(function() {
+        window.location.replace(document.body.getAttribute('data-redirect-to'));
+      }, function(xhr) {
+        displayError(xhr.responseText);
+      });
+    } else {
+      displayError("You don't seem to be logged in!");
+    }
+  </script>
+</body>
+</html>

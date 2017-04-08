@@ -1,3 +1,5 @@
+require 'update_in_batches'
+
 class FillMediaAssociationsOnLibraryEntry < ActiveRecord::Migration
   using UpdateInBatches
 

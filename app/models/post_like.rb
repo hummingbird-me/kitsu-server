@@ -31,10 +31,13 @@ class PostLike < ApplicationRecord
   counter_culture :user, column_name: 'likes_given_count'
   counter_culture %i[post user], column_name: 'likes_received_count'
 
+  scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
+
   def stream_activity
+    notify = [post.user.notifications] unless post.user == user
     post.feed.activities.new(
       target: post,
-      to: [post.user.notifications]
+      to: notify
     )
   end
 

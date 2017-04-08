@@ -2,7 +2,7 @@ module HTML
   class Pipeline
     class KitsuMentionFilter < MentionFilter
       # Disable "@mention" mentions
-      MentionLogins = []
+      MentionLogins = [].freeze
 
       def base_url
         '/users/'

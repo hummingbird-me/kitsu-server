@@ -1,7 +1,15 @@
 ---
-:concurrency: 1
+:concurrency: 4
 production:
   :concurrency: 25
 :queues:
-  - default
-  - mailers
+  - [default, 2]
+  - [mailers, 1]
+  - [paperclip, 1]
+schedule:
+  CounterCacheResetWorker:
+    every: 12h
+  AverageRatingUpdateWorker:
+    every: 6h
+  RankingUpdateWorker:
+    every: 12h

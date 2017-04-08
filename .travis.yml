@@ -5,8 +5,8 @@ rvm:
 sudo: false
 
 env:
-  STREAM_API_KEY=2vqu5ratprnr
-  STREAM_API_SECRET=q2h4wt4p5wua9ugw5hr8wcevuxyyvx5k99vd94uvvxat2f3jr9s3ythbkty7ztgv
+  STREAM_API_KEY=q3k9n9kqk3fb
+  STREAM_API_SECRET=vkw87x3p323z6ma75n8dvnse98jrr9gkauf2zfjnzbgjpmm54ssnbync4yhhzugc
 
 cache:
   directories:
