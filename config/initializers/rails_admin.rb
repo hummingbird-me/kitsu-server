@@ -159,6 +159,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('Comment') { parent Post }
 
   config.model 'Mapping' do
+    field :media
     field(:external_id) { label 'External ID' }
     field :external_site, :enum do
       enum do
@@ -170,5 +171,12 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
         #    thetvdb/series thetvdb/season mydramalist ]
       end
     end
+  end
+
+  config.model 'Episode' do
+    field :media
+    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    fields :canonical_title, :number, :season_number, :synopsis, :airdate,
+      :length, :thumbnail
   end
 end
