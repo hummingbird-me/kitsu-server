@@ -185,7 +185,7 @@ FactoryGirl.define do
       validate_find '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>[a-zA-z0-9_\-]+)\z'
       validate_replace 'https://trakt.tv/users/\k<username>'
     end
-    
+
     # Website
     trait :website do
       validate_find '(?<protocol>https?://)(www.)?(?<url>(.)+\.(.)+)'
