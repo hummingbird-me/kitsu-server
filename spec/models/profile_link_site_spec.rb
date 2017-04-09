@@ -635,7 +635,7 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-    
+
     # Website
     describe 'Website' do
       context 'success' do
