@@ -13,3 +13,5 @@ schedule:
     every: 6h
   RankingUpdateWorker:
     every: 12h
+  LibraryEntryLogRemovalWorker:
+    every: 12h

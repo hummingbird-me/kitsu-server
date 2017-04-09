@@ -226,7 +226,9 @@ class LibraryEntry < ApplicationRecord
     return unless sync_to_mal?
 
     # create log
-    library_entry_log = LibraryEntryLog.create_for(method, library_entry)
+    library_entry_log = LibraryEntryLog.create_for(
+      method, self, myanimelist_linked_account
+    )
 
     MyAnimeListSyncWorker.perform_async(
       # for create & update

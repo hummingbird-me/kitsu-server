@@ -12,7 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170329203624) do
-  
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -594,8 +594,8 @@ ActiveRecord::Schema.define(version: 20170329203624) do
 
   create_table "library_entry_logs", force: :cascade do |t|
     t.integer  "linked_account_id",                                            null: false
-    t.string   "media_type"
-    t.integer  "media_id"
+    t.string   "media_type",                                                   null: false
+    t.integer  "media_id",                                                     null: false
     t.integer  "progress"
     t.decimal  "rating",            precision: 2, scale: 1
     t.integer  "reconsume_count"
