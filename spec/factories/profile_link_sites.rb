@@ -131,7 +131,7 @@ FactoryGirl.define do
       validate_find '\A(https?://)?(www.)?(patreon.com/)?(?<username>[a-zA-Z0-9_\-]+)\z'
       validate_replace 'https://patreon.com/\k<username>'
     end
-    
+
     # DeviantArt
     trait :deviantart do
       validate_find '\A(https?://)?(www.)?(?<username>[a-zA-z0-9_\-]+)(.deviantart.com)?\z'
