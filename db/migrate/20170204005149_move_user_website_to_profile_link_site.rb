@@ -3,7 +3,7 @@ class MoveUserWebsiteToProfileLinkSite < ActiveRecord::Migration
     User.where.not(website: nil).find_each do |user|
       ProfileLink.create(
         url: user.website.split(' ').first,
-        profile_link_site_id: 20,
+        profile_link_site_id: 29,
         user_id: user.id
       )
     end
