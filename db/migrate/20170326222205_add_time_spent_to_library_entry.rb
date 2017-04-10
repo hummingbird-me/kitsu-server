@@ -18,6 +18,10 @@ class AddTimeSpentToLibraryEntry < ActiveRecord::Migration
       SQL
     end
 
+    say_with_time 'Filling time_spent null values' do
+      LibraryEntry.where(time_spent: nil).update_in_batches(time_spent: 0)
+    end
+
     change_column_default :library_entries, :time_spent, 0
     change_column_null :library_entries, :time_spent, false
   end
