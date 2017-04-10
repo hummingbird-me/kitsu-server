@@ -9,8 +9,13 @@ class AddTimeSpentToLibraryEntry < ActiveRecord::Migration
     add_column :library_entries, :time_spent, :integer
 
     say_with_time 'Filling time_spent column' do
-      LibraryEntry.by_kind(:anime).joins(:anime)
-        .update_in_batches('time_spent = progress * anime.episode_length')
+      LibraryEntry.by_kind(:anime).update_in_batches(<<-SQL.squish)
+        time_spent = COALESCE(progress * (
+          SELECT episode_length
+          FROM anime
+          WHERE anime.id = library_entries.anime_id
+        ), 0)
+      SQL
     end
 
     change_column_default :library_entries, :time_spent, 0
