@@ -3,6 +3,7 @@ class ImageDimensionsValidator < ActiveModel::EachValidator
     return if value.blank?
 
     actual = dimensions_for(value)
+    return unless actual
 
     height = options[:height]
     width = options[:width]
@@ -16,6 +17,7 @@ class ImageDimensionsValidator < ActiveModel::EachValidator
   end
 
   def dimensions_for(attachment)
+    return unless attachment.queued_for_write[:original]
     file = attachment.queued_for_write[:original].path
     Paperclip::Geometry.from_file(file)
   end
