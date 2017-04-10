@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170329203624) do
+ActiveRecord::Schema.define(version: 20170410193746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -597,7 +597,7 @@ ActiveRecord::Schema.define(version: 20170329203624) do
     t.string   "media_type",                                                   null: false
     t.integer  "media_id",                                                     null: false
     t.integer  "progress"
-    t.decimal  "rating",            precision: 2, scale: 1
+    t.integer  "rating"
     t.integer  "reconsume_count"
     t.boolean  "reconsuming"
     t.integer  "status"
