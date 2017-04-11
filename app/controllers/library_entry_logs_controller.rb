@@ -1,0 +1,2 @@
+class LibraryEntryLogsController < ApplicationController
+end
