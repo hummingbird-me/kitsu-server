@@ -138,3 +138,33 @@ trakt:
   name: Trakt
   validate_find: '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>.+)\z'
   validate_replace: 'https://trakt.tv/users/\k<username>'
+myanimelist:
+  id: 29
+  name: MyAnimeList
+  validate_find: '\A(https?://)?(www.)?(myanimelist.net/)?(profile/)?(?<username>[a-zA-Z0-9_\-]+)\z'
+  validate_replace: 'https://myanimelist.net/profile/\k<username>'
+animeplanet:
+  id: 30
+  name: AnimePlanet
+  validate_find: '\A(https?://)?(www.)?(anime-planet.com/)?(users/)?(?<username>[a-zA-Z0-9_\-]+)\z'
+  validate_replace: 'https://anime-planet.com\users\k<username>'
+pixiv:
+  id: 31
+  name: Pixiv
+  validate_find: '\A(https?://)?(www.)?(pixiv.me/)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_replace: 'https://pixiv.me\k<username>'
+anidb:
+  id: 32
+  name: AniDB
+  validate_find: '\A(https?://)?(www.)?(anidb.net/)?(up)?(?<username>[0-9]+)\z'
+  validate_replace: 'https://anidb.net/up\k<username>'
+anilist:
+  id: 33
+  name: AniList
+  validate_find: '\A(https?://)?(www.)?(anilist.co/)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_replace: 'https://anilist.co/\k<username>'
+vndb:
+  id: 34
+  name: VNDB
+  validate_find: '\A(https?://)?(www.)?(vndb.org/)?(?<username>[a-zA-Z0-9]+)\z'
+  validate_replace: 'https://vndb.org/\k<username>'

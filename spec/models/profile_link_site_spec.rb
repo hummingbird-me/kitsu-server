@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: profile_link_sites
@@ -10,7 +9,7 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
-# rubocop:enable Metrics/LineLength
+# rubocop:disable Metrics/LineLength
 
 require 'rails_helper'
 
@@ -631,6 +630,126 @@ RSpec.describe ProfileLinkSite, type: :model do
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
+
+    # MyAnimeList
+    describe 'MyAnimeList' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            myanimelist.net/profile/FukuchiChiisaia
+            https://www.myanimelist.net/profile/FukuchiChiisaia
+            https://myanimelist.net/profile/FukuchiChiisaia
+            FukuchiChiisaia
+          ]
+          site = build(:profile_link_site, :myanimelist)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('FukuchiChiisaia')
+          end
+        end
+      end
+    end
+
+    # AnimePlanet
+    describe 'AnimePlanet' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            anime-planet.com/users/FukuchiChiisaia
+            https://www.anime-planet.com/users/FukuchiChiisaia
+            https://anime-planet.com/users/FukuchiChiisaia
+            FukuchiChiisaia
+          ]
+          site = build(:profile_link_site, :animeplanet)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('FukuchiChiisaia')
+          end
+        end
+      end
+    end
+
+    # Pixiv
+    describe 'Pixiv' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            pixiv.me/creseca
+            https://www.pixiv.me/creseca
+            https://pixiv.me/creseca
+            creseca
+          ]
+          site = build(:profile_link_site, :pixiv)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('creseca')
+          end
+        end
+      end
+    end
+
+    # AniDB
+    describe 'AniDB' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            anidb.net/up637678
+            https://www.anidb.net/up637678
+            https://anidb.net/up637678
+            637678
+          ]
+          site = build(:profile_link_site, :anidb)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('637678')
+          end
+        end
+      end
+    end
+
+    # AniList
+    describe 'AniList' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            anilist.co/fukuchichiisaia
+            https://www.anilist.co/fukuchichiisaia
+            https://anilist.co/fukuchichiisaia
+            fukuchichiisaia
+          ]
+          site = build(:profile_link_site, :anilist)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('fukuchichiisaia')
+          end
+        end
+      end
+    end
+
+    # VNDB
+    describe 'VNDB' do
+      context 'success' do
+        it 'should return a username' do
+          urls = %w[
+            vndb.org/u70299
+            https://www.vndb.org/u70299
+            https://vndb.org/u70299
+            u70299
+          ]
+          site = build(:profile_link_site, :vndb)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            expect(temp[:username]).to eq('u70299')
           end
         end
       end

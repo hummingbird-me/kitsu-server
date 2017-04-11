@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: profile_link_sites
@@ -9,8 +8,7 @@
 #  validate_replace :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#
-# rubocop:enable Metrics/LineLength
+# rubocop:disable Metrics/LineLength
 
 FactoryGirl.define do
   factory :profile_link_site do
@@ -185,6 +183,43 @@ FactoryGirl.define do
       validate_find '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>[a-zA-z0-9_\-]+)\z'
       validate_replace 'https://trakt.tv/users/\k<username>'
     end
+
+    # MyAnimeList
+    trait :myanimelist do
+      validate_find '\A(https?://)?(www.)?(myanimelist.net/)?(profile/)?(?<username>[a-zA-Z0-9_\-]+)\z'
+      validate_replace 'https://myanimelist.net/profile/\k<username>'
+    end
+
+    # AnimePlanet
+    trait :animeplanet do
+      validate_find '\A(https?://)?(www.)?(anime-planet.com/)?(users/)?(?<username>[a-zA-Z0-9_\-]+)\z'
+      validate_replace 'https://anime-planet.com\users\k<username>'
+    end
+
+    # Pixiv
+    trait :pixiv do
+      validate_find '\A(https?://)?(www.)?(pixiv.me/)?(?<username>[a-zA-Z0-9]+)\z'
+      validate_replace 'https://pixiv.me/\k<username>'
+    end
+
+    # AniDB
+    trait :anidb do
+      validate_find '\A(https?://)?(www.)?(anidb.net/)?(up)?(?<username>[0-9]+)\z'
+      validate_replace 'https://anidb.net/up\k<username>'
+    end
+
+    # AniList
+    trait :anilist do
+      validate_find '\A(https?://)?(www.)?(anilist.co/)?(?<username>[a-zA-Z0-9]+)\z'
+      validate_replace 'https://anilist.co/\k<username>'
+    end
+
+    # VNDB
+    trait :vndb do
+      validate_find '\A(https?://)?(www.)?(vndb.org/)?(?<username>[a-zA-Z0-9]+)\z'
+      validate_replace 'https://vndb.org/\k<username>'
+    end
+
     # rubocop:enable Metrics/LineLength
   end
 end
