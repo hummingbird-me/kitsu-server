@@ -142,4 +142,4 @@ website:
   id: 29
   name: Website
   validate_find: '\A(?<protocol>https?:\/\/)(www.)?(?<url>(.)+)\z'
-  validate_replace: '\k<protocol\k<url>'
+  validate_replace: '\k<protocol>\k<url>'
