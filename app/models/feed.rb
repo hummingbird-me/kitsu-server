@@ -1,23 +1,32 @@
 class Feed
   FEED_GROUPS = {
+    # Profiles
+    user: :flat,
     user_posts: :flat,
     user_media: :flat,
     user_aggr: :aggregated,
     user_posts_aggr: :aggregated,
     user_media_aggr: :aggregated,
+    # Media Pages
     media_posts: :flat,
     media_media: :flat,
     media_aggr: :aggregated,
     media_posts_aggr: :aggregated,
     media_media_aggr: :aggregated,
+    # Groups
     group: :flat,
     group_aggr: :aggregated,
+    # Posts
     post: :flat,
+    # Reports
     reports_aggr: :aggregated,
+    # Notifications
+    notifications: :notification,
+    # Timeline
     timeline: :aggregated,
     timeline_posts: :aggregated,
     timeline_media: :aggregated,
-    notifications: :notification,
+    # Global Timeline
     global: :aggregated,
     global_posts: :aggregated,
     global_media: :aggregated
