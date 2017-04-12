@@ -11,8 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170329203624) do
-  
+ActiveRecord::Schema.define(version: 20170407162503) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -1079,6 +1079,16 @@ ActiveRecord::Schema.define(version: 20170329203624) do
   add_index "substories", ["target_id"], name: "index_substories_on_target_id", using: :btree
   add_index "substories", ["user_id"], name: "index_substories_on_user_id", using: :btree
 
+  create_table "user_settings", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.string   "type",       null: false
+    t.jsonb    "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "user_settings", ["user_id"], name: "index_user_settings_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255, default: "",          null: false
     t.string   "name",                        limit: 255
@@ -1269,5 +1279,6 @@ ActiveRecord::Schema.define(version: 20170329203624) do
   add_foreign_key "reviews", "library_entries"
   add_foreign_key "stats", "users"
   add_foreign_key "streaming_links", "streamers"
+  add_foreign_key "user_settings", "users"
   add_foreign_key "users", "posts", column: "pinned_post_id"
 end

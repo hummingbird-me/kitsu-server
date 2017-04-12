@@ -1,0 +1,1 @@
+class UserSettingsController < ApplicationController; end
