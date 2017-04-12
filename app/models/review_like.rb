@@ -17,7 +17,6 @@
 # Foreign Keys
 #
 #  fk_rails_2f5b7cb84c  (user_id => users.id)
-#  fk_rails_e06d0d2851  (review_id => reviews.id)
 #
 # rubocop:enable Metrics/LineLength
 

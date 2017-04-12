@@ -825,7 +825,7 @@ ActiveRecord::Schema.define(version: 20170329203624) do
   create_table "partner_deals", force: :cascade do |t|
     t.string   "deal_title",                limit: 255,                null: false
     t.string   "partner_name",              limit: 255,                null: false
-    t.string   "valid_countries",                       default: [],   null: false, array: true
+    t.string   "valid_countries",           limit: 255, default: [],   null: false, array: true
     t.string   "partner_logo_file_name",    limit: 255
     t.string   "partner_logo_content_type", limit: 255
     t.integer  "partner_logo_file_size"
@@ -1186,7 +1186,7 @@ ActiveRecord::Schema.define(version: 20170329203624) do
   create_table "videos", force: :cascade do |t|
     t.string   "url",               limit: 255,                  null: false
     t.string   "embed_data",        limit: 255,                  null: false
-    t.string   "available_regions",             default: ["US"],              array: true
+    t.string   "available_regions", limit: 255, default: ["US"],              array: true
     t.integer  "episode_id"
     t.integer  "streamer_id"
     t.datetime "created_at"

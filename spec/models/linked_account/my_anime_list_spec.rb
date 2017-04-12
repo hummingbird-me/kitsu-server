@@ -21,7 +21,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_d68dcf73fa  (user_id => users.id)
+#  fk_rails_166e103170  (user_id => users.id)
 #
 # rubocop:enable Metrics/LineLength
 

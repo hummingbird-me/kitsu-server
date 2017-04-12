@@ -52,6 +52,7 @@
 #  previous_email              :string
 #  pro_expires_at              :datetime
 #  profile_completed           :boolean          default(FALSE), not null
+#  rating_system               :integer          default(0), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
@@ -62,6 +63,7 @@
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
+#  theme                       :integer          default(0), not null
 #  time_zone                   :string
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
