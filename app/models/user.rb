@@ -67,7 +67,6 @@
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
 #  waifu_or_husbando           :string(255)
-#  website                     :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  facebook_id                 :string(255)      indexed

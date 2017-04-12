@@ -1113,7 +1113,6 @@ ActiveRecord::Schema.define(version: 20170410193746) do
     t.boolean  "avatar_processing"
     t.boolean  "subscribed_to_newsletter",                default: true
     t.string   "location",                    limit: 255
-    t.string   "website",                     limit: 255
     t.string   "waifu_or_husbando",           limit: 255
     t.integer  "waifu_id"
     t.boolean  "to_follow",                               default: false

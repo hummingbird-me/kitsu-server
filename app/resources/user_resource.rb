@@ -5,7 +5,7 @@ class UserResource < BaseResource
   caching
 
   attributes :name, :past_names, :about, :bio, :about_formatted, :location,
-    :website, :waifu_or_husbando, :followers_count, :created_at, :facebook_id,
+    :waifu_or_husbando, :followers_count, :created_at, :facebook_id,
     :following_count, :life_spent_on_anime, :birthday, :gender, :updated_at,
     :comments_count, :favorites_count, :likes_given_count, :reviews_count,
     :likes_received_count, :posts_count, :ratings_count, :pro_expires_at,
