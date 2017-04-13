@@ -155,7 +155,6 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('MediaFollow') { parent User }
   config.model('LibraryEntry') { parent User }
 
-  config.model('MediaRelationship') { visible false }
   config.model('LibraryEntryLog') { visible false }
 
   # Feed
