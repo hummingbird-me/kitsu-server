@@ -43,7 +43,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
 
   # Display as scrollable list
-  config.total_columns_width = 9999999
+  config.total_columns_width = 9_999_999
 
   # Display canonical_title for label on media
   config.label_methods += %i[canonical_title site_name]

@@ -29,7 +29,7 @@
 class Episode < ApplicationRecord
   include Titleable
 
-  belongs_to :media, polymorphic: true, touch: true
+  belongs_to :media, polymorphic: true, inverse_of: :episodes, touch: true
 
   has_attached_file :thumbnail
 
