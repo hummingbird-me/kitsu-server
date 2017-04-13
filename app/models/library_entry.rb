@@ -213,6 +213,7 @@ class LibraryEntry < ApplicationRecord
       Stat::AnimeGenreBreakdown.increment(user, self)
       Stat::AnimeAmountWatched.increment(user, self)
     when :manga
+      Stat::MangaGenreBreakdown.increment(user, self)
     end
   end
 
@@ -224,6 +225,7 @@ class LibraryEntry < ApplicationRecord
       Stat::AnimeGenreBreakdown.decrement(user, self)
       Stat::AnimeAmountWatched.decrement(user, self)
     when :manga
+      Stat::MangaGenreBreakdown.decrement(user, self)
     end
   end
 
