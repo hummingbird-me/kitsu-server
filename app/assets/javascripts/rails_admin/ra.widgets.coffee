@@ -43,10 +43,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       input = this
       image_container = $("#" + input.id).parent().children(".preview")
       unless image_container.length
-        image_container = $("#" + input.id).parent().prepend($('<img />').addClass('preview').addClass('img-thumbnail')).find('img.preview')
+        image_container = $("#" + input.id).parent().prepend($('<img />')
+          .addClass('preview').addClass('img-thumbnail')).find('img.preview')
         image_container.parent().find('img:not(.preview)').hide()
       ext = $("#" + input.id).val().split('.').pop().toLowerCase()
-      if input.files and input.files[0] and $.inArray(ext, ['gif','png','jpg','jpeg','bmp']) != -1
+      if input.files and input.files[0] and
+          $.inArray(ext, ['gif','png','jpg','jpeg','bmp']) != -1
         reader = new FileReader()
         reader.onload = (e) ->
           image_container.attr "src", e.target.result
@@ -80,9 +82,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       nav = field.find('> .controls > .nav')
       tab_content = field.find('> .tab-content')
       toggler = field.find('> .controls > .btn-group > .toggler')
-      tab_content.children('.fields:not(.tab-pane)').addClass('tab-pane').each ->
-        $(this).attr('id', 'unique-id-' + (new Date().getTime()) + Math.floor(Math.random()*100000))
-        nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
+      tab_content.children('.fields:not(.tab-pane)')
+          .addClass('tab-pane').each ->
+        $(this).attr('id', 'unique-id-' + (new Date().getTime()) +
+          Math.floor(Math.random()*100000))
+        nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' +
+          $(this).children('.object-infos').data('object-label') + '</a></li>')
       if nav.find("> li.active").length == 0
         nav.find("> li > a[data-toggle='tab']:first").tab('show')
       if nav.children().length == 0
@@ -107,17 +112,23 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       nav = field.find("> .controls > .nav")
       tab_content = field.find("> .tab-content")
       toggler = field.find('> .controls > .btn-group > .toggler')
-      tab_content.children(".fields:not(.tab-pane)").addClass('tab-pane active').each ->
-        field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').html( $(this).children('.object-infos').data('object-label') )
-        nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
+      tab_content.children(".fields:not(.tab-pane)")
+          .addClass('tab-pane active').each ->
+        field.find('> .controls .add_nested_fields')
+          .removeClass('add_nested_fields')
+          .html( $(this).children('.object-infos').data('object-label') )
+        nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' +
+          $(this).children('.object-infos').data('object-label') + '</a></li>')
       first_tab = nav.find("> li > a[data-toggle='tab']:first")
       first_tab.tab('show')
-      field.find("> .controls > [data-target]:first").html('<i class="icon-white"></i> ' + first_tab.html())
+      field.find("> .controls > [data-target]:first")
+        .html('<i class="icon-white"></i> ' + first_tab.html())
       nav.hide()
       if nav.children().length == 0
         nav.hide()
         tab_content.hide()
-        toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right')
+        toggler.addClass('disabled').removeClass('active').children('i')
+          .addClass('icon-chevron-right')
       else
         if toggler.hasClass('active')
           toggler.children('i').addClass('icon-chevron-down')
@@ -135,8 +146,8 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       urls = type_select.data('urls')
 
       type_select.on 'change', (e) ->
-        object_select.data('options', $("##{type_select.val().toLowerCase()}-js-options")
-          .data('options'))
+        object_select.data('options',
+          $("##{type_select.val().toLowerCase()}-js-options").data('options'))
         object_select.filteringSelect("destroy")
         object_select.filteringSelect object_select.data('options')
 
