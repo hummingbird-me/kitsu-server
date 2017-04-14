@@ -1024,6 +1024,14 @@ ActiveRecord::Schema.define(version: 20170426123432) do
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
+  create_table "site_announcements", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.text     "text"
+    t.string   "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "stats", force: :cascade do |t|
     t.integer  "user_id",                 null: false
     t.string   "type",                    null: false
@@ -1282,6 +1290,7 @@ ActiveRecord::Schema.define(version: 20170426123432) do
   add_foreign_key "reports", "users", column: "moderator_id"
   add_foreign_key "review_likes", "users"
   add_foreign_key "reviews", "library_entries"
+  add_foreign_key "site_announcements", "users"
   add_foreign_key "stats", "users"
   add_foreign_key "streaming_links", "streamers"
   add_foreign_key "users", "posts", column: "pinned_post_id"

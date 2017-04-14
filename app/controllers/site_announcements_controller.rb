@@ -1,0 +1,2 @@
+class SiteAnnouncementsController < ApplicationController
+end
