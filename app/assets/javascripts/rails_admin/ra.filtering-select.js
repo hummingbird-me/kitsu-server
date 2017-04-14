@@ -62,19 +62,16 @@
                 }
               });
               if (!valid || $(this).val() == '') {
-                // remove invalid value, as it didn't match anything
                 $(this).val(null);
                 select.html($('<option value="" selected="selected"></option>'));
                 input.data("ui-autocomplete").term = "";
                 $(self.element.parents('.controls')[0]).find('.update').addClass('disabled');
                 return false;
               }
-
             }
           }
         })
         .keyup(function() {
-          /* Clear select options and trigger change if selected item is deleted */
           if ($(this).val().length == 0) {
             select.html($('<option value="" selected="selected"></option>'));
             select.trigger("change");
@@ -93,20 +90,15 @@
 
       var button = this.button = $('<span class="input-group-btn"><label class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Show All Items" role="button"><span class="caret"></span><span class="ui-button-text">&nbsp;</span></label></span>')
         .click(function() {
-          // close if already visible
           if (input.autocomplete("widget").is(":visible")) {
             input.autocomplete("close");
             return;
           }
-
-          // pass empty string as value to search for, displaying all results
           input.autocomplete("search", "");
           input.focus();
         });
 
       filtering_select.append(input).append(button).insertAfter(select);
-
-
     },
 
     _getResultSet: function(request, data, xhr) {
@@ -122,7 +114,6 @@
       };
 
       return $.map(data, function(el, i) {
-        // match regexp only for local requests, remote ones are already filtered, and label may not contain filtered term.
         if ((el.id || el.value) && (xhr || matcher.test(el.label))) {
           return {
             html: highlighter(el.label || el.id, request.term),
@@ -134,20 +125,14 @@
     },
 
     _getSourceFunction: function(source) {
-
       var self = this,
           requestIndex = 0;
-
       if ($.isArray(source)) {
-
         return function(request, response) {
           response(self._getResultSet(request, source, false));
         };
-
       } else if (typeof source === "string") {
-
         return function(request, response) {
-
           if (this.xhr) {
             this.xhr.abort();
           }
@@ -169,9 +154,7 @@
             }
           });
         };
-
       } else {
-
         return source;
       }
     },
