@@ -29,13 +29,14 @@
 class Episode < ApplicationRecord
   include Titleable
 
-  belongs_to :media, polymorphic: true, inverse_of: :episodes, touch: true
+  belongs_to :media, polymorphic: true, touch: true
 
   has_attached_file :thumbnail
 
   validates :media, presence: true, polymorphism: { type: Media }
   validates :number, presence: true
   validates :season_number, presence: true
+  validates :synopsis, length: { in: 50..600 }, allow_blank: true
   validates_attachment :thumbnail, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]
   }

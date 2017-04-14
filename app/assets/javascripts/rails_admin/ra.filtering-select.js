@@ -26,12 +26,13 @@
         }).toArray();
       }
 
+      var float_style;
       if (this.options.float_left) {
-        var float_style = "left"
+        float_style = "left";
       } else {
-        var float_style = "none"
+        float_style = "none";
       }
-      var filtering_select = $('<div class="input-group filtering-select col-sm-2" style="float: ' + float_style + ' "></div>')
+      var filtering_select = $('<div class="input-group filtering-select col-sm-2" style="float: ' + float_style + ' "></div>');
 
       var input = this.input = $('<input type="text">')
         .val(value)
@@ -61,7 +62,7 @@
                   return false;
                 }
               });
-              if (!valid || $(this).val() == '') {
+              if (!valid || $(this).val() === '') {
                 $(this).val(null);
                 select.html($('<option value="" selected="selected"></option>'));
                 input.data("ui-autocomplete").term = "";
@@ -72,14 +73,14 @@
           }
         })
         .keyup(function() {
-          if ($(this).val().length == 0) {
+          if ($(this).val().length === 0) {
             select.html($('<option value="" selected="selected"></option>'));
             select.trigger("change");
           }
-        })
+        });
 
       if(select.attr('placeholder'))
-        input.attr('placeholder', select.attr('placeholder'))
+        input.attr('placeholder', select.attr('placeholder'));
 
       input.data("ui-autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
