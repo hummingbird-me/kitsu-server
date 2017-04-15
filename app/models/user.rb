@@ -231,40 +231,16 @@ class User < ApplicationRecord
     self.title == 'Staff' || self.title == 'Mod'
   end
 
-  def posts_feed
-    @posts_feed ||= Feed.user_posts(id)
-  end
-
-  def media_feed
-    @media_feed ||= Feed.user_media(id)
-  end
-
-  def aggregated_feed
-    @aggr_feed ||= Feed.user_aggr(id)
-  end
-
-  def posts_aggregated_feed
-    @posts_aggr_feed ||= Feed.user_posts_aggr(id)
-  end
-
-  def media_aggregated_feed
-    @media_aggr_feed ||= Feed.user_media_aggr(id)
+  def profile_feed
+    @profile_feed ||= Feed::ProfileFeed.new(id)
   end
 
   def timeline
-    @timeline ||= Feed.timeline(id)
-  end
-
-  def posts_timeline
-    @posts_timeline ||= Feed.timeline_posts(id)
-  end
-
-  def media_timeline
-    @media_timeline ||= Feed.timeline_media(id)
+    @timeline ||= Feed::Timeline.new(id)
   end
 
   def notifications
-    @notifications ||= Feed.notifications(id)
+    @notifications ||= Feed::Notifications.new(id)
   end
 
   def update_feed_completed
@@ -297,22 +273,9 @@ class User < ApplicationRecord
     # Send Confirmation Email
     UserMailer.confirmation(self).deliver_later
 
-    # TODO: Refactor this to use batch follow
     # Set up feeds
-    aggregated_feed.follow(posts_feed)
-    aggregated_feed.follow(media_feed)
-    posts_aggregated_feed.follow(posts_feed)
-    media_aggregated_feed.follow(media_feed)
-
-    timeline.follow(posts_feed)
-    timeline.follow(media_feed)
-    posts_timeline.follow(posts_feed)
-    media_timeline.follow(media_feed)
-
-    Feed.global.follow(posts_feed)
-    Feed.global.follow(media_feed)
-    Feed.global_posts.follow(posts_feed)
-    Feed.global_media.follow(media_feed)
+    profile = Feed::ProfileFeed.new(id).setup!
+    Feed::Timeline.new(id).follow(profile)
 
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
@@ -321,15 +284,9 @@ class User < ApplicationRecord
   after_save do
     if share_to_global_changed?
       if share_to_global
-        Feed.global.follow(posts_feed)
-        Feed.global.follow(media_feed)
-        Feed.global_posts.follow(posts_feed)
-        Feed.global_media.follow(media_feed)
+        Feed::Global.new.follow(profile_feed)
       else
-        Feed.global.unfollow(posts_feed)
-        Feed.global.unfollow(media_feed)
-        Feed.global_posts.unfollow(posts_feed)
-        Feed.global_media.unfollow(media_feed)
+        Feed::Global.new.unfollow(profile_feed)
       end
     end
   end
