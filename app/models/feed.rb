@@ -96,3 +96,6 @@ class Feed
     end
   end
 end
+
+# Load the feed subfolder so all the classes can register their names
+Dir['app/models/feed/*'].each { |file| require_dependency(file) }
