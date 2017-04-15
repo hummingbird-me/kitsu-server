@@ -35,8 +35,8 @@ module Kitsu
     # Include all concern directories in app/*/concerns
     concern_dirs = Dir['app/*/concerns'].map { |d| File.expand_path(d) }
     config.eager_load_paths += concern_dirs
-    # Eager-load data_import and list_import files
-    import_dirs = Dir['lib/{data,list}_import'].map { |d| File.expand_path(d) }
+    # Eager-load list_import files
+    import_dirs = Dir['lib/list_import'].map { |d| File.expand_path(d) }
     config.eager_load_paths += import_dirs
     # Rip out any non-unique entries
     config.eager_load_paths.uniq!
