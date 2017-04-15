@@ -67,6 +67,16 @@ class Feed
     @feeds[name]
   end
 
+  # Temporary compatibility stuff
+  # TODO: remove these
+  def self.method_missing(name, *args)
+    class_for(name.to_s)&.new(*args) || super
+  end
+
+  def self.respond_to_missing?(name, include_private = false)
+    @feeds.key?(name.to_s) || super
+  end
+
   private
 
   def stream_feed
