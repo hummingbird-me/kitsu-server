@@ -10,7 +10,6 @@ class Feed
       # prepared and can just dup it off for subclasses
       self._filters = Hash.new { {} }
       self._feed_type = :aggregated
-
     end
 
     class_methods do
@@ -27,6 +26,7 @@ class Feed
       # Define the feed name
       def feed_name(name)
         self._feed_name = name
+        Feed.register!(name, self)
       end
 
       protected
@@ -45,7 +45,13 @@ class Feed
 
       def inherited(subclass)
         super(subclass)
-        subclass._feed_name ||= subclass.name.gsub(/Feed\z/, '').underscore
+        # If there's no _feed_name already set...
+        unless subclass._feed_name
+          # Configure the default _feed_name
+          subclass._feed_name = subclass.namename.gsub(/Feed\z/, '').underscore
+          # Register our feed name
+          Feed.register!(subclass._feed_name, subclass)
+        end
       end
     end
   end

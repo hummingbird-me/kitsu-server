@@ -56,6 +56,17 @@ class Feed
     stream_activity_target(opts).add_activity(activity)
   end
 
+  # Register a feed class for lookups by name
+  def self.register!(name, klass)
+    @feeds ||= {}
+    @feeds[name] = klass
+  end
+
+  # Look up the class for a given feed name
+  def self.class_for(name)
+    @feeds[name]
+  end
+
   private
 
   def stream_feed
