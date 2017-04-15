@@ -1,120 +1,87 @@
+# This class is an abstraction on top of Stream Feeds, hiding the details of
+# what underlying feeds there are (some "feeds" are actually a group of 6+
+# feeds!)
 class Feed
-  FEED_GROUPS = {
-    # Profiles
-    user: :flat,
-    user_posts: :flat,
-    user_media: :flat,
-    user_aggr: :aggregated,
-    user_posts_aggr: :aggregated,
-    user_media_aggr: :aggregated,
-    # Media Pages
-    media_posts: :flat,
-    media_media: :flat,
-    media_aggr: :aggregated,
-    media_posts_aggr: :aggregated,
-    media_media_aggr: :aggregated,
-    # Groups
-    group: :flat,
-    group_aggr: :aggregated,
-    # Posts
-    post: :flat,
-    # Reports
-    reports_aggr: :aggregated,
-    # Notifications
-    notifications: :notification,
-    # Timeline
-    timeline: :aggregated,
-    timeline_posts: :aggregated,
-    timeline_media: :aggregated,
-    # Global Timeline
-    global: :aggregated,
-    global_posts: :aggregated,
-    global_media: :aggregated
-  }.freeze
+  # Feed::DSL provides us with simple, declarative means of building a Feed
+  # subclass.
+  include DSL
 
-  attr_accessor :stream_feed, :group, :id
-  delegate :readonly_token, to: :stream_feed
+  # Common sets of verbs to filter on
+  MEDIA_VERBS = %w[updated rated progressed].freeze
+  POST_VERBS = %w[post comment follow review].freeze
 
-  def initialize(group, id)
-    @group = group.to_s
-    @id = id.to_s
-    self.stream_feed = client.feed(group, id)
+  # Create a new instance of this feed for a given ID.  If given multiple
+  # parameters, concatenates them with hyphens in between.
+  def initialize(*ids)
+    @id = ids.join('-')
   end
 
-  def activities
-    ActivityList.new(self)
-  end
-
-  def follow(feed)
-    stream_feed.follow(feed.group, feed.id)
-  end
-
-  def unfollow(feed)
-    stream_feed.unfollow(feed.group, feed.id)
-  end
-
-  def ==(other)
-    stream_id == other.stream_id
-  end
-
-  def flat
-    if group.end_with?('_aggr')
-      Feed.new(group.sub('_aggr', ''), id)
-    else
-      self
-    end
-  end
-
-  def self.follow_many(follows, scrollback: 100)
-    follows = follows.map(&:to_a).map(&:flatten)
-    stream_follows = follows.map do |(source, target)|
+  # Follow another Feed, optionally with a scrollback.
+  # Under the hood, this actually calls {#follows_for}, which generates a list
+  # of follows (correlating common filters) and then sends it to
+  # {Feed::Stream#follow_many}, to perform the follow in one fell swoop.
+  def follow(target, scrollback: 100)
+    # Directly follow the target
+    follows = [{ source: stream_feed, target: target.stream_follow_target }]
+    # Get the intersection of the filter sets and create any necessary follows
+    shared_filters = self.class.filters_shared_with(target.class)
+    follows += shared_filters.map do |filter|
       {
-        source: Feed.get_stream_id(source),
-        target: Feed.get_stream_id(target)
+        source: stream_feed(filter: filter),
+        target: target.stream_follow_target(filter: filter)
       }
     end
-    client.follow_many(stream_follows, scrollback)
+    # Add the follows in one operation
+    Feed::Stream.follow_many(follows, scrollback)
   end
 
-  def stream_id
-    "#{group}:#{id}"
+  # Get the ActivityList for this Feed, optionally requesting a specific filter
+  # and/or type.
+  def activities(filter: nil, type: _feed_type)
+    feed = Feed::Stream.new({
+      type: type,
+      filter: filter,
+      name: _feed_name
+    }, id)
+    feed.activities
   end
 
-  FEED_GROUPS.except(:global, :global_media, :global_posts).keys.each do |feed|
-    define_singleton_method(feed) { |*args| new(feed, args.join('-')) }
-  end
-
-  FEED_GROUPS.values.uniq.each do |expected_type|
-    define_method("#{expected_type}?") { type == expected_type }
-  end
-
-  def self.global
-    new('global', 'global')
-  end
-
-  def self.global_posts
-    new('global_posts', 'global')
-  end
-
-  def self.global_media
-    new('global_media', 'global')
-  end
-
-  def type
-    FEED_GROUPS[group.to_sym]
-  end
-
-  def self.get_stream_id(obj)
-    obj.respond_to?(:stream_id) ? obj.stream_id : obj
+  # Adds an activity to the feed, automatically adding the filtered feeds to the
+  # "to" field
+  def self.add_activity(activity, opts = {})
+    # Build the "to" field
+    activity.to ||= []
+    activity.to += stream_activity_targets_for(activity, opts)
+    # Send the activity to the target feed
+    stream_activity_target(opts).add_activity(activity)
   end
 
   private
 
-  def self.client
-    StreamRails.client
+  def stream_feed
+    Feed::Stream.new({ type: _feed_type, name: _feed_name }.merge(opts), id)
   end
 
-  def client
-    self.class.client
+  protected
+
+  def stream_follow_target(opts = {})
+    Feed::Stream.new({ type: :flat, name: _feed_name }.merge(opts), id)
+  end
+
+  def stream_activity_target(opts = {})
+    Feed::Stream.new({ type: :flat, name: _feed_name }.merge(opts), id)
+  end
+
+  def stream_activity_targets_for(activity, opts = {})
+    # Determine which sub-feeds we need to distribute to
+    targets = _filters.select { |filter| filter[:proc].call(activity) }
+    # And convert them to Feed::Stream instances
+    targets.map do |filter|
+      Feed::Stream.new({
+        type: :flat,
+        name: _feed_name,
+        filter: filter
+      }.merge(opts), id)
+    end
   end
 end
