@@ -23,7 +23,7 @@ class Feed
     private
 
     def group_name_for(group)
-      if group.respond_to(:to_h)
+      if group.respond_to?(:to_h)
         # Extract the attributes to build the group name
         name, filter, type = group.to_h.values_at(:name, :filter, :type)
         # Convert aggregated feed to "aggr"
