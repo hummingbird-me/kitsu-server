@@ -12,7 +12,7 @@ class Feed
       self._feed_type = :aggregated
     end
 
-    class_methods do
+    class_methods do # rubocop:disable Metrics/BlockLength
       # Add a filter option to the feed class
       def filter(name, options = {})
         _filters[name] = _filters[name].merge(options)
@@ -48,7 +48,8 @@ class Feed
         # If there's no _feed_name already set...
         unless subclass._feed_name
           # Configure the default _feed_name
-          subclass._feed_name = subclass.namename.gsub(/Feed\z/, '').underscore
+          subclass._feed_name = subclass.name.gsub(/\AFeed::|Feed\z/, '')
+                                        .underscore
           # Register our feed name
           Feed.register!(subclass._feed_name, subclass)
         end
