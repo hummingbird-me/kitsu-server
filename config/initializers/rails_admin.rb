@@ -171,6 +171,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
         #    thetvdb/series thetvdb/season mydramalist ]
       end
     end
+    include_all_fields
   end
 
   config.model 'Episode' do
@@ -178,5 +179,6 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
     fields :canonical_title, :number, :season_number, :synopsis, :airdate,
       :length, :thumbnail
+    include_all_fields
   end
 end
