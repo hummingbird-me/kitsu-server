@@ -29,11 +29,11 @@ class UserResource < BaseResource
   
   # DEPRECATED: this method just hides the fact that website has moved
   def website
-    profile_links.where(profile_link_site_id: 29).first&.url
+    _model.profile_links.where(profile_link_site_id: 29).first&.url
   end
   
   def website=(value)
-    profile_links.where(profile_link_site_id: 29).update(url: value)
+    _model.profile_links.where(profile_link_site_id: 29).update(url: value)
   end
 
   def self.attribute_caching_context(context)
