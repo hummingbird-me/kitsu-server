@@ -59,6 +59,9 @@ class LibraryEntryResource < BaseResource
 
   paginator :unlimited
 
+  search_with LibrarySearchService
+  query :title
+
   # DEPRECATED: These methods are for until all clients have switched to
   # rating_twenty
   attributes :rating, :rating_twenty
