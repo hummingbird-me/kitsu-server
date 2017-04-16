@@ -274,8 +274,8 @@ class User < ApplicationRecord
     UserMailer.confirmation(self).deliver_later
 
     # Set up feeds
-    profile = Feed::ProfileFeed.new(id).setup!
-    Feed::Timeline.new(id).follow(profile)
+    profile_feed.setup!
+    timeline.setup!
 
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)

@@ -79,6 +79,29 @@ class Feed
 
   private
 
+  # Generate a set of "default" auto follows, basically matching the filters to
+  # their aggregations
+  def default_auto_follows
+    return unless _feed_type == :aggregated
+    base_follow = { source: stream_feed, target: stream_activity_target }
+    filter_follows = _filters.map do |filter|
+      {
+        source: Feed::Stream.new({
+          type: :aggregated,
+          name: _feed_name,
+          filter: filter
+        }, id),
+        target: Feed::Stream.new({
+          type: :flat,
+          name: _feed_name,
+          filter: filter
+        }, id)
+      }
+    end
+
+    [base_follow, *filter_follows]
+  end
+
   def stream_feed
     Feed::Stream.new({ type: _feed_type, name: _feed_name }.merge(opts), id)
   end
