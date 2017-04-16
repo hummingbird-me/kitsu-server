@@ -9,7 +9,7 @@ class UserResource < BaseResource
     :following_count, :life_spent_on_anime, :birthday, :gender, :updated_at,
     :comments_count, :favorites_count, :likes_given_count, :reviews_count,
     :likes_received_count, :posts_count, :ratings_count, :pro_expires_at,
-    :title, :profile_completed, :feed_completed
+    :title, :profile_completed, :feed_completed, :website
   attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 
@@ -26,6 +26,15 @@ class UserResource < BaseResource
   has_many :favorites
   has_many :reviews
   has_many :stats
+  
+  # DEPRECATED: this method just hides the fact that website has moved
+  def website
+    profile_links.where(profile_link_site_id: 29).first&.url
+  end
+  
+  def website=(value)
+    profile_links.where(profile_link_site_id: 29).update(url: value)
+  end
 
   def self.attribute_caching_context(context)
     context[:current_user]&.resource_owner
