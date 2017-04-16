@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170410193746) do
+ActiveRecord::Schema.define(version: 20170411042333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -578,9 +578,8 @@ ActiveRecord::Schema.define(version: 20170410193746) do
     t.integer  "anime_id"
     t.integer  "manga_id"
     t.integer  "drama_id"
-    t.integer  "new_rating"
-    t.integer  "time_spent",                              default: 0,     null: false
     t.integer  "rating"
+    t.integer  "time_spent",      default: 0,     null: false
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -593,20 +592,21 @@ ActiveRecord::Schema.define(version: 20170410193746) do
   add_index "library_entries", ["user_id"], name: "index_library_entries_on_user_id", using: :btree
 
   create_table "library_entry_logs", force: :cascade do |t|
-    t.integer  "linked_account_id",                                            null: false
-    t.string   "media_type",                                                   null: false
-    t.integer  "media_id",                                                     null: false
+    t.integer  "linked_account_id",                    null: false
+    t.string   "media_type",                           null: false
+    t.integer  "media_id",                             null: false
     t.integer  "progress"
     t.integer  "rating"
     t.integer  "reconsume_count"
     t.boolean  "reconsuming"
     t.integer  "status"
     t.integer  "volumes_owned"
-    t.string   "action_performed",                          default: "create", null: false
-    t.integer  "sync_status",                               default: 0,        null: false
+    t.string   "action_performed",  default: "create", null: false
+    t.integer  "sync_status",       default: 0,        null: false
     t.text     "error_message"
-    t.datetime "created_at",                                                   null: false
-    t.datetime "updated_at",                                                   null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "day"
   end
 
   add_index "library_entry_logs", ["linked_account_id"], name: "index_library_entry_logs_on_linked_account_id", using: :btree
@@ -825,7 +825,7 @@ ActiveRecord::Schema.define(version: 20170410193746) do
   create_table "partner_deals", force: :cascade do |t|
     t.string   "deal_title",                limit: 255,                null: false
     t.string   "partner_name",              limit: 255,                null: false
-    t.string   "valid_countries",                       default: [],   null: false, array: true
+    t.string   "valid_countries",           limit: 255, default: [],   null: false, array: true
     t.string   "partner_logo_file_name",    limit: 255
     t.string   "partner_logo_content_type", limit: 255
     t.integer  "partner_logo_file_size"
@@ -1185,7 +1185,7 @@ ActiveRecord::Schema.define(version: 20170410193746) do
   create_table "videos", force: :cascade do |t|
     t.string   "url",               limit: 255,                  null: false
     t.string   "embed_data",        limit: 255,                  null: false
-    t.string   "available_regions",             default: ["US"],              array: true
+    t.string   "available_regions", limit: 255, default: ["US"],              array: true
     t.integer  "episode_id"
     t.integer  "streamer_id"
     t.datetime "created_at"
@@ -1238,6 +1238,7 @@ ActiveRecord::Schema.define(version: 20170410193746) do
   add_foreign_key "group_member_notes", "group_members"
   add_foreign_key "group_member_notes", "users"
   add_foreign_key "group_neighbors", "groups", column: "destination_id"
+  add_foreign_key "group_neighbors", "groups", column: "source_id"
   add_foreign_key "group_permissions", "group_members"
   add_foreign_key "group_reports", "groups"
   add_foreign_key "group_reports", "users"
