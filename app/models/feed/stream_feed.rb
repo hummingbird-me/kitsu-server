@@ -20,6 +20,10 @@ class Feed
       stream_feed.unfollow(feed.group, feed.id)
     end
 
+    def stream_id
+      "#{@group}:#{@id}"
+    end
+
     private
 
     def group_name_for(group)

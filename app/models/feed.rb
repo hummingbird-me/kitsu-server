@@ -83,6 +83,8 @@ class Feed
     Feed::StreamFeed.follow_many(default_auto_follows, 100)
   end
 
+  delegate :stream_id, to: :stream_feed
+
   private
 
   # Generate a set of "default" auto follows, basically matching the filters to
