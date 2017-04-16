@@ -49,7 +49,7 @@ module Media
       content_type: %w[image/jpg image/jpeg image/png]
     }
 
-    after_create :follow_self
+    after_commit :follow_self, on: :create
   end
 
   def slug_candidates
