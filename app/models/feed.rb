@@ -38,12 +38,12 @@ class Feed
   # Get the ActivityList for this Feed, optionally requesting a specific filter
   # and/or type.
   def activities(filter: nil, type: _feed_type)
-    feed = Feed::Stream.new({
-      type: type,
-      filter: filter,
-      name: _feed_name
-    }, id)
-    feed.activities
+    stream_feed_for(filter: filter, type: type).activities
+  end
+
+  # Get the stream feed for a given filter+type of the current feed instance
+  def stream_feed_for(filter: nil, type: _feed_type)
+    Feed::Stream.new({ type: type, filter: filter, name: _feed_name }, id)
   end
 
   # Adds an activity to the feed, automatically adding the filtered feeds to the
