@@ -10,6 +10,8 @@ class Feed
   MEDIA_VERBS = %w[updated rated progressed].freeze
   POST_VERBS = %w[post comment follow review].freeze
 
+  attr_reader :id
+
   # Create a new instance of this feed for a given ID.  If given multiple
   # parameters, concatenates them with hyphens in between.
   def initialize(*ids)
@@ -32,7 +34,7 @@ class Feed
       }
     end
     # Add the follows in one operation
-    Feed::Stream.follow_many(follows, scrollback)
+    Feed::StreamFeed.follow_many(follows, scrollback)
   end
 
   # Get the ActivityList for this Feed, optionally requesting a specific filter
@@ -43,7 +45,7 @@ class Feed
 
   # Get the stream feed for a given filter+type of the current feed instance
   def stream_feed_for(filter: nil, type: _feed_type)
-    Feed::Stream.new({ type: type, filter: filter, name: _feed_name }, id)
+    Feed::StreamFeed.new({ type: type, filter: filter, name: _feed_name }, id)
   end
 
   # Adds an activity to the feed, automatically adding the filtered feeds to the
@@ -77,6 +79,10 @@ class Feed
     @feeds.key?(name.to_s) || super
   end
 
+  def setup!
+    Feed::StreamFeed.follow_many(default_auto_follows, 100)
+  end
+
   private
 
   # Generate a set of "default" auto follows, basically matching the filters to
@@ -86,12 +92,12 @@ class Feed
     base_follow = { source: stream_feed, target: stream_activity_target }
     filter_follows = _filters.map do |filter|
       {
-        source: Feed::Stream.new({
+        source: Feed::StreamFeed.new({
           type: :aggregated,
           name: _feed_name,
           filter: filter
         }, id),
-        target: Feed::Stream.new({
+        target: Feed::StreamFeed.new({
           type: :flat,
           name: _feed_name,
           filter: filter
@@ -103,17 +109,17 @@ class Feed
   end
 
   def stream_feed
-    Feed::Stream.new({ type: _feed_type, name: _feed_name }.merge(opts), id)
+    Feed::StreamFeed.new({ type: _feed_type, name: _feed_name }.merge(opts), id)
   end
 
   protected
 
   def stream_follow_target(opts = {})
-    Feed::Stream.new({ type: :flat, name: _feed_name }.merge(opts), id)
+    Feed::StreamFeed.new({ type: :flat, name: _feed_name }.merge(opts), id)
   end
 
   def stream_activity_target(opts = {})
-    Feed::Stream.new({ type: :flat, name: _feed_name }.merge(opts), id)
+    Feed::StreamFeed.new({ type: :flat, name: _feed_name }.merge(opts), id)
   end
 
   def stream_activity_targets_for(activity, opts = {})
@@ -121,7 +127,7 @@ class Feed
     targets = _filters.select { |filter| filter[:proc].call(activity) }
     # And convert them to Feed::Stream instances
     targets.map do |filter|
-      Feed::Stream.new({
+      Feed::StreamFeed.new({
         type: :flat,
         name: _feed_name,
         filter: filter
