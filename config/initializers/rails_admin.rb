@@ -30,6 +30,16 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     edit
     delete
     history_show
+    show_in_app do
+      only %w[Anime Manga Group User]
+      controller do
+        proc do
+          namespace = @abstract_model.table_name.parameterize
+          slug = @object.try(:slug) || @object.try(:name)
+          redirect_to "https://kitsu.io/#{namespace}/#{slug}"
+        end
+      end
+    end
   end
 
   # Display canonical_title for label on media
@@ -45,8 +55,11 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Anime
   config.model 'Anime' do
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :abbreviated_titles, :serialized do
+      html_attributes rows: '6', cols: '70'
+    end
     fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
-      :cover_image, :age_rating, :age_rating_guide
+      :cover_image, :age_rating, :age_rating_guide, :episode_count
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :producers, :average_rating, :cover_image_top_offset
@@ -60,18 +73,34 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Manga
   config.model 'Manga' do
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :abbreviated_titles, :serialized do
+      html_attributes rows: '6', cols: '70'
+    end
     fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
-      :cover_image, :age_rating, :age_rating_guide
+      :cover_image, :age_rating, :age_rating_guide, :chapter_count,
+      :volume_count
     include_all_fields
+    exclude_fields :library_entries, :inverse_media_relationships, :favorites,
+      :average_rating, :cover_image_top_offset
     navigation_label 'Manga'
     weight(-15)
   end
   config.model('MangaCharacter') { parent Manga }
   config.model('MangaStaff') { parent Manga }
-  config.model('Chapter') { parent Manga }
+  config.model 'Chapter' do
+    parent Manga
+    field :manga
+    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    fields :canonical_title, :number, :synopsis, :published, :volume, :length
+    include_all_fields
+    navigation_label 'Chapters'
+  end
   # Drama
   config.model 'Drama' do
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :abbreviated_titles, :serialized do
+      html_attributes rows: '6', cols: '70'
+    end
     fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
       :cover_image, :age_rating, :age_rating_guide
     include_all_fields
@@ -109,7 +138,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       :dropbox_token, :dropbox_secret, :last_backup, :stripe_token,
       :stripe_customer_id, :import_status, :import_from, :import_error,
       :profile_completed, :feed_completed, :followers, :following, :comments,
-      :posts, :media_follows, :blocks, :last_recommendations_update, :title
+      :posts, :media_follows, :blocks, :last_recommendations_update, :title,
+      :library_entries
     navigation_label 'Users'
     weight(-10)
   end
@@ -129,6 +159,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('Comment') { parent Post }
 
   config.model 'Mapping' do
+    field :media
     field(:external_id) { label 'External ID' }
     field :external_site, :enum do
       enum do
@@ -140,5 +171,12 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
         #    thetvdb/series thetvdb/season mydramalist ]
       end
     end
+  end
+
+  config.model 'Episode' do
+    field :media
+    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
+    fields :canonical_title, :number, :season_number, :synopsis, :airdate,
+      :length, :thumbnail
   end
 end

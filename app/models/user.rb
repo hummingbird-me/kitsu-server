@@ -67,7 +67,6 @@
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
 #  waifu_or_husbando           :string(255)
-#  website                     :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  facebook_id                 :string(255)      indexed
@@ -103,9 +102,11 @@ class User < ApplicationRecord
     wiki you staff mod
   ].freeze
 
+  enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
   update_index('users#user') { self }
+  enum theme: %i[light dark]
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
@@ -131,6 +132,7 @@ class User < ApplicationRecord
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
   has_many :group_members, dependent: :destroy
+  has_many :stats, dependent: :destroy
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
@@ -271,7 +273,7 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
-  after_create do
+  after_commit on: :create do
     # Send Confirmation Email
     UserMailer.confirmation(self).deliver_later
     # Set up feeds

@@ -67,7 +67,6 @@
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
 #  waifu_or_husbando           :string(255)
-#  website                     :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  facebook_id                 :string(255)      indexed
@@ -100,6 +99,7 @@ RSpec.describe User, type: :model do
   it { should belong_to(:waifu) }
   it { should have_many(:linked_accounts).dependent(:destroy) }
   it { should have_many(:profile_links).dependent(:destroy) }
+  it { should have_many(:stats).dependent(:destroy) }
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }

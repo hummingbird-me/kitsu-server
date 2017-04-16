@@ -128,7 +128,7 @@ class ApplicationPolicy
     scope(record_scope).exists?
   end
 
-  %i[dashboard? export? history?].each do |action|
+  %i[dashboard? export? history? show_in_app?].each do |action|
     define_method(action) { is_any_admin? }
   end
 

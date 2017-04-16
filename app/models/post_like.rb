@@ -34,9 +34,10 @@ class PostLike < ApplicationRecord
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
 
   def stream_activity
+    notify = [post.user.notifications] unless post.user == user
     post.feed.activities.new(
       target: post,
-      to: [post.user.notifications]
+      to: notify
     )
   end
 

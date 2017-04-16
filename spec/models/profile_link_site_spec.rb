@@ -497,6 +497,8 @@ RSpec.describe ProfileLinkSite, type: :model do
             imdb.com/ur33598229
             https://www.imdb.com/user/ur33598229
             https://imdb.com/user/ur33598229
+            http://www.imdb.com/user/ur33598229
+            http://imdb.com/user/ur33598229
             ur33598229
           ]
           site = build(:profile_link_site, :imdb)
@@ -629,6 +631,38 @@ RSpec.describe ProfileLinkSite, type: :model do
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('matthewdias')
+          end
+        end
+      end
+    end
+
+    # Website
+    describe 'Website' do
+      context 'success' do
+        it 'should work with http' do
+          urls = %w[
+            http://drassiner.com
+            http://www.drassiner.com
+          ]
+          site = build(:profile_link_site, :website)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:protocol]).to eq('http://')
+            expect(temp[:url]).to eq('drassiner.com')
+          end
+        end
+        it 'should work with https' do
+          urls = %w[
+            https://drassiner.com
+            https://www.drassiner.com
+          ]
+          site = build(:profile_link_site, :website)
+
+          urls.each do |url|
+            temp = Regexp.new(site.validate_find).match(url)
+            expect(temp[:protocol]).to eq('https://')
+            expect(temp[:url]).to eq('drassiner.com')
           end
         end
       end

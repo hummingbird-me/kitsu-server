@@ -57,7 +57,7 @@ class ListImport
 
       def rating
         return if obj[:score] == 0 || obj[:score].nil?
-        obj[:score].to_f / 2
+        obj[:score].to_i * 2
       end
 
       def notes

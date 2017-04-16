@@ -6,7 +6,7 @@ RSpec.shared_examples 'media' do
   # Columns which are mandatory for all media
   it { should have_db_column(:slug).of_type(:string) }
   it { should have_db_column(:abbreviated_titles).of_type(:string) }
-  it { should have_db_column(:average_rating).of_type(:float) }
+  it { should have_db_column(:average_rating).of_type(:decimal) }
   it { should have_db_column(:rating_frequencies).of_type(:hstore) }
   it { should have_db_column(:start_date).of_type(:date) }
   it { should have_db_column(:end_date).of_type(:date) }
@@ -17,9 +17,9 @@ RSpec.shared_examples 'media' do
   it { should respond_to(:slug_candidates) }
   it { should respond_to(:progress_limit) }
   it { should delegate_method(:year).to(:start_date) }
-  it 'should ensure rating is within 0..5' do
+  it 'should ensure rating is within 0..100' do
     should validate_numericality_of(:average_rating)
-      .is_less_than_or_equal_to(5)
+      .is_less_than_or_equal_to(100)
       .is_greater_than(0)
   end
 
@@ -52,46 +52,47 @@ RSpec.shared_examples 'media' do
       it 'should return a Hash of zeroes' do
         subject.save!
         freqs = subject.calculate_rating_frequencies
-        expect(freqs).to include(0.5)
-        expect(freqs).to include(2.5)
-        expect(freqs).to include(5.0)
+        expect(freqs).to include(2)
+        expect(freqs).to include(7)
+        expect(freqs).to include(13)
+        expect(freqs).to include(17)
         expect(freqs.values).to all(eq(0))
       end
     end
     context 'with a couple library entries' do
       it 'should return the count of each rating in a Hash' do
         subject.save!
-        3.times { create(:library_entry, media: subject, rating: 3.0) }
+        3.times { create(:library_entry, media: subject, rating: 3) }
         freqs = subject.calculate_rating_frequencies
-        expect(freqs[3.0]).to eq(3)
+        expect(freqs[3]).to eq(3)
       end
     end
   end
 
   describe '#decrement_rating_frequency' do
     it 'should decrement the rating frequency' do
-      subject.rating_frequencies['3.0'] = 5
+      subject.rating_frequencies['3'] = 5
       subject.save!
-      subject.decrement_rating_frequency('3.0')
+      subject.decrement_rating_frequency('3')
       subject.reload
-      expect(subject.rating_frequencies['3.0']).to eq('4')
+      expect(subject.rating_frequencies['3']).to eq('4')
     end
   end
 
   describe '#increment_rating_frequency' do
     it 'should increment the rating frequency' do
-      subject.rating_frequencies['3.0'] = 5
+      subject.rating_frequencies['3'] = 5
       subject.save!
-      subject.increment_rating_frequency('3.0')
+      subject.increment_rating_frequency('3')
       subject.reload
-      expect(subject.rating_frequencies['3.0']).to eq('6')
+      expect(subject.rating_frequencies['3']).to eq('6')
     end
     context 'without a pre-existing value' do
       it 'should assume zero' do
         subject.save!
-        subject.increment_rating_frequency('3.0')
+        subject.increment_rating_frequency('3')
         subject.reload
-        expect(subject.rating_frequencies['3.0']).to eq('1')
+        expect(subject.rating_frequencies['3']).to eq('1')
       end
     end
   end

@@ -1,11 +1,11 @@
 class UserResource < BaseResource
   PRIVATE_FIELDS = %i[email password confirmed previous_email language time_zone
-                      country share_to_global title_language_preference sfw_filter].freeze
-
+                      country share_to_global title_language_preference
+                      sfw_filter rating_system theme].freeze
   caching
 
   attributes :name, :past_names, :about, :bio, :about_formatted, :location,
-    :website, :waifu_or_husbando, :followers_count, :created_at, :facebook_id,
+    :waifu_or_husbando, :followers_count, :created_at, :facebook_id,
     :following_count, :life_spent_on_anime, :birthday, :gender, :updated_at,
     :comments_count, :favorites_count, :likes_given_count, :reviews_count,
     :likes_received_count, :posts_count, :ratings_count, :pro_expires_at,
@@ -25,13 +25,14 @@ class UserResource < BaseResource
   has_many :library_entries
   has_many :favorites
   has_many :reviews
+  has_many :stats
 
   def self.attribute_caching_context(context)
     context[:current_user]&.resource_owner
   end
 
-  filter :name, apply: -> (records, value, _o) { records.by_name(value.first) }
-  filter :self, apply: -> (records, _v, options) {
+  filter :name, apply: ->(records, value, _o) { records.by_name(value.first) }
+  filter :self, apply: ->(records, _v, options) {
     current_user = options[:context][:current_user]&.resource_owner
     records.where(id: current_user&.id) || User.none
   }
@@ -39,7 +40,7 @@ class UserResource < BaseResource
   index UsersIndex::User
   query :query,
     mode: :query,
-    apply: -> (values, _ctx) {
+    apply: ->(values, _ctx) {
       {
         bool: {
           should: [

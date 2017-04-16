@@ -44,6 +44,34 @@ module StreamSync
     genres_for Drama
   end
 
+  def user_ratings
+    print ' => uploading'
+    User.ids.in_groups_of(990, false).each do |user_ids|
+      print '.'
+
+      entries = LibraryEntry.where(user_id: user_ids)
+                            .select(:media_type, :media_id, :status, :user_id,
+                              :rating)
+                            .group_by(&:user_id)
+
+      data = user_ids.map { |user_id|
+        ["User:#{user_id}", {
+          library: entries[user_id].map { |entry|
+            stream_id = "#{entry.media_type}:#{entry.media_id}"
+            [stream_id, {
+              status: entry.status,
+              rating: entry.rating
+            }]
+          }.to_h
+        }]
+      }.to_h
+
+      custom_endpoint_client.upload_meta(data)
+      print '^'
+    end
+    print "\n"
+  end
+
   def genres_for(klass)
     puts "#{klass.name}:"
     print ' => uploading'

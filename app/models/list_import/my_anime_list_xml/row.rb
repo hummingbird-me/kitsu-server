@@ -42,8 +42,8 @@ class ListImport
       end
 
       def rating
-        # 10-point scale to 5-point scale
-        node.at_css('my_score').content.to_f / 2
+        # 10-point scale to 20-point scale
+        node.at_css('my_score').content.to_f * 2
       end
 
       def reconsume_count

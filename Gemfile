@@ -4,7 +4,7 @@ ruby '2.3.1'
 # Core Stuff
 gem 'puma'
 gem 'puma_worker_killer'
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.8'
 gem 'rails-api'
 
 # Database Stuff
@@ -44,16 +44,14 @@ gem 'kramdown'
 gem 'onebox'
 gem 'rinku'
 gem 'sanitize'
-gem 'twemoji', github: 'vevix/twemoji'
 
 # Miscellaneous Utilities
 gem 'acts_as_list' # Sortables!
-# JSON-API resources
+gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
-gem 'hashie' # Souped-up Hashes
 gem 'jsonapi-resources', '0.9.0'
-gem 'nokogiri' # Parse MAL XML shit
+gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
@@ -79,7 +77,6 @@ gem 'sinatra' # used by sidekiq/web
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
   gem 'dotenv-rails' # Load default ENV
-  gem 'foreman' # Start processes
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 

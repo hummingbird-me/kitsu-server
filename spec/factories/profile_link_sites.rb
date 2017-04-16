@@ -147,7 +147,7 @@ FactoryGirl.define do
     # IMDb
     trait :imdb do
       validate_find '\A(https?://)?(www.)?(imdb.com/)?(user/)?(?<username>[a-zA-z0-9_\-]+)\z'
-      validate_replace 'https://imdb.com/user/\k<username>'
+      validate_replace 'https://www.imdb.com/user/\k<username>'
     end
 
     # Last.fm
@@ -184,6 +184,12 @@ FactoryGirl.define do
     trait :trakt do
       validate_find '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>[a-zA-z0-9_\-]+)\z'
       validate_replace 'https://trakt.tv/users/\k<username>'
+    end
+
+    # Website
+    trait :website do
+      validate_find '(?<protocol>https?://)(www.)?(?<url>(.)+\.(.)+)'
+      validate_replace '\k<protocol\k<url>'
     end
     # rubocop:enable Metrics/LineLength
   end

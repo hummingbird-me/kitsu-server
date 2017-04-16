@@ -1,0 +1,2 @@
+class ChapterPolicy < ApplicationPolicy
+end

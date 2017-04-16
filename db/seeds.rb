@@ -1,5 +1,7 @@
 # Load seeds from YAML files in db/seeds/*
 
+require 'seed_file'
+
 MAX_ID = 2 ** 30 - 1
 SEED_DIR = 'db/seeds'
 

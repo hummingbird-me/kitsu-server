@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       jsonapi_resources :media_relationships
       jsonapi_resources :anime_productions
       jsonapi_resources :episodes
+      jsonapi_resources :stats
       # DEPRECATED: Legacy systems
       jsonapi_resources :castings
       get '/anime/:anime_id/_languages', to: 'anime#languages'
@@ -120,6 +121,10 @@ Rails.application.routes.draw do
     get '/debug/dump_all', to: 'debug#dump_all'
     post '/debug/trace_on', to: 'debug#trace_on'
     get '/debug/gc_info', to: 'debug#gc_info'
+
+    ### WebHooks
+    get '/hooks/youtube', to: 'webhooks#youtube_verify'
+    post '/hooks/youtube', to: 'webhooks#youtube_notify'
 
     ### Staging Sync
     post '/user/_prodsync', to: 'users#prod_sync'

@@ -107,7 +107,7 @@ imdb:
   id: 22
   name: IMDb
   validate_find: '\A(https?://)?(www.)?(imdb.com/)?(user/)?(?<username>[a-zA-z0-9]+)\z'
-  validate_replace: 'https://imdb.com/user/\k<username>'
+  validate_replace: 'https://www.imdb.com/user/\k<username>'
 lastfm:
   id: 23
   name: Last.fm
@@ -138,3 +138,8 @@ trakt:
   name: Trakt
   validate_find: '\A(https?://)?(www.)?(trakt.tv/)?(users/)?(?<username>.+)\z'
   validate_replace: 'https://trakt.tv/users/\k<username>'
+website:
+  id: 29
+  name: Website
+  validate_find: '\A(?<protocol>https?:\/\/)(www.)?(?<url>(.)+)\z'
+  validate_replace: '\k<protocol>\k<url>'

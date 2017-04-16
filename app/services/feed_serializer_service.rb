@@ -113,7 +113,6 @@ class FeedSerializerService
     uri = URI.parse(base_url)
     query = URI.decode_www_form(uri.query || '').to_h.merge(params)
     uri.query = URI.encode_www_form(query.to_a)
-    uri.path = "/api#{uri.path}"
     uri.to_s
   end
 
