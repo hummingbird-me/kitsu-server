@@ -8,7 +8,7 @@ class Stat
     end
 
     # for class methods
-    def self.media_column
+    def self.media_type
       'Manga'
     end
   end

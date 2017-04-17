@@ -17,7 +17,7 @@ class Stat
     class_methods do
       def increment(user, library_entry)
         record = user.stats.find_or_initialize_by(
-          type: "Stat::#{media_column}GenreBreakdown"
+          type: "Stat::#{media_type}GenreBreakdown"
         )
         # set default to total if it doesn't exist
         record.stats_data['total'] = 0 if record.new_record?
@@ -33,7 +33,7 @@ class Stat
       end
 
       def decrement(user, library_entry)
-        record = user.stats.find_by(type: "Stat::#{media_column}GenreBreakdown")
+        record = user.stats.find_by(type: "Stat::#{media_type}GenreBreakdown")
         return unless record
 
         library_entry.media.genres.each do |genre|
