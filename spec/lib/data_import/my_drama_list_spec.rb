@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'data_import/my_drama_list'
 
 RSpec.describe DataImport::MyDramaList do
   subject { described_class.new }

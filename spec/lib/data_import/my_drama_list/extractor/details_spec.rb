@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'data_import/my_drama_list/extractor/details'
 
 RSpec.describe DataImport::MyDramaList::Extractor::Details do
   let(:html) { fixture('my_drama_list/karate-robo-zaborgar.html') }

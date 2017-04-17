@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'data_import/media'
 
 RSpec.describe DataImport::Media do
   subject { Class.new { include DataImport::Media }.new }

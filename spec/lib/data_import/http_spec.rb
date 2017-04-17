@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'data_import/http'
 
 RSpec.describe DataImport::HTTP do
   subject { Class.new { include DataImport::HTTP }.new }

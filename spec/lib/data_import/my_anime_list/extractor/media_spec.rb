@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'data_import/my_anime_list/extractor/media'
 
 RSpec.describe DataImport::MyAnimeList::Extractor::Media do
   let(:tv) { fixture('my_anime_list/cowboy-bebop-tv.json') }

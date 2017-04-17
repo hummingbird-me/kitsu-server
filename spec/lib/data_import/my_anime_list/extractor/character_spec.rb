@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'data_import/my_anime_list/extractor/character'
 
 RSpec.describe DataImport::MyAnimeList::Extractor::Character do
   let(:guts_character) { fixture('my_anime_list/characters/guts.html') }
