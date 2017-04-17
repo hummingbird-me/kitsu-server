@@ -45,7 +45,11 @@ class Feed
 
   # Get the stream feed for a given filter+type of the current feed instance
   def stream_feed_for(filter: nil, type: _feed_type)
-    Feed::StreamFeed.new({ type: type, filter: filter, name: _feed_name }, id)
+    Feed::StreamFeed.new({
+      type: type,
+      filter: filter,
+      name: _feed_name
+    }, id, owner_feed: self)
   end
 
   # Adds an activity to the feed, automatically adding the filtered feeds to the

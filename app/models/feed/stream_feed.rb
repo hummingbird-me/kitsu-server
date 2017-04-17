@@ -1,11 +1,12 @@
 class Feed
   class StreamFeed
-    attr_reader :group, :id, :stream_feed
+    attr_reader :group, :id, :stream_feed, :owner_feed
 
-    def initialize(group, id)
+    def initialize(group, id, owner_feed: nil)
       @group = group_name_for(group)
       @id = id
       @stream_feed = client.feed(group, id)
+      @owner_feed = owner_feed
     end
 
     def activities

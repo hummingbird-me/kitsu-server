@@ -129,7 +129,7 @@ class Feed
     end
 
     def add(activity)
-      res = feed.stream_feed.add_activity(activity.as_json)
+      res = feed.owner_feed.add_activity(activity.as_json)
       res = res.symbolize_keys.except(:duration)
       Feed::Activity.new(feed, res)
     end
