@@ -9,8 +9,12 @@
 #  number          :integer          not null
 #  published       :date
 #  synopsis        :text
+#  thumbnail_content_type :string(255)
+#  thumbnail_file_name    :string(255)
+#  thumbnail_file_size    :integer
+#  thumbnail_updated_at   :datetime
 #  titles          :hstore           default({}), not null
-#  volume          :integer
+#  volume_number   :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  manga_id        :integer          indexed
@@ -24,9 +28,15 @@
 require 'rails_helper'
 
 RSpec.describe Chapter, type: :model do
-  # subject { create(:chapter) }
-  #
-  # let(:manga) { create(:manga) }
+  subject { create(:chapter) }
+  let(:manga) { create(:manga) }
+
   it { should validate_presence_of(:manga) }
   it { should validate_presence_of(:number) }
+  it { should validate_presence_of(:volume_number) }
+  it 'should strip XSS from synopsis' do
+    subject.synopsis = '<script>prompt("PASSWORD:")</script>' * 3
+    subject.save!
+    expect(subject.synopsis).not_to include('<script>')
+  end
 end

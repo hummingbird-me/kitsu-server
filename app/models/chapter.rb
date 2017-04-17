@@ -9,8 +9,12 @@
 #  number          :integer          not null
 #  published       :date
 #  synopsis        :text
+#  thumbnail_content_type :string(255)
+#  thumbnail_file_name    :string(255)
+#  thumbnail_file_size    :integer
+#  thumbnail_updated_at   :datetime
 #  titles          :hstore           default({}), not null
-#  volume          :integer
+#  volume_number   :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  manga_id        :integer          indexed
@@ -22,8 +26,20 @@
 # rubocop:enable Metrics/LineLength
 
 class Chapter < ApplicationRecord
+  include Titleable
+
   belongs_to :manga
+
+  has_attached_file :thumbnail
 
   validates :manga, presence: true
   validates :number, presence: true
+  # validates :volume_number, presence: true
+  validates_attachment :thumbnail, content_type: {
+    content_type: %w[image/jpg image/jpeg image/png]
+  }
+
+  before_save do
+    self.synopsis = Sanitize.fragment(synopsis, Sanitize::Config::RESTRICTED)
+  end
 end

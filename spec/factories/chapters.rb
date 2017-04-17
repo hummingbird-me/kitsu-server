@@ -9,8 +9,12 @@
 #  number          :integer          not null
 #  published       :date
 #  synopsis        :text
+#  thumbnail_content_type :string(255)
+#  thumbnail_file_name    :string(255)
+#  thumbnail_file_size    :integer
+#  thumbnail_updated_at   :datetime
 #  titles          :hstore           default({}), not null
-#  volume          :integer
+#  volume_number   :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  manga_id        :integer          indexed
@@ -26,10 +30,10 @@ FactoryGirl.define do
     association :manga, factory: :manga, strategy: :build
     titles { { en_jp: Faker::Name.name } }
     canonical_title 'en_jp'
-    sequence(:number)
+    synopsis { Faker::Lorem.paragraph(4) }
     length { rand(20..60) }
-    volume { rand(1..10) }
-    synopsis { Faker::Lorem.paragraph }
     published { Faker::Date.between(20.years.ago, Date.today) }
+    volume_number { rand(1..10) }
+    sequence(:number)
   end
 end
