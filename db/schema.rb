@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170417224628) do
+ActiveRecord::Schema.define(version: 20170418003511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,7 +140,7 @@ ActiveRecord::Schema.define(version: 20170417224628) do
     t.hstore   "titles",                             default: {},      null: false
     t.string   "canonical_title",                    default: "en_jp", null: false
     t.integer  "number",                                               null: false
-    t.integer  "volume"
+    t.integer  "volume_number"
     t.integer  "length"
     t.text     "synopsis"
     t.date     "published"

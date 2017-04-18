@@ -94,7 +94,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     parent Manga
     field :manga
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    fields :canonical_title, :number, :synopsis, :published, :volume, :length
+    fields :canonical_title, :number, :synopsis, :published, :volume_number, :length
     include_all_fields
     navigation_label 'Chapters'
   end
