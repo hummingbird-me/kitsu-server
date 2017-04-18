@@ -323,6 +323,7 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack-timeout (0.4.2)
     rails (4.2.8)
       actionmailer (= 4.2.8)
       actionpack (= 4.2.8)
@@ -554,6 +555,7 @@ DEPENDENCIES
   pundit-resources
   rack-attack
   rack-cors
+  rack-timeout
   rails (= 4.2.8)
   rails-api
   rails_12factor
