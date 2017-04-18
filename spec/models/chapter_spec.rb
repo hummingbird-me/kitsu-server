@@ -33,7 +33,7 @@ RSpec.describe Chapter, type: :model do
 
   it { should validate_presence_of(:manga) }
   it { should validate_presence_of(:number) }
-  it { should validate_presence_of(:volume_number) }
+  # it { should validate_presence_of(:volume_number) }
   it 'should strip XSS from synopsis' do
     subject.synopsis = '<script>prompt("PASSWORD:")</script>' * 3
     subject.save!
