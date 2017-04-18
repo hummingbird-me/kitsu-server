@@ -7,6 +7,7 @@ namespace :kitsu do
     klass.manga_genre_breakdown
 
     # Amount Watched/Read
-    klass.anime_amount_watched
+    klass.anime_amount_consumed
+    klass.manga_amount_consumed
   end
 end

@@ -8,8 +8,12 @@ class RegenerateStatService
       user_stat(:manga, 'Stat::MangaGenreBreakdown')
     end
 
-    def anime_amount_watched
-      user_stat(:anime, 'Stat::AnimeAmountWatched')
+    def anime_amount_consumed
+      user_stat(:anime, 'Stat::AnimeAmountConsumed')
+    end
+
+    def manga_amount_consumed
+      user_stat(:manga, 'Stat::MangaAmountConsumed')
     end
 
     private
