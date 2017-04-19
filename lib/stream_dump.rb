@@ -1,95 +1,9 @@
 module StreamDump
-  class Story < ActiveRecord::Base
-    default_scope { where(deleted_at: nil) }
-
-    has_many :substories
-    belongs_to :library_entry
-  end
-  class Substory < ActiveRecord::Base
-    STATUS_KEYS = {
-      'Currently Watching' => 'current',
-      'Plan to Watch' => 'planned',
-      'Completed' => 'completed',
-      'On Hold' => 'on_hold',
-      'Dropped' => 'dropped'
-    }.freeze
-
-    default_scope { where(deleted_at: nil) }
-
-    belongs_to :story
-    belongs_to :user
-    belongs_to :target, polymorphic: true
-
-    enum substory_type: {
-      followed: 0,
-      status_update: 1,
-      comment: 2,
-      progress: 3,
-      reply: 4
-    }
-
-    scope :for_user, ->(user_id) { where(user_id: user_id) }
-    scope :media_update, -> { where(substory_type: [1, 3]) }
-    scope :with_library_entry, -> {
-      includes(story: { library_entry: %i[user media] })
-    }
-
-    def activity
-      MediaActivityService.new(story.library_entry)
-    end
-
-    def progress
-      data['episode_number']
-    end
-
-    def status
-      STATUS_KEYS[data['new_status']]
-    end
-
-    def stream_activity
-      return unless story&.library_entry
-      case substory_type
-      when 'status_update' then activity.status(status)
-      when 'progress' then activity.progress(progress)
-      end.tap do |activity|
-        activity.time = created_at
-      end
-    end
-  end
-
-  class UnmentioningPost < Post
-    scope :for_user, ->(user) {
-      where(user: user, target_user: nil).or(where(target_user: user))
-    }
-    scope :for_group, ->(group) { where(target_group: group) }
-    scope :groupless, -> { where(target_group_id: nil) }
-
-    def stream_activity
-      target_feed = if target_group_id? then Feed.group(target_group_id)
-                    elsif target_user_id? then Feed.user(target_user_id)
-                    else Feed.user(user_id)
-                    end
-      media_feed = Feed.media(media_type, media_id) if media_id
-      as_post = becomes(Post)
-      target_feed.activities.new(
-        time: updated_at,
-        updated_at: updated_at,
-        post_likes_count: post_likes_count,
-        comments_count: comments_count,
-        content: content,
-        to: [media_feed],
-        verb: 'post',
-        object: as_post,
-        foreign_id: as_post
-      )
-    end
-  end
-
   module_function
 
   def posts(scope = User)
     each_user(scope) do |user_id|
-      posts = UnmentioningPost.groupless.for_user(user_id).includes(:user)
+      posts = UnmentioningPost.for_user(user_id).includes(:user)
       next if posts.blank?
       data = posts.find_each.map(&:complete_stream_activity).compact
       next if data.blank?
