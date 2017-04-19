@@ -23,44 +23,32 @@ class Feed
   # of follows (correlating common filters) and then sends it to
   # {Feed::Stream#follow_many}, to perform the follow in one fell swoop.
   def follow(target, scrollback: 100)
-    # Directly follow the target
-    follows = [{ source: stream_feed, target: target.stream_follow_target }]
-    # Get the intersection of the filter sets and create any necessary follows
-    shared_filters = self.class.filters_shared_with(target.class)
-    follows += shared_filters.map do |filter|
-      {
-        source: stream_feed(filter: filter),
-        target: target.stream_follow_target(filter: filter)
-      }
-    end
-    # Add the follows in one operation
-    Feed::StreamFeed.follow_many(follows, scrollback)
+    # Add the follows in one follow_many operation
+    Feed::StreamFeed.follow_many(follows_for(target), scrollback)
   end
 
-  def unfollow(target)
-    # TODO: unify this with the generation of #follow stuff
-    follows = [{ source: stream_feed, target: target.stream_follow_target }]
-    shared_filters = self.class.filters_shared_with(target.class)
-    follows += shared_filters.map do |filter|
-      {
-        source: stream_feed(filter: filter),
-        target: target.stream_follow_target(filter: filter)
-      }
-    end
-    follows.each do |follow|
-      follow[:source].unfollow(follow[:target])
+  # Unfollow another Feed, optionally keeping the history
+  def unfollow(target, keep_history: false)
+    # Stream doesn't provide an unfollow_many method, so we just gotta settle
+    # for this nontransactional pile of crap.
+    # Get the follows
+    follows_for(target).each do |follow|
+      # And unfollow each of 'em
+      follow[:source].unfollow(follow[:target], keep_history: keep_history)
     end
   end
 
+  # Compare two Feed instances.  Basically, compare feed name and ID
   def ==(other)
-    self.class == other.class && id == other.id
+    _feed_name == other._feed_name && id == other.id
   end
 
   # Get the ActivityList for this Feed, optionally requesting a specific filter
   # and/or type.
-  def activities(filter: nil, type: _feed_type)
+  def activities_for(filter: nil, type: _feed_type)
     stream_feed_for(filter: filter, type: type).activities
   end
+  alias_method :activities, :activities_for
 
   # Get the stream feed for a given filter+type of the current feed instance
   def stream_feed_for(filter: nil, type: _feed_type)
@@ -71,15 +59,23 @@ class Feed
     }, id, owner_feed: self)
   end
 
+  # shorthand+fastpath for the default stream feed
+  def stream_feed
+    @stream_feed ||= stream_feed_for
+  end
+
   # Adds an activity to the feed, automatically adding the filtered feeds to the
   # "to" field
-  def self.add_activity(activity, opts = {})
+  def add_activity(activity, opts = {})
     # Build the "to" field
     activity.to ||= []
     activity.to += stream_activity_targets_for(activity, opts)
     # Send the activity to the target feed
     stream_activity_target(opts).add_activity(activity)
   end
+
+  # Pass right along to stream_feed
+  delegate :remove_activity, to: :stream_feed
 
   # Register a feed class for lookups by name
   def self.register!(name, klass)
@@ -109,7 +105,43 @@ class Feed
   delegate :stream_id, to: :stream_feed
   delegate :readonly_token, to: :stream_feed
 
+  def stream_follow_target(opts = {})
+    Feed::StreamFeed.new({ type: :flat, name: _feed_name }.merge(opts), id)
+  end
+
+  def stream_activity_target(opts = {})
+    Feed::StreamFeed.new({ type: :flat, name: _feed_name }.merge(opts), id)
+  end
+
+  def stream_activity_targets_for(activity, opts = {})
+    # Determine which sub-feeds we need to distribute to
+    targets = _filters.select { |filter| filter[:proc].call(activity) }
+    # And convert them to Feed::Stream instances
+    targets.map do |filter|
+      Feed::StreamFeed.new({
+        type: :flat,
+        name: _feed_name,
+        filter: filter
+      }.merge(opts), id)
+    end
+  end
+
   private
+
+  def follows_for(target)
+    # Directly follow the target
+    follows = [{ source: stream_feed, target: target.stream_follow_target }]
+    # Get the intersection of the filter sets and create any necessary follows
+    shared_filters = self.class.filters_shared_with(target.class)
+    follows += shared_filters.map do |filter|
+      {
+        source: stream_feed(filter: filter),
+        target: target.stream_follow_target(filter: filter)
+      }
+    end
+    # And finally, return the result
+    follows
+  end
 
   # Generate a set of "default" auto follows, basically matching the filters to
   # their aggregations
@@ -136,29 +168,6 @@ class Feed
 
   def stream_feed(opts = {})
     Feed::StreamFeed.new({ type: _feed_type, name: _feed_name }.merge(opts), id)
-  end
-
-  protected
-
-  def stream_follow_target(opts = {})
-    Feed::StreamFeed.new({ type: :flat, name: _feed_name }.merge(opts), id)
-  end
-
-  def stream_activity_target(opts = {})
-    Feed::StreamFeed.new({ type: :flat, name: _feed_name }.merge(opts), id)
-  end
-
-  def stream_activity_targets_for(activity, opts = {})
-    # Determine which sub-feeds we need to distribute to
-    targets = _filters.select { |filter| filter[:proc].call(activity) }
-    # And convert them to Feed::Stream instances
-    targets.map do |filter|
-      Feed::StreamFeed.new({
-        type: :flat,
-        name: _feed_name,
-        filter: filter
-      }.merge(opts), id)
-    end
   end
 end
 

@@ -1,13 +1,15 @@
 class Feed
   class StreamFeed
-    attr_reader :group, :id, :stream_feed, :owner_feed
+    attr_reader :group, :id, :client_feed, :owner_feed
 
-    delegate :readonly_token, to: :stream_feed
+    delegate :readonly_token, to: :client_feed
+    delegate :add_activity, to: :client_feed
+    delegate :remove_activity, to: :client_feed
 
     def initialize(group, id, owner_feed: nil)
       @group = group_name_for(group)
       @id = id
-      @stream_feed = client.feed(@group, @id)
+      @client_feed = client.feed(@group, @id)
       @owner_feed = owner_feed
     end
 
@@ -16,11 +18,20 @@ class Feed
     end
 
     def follow(feed)
-      stream_feed.follow(feed.group, feed.id)
+      client_feed.follow(feed.group, feed.id)
     end
 
-    def unfollow(feed)
-      stream_feed.unfollow(feed.group, feed.id)
+    def unfollow(feed, keep_history: false)
+      client_feed.unfollow(feed.group, feed.id, keep_history: keep_history)
+    end
+
+    def self.follow_many(follows, scrollback)
+      follows = follows.map do |follow|
+        follow.transform_values do |value|
+          value.respond_to?(:stream_id) ? value.stream_id : value
+        end
+      end
+      StreamRails.client.follow_many(follows, scrollback)
     end
 
     def stream_id

@@ -29,8 +29,6 @@ class Feed
         Feed.register!(name, self)
       end
 
-      protected
-
       # Generates unique identifiers for each filter, based on the parameters
       # which filter it
       def _filter_keys
