@@ -37,6 +37,25 @@ class Feed
     Feed::StreamFeed.follow_many(follows, scrollback)
   end
 
+  def unfollow(target)
+    # TODO: unify this with the generation of #follow stuff
+    follows = [{ source: stream_feed, target: target.stream_follow_target }]
+    shared_filters = self.class.filters_shared_with(target.class)
+    follows += shared_filters.map do |filter|
+      {
+        source: stream_feed(filter: filter),
+        target: target.stream_follow_target(filter: filter)
+      }
+    end
+    follows.each do |follow|
+      follow[:source].unfollow(follow[:target])
+    end
+  end
+
+  def ==(other)
+    self.class == other.class && id == other.id
+  end
+
   # Get the ActivityList for this Feed, optionally requesting a specific filter
   # and/or type.
   def activities(filter: nil, type: _feed_type)
