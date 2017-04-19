@@ -2,10 +2,12 @@ class Feed
   class StreamFeed
     attr_reader :group, :id, :stream_feed, :owner_feed
 
+    delegate :readonly_token, to: :stream_feed
+
     def initialize(group, id, owner_feed: nil)
       @group = group_name_for(group)
       @id = id
-      @stream_feed = client.feed(group, id)
+      @stream_feed = client.feed(@group, @id)
       @owner_feed = owner_feed
     end
 
@@ -26,6 +28,10 @@ class Feed
     end
 
     private
+
+    def client
+      StreamRails.client
+    end
 
     def group_name_for(group)
       if group.respond_to?(:to_h)

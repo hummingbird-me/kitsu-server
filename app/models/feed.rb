@@ -89,7 +89,7 @@ class Feed
 
   # Look up the class for a given feed name
   def self.class_for(name)
-    @feeds[name]
+    (@feeds && @feeds[name])
   end
 
   # Temporary compatibility stuff
@@ -99,7 +99,7 @@ class Feed
   end
 
   def self.respond_to_missing?(name, include_private = false)
-    @feeds.key?(name.to_s) || super
+    (@feeds && @feeds.key?(name.to_s)) || super
   end
 
   def setup!
@@ -107,6 +107,7 @@ class Feed
   end
 
   delegate :stream_id, to: :stream_feed
+  delegate :readonly_token, to: :stream_feed
 
   private
 
@@ -133,7 +134,7 @@ class Feed
     [base_follow, *filter_follows]
   end
 
-  def stream_feed
+  def stream_feed(opts = {})
     Feed::StreamFeed.new({ type: _feed_type, name: _feed_name }.merge(opts), id)
   end
 

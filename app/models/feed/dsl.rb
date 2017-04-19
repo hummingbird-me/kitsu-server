@@ -47,6 +47,7 @@ class Feed
         super(subclass)
         # If there's no _feed_name already set...
         unless subclass._feed_name
+          return unless subclass.name
           # Configure the default _feed_name
           subclass._feed_name = subclass.name.gsub(/\AFeed::|Feed\z/, '')
                                         .underscore
