@@ -1,15 +1,15 @@
 class Stat
-  class AnimeGenreBreakdown < Stat
+  class MangaGenreBreakdown < Stat
     include Stat::GenreBreakdown
 
     # for recalculate!
     def media_column
-      :anime
+      :manga
     end
 
     # for class methods
     def self.media_type
-      'Anime'
+      'Manga'
     end
   end
 end

@@ -44,5 +44,15 @@ FactoryGirl.define do
     titles { { en_jp: Faker::Name.name } }
     canonical_title 'en_jp'
     average_rating { rand(1.0..100.0) }
+
+    trait :genres do
+      transient do
+        amount 5
+      end
+
+      after(:create) do |manga, evaluator|
+        manga.genres = create_list(:genre, evaluator.amount)
+      end
+    end
   end
 end
