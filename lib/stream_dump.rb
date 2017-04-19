@@ -1,9 +1,13 @@
+Dir['lib/stream_dump/*'].each do |file|
+  require_dependency(File.expand_path(file))
+end
+
 module StreamDump
   module_function
 
   def posts(scope = User)
     each_user(scope) do |user_id|
-      posts = UnmentioningPost.for_user(user_id).includes(:user)
+      posts = StreamDump::Post.for_user(user_id).includes(:user)
       next if posts.blank?
       data = posts.find_each.map(&:complete_stream_activity).compact
       next if data.blank?
@@ -17,7 +21,7 @@ module StreamDump
 
   def group_posts(scope = Group)
     each_group(scope) do |group_id|
-      posts = UnmentioningPost.for_group(group_id).includes(:user)
+      posts = StreamDump::Post.for_group(group_id).includes(:user)
       next if posts.blank?
       data = posts.find_each.map(&:complete_stream_activity).compact
       next if data.blank?
@@ -31,7 +35,8 @@ module StreamDump
 
   def stories(scope = User)
     each_user(scope) do |user_id|
-      substories = Substory.for_user(user_id).media_update.with_library_entry
+      substories = StreamDump::Substory.for_user(user_id).media_update
+                                       .with_library_entry
       next if substories.blank?
       data = substories.find_each.map(&:stream_activity).compact
       next if data.blank?
