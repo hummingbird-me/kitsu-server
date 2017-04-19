@@ -15,6 +15,9 @@ class Feed
     class_methods do # rubocop:disable Metrics/BlockLength
       # Add a filter option to the feed class
       def filter(name, options = {})
+        options[:proc] = ->(activity) do
+          options[:verb].include?(activity[:verb])
+        end
         _filters[name] = _filters[name].merge(options)
       end
 

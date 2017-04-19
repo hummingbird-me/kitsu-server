@@ -46,7 +46,7 @@ class Feed
   # Get the ActivityList for this Feed, optionally requesting a specific filter
   # and/or type.
   def activities_for(filter: nil, type: _feed_type)
-    stream_feed_for(filter: filter, type: type).activities
+    Feed::ActivityList.new(self).filter(filter)
   end
   alias_method :activities, :activities_for
 
@@ -68,8 +68,9 @@ class Feed
   # "to" field
   def add_activity(activity, opts = {})
     # Build the "to" field
-    activity.to ||= []
-    activity.to += stream_activity_targets_for(activity, opts)
+    activity[:to] ||= []
+    cc_to = stream_activity_targets_for(activity, opts).map(&:stream_id)
+    activity[:to] += cc_to
     # Send the activity to the target feed
     stream_activity_target(opts).add_activity(activity)
   end
@@ -94,6 +95,14 @@ class Feed
     class_for(name.to_s)&.new(*args) || super
   end
 
+  def self.get_stream_id(obj)
+    if obj.respond_to?(:stream_id)
+      obj.stream_id
+    else
+      obj
+    end
+  end
+
   def self.respond_to_missing?(name, include_private = false)
     (@feeds && @feeds.key?(name.to_s)) || super
   end
@@ -115,7 +124,8 @@ class Feed
 
   def stream_activity_targets_for(activity, opts = {})
     # Determine which sub-feeds we need to distribute to
-    targets = _filters.select { |filter| filter[:proc].call(activity) }
+    targets = _filters.select { |_name, filter| filter[:proc].call(activity) }
+    targets = targets.keys
     # And convert them to Feed::Stream instances
     targets.map do |filter|
       Feed::StreamFeed.new({
