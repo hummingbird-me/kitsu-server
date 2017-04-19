@@ -70,6 +70,7 @@ class LibraryEntryResource < BaseResource
   end
 
   def rating=(value)
+    return unless value
     _model.rating = value.to_f * 4
   end
 
