@@ -1,4 +1,4 @@
-class Stat
+class Stat < ApplicationRecord
   module GenreBreakdown
     extend ActiveSupport::Concern
 

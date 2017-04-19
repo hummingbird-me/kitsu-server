@@ -1,4 +1,4 @@
-class Stat
+class Stat < ApplicationRecord
   class MangaGenreBreakdown < Stat
     include Stat::GenreBreakdown
 

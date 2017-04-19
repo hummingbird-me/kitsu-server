@@ -1,4 +1,4 @@
-class Stat
+class Stat < ApplicationRecord
   class AnimeAmountConsumed < Stat
     include Stat::AmountConsumed
 
