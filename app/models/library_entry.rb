@@ -46,7 +46,7 @@ class LibraryEntry < ApplicationRecord
   belongs_to :manga
   belongs_to :drama
   has_one :review, dependent: :destroy
-  has_many :marathons, dependent: :destroy
+  has_many :library_events, dependent: :destroy
 
   scope :sfw, -> { where(nsfw: false) }
   scope :by_kind, ->(*kinds) do
@@ -103,10 +103,6 @@ class LibraryEntry < ApplicationRecord
     follows = Follow.arel_table
     sql = follows.where(follows[:follower_id].eq(user_id)).project(:followed_id)
     where("user_id IN (#{sql.to_sql})")
-  end
-
-  def current_marathon
-    marathons.current.first_or_create
   end
 
   def progress_limit
