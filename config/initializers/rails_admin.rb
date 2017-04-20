@@ -170,10 +170,13 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       enum do
         {
           'MyAnimeList Anime' => 'myanimelist/anime',
-          'MyAnimeList Manga' => 'myanimelist/manga'
+          'MyAnimeList Manga' => 'myanimelist/manga',
+          'AnimeNewsNetwork' => 'animenewsnetwork',
+          'AniDB' => 'anidb',
+          'TheTVDB Series' => 'thetvdb/series',
+          'TheTVDB Season' => 'thetvdb/season',
+          'MyDramaList' => 'mydramalist'
         }
-        # %w[myanimelist/anime myanimelist/manga animenewsnetwork anidb
-        #    thetvdb/series thetvdb/season mydramalist ]
       end
     end
     include_all_fields
