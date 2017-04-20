@@ -616,11 +616,29 @@ ActiveRecord::Schema.define(version: 20170502061636) do
 
   create_table "library_events", force: :cascade do |t|
     t.integer  "library_entry_id", null: false
-    t.integer  "event",            null: false
+    t.integer  "user_id"
+    t.text     "notes"
+    t.boolean  "nsfw"
+    t.boolean  "private"
+    t.integer  "progress"
+    t.integer  "rating"
+    t.boolean  "reconsuming"
+    t.integer  "reconsume_count"
+    t.integer  "volumes_owned"
+    t.integer  "time_spent"
     t.integer  "status"
+    t.integer  "anime_id"
+    t.integer  "manga_id"
+    t.integer  "drama_id"
+    t.integer  "event",            null: false
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
+
+  add_index "library_events", ["anime_id"], name: "index_library_events_on_anime_id", using: :btree
+  add_index "library_events", ["drama_id"], name: "index_library_events_on_drama_id", using: :btree
+  add_index "library_events", ["manga_id"], name: "index_library_events_on_manga_id", using: :btree
+  add_index "library_events", ["user_id"], name: "index_library_events_on_user_id", using: :btree
 
   create_table "linked_accounts", force: :cascade do |t|
     t.integer  "user_id",                            null: false
