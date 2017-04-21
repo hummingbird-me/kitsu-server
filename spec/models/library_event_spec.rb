@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe LibraryEvent, type: :model do
-  subject { build(:library_event) }
+  subject { described_class.new }
 
   it { should belong_to(:library_entry) }
+  it { should belong_to(:user) }
+
+  it { should validate_presence_of(:library_entry) }
+  it { should validate_presence_of(:user) }
   it { should validate_presence_of(:event) }
+  it { should validate_presence_of(:changed_data) }
 
   it { should define_enum_for(:event).with(%i[added updated]) }
   it { should define_enum_for(:status).with(LibraryEntry.statuses) }
-
-  # context 'with event=changed' do
-  #   subject { build(:library_event, event: :updated) }
-  #   it { should validate_presence_of(:status) }
-  # end
 end

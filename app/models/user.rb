@@ -136,6 +136,7 @@ class User < ApplicationRecord
   has_many :list_imports, dependent: :destroy
   has_many :group_members, dependent: :destroy
   has_many :stats, dependent: :destroy
+  has_many :library_events, dependent: :destroy
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }

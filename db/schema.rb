@@ -615,8 +615,11 @@ ActiveRecord::Schema.define(version: 20170502061636) do
   add_index "library_entry_logs", ["linked_account_id"], name: "index_library_entry_logs_on_linked_account_id", using: :btree
 
   create_table "library_events", force: :cascade do |t|
-    t.integer  "library_entry_id", null: false
-    t.integer  "user_id"
+    t.integer  "library_entry_id",              null: false
+    t.integer  "user_id",                       null: false
+    t.integer  "anime_id"
+    t.integer  "manga_id"
+    t.integer  "drama_id"
     t.text     "notes"
     t.boolean  "nsfw"
     t.boolean  "private"
@@ -627,12 +630,10 @@ ActiveRecord::Schema.define(version: 20170502061636) do
     t.integer  "volumes_owned"
     t.integer  "time_spent"
     t.integer  "status"
-    t.integer  "anime_id"
-    t.integer  "manga_id"
-    t.integer  "drama_id"
-    t.integer  "event",            null: false
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.integer  "event",                         null: false
+    t.jsonb    "changed_data",     default: {}, null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   add_index "library_events", ["anime_id"], name: "index_library_events_on_anime_id", using: :btree
@@ -1282,6 +1283,7 @@ ActiveRecord::Schema.define(version: 20170502061636) do
   add_foreign_key "leader_chat_messages", "groups"
   add_foreign_key "leader_chat_messages", "users"
   add_foreign_key "library_events", "library_entries"
+  add_foreign_key "library_events", "users"
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"

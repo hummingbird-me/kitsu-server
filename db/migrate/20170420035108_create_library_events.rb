@@ -6,8 +6,10 @@ class CreateLibraryEvents < ActiveRecord::Migration
 
     create_table :library_events do |t|
       t.references :library_entry, foreign_key: true, null: false
-      t.integer :user_id, index: true # filter purposes
-
+      t.references :user, foreign_key: true, index: true, null: false
+      t.integer :anime_id, index: true
+      t.integer :manga_id, index: true
+      t.integer :drama_id, index: true
       # not adding null constraints or defaults
       # because this is coming from library_entry,
       # so it should have all valid fields where needed
@@ -21,13 +23,9 @@ class CreateLibraryEvents < ActiveRecord::Migration
       t.integer :volumes_owned
       t.integer :time_spent
       t.integer :status
-
-      t.integer :anime_id, index: true
-      t.integer :manga_id, index: true
-      t.integer :drama_id, index: true
-
-      # only new column
+      # new columns
       t.integer :event, null: false
+      t.jsonb :changed_data, default: {}, null: false
 
       t.timestamps null: false
     end
