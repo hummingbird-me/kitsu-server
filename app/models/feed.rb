@@ -136,6 +136,10 @@ class Feed
     end
   end
 
+  def aggregated?
+    _feed_type == :aggregated || _feed_type == :notification
+  end
+
   private
 
   def follows_for(target)
@@ -174,10 +178,6 @@ class Feed
     end
 
     [base_follow, *filter_follows]
-  end
-
-  def stream_feed(opts = {})
-    Feed::StreamFeed.new({ type: _feed_type, name: _feed_name }.merge(opts), id)
   end
 end
 

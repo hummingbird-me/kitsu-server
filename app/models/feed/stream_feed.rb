@@ -17,6 +17,10 @@ class Feed
       ActivityList.new(self)
     end
 
+    def get(*args)
+      client_feed.get(*args)
+    end
+
     def follow(feed)
       client_feed.follow(feed.group, feed.id)
     end
