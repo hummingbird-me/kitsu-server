@@ -196,6 +196,10 @@ class Feed
       fetcher.to_a
     end
 
+    def to_enum
+      fetcher.to_enum
+    end
+
     def more?
       fetcher.more?
     end
