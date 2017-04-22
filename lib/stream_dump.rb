@@ -5,6 +5,41 @@ end
 module StreamDump
   module_function
 
+  def split_posts(scope = User)
+    results = each_user(scope) do |user_id|
+      activities = Feed::ProfileFeed.new(user_id).activities_for(type: :flat)
+                                    .unenriched.to_enum
+      posts_activities = []
+      media_activities = []
+      profile_feed = Feed::ProfileFeed.new(user_id)
+      posts_feed = profile_feed.stream_feed_for(filter: :posts).stream_id
+      media_feed = profile_feed.stream_feed_for(filter: :media).stream_id
+
+      activities.each do |act|
+        if Feed::MEDIA_VERBS.include?(act.verb)
+          media_activities << act.activities.first
+        elsif Feed::POST_VERBS.include?(act.verb)
+          posts_activities << act.activities.first
+        end
+      end
+
+      [
+        {
+          instruction: 'add_activities',
+          feedId: media_feed,
+          data: media_activities.map(&:as_json)
+        },
+        {
+          instruction: 'add_activities',
+          feedId: posts_feed,
+          data: posts_activities.map(&:as_json)
+        }
+      ]
+    end
+    # Flatten the results lazily
+    results.flat_map { |x| x }
+  end
+
   def posts(scope = User)
     each_user(scope) do |user_id|
       posts = StreamDump::Post.for_user(user_id).includes(:user)
