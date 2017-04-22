@@ -31,3 +31,4 @@ module StreamDump
       )
     end
   end
+end

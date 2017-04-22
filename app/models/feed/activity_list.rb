@@ -1,7 +1,7 @@
 class Feed
   class ActivityList
     attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :limit_ratio, :termination_reason, :filter
+      :limit_ratio, :termination_reason, :filter, :feed_type
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
@@ -161,10 +161,17 @@ class Feed
       end
     end
 
-    # @attr [Float] filter_name The name of the filter to apply when reading the
-    #                           feed.
+    # @attr [Symbol] filter_name The name of the filter to apply when reading
+    #                            the feed.
     def filter(filter_name)
       @filter = filter_name
+      self
+    end
+
+    # @attr [Symbol] feed_type The type of underlying feed to use when reading
+    #                          the feed.
+    def with_type(feed_type)
+      @feed_type = feed_type
       self
     end
 
@@ -207,7 +214,7 @@ class Feed
     private
 
     def stream_feed
-      feed.stream_feed_for(@filter)
+      feed.stream_feed_for(filter: @filter, type: @feed_type)
     end
 
     def fetcher
