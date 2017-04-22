@@ -65,10 +65,10 @@ module Media
   end
 
   def feed
-    @feed ||= Feed::Media.new(self.class.name, id)
+    @feed ||= Feed::MediaFeed.new(self.class.name, id)
   end
 
   def follow_self
-    Feed::Media.new(self.class.name, id).setup!
+    Feed::MediaFeed.new(self.class.name, id).setup!
   end
 end
