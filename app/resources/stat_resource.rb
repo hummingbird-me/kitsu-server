@@ -9,6 +9,8 @@ class StatResource < BaseResource
   model_hint model: Stat::MangaAmountConsumed
   model_hint model: Stat::AnimeFavoriteYear
   model_hint model: Stat::MangaFavoriteYear
+  model_hint model: Stat::AnimeActivityHistory
+  model_hint model: Stat::MangaActivityHistory
 
   attribute :stats_data
   # kind is aliased to type

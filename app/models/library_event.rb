@@ -9,7 +9,8 @@ class LibraryEvent < ApplicationRecord
   enum status: LibraryEntry.statuses
   # changes should validate only on :update
 
-  validates :event, :changed_data, presence: true
+  # remove validation of changed_data
+  validates :event, presence: true
 
   def self.create_for(event, library_entry)
     # TODO: one edge case we might need to deal with

@@ -22,6 +22,13 @@ class RegenerateStatService
 
     def manga_favorite_year
       user_stat(:manga, 'Stat::MangaFavoriteYear')
+
+    def anime_activity_history
+      user_stat(:anime, 'Stat::AnimeActivityHistory')
+    end
+
+    def manga_activity_history
+      user_stat(:manga, 'Stat::MangaActivityHistory')
     end
 
     private
