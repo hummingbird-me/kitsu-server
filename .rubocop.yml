@@ -127,7 +127,14 @@ Metrics/AbcSize:
 Metrics/BlockNesting:
   Enabled: true
   Max: 5
+Metrics/BlockLength:
+  Enabled: true
+  Max: 40
 Metrics/ClassLength:
+  Enabled: true
+  CountComments: false
+  Max: 500
+Metrics/ModuleLength:
   Enabled: true
   CountComments: false
   Max: 500
