@@ -45,6 +45,11 @@ class Feed
       self
     end
 
+    def unenriched
+      @including = []
+      self
+    end
+
     def sfw
       select do |act|
         throw :remove_group if act[:nsfw]

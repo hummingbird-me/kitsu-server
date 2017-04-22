@@ -18,8 +18,10 @@ class Feed
         res = data
         res = apply_selects(res, opts[:fast_selects] || [])
         res = strip_unused(res)
-        res = enrich(res, opts[:includes] || [])
-        res = strip_unenriched(res, opts[:includes] || [])
+        unless opts[:includes].blank?
+          res = enrich(res, opts[:includes])
+          res = strip_unenriched(res, opts[:includes])
+        end
         res = apply_selects(res, opts[:slow_selects] || [])
         res = apply_maps(res, opts[:maps] || [])
         res = wrap(res)
