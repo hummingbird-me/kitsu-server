@@ -88,6 +88,9 @@ group :development, :test do
   # Guard notices filesystem changes and *does things*
   gem 'guard'
   gem 'guard-rspec', require: false # Running specs
+
+  # Useful for benchmarking!
+  gem 'benchmark-ips'
 end
 
 group :test do
