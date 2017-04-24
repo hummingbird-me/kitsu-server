@@ -3,6 +3,11 @@ module Sluggable
 
   included do
     extend FriendlyId
+
+    before_save do
+      # Force to nil
+      self.slug = nil if slug.blank?
+    end
   end
 
   class_methods do
