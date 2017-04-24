@@ -16,12 +16,20 @@ class RegenerateStatService
       user_stat(:manga, 'Stat::MangaAmountConsumed')
     end
 
+    def anime_favorite_year
+      user_stat(:anime, 'Stat::AnimeFavoriteYear')
+    end
+
+    def manga_favorite_year
+      user_stat(:manga, 'Stat::MangaFavoriteYear')
+    end
+
     private
 
     def user_stat(media_column, stat_type)
       User.where(id: LibraryEntry.select(:user_id).by_kind(media_column))
           .find_each do |user|
-            user.stats.find_by(type: stat_type).recalculate!
+            user.stats.find_or_initialize_by(type: stat_type).recalculate!
           end
     end
   end
