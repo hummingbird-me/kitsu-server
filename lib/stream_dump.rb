@@ -174,18 +174,24 @@ module StreamDump
     each_id(scope, 'Drama', &block)
   end
 
-  def each_media(&block)
+  def each_media
     [
-      each_anime { |id| block.('Anime', id) },
-      each_manga { |id| block.('Manga', id) },
-      each_drama { |id| block.('Drama', id) }
+      each_anime { |id| yield 'Anime', id },
+      each_manga { |id| yield 'Manga', id },
+      each_drama { |id| yield 'Drama', id }
     ].lazy.flat_map { |list| list }
   end
 
   def each_id(scope, title, &block)
     items = scope.pluck(:id).each.lazy
     bar = progress_bar(title, scope.count(:all))
-    items.map(&block).map { |i| bar.increment; i }.reject(&:nil?)
+    # HACK: Normally we'd use #each because we don't want to modify the values,
+    # but we need to stay lazy, and Enumerator::Lazy#each will collapse the
+    # laziness.
+    items.map(&block).map { |i|
+      bar.increment
+      i
+    }.reject(&:nil?)
   end
 
   def progress_bar(title, count)
