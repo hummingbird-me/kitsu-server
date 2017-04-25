@@ -22,4 +22,14 @@
 
 class UserSetting < ApplicationRecord
   belongs_to :user, required: true, touch: true
+
+  def self.create_defaults_for(user)
+    # Run .create_default_for(user) on each subclass
+    UserSetting.descendants.map { |setting| setting.create_default_for(user) }
+  end
+end
+
+# Load subclasses
+Dir['app/models/user_setting/*.rb'].each do |file|
+  require_dependency(File.expand_path(file))
 end
