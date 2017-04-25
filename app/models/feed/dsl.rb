@@ -55,6 +55,8 @@ class Feed
           # Register our feed name
           Feed.register!(subclass._feed_name, subclass)
         end
+        # Duplicate the _filters hash
+        subclass._filters = _filters.deep_dup
       end
     end
   end
