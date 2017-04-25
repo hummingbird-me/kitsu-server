@@ -89,6 +89,10 @@ class Feed
     (@feeds && @feeds[name])
   end
 
+  def self.feeds
+    @feeds || {}
+  end
+
   # Temporary compatibility stuff
   # TODO: remove these
   def self.method_missing(name, *args)
