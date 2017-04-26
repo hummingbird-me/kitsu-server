@@ -3,9 +3,13 @@ class MyAnimeListListWorker
 
   def perform(linked_account_id, user_id)
     kitsu_library(user_id).each do |library_entry|
-      log = create_log(library_entry, linked_account_id)
-      sync = MyAnimeListSyncService.new(library_entry, 'create', log)
-      sync.execute_method
+      begin
+        log = create_log(library_entry, linked_account_id)
+        sync = MyAnimeListSyncService.new(library_entry, 'create', log)
+        sync.execute_method
+      rescue Exception => exception
+        Raven.capture_exception(exception)
+      end
     end
   end
 
