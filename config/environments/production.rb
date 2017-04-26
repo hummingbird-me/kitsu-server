@@ -83,4 +83,7 @@ Rails.application.configure do
 
   # Enable Rack-Attack middleware
   config.middleware.insert_after ActionDispatch::RemoteIp, Rack::Attack
+  
+  # Configure probes for Skylight
+  config.skylight.probes += %w[redis elasticsearch]
 end
