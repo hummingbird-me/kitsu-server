@@ -2,12 +2,20 @@ class MyAnimeListListWorker
   include Sidekiq::Worker
 
   def perform(linked_account_id, user_id)
-    kitsu_library(user_id).each do |library_entry|
+    # Create the logs
+    logs = kitsu_library(user_id).map do |le|
+      [le, create_log(le, linked_account_id)]
+    end
+    # Generate the syncs
+    syncs = logs.map do |(library_entry, log)|
+      MyAnimeListSyncService.new(library_entry, 'create', log)
+    end
+    # Run the syncs
+    syncs.each do |sync|
+      # Suppress errors and keep going, we want to 
       begin
-        log = create_log(library_entry, linked_account_id)
-        sync = MyAnimeListSyncService.new(library_entry, 'create', log)
         sync.execute_method
-      rescue Exception => exception
+      rescue StandardError => exception
         Raven.capture_exception(exception)
       end
     end
