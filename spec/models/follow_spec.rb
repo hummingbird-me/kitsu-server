@@ -36,55 +36,16 @@ RSpec.describe Follow, type: :model do
     .counter_cache(:followers_count).touch(true) }
   it { should validate_presence_of(:followed) }
 
-  it "should add posts follow to follower's timeline on save" do
+  it "should add follow to follower's timeline on create" do
     expect(subject.follower.timeline).to receive(:follow)
-      .with(subject.followed.posts_feed)
+      .with(subject.followed.profile_feed)
     subject.save!
   end
 
-  it "should add media follow to follower's timeline on save" do
-    expect(subject.follower.timeline).to receive(:follow)
-      .with(subject.followed.media_feed)
-    subject.save!
-  end
-
-  it "should add follow to follower's posts timeline on save" do
-    expect(subject.follower.posts_timeline).to receive(:follow)
-      .with(subject.followed.posts_feed)
-    subject.save!
-  end
-
-  it "should add follow to follower's media timeline on save" do
-    expect(subject.follower.media_timeline).to receive(:follow)
-      .with(subject.followed.media_feed)
-    subject.save!
-  end
-
-  it "should remove posts follow on follower's timeline on destroy" do
+  it "should remove follow from follower's timeline on destroy" do
     subject.save!
     expect(subject.follower.timeline).to receive(:unfollow)
-      .with(subject.followed.posts_feed)
-    subject.destroy!
-  end
-
-  it "should remove media follow on follower's timeline on destroy" do
-    subject.save!
-    expect(subject.follower.timeline).to receive(:unfollow)
-      .with(subject.followed.media_feed)
-    subject.destroy!
-  end
-
-  it "should remove follow on follower's posts timeline on destroy" do
-    subject.save!
-    expect(subject.follower.posts_timeline).to receive(:unfollow)
-      .with(subject.followed.posts_feed)
-    subject.destroy!
-  end
-
-  it "should remove follow on follower's media timeline on destroy" do
-    subject.save!
-    expect(subject.follower.media_timeline).to receive(:unfollow)
-      .with(subject.followed.media_feed)
+      .with(subject.followed.profile_feed)
     subject.destroy!
   end
 
@@ -96,7 +57,7 @@ RSpec.describe Follow, type: :model do
   end
 
   it "should generate an activity on the followers' aggregated feed" do
-    follower_feed = subject.follower.aggregated_feed
+    follower_feed = subject.follower.feed.no_fanout
     expect(subject.stream_activity.feed).to eq(follower_feed)
   end
 

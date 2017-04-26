@@ -102,71 +102,17 @@ RSpec.shared_examples 'media' do
     end
   end
 
-  describe '#posts_feed' do
-    it 'returns a posts feed for the media' do
-      expect(subject.posts_feed)
-        .to eq(Feed.media_posts(described_class, subject.id))
-    end
-  end
-
-  describe '#media_feed' do
-    it 'returns a media feed for the media' do
-      expect(subject.media_feed)
-        .to eq(Feed.media_media(described_class, subject.id))
-    end
-  end
-
-  describe '#aggregated_feed' do
-    it 'returns a general aggregated feed for the media' do
-      expect(subject.aggregated_feed)
-        .to eq(Feed.media_aggr(described_class, subject.id))
-    end
-  end
-
-  describe '#posts_aggregated_feed' do
-    it 'returns a posts aggregated feed for the media' do
-      expect(subject.posts_aggregated_feed)
-        .to eq(Feed.media_posts_aggr(described_class, subject.id))
-    end
-  end
-
-  describe '#media_aggregated_feed' do
-    it 'returns a media aggregated feed for the media' do
-      expect(subject.media_aggregated_feed)
-        .to eq(Feed.media_media_aggr(described_class, subject.id))
+  describe '#feed' do
+    it 'returns a feed for the media' do
+      expect(subject.feed).to be_a(Feed::MediaFeed)
     end
   end
 
   describe 'after creating' do
-    context 'setting up media feed' do
-      let(:aggregated_feed) { double(:feed).as_null_object }
-
-      before do
-        allow(subject).to receive(:aggregated_feed).and_return(aggregated_feed)
-      end
-
-      it 'sets the aggregated feed to follow the posts feed' do
-        expect(subject.aggregated_feed)
-          .to receive(:follow).with(subject.posts_feed)
-        subject.save!
-      end
-
-      it 'sets the aggregated feed to follow the media feed' do
-        expect(subject.aggregated_feed)
-          .to receive(:follow).with(subject.media_feed)
-        subject.save!
-      end
-    end
-
-    it 'sets the aggregated posts feed to follow the posts feed' do
-      expect(subject.posts_aggregated_feed)
-        .to receive(:follow).with(subject.posts_feed)
-      subject.save!
-    end
-
-    it 'sets the aggregated media feed to follow the media feed' do
-      expect(subject.media_aggregated_feed)
-        .to receive(:follow).with(subject.media_feed)
+    it 'calls #setup! on the feed' do
+      feed = double(:feed).as_null_object
+      allow(subject).to receive(:feed).and_return(feed)
+      expect(subject.feed).to receive(:setup!)
       subject.save!
     end
   end

@@ -53,11 +53,13 @@ RSpec.describe Review, type: :model do
 
   describe '#steam_activity' do
     it 'publishes the activity to the user\'s media feed' do
-      expect(subject.stream_activity.feed).to eq(subject.user.media_feed)
+      expect(subject.stream_activity.feed).to eq(subject.user.profile_feed)
     end
 
     it 'copies the activity to the media\'s media feed' do
-      expect(subject.stream_activity[:to]).to include(subject.media.media_feed)
+      expect(subject.stream_activity[:to]).to(
+        include(subject.media.profile_feed)
+      )
     end
   end
 end

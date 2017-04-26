@@ -45,7 +45,7 @@ RSpec.describe Feed, type: :model do
     it 'should call on stream_feed.unfollow' do
       target_feed = Feed::MediaFeed.new('Anime', '7')
       stream_feed = feed.send(:stream_feed)
-      expect(stream_feed).to receive(:unfollow).with(['media', '7'])
+      expect(stream_feed).to receive(:unfollow)
       feed.unfollow(target_feed)
     end
   end

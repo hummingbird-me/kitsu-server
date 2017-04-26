@@ -166,7 +166,7 @@ class Feed
   def default_auto_follows
     return unless _feed_type == :aggregated
     base_follow = { source: stream_feed, target: stream_activity_target }
-    filter_follows = _filters.map do |filter|
+    filter_follows = _filters.map do |filter, options|
       {
         source: Feed::StreamFeed.new({
           type: :aggregated,

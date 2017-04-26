@@ -5,6 +5,7 @@ class Feed
 
     def no_fanout
       @no_fanout = true
+      self
     end
 
     def stream_activity_target(opts = {})

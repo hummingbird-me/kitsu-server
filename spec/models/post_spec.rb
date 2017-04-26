@@ -63,7 +63,7 @@ RSpec.describe Post, type: :model do
     let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
 
     it 'should have an activity with media\'s posts feed in "to" list' do
-      expect(activity[:to]).to include(media.posts_feed.stream_id)
+      expect(activity[:to]).to include(media.feed.stream_id)
     end
   end
 
@@ -90,8 +90,8 @@ RSpec.describe Post, type: :model do
     let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
 
     describe '#stream_activity' do
-      it "should have the target user's aggregated posts feed as the target" do
-        expect(subject.stream_activity.feed).to eq(user.posts_aggregated_feed)
+      it "should have the target user's feed as the target" do
+        expect(subject.stream_activity.feed).to eq(user.feed)
       end
 
       it "should have the target user's notifications in the to field" do

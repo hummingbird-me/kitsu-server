@@ -27,7 +27,7 @@ class Follow < ApplicationRecord
   validates :followed, uniqueness: { scope: :follower_id }
 
   def stream_activity
-    follower.aggregated_feed.activities.new(
+    follower.profile_feed.no_fanout.activities.new(
       actor: follower,
       followed: followed,
       to: [followed.notifications]
@@ -39,19 +39,11 @@ class Follow < ApplicationRecord
   end
   validate :validate_not_yourself
 
-  after_create do
-    follower.timeline.follow(followed.posts_feed)
-    follower.timeline.follow(followed.media_feed)
-    follower.posts_timeline.follow(followed.posts_feed)
-    follower.media_timeline.follow(followed.media_feed)
+  # Set up follows in Stream
+  after_commit(on: :create) { follower.timeline.follow(followed.profile_feed) }
+  after_commit(on: :destroy) do
+    follower.timeline.unfollow(followed.profile_feed)
   end
-
-  after_destroy do
-    follower.timeline.unfollow(followed.posts_feed)
-    follower.timeline.unfollow(followed.media_feed)
-    follower.posts_timeline.unfollow(followed.posts_feed)
-    follower.media_timeline.unfollow(followed.media_feed)
-  end
-
+  # Update onboarding
   after_create { follower.update_feed_completed! }
 end
