@@ -68,6 +68,7 @@ gem 'rack-timeout'
 gem 'fast_blank' # Faster String#blank?
 gem 'oj' # Blazing-fast JSON parsing
 gem 'oj_mimic_json' # Hook it in place of JSON gem
+gem "skylight"
 
 gem 'sentry-raven' # Send error data to Sentry
 
