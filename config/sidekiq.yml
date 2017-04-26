@@ -6,7 +6,7 @@ production:
   - [default, 2]
   - [mailers, 1]
   - [paperclip, 1]
-schedule:
+:schedule:
   CounterCacheResetWorker:
     every: 12h
   AverageRatingUpdateWorker:
