@@ -57,7 +57,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
 
   # Anime
   config.model 'Anime' do
-    list { field :id }
+    field :id
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
     field :abbreviated_titles, :serialized do
       html_attributes rows: '6', cols: '70'
@@ -76,7 +76,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('AnimeStaff') { parent Anime }
   # Manga
   config.model 'Manga' do
-    list { field :id }
+    field :id
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
     field :abbreviated_titles, :serialized do
       html_attributes rows: '6', cols: '70'
@@ -94,8 +94,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('MangaStaff') { parent Manga }
   config.model 'Chapter' do
     parent Manga
-    list { field :id }
-    field :manga
+    fields :id, :manga
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
     fields :canonical_title, :number, :synopsis, :published, :volume_number,
       :length
@@ -104,7 +103,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
   # Drama
   config.model 'Drama' do
-    list { field :id }
+    field :id
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
     field :abbreviated_titles, :serialized do
       html_attributes rows: '6', cols: '70'
@@ -138,8 +137,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
 
   # Users
   config.model 'User' do
-    list { field :id }
-    fields :name, :email, :about, :avatar, :cover_image
+    fields :id, :name, :email, :about, :avatar, :cover_image
     include_all_fields
     exclude_fields :password_digest, :remember_created_at, :current_sign_in_at,
       :last_sign_in_at, :recommendations_up_to_date, :facebook_id, :twitter_id,
@@ -167,8 +165,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('Comment') { parent Post }
 
   config.model 'Mapping' do
-    list { field :id }
-    field :media
+    fields :id, :media
     field(:external_id) { label 'External ID' }
     field :external_site, :enum do
       enum do
@@ -187,8 +184,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
 
   config.model 'Episode' do
-    list { field :id }
-    field :media
+    fields :id, :media
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
     fields :canonical_title, :number, :season_number, :synopsis, :airdate,
       :length, :thumbnail
