@@ -42,6 +42,10 @@ class Feed
       "#{@group}:#{@id}"
     end
 
+    def self.client
+      StreamRails.client
+    end
+
     private
 
     def client

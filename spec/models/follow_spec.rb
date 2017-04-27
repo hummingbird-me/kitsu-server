@@ -57,7 +57,7 @@ RSpec.describe Follow, type: :model do
   end
 
   it "should generate an activity on the followers' aggregated feed" do
-    follower_feed = subject.follower.feed.no_fanout
+    follower_feed = subject.follower.profile_feed.no_fanout
     expect(subject.stream_activity.feed).to eq(follower_feed)
   end
 

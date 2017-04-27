@@ -149,7 +149,7 @@ class Feed
     #
     # @attr [Feed::Activity,#as_json] activity The activity to add to the feed
     def update(activity)
-      Feed.client.update_activity(activity.as_json)
+      Feed::StreamFeed.client.update_activity(activity.as_json)
     end
 
     # Destroy an activity by foreign_id, uuid, or Activity instance

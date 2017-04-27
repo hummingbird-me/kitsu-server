@@ -69,7 +69,7 @@ class Feed
       def enrich(activities, includes)
         feed = opts[:feed]
         enricher = StreamRails::Enrich.new(includes)
-        if feed.aggregated? || feed.notification?
+        if feed.aggregated?
           enricher.enrich_aggregated_activities(activities)
         else
           enricher.enrich_activities(activities)

@@ -12,7 +12,7 @@ RSpec.describe Feed, type: :model do
   describe '#activities' do
     it 'should return an ActivityList for the feed' do
       expect(feed.activities).to be_an(Feed::ActivityList)
-      expect(feed.activities.feed.owner_feed).to eq(feed)
+      expect(feed.activities.feed).to eq(feed)
     end
   end
 

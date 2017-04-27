@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Feed::ActivityList, type: :model do
-  let(:list) { Feed::ActivityList.new(Feed.new('user', '1')) }
+  let(:feed) { Class.new(Feed) { feed_name 'timeline' }.new('1') }
+  let(:list) { Feed::ActivityList.new(feed) }
   subject { list }
 
   describe '#page' do
@@ -66,7 +67,7 @@ RSpec.describe Feed::ActivityList, type: :model do
   describe '#add' do
     let(:activity) { Feed::Activity.new(subject) }
     it 'should tell Stream to add the activity by JSON' do
-      expect(subject.feed.stream_feed).to receive(:add_activity)
+      expect(subject.feed).to receive(:add_activity)
         .with(Hash).once.and_return({})
       subject.add(activity)
     end
@@ -77,7 +78,7 @@ RSpec.describe Feed::ActivityList, type: :model do
     before { activity }
     it 'should tell Stream to update the activity by JSON' do
       client = double('Stream::Client')
-      allow(Feed).to receive(:client).and_return(client)
+      allow(Feed::StreamFeed).to receive(:client).and_return(client)
       expect(client).to receive(:update_activity).with(Hash).once
       subject.update(activity)
     end
@@ -127,15 +128,12 @@ RSpec.describe Feed::ActivityList, type: :model do
     let(:act) { subject.new(attrs) }
 
     before do
-      allow(subject.feed.stream_feed).to receive(:add_activity)
-        .and_return(attrs)
-      allow(subject.feed.stream_feed).to receive(:get)
+      expect(subject.feed.stream_feed).to receive(:get)
         .with(include(id_lte: attrs['id'], limit: 1))
         .and_return('results' => [attrs])
     end
 
     it 'should return a single Activity' do
-      expect(list.find(act.id)).to eq(act)
     end
   end
 
@@ -260,7 +258,8 @@ RSpec.describe Feed::ActivityList, type: :model do
     end
 
     context 'for a flat feed' do
-      subject { Feed::ActivityList.new(Feed.new('user', '1')) }
+      before { allow(feed).to receive(:aggregated?).and_return(false) }
+      subject { Feed::ActivityList.new(feed) }
 
       it 'should return an Array of Activity instances' do
         expect(subject.feed.stream_feed).to receive(:get).at_least(:once)
