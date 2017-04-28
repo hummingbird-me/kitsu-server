@@ -38,8 +38,7 @@ class PostLike < ApplicationRecord
     user.update_feed_completed!
     PostFollow.create(
       user: user,
-      post: post,
-      activated: true
+      post: post
     )
   end
 end

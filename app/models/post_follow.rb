@@ -3,7 +3,6 @@
 # Table name: post_follows
 #
 #  id         :integer          not null, primary key
-#  activated  :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  post_id    :integer          indexed
@@ -27,27 +26,11 @@ class PostFollow < ActiveRecord::Base
 
   validates :post, uniqueness: { scope: :user_id }
 
-  def changed_status?
-    @changed_status == true
-  end
-
-  before_save do 
-  	@changed_status = :activated_changed
-  end
-
-  after_save do
-  	if changed_status?
-	  	if self.activated?
-	  	  user.notifications.follow(post.feed)
-	  	else
-	  	  user.notifications.unfollow(post.feed)
-	  	end
-	end
+  after_create do
+  	user.notifications.follow(post.feed)
   end
 
   after_destroy do
-  	if self.activated?
-  	  user.notifications.unfollow(post.feed)
-    end
+  	user.notifications.unfollow(post.feed)
   end
 end

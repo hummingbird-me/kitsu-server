@@ -3,7 +3,6 @@
 # Table name: post_follows
 #
 #  id         :integer          not null, primary key
-#  activated  :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  post_id    :integer          indexed

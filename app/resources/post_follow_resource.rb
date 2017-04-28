@@ -1,10 +1,6 @@
 class PostFollowResource < BaseResource
-  attributes :activated, :created_at, :updated_at
-
-  def self.updatable_fields(context)
-    super - [:user, :post]
-  end
-
+  attributes :created_at, :updated_at
+  
   has_one :post
   has_one :user
 

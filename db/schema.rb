@@ -857,7 +857,6 @@ ActiveRecord::Schema.define(version: 20170426123432) do
     t.datetime "updated_at", null: false
     t.integer  "user_id"
     t.integer  "post_id"
-    t.boolean  "activated"
   end
 
   add_index "post_follows", ["post_id"], name: "index_post_follows_on_post_id", using: :btree

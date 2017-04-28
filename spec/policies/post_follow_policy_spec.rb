@@ -7,9 +7,8 @@ RSpec.describe PostFollowPolicy do
   subject { described_class }
 
   permissions :update? do
-    it('should allow for yourself') { should permit(user, follow) }
-    it('should not allow anons') { should_not permit(nil, follow) }
-    it('should not allow for others') { should_not permit(user, other) }
+    it('should not allow users') { should_not permit(user, follow) }
+    it('should not allow anons') { should_not permit(nil, like) }
   end
 
   permissions :create?, :destroy? do

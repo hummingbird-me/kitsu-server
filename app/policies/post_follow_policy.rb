@@ -3,7 +3,7 @@ class PostFollowPolicy < ApplicationPolicy
     record.user == user
   end
   def update?
-    record.user == user
+    false
   end
   alias_method :destroy?, :create?
 end
