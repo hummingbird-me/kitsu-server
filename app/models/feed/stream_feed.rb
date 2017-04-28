@@ -13,8 +13,17 @@ class Feed
       @owner_feed = owner_feed
     end
 
-    def activities
+    def activities(*)
       ActivityList.new(self)
+    end
+
+    def aggregated?
+      %w[notifications timeline global].include?(@group) ||
+        @group.end_with?('_aggr')
+    end
+
+    def stream_feed
+      self
     end
 
     def get(*args)

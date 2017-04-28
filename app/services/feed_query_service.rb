@@ -31,7 +31,7 @@ class FeedQueryService
   def feed
     if split_feeds?
       return @feed if @feed
-      feed_name = params[:group].split('_').first
+      feed_name = params[:group].sub(/_aggr\z/, '')
       @feed = Feed.class_for(feed_name).new(params[:id])
     else
       # Just use the basic SreamFeed class for the old system
