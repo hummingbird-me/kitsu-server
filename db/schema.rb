@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170411042333) do
+ActiveRecord::Schema.define(version: 20170426123432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -606,7 +606,6 @@ ActiveRecord::Schema.define(version: 20170411042333) do
     t.text     "error_message"
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
-    t.integer  "day"
   end
 
   add_index "library_entry_logs", ["linked_account_id"], name: "index_library_entry_logs_on_linked_account_id", using: :btree
@@ -852,6 +851,17 @@ ActiveRecord::Schema.define(version: 20170411042333) do
 
   add_index "people", ["mal_id"], name: "index_people_on_mal_id", unique: true, using: :btree
   add_index "people", ["mal_id"], name: "person_mal_id", unique: true, using: :btree
+
+  create_table "post_follows", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+    t.integer  "post_id"
+    t.boolean  "activated"
+  end
+
+  add_index "post_follows", ["post_id"], name: "index_post_follows_on_post_id", using: :btree
+  add_index "post_follows", ["user_id"], name: "index_post_follows_on_user_id", using: :btree
 
   create_table "post_likes", force: :cascade do |t|
     t.integer  "post_id",    null: false
@@ -1259,6 +1269,8 @@ ActiveRecord::Schema.define(version: 20170411042333) do
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
   add_foreign_key "media_follows", "users"
+  add_foreign_key "post_follows", "posts"
+  add_foreign_key "post_follows", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "profile_links", "profile_link_sites"
