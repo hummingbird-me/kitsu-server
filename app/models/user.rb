@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -52,6 +51,7 @@
 #  previous_email              :string
 #  pro_expires_at              :datetime
 #  profile_completed           :boolean          default(FALSE), not null
+#  rating_system               :integer          default(0), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
@@ -62,6 +62,7 @@
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
+#  theme                       :integer          default(0), not null
 #  time_zone                   :string
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
@@ -87,7 +88,6 @@
 #
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
-# rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
   include WithCoverImage
@@ -129,6 +129,7 @@ class User < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :comment_likes, dependent: :destroy
   has_many :post_likes, dependent: :destroy
+  has_many :post_follows, dependent: :destroy
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
   has_many :group_members, dependent: :destroy

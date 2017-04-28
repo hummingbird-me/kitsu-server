@@ -87,5 +87,13 @@ class Comment < ApplicationRecord
     true
   end
 
-  after_create { user.update_feed_completed! }
+  after_create do 
+    user.update_feed_completed!
+    PostFollow.create(
+      user: user,
+      post: post,
+      activated: true
+    )
+  end
+    
 end
