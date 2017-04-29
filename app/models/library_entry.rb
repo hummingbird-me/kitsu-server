@@ -174,8 +174,11 @@ class LibraryEntry < ApplicationRecord
           # When marked completed, we try to update progress to the cap
           self.progress = media.progress_limit
         end
-        # When marked completed and started_at exists finished_at doesn't
-        self.finished_at = Time.now if started_at? && !finished_at
+        # When marked completed and finished_at doesn't exist
+        unless finished_at?
+          self.finished_at = Time.now
+          self.started_at = Time.now unless started_at?
+        end
       elsif current? && !started_at?
         # When marked current and started_at doesn't exist
         self.started_at = Time.now
