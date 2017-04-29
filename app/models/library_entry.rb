@@ -17,7 +17,7 @@
 #  status          :integer          not null, indexed => [user_id]
 #  time_spent      :integer          default(0), not null
 #  volumes_owned   :integer          default(0), not null
-#  watched_at      :datetime
+#  consumed_at      :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  anime_id        :integer          indexed
@@ -187,7 +187,7 @@ class LibraryEntry < ApplicationRecord
       # When in current and progress equals total episodes
       self.status = :completed
     end
-    self.watched_at = Time.now if progress_changed?
+    self.consumed_at = Time.now if progress_changed?
   end
 
   after_save do

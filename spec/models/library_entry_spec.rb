@@ -136,11 +136,11 @@ RSpec.describe LibraryEntry, type: :model do
 
   describe 'timestamp validation' do
     let(:anime) { build(:anime) }
-    context 'watched_at validation' do
-      it 'should set watched_at when progress is changed' do
+    context 'consumed_at validation' do
+      it 'should set consumed_at when progress is changed' do
         library_entry = build(:library_entry, media: anime, progress: 1)
         library_entry.save!
-        expect(library_entry.watched_at).to be_present
+        expect(library_entry.consumed_at).to be_present
       end
     end
     context 'started_at validation' do
