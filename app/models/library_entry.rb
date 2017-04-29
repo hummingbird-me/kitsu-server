@@ -4,6 +4,7 @@
 # Table name: library_entries
 #
 #  id              :integer          not null, primary key
+#  finished_at      :datetime
 #  media_type      :string           not null, indexed => [user_id], indexed => [user_id, media_id]
 #  notes           :text
 #  nsfw            :boolean          default(FALSE), not null
@@ -12,9 +13,11 @@
 #  rating          :integer
 #  reconsume_count :integer          default(0), not null
 #  reconsuming     :boolean          default(FALSE), not null
+#  started_at      :datetime
 #  status          :integer          not null, indexed => [user_id]
 #  time_spent      :integer          default(0), not null
 #  volumes_owned   :integer          default(0), not null
+#  watched_at      :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  anime_id        :integer          indexed
@@ -165,13 +168,23 @@ class LibraryEntry < ApplicationRecord
   end
 
   before_save do
-    if status_changed? && completed? && media&.progress_limit
-      # When marked completed, we try to update progress to the cap
-      self.progress = media.progress_limit
-    elsif !status_changed? && progress == media&.progress_limit
+    if status_changed?
+      if completed?
+        if media&.progress_limit
+          # When marked completed, we try to update progress to the cap
+          self.progress = media.progress_limit
+        end
+        # When marked completed and started_at exists finished_at doesn't
+        self.finished_at = Time.now if started_at? && !finished_at
+      elsif current? && !started_at?
+        # When marked current and started_at doesn't exist
+        self.started_at = Time.now
+      end
+    elsif progress == media&.progress_limit
       # When in current and progress equals total episodes
       self.status = :completed
     end
+    self.watched_at = Time.now if progress_changed?
   end
 
   after_save do
