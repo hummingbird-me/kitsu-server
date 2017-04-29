@@ -56,6 +56,7 @@ class Comment < ApplicationRecord
 
   def stream_activity
     to = []
+    to += mentioned_users.map(&:notifications)
     to += post.other_feeds
     to += post.target_timelines
     to << post.target_feed
@@ -69,11 +70,6 @@ class Comment < ApplicationRecord
       target: post,
       to: to - [user.notifications]
     )
-  end
-
-  def notification_users
-    users = [user]
-    users += mentioned_users
   end
 
   def mentioned_users
@@ -91,12 +87,10 @@ class Comment < ApplicationRecord
 
   after_create do 
     user.update_feed_completed!
-    notification_users.each do |u|
-      PostFollow.create(
-        user: u,
-        post: post
-      )
-    end
+    PostFollow.create(
+      user: user,
+      post: post
+    )
   end
     
 end

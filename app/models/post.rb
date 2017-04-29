@@ -76,10 +76,11 @@ class Post < ApplicationRecord
     [media&.feed].compact
   end
 
-  def notified_users
-    users = [target_user]
-    users += mentioned_users
-    users.compact - [user]
+  def notified_feeds
+    [
+      target_user&.notifications,
+      *mentioned_users.map(&:notifications)
+    ].compact - [user.notifications]
   end
 
   def target_feed
@@ -104,7 +105,7 @@ class Post < ApplicationRecord
       post_likes_count: post_likes_count,
       comments_count: comments_count,
       nsfw: nsfw,
-      to: other_feeds + target_timelines
+      to: other_feeds + notified_feeds + target_timelines
     )
   end
 
@@ -128,13 +129,6 @@ class Post < ApplicationRecord
     media.trending_vote(user, 2.0) if media.present?
     if target_group.present?
       GroupUnreadFanoutWorker.perform_async(target_group_id, user_id)
-    end
-
-    notified_users.each do |u|
-      PostFollow.create(
-        user: u,
-        post: self
-      )
     end
   end
 end
