@@ -27,10 +27,10 @@ class PostFollow < ActiveRecord::Base
   validates :post, uniqueness: { scope: :user_id }
 
   after_create do
-  	user.notifications.follow(post.comments_feed)
+    user.notifications.follow(post.comments_feed)
   end
 
   after_destroy do
-  	user.notifications.unfollow(post.comments_feed)
+    user.notifications.unfollow(post.comments_feed)
   end
 end
