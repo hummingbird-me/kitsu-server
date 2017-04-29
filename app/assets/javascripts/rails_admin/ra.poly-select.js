@@ -1,5 +1,5 @@
 (function($) {
-  $.widget("ra.filteringSelect", {
+  $.widget("ra.polySelect", {
     options: {
       createQuery: function(query) {
         return { query: query };
@@ -32,7 +32,7 @@
       } else {
         float_style = "none";
       }
-      var filtering_select = $('<div class="input-group filtering-select col-sm-2" style="float: ' + float_style + ' "></div>');
+      var poly_select = $('<div class="input-group filtering-select col-sm-2" style="float: ' + float_style + ' "></div>');
 
       var input = this.input = $('<input type="text">')
         .val(value)
@@ -99,7 +99,7 @@
           input.focus();
         });
 
-      filtering_select.append(input).append(button).insertAfter(select);
+      poly_select.append(input).append(button).insertAfter(select);
     },
 
     _getResultSet: function(request, data, xhr) {

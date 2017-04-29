@@ -75,6 +75,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       else
         $(this).parents('.control-group').first().remoteForm()
 
+    # poly-select
+
+    content.find('[data-polyselect]').each ->
+      $(this).polySelect $(this).data('options')
+      $(this).parents('.control-group').first().remoteForm()
+
     # nested-many
 
     content.find('[data-nestedmany]').each ->
@@ -148,8 +154,8 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       type_select.on 'change', (e) ->
         object_select.data('options',
           $("##{type_select.val().toLowerCase()}-js-options").data('options'))
-        object_select.filteringSelect("destroy")
-        object_select.filteringSelect object_select.data('options')
+        object_select.polySelect("destroy")
+        object_select.polySelect object_select.data('options')
 
         if $(this).val() is ''
           object_select.html('<option value=""></option>')
