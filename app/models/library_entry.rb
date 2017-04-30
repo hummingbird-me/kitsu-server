@@ -168,21 +168,20 @@ class LibraryEntry < ApplicationRecord
   end
 
   before_save do
-    # When marked completed, we try to update progress to the cap
-    if status_changed? && completed? && media&.progress_limit
-      self.progress = media.progress_limit
+    if status_changed? && completed?
+      # update progress to the cap
+      self.progress = media.progress_limit if media&.progress_limit
+      # set finished_at and started_at for the first consume
+      self.finished_at ||= Time.now
+      self.started_at ||= Time.now
     end
-    # When in current and progress equals total episodes
+
+    # When progress equals total episodes
     self.status = :completed if progress == media&.progress_limit
     # When progress is changed, update consumed_at
     self.consumed_at = Time.now if progress_changed?
-    # When marked completed and finished_at doesn't exist
-    if status_changed? && completed? && !finished_at
-      self.finished_at = Time.now
-      self.started_at = Time.now unless started_at?
-    end
     # When marked current and started_at doesn't exist
-    self.started_at = Time.now if current? && !started_at?
+    self.started_at ||= Time.now if current?
   end
 
   after_save do

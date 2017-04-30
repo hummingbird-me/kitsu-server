@@ -135,23 +135,20 @@ RSpec.describe LibraryEntry, type: :model do
   end
 
   describe 'timestamp validation' do
-    let(:anime) { build(:anime) }
+    let!(:anime) { create(:anime) }
+    let!(:library_entry) do
+      create(:library_entry, media: Anime.last, status: :current, progress: 1)
+    end
     context 'consumed_at validation' do
       it 'should set consumed_at when progress is changed' do
-        library_entry = build(:library_entry, media: anime, progress: 1)
-        library_entry.save!
         expect(library_entry.consumed_at).to be_present
       end
     end
     context 'started_at validation' do
       it 'should set started_at when status is current' do
-        library_entry = build(:library_entry, media: anime, status: :current)
-        library_entry.save!
         expect(library_entry.started_at).to be_present
       end
       it 'should not change started_at' do
-        library_entry = build(:library_entry, media: anime, status: :current)
-        library_entry.save!
         started_at = library_entry.started_at
         library_entry.status = :on_hold
         library_entry.save!
@@ -161,15 +158,14 @@ RSpec.describe LibraryEntry, type: :model do
       end
     end
     context 'finished_at validation' do
+      let!(:library_entry) do
+        create(:library_entry, media: Anime.last, status: :completed)
+      end
       it 'should set finished_at and started_at when status is completed' do
-        library_entry = build(:library_entry, media: anime, status: :completed)
-        library_entry.save!
         expect(library_entry.finished_at).to be_present
         expect(library_entry.started_at).to be_present
       end
       it 'should not change finished_at' do
-        library_entry = build(:library_entry, media: anime, status: :completed)
-        library_entry.save!
         finished_at = library_entry.finished_at
         library_entry.status = :current
         library_entry.save!
