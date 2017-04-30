@@ -1,11 +1,13 @@
+require 'update_in_batches'
+
 class BackfillLibraryTimestamps < ActiveRecord::Migration
+  using UpdateInBatches
+  self.disable_ddl_transaction!
 
   def change
-    LibraryEntry.where("progress > 0").find_in_batches do |batch|
-      batch.each do |entry|
-        entry.update(consumed_at: entry.updated_at)
-        entry.update(finished_at: entry.updated_at) if entry.completed?
-      end
-    end
+    LibraryEntry.where("progress > 0").update_in_batches(<<-SQL)
+      consumed_at = updated_at,
+      finished_at = CASE WHEN status = #{LibraryEntry.statuses[:completed]} THEN updated_at END
+    SQL
   end
 end
