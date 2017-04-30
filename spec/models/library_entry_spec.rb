@@ -158,14 +158,15 @@ RSpec.describe LibraryEntry, type: :model do
       end
     end
     context 'finished_at validation' do
-      let!(:library_entry) do
-        create(:library_entry, media: Anime.last, status: :completed)
-      end
       it 'should set finished_at and started_at when status is completed' do
+        library_entry =
+          create(:library_entry, media: Anime.last, status: :completed)
         expect(library_entry.finished_at).to be_present
         expect(library_entry.started_at).to be_present
       end
       it 'should not change finished_at' do
+        library_entry =
+          create(:library_entry, media: Anime.last, status: :completed)
         finished_at = library_entry.finished_at
         library_entry.status = :current
         library_entry.save!
