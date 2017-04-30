@@ -44,6 +44,11 @@ class Stat < ApplicationRecord
         # this shouldn't ever happen for decrement,
         # but rather safe than sorry
         return unless start_date
+        # if recalculate! isn't run, this will guard against a start_date
+        # not being present and will prevent any errors
+        # EXAMPLE: user adds library_entry for anime,
+        # then user deletes another anime.
+        return unless record.stats_data[start_date]
         # decrement year by 1
         record.stats_data[start_date] -= 1
         # decrement total by 1
