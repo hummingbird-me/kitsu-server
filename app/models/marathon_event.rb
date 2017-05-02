@@ -19,7 +19,6 @@
 # rubocop:enable Metrics/LineLength
 
 class MarathonEvent < ActiveRecord::Base
-  include WithActivity
   belongs_to :marathon, required: true
 
   enum event: %i[added updated consumed]
@@ -31,13 +30,4 @@ class MarathonEvent < ActiveRecord::Base
   delegate :library_entry, to: :marathon
   delegate :media, to: :library_entry
   delegate :user, to: :library_entry
-
-  def stream_activity
-    user.feed.activities.new(
-      updated_at: updated_at,
-      to: [media.feed],
-      verb: event.to_s,
-      status: status.to_s
-    )
-  end
 end

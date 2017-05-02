@@ -18,8 +18,10 @@ class Feed
         res = data
         res = apply_selects(res, opts[:fast_selects] || [])
         res = strip_unused(res)
-        res = enrich(res, opts[:includes] || [])
-        res = strip_unenriched(res, opts[:includes] || [])
+        unless opts[:includes].blank?
+          res = enrich(res, opts[:includes])
+          res = strip_unenriched(res, opts[:includes])
+        end
         res = apply_selects(res, opts[:slow_selects] || [])
         res = apply_maps(res, opts[:maps] || [])
         res = wrap(res)
@@ -33,7 +35,7 @@ class Feed
         return activities if selects.empty?
         # We use map+reject(blank) so that we can modify the activities in the
         # groups
-        activities = activities.lazy.map { |act|
+        activities = activities.lazy.map do |act|
           if act['activities'] # recurse into activity groups
             catch(:remove_group) do
               act['activities'] = apply_selects(act['activities'], selects)
@@ -43,10 +45,10 @@ class Feed
             next unless selects.all? { |proc| proc.call(act) }
             act
           end
-        }
-        activities = activities.reject { |act|
+        end
+        activities = activities.reject do |act|
           act.blank? || (act['activities'] && act['activities'].blank?)
-        }
+        end
         activities.to_a
       end
 
@@ -65,9 +67,8 @@ class Feed
 
       # Run it through the StreamRails::Enrich process
       def enrich(activities, includes)
-        feed = opts[:feed]
         enricher = StreamRails::Enrich.new(includes)
-        if feed.aggregated? || feed.notification?
+        if opts[:aggregated]
           enricher.enrich_aggregated_activities(activities)
         else
           enricher.enrich_activities(activities)
@@ -100,7 +101,7 @@ class Feed
               # If it's an array (nested enrichment), grab the top level
               key = key.first if key.is_a?(Array)
               # Delete if it's still a string
-              act.delete(key) if act[key].is_a?(String)
+              act.delete(key.to_s) if act[key.to_s].is_a?(String)
             end
           end
           act

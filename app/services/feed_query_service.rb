@@ -11,24 +11,41 @@ class FeedQueryService
 
   def list
     return @list if @list
-    list = feed.activities
+    list = if split_feeds?
+             feed.activities
+           else
+             feed.activities(filter: kind_filter)
+           end
     list = list.page(id_lt: cursor) if cursor
     list = list.per(limit) if limit
     list = list.where_id(*id_query) if id_query
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
     list = list.blocking(blocked)
-    list = list.select(kind_filter[:ratio], &kind_filter[:proc]) if kind_filter
+    if kind_select && !split_feeds?
+      list = list.select(kind_select[:ratio], &kind_select[:proc])
+    end
     @list = list
   end
 
   def feed
-    @feed ||= Feed.new(params[:group], params[:id])
+    if split_feeds?
+      return @feed if @feed
+      feed_name = params[:group].sub(/_aggr\z/, '')
+      @feed = Feed.class_for(feed_name).new(params[:id])
+    else
+      # Just use the basic SreamFeed class for the old system
+      @feed ||= Feed::StreamFeed.new(params[:group], params[:id])
+    end
   end
 
   private
 
   delegate :sfw_filter?, to: :user, allow_nil: true
+
+  def split_feeds?
+    params.key?(:_split_feeds)
+  end
 
   def cursor
     params.dig(:page, :cursor)
@@ -49,9 +66,12 @@ class FeedQueryService
   end
 
   def kind_filter
-    kind = params.dig(:filter, :kind)
+    params.dig(:filter, :kind)
+  end
+
+  def kind_select
     @kind_filter ||=
-      case kind
+      case kind_filter
       when 'media'
         {
           ratio: 0.8,

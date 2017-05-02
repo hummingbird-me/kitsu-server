@@ -6,7 +6,7 @@ RSpec.describe Feed::ActivityList::Page do
   let(:opts) { { feed: feed } }
 
   context 'on a flat feed' do
-    let(:feed) { Feed.user(1) }
+    let(:feed) { OpenStruct.new(:aggregated? => false) }
     let(:data) do
       [
         { nsfw: true, actor: user.stream_id },
@@ -69,7 +69,7 @@ RSpec.describe Feed::ActivityList::Page do
   end
 
   context 'on an aggregated feed' do
-    let(:feed) { Feed.user_aggr(1) }
+    let(:feed) { OpenStruct.new(:aggregated? => true) }
     let(:data) do
       [
         {

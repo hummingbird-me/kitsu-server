@@ -49,7 +49,7 @@ module Media
       content_type: %w[image/jpg image/jpeg image/png]
     }
 
-    after_create :follow_self
+    after_commit :setup_feed, on: :create
   end
 
   def slug_candidates
@@ -65,14 +65,10 @@ module Media
   end
 
   def feed
-    @feed ||= Feed.media(self.class.name, id)
+    @feed ||= Feed::MediaFeed.new(self.class.name, id)
   end
 
-  def aggregated_feed
-    @aggregated_feed ||= Feed.media_aggr(self.class.name, id)
-  end
-
-  def follow_self
-    aggregated_feed.follow(feed)
+  def setup_feed
+    feed.setup!
   end
 end

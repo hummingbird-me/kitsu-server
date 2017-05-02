@@ -2,8 +2,21 @@ module StreamSync
   module_function
 
   def follow_user_aggr
-    mass_follow('user_aggr', User.pluck(:id)) do |id|
-      { Feed.user_aggr(id) => Feed.user(id) }
+    ids = User.pluck(:id)
+    mass_follow('user_aggr', ids) do |id|
+      { Feed.user_aggr(id) => Feed.user_posts(id) }
+    end
+
+    mass_follow('user_aggr', ids) do |id|
+      { Feed.user_aggr(id) => Feed.user_media(id) }
+    end
+
+    mass_follow('user_posts_aggr', ids) do |id|
+      { Feed.user_posts_aggr(id) => Feed.user_posts(id) }
+    end
+
+    mass_follow('user_media_aggr', ids) do |id|
+      { Feed.user_media_aggr(id) => Feed.user_media(id) }
     end
   end
 
@@ -14,27 +27,82 @@ module StreamSync
   end
 
   def follow_timeline
-    mass_follow('timeline', User.pluck(:id)) do |id|
-      { Feed.timeline(id) => Feed.user(id) }
+    ids = User.pluck(:id)
+
+    mass_follow('timeline', ids) do |id|
+      { Feed.timeline(id) => Feed.user_posts(id) }
+    end
+
+    mass_follow('timeline', ids) do |id|
+      { Feed.timeline(id) => Feed.user_media(id) }
+    end
+
+    mass_follow('timeline_posts', ids) do |id|
+      { Feed.timeline_posts(id) => Feed.user_posts(id) }
+    end
+
+    mass_follow('timeline_media', ids) do |id|
+      { Feed.timeline_media(id) => Feed.user_media(id) }
     end
   end
 
   def follow_global
-    mass_follow('global', User.pluck(:id)) do |id|
-      { Feed.global => Feed.user(id) }
+    ids = User.pluck(:id)
+
+    mass_follow('global', ids) do |id|
+      { Feed.global => Feed.user_posts(id) }
+    end
+
+    mass_follow('global', ids) do |id|
+      { Feed.global => Feed.user_media(id) }
+    end
+
+    mass_follow('global_posts', ids) do |id|
+      { Feed.global_posts => Feed.user_posts(id) }
+    end
+
+    mass_follow('global_media', ids) do |id|
+      { Feed.global_media => Feed.user_media(id) }
     end
   end
 
   def follow_media_aggr(type)
-    mass_follow("media_aggr<#{type.name}>", type.pluck(:id)) do |id|
-      { Feed.media_aggr(type, id) => Feed.media(type, id) }
+    ids = type.pluck(:id)
+
+    mass_follow("media_aggr<#{type.name}>", ids) do |id|
+      { Feed.media_aggr(type, id) => Feed.media_posts(type, id) }
+    end
+
+    mass_follow("media_aggr<#{type.name}>", ids) do |id|
+      { Feed.media_aggr(type, id) => Feed.media_media(type, id) }
+    end
+
+    mass_follow("media_posts_aggr<#{type.name}>", ids) do |id|
+      { Feed.media_posts_aggr(type, id) => Feed.media_posts(type, id) }
+    end
+
+    mass_follow("media_media_aggr<#{type.name}>", ids) do |id|
+      { Feed.media_media_aggr(type, id) => Feed.media_media(type, id) }
     end
   end
 
   def follows
     follows = Follow.pluck(:follower_id, :followed_id)
+
     mass_follow('Follows', follows) do |follower_id, followed_id|
-      { Feed.timeline(follower_id) => Feed.user(followed_id) }
+      { Feed.timeline(follower_id) => Feed.user_posts(followed_id) }
+    end
+
+    mass_follow('Follows', follows) do |follower_id, followed_id|
+      { Feed.timeline(follower_id) => Feed.user_media(followed_id) }
+    end
+
+    mass_follow('Post Follows', follows) do |follower_id, followed_id|
+      { Feed.timeline_posts(follower_id) => Feed.user_posts(followed_id) }
+    end
+
+    mass_follow('Media Follows', follows) do |follower_id, followed_id|
+      { Feed.timeline_media(follower_id) => Feed.user_media(followed_id) }
     end
   end
 
@@ -98,7 +166,7 @@ module StreamSync
     follows.in_groups_of(800, false).each do |group|
       print '.'
       sleep 0.1
-      Feed.follow_many(group, scrollback: 0)
+      Feed.follow_many(group, scrollback: 300)
     end
     print "\n"
   end
