@@ -92,7 +92,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject { build(:user) }
+  subject { build(:user, id: 1) }
   let(:persisted_user) { create(:user) }
 
   it { should have_db_index(:facebook_id) }
@@ -185,6 +185,215 @@ RSpec.describe User, type: :model do
         subject.save
       end
       expect(subject.past_names[0]).to equal(subject.previous_name)
+    end
+  end
+
+  describe 'available feeds' do
+    it 'include a user posts feed' do
+      expect(subject.posts_feed).to eq(Feed.user_posts(subject.id))
+    end
+
+    it 'include a user media feed' do
+      expect(subject.media_feed).to eq(Feed.user_media(subject.id))
+    end
+
+    it 'include a user aggregated feed' do
+      expect(subject.aggregated_feed).to eq(Feed.user_aggr(subject.id))
+    end
+
+    it 'include a user posts aggregated feed' do
+      expect(subject.posts_aggregated_feed)
+        .to eq(Feed.user_posts_aggr(subject.id))
+    end
+
+    it 'include a user media aggregated feed' do
+      expect(subject.media_aggregated_feed)
+        .to eq(Feed.user_media_aggr(subject.id))
+    end
+
+    it 'include a timeline feed' do
+      expect(subject.timeline).to eq(Feed.timeline(subject.id))
+    end
+
+    it 'include a posts timeline feed' do
+      expect(subject.posts_timeline).to eq(Feed.timeline_posts(subject.id))
+    end
+
+    it 'include a media timeline feed' do
+      expect(subject.media_timeline).to eq(Feed.timeline_media(subject.id))
+    end
+
+    it 'include a notifications feed' do
+      expect(subject.notifications).to eq(Feed.notifications(subject.id))
+    end
+  end
+
+  describe 'after creation' do
+    before do
+      allow_any_instance_of(Feed).to receive(:follow)
+      allow_any_instance_of(Feed).to receive(:unfollow)
+    end
+
+    context 'setting up the aggregated feed follows' do
+      let(:aggregated_feed) { double(:feed).as_null_object }
+
+      before do
+        allow(subject).to receive(:aggregated_feed).and_return(aggregated_feed)
+      end
+
+      it 'sets user aggregated feed to follow the user posts feed' do
+        expect(subject.aggregated_feed)
+          .to receive(:follow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'sets user aggregated feed to follow the user media feed' do
+        expect(subject.aggregated_feed)
+          .to receive(:follow).with(subject.media_feed)
+        subject.save!
+      end
+    end
+
+    it 'sets user posts aggregated feed to follow the user posts feed' do
+      expect(subject.posts_aggregated_feed).to receive(:follow)
+        .with(subject.posts_feed)
+      subject.save!
+    end
+
+    it 'sets user media aggregated feed to follow the user media feed' do
+      expect(subject.media_aggregated_feed).to receive(:follow)
+        .with(subject.media_feed)
+      subject.save!
+    end
+
+    context 'setting up the timeline follows' do
+      let(:timeline) { double(:feed).as_null_object }
+
+      before do
+        allow(subject).to receive(:timeline).and_return(timeline)
+      end
+
+      it 'sets the timeline feed to follow the user posts feed' do
+        expect(subject.timeline).to receive(:follow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'sets the timeline feed to follow the user media feed' do
+        expect(subject.timeline).to receive(:follow).with(subject.media_feed)
+        subject.save!
+      end
+    end
+
+    it 'sets the posts timeline feed to follow the user posts feed' do
+      expect(subject.posts_timeline).to receive(:follow)
+        .with(subject.posts_feed)
+      subject.save!
+    end
+
+    it 'sets the media timeline feed to follow the user media feed' do
+      expect(subject.media_timeline).to receive(:follow)
+        .with(subject.media_feed)
+      subject.save!
+    end
+
+    context 'setting up global feeds' do
+      let(:global) { double(:feed).as_null_object }
+      let(:global_posts) { double(:feed).as_null_object }
+      let(:global_media) { double(:feed).as_null_object }
+
+      before do
+        allow(Feed).to receive(:global).and_return(global)
+        allow(Feed).to receive(:global_posts).and_return(global_posts)
+        allow(Feed).to receive(:global_media).and_return(global_media)
+      end
+
+      it 'sets the global feed to follow the user posts feed' do
+        expect(global).to receive(:follow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'sets the global feed to follow the user media feed' do
+        expect(global).to receive(:follow).with(subject.media_feed)
+        subject.save!
+      end
+
+      it 'sets the global posts feed to follow the user posts feed' do
+        expect(global_posts).to receive(:follow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'sets the global media feed to follow the user media feed' do
+        expect(global_media).to receive(:follow).with(subject.media_feed)
+        subject.save!
+      end
+    end
+  end
+
+  describe 'after updating' do
+    let(:global) { double(:feed).as_null_object }
+    let(:global_posts) { double(:feed).as_null_object }
+    let(:global_media) { double(:feed).as_null_object }
+
+    before do
+      allow(Feed).to receive(:global).and_return(global)
+      allow(Feed).to receive(:global_posts).and_return(global_posts)
+      allow(Feed).to receive(:global_media).and_return(global_media)
+    end
+
+    context 'when global sharing changes to true' do
+      before do
+        subject.share_to_global = false
+        subject.save!
+        subject.share_to_global = true
+      end
+
+      it 'sets the global feed to follow the user posts feed' do
+        expect(global).to receive(:follow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'sets the global feed to follow the user media feed' do
+        expect(global).to receive(:follow).with(subject.media_feed)
+        subject.save!
+      end
+
+      it 'sets the global posts feed to follow the user posts feed' do
+        expect(global_posts).to receive(:follow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'sets the global media feed to follow the user media feed' do
+        expect(global_media).to receive(:follow).with(subject.media_feed)
+        subject.save!
+      end
+    end
+
+    context 'when global sharing changes to false' do
+      before do
+        subject.share_to_global = true
+        subject.save!
+        subject.share_to_global = false
+      end
+
+      it 'unsets the global feed from following the user posts feed' do
+        expect(global).to receive(:unfollow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'unsets the global feed from following the user media feed' do
+        expect(global).to receive(:unfollow).with(subject.media_feed)
+        subject.save!
+      end
+
+      it 'unsets the global posts feed from following the user posts feed' do
+        expect(global_posts).to receive(:unfollow).with(subject.posts_feed)
+        subject.save!
+      end
+
+      it 'unsets the global media feed from following the user media feed' do
+        expect(global_media).to receive(:unfollow).with(subject.media_feed)
+        subject.save!
+      end
     end
   end
 end

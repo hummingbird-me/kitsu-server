@@ -23,10 +23,16 @@ class MediaFollow < ActiveRecord::Base
   validates :media, polymorphism: { type: Media }
 
   after_create do
-    user.timeline.follow(media.feed)
+    user.timeline.follow(media.posts_feed)
+    user.timeline.follow(media.media_feed)
+    user.posts_timeline.follow(media.posts_feed)
+    user.media_timeline.follow(media.media_feed)
   end
 
   after_destroy do
-    user.timeline.unfollow(media.feed)
+    user.timeline.unfollow(media.posts_feed)
+    user.timeline.unfollow(media.media_feed)
+    user.posts_timeline.unfollow(media.posts_feed)
+    user.media_timeline.unfollow(media.media_feed)
   end
 end

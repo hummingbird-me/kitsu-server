@@ -100,7 +100,7 @@ class Feed
               # If it's an array (nested enrichment), grab the top level
               key = key.first if key.is_a?(Array)
               # Delete if it's still a string
-              act.delete(key) if act[key].is_a?(String)
+              act.delete(key.to_s) if act[key.to_s].is_a?(String)
             end
           end
           act

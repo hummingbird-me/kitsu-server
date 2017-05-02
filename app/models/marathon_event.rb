@@ -33,9 +33,9 @@ class MarathonEvent < ActiveRecord::Base
   delegate :user, to: :library_entry
 
   def stream_activity
-    user.feed.activities.new(
+    user.media_feed.activities.new(
       updated_at: updated_at,
-      to: [media.feed],
+      to: [media.media_feed],
       verb: event.to_s,
       status: status.to_s
     )

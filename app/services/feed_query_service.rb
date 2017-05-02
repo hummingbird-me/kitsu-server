@@ -2,6 +2,13 @@ class FeedQueryService
   MEDIA_VERBS = %w[updated rated progressed].freeze
   POST_VERBS = %w[post comment follow review].freeze
 
+  KIND_TO_FEED = {
+    media_aggr: { posts: 'media_posts_aggr', media: 'media_media_aggr' },
+    user_aggr: { posts: 'user_posts_aggr', media: 'user_media_aggr' },
+    timeline: { posts: 'timeline_posts', media: 'timeline_media' },
+    global: { posts: 'global_posts', media: 'global_media' }
+  }.freeze
+
   attr_reader :params, :user
 
   def initialize(params, user)
@@ -18,12 +25,15 @@ class FeedQueryService
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
     list = list.blocking(blocked)
-    list = list.select(kind_filter[:ratio], &kind_filter[:proc]) if kind_filter
     @list = list
   end
 
   def feed
-    @feed ||= Feed.new(params[:group], params[:id])
+    return @feed if @feed
+    kind = params.dig(:filter, :kind).try(:to_sym)
+    group = params[:group].try(:to_sym)
+    feed_name = KIND_TO_FEED.dig(group, kind) || group
+    @feed = Feed.new(feed_name, params[:id])
   end
 
   private
@@ -46,35 +56,6 @@ class FeedQueryService
     return unless params.dig(:filter, :id).is_a? Hash
     operator, id = params.dig(:filter, :id).to_a.flatten
     [operator.to_sym, id]
-  end
-
-  def kind_filter
-    kind = params.dig(:filter, :kind)
-    @kind_filter ||=
-      case kind
-      when 'media'
-        {
-          ratio: 0.8,
-          proc: ->(act) do
-            if MEDIA_VERBS.include?(act['verb'])
-              true
-            else
-              throw :remove_group
-            end
-          end
-        }
-      when 'posts'
-        {
-          ratio: 0.2,
-          proc: ->(act) do
-            if POST_VERBS.include?(act['verb'])
-              true
-            else
-              throw :remove_group
-            end
-          end
-        }
-      end
   end
 
   def blocked

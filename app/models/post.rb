@@ -70,7 +70,7 @@ class Post < ApplicationRecord
   end
 
   def other_feeds
-    [media&.feed].compact
+    [media&.posts_feed].compact
   end
 
   def notified_feeds
@@ -82,11 +82,11 @@ class Post < ApplicationRecord
 
   def target_feed
     if target_user
-      target_user.aggregated_feed
+      target_user.posts_aggregated_feed
     elsif target_group
       target_group.feed
     else
-      user.feed
+      user.posts_feed
     end
   end
 
