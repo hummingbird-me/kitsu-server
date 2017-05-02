@@ -6,5 +6,5 @@ class PostFollowPolicy < ApplicationPolicy
 
   def update?
     false
-  end  
+  end
 end

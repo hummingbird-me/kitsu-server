@@ -21,6 +21,6 @@
 
 FactoryGirl.define do
   factory :post_follow do
-  	
+    
   end
 end
