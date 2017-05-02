@@ -45,7 +45,6 @@ gem 'rinku'
 gem 'sanitize'
 
 # Miscellaneous Utilities
-gem 'acts_as_list' # Sortables!
 gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
@@ -54,6 +53,7 @@ gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
+gem 'ranked-model' # Sortables!
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'stream-ruby', '~> 2.5.4' # Feeds
