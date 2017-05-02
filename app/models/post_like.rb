@@ -33,12 +33,7 @@ class PostLike < ApplicationRecord
       to: notify
     )
   end
-
   after_create do 
     user.update_feed_completed!
-    PostFollow.create(
-      user: user,
-      post: post
-    )
   end
 end

@@ -92,5 +92,4 @@ class Comment < ApplicationRecord
       post: post
     )
   end
-    
 end
