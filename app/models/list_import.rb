@@ -124,6 +124,10 @@ class ListImport < ApplicationRecord
     end
   end
 
+  before_validation do
+    self.input_text = input_text.strip if input_text.present?
+  end
+
   after_create do
     ListImportWorker.perform_async(id)
   end
