@@ -1,5 +1,5 @@
 class SiteAnnouncementResource < BaseResource
-  attributes :text, :link
+  attributes :title, :description, :image_url, :link
 
   has_one :user
 end
