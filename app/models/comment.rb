@@ -84,7 +84,6 @@ class Comment < ApplicationRecord
     self.edited_at = Time.now if content_changed?
     true
   end
-
   after_create do 
     user.update_feed_completed!
     PostFollow.create(

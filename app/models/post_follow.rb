@@ -20,7 +20,6 @@
 #
 
 class PostFollow < ActiveRecord::Base
-  
   belongs_to :user, required: true, touch: true
   belongs_to :post, required: true
 
