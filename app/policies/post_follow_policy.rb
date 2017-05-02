@@ -8,4 +8,3 @@ class PostFollowPolicy < ApplicationPolicy
   end
   alias_method :destroy?, :create?
 end
-
