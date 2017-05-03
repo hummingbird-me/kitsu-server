@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: posts
@@ -30,10 +29,9 @@
 #
 # Foreign Keys
 #
-#  fk_rails_43023491e6  (target_user_id => users.id)
 #  fk_rails_5b5ddfd518  (user_id => users.id)
+#  fk_rails_6fac2de613  (target_user_id => users.id)
 #
-# rubocop:enable Metrics/LineLength
 
 require_dependency 'html/pipeline/onebox_filter'
 
@@ -51,6 +49,7 @@ class Post < ApplicationRecord
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
   has_many :post_likes, dependent: :destroy
+  has_many :post_follows, dependent: :destroy
   has_many :comments, dependent: :destroy
 
   scope :in_group, ->(group) { where(target_group: group) }
@@ -67,6 +66,10 @@ class Post < ApplicationRecord
 
   def feed
     Feed::PostFeed.new(id)
+  end
+
+  def comments_feed
+    Feed::PostComments.new(id)
   end
 
   def other_feeds

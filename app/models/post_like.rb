@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: post_likes
@@ -13,12 +12,6 @@
 #
 #  index_post_likes_on_post_id  (post_id)
 #
-# Foreign Keys
-#
-#  fk_rails_a04bfa7e81  (post_id => posts.id)
-#  fk_rails_d07653f350  (user_id => users.id)
-#
-# rubocop:enable Metrics/LineLength
 
 class PostLike < ApplicationRecord
   include WithActivity
@@ -40,6 +33,7 @@ class PostLike < ApplicationRecord
       to: notify
     )
   end
-
-  after_create { user.update_feed_completed! }
+  after_create do 
+    user.update_feed_completed!
+  end
 end
