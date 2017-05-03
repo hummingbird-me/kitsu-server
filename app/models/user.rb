@@ -164,7 +164,7 @@ class User < ApplicationRecord
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :alts_of, ->(user) do
-    where('ip_addresses && ARRAY[?]::inet', user.ip_addresses)
+    where('ip_addresses && ARRAY[?]::inet[]', user.ip_addresses.map(&:to_s))
   end
   scope :followed_first, ->(user) {
     user_id = sanitize(user.id)
