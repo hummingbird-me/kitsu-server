@@ -165,7 +165,7 @@ class User < ApplicationRecord
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :alts_of, ->(user) do
-    where('ip_addresses && ARRAY[?]::inet', user.ip_addresses)
+    where('ip_addresses && ARRAY[?]::inet[]', user.ip_addresses.map(&:to_s))
   end
   scope :followed_first, ->(user) {
     user_id = sanitize(user.id)
@@ -244,6 +244,10 @@ class User < ApplicationRecord
     @notifications ||= Feed::Notifications.new(id)
   end
 
+  def site_announcements_feed
+    @site_announcements_feed ||= Feed::SiteAnnouncementsFeed.new(id)
+  end
+
   def update_feed_completed
     return self if feed_completed?
     if library_entries.rated.count >= 5 && following.count >= 5 &&
@@ -277,6 +281,7 @@ class User < ApplicationRecord
     # Set up feeds
     profile_feed.setup!
     timeline.setup!
+    site_announcements_feed.setup!
 
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)

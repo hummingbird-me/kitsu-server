@@ -22,9 +22,10 @@ class Feed
         @group.end_with?('_aggr')
     end
 
-    def stream_feed
+    def stream_feed(*)
       self
     end
+    alias_method :stream_feed_for, :stream_feed
 
     def get(*args)
       client_feed.get(*args)

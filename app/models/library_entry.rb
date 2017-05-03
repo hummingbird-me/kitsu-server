@@ -211,8 +211,12 @@ class LibraryEntry < ApplicationRecord
     case kind
     when :anime
       Stat::AnimeGenreBreakdown.increment(user, self)
-      Stat::AnimeAmountWatched.increment(user, self)
+      Stat::AnimeAmountConsumed.increment(user, self)
+      Stat::AnimeFavoriteYear.increment(user, self)
     when :manga
+      Stat::MangaGenreBreakdown.increment(user, self)
+      Stat::MangaAmountConsumed.increment(user, self)
+      Stat::MangaFavoriteYear.increment(user, self)
     end
   end
 
@@ -222,8 +226,12 @@ class LibraryEntry < ApplicationRecord
     case kind
     when :anime
       Stat::AnimeGenreBreakdown.decrement(user, self)
-      Stat::AnimeAmountWatched.decrement(user, self)
+      Stat::AnimeAmountConsumed.decrement(user, self)
+      Stat::AnimeFavoriteYear.decrement(user, self)
     when :manga
+      Stat::MangaGenreBreakdown.decrement(user, self)
+      Stat::MangaAmountConsumed.decrement(user, self)
+      Stat::MangaFavoriteYear.decrement(user, self)
     end
   end
 

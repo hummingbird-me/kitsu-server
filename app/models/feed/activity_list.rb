@@ -219,7 +219,7 @@ class Feed
     private
 
     def stream_feed
-      feed.stream_feed_for(filter: @filter, type: @feed_type)
+      @stream_feed ||= feed.stream_feed_for(filter: @filter, type: @feed_type)
     end
 
     def fetcher
@@ -236,7 +236,8 @@ class Feed
         maps: @maps,
         limit_ratio: @limit_ratio,
         includes: @including,
-        feed: @feed
+        feed: stream_feed,
+        aggregated: feed.aggregated?
       }
     end
   end

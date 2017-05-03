@@ -137,15 +137,19 @@ ActiveRecord::Schema.define(version: 20170426123432) do
 
   create_table "chapters", force: :cascade do |t|
     t.integer  "manga_id"
-    t.hstore   "titles",          default: {},      null: false
-    t.string   "canonical_title", default: "en_jp", null: false
-    t.integer  "number",                            null: false
-    t.integer  "volume"
+    t.hstore   "titles",                             default: {},      null: false
+    t.string   "canonical_title",                    default: "en_jp", null: false
+    t.integer  "number",                                               null: false
+    t.integer  "volume_number"
     t.integer  "length"
     t.text     "synopsis"
     t.date     "published"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
+    t.string   "thumbnail_file_name",    limit: 255
+    t.string   "thumbnail_content_type", limit: 255
+    t.integer  "thumbnail_file_size"
+    t.datetime "thumbnail_updated_at"
   end
 
   add_index "chapters", ["manga_id"], name: "index_chapters_on_manga_id", using: :btree

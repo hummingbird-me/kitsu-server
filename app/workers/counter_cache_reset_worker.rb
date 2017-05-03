@@ -1,3 +1,5 @@
+require_dependency 'counter_cache_resets'
+
 class CounterCacheResetWorker
   include Sidekiq::Worker
 

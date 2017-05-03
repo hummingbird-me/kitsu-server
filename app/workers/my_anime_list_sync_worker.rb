@@ -1,9 +1,10 @@
 class MyAnimeListSyncWorker
   include Sidekiq::Worker
+  # Try three times and then give up
+  sidekiq_options retry: 3, queue: 'sync'
 
   # data is a hash
   def perform(data)
-    # TODO: make a report per day for what is happening (syncing)
     case data['method']
     when 'delete'
       # will not exist in database
@@ -14,11 +15,12 @@ class MyAnimeListSyncWorker
       library_entry = LibraryEntry.find(data['library_entry_id'])
     end
 
-    library_entry_log = LibraryEntryLog.find(data['library_entry_log_id'])
-    media = MyAnimeListSyncService.new(
-      library_entry, data['method'], library_entry_log
+    log = LibraryEntryLog.find(data['library_entry_log_id'])
+    sync = MyAnimeListSyncService.new(
+      library_entry, data['method'], log
     )
-
-    media.execute_method
+    sync.execute_method
+  rescue ActiveRecord::RecordNotFound => exception
+    Raven.capture_exception(exception)
   end
 end

@@ -3,10 +3,11 @@
 production:
   :concurrency: 25
 :queues:
-  - [default, 2]
-  - [mailers, 1]
-  - [paperclip, 1]
-schedule:
+  - [default, 3]
+  - [mailers, 2]
+  - [paperclip, 2]
+  - [sync, 1]
+:schedule:
   CounterCacheResetWorker:
     every: 12h
   AverageRatingUpdateWorker:

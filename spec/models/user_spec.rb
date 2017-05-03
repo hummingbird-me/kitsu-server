@@ -213,6 +213,14 @@ RSpec.describe User, type: :model do
       expect(profile).to receive(:setup!)
       subject.save!
     end
+
+    it 'should set up the site announcement feed' do
+      announcements = double(:feed)
+      allow(subject).to receive(:site_announcements_feed)
+        .and_return(announcements)
+      expect(announcements).to receive(:setup!)
+      subject.save!
+    end
   end
 
   describe 'after updating' do

@@ -4,7 +4,11 @@ class StatResource < BaseResource
   include STIResource
   # STI, put all inheritance here
   model_hint model: Stat::AnimeGenreBreakdown
-  model_hint model: Stat::AnimeAmountWatched
+  model_hint model: Stat::MangaGenreBreakdown
+  model_hint model: Stat::AnimeAmountConsumed
+  model_hint model: Stat::MangaAmountConsumed
+  model_hint model: Stat::AnimeFavoriteYear
+  model_hint model: Stat::MangaFavoriteYear
 
   attribute :stats_data
   # kind is aliased to type

@@ -2,21 +2,22 @@ class MyAnimeListListWorker
   include Sidekiq::Worker
 
   def perform(linked_account_id, user_id)
-    kitsu_library(user_id).each do |library_entry|
-      # create the logs here before the next worker
-      library_entry_log = create_log(library_entry, linked_account_id)
-
-      MyAnimeListSyncWorker.perform_async(
-        library_entry_id: library_entry.id,
-        # HACK: I am unable to determine the method
-        # through the initial sync because I don't access their
-        # mal list. For now everything will be a create action,
-        # but at some point we can update to get the correct action.
-        # Same issue with the LibraryEntryLog performed_action
-
-        method: 'create',
-        library_entry_log_id: library_entry_log.id
-      )
+    # Create the logs
+    logs = kitsu_library(user_id).map do |le|
+      [le, create_log(le, linked_account_id)]
+    end
+    # Generate the syncs
+    syncs = logs.map do |(library_entry, log)|
+      MyAnimeListSyncService.new(library_entry, 'create', log)
+    end
+    # Run the syncs
+    syncs.each do |sync|
+      # Suppress errors and keep going, we want to 
+      begin
+        sync.execute_method
+      rescue StandardError => exception
+        Raven.capture_exception(exception)
+      end
     end
   end
 
