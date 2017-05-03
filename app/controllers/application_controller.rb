@@ -16,10 +16,10 @@ class ApplicationController < JSONAPI::ResourceController
       extra = {}
       begin
         if error.is_a?(ActiveRecord::StatementInvalid)
-          # Capital letters tend to be chunks of unchanging SQL
-          # Basically, a ghetto way to unify based on SQL similarity (lol)
-          message = error.original_exception.error.scan(/[A-Z]/).join
-          extra[:fingerprint] = [error.original_exception.class.name, message]
+          # Clean the stack trace and use that for the fingerprint.
+          trace = Rails.backtrace_cleaner.clean(error.backtrace)
+          trace = trace.map { |line| line.split(/:\d+:/).first }
+          extra[:fingerprint] = [error.original_exception.class.name, trace]
         end
       ensure
         Raven.capture_exception(error, extra)
