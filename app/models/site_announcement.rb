@@ -26,6 +26,6 @@ class SiteAnnouncement < ApplicationRecord
   validates :title, presence: true
 
   def stream_activity
-    Feed::SiteAnnouncementsFeed.global.activities.new
+    Feed::SiteAnnouncementsGlobal.new.activities.new
   end
 end
