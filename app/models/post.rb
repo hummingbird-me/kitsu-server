@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: posts
@@ -32,6 +33,7 @@
 #  fk_rails_5b5ddfd518  (user_id => users.id)
 #  fk_rails_6fac2de613  (target_user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 require_dependency 'html/pipeline/onebox_filter'
 

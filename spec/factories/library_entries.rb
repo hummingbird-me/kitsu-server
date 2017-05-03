@@ -9,10 +9,11 @@
 #  nsfw            :boolean          default(FALSE), not null
 #  private         :boolean          default(FALSE), not null, indexed
 #  progress        :integer          default(0), not null
-#  rating          :decimal(2, 1)
+#  rating          :integer
 #  reconsume_count :integer          default(0), not null
 #  reconsuming     :boolean          default(FALSE), not null
 #  status          :integer          not null, indexed => [user_id]
+#  time_spent      :integer          default(0), not null
 #  volumes_owned   :integer          default(0), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

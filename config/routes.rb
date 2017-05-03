@@ -481,6 +481,11 @@ end
 #                                                 PUT|PATCH /api/edge/manga/:manga_id/relationships/media-relationships(.:format)                     manga#update_relationship {:relationship=>"media_relationships"}
 #                                                 DELETE    /api/edge/manga/:manga_id/relationships/media-relationships(.:format)                     manga#destroy_relationship {:relationship=>"media_relationships"}
 #                       manga_media_relationships GET       /api/edge/manga/:manga_id/media-relationships(.:format)                                   media_relationships#get_related_resources {:relationship=>"media_relationships", :source=>"manga"}
+#                    manga_relationships_chapters GET       /api/edge/manga/:manga_id/relationships/chapters(.:format)                                manga#show_relationship {:relationship=>"chapters"}
+#                                                 POST      /api/edge/manga/:manga_id/relationships/chapters(.:format)                                manga#create_relationship {:relationship=>"chapters"}
+#                                                 PUT|PATCH /api/edge/manga/:manga_id/relationships/chapters(.:format)                                manga#update_relationship {:relationship=>"chapters"}
+#                                                 DELETE    /api/edge/manga/:manga_id/relationships/chapters(.:format)                                manga#destroy_relationship {:relationship=>"chapters"}
+#                                  manga_chapters GET       /api/edge/manga/:manga_id/chapters(.:format)                                              chapters#get_related_resources {:relationship=>"chapters", :source=>"manga"}
 #            manga_relationships_manga_characters GET       /api/edge/manga/:manga_id/relationships/manga-characters(.:format)                        manga#show_relationship {:relationship=>"manga_characters"}
 #                                                 POST      /api/edge/manga/:manga_id/relationships/manga-characters(.:format)                        manga#create_relationship {:relationship=>"manga_characters"}
 #                                                 PUT|PATCH /api/edge/manga/:manga_id/relationships/manga-characters(.:format)                        manga#update_relationship {:relationship=>"manga_characters"}

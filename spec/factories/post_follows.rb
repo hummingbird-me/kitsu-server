@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: post_follows
@@ -18,6 +19,8 @@
 #  fk_rails_8cdaf33e9c  (user_id => users.id)
 #  fk_rails_afb3620fdd  (post_id => posts.id)
 #
+# rubocop:enable Metrics/LineLength
+
 FactoryGirl.define do
   factory :post_follow do
   end

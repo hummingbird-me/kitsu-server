@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: post_likes
@@ -12,6 +13,7 @@
 #
 #  index_post_likes_on_post_id  (post_id)
 #
+# rubocop:enable Metrics/LineLength
 
 class PostLike < ApplicationRecord
   include WithActivity

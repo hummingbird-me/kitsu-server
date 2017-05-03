@@ -7,7 +7,7 @@
 #  abbreviated_titles        :string           is an Array
 #  age_rating                :integer
 #  age_rating_guide          :string
-#  average_rating            :float
+#  average_rating            :decimal(5, 2)
 #  canonical_title           :string           default("en_jp"), not null
 #  chapter_count             :integer
 #  cover_image_content_type  :string(255)
