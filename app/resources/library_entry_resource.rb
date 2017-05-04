@@ -1,4 +1,4 @@
-require 'unlimited_paginator'
+require 'library_paginator'
 
 class LibraryEntryResource < BaseResource
   TITLE_SORT = /\A([^\.]+)\.titles\.([^\.]+)\z/
@@ -57,7 +57,7 @@ class LibraryEntryResource < BaseResource
   has_one :unit, polymorphic: true, eager_load_on_include: false
   has_one :next_unit, polymorphic: true, eager_load_on_include: false
 
-  paginator :unlimited
+  paginator :library
 
   search_with LibrarySearchService
   query :title
