@@ -33,8 +33,10 @@ module StreamDump
   def private_library_feed(scope = User)
     each_user(scope) do |user_id|
       entries = LibraryEntry.where(user_id: user_id)
-                            .pluck(:id, :status, :rating, :progress, :updated_at)
-      entries = entries.map do |(id, status, rating, progress, updated_at)|
+                            .pluck(:id, :status, :rating, :progress,
+                              :updated_at, :media_type, :media_id)
+      entries = entries.map do |(id, status, rating, progress, updated_at,
+                                 media_type, media_id)|
         [
           {
             # STATUS
@@ -42,6 +44,7 @@ module StreamDump
             foreign_id: "LibraryEntry:#{id}:updated-#{status}",
             object: "LibraryEntry:#{id}",
             actor: "User:#{user_id}",
+            media: "#{media_type}:#{media_id}",
             status: status,
             time: updated_at
           },
@@ -51,6 +54,7 @@ module StreamDump
             foreign_id: "LibraryEntry:#{id}:rated",
             object: "LibraryEntry:#{id}",
             actor: "User:#{user_id}",
+            media: "#{media_type}:#{media_id}",
             rating: rating,
             time: updated_at
           },
@@ -60,6 +64,7 @@ module StreamDump
             foreign_id: "LibraryEntry:#{id}:progressed-#{progress}",
             object: "LibraryEntry:#{id}",
             actor: "User:#{user_id}",
+            media: "#{media_type}:#{media_id}",
             progress: progress,
             time: updated_at
           }
