@@ -115,13 +115,13 @@ class ListImport < ApplicationRecord
   end
 
   def stream_activity
-    if failed? || completed?
-      user.notifications.activities.new(
-        verb: 'imported',
-        kind: self.class.name,
-        status: status
-      )
-    end
+    return unless failed? || completed?
+
+    user.notifications.activities.new(
+      verb: 'imported',
+      kind: self.class.name,
+      status: status
+    )
   end
 
   before_validation do
