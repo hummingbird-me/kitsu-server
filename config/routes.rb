@@ -125,6 +125,7 @@ Rails.application.routes.draw do
     ### WebHooks
     get '/hooks/youtube', to: 'webhooks#youtube_verify'
     post '/hooks/youtube', to: 'webhooks#youtube_notify'
+    post '/hooks/getstream', to: 'webhooks#getstream_firehose'
 
     ### Staging Sync
     post '/user/_prodsync', to: 'users#prod_sync'

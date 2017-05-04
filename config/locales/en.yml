@@ -20,4 +20,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  notifications:
+    followed: "%{actor} followed you."
+    post_mentioned: "%{actor} mentioned you in a post."
+    comment_mentioned: "%{actor} mentioned you in a comment."
+    post_replied: "%{actor} replied to your post."
+    comment_replied: "%{actor} replied to your comment."
+    post_like: "%{actor} liked your post."
+    comment_like: "%{actor} liked your comment."

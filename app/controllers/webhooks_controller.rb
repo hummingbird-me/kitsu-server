@@ -1,7 +1,7 @@
 class WebhooksController < ApplicationController
   include CustomControllerHelpers
 
-  before_action :check_linked_account_param
+  before_action :check_linked_account_param, except: :getstream_firehose
 
   def youtube_verify
     mode = params['hub.mode']
@@ -25,6 +25,25 @@ class WebhooksController < ApplicationController
 
     if match && linked_account.share_from?
       YoutubeService::Notification.new(body).post!(linked_account.user)
+    end
+
+    head status: 200
+  end
+
+  def getstream_firehose
+    notifications = JSON.parse(request.body.read)
+    list = FeedQueryService.new({
+      group: 'notifications',
+      id: 5,
+      }, nil).list
+    puts FeedSerializerService.new(
+      list,
+      including: ['actor', 'target.post'],
+      context: context,
+      base_url: request.url
+    ).to_json
+    notifications.each do |notification|
+      # OneSignalNotificationWorker.perform_async(notification) if notification['new'].length > 0 
     end
 
     head status: 200
