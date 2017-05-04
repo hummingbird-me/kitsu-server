@@ -30,6 +30,28 @@ module StreamDump
     results.flat_map { |x| x }
   end
 
+  def group_timeline_migration(scope = User)
+    results = each_user(scope) do |user_id|
+      group_ids = GroupMember.where(user_id: user_id).pluck(:group_id)
+      group_feeds = group_ids.map { |id| "group:#{id}" }
+
+      [
+        {
+          instruction: 'follow',
+          feedId: "group_timeline:#{user_id}",
+          data: group_feeds
+        },
+        {
+          instruction: 'unfollow',
+          feedId: "timeline:#{user_id}",
+          data: group_feeds
+        }
+      ]
+    end
+    # Flatten the results lazily
+    results.flat_map { |x| x }
+  end
+
   def split_feed(feed)
     activities = feed.activities_for(type: :flat).unenriched.to_enum
 
