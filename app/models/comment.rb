@@ -56,12 +56,15 @@ class Comment < ApplicationRecord
 
   def stream_activity
     to = []
+    to << post.user.notifications unless post.user == user
+    to << parent&.user&.notifications unless parent&.user == user
     to += mentioned_users.map(&:notifications)
     to += post.other_feeds
     to += post.target_timelines
+    to += post.comments_feed
     to << post.target_feed
     to.compact!
-    post.comments_feed.activities.new(
+    post.feed.activities.new(
       reply_to_user: (parent&.user || post&.user),
       reply_to_type: (parent.present? ? 'comment' : 'post'),
       likes_count: likes_count,
@@ -84,7 +87,7 @@ class Comment < ApplicationRecord
     self.edited_at = Time.now if content_changed?
     true
   end
-  after_create do 
+  after_create do
     user.update_feed_completed!
     PostFollow.create(
       user: user,
