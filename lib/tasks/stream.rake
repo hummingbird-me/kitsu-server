@@ -1,5 +1,4 @@
 require 'stream_sync'
-require 'stream_dump'
 
 namespace :stream do
   namespace :sync do
