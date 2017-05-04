@@ -1,4 +1,4 @@
-class SiteAnnouncementsPolicy < ApplicationPolicy
+class SiteAnnouncementPolicy < ApplicationPolicy
   def update?
     is_admin?
   end
