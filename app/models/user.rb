@@ -242,6 +242,10 @@ class User < ApplicationRecord
     @timeline ||= Feed::Timeline.new(id)
   end
 
+  def group_timeline
+    @group_timeline ||= Feed::Timeline.new(id)
+  end
+
   def notifications
     @notifications ||= Feed::Notifications.new(id)
   end
