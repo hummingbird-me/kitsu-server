@@ -231,7 +231,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    self.title == 'Staff' || self.title == 'Mod'
+    title == 'Staff' || title == 'Mod'
   end
 
   def profile_feed
