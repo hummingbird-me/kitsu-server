@@ -4,7 +4,7 @@ RSpec.describe Feed::SiteAnnouncementsFeed, type: :model do
   describe '#setup!' do
     it 'should make the feed follow the global' do
       feed = described_class.new('5554')
-      expect(feed).to receive(:follow).with(SiteAnnouncementsGlobal.global).once
+      expect(feed).to receive(:follow).with(SiteAnnouncementsGlobal.new).once
       feed.setup!
     end
   end

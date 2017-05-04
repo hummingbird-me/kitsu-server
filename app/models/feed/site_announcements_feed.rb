@@ -3,7 +3,7 @@ class Feed
     feed_type :notification
 
     def setup!
-      follow(SiteAnnouncementsGlobal.global)
+      follow(SiteAnnouncementsGlobal.new)
     end
   end
 end
