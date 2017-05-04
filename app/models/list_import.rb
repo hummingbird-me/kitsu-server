@@ -128,7 +128,7 @@ class ListImport < ApplicationRecord
     self.input_text = input_text.strip if input_text.present?
   end
 
-  after_create do
+  after_commit(on: :create) do
     ListImportWorker.perform_async(id)
   end
 end

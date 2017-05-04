@@ -2,7 +2,7 @@ class ListImportWorker
   include Sidekiq::Worker
 
   def perform(import_id)
-    import = ListImport.find(import_id)
-    import.apply!
+    import = ListImport.find_by(id: import_id)
+    import&.apply!
   end
 end
