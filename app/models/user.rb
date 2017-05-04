@@ -254,6 +254,10 @@ class User < ApplicationRecord
     @site_announcements_feed ||= Feed::SiteAnnouncementsFeed.new(id)
   end
 
+  def library_feed
+    @library_feed ||= Feed::PrivateLibraryFeed.new(id)
+  end
+
   def update_feed_completed
     return self if feed_completed?
     if library_entries.rated.count >= 5 && following.count >= 5 &&
