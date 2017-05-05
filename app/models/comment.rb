@@ -56,8 +56,6 @@ class Comment < ApplicationRecord
 
   def stream_activity
     to = []
-    to << post.user.notifications unless post.user == user
-    to << parent&.user&.notifications unless parent&.user == user
     to += mentioned_users.map(&:notifications)
     to += post.other_feeds
     to += post.target_timelines
