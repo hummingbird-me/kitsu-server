@@ -24,7 +24,7 @@ class RecommendationsController < ApplicationController
   end
 
   def recommendations
-    trending_service.recommendations_for(namespace_class)
+    recommendations_service.recommendations_for(namespace_class)
   end
 
   def namespace
