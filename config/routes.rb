@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       jsonapi_resources :review_likes
       # Trending
       get '/trending/:namespace', to: 'trending#index'
+      get '/recommendations/:namespace', to: 'recommendations#index'
 
       ### People/Characters/Companies
       jsonapi_resources :characters
@@ -846,6 +847,7 @@ end
 #                                                 PUT       /api/edge/review-likes/:id(.:format)                                                      review_likes#update
 #                                                 DELETE    /api/edge/review-likes/:id(.:format)                                                      review_likes#destroy
 #                                                 GET       /api/edge/trending/:namespace(.:format)                                                   trending#index
+#                                                 GET       /api/edge/recommendations/:namespace(.:format)                                            recommendations#index
 #           character_relationships_primary_media GET       /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#show_relationship {:relationship=>"primary_media"}
 #                                                 PUT|PATCH /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#update_relationship {:relationship=>"primary_media"}
 #                                                 DELETE    /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#destroy_relationship {:relationship=>"primary_media"}
@@ -998,6 +1000,16 @@ end
 #                                                 POST      /api/edge/feeds/:group/:id/_read(.:format)                                                feeds#mark_read
 #                                                 POST      /api/edge/feeds/:group/:id/_seen(.:format)                                                feeds#mark_seen
 #                                                 DELETE    /api/edge/feeds/:group/:id/activities/:uuid(.:format)                                     feeds#destroy_activity
+#            site_announcement_relationships_user GET       /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#show_relationship {:relationship=>"user"}
+#                                                 PUT|PATCH /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#update_relationship {:relationship=>"user"}
+#                                                 DELETE    /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#destroy_relationship {:relationship=>"user"}
+#                          site_announcement_user GET       /api/edge/site-announcements/:site_announcement_id/user(.:format)                         users#get_related_resource {:relationship=>"user", :source=>"site_announcements"}
+#                              site_announcements GET       /api/edge/site-announcements(.:format)                                                    site_announcements#index
+#                                                 POST      /api/edge/site-announcements(.:format)                                                    site_announcements#create
+#                               site_announcement GET       /api/edge/site-announcements/:id(.:format)                                                site_announcements#show
+#                                                 PATCH     /api/edge/site-announcements/:id(.:format)                                                site_announcements#update
+#                                                 PUT       /api/edge/site-announcements/:id(.:format)                                                site_announcements#update
+#                                                 DELETE    /api/edge/site-announcements/:id(.:format)                                                site_announcements#destroy
 #                     group_relationships_members GET       /api/edge/groups/:group_id/relationships/members(.:format)                                groups#show_relationship {:relationship=>"members"}
 #                                                 POST      /api/edge/groups/:group_id/relationships/members(.:format)                                groups#create_relationship {:relationship=>"members"}
 #                                                 PUT|PATCH /api/edge/groups/:group_id/relationships/members(.:format)                                groups#update_relationship {:relationship=>"members"}
