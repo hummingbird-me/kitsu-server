@@ -4,7 +4,7 @@ class RecommendationsService
   class Media
     attr_reader :client, :user
 
-    def inititalize(user)
+    def initialize(user)
       @client = Stream::CustomEndpointClient.new
       @user = user
     end
