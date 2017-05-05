@@ -30,20 +30,14 @@ class WebhooksController < ApplicationController
     head status: 200
   end
 
+  # Handle notification updates from getstream firehose
   def getstream_firehose
     notifications = JSON.parse(request.body.read)
-    list = FeedQueryService.new({
-      group: 'notifications',
-      id: 5,
-      }, nil).list
-    puts FeedSerializerService.new(
-      list,
-      including: ['actor', 'target.post'],
-      context: context,
-      base_url: request.url
-    ).to_json
+    # Since it may contains up to 100 per request,
+    # Letting the task run in background to eliminate
+    # API timeout and rescue possible errors
     notifications.each do |notification|
-      # OneSignalNotificationWorker.perform_async(notification) if notification['new'].length > 0 
+      OneSignalNotificationWorker.perform_async(notification) if notification['new'].length > 0 
     end
 
     head status: 200

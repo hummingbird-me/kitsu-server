@@ -1,41 +1,45 @@
 # Parse getstream.io webhook reqest
 class GetstreamWebhookService
-  attr_reader :activity
+  attr_reader :activity, :feed_id, :actor_id
 
   def initialize(feed)
     #TODO Experiment will there be multiple activities
     @activity = feed['new'].first
+    @feed_id = feed['feed'].split(':').last
+    @actor_id = @activity['actor'].split(':').last
   end
 
-  # Find the activity actor base on the actor id provided
-  def actor
-    User.find_by(id: activity['actor'].split(':').last.to_i)
-  end
+  # Express activity of this feed in desired locale
+  def stringify_activity
+    feed_target = User.find_by(id: feed_id)
+    locale = feed_target&.language || 'en'
+    actor_name = User.find_by(id: actor_id)&.name
 
-  # 
-  def activity_targets
-    targets = []
-    activity['to'].each do |t|
-      group, id = t.split(':')
-      next unless group == 'notifications'
-      user = User.find_by(id: id)
-      targets << user if user.present?
-    end
-    targets
-  end
-
-  def stringify_activity(actor, locale='en')
     case activity['verb']
     when 'follow'
-      I18n.t(:followed, scope: [:notifications], actor: actor, locale: locale)
+      I18n.t(:followed, scope: [:notifications], actor: actor_name, locale: locale)
     when 'post'
-      I18n.t(:followed, scope: [:notifications], actor: actor, locale: locale)
+      I18n.t(:post_mentioned, scope: [:notifications], actor: actor_name, locale: locale)
     when 'post_like'
-      I18n.t(:followed, scope: [:notifications], actor: actor, locale: locale)
+      I18n.t(:post_like, scope: [:notifications], actor: actor_name, locale: locale)
     when 'comment_like'
-      I18n.t(:followed, scope: [:notifications], actor: actor, locale: locale)
+      I18n.t(:comment_like, scope: [:notifications], actor: actor_name, locale: locale)
     when 'comment'
-      I18n.t(:followed, scope: [:notifications], actor: actor, locale: locale)
+      # Checking what exactly this feed is refering to
+      # reply in post, reply in comment, mention in comment, mention in post
+      reply_to_user_id = activity['reply_to_user'].split(':').last
+      reply_to_type = activity['reply_to_type']
+
+      if feed_id == reply_to_user_id
+        if reply_to_type == 'post'
+          I18n.t(:post_replied, scope: [:notifications], actor: actor_name, locale: locale)
+        else
+          I18n.t(:comment_replied, scope: [:notifications], actor: actor_name, locale: locale)  
+        end
+      else
+        #TODO: If post is belongs to feed target. Should be reply to post
+        I18n.t(:comment_mentioned, scope: [:notifications], actor: actor_name, locale: locale)  
+      end
     end
   end
 end

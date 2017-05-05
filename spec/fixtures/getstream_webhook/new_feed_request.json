@@ -21,7 +21,7 @@
   {
     "deleted": [],
     "new": [{
-      "actor": "User:1",
+      "actor": "User:4",
       "comments_count": 0,
       "foreign_id": "Post:12",
       "group": "45008_2017-05-03",
@@ -38,7 +38,43 @@
       "verb": "post"
     }],
     "published_at": "2017-05-03T09:31:08.000000+00:00",
-    "feed": "notifications:4",
+    "feed": "notifications:1",
+    "app_id": "123"
+  },
+  {
+    "deleted": [],
+    "new": [{
+      "actor":"User:4",
+      "foreign_id":"PostLike:3",
+      "group":"45074_2017-05-03",
+      "id":"3289d700-2fe5-11e7-8080-8001647ded41",
+      "object":"PostLike:3",
+      "origin":null,
+      "target":"Post:12",
+      "time":"2017-05-03T09:45:10.000000",
+      "to":["notifications:1"],
+      "verb":"post_like"
+    }],
+    "published_at": "2017-05-03T09:45:10.000000+00:00",
+    "feed": "notifications:1",
+    "app_id": "123"
+  },
+  {
+    "deleted": [],
+    "new": [{
+      "actor": "User:4",
+      "foreign_id": "CommentLike:3",
+      "group": "45075_2017-05-03",
+      "id": "3caad600-2fe3-11e7-8080-800153936d5b",
+      "object": "CommentLike:3",
+      "origin": null,
+      "target": "Comment:5",
+      "time": "2017-05-03T09:31:08.000000",
+      "to": [],
+      "verb": "comment_like"
+    }],
+    "published_at": "2017-05-03T09:31:08.000000+00:00",
+    "feed": "notifications:1",
     "app_id": "123"
   },
   {
@@ -85,42 +121,6 @@
     }],
     "published_at":"2017-05-03T08:07:39.000000+00:00",
     "feed":"notifications:1",
-    "app_id": "123"
-  },
-  {
-    "deleted": [],
-    "new": [{
-      "actor": "User:4",
-      "foreign_id": "CommentLike:3",
-      "group": "45075_2017-05-03",
-      "id": "3caad600-2fe3-11e7-8080-800153936d5b",
-      "object": "CommentLike:3",
-      "origin": null,
-      "target": "Comment:5",
-      "time": "2017-05-03T09:31:08.000000",
-      "to": [],
-      "verb": "comment_like"
-    }],
-    "published_at": "2017-05-03T09:31:08.000000+00:00",
-    "feed": "notifications:2",
-    "app_id": "123"
-  },
-  {
-    "deleted": [],
-    "new": [{
-      "actor":"User:4",
-      "foreign_id":"PostLike:3",
-      "group":"45074_2017-05-03",
-      "id":"3289d700-2fe5-11e7-8080-8001647ded41",
-      "object":"PostLike:3",
-      "origin":null,
-      "target":"Post:12",
-      "time":"2017-05-03T09:45:10.000000",
-      "to":["notifications:1"],
-      "verb":"post_like"
-    }],
-    "published_at": "2017-05-03T09:45:10.000000+00:00",
-    "feed": "notifications:1",
     "app_id": "123"
   },
   { 
