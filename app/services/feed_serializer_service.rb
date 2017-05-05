@@ -59,7 +59,7 @@ class FeedSerializerService
   end
 
   def including
-    if feed.aggregated? || feed.notification?
+    if feed.aggregated?
       @including.map { |inc| "activities.#{inc}" } + ['activities']
     else
       @including
@@ -96,7 +96,7 @@ class FeedSerializerService
   end
 
   def resource_class
-    if feed.aggregated? || feed.notification?
+    if feed.aggregated?
       ActivityGroupResource
     else
       ActivityResource
