@@ -69,9 +69,9 @@ module StreamSync
   def follow_site_announcements
     ids = User.pluck(:id)
 
-    mass_follow('announcements', ids) do |id|
-      global = Feed::SiteAnnouncementsGlobal.global
-      { Feed::SiteAnnouncementsFeed.new(id) => global }
+    mass_follow('announcements', ids, scrollback: 0) do |id|
+      global = Feed::SiteAnnouncementsGlobal.new.stream_id
+      { source: global, target: Feed::SiteAnnouncementsFeed.new(id).stream_id }
     end
   end
 
@@ -175,7 +175,7 @@ module StreamSync
     follows.in_groups_of(800, false).each do |group|
       print '.'
       sleep 0.1
-      Feed::StreamFeed.follow_many(group, scrollback: scrollback)
+      Feed::StreamFeed.follow_many(group, scrollback)
     end
     print "\n"
   end
