@@ -107,6 +107,7 @@ class Post < ApplicationRecord
       post_likes_count: post_likes_count,
       comments_count: comments_count,
       nsfw: nsfw,
+      mentioned_users: mentioned_users.pluck(:id),
       to: other_feeds + notified_feeds + target_timelines
     )
   end
