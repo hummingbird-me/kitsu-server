@@ -67,7 +67,11 @@ class FeedSerializerService
   end
 
   def meta
-    { readonlyToken: activity_list.feed.readonly_token }
+    {
+      readonlyToken: activity_list.feed.readonly_token,
+      unseenCount: activity_list.unseen_count,
+      unreadCount: activity_list.unread_count
+    }.compact
   end
 
   def links

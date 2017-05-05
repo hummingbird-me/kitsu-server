@@ -200,21 +200,12 @@ class Feed
       self
     end
 
-    def empty?
-      to_a.empty?
-    end
-
-    def to_a
-      fetcher.to_a
-    end
-
-    def to_enum
-      fetcher.to_enum
-    end
-
-    def more?
-      fetcher.more?
-    end
+    delegate :to_a, to: :fetcher
+    delegate :empty?, to: :to_a
+    delegate :to_enum, to: :fetcher
+    delegate :more?, to: :fetcher
+    delegate :unread_count, to: :fetcher
+    delegate :unseen_count, to: :fetcher
 
     private
 
