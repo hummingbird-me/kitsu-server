@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       jsonapi_resources :review_likes
       # Trending
       get '/trending/:namespace', to: 'trending#index'
+      get '/recommendations/:namespace', to: 'recommendations#index'
 
       ### People/Characters/Companies
       jsonapi_resources :characters
@@ -841,6 +842,7 @@ end
 #                                                 PUT       /api/edge/review-likes/:id(.:format)                                                      review_likes#update
 #                                                 DELETE    /api/edge/review-likes/:id(.:format)                                                      review_likes#destroy
 #                                                 GET       /api/edge/trending/:namespace(.:format)                                                   trending#index
+#                                                 GET       /api/edge/recommendations/:namespace(.:format)                                            recommendations#index
 #           character_relationships_primary_media GET       /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#show_relationship {:relationship=>"primary_media"}
 #                                                 PUT|PATCH /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#update_relationship {:relationship=>"primary_media"}
 #                                                 DELETE    /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#destroy_relationship {:relationship=>"primary_media"}
