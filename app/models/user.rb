@@ -231,7 +231,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    self.title == 'Staff' || self.title == 'Mod'
+    title == 'Staff' || title == 'Mod'
   end
 
   def profile_feed
@@ -252,6 +252,10 @@ class User < ApplicationRecord
 
   def site_announcements_feed
     @site_announcements_feed ||= Feed::SiteAnnouncementsFeed.new(id)
+  end
+
+  def library_feed
+    @library_feed ||= Feed::PrivateLibraryFeed.new(id)
   end
 
   def update_feed_completed

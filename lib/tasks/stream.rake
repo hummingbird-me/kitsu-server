@@ -60,5 +60,13 @@ namespace :stream do
         STDOUT.puts instr.to_json
       end
     end
+
+    desc 'Dump library base'
+    task private_library: :environment do
+      ApplicationRecord.logger = Logger.new(nil)
+      StreamDump.private_library_feed.each do |instr|
+        STDOUT.puts instr.to_json
+      end
+    end
   end
 end
