@@ -26,7 +26,9 @@ class RecommendationsService
     end
 
     def strength
-      client.get("profile_strength/#{user.id}/")
+      res = client.get("profile_strength/#{user.id}/")
+      strengths = res.body.dig('results', 'profile_strength')
+      strengths
     end
   end
 end
