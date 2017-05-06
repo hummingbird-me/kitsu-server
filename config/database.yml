@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV['DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 25 %>
+  pool: <%= ENV['DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 40 %>
   variables:
     lock_timeout: 3s
 

@@ -1,7 +1,7 @@
 ---
-:concurrency: 4
+:concurrency: 6
 production:
-  :concurrency: 25
+  :concurrency: 40
 :queues:
   - [default, 3]
   - [mailers, 2]
