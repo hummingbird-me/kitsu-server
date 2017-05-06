@@ -90,9 +90,6 @@ class Comment < ApplicationRecord
   end
   after_create do
     user.update_feed_completed!
-    PostFollow.create(
-      user: user,
-      post: post
-    )
+    #PostFollow.create(user: user, post: post)
   end
 end
