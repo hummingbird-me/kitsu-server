@@ -69,6 +69,7 @@ class Comment < ApplicationRecord
       replies_count: replies_count,
       post_id: post_id,
       target: post,
+      mentioned_users: mentioned_users.pluck(:id),
       to: to - [user.notifications]
     )
   end
