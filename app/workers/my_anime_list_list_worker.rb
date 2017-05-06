@@ -1,5 +1,6 @@
 class MyAnimeListListWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'sync'
 
   def perform(linked_account_id, user_id)
     # Create the logs
