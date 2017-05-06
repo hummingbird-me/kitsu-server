@@ -13,10 +13,16 @@ class MyAnimeListListWorker
     end
     # Run the syncs
     syncs.each do |sync|
-      # Suppress errors and keep going, we want to 
+      # Suppress errors and keep going, we want to
       begin
         sync.execute_method
       rescue StandardError => exception
+        # Queue a separate synv to retry
+        MyAnimeListSyncWorker.perform_async(
+          library_entry_id: sync.library_entry.id,
+          method: sync.method,
+          library_entry_log_id: sync.library_entry_log.id
+        )
         Raven.capture_exception(exception)
       end
     end
