@@ -6,7 +6,6 @@ production:
   - [default, 3]
   - [mailers, 2]
   - [paperclip, 2]
-  - [sync, 1]
 :schedule:
   CounterCacheResetWorker:
     every: 12h
