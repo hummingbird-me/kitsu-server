@@ -1,7 +1,7 @@
 require 'objspace'
 
 class DebugController < ApplicationController
-  #before_action :verify_admin
+  before_action :verify_admin
   skip_after_action :enforce_policy_use
 
   def verify_admin
