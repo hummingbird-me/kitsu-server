@@ -14,6 +14,30 @@ class GetstreamWebhookService
     User.find_by(id: feed_id)
   end
 
+  # Get the corresponding feed url
+  def feed_url
+    model_type, model_id = activity['foreign_id'].split(':')
+    protocol = Rails.env.development? ? 'http://' : 'https://'
+    base_url = "#{protocol}#{ActionMailer::Base.default_url_options.values.join(':')}"
+    path = ''
+    case model_type
+    when 'Follow'
+      path = "/users/#{activity['actor'].split(':').last}"
+    when 'Post'
+      path = "/posts/#{model_id}"
+    when 'Comment'
+      path = "/comments/#{model_id}"
+    when 'PostLike'
+      target_type, target_id = activity['target'].split(':')
+      path = "/posts/#{target_id}"
+    when 'CommentLike'
+      target_type, target_id = activity['target'].split(':')
+      path = "/comments/#{target_id}"
+    end
+
+    "#{base_url}#{path}"
+  end
+
   # Express activity of this feed in desired locale
   def stringify_activity
     locale = (feed_target&.language || 'en').to_sym

@@ -8,16 +8,21 @@ RSpec.describe OneSignalNotificationWorker do
   end
 
   describe '#perform' do
-    let(:request) { JSON.parse(fixture('getstream_webhook/post_reply_request.json')).first }
+    let(:request) do
+      JSON.parse(fixture('getstream_webhook/post_reply_request.json')).first
+    end
     let!(:actor) { FactoryGirl.create(:user, id: 4) }
 
     before do
-      allow_any_instance_of(OneSignalNotificationService).to receive(:notify_players!) {}
+      allow_any_instance_of(OneSignalNotificationService)
+        .to receive(:notify_players!) {}
       allow(OneSignalNotificationService).to receive(:new) {}
     end
 
     context 'when user has subscribed to one signal' do
-      let!(:target) { FactoryGirl.create(:user, :subscribed_to_one_signal, id: 1) }
+      let!(:target) do
+        FactoryGirl.create(:user, :subscribed_to_one_signal, id: 1)
+      end
 
       it 'should initialize one signal notification service' do
         service_class = double('OneSignalNotificationService')

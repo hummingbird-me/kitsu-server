@@ -1,6 +1,45 @@
 require 'rails_helper'
 
 RSpec.describe GetstreamWebhookService do
+
+  shared_examples_for 'correct action url' do |path|
+   it 'should return the frontend url that refer to this action' do
+      expect(GetstreamWebhookService.new(request).feed_url).to eq("https://kitsu.example.com/#{path}")
+    end
+  end
+
+  describe '#feed_url' do
+    context 'follow activity' do
+      let(:request) { JSON.parse(fixture('getstream_webhook/new_feed_request.json')).first }
+
+      it_should_behave_like 'correct action url', 'users/4'
+    end
+
+    context 'post activity' do
+      let(:request) { JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[1] }
+
+      it_should_behave_like 'correct action url', 'posts/12'
+    end
+
+    context 'comment activity' do
+      let(:request) { JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[4] }
+
+      it_should_behave_like 'correct action url', 'comments/9'
+    end
+
+    context 'post like activity' do
+      let(:request) { JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[2] }
+
+      it_should_behave_like 'correct action url', 'posts/12'
+    end
+
+    context 'comment like activity' do
+      let(:request) { JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[3] }
+
+      it_should_behave_like 'correct action url', 'comments/5'
+    end
+  end
+
   describe '#stringify_activity' do
     context 'follow, post, post_like and comment_like activity' do
       let(:request) { JSON.parse(fixture('getstream_webhook/new_feed_request.json')) }

@@ -5,7 +5,7 @@ class OneSignalNotificationService
   attr_reader :content, :player_ids, :opts
 
   # Initialize services with GetStream webhook request
-  def initialize(content, player_ids, opts: {})
+  def initialize(content, player_ids, opts = {})
     @content = content
     @player_ids = player_ids
     @opts = opts

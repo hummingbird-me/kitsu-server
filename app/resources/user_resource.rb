@@ -9,7 +9,7 @@ class UserResource < BaseResource
     :following_count, :life_spent_on_anime, :birthday, :gender, :updated_at,
     :comments_count, :favorites_count, :likes_given_count, :reviews_count,
     :likes_received_count, :posts_count, :ratings_count, :pro_expires_at,
-    :title, :profile_completed, :feed_completed, :website
+    :title, :profile_completed, :feed_completed, :website, :one_signal_id
   attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 
