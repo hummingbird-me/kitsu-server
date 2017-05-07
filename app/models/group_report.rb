@@ -53,7 +53,7 @@ class GroupReport < ApplicationRecord
   validates :reason, :status, presence: true
 
   def stream_activity
-    Feed::Reports.new(group_id).activities.new(naughty: naughty)
+    ReportsFeed.new(group_id).activities.new(naughty: naughty)
   end
 
   def escalate!

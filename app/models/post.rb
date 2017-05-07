@@ -67,11 +67,11 @@ class Post < ApplicationRecord
   validates :target_user, absence: true, if: :target_group
 
   def feed
-    Feed::PostFeed.new(id)
+    PostFeed.new(id)
   end
 
   def comments_feed
-    Feed::PostComments.new(id)
+    PostCommentsFeed.new(id)
   end
 
   def other_feeds

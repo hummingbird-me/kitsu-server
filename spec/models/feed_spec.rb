@@ -35,7 +35,7 @@ RSpec.describe Feed, type: :model do
 
   describe '#follow' do
     it 'should call on StreamFeed.follow_many' do
-      target_feed = Feed::MediaFeed.new('Anime', '7')
+      target_feed = MediaFeed.new('Anime', '7')
       expect(Feed::StreamFeed).to receive(:follow_many)
       feed.follow(target_feed)
     end
@@ -43,7 +43,7 @@ RSpec.describe Feed, type: :model do
 
   describe '#unfollow' do
     it 'should call on stream_feed.unfollow' do
-      target_feed = Feed::MediaFeed.new('Anime', '7')
+      target_feed = MediaFeed.new('Anime', '7')
       stream_feed = feed.send(:stream_feed)
       expect(stream_feed).to receive(:unfollow)
       feed.unfollow(target_feed)

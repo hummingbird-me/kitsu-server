@@ -8,7 +8,7 @@ module StreamDump
   def split_profiles(scope = User)
     results = each_user(scope) do |user_id|
       # Split the feed
-      split_feed(Feed::ProfileFeed.new(user_id))
+      split_feed(ProfileFeed.new(user_id))
     end
     # Flatten the results lazily
     results.flat_map { |x| x }
@@ -16,7 +16,7 @@ module StreamDump
 
   def split_media
     results = each_media do |media_type, media_id|
-      split_feed(Feed::MediaFeed.new(media_type, media_id))
+      split_feed(MediaFeed.new(media_type, media_id))
     end
     # Flatten the results lazily
     results.flat_map { |x| x }
@@ -24,7 +24,7 @@ module StreamDump
 
   def split_timelines(scope = User)
     results = each_user(scope) do |user_id|
-      split_feed(Feed::Timeline.new(user_id))
+      split_feed(TimelineFeed.new(user_id))
     end
     # Flatten the results lazily
     results.flat_map { |x| x }

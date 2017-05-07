@@ -77,7 +77,7 @@ RSpec.describe Group, type: :model do
   it { should validate_length_of(:tagline).is_at_most(60) }
 
   it 'should set up the feed on create' do
-    feed = double('Feed::GroupFeed')
+    feed = double('GroupFeed')
     allow(subject).to receive(:feed).and_return(feed)
     expect(feed).to receive(:setup!)
     subject.save!

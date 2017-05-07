@@ -235,27 +235,27 @@ class User < ApplicationRecord
   end
 
   def profile_feed
-    @profile_feed ||= Feed::ProfileFeed.new(id)
+    @profile_feed ||= ProfileFeed.new(id)
   end
 
   def timeline
-    @timeline ||= Feed::Timeline.new(id)
+    @timeline ||= TimelineFeed.new(id)
   end
 
   def group_timeline
-    @group_timeline ||= Feed::Timeline.new(id)
+    @group_timeline ||= GroupTimelineFeed.new(id)
   end
 
   def notifications
-    @notifications ||= Feed::Notifications.new(id)
+    @notifications ||= NotificationsFeed.new(id)
   end
 
   def site_announcements_feed
-    @site_announcements_feed ||= Feed::SiteAnnouncementsFeed.new(id)
+    @site_announcements_feed ||= SiteAnnouncementsFeed.new(id)
   end
 
   def library_feed
-    @library_feed ||= Feed::PrivateLibraryFeed.new(id)
+    @library_feed ||= PrivateLibraryFeed.new(id)
   end
 
   def update_feed_completed
@@ -300,9 +300,9 @@ class User < ApplicationRecord
   after_save do
     if share_to_global_changed?
       if share_to_global
-        Feed::Global.new.follow(profile_feed)
+        GlobalFeed.new.follow(profile_feed)
       else
-        Feed::Global.new.unfollow(profile_feed)
+        GlobalFeed.new.unfollow(profile_feed)
       end
     end
   end

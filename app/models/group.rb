@@ -91,7 +91,7 @@ class Group < ApplicationRecord
   end
 
   def feed
-    Feed::GroupFeed.new(id)
+    GroupFeed.new(id)
   end
 
   # Not bothering with teardown because the group ID won't be reused (so who

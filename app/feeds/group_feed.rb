@@ -1,0 +1,2 @@
+class GroupFeed < Feed
+end

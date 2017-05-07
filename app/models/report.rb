@@ -41,6 +41,6 @@ class Report < ApplicationRecord
   validates :reason, :status, presence: true
 
   def stream_activity
-    Feed::Reports.new('global').activities.new(naughty: naughty)
+    ReportsFeed.new('global').activities.new(naughty: naughty)
   end
 end
