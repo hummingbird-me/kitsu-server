@@ -9,9 +9,13 @@ class GetstreamWebhookService
     @actor_id = @activity['actor'].split(':').last
   end
 
+  # Find correspond user from feed id
+  def feed_target
+    User.find_by(id: feed_id)
+  end
+
   # Express activity of this feed in desired locale
   def stringify_activity
-    feed_target = User.find_by(id: feed_id)
     locale = feed_target&.language || 'en'
     actor_name = User.find_by(id: actor_id)&.name
 

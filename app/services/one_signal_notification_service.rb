@@ -2,12 +2,12 @@
 class OneSignalNotificationService
   ONE_SIGNAL_URL = 'https://onesignal.com/api'.freeze
 
-  attr_reader :content, :players, :opts
+  attr_reader :content, :player_ids, :opts
 
   # Initialize services with GetStream webhook request
-  def initialize(content, players, opts: {})
+  def initialize(content, player_ids, opts: {})
     @content = content
-    @players = players.map { |p| p&.one_signal_id }.compact
+    @player_ids = player_ids
     @opts = opts
   end
 
@@ -16,12 +16,12 @@ class OneSignalNotificationService
     opts.merge({
       app_id: app_id,
       content: content,
-      include_player_ids: players,
-    }).to_json
+      include_player_ids: player_ids,
+    })
   end
 
   # Send notification to OneSignal
-  def create
+  def notify_players!
     # POST request to one signal server
     res = Typhoeus.post("#{ONE_SIGNAL_URL}/v1/notifications",
         headers: {
@@ -30,13 +30,23 @@ class OneSignalNotificationService
         },
         body: request_json)
 
-    # return unless res.success?
-    # res = JSON.parse(res.body)
-    # return unless res.has_key?('errors')
-    # res['errors']
+    check_and_process_invalids(JSON.parse(res.body)) if res.success?
   end
 
   private
+
+  def check_and_process_invalids(res)
+    return unless res.has_key?(:errors)
+    errors = res[:errors]
+    if errors.is_a?(Hash) && errors.has_key?(:invalid_player_ids)
+      # Some one signal player ids are invalid
+      players = User.where('one_signal_id IN (?)', errors[:invalid_player_ids])
+    else
+      players = User.where('one_signal_id IN (?)', player_ids)
+    end
+
+    players.update_all(one_signal_id: nil)
+  end
 
   def app_id
     ENV['ONE_SIGNAL_APP_ID']

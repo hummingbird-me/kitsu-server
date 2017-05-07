@@ -106,5 +106,9 @@ FactoryGirl.define do
     trait :with_avatar do
       avatar { Faker::Company.logo }
     end
+
+    trait :subscribed_to_one_signal do
+      one_signal_id { Faker::Lorem.characters(32) }
+    end
   end
 end
