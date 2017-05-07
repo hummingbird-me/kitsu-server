@@ -12,7 +12,7 @@ RSpec.describe OneSignalNotificationService do
     end
 
     it 'should have content' do
-      expect(service.request_json[:content]).to eq({en: 'English message' })
+      expect(service.request_json[:content]).to eq(en: 'English message')
     end
 
     it 'should have included player ids' do
@@ -42,7 +42,7 @@ RSpec.describe OneSignalNotificationService do
         OneSignalNotificationService.new(
           { en: 'English message' },
           player_ids,
-          { url: 'https://kitsu.io/kitsu-256.png' }
+          url: 'https://kitsu.io/kitsu-256.png'
         )
       end
 
@@ -113,10 +113,8 @@ RSpec.describe OneSignalNotificationService do
 
     context 'with some invalid ids' do
       before do
-        service.send(:check_and_process_invalids, {
-          errors: {
-            invalid_player_ids: player_ids
-          }
+        service.send(:check_and_process_invalids, errors: {
+          invalid_player_ids: player_ids
         })
         players.each(&:reload)
       end
@@ -128,9 +126,8 @@ RSpec.describe OneSignalNotificationService do
 
     context 'when all player ids are invalid' do
       before do
-        service.send(:check_and_process_invalids, {
-          errors: ['All included players are not subscribed']
-        })
+        service.send(:check_and_process_invalids,
+          errors: ['All included players are not subscribed'])
         players.each(&:reload)
       end
 
