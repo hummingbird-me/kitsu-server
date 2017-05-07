@@ -34,6 +34,5 @@ FactoryGirl.define do
     association :user, strategy: :build
 
     event :updated
-    status :planned
   end
 end
