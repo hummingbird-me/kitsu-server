@@ -8,7 +8,7 @@ class Stat < ApplicationRecord
                   .group("date_part('year', #{media_start_date})::integer")
                   .count
 
-      self.stats_data['all_years'] = years
+      stats_data['all_years'] = years
       stats_data['total'] = years.values.reduce(:+)
 
       save!
