@@ -4,7 +4,7 @@ class Stat < ApplicationRecord
 
     DEFAULT_STATS = {
       'total' => 0,
-      'all_genres' => {},
+      'all_genres' => {}
     }.freeze
 
     # Fully regenrate data
@@ -15,7 +15,7 @@ class Stat < ApplicationRecord
 
       # clear stats_data
       self.stats_data = {}
-      self.stats_data['all_genres'] = genres
+      stats_data['all_genres'] = genres
       stats_data['total'] = genres.values.reduce(:+)
 
       save!

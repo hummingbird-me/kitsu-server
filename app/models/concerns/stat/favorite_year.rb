@@ -4,7 +4,7 @@ class Stat < ApplicationRecord
 
     DEFAULT_STATS = {
       'total' => 0,
-      'all_years' => {},
+      'all_years' => {}
     }.freeze
 
     def recalculate!
