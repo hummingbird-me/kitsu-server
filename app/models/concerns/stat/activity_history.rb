@@ -10,6 +10,8 @@ class Stat < ApplicationRecord
     def recalculate!
       activity = user.library_events.eager_load(media_column)
 
+      # clear stats_data
+      self.stats_data = {}
       self.stats_data = {
         total: activity.count,
         activity: activity # collection of events
