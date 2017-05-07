@@ -121,11 +121,6 @@ Rails.application.routes.draw do
     get '/sidekiq', to: 'sessions#redirect'
     resources :sessions, only: %i[new create]
 
-    ### Debug APIs
-    get '/debug/dump_all', to: 'debug#dump_all'
-    post '/debug/trace_on', to: 'debug#trace_on'
-    get '/debug/gc_info', to: 'debug#gc_info'
-
     ### WebHooks
     get '/hooks/youtube', to: 'webhooks#youtube_verify'
     post '/hooks/youtube', to: 'webhooks#youtube_notify'
@@ -998,6 +993,16 @@ end
 #                                                 POST      /api/edge/feeds/:group/:id/_read(.:format)                                                feeds#mark_read
 #                                                 POST      /api/edge/feeds/:group/:id/_seen(.:format)                                                feeds#mark_seen
 #                                                 DELETE    /api/edge/feeds/:group/:id/activities/:uuid(.:format)                                     feeds#destroy_activity
+#            site_announcement_relationships_user GET       /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#show_relationship {:relationship=>"user"}
+#                                                 PUT|PATCH /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#update_relationship {:relationship=>"user"}
+#                                                 DELETE    /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#destroy_relationship {:relationship=>"user"}
+#                          site_announcement_user GET       /api/edge/site-announcements/:site_announcement_id/user(.:format)                         users#get_related_resource {:relationship=>"user", :source=>"site_announcements"}
+#                              site_announcements GET       /api/edge/site-announcements(.:format)                                                    site_announcements#index
+#                                                 POST      /api/edge/site-announcements(.:format)                                                    site_announcements#create
+#                               site_announcement GET       /api/edge/site-announcements/:id(.:format)                                                site_announcements#show
+#                                                 PATCH     /api/edge/site-announcements/:id(.:format)                                                site_announcements#update
+#                                                 PUT       /api/edge/site-announcements/:id(.:format)                                                site_announcements#update
+#                                                 DELETE    /api/edge/site-announcements/:id(.:format)                                                site_announcements#destroy
 #                     group_relationships_members GET       /api/edge/groups/:group_id/relationships/members(.:format)                                groups#show_relationship {:relationship=>"members"}
 #                                                 POST      /api/edge/groups/:group_id/relationships/members(.:format)                                groups#create_relationship {:relationship=>"members"}
 #                                                 PUT|PATCH /api/edge/groups/:group_id/relationships/members(.:format)                                groups#update_relationship {:relationship=>"members"}
@@ -1254,9 +1259,6 @@ end
 #                                         sidekiq GET       /api/sidekiq(.:format)                                                                    sessions#redirect
 #                                        sessions POST      /api/sessions(.:format)                                                                   sessions#create
 #                                     new_session GET       /api/sessions/new(.:format)                                                               sessions#new
-#                                  debug_dump_all GET       /api/debug/dump_all(.:format)                                                             debug#dump_all
-#                                  debug_trace_on POST      /api/debug/trace_on(.:format)                                                             debug#trace_on
-#                                   debug_gc_info GET       /api/debug/gc_info(.:format)                                                              debug#gc_info
 #                                   hooks_youtube GET       /api/hooks/youtube(.:format)                                                              webhooks#youtube_verify
 #                                                 POST      /api/hooks/youtube(.:format)                                                              webhooks#youtube_notify
 #                                  user__prodsync POST      /api/user/_prodsync(.:format)                                                             users#prod_sync
