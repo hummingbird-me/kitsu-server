@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -72,6 +71,7 @@
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  facebook_id                 :string(255)      indexed
+#  one_signal_id               :string           indexed
 #  pinned_post_id              :integer
 #  pro_membership_plan_id      :integer
 #  stripe_customer_id          :string(255)
@@ -80,16 +80,16 @@
 #
 # Indexes
 #
-#  index_users_on_email        (email) UNIQUE
-#  index_users_on_facebook_id  (facebook_id) UNIQUE
-#  index_users_on_to_follow    (to_follow)
-#  index_users_on_waifu_id     (waifu_id)
+#  index_users_on_email          (email) UNIQUE
+#  index_users_on_facebook_id    (facebook_id) UNIQUE
+#  index_users_on_one_signal_id  (one_signal_id)
+#  index_users_on_to_follow      (to_follow)
+#  index_users_on_waifu_id       (waifu_id)
 #
 # Foreign Keys
 #
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
-# rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
   include WithCoverImage

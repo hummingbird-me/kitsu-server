@@ -144,7 +144,7 @@ end
 
 # == Route Map
 #
-# I, [2017-04-28T00:33:17.625572 #36485]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-05-07T10:11:56.624050 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                          Prefix Verb      URI Pattern                                                                               Controller#Action
 #                        user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#show_relationship {:relationship=>"waifu"}
 #                                                 PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#update_relationship {:relationship=>"waifu"}
@@ -999,6 +999,16 @@ end
 #                                                 POST      /api/edge/feeds/:group/:id/_read(.:format)                                                feeds#mark_read
 #                                                 POST      /api/edge/feeds/:group/:id/_seen(.:format)                                                feeds#mark_seen
 #                                                 DELETE    /api/edge/feeds/:group/:id/activities/:uuid(.:format)                                     feeds#destroy_activity
+#            site_announcement_relationships_user GET       /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#show_relationship {:relationship=>"user"}
+#                                                 PUT|PATCH /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#update_relationship {:relationship=>"user"}
+#                                                 DELETE    /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)           site_announcements#destroy_relationship {:relationship=>"user"}
+#                          site_announcement_user GET       /api/edge/site-announcements/:site_announcement_id/user(.:format)                         users#get_related_resource {:relationship=>"user", :source=>"site_announcements"}
+#                              site_announcements GET       /api/edge/site-announcements(.:format)                                                    site_announcements#index
+#                                                 POST      /api/edge/site-announcements(.:format)                                                    site_announcements#create
+#                               site_announcement GET       /api/edge/site-announcements/:id(.:format)                                                site_announcements#show
+#                                                 PATCH     /api/edge/site-announcements/:id(.:format)                                                site_announcements#update
+#                                                 PUT       /api/edge/site-announcements/:id(.:format)                                                site_announcements#update
+#                                                 DELETE    /api/edge/site-announcements/:id(.:format)                                                site_announcements#destroy
 #                     group_relationships_members GET       /api/edge/groups/:group_id/relationships/members(.:format)                                groups#show_relationship {:relationship=>"members"}
 #                                                 POST      /api/edge/groups/:group_id/relationships/members(.:format)                                groups#create_relationship {:relationship=>"members"}
 #                                                 PUT|PATCH /api/edge/groups/:group_id/relationships/members(.:format)                                groups#update_relationship {:relationship=>"members"}
@@ -1260,6 +1270,7 @@ end
 #                                   debug_gc_info GET       /api/debug/gc_info(.:format)                                                              debug#gc_info
 #                                   hooks_youtube GET       /api/hooks/youtube(.:format)                                                              webhooks#youtube_verify
 #                                                 POST      /api/hooks/youtube(.:format)                                                              webhooks#youtube_notify
+#                                 hooks_getstream POST      /api/hooks/getstream(.:format)                                                            webhooks#getstream_firehose
 #                                  user__prodsync POST      /api/user/_prodsync(.:format)                                                             users#prod_sync
 #                                                 GET       /api/oauth/authorize/:code(.:format)                                                      doorkeeper/authorizations#show
 #                             oauth_authorization GET       /api/oauth/authorize(.:format)                                                            doorkeeper/authorizations#new
