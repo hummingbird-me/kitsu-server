@@ -1,3 +1,33 @@
+# rubocop:disable Metrics/LineLength
+# == Schema Information
+#
+# Table name: library_events
+#
+#  id               :integer          not null, primary key
+#  changed_data     :jsonb            not null
+#  event            :integer          not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  anime_id         :integer          indexed
+#  drama_id         :integer          indexed
+#  library_entry_id :integer          not null
+#  manga_id         :integer          indexed
+#  user_id          :integer          not null, indexed
+#
+# Indexes
+#
+#  index_library_events_on_anime_id  (anime_id)
+#  index_library_events_on_drama_id  (drama_id)
+#  index_library_events_on_manga_id  (manga_id)
+#  index_library_events_on_user_id   (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_4f07f07655  (user_id => users.id)
+#  fk_rails_8c048c3900  (library_entry_id => library_entries.id)
+#
+# rubocop:enable Metrics/LineLength
+
 class LibraryEvent < ApplicationRecord
   belongs_to :library_entry, required: true
   belongs_to :user, required: true
@@ -6,27 +36,11 @@ class LibraryEvent < ApplicationRecord
   belongs_to :drama
 
   enum event: %i[added updated]
-  enum status: LibraryEntry.statuses
-  # changes should validate only on :update
-
   # remove validation of changed_data
   validates :event, presence: true
 
   def self.create_for(event, library_entry)
-    # TODO: one edge case we might need to deal with
-    # is if someone changes progress up and down
-    # just to mess with it (other fields also)
     LibraryEvent.create!(
-      notes: library_entry&.notes,
-      nsfw: library_entry.nsfw,
-      private: library_entry.private,
-      progress: library_entry.progress,
-      rating: library_entry&.rating,
-      reconsuming: library_entry.reconsuming,
-      reconsume_count: library_entry.reconsume_count,
-      volumes_owned: library_entry.volumes_owned,
-      time_spent: library_entry.time_spent,
-      status: library_entry.status,
       # instead of polymorphic media
       anime_id: library_entry&.anime_id,
       manga_id: library_entry&.manga_id,

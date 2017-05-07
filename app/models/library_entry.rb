@@ -223,13 +223,18 @@ class LibraryEntry < ApplicationRecord
 
   after_update do
     # Activity History Stat will be using this
-    # TODO: refactor this somehow?
     library_event = LibraryEvent.create_for(:updated, self)
     case kind
     when :anime
       Stat::AnimeActivityHistory.increment(user, library_event)
+      # special case checking if progress was increased or decreased
+      Stat::AnimeAmountConsumed.increment(user, self) if progress > progress_was
+      Stat::AnimeAmountConsumed.decrement(user, self) if progress < progress_was
     when :manga
       Stat::MangaActivityHistory.increment(user, library_event)
+      # special case checking if progress was increased or decreased
+      Stat::MangaAmountConsumed.increment(user, self) if progress > progress_was
+      Stat::MangaAmountConsumed.decrement(user, self) if progress < progress_was
     end
   end
 

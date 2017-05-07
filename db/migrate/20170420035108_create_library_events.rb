@@ -10,20 +10,7 @@ class CreateLibraryEvents < ActiveRecord::Migration
       t.integer :anime_id, index: true
       t.integer :manga_id, index: true
       t.integer :drama_id, index: true
-      # not adding null constraints or defaults
-      # because this is coming from library_entry,
-      # so it should have all valid fields where needed
-      t.text :notes
-      t.boolean :nsfw
-      t.boolean :private
-      t.integer :progress
-      t.integer :rating
-      t.boolean :reconsuming
-      t.integer :reconsume_count
-      t.integer :volumes_owned
-      t.integer :time_spent
-      t.integer :status
-      # new columns
+
       t.integer :event, null: false
       t.jsonb :changed_data, default: {}, null: false
 

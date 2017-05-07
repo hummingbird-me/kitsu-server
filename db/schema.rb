@@ -620,16 +620,6 @@ ActiveRecord::Schema.define(version: 20170502061636) do
     t.integer  "anime_id"
     t.integer  "manga_id"
     t.integer  "drama_id"
-    t.text     "notes"
-    t.boolean  "nsfw"
-    t.boolean  "private"
-    t.integer  "progress"
-    t.integer  "rating"
-    t.boolean  "reconsuming"
-    t.integer  "reconsume_count"
-    t.integer  "volumes_owned"
-    t.integer  "time_spent"
-    t.integer  "status"
     t.integer  "event",                         null: false
     t.jsonb    "changed_data",     default: {}, null: false
     t.datetime "created_at",                    null: false
