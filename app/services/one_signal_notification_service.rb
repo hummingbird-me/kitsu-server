@@ -13,22 +13,22 @@ class OneSignalNotificationService
 
   # Pack JSON request from preconfigured attr
   def request_json
-    opts.merge({
+    opts.merge(
       app_id: app_id,
       content: content,
-      include_player_ids: player_ids,
-    })
+      include_player_ids: player_ids
+    )
   end
 
   # Send notification to OneSignal
   def notify_players!
     # POST request to one signal server
     res = Typhoeus.post("#{ONE_SIGNAL_URL}/v1/notifications",
-        headers: {
-          'Content-Type'  => 'application/json;charset=utf-8',
-          'Authorization' => "Basic #{api_key}"
-        },
-        body: request_json)
+      headers: {
+        'Content-Type'  => 'application/json;charset=utf-8',
+        'Authorization' => "Basic #{api_key}"
+      },
+      body: request_json)
 
     check_and_process_invalids(JSON.parse(res.body)) if res.success?
   end
@@ -36,9 +36,9 @@ class OneSignalNotificationService
   private
 
   def check_and_process_invalids(res)
-    return unless res.has_key?(:errors)
+    return unless res.key?(:errors)
     errors = res[:errors]
-    if errors.is_a?(Hash) && errors.has_key?(:invalid_player_ids)
+    if errors.is_a?(Hash) && errors.key?(:invalid_player_ids)
       # Some one signal player ids are invalid
       players = User.where('one_signal_id IN (?)', errors[:invalid_player_ids])
     else
