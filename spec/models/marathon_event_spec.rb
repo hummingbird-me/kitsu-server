@@ -31,13 +31,18 @@ RSpec.describe MarathonEvent, type: :model do
     subject { build(:marathon_event, event: :updated)}
     it { should validate_presence_of(:status) }
   end
+
   context 'without event=changed' do
     subject { build(:marathon_event, event: :consumed) }
     it { should_not validate_presence_of(:status) }
   end
 
-  it 'should have an activity with media feed in "to" list' do
+  it 'should publish to the user\'s media feed' do
+    expect(subject.stream_activity.feed).to eq(subject.user.media_feed)
+  end
+
+  it 'should have an activity with media\'s media feed in "to" list' do
     activity = subject.stream_activity.as_json.with_indifferent_access
-    expect(activity[:to]).to include(subject.media.feed.stream_id)
+    expect(activity[:to]).to include(subject.media.media_feed.stream_id)
   end
 end

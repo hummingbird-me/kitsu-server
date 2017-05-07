@@ -66,7 +66,7 @@ class Post < ApplicationRecord
   validates :target_user, absence: true, if: :target_group
 
   def feed
-    Feed.post(id)
+    Feed::PostFeed.new(id)
   end
 
   def other_feeds
@@ -81,12 +81,12 @@ class Post < ApplicationRecord
   end
 
   def target_feed
-    if target_user
-      target_user.aggregated_feed
-    elsif target_group
+    if target_user # A => B, post to B without fanout
+      target_user.profile_feed.no_fanout
+    elsif target_group # A => Group, post to Group
       target_group.feed
-    else
-      user.feed
+    else # General post, fanout normally
+      user.profile_feed
     end
   end
 

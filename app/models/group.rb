@@ -91,18 +91,12 @@ class Group < ApplicationRecord
   end
 
   def feed
-    Feed.group(id)
+    Feed::GroupFeed.new(id)
   end
 
-  def aggregated_feed
-    Feed.group_aggr(id)
-  end
-
-  after_create do
-    aggregated_feed.follow(feed)
-  end
-
-  after_destroy do
-    aggregated_feed.unfollow(feed)
+  # Not bothering with teardown because the group ID won't be reused (so who
+  # cares?)
+  after_commit(on: :create) do
+    feed.setup!
   end
 end

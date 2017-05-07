@@ -92,7 +92,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject { build(:user) }
+  subject { build(:user, id: 1) }
   let(:persisted_user) { create(:user) }
 
   it { should have_db_index(:facebook_id) }
@@ -185,6 +185,69 @@ RSpec.describe User, type: :model do
         subject.save
       end
       expect(subject.past_names[0]).to equal(subject.previous_name)
+    end
+  end
+
+  describe '#profile_feed' do
+    it 'should return a Feed::ProfileFeed instance' do
+      expect(subject.profile_feed).to be_a(Feed::ProfileFeed)
+    end
+  end
+
+  context 'after creation' do
+    before do
+      allow_any_instance_of(Feed).to receive(:follow)
+      allow_any_instance_of(Feed).to receive(:unfollow)
+    end
+
+    it 'should have the timeline follow the profile feed' do
+      timeline = double(:feed)
+      profile = double(:feed)
+      allow(subject).to receive(:profile_feed).and_return(profile)
+      allow(subject).to receive(:timeline).and_return(timeline)
+      expect(timeline).to receive(:follow).with(profile)
+      subject.save!
+    end
+
+    it 'should set up the profile feeds' do
+      profile = double(:feed)
+      allow(subject).to receive(:profile_feed).and_return(profile)
+      expect(profile).to receive(:setup!)
+      subject.save!
+    end
+  end
+
+  describe 'after updating' do
+    let(:global) { double(Feed::Global) }
+
+    before do
+      stub_const('Feed::Global', global)
+    end
+
+    context 'when global sharing changes to true' do
+      before do
+        subject.share_to_global = false
+        subject.save!
+        subject.share_to_global = true
+      end
+
+      it 'should have the global feed follow the profile feed' do
+        expect(global).to receive(:follow).with(subject.profile_feed)
+        subject.save!
+      end
+    end
+
+    context 'when global sharing changes to false' do
+      before do
+        subject.share_to_global = true
+        subject.save!
+        subject.share_to_global = false
+      end
+
+      it 'should have the global feed unfollow the profile feed' do
+        expect(global).to receive(:unfollow).with(subject.profile_feed)
+        subject.save!
+      end
     end
   end
 end

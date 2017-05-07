@@ -21,6 +21,11 @@ require 'rails_helper'
 RSpec.describe Follow, type: :model do
   let(:user_follower) { create(:user) }
   let(:user_followed) { create(:user) }
+  let(:timeline) { double(:feed).as_null_object }
+
+  before do
+    allow(subject.follower).to receive(:timeline).and_return(timeline)
+  end
 
   subject { build(:follow, follower: user_follower, followed: user_followed) }
 
@@ -31,16 +36,16 @@ RSpec.describe Follow, type: :model do
     .counter_cache(:followers_count).touch(true) }
   it { should validate_presence_of(:followed) }
 
-  it "should add follow to follower's timeline on save" do
+  it "should add follow to follower's timeline on create" do
     expect(subject.follower.timeline).to receive(:follow)
-      .with(subject.followed.feed)
+      .with(subject.followed.profile_feed)
     subject.save!
   end
 
-  it "should remove follow on follower's timeline on destroy" do
+  it "should remove follow from follower's timeline on destroy" do
     subject.save!
     expect(subject.follower.timeline).to receive(:unfollow)
-      .with(subject.followed.feed)
+      .with(subject.followed.profile_feed)
     subject.destroy!
   end
 
@@ -52,7 +57,12 @@ RSpec.describe Follow, type: :model do
   end
 
   it "should generate an activity on the followers' aggregated feed" do
-    follower_feed = subject.follower.aggregated_feed
+    follower_feed = subject.follower.feed.no_fanout
     expect(subject.stream_activity.feed).to eq(follower_feed)
+  end
+
+  it "should copy the activity to the followed's notification feed" do
+    expect(subject.stream_activity[:to])
+      .to include(subject.followed.notifications)
   end
 end

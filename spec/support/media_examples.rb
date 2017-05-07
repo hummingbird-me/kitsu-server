@@ -3,6 +3,11 @@ require 'rails_helper'
 RSpec.shared_examples 'media' do
   include_examples 'titleable'
 
+  before do
+    allow_any_instance_of(Feed).to receive(:follow)
+    allow_any_instance_of(Feed).to receive(:unfollow)
+  end
+
   # Columns which are mandatory for all media
   it { should have_db_column(:slug).of_type(:string) }
   it { should have_db_column(:abbreviated_titles).of_type(:string) }
@@ -94,6 +99,21 @@ RSpec.shared_examples 'media' do
         subject.reload
         expect(subject.rating_frequencies['3']).to eq('1')
       end
+    end
+  end
+
+  describe '#feed' do
+    it 'returns a feed for the media' do
+      expect(subject.feed).to be_a(Feed::MediaFeed)
+    end
+  end
+
+  describe 'after creating' do
+    it 'calls #setup! on the feed' do
+      feed = double(:feed).as_null_object
+      allow(subject).to receive(:feed).and_return(feed)
+      expect(subject.feed).to receive(:setup!)
+      subject.save!
     end
   end
 end

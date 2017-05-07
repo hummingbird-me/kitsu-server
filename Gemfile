@@ -3,7 +3,6 @@ ruby '2.3.1'
 
 # Core Stuff
 gem 'puma'
-gem 'puma_worker_killer'
 gem 'rails', '4.2.8'
 gem 'rails-api'
 
@@ -55,8 +54,9 @@ gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'stream-ruby', '~> 2.5.2'
-gem 'stream_rails', github: 'GetStream/stream-rails', branch: 'feature/subreference-enrichment' # Feeds
+gem 'stream-ruby', '~> 2.5.4' # Feeds
+gem 'stream_rails', github: 'GetStream/stream-rails',
+                    branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'typhoeus' # Parallelize scraping tasks
 
 # Rack Middleware
@@ -89,6 +89,9 @@ group :development, :test do
   # Guard notices filesystem changes and *does things*
   gem 'guard'
   gem 'guard-rspec', require: false # Running specs
+
+  # Useful for benchmarking!
+  gem 'benchmark-ips'
 end
 
 group :test do
@@ -98,6 +101,7 @@ group :test do
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
   gem 'simplecov' # Local coverage
+  gem 'test_after_commit' # Rails 4 doesn't run commit callbacks on transactions
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
 
@@ -106,6 +110,7 @@ group :test do
 end
 
 group :production, :staging do
+  gem 'puma_worker_killer'
   gem 'rails_12factor' # Log to stdout, serve assets
   gem 'skylight' # Performance Monitoring
 end

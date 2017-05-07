@@ -26,6 +26,28 @@ class Feed
         @data
       end
 
+      def to_enum
+        Enumerator.new { |yielder|
+          opts = stream_options.merge(limit: 100)
+          next_page = {}
+
+          loop do
+            # Generate the options
+            opts = opts.merge(next_page)
+            # Grab the page
+            page = feed.stream_feed.get(opts)['results']
+            # Record the next page info
+            next_page = get_next_page(page)
+            # If we got less than we asked for, we've hit the final page
+            raise StopIteration if page.count < 100
+            # Filter the page and tack it onto the list
+            page = Page.new(page, fetcher_options).to_a
+            # Iterate over the page and yield it
+            page.each { |act| yielder << act }
+          end
+        }.lazy
+      end
+
       def more?
         @termination_reason != :end
       end

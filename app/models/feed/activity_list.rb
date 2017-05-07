@@ -1,7 +1,7 @@
 class Feed
   class ActivityList
     attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :limit_ratio, :termination_reason
+      :limit_ratio, :termination_reason, :filter, :feed_type
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
@@ -42,6 +42,11 @@ class Feed
     def per(page_size)
       @page_size = page_size
       update_pagination!
+      self
+    end
+
+    def unenriched
+      @including = []
       self
     end
 
@@ -109,12 +114,14 @@ class Feed
       self
     end
 
+    # Create a new, unsaved Feed::Activity instance for the Feed
     def new(data = {})
       Feed::Activity.new(feed, data)
     end
 
     def find(id)
-      act = feed.stream_feed.get(id_lte: id, limit: 1)['results'].first
+      # Read from the stream_feed instead of the feed, to apply filters
+      act = stream_feed.get(id_lte: id, limit: 1)['results'].first
       # If we got an ActivityGroup, get the first Activity in it
       act = act['activities'].first if act.key?('activities')
 
@@ -129,23 +136,48 @@ class Feed
     end
 
     def add(activity)
-      res = feed.stream_feed.add_activity(activity.as_json)
+      # Add to the Feed directly, converting the activity to JSON
+      res = feed.add_activity(activity.as_json)
+      # Symbolize the response
       res = res.symbolize_keys.except(:duration)
+      # Turn it into an Activity object
       Feed::Activity.new(feed, res)
     end
     alias_method :<<, :add
 
+    # Update an existing activity
+    #
+    # @attr [Feed::Activity,#as_json] activity The activity to add to the feed
     def update(activity)
       Feed.client.update_activity(activity.as_json)
     end
 
+    # Destroy an activity by foreign_id, uuid, or Activity instance
+    #
+    # @attr [Feed::Activity] activity An Activity object to destroy
+    # @attr [String] foreign_id The foreign_id of an activity to remove
+    # @attr [String] uuid The uuid of an activity to remove
     def destroy(activity = nil, foreign_id: nil, uuid: nil)
       if uuid
-        feed.stream_feed.remove_activity(activity)
+        feed.remove_activity(activity)
       else
         foreign_id = Feed.get_stream_id(foreign_id || activity.foreign_id)
-        feed.stream_feed.remove_activity(foreign_id, foreign_id: true)
+        feed.remove_activity(foreign_id, foreign_id: true)
       end
+    end
+
+    # @attr [Symbol] filter_name The name of the filter to apply when reading
+    #                            the feed.
+    def filter(filter_name)
+      @filter = filter_name
+      self
+    end
+
+    # @attr [Symbol] feed_type The type of underlying feed to use when reading
+    #                          the feed.
+    def with_type(feed_type)
+      @feed_type = feed_type
+      self
     end
 
     # @attr [Float] ratio The expected percentage of posts that will be matched
@@ -176,11 +208,19 @@ class Feed
       fetcher.to_a
     end
 
+    def to_enum
+      fetcher.to_enum
+    end
+
     def more?
       fetcher.more?
     end
 
     private
+
+    def stream_feed
+      feed.stream_feed_for(filter: @filter, type: @feed_type)
+    end
 
     def fetcher
       @fetcher ||= Fetcher.new(

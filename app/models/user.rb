@@ -231,20 +231,16 @@ class User < ApplicationRecord
     self.title == 'Staff' || self.title == 'Mod'
   end
 
-  def feed
-    @feed ||= Feed.user(id)
-  end
-
-  def aggregated_feed
-    @aggr_feed ||= Feed.user_aggr(id)
+  def profile_feed
+    @profile_feed ||= Feed::ProfileFeed.new(id)
   end
 
   def timeline
-    @timeline ||= Feed.timeline(id)
+    @timeline ||= Feed::Timeline.new(id)
   end
 
   def notifications
-    @notifications ||= Feed.notifications(id)
+    @notifications ||= Feed::Notifications.new(id)
   end
 
   def update_feed_completed
@@ -276,10 +272,11 @@ class User < ApplicationRecord
   after_commit on: :create do
     # Send Confirmation Email
     UserMailer.confirmation(self).deliver_later
+
     # Set up feeds
-    aggregated_feed.follow(feed)
-    timeline.follow(feed)
-    Feed.global.follow(feed)
+    profile_feed.setup!
+    timeline.setup!
+
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
   end
@@ -287,9 +284,9 @@ class User < ApplicationRecord
   after_save do
     if share_to_global_changed?
       if share_to_global
-        Feed.global.follow(feed)
+        Feed::Global.new.follow(profile_feed)
       else
-        Feed.global.unfollow(feed)
+        Feed::Global.new.unfollow(profile_feed)
       end
     end
   end
