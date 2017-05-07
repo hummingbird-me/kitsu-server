@@ -12,7 +12,19 @@ class ApplicationController < JSONAPI::ResourceController
   force_ssl if Rails.env.production?
 
   if Raven.configuration.capture_allowed?
-    on_server_error { |error| Raven.capture_exception(error) }
+    on_server_error do |error|
+      extra = {}
+      begin
+        if error.is_a?(ActiveRecord::StatementInvalid)
+          # Clean the stack trace and use that for the fingerprint.
+          trace = Rails.backtrace_cleaner.clean(error.backtrace)
+          trace = trace.map { |line| line.split(/:\d+:/).first }
+          extra[:fingerprint] = [error.original_exception.class.name, trace]
+        end
+      ensure
+        Raven.capture_exception(error, extra)
+      end
+    end
 
     before_action :tag_sentry_context
 

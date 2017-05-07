@@ -6,9 +6,9 @@
 #  id                :integer          not null, primary key
 #  action_performed  :string           default("create"), not null
 #  error_message     :text
-#  media_type        :string
+#  media_type        :string           not null
 #  progress          :integer
-#  rating            :decimal(2, 1)
+#  rating            :integer
 #  reconsume_count   :integer
 #  reconsuming       :boolean
 #  status            :integer
@@ -17,7 +17,7 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  linked_account_id :integer          not null, indexed
-#  media_id          :integer
+#  media_id          :integer          not null
 #
 # Indexes
 #

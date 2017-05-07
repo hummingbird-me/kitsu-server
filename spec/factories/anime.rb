@@ -7,7 +7,7 @@
 #  abbreviated_titles        :string           is an Array
 #  age_rating                :integer          indexed
 #  age_rating_guide          :string(255)
-#  average_rating            :float            indexed
+#  average_rating            :decimal(5, 2)    indexed
 #  canonical_title           :string           default("en_jp"), not null
 #  cover_image_content_type  :string(255)
 #  cover_image_file_name     :string(255)

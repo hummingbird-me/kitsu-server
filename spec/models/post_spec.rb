@@ -30,8 +30,8 @@
 #
 # Foreign Keys
 #
-#  fk_rails_43023491e6  (target_user_id => users.id)
 #  fk_rails_5b5ddfd518  (user_id => users.id)
+#  fk_rails_6fac2de613  (target_user_id => users.id)
 #
 # rubocop:enable Metrics/LineLength
 
@@ -62,8 +62,8 @@ RSpec.describe Post, type: :model do
     subject { build(:post, media: media) }
     let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
 
-    it 'should have an activity with media\'s posts feed in "to" list' do
-      expect(activity[:to]).to include(media.feed.stream_id)
+    it 'should have an activity with media\'s feed in "to" list' do
+      expect(activity[:to]).to include("media:Anime-#{media.id}")
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe Post, type: :model do
 
     describe '#stream_activity' do
       it "should have the target user's feed as the target" do
-        expect(subject.stream_activity.feed).to eq(user.feed)
+        expect(subject.stream_activity.feed).to eq(user.profile_feed)
       end
 
       it "should have the target user's notifications in the to field" do

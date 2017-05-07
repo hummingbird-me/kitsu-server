@@ -66,6 +66,15 @@ module StreamSync
     end
   end
 
+  def follow_site_announcements
+    ids = User.pluck(:id)
+
+    mass_follow('announcements', ids, scrollback: 0) do |id|
+      global = Feed::SiteAnnouncementsGlobal.new.stream_id
+      { target: global, source: Feed::SiteAnnouncementsFeed.new(id).stream_id }
+    end
+  end
+
   def follow_media_aggr(type)
     ids = type.pluck(:id)
 
@@ -154,19 +163,19 @@ module StreamSync
     print "\n"
   end
 
-  def mass_follow(name, list, &map_block)
+  def mass_follow(name, list, scrollback: 300)
     puts "#{name}:"
     print ' => generating'
     follows = list.map do |*args|
       print '.' if rand(1..100) > 98
-      map_block.call(*args)
+      yield(*args)
     end
     print "\n"
     print ' => uploading'
     follows.in_groups_of(800, false).each do |group|
       print '.'
       sleep 0.1
-      Feed.follow_many(group, scrollback: 300)
+      Feed::StreamFeed.follow_many(group, scrollback)
     end
     print "\n"
   end

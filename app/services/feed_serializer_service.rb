@@ -59,7 +59,7 @@ class FeedSerializerService
   end
 
   def including
-    if feed.aggregated? || feed.notification?
+    if feed.aggregated?
       @including.map { |inc| "activities.#{inc}" } + ['activities']
     else
       @including
@@ -67,7 +67,11 @@ class FeedSerializerService
   end
 
   def meta
-    { readonlyToken: activity_list.feed.readonly_token }
+    {
+      readonlyToken: activity_list.feed.readonly_token,
+      unseenCount: activity_list.unseen_count,
+      unreadCount: activity_list.unread_count
+    }.compact
   end
 
   def links
@@ -96,7 +100,7 @@ class FeedSerializerService
   end
 
   def resource_class
-    if feed.aggregated? || feed.notification?
+    if feed.aggregated?
       ActivityGroupResource
     else
       ActivityResource

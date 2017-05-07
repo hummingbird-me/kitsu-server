@@ -77,6 +77,7 @@ class Feed
 
   # Pass right along to stream_feed
   delegate :remove_activity, to: :stream_feed
+  delegate :get, to: :stream_feed
 
   # Register a feed class for lookups by name
   def self.register!(name, klass)

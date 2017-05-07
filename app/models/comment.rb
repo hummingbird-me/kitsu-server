@@ -61,6 +61,7 @@ class Comment < ApplicationRecord
     to += mentioned_users.map(&:notifications)
     to += post.other_feeds
     to += post.target_timelines
+    to << post.comments_feed
     to << post.target_feed
     to.compact!
     post.feed.activities.new(
@@ -70,6 +71,7 @@ class Comment < ApplicationRecord
       replies_count: replies_count,
       post_id: post_id,
       target: post,
+      mentioned_users: mentioned_users.pluck(:id),
       to: to - [user.notifications]
     )
   end
@@ -86,6 +88,8 @@ class Comment < ApplicationRecord
     self.edited_at = Time.now if content_changed?
     true
   end
-
-  after_create { user.update_feed_completed! }
+  after_create do
+    user.update_feed_completed!
+    #PostFollow.create(user: user, post: post)
+  end
 end

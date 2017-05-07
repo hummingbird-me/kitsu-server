@@ -76,18 +76,10 @@ RSpec.describe Group, type: :model do
   it { should belong_to(:category).class_name('GroupCategory') }
   it { should validate_length_of(:tagline).is_at_most(60) }
 
-  it 'should send the follow to Stream on save' do
-    feed = double('Feed')
-    allow(subject).to receive(:aggregated_feed).and_return(feed)
-    expect(feed).to receive(:follow)
+  it 'should set up the feed on create' do
+    feed = double('Feed::GroupFeed')
+    allow(subject).to receive(:feed).and_return(feed)
+    expect(feed).to receive(:setup!)
     subject.save!
-  end
-
-  it 'should remove the follow from Stream on save' do
-    feed = double('Feed')
-    subject.save!
-    allow(subject).to receive(:aggregated_feed).and_return(feed)
-    expect(feed).to receive(:unfollow).with(subject.feed)
-    subject.destroy!
   end
 end

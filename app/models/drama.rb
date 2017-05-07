@@ -7,12 +7,13 @@
 #  abbreviated_titles        :string           is an Array
 #  age_rating                :integer
 #  age_rating_guide          :string
-#  average_rating            :float
+#  average_rating            :decimal(5, 2)
 #  canonical_title           :string           default("en_jp"), not null
 #  country                   :string           default("ja"), not null
 #  cover_image_content_type  :string
 #  cover_image_file_name     :string
 #  cover_image_file_size     :integer
+#  cover_image_processing    :boolean
 #  cover_image_top_offset    :integer          default(0), not null
 #  cover_image_updated_at    :datetime
 #  end_date                  :date

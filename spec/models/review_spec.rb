@@ -58,7 +58,7 @@ RSpec.describe Review, type: :model do
 
     it 'copies the activity to the media\'s media feed' do
       expect(subject.stream_activity[:to]).to(
-        include(subject.media.profile_feed)
+        include(subject.media.feed)
       )
     end
   end

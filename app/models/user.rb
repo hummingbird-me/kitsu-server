@@ -52,6 +52,7 @@
 #  previous_email              :string
 #  pro_expires_at              :datetime
 #  profile_completed           :boolean          default(FALSE), not null
+#  rating_system               :integer          default(0), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
@@ -62,6 +63,7 @@
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
+#  theme                       :integer          default(0), not null
 #  time_zone                   :string
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
@@ -129,6 +131,7 @@ class User < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :comment_likes, dependent: :destroy
   has_many :post_likes, dependent: :destroy
+  has_many :post_follows, dependent: :destroy
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
   has_many :group_members, dependent: :destroy
@@ -164,7 +167,7 @@ class User < ApplicationRecord
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :alts_of, ->(user) do
-    where('ip_addresses && ARRAY[?]::inet', user.ip_addresses)
+    where('ip_addresses && ARRAY[?]::inet[]', user.ip_addresses.map(&:to_s))
   end
   scope :followed_first, ->(user) {
     user_id = sanitize(user.id)
@@ -228,7 +231,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    self.title == 'Staff' || self.title == 'Mod'
+    title == 'Staff' || title == 'Mod'
   end
 
   def profile_feed
@@ -239,8 +242,20 @@ class User < ApplicationRecord
     @timeline ||= Feed::Timeline.new(id)
   end
 
+  def group_timeline
+    @group_timeline ||= Feed::Timeline.new(id)
+  end
+
   def notifications
     @notifications ||= Feed::Notifications.new(id)
+  end
+
+  def site_announcements_feed
+    @site_announcements_feed ||= Feed::SiteAnnouncementsFeed.new(id)
+  end
+
+  def library_feed
+    @library_feed ||= Feed::PrivateLibraryFeed.new(id)
   end
 
   def update_feed_completed
@@ -276,6 +291,7 @@ class User < ApplicationRecord
     # Set up feeds
     profile_feed.setup!
     timeline.setup!
+    site_announcements_feed.setup!
 
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)

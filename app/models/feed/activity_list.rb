@@ -149,7 +149,7 @@ class Feed
     #
     # @attr [Feed::Activity,#as_json] activity The activity to add to the feed
     def update(activity)
-      Feed.client.update_activity(activity.as_json)
+      Feed::StreamFeed.client.update_activity(activity.as_json)
     end
 
     # Destroy an activity by foreign_id, uuid, or Activity instance
@@ -200,26 +200,17 @@ class Feed
       self
     end
 
-    def empty?
-      to_a.empty?
-    end
-
-    def to_a
-      fetcher.to_a
-    end
-
-    def to_enum
-      fetcher.to_enum
-    end
-
-    def more?
-      fetcher.more?
-    end
+    delegate :to_a, to: :fetcher
+    delegate :empty?, to: :to_a
+    delegate :to_enum, to: :fetcher
+    delegate :more?, to: :fetcher
+    delegate :unread_count, to: :fetcher
+    delegate :unseen_count, to: :fetcher
 
     private
 
     def stream_feed
-      feed.stream_feed_for(filter: @filter, type: @feed_type)
+      @stream_feed ||= feed.stream_feed_for(filter: @filter, type: @feed_type)
     end
 
     def fetcher
@@ -236,7 +227,8 @@ class Feed
         maps: @maps,
         limit_ratio: @limit_ratio,
         includes: @including,
-        feed: @feed
+        feed: stream_feed,
+        aggregated: feed.aggregated?
       }
     end
   end

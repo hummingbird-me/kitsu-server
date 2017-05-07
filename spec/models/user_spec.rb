@@ -52,6 +52,7 @@
 #  previous_email              :string
 #  pro_expires_at              :datetime
 #  profile_completed           :boolean          default(FALSE), not null
+#  rating_system               :integer          default(0), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
@@ -62,6 +63,7 @@
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
+#  theme                       :integer          default(0), not null
 #  time_zone                   :string
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
@@ -200,12 +202,10 @@ RSpec.describe User, type: :model do
       allow_any_instance_of(Feed).to receive(:unfollow)
     end
 
-    it 'should have the timeline follow the profile feed' do
+    it 'should set up the timeline' do
       timeline = double(:feed)
-      profile = double(:feed)
-      allow(subject).to receive(:profile_feed).and_return(profile)
       allow(subject).to receive(:timeline).and_return(timeline)
-      expect(timeline).to receive(:follow).with(profile)
+      expect(timeline).to receive(:setup!)
       subject.save!
     end
 
@@ -215,17 +215,27 @@ RSpec.describe User, type: :model do
       expect(profile).to receive(:setup!)
       subject.save!
     end
+
+    it 'should set up the site announcement feed' do
+      announcements = double(:feed)
+      allow(subject).to receive(:site_announcements_feed)
+        .and_return(announcements)
+      expect(announcements).to receive(:setup!)
+      subject.save!
+    end
   end
 
   describe 'after updating' do
-    let(:global) { double(Feed::Global) }
+    let(:global) { instance_double(Feed::Global) }
 
     before do
-      stub_const('Feed::Global', global)
+      feed = OpenStruct.new(new: global)
+      stub_const('Feed::Global', feed)
     end
 
     context 'when global sharing changes to true' do
       before do
+        allow(global).to receive(:unfollow).with(subject.profile_feed)
         subject.share_to_global = false
         subject.save!
         subject.share_to_global = true
@@ -239,6 +249,7 @@ RSpec.describe User, type: :model do
 
     context 'when global sharing changes to false' do
       before do
+        allow(global).to receive(:follow).with(subject.profile_feed)
         subject.share_to_global = true
         subject.save!
         subject.share_to_global = false

@@ -610,7 +610,6 @@ ActiveRecord::Schema.define(version: 20170507033440) do
     t.text     "error_message"
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
-    t.integer  "day"
   end
 
   add_index "library_entry_logs", ["linked_account_id"], name: "index_library_entry_logs_on_linked_account_id", using: :btree
@@ -857,6 +856,16 @@ ActiveRecord::Schema.define(version: 20170507033440) do
   add_index "people", ["mal_id"], name: "index_people_on_mal_id", unique: true, using: :btree
   add_index "people", ["mal_id"], name: "person_mal_id", unique: true, using: :btree
 
+  create_table "post_follows", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+    t.integer  "post_id"
+  end
+
+  add_index "post_follows", ["post_id"], name: "index_post_follows_on_post_id", using: :btree
+  add_index "post_follows", ["user_id"], name: "index_post_follows_on_user_id", using: :btree
+
   create_table "post_likes", force: :cascade do |t|
     t.integer  "post_id",    null: false
     t.integer  "user_id",    null: false
@@ -1014,6 +1023,16 @@ ActiveRecord::Schema.define(version: 20170507033440) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
+  create_table "site_announcements", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.text     "description"
+    t.string   "link"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "title",       null: false
+    t.string   "image_url"
+  end
 
   create_table "stats", force: :cascade do |t|
     t.integer  "user_id",                 null: false
@@ -1265,6 +1284,8 @@ ActiveRecord::Schema.define(version: 20170507033440) do
   add_foreign_key "marathon_events", "marathons"
   add_foreign_key "marathons", "library_entries"
   add_foreign_key "media_follows", "users"
+  add_foreign_key "post_follows", "posts"
+  add_foreign_key "post_follows", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "profile_links", "profile_link_sites"
@@ -1273,6 +1294,7 @@ ActiveRecord::Schema.define(version: 20170507033440) do
   add_foreign_key "reports", "users", column: "moderator_id"
   add_foreign_key "review_likes", "users"
   add_foreign_key "reviews", "library_entries"
+  add_foreign_key "site_announcements", "users"
   add_foreign_key "stats", "users"
   add_foreign_key "streaming_links", "streamers"
   add_foreign_key "users", "posts", column: "pinned_post_id"

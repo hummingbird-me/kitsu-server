@@ -52,5 +52,21 @@ namespace :stream do
       StreamDump.group_memberships.each { |instr| STDOUT.puts instr.to_json }
       StreamDump.group_auto_follows.each { |instr| STDOUT.puts instr.to_json }
     end
+
+    desc 'Dump group timeline migration'
+    task group_timeline: :environment do
+      ApplicationRecord.logger = Logger.new(nil)
+      StreamDump.group_timeline_migration.each do |instr|
+        STDOUT.puts instr.to_json
+      end
+    end
+
+    desc 'Dump library base'
+    task private_library: :environment do
+      ApplicationRecord.logger = Logger.new(nil)
+      StreamDump.private_library_feed.each do |instr|
+        STDOUT.puts instr.to_json
+      end
+    end
   end
 end

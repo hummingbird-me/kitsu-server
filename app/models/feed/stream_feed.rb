@@ -13,9 +13,20 @@ class Feed
       @owner_feed = owner_feed
     end
 
-    def activities
+    def activities(*)
       ActivityList.new(self)
     end
+
+    def aggregated?
+      %w[notifications timeline group_timeline global
+         site_announcements].include?(@group) ||
+        @group.end_with?('_aggr')
+    end
+
+    def stream_feed(*)
+      self
+    end
+    alias_method :stream_feed_for, :stream_feed
 
     def get(*args)
       client_feed.get(*args)
@@ -40,6 +51,10 @@ class Feed
 
     def stream_id
       "#{@group}:#{@id}"
+    end
+
+    def self.client
+      StreamRails.client
     end
 
     private

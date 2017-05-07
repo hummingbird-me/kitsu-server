@@ -10,5 +10,5 @@ class LibraryEntryLogResource < BaseResource
   has_one :linked_account
   has_one :media, polymorphic: true
 
-  filters :linked_account_id
+  filters :linked_account_id, :sync_status
 end

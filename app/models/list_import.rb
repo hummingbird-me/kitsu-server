@@ -115,16 +115,20 @@ class ListImport < ApplicationRecord
   end
 
   def stream_activity
-    if failed? || completed?
-      user.notifications.activities.new(
-        verb: 'imported',
-        kind: self.class.name,
-        status: status
-      )
-    end
+    return unless failed? || completed?
+
+    user.notifications.activities.new(
+      verb: 'imported',
+      kind: self.class.name,
+      status: status
+    )
   end
 
-  after_create do
+  before_validation do
+    self.input_text = input_text.strip if input_text.present?
+  end
+
+  after_commit(on: :create) do
     ListImportWorker.perform_async(id)
   end
 end

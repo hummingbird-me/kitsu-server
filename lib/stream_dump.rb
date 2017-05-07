@@ -30,6 +30,78 @@ module StreamDump
     results.flat_map { |x| x }
   end
 
+  def private_library_feed(scope = User)
+    each_user(scope) do |user_id|
+      entries = LibraryEntry.where(user_id: user_id)
+                            .pluck(:id, :status, :rating, :progress,
+                              :updated_at, :media_type, :media_id)
+      entries = entries.map do |(id, status, rating, progress, updated_at,
+                                 media_type, media_id)|
+        [
+          {
+            # STATUS
+            verb: 'updated',
+            foreign_id: "LibraryEntry:#{id}:updated-#{status}",
+            object: "LibraryEntry:#{id}",
+            actor: "User:#{user_id}",
+            media: "#{media_type}:#{media_id}",
+            status: status,
+            time: updated_at
+          },
+          {
+            # RATING
+            verb: 'rated',
+            foreign_id: "LibraryEntry:#{id}:rated",
+            object: "LibraryEntry:#{id}",
+            actor: "User:#{user_id}",
+            media: "#{media_type}:#{media_id}",
+            rating: rating,
+            time: updated_at
+          },
+          {
+            # PROGRESS
+            verb: 'progressed',
+            foreign_id: "LibraryEntry:#{id}:progressed-#{progress}",
+            object: "LibraryEntry:#{id}",
+            actor: "User:#{user_id}",
+            media: "#{media_type}:#{media_id}",
+            progress: progress,
+            time: updated_at
+          }
+        ]
+      end
+      entries = entries.flat_map { |x| x }
+
+      {
+        instruction: 'add_activities',
+        feedId: "private_library:#{user_id}",
+        data: entries
+      }
+    end
+  end
+
+  def group_timeline_migration(scope = User)
+    results = each_user(scope) do |user_id|
+      group_ids = GroupMember.where(user_id: user_id).pluck(:group_id)
+      group_feeds = group_ids.map { |id| "group:#{id}" }
+
+      [
+        {
+          instruction: 'follow',
+          feedId: "group_timeline:#{user_id}",
+          data: group_feeds
+        },
+        {
+          instruction: 'unfollow',
+          feedId: "timeline:#{user_id}",
+          data: group_feeds
+        }
+      ]
+    end
+    # Flatten the results lazily
+    results.flat_map { |x| x }
+  end
+
   def split_feed(feed)
     activities = feed.activities_for(type: :flat).unenriched.to_enum
 
