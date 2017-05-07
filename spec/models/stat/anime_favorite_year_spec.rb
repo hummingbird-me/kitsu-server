@@ -38,8 +38,8 @@ RSpec.describe Stat::AnimeFavoriteYear do
     it 'should add all library entries related to user' do
       record = Stat.find_by(user: user, type: 'Stat::AnimeFavoriteYear')
 
-      expect(record.stats_data['2016']).to eq(1)
-      expect(record.stats_data['2014']).to eq(1)
+      expect(record.stats_data['all_years']['2016']).to eq(1)
+      expect(record.stats_data['all_years']['2014']).to eq(1)
       expect(record.stats_data['total']).to eq(2)
     end
   end
@@ -53,7 +53,7 @@ RSpec.describe Stat::AnimeFavoriteYear do
     it 'should add LibraryEntry anime start_date into stats_data' do
       record = Stat.find_by(user: user, type: 'Stat::AnimeFavoriteYear')
 
-      expect(record.stats_data['2012']).to eq(1)
+      expect(record.stats_data['all_years']['2012']).to eq(1)
       expect(record.stats_data['total']).to eq(3)
     end
   end
@@ -65,7 +65,7 @@ RSpec.describe Stat::AnimeFavoriteYear do
     it 'should remove LibraryEntry anime start_date from stats_data' do
       record = Stat.find_by(user: user, type: 'Stat::AnimeFavoriteYear')
 
-      expect(record.stats_data['2016']).to eq(0)
+      expect(record.stats_data['all_years']['2016']).to eq(0)
       expect(record.stats_data['total']).to eq(1)
     end
   end

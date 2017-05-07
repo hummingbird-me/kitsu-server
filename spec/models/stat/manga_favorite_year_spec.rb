@@ -38,8 +38,8 @@ RSpec.describe Stat::MangaFavoriteYear do
     it 'should add all library entries related to user' do
       record = Stat.find_by(user: user, type: 'Stat::MangaFavoriteYear')
 
-      expect(record.stats_data['2016']).to eq(1)
-      expect(record.stats_data['2014']).to eq(1)
+      expect(record.stats_data['all_years']['2016']).to eq(1)
+      expect(record.stats_data['all_years']['2014']).to eq(1)
       expect(record.stats_data['total']).to eq(2)
     end
   end
@@ -53,7 +53,7 @@ RSpec.describe Stat::MangaFavoriteYear do
     it 'should add LibraryEntry manga start_date into stats_data' do
       record = Stat.find_by(user: user, type: 'Stat::MangaFavoriteYear')
 
-      expect(record.stats_data['2012']).to eq(1)
+      expect(record.stats_data['all_years']['2012']).to eq(1)
       expect(record.stats_data['total']).to eq(3)
     end
   end
@@ -65,7 +65,7 @@ RSpec.describe Stat::MangaFavoriteYear do
     it 'should remove LibraryEntry manga start_date from stats_data' do
       record = Stat.find_by(user: user, type: 'Stat::MangaFavoriteYear')
 
-      expect(record.stats_data['2016']).to eq(0)
+      expect(record.stats_data['all_years']['2016']).to eq(0)
       expect(record.stats_data['total']).to eq(1)
     end
   end
