@@ -2,13 +2,20 @@ class Stat < ApplicationRecord
   module GenreBreakdown
     extend ActiveSupport::Concern
 
+    DEFAULT_STATS = {
+      'total' => 0,
+      'all_genres' => {},
+    }.freeze
+
     # Fully regenrate data
     def recalculate!
       genres = user.library_entries.eager_load(media_column => :genres)
                    .where.not(genres: { slug: nil })
                    .group(:'genres.slug').count
 
-      self.stats_data = genres
+      # clear stats_data
+      self.stats_data = {}
+      self.stats_data['all_genres'] = genres
       stats_data['total'] = genres.values.reduce(:+)
 
       save!
@@ -19,13 +26,13 @@ class Stat < ApplicationRecord
         record = user.stats.find_or_initialize_by(
           type: "Stat::#{media_type}GenreBreakdown"
         )
-        # set default to total if it doesn't exist
-        record.stats_data['total'] = 0 if record.new_record?
+        # set default stats if it doesn't exist
+        record.stats_data = DEFAULT_STATS.deep_dup if record.new_record?
 
         library_entry.media.genres.each do |genre|
-          record.stats_data[genre.slug] = 0 unless record.stats_data[genre.slug]
+          record.stats_data['all_genres'][genre.slug] ||= 0
 
-          record.stats_data[genre.slug] += 1
+          record.stats_data['all_genres'][genre.slug] += 1
           record.stats_data['total'] += 1
         end
 
@@ -37,9 +44,9 @@ class Stat < ApplicationRecord
         return unless record
 
         library_entry.media.genres.each do |genre|
-          next unless record.stats_data[genre.slug]
+          next unless record.stats_data['all_genres'][genre.slug]
 
-          record.stats_data[genre.slug] -= 1
+          record.stats_data['all_genres'][genre.slug] -= 1
           record.stats_data['total'] -= 1
         end
 

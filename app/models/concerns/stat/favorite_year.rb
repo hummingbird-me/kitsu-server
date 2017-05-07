@@ -2,6 +2,11 @@ class Stat < ApplicationRecord
   module FavoriteYear
     extend ActiveSupport::Concern
 
+    DEFAULT_STATS = {
+      'total' => 0,
+      'all_years' => {},
+    }.freeze
+
     def recalculate!
       years = user.library_entries.eager_load(media_column)
                   .where.not(media_start_date => nil)
@@ -22,19 +27,14 @@ class Stat < ApplicationRecord
           type: "Stat::#{media_type}FavoriteYear"
         )
         # set default to total and all_years if it doesn't exist
-        if record.new_record?
-          record.stats_data['total'] = 0
-          record.stats_data['all_years'] = {}
-        end
+        record.stats_data = DEFAULT_STATS.deep_dup if record.new_record?
 
         start_date = library_entry.media.start_date&.year&.to_s
         # if start_date doesn't exist, no need to continue
         return unless start_date
 
         # check if year exists in object
-        unless record.stats_data['all_years'][start_date]
-          record.stats_data['all_years'][start_date] = 0
-        end
+        record.stats_data['all_years'][start_date] ||= 0
         # increment year by 1
         record.stats_data['all_years'][start_date] += 1
         # increment total by 1
