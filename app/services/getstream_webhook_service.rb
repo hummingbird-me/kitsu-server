@@ -16,18 +16,19 @@ class GetstreamWebhookService
 
   # Express activity of this feed in desired locale
   def stringify_activity
-    locale = feed_target&.language || 'en'
+    locale = (feed_target&.language || 'en').to_sym
     actor_name = User.find_by(id: actor_id)&.name
+    activity_str = {}
 
     case activity['verb']
     when 'follow'
-      I18n.t(:followed, scope: [:notifications], actor: actor_name, locale: locale)
+      activity_str[locale] = I18n.t(:followed, scope: [:notifications], actor: actor_name, locale: locale)
     when 'post'
-      I18n.t(:post_mentioned, scope: [:notifications], actor: actor_name, locale: locale)
+      activity_str[locale] = I18n.t(:post_mentioned, scope: [:notifications], actor: actor_name, locale: locale)
     when 'post_like'
-      I18n.t(:post_like, scope: [:notifications], actor: actor_name, locale: locale)
+      activity_str[locale] = I18n.t(:post_like, scope: [:notifications], actor: actor_name, locale: locale)
     when 'comment_like'
-      I18n.t(:comment_like, scope: [:notifications], actor: actor_name, locale: locale)
+      activity_str[locale] = I18n.t(:comment_like, scope: [:notifications], actor: actor_name, locale: locale)
     when 'comment'
       # Checking what exactly this feed is refering to
       # reply in post, reply in comment, mention in comment, mention in post
@@ -36,14 +37,16 @@ class GetstreamWebhookService
 
       if feed_id == reply_to_user_id
         if reply_to_type == 'post'
-          I18n.t(:post_replied, scope: [:notifications], actor: actor_name, locale: locale)
+          activity_str[locale] = I18n.t(:post_replied, scope: [:notifications], actor: actor_name, locale: locale)
         else
-          I18n.t(:comment_replied, scope: [:notifications], actor: actor_name, locale: locale)  
+          activity_str[locale] = I18n.t(:comment_replied, scope: [:notifications], actor: actor_name, locale: locale)  
         end
       else
         #TODO: If post is belongs to feed target. Should be reply to post
-        I18n.t(:comment_mentioned, scope: [:notifications], actor: actor_name, locale: locale)  
+        activity_str[locale] = I18n.t(:comment_mentioned, scope: [:notifications], actor: actor_name, locale: locale)  
       end
     end
+
+    activity_str
   end
 end

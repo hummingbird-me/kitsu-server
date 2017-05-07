@@ -36,8 +36,9 @@ class WebhooksController < ApplicationController
     # Since it may contains up to 100 per request,
     # Letting the task run in background to eliminate
     # API timeout and rescue possible errors
-    notifications = notifications.select { |n| n['new'].length > 0 }
-    OneSignalNotificationWorker.perform_async(notifications) if notifications.length > 0
+    notifications.each do |notification|
+      OneSignalNotificationWorker.perform_async(notification) if notification['new'].length > 0
+    end
 
     head status: 200
   end

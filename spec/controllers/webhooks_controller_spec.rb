@@ -127,7 +127,7 @@ RSpec.describe WebhooksController, type: :controller do
 
       it 'should dispatch multiple notification workers' do
         worker = double(OneSignalNotificationWorker)
-        expect(worker).to receive(:perform_async)
+        expect(worker).to receive(:perform_async).exactly(6).times
         stub_const('OneSignalNotificationWorker', worker)
         post :getstream_firehose, body
       end
