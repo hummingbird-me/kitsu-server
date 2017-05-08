@@ -1,7 +1,7 @@
 class GlobalFeed < Feed
   include MediaUpdatesFilterable
 
-  def initialize
+  def initialize(*)
     super('global')
   end
 
