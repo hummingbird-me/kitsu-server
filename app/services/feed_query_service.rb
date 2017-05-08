@@ -39,6 +39,12 @@ class FeedQueryService
     end
   end
 
+  def split_feed
+    return @split_feed if @split_feed
+    feed_name = params[:group].sub(/_aggr\z/, '')
+    @split_feed = Feed.class_for(feed_name).new(params[:id])
+  end
+
   private
 
   delegate :sfw_filter?, to: :user, allow_nil: true
