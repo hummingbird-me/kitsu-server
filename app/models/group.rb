@@ -77,7 +77,9 @@ class Group < ApplicationRecord
   has_many :action_logs, class_name: 'GroupActionLog', dependent: :destroy
   belongs_to :category, class_name: 'GroupCategory'
 
-  validates :name, presence: true, length: { in: 3..50 }, uniqueness: true
+  validates :name, presence: true,
+                   length: { in: 3..50 },
+                   uniqueness: { case_sensitive: false }
   validates :tagline, length: { maximum: 60 }, allow_blank: true
   validates :privacy, inclusion: {
     in: %w[closed],
