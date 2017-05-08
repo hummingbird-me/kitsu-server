@@ -92,6 +92,10 @@ class Group < ApplicationRecord
     members.where(user: user).first
   end
 
+  def public_visible?
+    open? || restricted?
+  end
+
   def feed
     GroupFeed.new(id)
   end

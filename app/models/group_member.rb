@@ -73,6 +73,10 @@ class GroupMember < ApplicationRecord
     update(rank: rank)
   end
 
+  def public_visible
+    group.public_visible?
+  end
+
   after_create do
     user.group_timeline.follow(group.feed)
   end
