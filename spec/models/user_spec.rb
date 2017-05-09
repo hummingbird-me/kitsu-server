@@ -226,11 +226,11 @@ RSpec.describe User, type: :model do
   end
 
   describe 'after updating' do
-    let(:global) { instance_double(Feed::Global) }
+    let(:global) { instance_double(GlobalFeed) }
 
     before do
       feed = OpenStruct.new(new: global)
-      stub_const('Feed::Global', feed)
+      stub_const('GlobalFeed', feed)
     end
 
     context 'when global sharing changes to true' do

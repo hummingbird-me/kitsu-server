@@ -52,6 +52,7 @@ class GroupMember < ApplicationRecord
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
   scope :leaders, -> { where.not(rank: 'pleb') }
   scope :blocking, ->(users) { where.not(user_id: users) }
+  scope :visible_for, ->(u) { joins(:group).merge(Group.visible_for(u)) }
 
   def has_permission?(perm)
     permissions.for_permission(perm).exists?
@@ -70,6 +71,10 @@ class GroupMember < ApplicationRecord
     rank = :mod if permissions.present?
     rank = :admin if has_permission?(:owner)
     update(rank: rank)
+  end
+
+  def public_visible
+    group.public_visible?
   end
 
   after_create do

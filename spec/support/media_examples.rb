@@ -104,7 +104,7 @@ RSpec.shared_examples 'media' do
 
   describe '#feed' do
     it 'returns a feed for the media' do
-      expect(subject.feed).to be_a(Feed::MediaFeed)
+      expect(subject.feed).to be_a(MediaFeed)
     end
   end
 

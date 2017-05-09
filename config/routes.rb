@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       jsonapi_resources :review_likes
       # Trending
       get '/trending/:namespace', to: 'trending#index'
+      get '/recommendations/:namespace', to: 'recommendations#index'
 
       ### People/Characters/Companies
       jsonapi_resources :characters
@@ -120,11 +121,6 @@ Rails.application.routes.draw do
     get '/admin', to: 'sessions#redirect'
     get '/sidekiq', to: 'sessions#redirect'
     resources :sessions, only: %i[new create]
-
-    ### Debug APIs
-    get '/debug/dump_all', to: 'debug#dump_all'
-    post '/debug/trace_on', to: 'debug#trace_on'
-    get '/debug/gc_info', to: 'debug#gc_info'
 
     ### WebHooks
     get '/hooks/youtube', to: 'webhooks#youtube_verify'
@@ -847,6 +843,7 @@ end
 #                                                 PUT       /api/edge/review-likes/:id(.:format)                                                      review_likes#update
 #                                                 DELETE    /api/edge/review-likes/:id(.:format)                                                      review_likes#destroy
 #                                                 GET       /api/edge/trending/:namespace(.:format)                                                   trending#index
+#                                                 GET       /api/edge/recommendations/:namespace(.:format)                                            recommendations#index
 #           character_relationships_primary_media GET       /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#show_relationship {:relationship=>"primary_media"}
 #                                                 PUT|PATCH /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#update_relationship {:relationship=>"primary_media"}
 #                                                 DELETE    /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#destroy_relationship {:relationship=>"primary_media"}
@@ -1265,9 +1262,6 @@ end
 #                                         sidekiq GET       /api/sidekiq(.:format)                                                                    sessions#redirect
 #                                        sessions POST      /api/sessions(.:format)                                                                   sessions#create
 #                                     new_session GET       /api/sessions/new(.:format)                                                               sessions#new
-#                                  debug_dump_all GET       /api/debug/dump_all(.:format)                                                             debug#dump_all
-#                                  debug_trace_on POST      /api/debug/trace_on(.:format)                                                             debug#trace_on
-#                                   debug_gc_info GET       /api/debug/gc_info(.:format)                                                              debug#gc_info
 #                                   hooks_youtube GET       /api/hooks/youtube(.:format)                                                              webhooks#youtube_verify
 #                                                 POST      /api/hooks/youtube(.:format)                                                              webhooks#youtube_notify
 #                                 hooks_getstream POST      /api/hooks/getstream(.:format)                                                            webhooks#getstream_firehose

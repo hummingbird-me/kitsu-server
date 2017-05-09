@@ -19,7 +19,7 @@ class GroupMemberPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.blocking(blocked_users)
+      scope.blocking(blocked_users).visible_for(user)
     end
   end
 end

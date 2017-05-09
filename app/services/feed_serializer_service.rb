@@ -24,25 +24,28 @@ class FeedSerializerService
     end
 
     def link_object_to_many(*)
-      super.reject { |k, v| k == :links }.to_h
+      super.reject { |k, _v| k == :links }.to_h
     end
 
     def link_object_to_one(*)
-      super.reject { |k, v| k == :links }.to_h
+      super.reject { |k, _v| k == :links }.to_h
     end
 
     def relationships_hash(*)
-      super.select { |k, v| v.present? }.to_h
+      super.select { |_k, v| v.present? }.to_h
     end
   end
 
-  attr_reader :activity_list, :including, :fields, :context, :base_url
+  attr_reader :activity_list, :including, :fields, :context, :stream_feed,
+    :base_url
 
-  def initialize(list, including: nil, fields: nil, context: nil, base_url:)
+  def initialize(list, including: nil, fields: nil, context: nil, stream_feed:,
+    base_url:)
     @including = including || []
     @fields = fields || {}
     @context = context || {}
     @base_url = base_url
+    @stream_feed = stream_feed
     @activity_list = list.includes(stream_enrichment_fields)
   end
 
@@ -68,6 +71,11 @@ class FeedSerializerService
 
   def meta
     {
+      feed: {
+        group: stream_feed.group,
+        id: stream_feed.id,
+        token: stream_feed.readonly_token
+      },
       readonlyToken: activity_list.feed.readonly_token,
       unseenCount: activity_list.unseen_count,
       unreadCount: activity_list.unread_count

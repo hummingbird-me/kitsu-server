@@ -38,6 +38,7 @@ class FeedsController < ApplicationController
     @serializer ||= FeedSerializerService.new(
       list,
       including: params[:include]&.split(','),
+      stream_feed: underlying_split_feed,
       # fields: params[:fields]&.split(','),
       context: context,
       base_url: request.url
@@ -53,6 +54,11 @@ class FeedsController < ApplicationController
   end
 
   delegate :feed, to: :query
+
+  def underlying_split_feed
+    filter = params.dig(:filter, :kind)
+    query.split_feed.stream_feed_for(filter: filter)
+  end
 
   def authorize_feed!
     unless feed_visible?

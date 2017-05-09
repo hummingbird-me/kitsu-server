@@ -70,8 +70,8 @@ module StreamSync
     ids = User.pluck(:id)
 
     mass_follow('announcements', ids, scrollback: 0) do |id|
-      global = Feed::SiteAnnouncementsGlobal.new.stream_id
-      { target: global, source: Feed::SiteAnnouncementsFeed.new(id).stream_id }
+      global = SiteAnnouncementsGlobalFeed.new.stream_id
+      { target: global, source: SiteAnnouncementsFeed.new(id).stream_id }
     end
   end
 

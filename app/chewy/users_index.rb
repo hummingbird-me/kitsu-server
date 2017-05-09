@@ -11,6 +11,13 @@ class UsersIndex < Chewy::Index
     def self.blocking(*user_ids)
       filter { user_id(:or) != user_ids.flatten }
     end
+
+    def self.visible_for(user)
+      return filter { public_visible == true } unless user
+      group_ids = user.group_members.pluck(:group_id)
+      filter { (group_id(:or) == group_ids) | (public_visible == true) }
+    end
+
     field :group_id
     field :user_id
     field :rank
@@ -18,6 +25,7 @@ class UsersIndex < Chewy::Index
     field :past_names, value: ->(mem) { mem.user&.past_names }
     field :group_name, value: ->(mem) { mem.group&.name }
     field :group_category, value: ->(mem) { mem.group&.category&.slug }
+    field :public_visible
     field :created_at
   end
 end

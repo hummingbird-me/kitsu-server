@@ -65,7 +65,7 @@ module Media
   end
 
   def feed
-    @feed ||= Feed::MediaFeed.new(self.class.name, id)
+    @feed ||= MediaFeed.new(self.class.name, id)
   end
 
   def setup_feed
