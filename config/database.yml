@@ -2,8 +2,11 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV['DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 40 %>
+  connect_timeout: 5
+  checkout_timeout: 2
   variables:
     lock_timeout: 3s
+    statement_timeout: 15s
 
 development:
   <<: *default
