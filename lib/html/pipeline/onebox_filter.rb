@@ -1,11 +1,11 @@
 module HTML
   class Pipeline
     class OneboxFilter < HTML::Pipeline::Filter
-      WHITELISTED_FILE_TYPES = ['.gif', '.jpg', '.png', '.mov', '.mp4']
+      ONEBOX_WHITELIST = ['.gif', '.jpg', '.jpeg', '.png', '.mov', '.mp4', 'giphy.com', 'gph.is', 'imgur.com']
       def call
         doc.search('a.autolink').each do |a|
           url = a['href']
-          file_regex = Regexp.union(WHITELISTED_FILE_TYPES)
+          file_regex = Regexp.union(ONEBOX_WHITELIST)
           if file_regex === url.downcase
             preview = Onebox.preview(url, max_width: 500) rescue nil
             if preview&.to_s.present?
