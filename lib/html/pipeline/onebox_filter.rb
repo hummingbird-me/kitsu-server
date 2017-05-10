@@ -1,8 +1,9 @@
 module HTML
   class Pipeline
     class OneboxFilter < HTML::Pipeline::Filter
-      ONEBOX_WHITELIST = ['.gif', '.jpg', '.jpeg', 
-        '.png', '.mov', '.mp4', 
+      ONEBOX_WHITELIST = [
+        '.gif', '.jpg', '.jpeg',
+        '.png', '.mov', '.mp4',
         'giphy.com', 'gph.is', 'imgur.com'
       ].freeze
       def call
