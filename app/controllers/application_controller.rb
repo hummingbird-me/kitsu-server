@@ -19,7 +19,7 @@ class ApplicationController < JSONAPI::ResourceController
           # Clean the stack trace and use that for the fingerprint.
           trace = Rails.backtrace_cleaner.clean(error.backtrace)
           trace = trace.map { |line| line.split(/:\d+:/).first }
-          extra[:fingerprint] = [error.original_exception.class.name, trace]
+          extra[:fingerprint] = [error.original_exception.class.name, *trace]
         end
       ensure
         Raven.capture_exception(error, extra)
