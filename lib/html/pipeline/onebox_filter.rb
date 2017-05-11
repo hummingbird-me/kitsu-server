@@ -4,8 +4,7 @@ module HTML
       ONEBOX_WHITELIST = [
         '.gif', '.jpg', '.jpeg',
         '.png', '.mov', '.mp4',
-        'giphy.com', 'gph.is', 'imgur.com',
-        '.webm'
+        'gph.is', 'imgur.com', '.webm'
       ].freeze
       def call
         doc.search('a.autolink').each do |a|
