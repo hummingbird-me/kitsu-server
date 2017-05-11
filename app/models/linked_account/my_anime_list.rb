@@ -40,10 +40,11 @@ class LinkedAccount
 
       if response.code == 200
         true
-      elsif response.code == 403
+      elsif response.code == 403 || response.code == 401
         errors.add(:token, 'Username or password was incorrect.')
       else
-        errors.add(:token, "#{response.code}: #{response.body}")
+        errors.add(:token, 'An unknown error occurred and we were unable to link
+                            your account.'.squish)
       end
     end
 
