@@ -1,9 +1,17 @@
 module HTML
   class Pipeline
     class OneboxFilter < HTML::Pipeline::Filter
+      ONEBOX_WHITELIST = [
+        '.gif', '.jpg', '.jpeg',
+        '.png', '.mov', '.mp4',
+        'giphy.com', 'gph.is', 'imgur.com',
+        '.webm'
+      ].freeze
       def call
         doc.search('a.autolink').each do |a|
           url = a['href']
+          file_regex = Regexp.union(ONEBOX_WHITELIST)
+          next unless file_regex === url.downcase
           preview = Onebox.preview(url, max_width: 500) rescue nil
           if preview&.to_s.present?
             onebox_name = preview.send(:engine).class.onebox_name
