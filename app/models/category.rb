@@ -35,7 +35,6 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :anime
   has_and_belongs_to_many :manga
   has_and_belongs_to_many :drama
-  
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]
   }
