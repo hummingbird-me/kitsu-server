@@ -8,11 +8,11 @@ module Onebox
       always_https
 
       def to_html
-        return gif_html if /^.*\.gif$/ =~ @url
+        return gif_html(@url) if /^.*\.(gif|mp4|webm)$/ =~ @url
         og = get_opengraph
-        return video_html(og) unless Onebox::Helpers::blank?(og[:video])
+        return video_html(og) unless Onebox::Helpers.blank?(og[:video])
         return album_html(og) if album?
-        return image_html(og) unless Onebox::Helpers::blank?(og[:image])
+        return image_html(og) unless Onebox::Helpers.blank?(og[:image])
         nil
       end
 
@@ -81,8 +81,8 @@ module Onebox
         secure_link.to_s
       end
 
-      def gif_html
-        escaped_url = ::Onebox::Helpers.normalize_url_for_output(@url)
+      def gif_html(url)
+        escaped_url = ::Onebox::Helpers.normalize_url_for_output(url)
         %r{https?://(?:.*\.)?imgur.com/(?:./)?([0-9,a-z,A-Z]+)} =~ escaped_url
         src = "https://i.imgur.com/#{Regexp.last_match(1)}.mp4"
 
