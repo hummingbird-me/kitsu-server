@@ -7,16 +7,16 @@ class AnidbCategoryImport
     end
 
     def apply!
-      data.each do |_category|
-        _category = _category.deep_symbolize_keys
-        puts _category[:titles][:canonical]
+      data.each do |item|
+        item = item.deep_symbolize_keys
+        puts item[:titles][:canonical]
 
-        category ||= Category.find_by(anidb_id: _category[:id]) || Category.new
-        category.canonical_title ||= _category[:titles][:canonical]
-        category.description ||= _category[:description]
-        category.image_file_name ||= _category[:image]
-        category.titles ||= _category[:titles]
-        category.anidb_id ||= _category[:id]
+        category ||= Category.find_by(anidb_id: item[:id]) || Category.new
+        category.canonical_title ||= item[:titles][:canonical]
+        category.description ||= item[:description]
+        category.image_file_name ||= item[:image]
+        category.titles ||= item[:titles]
+        category.anidb_id ||= item[:id]
         category.save
       end
     end
