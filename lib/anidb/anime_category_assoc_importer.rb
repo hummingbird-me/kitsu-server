@@ -15,7 +15,7 @@ class AnidbAssocAnimeCategoryImport
         }
         puts 'looking up -> ' + unfiltered_anime[:canonical]
         kitsu_anime = Mapping.guess('Anime', mapping_object)
-        next unless !kitsu_anime.nil?
+        next if kitsu_anime
         puts '      >found<'
         categories = Category.where(anidb_id: unfiltered_anime[:tags])
         kitsu_anime.categories = categories
@@ -30,8 +30,9 @@ class AnidbAssocAnimeCategoryImport
     filename = File.join(
       File.expand_path(
         File.dirname(__FILE__)
-      ), 
-    'anidb_anime_category_assoc.json')
+      ),
+      'anidb_anime_category_assoc.json'
+    )
     ImportFile.new(filename).apply! if File.file?(filename)
   end
 end

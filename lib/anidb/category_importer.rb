@@ -28,8 +28,9 @@ class AnidbCategoryImport
     filename = File.join(
       File.expand_path(
         File.dirname(__FILE__)
-      ), 
-    'anidb_category.json')
+      ),
+      'anidb_category.json'
+    )
     ImportFile.new(filename).apply! if File.file?(filename)
   end
 end
