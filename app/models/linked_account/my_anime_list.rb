@@ -4,6 +4,7 @@
 # Table name: linked_accounts
 #
 #  id                 :integer          not null, primary key
+#  disabled_reason    :string
 #  encrypted_token    :string
 #  encrypted_token_iv :string
 #  share_from         :boolean          default(FALSE), not null
@@ -39,10 +40,11 @@ class LinkedAccount
 
       if response.code == 200
         true
-      elsif response.code == 403
+      elsif response.code == 403 || response.code == 401
         errors.add(:token, 'Username or password was incorrect.')
       else
-        errors.add(:token, "#{response.code}: #{response.body}")
+        errors.add(:token, 'An unknown error occurred and we were unable to link
+                            your account.'.squish)
       end
     end
 

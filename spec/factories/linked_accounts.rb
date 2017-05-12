@@ -4,6 +4,7 @@
 # Table name: linked_accounts
 #
 #  id                 :integer          not null, primary key
+#  disabled_reason    :string
 #  encrypted_token    :string
 #  encrypted_token_iv :string
 #  share_from         :boolean          default(FALSE), not null
