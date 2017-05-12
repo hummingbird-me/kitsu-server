@@ -1,4 +1,9 @@
 class MyAnimeListSyncService
+  class TimeoutError < StandardError; end
+  class MediaNotFound < StandardError; end
+  class BadAuthorization < StandardError; end
+  class ConnectFailed < StandardError; end
+
   ATARASHII_API_HOST = 'https://hbv3-mal-api.herokuapp.com/2.1/'.freeze
   MINE = '?mine=1'.freeze
 
@@ -15,8 +20,9 @@ class MyAnimeListSyncService
     # Logs the error so the user can see what didn't sync.
     if mal_media.nil?
       library_entry_log.update(
-        sync_status: :error, action_performed: method,
-        error_message: 'Unable to convert Kitsu data to Mal data'
+        sync_status: :error,
+        action_performed: method,
+        error_message: 'Unable to convert Kitsu data to MAL data'
       )
       return
     end
@@ -53,13 +59,12 @@ class MyAnimeListSyncService
             (response['id'].nil? || response['read_status'])
         # manga already exists in their list
 
-        # HACK: this is related to what check_response_status will return
-        # due to some bug, it will just return an error message,
-        # so this checks to see if an id exists in the object,
-        # (every object will have an id regardless of anime/manga,
-        # but as of right now it won't).
-        # Once fixed, it should be checking for read_status like
-        # anime does with watched_status
+        # HACK: this is related to what check_response_status will return due to
+        # some bug, it will just return an error message, so this checks to see
+        # if an id exists in the object, (every object will have an id
+        # regardless of anime/manga, but as of right now it won't).  Once fixed,
+        # it should be checking for read_status like anime does with
+        # watched_status
         put("mangalist/manga/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
@@ -74,6 +79,19 @@ class MyAnimeListSyncService
           score: format_score(library_entry.rating))
       end
     end
+  rescue BadAuthorization
+    library_entry_log.update(
+      sync_status: :error,
+      action_performed: method,
+      error_message: 'Login failed'
+    )
+    linked_account.update(sync_to: true, disabled_reason: 'Login failed')
+  rescue MediaNotFound
+    library_entry_log.update(
+      sync_status: :error,
+      action_performed: method,
+      error_message: 'Could not find MAL ID'
+    )
   end
 
   def format_status(status)
@@ -102,9 +120,7 @@ class MyAnimeListSyncService
       userpwd: simple_auth(profile)
     )
 
-    # will raise an error if something is wrong
-    # otherwise will return true
-    check_response_status(res) unless res.success?
+    check_response_status(res)
 
     res.response_body
   end
@@ -146,25 +162,30 @@ class MyAnimeListSyncService
   end
 
   def check_response_status(response)
-    # HACK: this will only happen with manga
-    # if you have the score set to 0 and this manga
-    # already exists on your list (PUT request).
-    # Once you update the score, this error will stop happening.
+    # HACK: this will only happen with manga if you have the score set to 0 and
+    # this manga already exists on your list (PUT request).  Once you update the
+    # score, this error will stop happening.
     if response.success? || (response.code == 500 && media_type == 'manga')
       library_entry_log.update(sync_status: :success, action_performed: method)
       return true
     end
 
     library_entry_log.update(
-      sync_status: :error, action_performed: method,
+      sync_status: :error,
+      action_performed: method,
       error_message: response.return_message.to_s
     )
+
+    # login is broken I think
+    raise BadAuthorization if response.code == 403 || response.code == 401
+    # media not found
+    raise MediaNotFound if response.code == 404
     # timed out
-    raise 'Request Timed Out' if response.timed_out?
+    raise TimeoutError if response.timed_out?
     # could not get an http response
-    raise response.return_message.to_s if response.code.zero?
-    # received a non-successfull http response
-    raise "HTTP request failed: #{response.code}"
+    raise ConnectFailed, response.return_message.to_s if response.code.zero?
+    # received a non-successful http response
+    raise UnknownError, response.code
   end
 
   def media_type
