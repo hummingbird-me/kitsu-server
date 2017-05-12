@@ -53,7 +53,6 @@ class Manga < ApplicationRecord
   has_many :chapters
   has_many :manga_characters, dependent: :destroy
   has_many :manga_staff, dependent: :destroy
-  has_and_belongs_to_many :categories
 
   validates :chapter_count, numericality: { greater_than: 0 }, allow_nil: true
 

@@ -50,7 +50,6 @@ class Drama < ApplicationRecord
   include Episodic
 
   enum subtype: %i[drama movie special]
-  has_and_belongs_to_many :categories
 
   has_attached_file :cover_image,
     url: '/:class/:attachment/:id/:style.:content_type_extension'
