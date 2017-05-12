@@ -15,7 +15,7 @@ class AnidbAssocAnimeCategoryImport
         }
         puts 'looking up -> ' + unfiltered_anime[:canonical]
         kitsu_anime = Mapping.guess('Anime', mapping_object)
-        next if kitsu_anime
+        next unless kitsu_anime
         puts '      >found<'
         categories = Category.where(anidb_id: unfiltered_anime[:tags])
         kitsu_anime.categories = categories
