@@ -14,7 +14,7 @@ class AnidbCategoryImport
         category ||= Category.find_by(anidb_id: item[:id]) || Category.new
         category.canonical_title ||= item[:titles][:canonical]
         category.description ||= item[:description]
-        category.image_file_name ||= item[:image]
+        category.image ||= item[:image]
         category.titles ||= item[:titles]
         category.anidb_id ||= item[:id]
         category.save

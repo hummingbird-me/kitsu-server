@@ -8,6 +8,6 @@ RSpec.describe CategoryFavoritePolicy do
 
   permissions :update?, :create?, :destroy? do
     it('should allow user') { should permit(user, favorite) }
-    it('should not allow other') { should_not permit(other, favorite) }
+    it('should not allow other') { should_not permit(user, other) }
   end
 end
