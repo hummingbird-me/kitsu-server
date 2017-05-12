@@ -2,6 +2,7 @@ class GroupInvitesController < ApplicationController
   include CustomControllerHelpers
 
   before_action :authenticate!, only: %i[accept decline]
+  before_action :acceptable?, only: %i[accept decline revoke]
 
   def accept
     invite.accept!
@@ -21,9 +22,19 @@ class GroupInvitesController < ApplicationController
   private
 
   def authenticate!
-    serialize_error(404, 'Not Found') unless invite
+    unless invite
+      return render_jsonapi serialize_error(404, 'Not Found'), status: 404
+    end
     user = current_user.resource_owner
-    serialize_error(403, 'Not Authorized') if user == invite.user
+    unless user == invite.user
+      render_jsonapi serialize_error(403, 'Not Authorized'), status: 403
+    end
+  end
+
+  def acceptable?
+    if invite.unacceptable?
+      render_jsonapi serialize_error(403, 'Already Responded'), status: 403
+    end
   end
 
   def invite
