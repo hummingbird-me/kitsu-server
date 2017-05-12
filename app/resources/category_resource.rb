@@ -1,0 +1,1 @@
+class CategoryResource < BaseResource; end

@@ -1,4 +1,18 @@
 namespace :importers do
+  namespace :anidb do
+    require 'anidb/category_importer'
+    require 'anidb/anime_category_assoc_importer' 
+    desc 'Import Categories'
+    task :categories, [:quantity] => [:environment] do |_t, args|
+      puts "Importing Categories from AniDB dump"
+      AnidbCategoryImport.new().run!
+    end
+    desc 'Import Anime Associated Categories'
+    task :anime_assoc, [:quantity] => [:environment] do |_t, args|
+      puts "Importing Anime Associated Categoriesfrom AniDB dump"
+      AnidbAssocAnimeCategoryImport.new().run!
+    end
+  end
   namespace :kitsu do
     desc 'Download only anime posters'
     task :posters, [:quantity] => [:environment] do |_t, args|

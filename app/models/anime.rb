@@ -59,6 +59,7 @@ class Anime < ApplicationRecord
   has_many :anime_productions, dependent: :destroy
   has_many :anime_characters, dependent: :destroy
   has_many :anime_staff, dependent: :destroy
+  has_and_belongs_to_many :categories
   alias_attribute :show_type, :subtype
 
   rails_admin { fields :episode_count }

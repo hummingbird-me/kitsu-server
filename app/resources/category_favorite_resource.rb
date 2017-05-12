@@ -1,0 +1,2 @@
+class CategoryFavoriteResource < BaseResource
+end
