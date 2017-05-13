@@ -1043,6 +1043,7 @@ ActiveRecord::Schema.define(version: 20170515122347) do
     t.datetime "updated_at",              null: false
   end
 
+  add_index "stats", ["type", "user_id"], name: "index_stats_on_type_and_user_id", unique: true, using: :btree
   add_index "stats", ["user_id"], name: "index_stats_on_user_id", using: :btree
 
   create_table "stories", force: :cascade do |t|
