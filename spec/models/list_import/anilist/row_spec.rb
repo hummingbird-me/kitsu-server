@@ -23,12 +23,11 @@ RSpec.describe ListImport::Anilist::Row do
       it 'should work for guess' do
         allow(Mapping).to receive(:lookup).and_return(nil)
 
-        expect(Mapping).to receive(:guess).with(Anime, {
+        expect(Mapping).to receive(:guess).with(Anime,
           id: 1,
           title: 'COWBOY BEBOP',
           subtype: 'TV',
-          episode_count: 26
-        }).and_return('hello')
+          episode_count: 26).and_return('hello')
 
         subject.media
       end
@@ -181,10 +180,10 @@ RSpec.describe ListImport::Anilist::Row do
       end
     end
 
-    describe '#my_start_date' do
+    describe '#started_at' do
       context 'with date being empty' do
         it 'should return nil' do
-          expect(subject.my_start_date).to be_nil
+          expect(subject.started_at).to be_nil
         end
       end
       context 'with YYYY existing' do
@@ -194,7 +193,7 @@ RSpec.describe ListImport::Anilist::Row do
             'anime'
           )
           # YYYY
-          expect(subject.my_start_date).to eq(Date.new(2016))
+          expect(subject.started_at).to eq(Date.new(2016))
         end
       end
       context 'with YYYY/MM existing' do
@@ -204,7 +203,7 @@ RSpec.describe ListImport::Anilist::Row do
             'anime'
           )
           # YYYY-MM
-          expect(subject.my_start_date).to eq(Date.new(2016, 10))
+          expect(subject.started_at).to eq(Date.new(2016, 10))
         end
       end
       context 'with YYYY/MM/DD existing' do
@@ -214,15 +213,15 @@ RSpec.describe ListImport::Anilist::Row do
             'anime'
           )
           # YYYY-MM-DD
-          expect(subject.my_start_date).to eq(Date.new(2016, 10, 3))
+          expect(subject.started_at).to eq(Date.new(2016, 10, 3))
         end
       end
     end
 
-    describe '#my_finish_date' do
+    describe '#finished_at' do
       context 'with date being empty' do
         it 'should return nil' do
-          expect(subject.my_finish_date).to be_nil
+          expect(subject.finished_at).to be_nil
         end
       end
       context 'with YYYY existing' do
@@ -232,7 +231,7 @@ RSpec.describe ListImport::Anilist::Row do
             'anime'
           )
           # YYYY
-          expect(subject.my_finish_date).to eq(Date.new(2016))
+          expect(subject.finished_at).to eq(Date.new(2016))
         end
       end
       context 'with YYYY/MM existing' do
@@ -242,7 +241,7 @@ RSpec.describe ListImport::Anilist::Row do
             'anime'
           )
           # YYYY-MM
-          expect(subject.my_finish_date).to eq(Date.new(2016, 10))
+          expect(subject.finished_at).to eq(Date.new(2016, 10))
         end
       end
       context 'with YYYY/MM/DD existing' do
@@ -252,7 +251,7 @@ RSpec.describe ListImport::Anilist::Row do
             'anime'
           )
           # YYYY-MM-DD
-          expect(subject.my_finish_date).to eq(Date.new(2016, 10, 10))
+          expect(subject.finished_at).to eq(Date.new(2016, 10, 10))
         end
       end
     end
@@ -277,12 +276,11 @@ RSpec.describe ListImport::Anilist::Row do
       it 'should work for guess' do
         allow(Mapping).to receive(:lookup).and_return(nil)
 
-        expect(Mapping).to receive(:guess).with(Manga, {
+        expect(Mapping).to receive(:guess).with(Manga,
           id: 30_933,
           title: 'Elfen Lied',
           subtype: 'Manga',
-          chapter_count: 113
-        }).and_return('hello')
+          chapter_count: 113).and_return('hello')
 
         subject.media
       end

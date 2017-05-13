@@ -71,9 +71,10 @@ class ListImport < ApplicationRecord
         data[:progress] = [data[:progress], limit].compact.min
         # Merge the library entries
         le = LibraryEntry.where(user: user, media: media).first_or_initialize
+        # @TODO: make this attribute actually work
         le.imported = true
         le = merged_entry(le, data)
-        le.save! unless le.status == nil
+        le.save! unless le.status.nil?
         yield({ status: :running, total: count, progress: index + 1 })
       end
     end
@@ -116,7 +117,6 @@ class ListImport < ApplicationRecord
 
   def stream_activity
     return unless failed? || completed?
-
     user.notifications.activities.new(
       verb: 'imported',
       kind: self.class.name,
