@@ -586,7 +586,7 @@ ActiveRecord::Schema.define(version: 20170515122347) do
     t.integer  "time_spent",      default: 0,     null: false
     t.datetime "started_at"
     t.datetime "finished_at"
-    t.datetime "consumed_at"
+    t.datetime "progressed_at"
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree

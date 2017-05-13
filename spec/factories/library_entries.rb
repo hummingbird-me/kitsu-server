@@ -17,7 +17,7 @@
 #  status          :integer          not null, indexed => [user_id]
 #  time_spent      :integer          default(0), not null
 #  volumes_owned   :integer          default(0), not null
-#  consumed_at      :datetime
+#  progressed_at      :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  anime_id        :integer          indexed

@@ -139,9 +139,9 @@ RSpec.describe LibraryEntry, type: :model do
     let!(:library_entry) do
       create(:library_entry, media: Anime.last, status: :current, progress: 1)
     end
-    context 'consumed_at validation' do
-      it 'should set consumed_at when progress is changed' do
-        expect(library_entry.consumed_at).to be_present
+    context 'progressed_at validation' do
+      it 'should set progressed_at when progress is changed' do
+        expect(library_entry.progressed_at).to be_present
       end
     end
     context 'started_at validation' do

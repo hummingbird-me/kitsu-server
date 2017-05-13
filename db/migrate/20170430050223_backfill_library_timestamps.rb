@@ -6,7 +6,7 @@ class BackfillLibraryTimestamps < ActiveRecord::Migration
 
   def change
     LibraryEntry.where("progress > 0").update_in_batches(<<-SQL)
-      consumed_at = updated_at,
+      progressed_at = updated_at,
       finished_at = CASE WHEN status = #{LibraryEntry.statuses[:completed]} THEN updated_at END
     SQL
   end

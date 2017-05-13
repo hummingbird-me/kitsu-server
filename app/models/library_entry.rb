@@ -17,7 +17,7 @@
 #  status          :integer          not null, indexed => [user_id]
 #  time_spent      :integer          default(0), not null
 #  volumes_owned   :integer          default(0), not null
-#  consumed_at      :datetime
+#  progressed_at      :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  anime_id        :integer          indexed
@@ -180,8 +180,8 @@ class LibraryEntry < ApplicationRecord
     self.status = :completed if !status_changed? &&
                                 progress == media&.progress_limit
     unless imported?
-      # When progress is changed, update consumed_at
-      self.consumed_at = Time.now if progress_changed?
+      # When progress is changed, update progressed_at
+      self.progressed_at = Time.now if progress_changed?
       # When marked current and started_at doesn't exist
       self.started_at ||= Time.now if current?
     end
