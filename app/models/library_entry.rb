@@ -172,14 +172,14 @@ class LibraryEntry < ApplicationRecord
       # update progress to the cap
       self.progress = media.progress_limit if media&.progress_limit
       # set finished_at and started_at for the first consume
-      self.started_at ||= Time.now unless imported?
-      self.finished_at ||= Time.now unless imported?
+      self.started_at ||= Time.now unless imported
+      self.finished_at ||= Time.now unless imported
     end
 
     # When progress equals total episodes
     self.status = :completed if !status_changed? &&
                                 progress == media&.progress_limit
-    unless imported?
+    unless imported
       # When progress is changed, update progressed_at
       self.progressed_at = Time.now if progress_changed?
       # When marked current and started_at doesn't exist
@@ -189,7 +189,7 @@ class LibraryEntry < ApplicationRecord
 
   after_save do
     # Disable activities on import
-    unless imported? || private?
+    unless imported || private?
       activity.rating(rating)&.create if rating_changed? && rating.present?
       activity.status(status)&.create if status_changed?
       # If the progress has changed, make an activity unless the status is also
