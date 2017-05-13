@@ -66,6 +66,8 @@ class ListImport
         date = node['started_on'].split('/')
 
         DateTime.strptime(format_date(date), '%F')
+      rescue
+        nil
       end
 
       def finished_at
@@ -74,6 +76,8 @@ class ListImport
         date = node['finished_on'].split('/')
 
         DateTime.strptime(format_date(date), '%F')
+      rescue
+        nil
       end
 
       def data

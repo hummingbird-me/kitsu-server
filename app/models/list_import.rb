@@ -71,7 +71,6 @@ class ListImport < ApplicationRecord
         data[:progress] = [data[:progress], limit].compact.min
         # Merge the library entries
         le = LibraryEntry.where(user: user, media: media).first_or_initialize
-        # @TODO: make this attribute actually work
         le.imported = true
         le = merged_entry(le, data)
         le.save! unless le.status.nil?

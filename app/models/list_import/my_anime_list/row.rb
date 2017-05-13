@@ -65,14 +65,14 @@ class ListImport
       end
 
       def started_at
-        DateTime.strptime(obj[:start_date_string], '%F')
-      rescue ArgumentError
+        DateTime.strptime(obj[:start_date_string], '%m-%d-%y')
+      rescue
         nil
       end
 
       def finished_at
-        DateTime.strptime(obj[:finish_date_string], '%F')
-      rescue ArgumentError
+        DateTime.strptime(obj[:finish_date_string], '%m-%d-%y')
+      rescue
         nil
       end
 

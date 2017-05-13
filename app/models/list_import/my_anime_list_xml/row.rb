@@ -60,13 +60,13 @@ class ListImport
       end
 
       def started_at
-        DateTime.strptime(node.at_css('my_start_date'), '%F')
+        DateTime.strptime(node.at_css('my_start_date'), '%m-%d-%y')
       rescue ArgumentError
         nil
       end
 
       def finished_at
-        DateTime.strptime(node.at_css('my_finish_date'), '%F')
+        DateTime.strptime(node.at_css('my_finish_date'), '%m-%d-%y')
       rescue ArgumentError
         nil
       end
