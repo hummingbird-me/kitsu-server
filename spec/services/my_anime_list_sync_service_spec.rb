@@ -99,7 +99,7 @@ RSpec.describe MyAnimeListSyncService do
 
         expect {
           subject.send(:get, 'example.com', linked_account)
-        }.to raise_error(/failed/)
+        }.to raise_exception
 
         expect(WebMock).to have_requested(:get, "#{@host}example.com")
           .with(
