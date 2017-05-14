@@ -122,7 +122,7 @@ class MyAnimeListSyncService
   end
 
   def format_date(date)
-    date.strftime('%F')
+    date.strftime('%F') if date
   end
 
   private

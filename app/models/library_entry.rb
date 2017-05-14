@@ -1,15 +1,15 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: library_entries
 #
 #  id              :integer          not null, primary key
-#  finished_at      :datetime
+#  finished_at     :datetime
 #  media_type      :string           not null, indexed => [user_id], indexed => [user_id, media_id]
 #  notes           :text
 #  nsfw            :boolean          default(FALSE), not null
 #  private         :boolean          default(FALSE), not null, indexed
 #  progress        :integer          default(0), not null
+#  progressed_at   :datetime
 #  rating          :integer
 #  reconsume_count :integer          default(0), not null
 #  reconsuming     :boolean          default(FALSE), not null
@@ -17,7 +17,6 @@
 #  status          :integer          not null, indexed => [user_id]
 #  time_spent      :integer          default(0), not null
 #  volumes_owned   :integer          default(0), not null
-#  progressed_at      :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  anime_id        :integer          indexed
@@ -37,7 +36,6 @@
 #  index_library_entries_on_user_id_and_media_type_and_media_id  (user_id,media_type,media_id) UNIQUE
 #  index_library_entries_on_user_id_and_status                   (user_id,status)
 #
-# rubocop:enable Metrics/LineLength
 
 class LibraryEntry < ApplicationRecord
   VALID_RATINGS = (2..20).to_a.freeze
