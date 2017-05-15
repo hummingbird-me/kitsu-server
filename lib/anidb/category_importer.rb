@@ -15,9 +15,18 @@ class AnidbCategoryImport
         category.canonical_title ||= item[:titles][:canonical]
         category.description ||= item[:description]
         category.image ||= item[:image]
-        category.titles ||= item[:titles]
         category.anidb_id ||= item[:id]
         category.save
+      end
+
+      data.each do |item|
+        item = item.deep_symbolize_keys
+        next unless item[:parent]
+        category = Category.find_by(anidb_id: item[:id])
+        category_parent = Category.find_by(anidb_id: item[:parent])
+        category.parent = category_parent
+        category.save
+        puts 'saving parent category for: ' + category.canonical_title + ', set to: '+ category_parent.canonical_title
       end
     end
   end

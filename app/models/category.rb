@@ -3,20 +3,21 @@
 # Table name: categories
 #
 #  id                 :integer          not null, primary key
-#  canonical_title    :string
+#  canonical_title    :string           not null
 #  description        :string
-#  image_content_type :string(255)
-#  image_file_name    :string(255)
+#  image_content_type :string
+#  image_file_name    :string
 #  image_file_size    :integer
 #  image_updated_at   :datetime
-#  titles             :hstore
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  anidb_id           :integer          indexed
+#  parent_id          :integer          indexed
 #
 # Indexes
 #
-#  index_categories_on_anidb_id  (anidb_id)
+#  index_categories_on_anidb_id   (anidb_id)
+#  index_categories_on_parent_id  (parent_id)
 #
 
 class Category < ActiveRecord::Base
@@ -35,6 +36,7 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :anime
   has_and_belongs_to_many :manga
   has_and_belongs_to_many :drama
+  belongs_to :parent, class_name: 'Category', required: false
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]
   }

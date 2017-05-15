@@ -141,19 +141,20 @@ ActiveRecord::Schema.define(version: 20170512081514) do
   add_index "castings", ["person_id"], name: "index_castings_on_person_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
-    t.string   "canonical_title"
+    t.string   "canonical_title",    null: false
     t.integer  "anidb_id"
-    t.string   "image_content_type", limit: 255
-    t.string   "image_file_name",    limit: 255
+    t.integer  "parent_id"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.hstore   "titles"
     t.string   "description"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   add_index "categories", ["anidb_id"], name: "index_categories_on_anidb_id", using: :btree
+  add_index "categories", ["parent_id"], name: "index_categories_on_parent_id", using: :btree
 
   create_table "categories_dramas", id: false, force: :cascade do |t|
     t.integer "category_id", null: false
