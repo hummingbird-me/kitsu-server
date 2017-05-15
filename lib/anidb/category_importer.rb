@@ -26,7 +26,6 @@ class AnidbCategoryImport
         category_parent = Category.find_by(anidb_id: item[:parent])
         category.parent = category_parent
         category.save
-        puts 'saving parent category for: ' + category.canonical_title + ', set to: '+ category_parent.canonical_title
       end
     end
   end
