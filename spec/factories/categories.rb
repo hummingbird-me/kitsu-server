@@ -22,6 +22,6 @@
 
 FactoryGirl.define do
   factory :category do
-  	canonical_title Faker::Name.name
+    canonical_title Faker::Name.name
   end
 end
