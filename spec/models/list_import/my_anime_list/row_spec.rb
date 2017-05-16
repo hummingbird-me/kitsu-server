@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe ListImport::MyAnimeList::Row do
-  context 'with anime' do
-    let(:anime) { fixture('list_import/my_anime_list/toy-anime.json') }
+  let(:anime) { fixture('list_import/my_anime_list/toy-anime.json') }
 
+  context 'with anime' do
     describe '#started_at' do
       context 'with empty date' do
         it 'should return nil' do
