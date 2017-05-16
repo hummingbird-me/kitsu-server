@@ -28,7 +28,7 @@
 
 class LinkedAccount < ApplicationRecord
   belongs_to :user, required: true
-  has_many :library_entry_logs
+  has_many :library_entry_logs, dependent: :destroy
   # encyrpt the token
   attr_encrypted :token, key: Base64.decode64(ENV['ATTR_ENCRYPT_KEY'])
   # expose for jsonapi
