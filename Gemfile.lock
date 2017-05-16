@@ -259,9 +259,9 @@ GEM
     naught (1.1.0)
     nenv (0.3.0)
     nested_form (0.3.2)
-    nokogiri (1.7.1)
+    nokogiri (1.7.2)
       mini_portile2 (~> 2.1.0)
-    nokogumbo (1.4.9)
+    nokogumbo (1.4.10)
       nokogiri
     notiffany (0.1.1)
       nenv (~> 0.1)
@@ -274,7 +274,7 @@ GEM
       rack (>= 1.2, < 3)
     oj (2.18.5)
     oj_mimic_json (1.0.1)
-    onebox (1.8.3)
+    onebox (1.8.5)
       fast_blank (>= 1.0.0)
       htmlentities (~> 4.3)
       moneta (~> 1.0)
@@ -324,7 +324,6 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rack-timeout (0.4.2)
     rails (4.2.8)
       actionmailer (= 4.2.8)
       actionpack (= 4.2.8)
@@ -561,7 +560,6 @@ DEPENDENCIES
   pundit-resources
   rack-attack
   rack-cors
-  rack-timeout
   rails (= 4.2.8)
   rails-api
   rails_12factor
@@ -596,4 +594,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.14.5
+   1.14.6

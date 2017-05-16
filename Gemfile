@@ -62,7 +62,6 @@ gem 'typhoeus' # Parallelize scraping tasks
 # Rack Middleware
 gem 'rack-attack'
 gem 'rack-cors'
-gem 'rack-timeout'
 
 # Optimizations
 gem 'fast_blank' # Faster String#blank?

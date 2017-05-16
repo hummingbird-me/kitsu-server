@@ -138,10 +138,11 @@ class User < ApplicationRecord
   has_many :stats, dependent: :destroy
 
   validates :email, presence: true,
-                    uniqueness: { case_sensitive: false }
+                    uniqueness: { case_sensitive: false }, if: :email_changed?
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false },
                    length: { minimum: 3, maximum: 20 },
+                   if: :name_changed?,
                    format: {
                      with: /\A[_A-Za-z0-9]+\z/,
                      message: <<-EOF.squish

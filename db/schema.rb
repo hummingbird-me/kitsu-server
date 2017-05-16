@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170507033440) do
+ActiveRecord::Schema.define(version: 20170511062519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -625,6 +625,7 @@ ActiveRecord::Schema.define(version: 20170507033440) do
     t.string   "encrypted_token_iv"
     t.string   "type",                               null: false
     t.boolean  "sync_to",            default: false, null: false
+    t.string   "disabled_reason"
   end
 
   add_index "linked_accounts", ["user_id"], name: "index_linked_accounts_on_user_id", using: :btree

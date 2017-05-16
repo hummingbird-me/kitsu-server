@@ -1,4 +1,6 @@
 class CommentLikeResource < BaseResource
+  caching
+
   has_one :comment
   has_one :user
 

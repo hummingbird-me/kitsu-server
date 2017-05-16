@@ -50,6 +50,9 @@ class ListImport
     def count
       # animelist will get me everything
       get("#{input_text}/animelist")['stats']['status_distribution'].map { |type|
+        # if user does not have any stats return 0
+        next 0 if type.last.count.zero?
+
         type.last.values.inject(&:+)
       }.inject(&:+)
     end
