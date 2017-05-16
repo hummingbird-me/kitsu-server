@@ -85,7 +85,7 @@ class MyAnimeListSyncService
       action_performed: method,
       error_message: 'Login failed'
     )
-    linked_account.update(sync_to: true, disabled_reason: 'Login failed')
+    linked_account.update(sync_to: false, disabled_reason: 'Login failed')
   rescue MediaNotFound
     library_entry_log.update(
       sync_status: :error,
