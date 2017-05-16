@@ -9,44 +9,54 @@ RSpec.describe GetstreamWebhookService do
   end
 
   describe '#feed_url' do
-    context 'follow activity' do
-      let(:request) do
-        JSON.parse(fixture('getstream_webhook/new_feed_request.json')).first
+    context 'when dealing with signle activity' do
+      context 'follow activity' do
+        let(:request) do
+          JSON.parse(fixture('getstream_webhook/new_feed_request.json')).first
+        end
+
+        it_should_behave_like 'correct action url', 'users/4'
       end
 
-      it_should_behave_like 'correct action url', 'users/4'
+      context 'post activity' do
+        let(:request) do
+          JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[1]
+        end
+
+        it_should_behave_like 'correct action url', 'posts/12'
+      end
+
+      context 'comment activity' do
+        let(:request) do
+          JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[4]
+        end
+
+        it_should_behave_like 'correct action url', 'comments/9'
+      end
+
+      context 'post like activity' do
+        let(:request) do
+          JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[2]
+        end
+
+        it_should_behave_like 'correct action url', 'posts/12'
+      end
+
+      context 'comment like activity' do
+        let(:request) do
+          JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[3]
+        end
+
+        it_should_behave_like 'correct action url', 'comments/5'
+      end
     end
 
-    context 'post activity' do
+    context 'when dealing with multiple activity' do
       let(:request) do
-        JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[1]
+        JSON.parse(fixture('getstream_webhook/multiple_activity_request.json')).first
       end
-
-      it_should_behave_like 'correct action url', 'posts/12'
-    end
-
-    context 'comment activity' do
-      let(:request) do
-        JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[4]
-      end
-
-      it_should_behave_like 'correct action url', 'comments/9'
-    end
-
-    context 'post like activity' do
-      let(:request) do
-        JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[2]
-      end
-
-      it_should_behave_like 'correct action url', 'posts/12'
-    end
-
-    context 'comment like activity' do
-      let(:request) do
-        JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[3]
-      end
-
-      it_should_behave_like 'correct action url', 'comments/5'
+      
+      it_should_behave_like 'correct action url', 'notifications'   
     end
   end
 
