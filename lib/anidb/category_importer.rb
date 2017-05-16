@@ -9,10 +9,10 @@ class AnidbCategoryImport
     def apply!
       data.each do |item|
         item = item.deep_symbolize_keys
-        puts item[:titles][:canonical]
+        puts item[:titles][:canonical].titleize
 
         category ||= Category.find_by(anidb_id: item[:id]) || Category.new
-        category.canonical_title ||= item[:titles][:canonical]
+        category.title ||= item[:titles][:canonical].titleize
         category.description ||= item[:description]
         category.image ||= item[:image]
         category.anidb_id ||= item[:id]

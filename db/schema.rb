@@ -141,7 +141,7 @@ ActiveRecord::Schema.define(version: 20170512081514) do
   add_index "castings", ["person_id"], name: "index_castings_on_person_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
-    t.string   "canonical_title",    null: false
+    t.string   "title",              null: false
     t.integer  "anidb_id"
     t.integer  "parent_id"
     t.string   "image_file_name"

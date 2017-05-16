@@ -3,12 +3,12 @@
 # Table name: categories
 #
 #  id                 :integer          not null, primary key
-#  canonical_title    :string           not null
 #  description        :string
 #  image_content_type :string
 #  image_file_name    :string
 #  image_file_size    :integer
 #  image_updated_at   :datetime
+#  title              :string           not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  anidb_id           :integer          indexed
@@ -41,5 +41,5 @@ class Category < ActiveRecord::Base
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]
   }
-  validates :canonical_title, presence: true
+  validates :title, presence: true
 end

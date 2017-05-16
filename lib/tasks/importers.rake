@@ -3,12 +3,12 @@ namespace :importers do
     require 'anidb/category_importer'
     require 'anidb/anime_category_assoc_importer'
     desc 'Import Categories'
-    task :categories, [:quantity] => [:environment] do |_t|
+    task categories: :environment do |_t|
       puts 'Importing Categories from AniDB dump'
       AnidbCategoryImport.new().run!
     end
     desc 'Import Anime Associated Categories'
-    task :anime_assoc, [:quantity] => [:environment] do |_t|
+    task anime_assoc: :environment do |_t|
       puts 'Importing Anime Associated Categoriesfrom AniDB dump'
       AnidbAssocAnimeCategoryImport.new().run!
     end
