@@ -25,7 +25,7 @@ class GroupInvitesController < ApplicationController
     unless invite
       return render_jsonapi serialize_error(404, 'Not Found'), status: 404
     end
-    user = current_user.resource_owner
+    user = current_user&.resource_owner
     unless user == invite.user
       render_jsonapi serialize_error(403, 'Not Authorized'), status: 403
     end
