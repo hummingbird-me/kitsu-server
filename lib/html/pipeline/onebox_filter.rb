@@ -3,7 +3,7 @@ module HTML
     class OneboxFilter < HTML::Pipeline::Filter
       ONEBOX_WHITELIST = [
         '.gif', '.jpg', '.jpeg', '.png', '.mov', '.mp4', '.webm',
-        'gph.is', 'giphy.com', 'gifs.com', 'imgur.com'
+        'gph.is', 'giphy.com', 'imgur.com'
       ].freeze
       def call
         doc.search('a.autolink').each do |a|

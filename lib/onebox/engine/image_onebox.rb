@@ -3,7 +3,7 @@ module Onebox
     class ImageOnebox
       include Engine
 
-      matches_regexp(%r{(https?:)?//(?!.*giphy.com)(?!.*imgur.com)(?!.*gifs.com).+.(png|jpg|jpeg|gif|bmp|tif|tiff)(\?.*)?})
+      matches_regexp(%r{(https?:)?//(?!.*giphy.com)(?!.*imgur.com).+.(png|jpg|jpeg|gif|bmp|tif|tiff)(\?.*)?})
 
       def always_https?
         WhitelistedGenericOnebox.host_matches(
