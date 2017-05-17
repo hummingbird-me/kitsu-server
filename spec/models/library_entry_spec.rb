@@ -136,44 +136,42 @@ RSpec.describe LibraryEntry, type: :model do
   end
 
   describe 'timestamp validation' do
-    before do
-      @library_entry =
-        create(:library_entry, media: anime, status: :current, progress: 1)
+    let!(:library_entry) do
+      create(:library_entry, media: anime, status: :current, progress: 1)
     end
     context 'progressed_at validation' do
       it 'should set progressed_at when progress is changed' do
-        expect(@library_entry.progressed_at).to be_present
+        expect(library_entry.progressed_at).to be_present
       end
     end
     context 'started_at validation' do
       it 'should set started_at when status is current' do
-        expect(@library_entry.started_at).to be_present
+        expect(library_entry.started_at).to be_present
       end
       it 'should not change started_at' do
-        started_at = @library_entry.started_at
-        @library_entry.status = :on_hold
-        @library_entry.save!
-        @library_entry.status = :current
-        @library_entry.save!
-        expect(@library_entry.started_at).to eq(started_at)
+        started_at = library_entry.started_at
+        library_entry.status = :on_hold
+        library_entry.save!
+        library_entry.status = :current
+        library_entry.save!
+        expect(library_entry.started_at).to eq(started_at)
       end
     end
     context 'finished_at validation' do
-      before do
-        @library_entry =
-          create(:library_entry, media: anime, status: :completed)
+      let!(:library_entry) do
+        create(:library_entry, media: anime, status: :completed)
       end
       it 'should set finished_at and started_at when status is completed' do
-        expect(@library_entry.finished_at).to be_present
-        expect(@library_entry.started_at).to be_present
+        expect(library_entry.finished_at).to be_present
+        expect(library_entry.started_at).to be_present
       end
       it 'should not change finished_at' do
-        finished_at = @library_entry.finished_at
-        @library_entry.status = :current
-        @library_entry.save!
-        @library_entry.status = :completed
-        @library_entry.save!
-        expect(@library_entry.finished_at).to eq(finished_at)
+        finished_at = library_entry.finished_at
+        library_entry.status = :current
+        library_entry.save!
+        library_entry.status = :completed
+        library_entry.save!
+        expect(library_entry.finished_at).to eq(finished_at)
       end
     end
   end
