@@ -17,13 +17,10 @@ class GetstreamWebhookService
   # Get the corresponding feed url
   def feed_url
     model_type, model_id = activity['foreign_id'].split(':')
-    protocol = Rails.env.development? ? 'http://' : 'https://'
-    host = ActionMailer::Base.default_url_options.values.join(':')
-    base_url = "#{protocol}#{host}"
     path = ''
     case model_type
     when 'Follow'
-      path = "/users/#{activity['actor'].split(':').last}"
+      path = "/users/#{actor_id}"
     when 'Post'
       path = "/posts/#{model_id}"
     when 'Comment'
@@ -36,12 +33,13 @@ class GetstreamWebhookService
       path = "/comments/#{target_id}"
     end
 
-    "#{base_url}#{path}"
+    "https://kitsu.io#{path}"
   end
 
   # Express activity of this feed in desired locale
   def stringify_activity
     locale = (feed_target&.language || 'en').to_sym
+    I18n.locale = locale
     actor_name = User.find_by(id: actor_id)&.name
     activity_str = {}
 
@@ -49,23 +47,19 @@ class GetstreamWebhookService
     when 'follow'
       activity_str[locale] = I18n.t(:followed,
         scope: [:notifications],
-        actor: actor_name,
-        locale: locale)
+        actor: actor_name)
     when 'post'
       activity_str[locale] = I18n.t(:post_mentioned,
         scope: [:notifications],
-        actor: actor_name,
-        locale: locale)
+        actor: actor_name)
     when 'post_like'
       activity_str[locale] = I18n.t(:post_like,
         scope: [:notifications],
-        actor: actor_name,
-        locale: locale)
+        actor: actor_name)
     when 'comment_like'
       activity_str[locale] = I18n.t(:comment_like,
         scope: [:notifications],
-        actor: actor_name,
-        locale: locale)
+        actor: actor_name)
     when 'comment'
       # Checking what exactly this feed is refering to
       # reply in post, reply in comment, mention in comment, mention in post
@@ -76,19 +70,16 @@ class GetstreamWebhookService
                                if reply_to_type == 'post'
                                  I18n.t(:post_replied,
                                    scope: [:notifications],
-                                   actor: actor_name,
-                                   locale: locale)
+                                   actor: actor_name)
                                else
                                  I18n.t(:comment_replied,
                                    scope: [:notifications],
-                                   actor: actor_name,
-                                   locale: locale)
+                                   actor: actor_name)
                                end
                              else
                                I18n.t(:comment_mentioned,
                                  scope: [:notifications],
-                                 actor: actor_name,
-                                 locale: locale)
+                                 actor: actor_name)
                              end
     end
 

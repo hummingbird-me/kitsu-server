@@ -4,7 +4,7 @@ RSpec.describe GetstreamWebhookService do
   shared_examples_for 'correct action url' do |path|
     it 'should return the frontend url that refer to this action' do
       expect(GetstreamWebhookService.new(request).feed_url)
-        .to eq("https://kitsu.example.com/#{path}")
+        .to eq("https://kitsu.io/#{path}")
     end
   end
 
