@@ -3,7 +3,9 @@ class AnidbCategoryImport
     attr_reader :data
 
     def initialize(filename)
-      @data = JSON.parse(open(filename).read)
+      # Load the JSON
+      json_file = open('https://media.kitsu.io/import_files/' + filename).read
+      @data = JSON.parse(json_file)
     end
 
     def apply!
@@ -23,8 +25,7 @@ class AnidbCategoryImport
         item = item.deep_symbolize_keys
         next unless item[:parent]
         category = Category.find_by(anidb_id: item[:id])
-        category_parent = Category.find_by(anidb_id: item[:parent])
-        category.parent = category_parent
+        category.parent ||= Category.find_by(anidb_id: item[:parent])
         category.save
       end
     end
@@ -33,12 +34,7 @@ class AnidbCategoryImport
   def run!
     ActiveRecord::Base.logger = Logger.new(nil)
     Chewy.strategy(:bypass)
-    filename = File.join(
-      File.expand_path(
-        File.dirname(__FILE__)
-      ),
-      'anidb_category.json'
-    )
-    ImportFile.new(filename).apply! if File.file?(filename)
+    filename = 'anidb_category.json'
+    ImportFile.new(filename).apply!
   end
 end

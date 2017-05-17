@@ -3,7 +3,9 @@ class AnidbAssocAnimeCategoryImport
     attr_reader :data
 
     def initialize(filename)
-      @data = JSON.parse(open(filename).read)
+      # Load the JSON
+      json_file = open('https://media.kitsu.io/import_files/' + filename).read
+      @data = JSON.parse(json_file)
     end
 
     def apply!
@@ -27,12 +29,7 @@ class AnidbAssocAnimeCategoryImport
   def run!
     ActiveRecord::Base.logger = Logger.new(nil)
     Chewy.strategy(:bypass)
-    filename = File.join(
-      File.expand_path(
-        File.dirname(__FILE__)
-      ),
-      'anidb_anime_category_assoc.json'
-    )
-    ImportFile.new(filename).apply! if File.file?(filename)
+    filename = 'anidb_anime_category_assoc.json'
+    ImportFile.new(filename).apply!
   end
 end
