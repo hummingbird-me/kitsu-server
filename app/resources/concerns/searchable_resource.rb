@@ -68,7 +68,9 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
 
     def load_query_records(query, opts = {})
       include_directives = opts[:include_directives]
-      return query.load.to_a unless include_directives
+      unless include_directives
+        return @_search_service ? query.to_a : query.load.to_a
+      end
 
       model_includes = resolve_relationship_names_to_relations(self,
         include_directives.model_includes, opts)
