@@ -33,6 +33,7 @@ class WebhooksController < ApplicationController
   # Handle notification updates from getstream firehose
   def getstream_firehose
     notifications = JSON.parse(request.body.read)
+    puts notifications
     # Since it may contains up to 100 per request,
     # Letting the task run in background to eliminate
     # API timeout and rescue possible errors

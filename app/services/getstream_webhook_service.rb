@@ -1,12 +1,11 @@
 # Parse getstream.io webhook reqest
 class GetstreamWebhookService
-  attr_reader :activities, :activity, :feed_id, :actor_id
+  attr_reader :activities, :activity, :feed_id
 
   def initialize(feed)
-    @activites = feed['new']
+    @activities = feed['new']
     @activity = feed['new'].first
     @feed_id = feed['feed'].split(':').last
-    @actor_id = @activity['actor'].split(':').last
   end
 
   # Find correspond user from feed id
@@ -17,7 +16,7 @@ class GetstreamWebhookService
   # Get the corresponding feed url
   def feed_url
     client_url = 'https://kitsu.io'
-
+    # Direct to user notifications list when more than one action
     return "#{client_url}/notifications" if activities.length > 1
 
     activity = activities.first
@@ -43,8 +42,10 @@ class GetstreamWebhookService
 
   # Express activity of this feed in desired locale
   def stringify_activity
-    I18n.locale = (feed_target&.language || 'en').to_sym
-    actor_name = User.find_by(id: actor_id)&.name
+    locale = (feed_target&.language || 'en').to_sym
+    I18n.locale = locale
+
+    actor_name = User.find_by(id: activity['actor'].split(':').last)&.name
     activity_str = {}
 
     case activity['verb']
