@@ -6,14 +6,14 @@ RSpec.describe ListImport::MyAnimeList::Row do
   context 'with anime' do
     describe '#started_at' do
       context 'with empty date' do
+        subject { described_class.new(JSON.parse(anime)[1]) }
         it 'should return nil' do
-          subject = described_class.new(JSON.parse(anime)[1])
           expect(subject.started_at).to be_nil
         end
       end
       context 'with valid date' do
+        subject { described_class.new(JSON.parse(anime)[0]) }
         it 'should return a date object' do
-          subject = described_class.new(JSON.parse(anime)[0])
           expect(subject.started_at).to eq(DateTime.new(2016, 7, 23))
         end
       end
@@ -21,14 +21,14 @@ RSpec.describe ListImport::MyAnimeList::Row do
 
     describe '#finished_at' do
       context 'with empty date' do
+        subject { described_class.new(JSON.parse(anime)[1]) }
         it 'should return nil' do
-          subject = described_class.new(JSON.parse(anime)[1])
           expect(subject.finished_at).to be_nil
         end
       end
       context 'with valid date' do
+        subject { described_class.new(JSON.parse(anime)[0]) }
         it 'should return a date object' do
-          subject = described_class.new(JSON.parse(anime)[0])
           expect(subject.finished_at).to eq(DateTime.new(2016, 7, 23))
         end
       end
