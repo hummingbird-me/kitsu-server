@@ -28,3 +28,21 @@ en:
     comment_replied: "%{actor} replied to your comment."
     post_like: "%{actor} liked your post."
     comment_like: "%{actor} liked your comment."
+    follow_comment: "%{actor} replied to the post you followed."
+    summary:
+      sentence: "You got %{summary} while you were away."
+      follow:
+        one: "1 follow"
+        other: "%{count} follows"
+      post:
+        one: "1 post mention"
+        other: "%{count} post mentions"
+      post_like:
+        one: "1 post like"
+        other: "%{count} post likes"
+      comment_like:
+        one: "1 comment like"
+        other: "%{count} comment likes"
+      comment:
+        one: "1 comment"
+        other: "%{count} comments"
