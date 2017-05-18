@@ -48,7 +48,6 @@
 
 class Anime < ApplicationRecord
   SEASONS = %w[winter spring summer fall].freeze
-  STATUSES = %w[not_aired upcoming airing finished]
 
   include Media
   include AgeRatings
@@ -82,13 +81,6 @@ class Anime < ApplicationRecord
       candidates << -> { [canonical_title, subtype, year] }
     end
     candidates
-  end
-
-  def status
-    return :not_aired if start_date > Date.today
-    return :upcoming if start_date.month - Date.today.month < 4
-    return :airing if start_date <= Date.today && end_date >= Date.today
-    return :finished if end_date <= Date.today
   end
 
   def season

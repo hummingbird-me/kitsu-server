@@ -37,8 +37,6 @@
 #
 
 class Manga < ApplicationRecord
-  STATUSES = %i[not_published upcoming publishing finished]
-
   include Media
   include AgeRatings
 
@@ -69,12 +67,5 @@ class Manga < ApplicationRecord
       -> { [canonical_title, year] }, # attack-on-titan-2004
       -> { [canonical_title, year, subtype] } # attack-on-titan-2004-doujin
     ]
-  end
-
-  def status
-    return :not_published if start_date > Date.today
-    return :upcoming if start_date.month - Date.today.month < 4
-    return :publishing if start_date <= Date.today && end_date >= Date.today
-    return :finished if end_date <= Date.today
   end
 end

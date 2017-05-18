@@ -1,6 +1,8 @@
 module Media
   extend ActiveSupport::Concern
 
+  STATUSES = %w[nya upcoming current finished]
+
   included do
     include Titleable
     include Rateable
@@ -62,6 +64,13 @@ module Media
   # How long the series ran for, or nil if the start date is unknown
   def run_length
     (end_date || Date.today) - start_date if start_date
+  end
+
+  def status
+    return :finished if end_date&.past?
+    return :current if start_date&.past?
+    return :upcoming if start_date && start_date < Date.today + 3.months
+    return :nya if start_date&.future?
   end
 
   def feed
