@@ -52,7 +52,9 @@ class MediaResource < BaseResource
     # Age Ratings
     :age_rating, :age_rating_guide,
     # Subtype
-    :subtype
+    :subtype,
+    # Airing/Publishing Status
+    :status
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
@@ -109,4 +111,12 @@ class MediaResource < BaseResource
         }
       }
     }
+
+  def self.updatable_fields(context)
+    super - [:status]
+  end
+
+  def self.creatable_fields(context)
+    super - [:status]
+  end
 end
