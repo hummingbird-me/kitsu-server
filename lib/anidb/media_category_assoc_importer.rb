@@ -25,13 +25,14 @@ class AnidbAssocMediaCategoryImport
 
     def associate_media_categores(media)
       genres = media.genres.map(&:name)
-      categories = genres.map {
-        |g| @genre_category_model[g]
-      }.compact unless genres.empty?
-
-      if categories
-        media.categories = categories
-        media.save
+      unless genres.empty?
+        categories = genres.map { |g|
+          @genre_category_model[g]
+        }.compact
+        if categories
+          media.categories = categories
+          media.save
+        end
       end
     end
 
