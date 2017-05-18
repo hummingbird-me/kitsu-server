@@ -2,9 +2,10 @@ class AnidbCategoryImport
   class ImportFile
     attr_reader :data
 
-    def initialize(filename)
+    def initialize(base_media_url, filename)
       # Load the JSON
-      json_file = open('https://media.kitsu.io/import_files/' + filename).read
+      utc = Time.now.to_i.to_s
+      json_file = open(base_media_url + filename + '?' + utc).read
       @data = JSON.parse(json_file)
     end
 
@@ -34,7 +35,8 @@ class AnidbCategoryImport
   def run!
     ActiveRecord::Base.logger = Logger.new(nil)
     Chewy.strategy(:bypass)
+    base_media_url = 'https://media.kitsu.io/import_files/'
     filename = 'anidb_category.json'
-    ImportFile.new(filename).apply!
+    ImportFile.new(base_media_url, filename).apply!
   end
 end
