@@ -6,16 +6,16 @@ class AnidbAssocMediaCategoryImport
       # Loading the JSON
       utc = Time.now.to_i.to_s
       anime_json_file = open(
-        base_media_url + 
-        anime_assoc_file + 
-        '?' + 
+        base_media_url +
+        anime_assoc_file +
+        '?' +
         utc
       ).read
       @data = JSON.parse(anime_json_file)
       genre_categeory_map = open(
-        base_media_url + 
-        genre_map_file + 
-        '?' + 
+        base_media_url +
+        genre_map_file +
+        '?' +
         utc
       ).read
       gc_data = JSON.parse(genre_categeory_map)
