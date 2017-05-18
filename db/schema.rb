@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515122347) do
+ActiveRecord::Schema.define(version: 20170518220741) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -664,7 +664,6 @@ ActiveRecord::Schema.define(version: 20170515122347) do
     t.string   "serialization",             limit: 255
     t.datetime "created_at",                                                                      null: false
     t.datetime "updated_at",                                                                      null: false
-    t.integer  "status"
     t.integer  "cover_image_top_offset",                                        default: 0
     t.integer  "volume_count"
     t.integer  "chapter_count"
