@@ -25,22 +25,34 @@ class AnidbAssocMediaCategoryImport
 
     def associate_media_categores(media)
       genres = media.genres.map(&:name)
-      categories = genres.map { |g| @genre_category_model[g] }.compact if !genres.empty?
+      categories = genres.map {
+        |g| @genre_category_model[g]
+      }.compact unless genres.empty?
+
       if categories
         media.categories = categories
         media.save
       end
     end
 
-    def apply!
-      exclude_ids = []
+    def associate_manga!
       puts 'Associating Manga Categories From Kitsu Genre Map'
       manga = Manga.includes(:genres).all
       manga.each do |m|
         associate_media_categores(m)
       end
-      manga = nil
+    end
 
+    def associate_empty_anime(exclude_ids)
+      puts 'Associating Excluded Anime With Categories From Kitsu Genre Map'
+      anime = Anime.includes(:genres).where.not(id: exclude_ids)
+      anime.each do |a|
+        associate_media_categores(a)
+      end
+    end
+
+    def associate_initial_anime!
+      exclude_ids = []
       puts 'Associating Anime With Categories From AniDB Dump'
       data.each do |unfiltered_anime|
         unfiltered_anime = unfiltered_anime.deep_symbolize_keys
@@ -58,12 +70,13 @@ class AnidbAssocMediaCategoryImport
         kitsu_anime.save
         exclude_ids << kitsu_anime.id
       end
+      exclude_ids
+    end
 
-      puts 'Associating Excluded Anime With Categories From Kitsu Genre Map'
-      anime = Anime.includes(:genres).where.not(id: exclude_ids)
-      anime.each do |a|
-        associate_media_categores(a)
-      end
+    def apply!
+      associate_manga!
+      excluded_anime_ids = associate_initial_anime!
+      associate_empty_anime(excluded_anime_ids)
     end
   end
 
