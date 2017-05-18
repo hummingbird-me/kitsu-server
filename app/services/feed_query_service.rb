@@ -40,7 +40,6 @@ class FeedQueryService
   end
 
   def split_feed
-    puts params
     return @split_feed if @split_feed
     feed_name = params[:group].sub(/_aggr\z/, '')
     @split_feed = Feed.class_for(feed_name).new(params[:id])

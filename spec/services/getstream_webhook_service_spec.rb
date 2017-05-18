@@ -9,7 +9,7 @@ RSpec.describe GetstreamWebhookService do
   end
 
   describe '#feed_url' do
-    context 'when dealing with signle activity' do
+    context 'when dealing with single activity' do
       context 'follow activity' do
         let(:request) do
           JSON.parse(fixture('getstream_webhook/new_feed_request.json')).first
@@ -50,13 +50,13 @@ RSpec.describe GetstreamWebhookService do
         it_should_behave_like 'correct action url', 'comments/5'
       end
     end
-
-    context 'when dealing with multiple activity' do
+    
+    context 'when dealing with multiple activities' do
       let(:request) do
-        JSON.parse(fixture('getstream_webhook/multiple_activity_request.json')).first
+        JSON.parse(fixture('getstream_webhook/multi_activity_req.json')).first
       end
-      
-      it_should_behave_like 'correct action url', 'notifications'   
+
+      it_should_behave_like 'correct action url', 'notifications'
     end
   end
 
@@ -95,7 +95,26 @@ RSpec.describe GetstreamWebhookService do
         JSON.parse(fixture('getstream_webhook/post_reply_request.json'))
       end
       let!(:actor) { FactoryGirl.create(:user, id: 4) }
+      let!(:mentioned) { FactoryGirl.create(:user, id: 5) }
+      let!(:followed) { FactoryGirl.create(:user, id: 6) }
       let!(:target) { FactoryGirl.create(:user, id: 1) }
+
+      context 'when user is mentioned in comment' do
+        let(:post_reply) { webhook_req[2] }
+        let(:comment_reply) { webhook_req[3] }
+
+        it 'should localize mentioned in a comment activity string' do
+          expect(GetstreamWebhookService.new(post_reply)
+            .stringify_activity[:en])
+            .to eq("#{actor.name} mentioned you in a comment.")
+        end
+
+        it 'should localize mentioned in a comment activity string' do
+          expect(GetstreamWebhookService.new(comment_reply)
+            .stringify_activity[:en])
+            .to eq("#{actor.name} mentioned you in a comment.")
+        end
+      end
 
       context 'when notification feed target and reply to user are same' do
         let(:post_reply) { webhook_req.first }
@@ -114,16 +133,33 @@ RSpec.describe GetstreamWebhookService do
         end
       end
 
-      context 'when notification feed target and reply to user are different' do
-        let(:post_reply) { webhook_req[2] }
-        let(:comment_reply) { webhook_req[3] }
+      context 'when user are not mentioned and not being replied' do
+        let(:comment) { webhook_req[4] }
 
-        it 'should localize mentioned in a comment activity string' do
-          expect(GetstreamWebhookService.new(post_reply)
+        it 'should localize reply to post activity string' do
+          expect(GetstreamWebhookService.new(comment)
             .stringify_activity[:en])
-            .to eq("#{actor.name} mentioned you in a comment.")
+            .to eq("#{actor.name} replied to the post you followed.")
         end
       end
+    end
+
+    context 'multiple activities' do
+      let(:webhook_req) do
+        JSON.parse(fixture('getstream_webhook/multi_activity_req.json')).first
+      end
+
+      before do
+        FactoryGirl.create(:user, id: 4)
+        FactoryGirl.create(:user, id: 5)
+      end
+
+      it 'should return localized summary' do
+        expect(GetstreamWebhookService.new(webhook_req)
+          .stringify_activity[:en])
+          .to eq("You got 2 follows, 1 post mention, and 1 comment while you were away.")
+      end
+
     end
   end
 end
