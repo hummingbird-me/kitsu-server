@@ -23,8 +23,8 @@ class LibraryEntryResource < BaseResource
 
   caching
 
-  attributes :status, :progress, :reconsuming, :reconsume_count, :notes,
-    :private, :updated_at
+  attributes :status, :progress, :volumes_owned, :reconsuming, :reconsume_count,
+    :notes, :private, :updated_at
 
   filters :user_id, :media_id, :media_type, :status, :anime_id, :manga_id,
     :drama_id
