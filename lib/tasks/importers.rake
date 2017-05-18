@@ -9,7 +9,7 @@ namespace :importers do
     end
     desc 'Import Media Associated Categories'
     task media_assoc: :environment do |_t|
-      puts 'Importing Media Associated Categories from AniDB/Kitsu Genre Mapping'
+      puts 'Importing Associated Categories from AniDB/Kitsu Genre Mapping'
       AnidbAssocMediaCategoryImport.new().run!
     end
   end
