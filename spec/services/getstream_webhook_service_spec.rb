@@ -50,7 +50,7 @@ RSpec.describe GetstreamWebhookService do
         it_should_behave_like 'correct action url', 'comments/5'
       end
     end
-    
+
     context 'when dealing with multiple activities' do
       let(:request) do
         JSON.parse(fixture('getstream_webhook/multi_activity_req.json')).first
@@ -157,9 +157,9 @@ RSpec.describe GetstreamWebhookService do
       it 'should return localized summary' do
         expect(GetstreamWebhookService.new(webhook_req)
           .stringify_activity[:en])
-          .to eq("You got 2 follows, 1 post mention, and 1 comment while you were away.")
+          .to eq('You got 2 follows, 1 post mention, and 1 comment '\
+            'while you were away.')
       end
-
     end
   end
 end
