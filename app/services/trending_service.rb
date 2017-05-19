@@ -86,13 +86,12 @@ class TrendingService
   end
 
   def handle_trending_categories(id, weight = 1.0)
-    if %w[Anime Manga Drama].include?(namespace.name)
-      categories = namespace.includes(:categories).find_by(id: id).categories
-      categories.each do |category|
-        key = trending_category_key(category.id)
-        update_score(key, id, weight)
-        trim(key, limit: NETWORK_LIMIT) if rand < TRIM_PROBABILITY
-      end
+    return unless %w[Anime Manga Drama].include?(namespace.name)
+    categories = namespace.includes(:categories).find_by(id: id).categories
+    categories.each do |category|
+      key = trending_category_key(category.id)
+      update_score(key, id, weight)
+      trim(key, limit: NETWORK_LIMIT) if rand < TRIM_PROBABILITY
     end
   end
 
