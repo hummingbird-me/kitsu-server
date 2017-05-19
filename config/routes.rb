@@ -31,6 +31,10 @@ Rails.application.routes.draw do
       jsonapi_resources :library_entries
       jsonapi_resources :favorites
 
+      ### Categories
+      jsonapi_resources :category_favorites
+      jsonapi_resources :categories
+
       ### Media
       jsonapi_resources :anime
       jsonapi_resources :manga
@@ -139,7 +143,7 @@ end
 
 # == Route Map
 #
-# I, [2017-04-28T00:33:17.625572 #36485]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-05-12T05:50:12.246251 #64097]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                          Prefix Verb      URI Pattern                                                                               Controller#Action
 #                        user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#show_relationship {:relationship=>"waifu"}
 #                                                 PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#update_relationship {:relationship=>"waifu"}
@@ -389,6 +393,18 @@ end
 #                                                 PATCH     /api/edge/favorites/:id(.:format)                                                         favorites#update
 #                                                 PUT       /api/edge/favorites/:id(.:format)                                                         favorites#update
 #                                                 DELETE    /api/edge/favorites/:id(.:format)                                                         favorites#destroy
+#                              category_favorites GET       /api/edge/category-favorites(.:format)                                                    category_favorites#index
+#                                                 POST      /api/edge/category-favorites(.:format)                                                    category_favorites#create
+#                               category_favorite GET       /api/edge/category-favorites/:id(.:format)                                                category_favorites#show
+#                                                 PATCH     /api/edge/category-favorites/:id(.:format)                                                category_favorites#update
+#                                                 PUT       /api/edge/category-favorites/:id(.:format)                                                category_favorites#update
+#                                                 DELETE    /api/edge/category-favorites/:id(.:format)                                                category_favorites#destroy
+#                                      categories GET       /api/edge/categories(.:format)                                                            categories#index
+#                                                 POST      /api/edge/categories(.:format)                                                            categories#create
+#                                        category GET       /api/edge/categories/:id(.:format)                                                        categories#show
+#                                                 PATCH     /api/edge/categories/:id(.:format)                                                        categories#update
+#                                                 PUT       /api/edge/categories/:id(.:format)                                                        categories#update
+#                                                 DELETE    /api/edge/categories/:id(.:format)                                                        categories#destroy
 #                      anime_relationships_genres GET       /api/edge/anime/:anime_id/relationships/genres(.:format)                                  anime#show_relationship {:relationship=>"genres"}
 #                                                 POST      /api/edge/anime/:anime_id/relationships/genres(.:format)                                  anime#create_relationship {:relationship=>"genres"}
 #                                                 PUT|PATCH /api/edge/anime/:anime_id/relationships/genres(.:format)                                  anime#update_relationship {:relationship=>"genres"}
