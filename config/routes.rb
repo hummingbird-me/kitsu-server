@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       ### Users
       jsonapi_resources :users
       post '/users/_recover', to: 'users#recover'
+      get '/users/_strength', to: 'users#profile_strength'
       # Profile data
       jsonapi_resources :profile_links
       jsonapi_resources :profile_link_sites
@@ -211,6 +212,7 @@ end
 #                                                 PUT       /api/edge/users/:id(.:format)                                                             users#update
 #                                                 DELETE    /api/edge/users/:id(.:format)                                                             users#destroy
 #                                  users__recover POST      /api/edge/users/_recover(.:format)                                                        users#recover
+#                                 users__strength GET       /api/edge/users/_strength(.:format)                                                       users#profile_strength
 #                 profile_link_relationships_user GET       /api/edge/profile-links/:profile_link_id/relationships/user(.:format)                     profile_links#show_relationship {:relationship=>"user"}
 #                                                 PUT|PATCH /api/edge/profile-links/:profile_link_id/relationships/user(.:format)                     profile_links#update_relationship {:relationship=>"user"}
 #                                                 DELETE    /api/edge/profile-links/:profile_link_id/relationships/user(.:format)                     profile_links#destroy_relationship {:relationship=>"user"}
