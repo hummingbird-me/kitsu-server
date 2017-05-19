@@ -1,7 +1,7 @@
 module Media
   extend ActiveSupport::Concern
 
-  STATUSES = %w[nya upcoming current finished]
+  STATUSES = %w[nya upcoming current finished].freeze
 
   included do
     include Titleable
@@ -47,6 +47,14 @@ module Media
                          inverse_of: :item
     delegate :year, to: :start_date, allow_nil: true
 
+    scope :past, -> { where('start_date <= ?', Date.today) }
+    scope :finished, -> { past.where('end_date < ?', Date.today) }
+    scope :current, -> do
+      past.where('end_date >= ? OR end_date IS ?', Date.today, nil)
+    end
+    scope :upcoming, -> { where('start_date <= ?', Date.today + 3.months) }
+    scope :nya, -> { where('start_date > ?', Date.today + 3.months) }
+
     validates_attachment :poster_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
     }
@@ -68,8 +76,8 @@ module Media
 
   def status
     return :finished if end_date&.past?
-    return :current if start_date&.past?
-    return :upcoming if start_date && start_date < Date.today + 3.months
+    return :current if start_date&.past? || start_date&.today?
+    return :upcoming if start_date && start_date <= Date.today + 3.months
     return :nya if start_date&.future?
   end
 
