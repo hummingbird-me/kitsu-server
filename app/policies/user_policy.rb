@@ -6,10 +6,7 @@ class UserPolicy < ApplicationPolicy
   def update?
     user == record || is_admin?
   end
-
-  def destroy?
-    is_admin?
-  end
+  alias_method :destroy?, :update?
 
   def editable_attributes(all)
     if has_scope?(:email_password_reset, accept_all: false)
