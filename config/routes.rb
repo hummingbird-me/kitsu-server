@@ -30,6 +30,10 @@ Rails.application.routes.draw do
 
       ### Library
       jsonapi_resources :library_entries
+      delete '/library-entries/_bulk', to: 'library_entries#bulk_delete'
+      patch '/library-entries/_bulk', to: 'library_entries#bulk_update'
+      put '/library-entries/_bulk', to: 'library_entries#bulk_update'
+
       jsonapi_resources :favorites
 
       ### Media
@@ -377,6 +381,9 @@ end
 #                                                 PATCH     /api/edge/library-entries/:id(.:format)                                                   library_entries#update
 #                                                 PUT       /api/edge/library-entries/:id(.:format)                                                   library_entries#update
 #                                                 DELETE    /api/edge/library-entries/:id(.:format)                                                   library_entries#destroy
+#                           library_entries__bulk DELETE    /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_delete
+#                                                 PATCH     /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_update
+#                                                 PUT       /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_update
 #                     favorite_relationships_user GET       /api/edge/favorites/:favorite_id/relationships/user(.:format)                             favorites#show_relationship {:relationship=>"user"}
 #                                                 PUT|PATCH /api/edge/favorites/:favorite_id/relationships/user(.:format)                             favorites#update_relationship {:relationship=>"user"}
 #                                                 DELETE    /api/edge/favorites/:favorite_id/relationships/user(.:format)                             favorites#destroy_relationship {:relationship=>"user"}
