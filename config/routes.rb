@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       ### Users
       jsonapi_resources :users
       post '/users/_recover', to: 'users#recover'
-      get '/users/_strength', to: 'users#profile_strength'
+      get '/users/:id/_strength', to: 'users#profile_strength'
       # Profile data
       jsonapi_resources :profile_links
       jsonapi_resources :profile_link_sites
@@ -29,10 +29,10 @@ Rails.application.routes.draw do
       jsonapi_resources :roles
 
       ### Library
-      jsonapi_resources :library_entries
       delete '/library-entries/_bulk', to: 'library_entries#bulk_delete'
       patch '/library-entries/_bulk', to: 'library_entries#bulk_update'
       put '/library-entries/_bulk', to: 'library_entries#bulk_update'
+      jsonapi_resources :library_entries
 
       jsonapi_resources :favorites
 
@@ -216,7 +216,7 @@ end
 #                                                 PUT       /api/edge/users/:id(.:format)                                                             users#update
 #                                                 DELETE    /api/edge/users/:id(.:format)                                                             users#destroy
 #                                  users__recover POST      /api/edge/users/_recover(.:format)                                                        users#recover
-#                                 users__strength GET       /api/edge/users/_strength(.:format)                                                       users#profile_strength
+#                                                 GET       /api/edge/users/:id/_strength(.:format)                                                   users#profile_strength
 #                 profile_link_relationships_user GET       /api/edge/profile-links/:profile_link_id/relationships/user(.:format)                     profile_links#show_relationship {:relationship=>"user"}
 #                                                 PUT|PATCH /api/edge/profile-links/:profile_link_id/relationships/user(.:format)                     profile_links#update_relationship {:relationship=>"user"}
 #                                                 DELETE    /api/edge/profile-links/:profile_link_id/relationships/user(.:format)                     profile_links#destroy_relationship {:relationship=>"user"}
@@ -343,6 +343,9 @@ end
 #                                                 PATCH     /api/edge/roles/:id(.:format)                                                             roles#update
 #                                                 PUT       /api/edge/roles/:id(.:format)                                                             roles#update
 #                                                 DELETE    /api/edge/roles/:id(.:format)                                                             roles#destroy
+#                           library_entries__bulk DELETE    /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_delete
+#                                                 PATCH     /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_update
+#                                                 PUT       /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_update
 #                library_entry_relationships_user GET       /api/edge/library-entries/:library_entry_id/relationships/user(.:format)                  library_entries#show_relationship {:relationship=>"user"}
 #                                                 PUT|PATCH /api/edge/library-entries/:library_entry_id/relationships/user(.:format)                  library_entries#update_relationship {:relationship=>"user"}
 #                                                 DELETE    /api/edge/library-entries/:library_entry_id/relationships/user(.:format)                  library_entries#destroy_relationship {:relationship=>"user"}
@@ -381,9 +384,6 @@ end
 #                                                 PATCH     /api/edge/library-entries/:id(.:format)                                                   library_entries#update
 #                                                 PUT       /api/edge/library-entries/:id(.:format)                                                   library_entries#update
 #                                                 DELETE    /api/edge/library-entries/:id(.:format)                                                   library_entries#destroy
-#                           library_entries__bulk DELETE    /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_delete
-#                                                 PATCH     /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_update
-#                                                 PUT       /api/edge/library-entries/_bulk(.:format)                                                 library_entries#bulk_update
 #                     favorite_relationships_user GET       /api/edge/favorites/:favorite_id/relationships/user(.:format)                             favorites#show_relationship {:relationship=>"user"}
 #                                                 PUT|PATCH /api/edge/favorites/:favorite_id/relationships/user(.:format)                             favorites#update_relationship {:relationship=>"user"}
 #                                                 DELETE    /api/edge/favorites/:favorite_id/relationships/user(.:format)                             favorites#destroy_relationship {:relationship=>"user"}
