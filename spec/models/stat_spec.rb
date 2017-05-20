@@ -24,7 +24,7 @@
 require 'rails_helper'
 
 RSpec.describe Stat, type: :model do
-  subject { described_class.new }
+  subject { build(:stat) }
 
   it { should belong_to(:user) }
   it { should validate_presence_of(:type) }
