@@ -75,7 +75,7 @@ class AnidbAssocMediaCategoryImport
     end
 
     def apply!
-      #associate_manga!
+      associate_manga!
       excluded_anime_ids = associate_initial_anime!
       associate_empty_anime(excluded_anime_ids)
     end
