@@ -13,6 +13,8 @@ class Stat < ApplicationRecord
       entries = user.library_entries.eager_load(media_column)
                     .where.not(media_length => nil)
 
+      # clear stats_data
+      self.stats_data = {}
       stats_data['all_time'] = {
         total_media: entries.count, # all anime or manga
         total_progress: entries.sum(:progress), # all episodes or chapters
