@@ -57,12 +57,13 @@ class AnidbAssocMediaCategoryImport
       data.each do |unfiltered_anime|
         unfiltered_anime = unfiltered_anime.deep_symbolize_keys
         next unless unfiltered_anime[:tags]
-        mapping_object = {
-          title: unfiltered_anime[:canonical],
-          episode_count: unfiltered_anime[:episode_count]
-        }
+        next unless unfiltered_anime[:mal_ids]
         puts 'looking up -> ' + unfiltered_anime[:canonical]
-        kitsu_anime = Mapping.guess('Anime', mapping_object)
+        kitsu_anime = nil
+        unfiltered_anime[:mal_ids].each do |mal_id|
+          kitsu_anime = Mapping.lookup('myanimelist/anime', mal_id)
+          break if kitsu_anime
+        end
         next unless kitsu_anime
         puts '      >found<'
         categories = Category.where(anidb_id: unfiltered_anime[:tags])
@@ -74,7 +75,7 @@ class AnidbAssocMediaCategoryImport
     end
 
     def apply!
-      associate_manga!
+      #associate_manga!
       excluded_anime_ids = associate_initial_anime!
       associate_empty_anime(excluded_anime_ids)
     end
