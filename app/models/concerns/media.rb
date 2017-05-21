@@ -61,7 +61,9 @@ module Media
     scope :upcoming, -> do
       future.where('start_date <= ?', Date.today + 3.months)
     end
-    scope :unreleased, -> { future.where('start_date > ?', Date.today + 3.months) }
+    scope :unreleased, -> do
+      future.where('start_date > ?', Date.today + 3.months)
+    end
     scope :tba, -> { where('start_date IS ? AND end_date IS ?', nil, nil) }
 
     validates_attachment :poster_image, content_type: {
