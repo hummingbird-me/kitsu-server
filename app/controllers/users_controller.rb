@@ -35,9 +35,9 @@ class UsersController < ApplicationController
 
   def profile_strength
     user = current_user&.resource_owner
-    user_id = params.require(:id)
-    unless user.id == user_id
-      render_jsonapi serialize_error(401, 'Not permitted'), status: 401
+    user_id = params.require(:id).to_i
+    unless user&.id == user_id
+      return render_jsonapi serialize_error(401, 'Not permitted'), status: 401
     end
 
     # Get strength from Stream
