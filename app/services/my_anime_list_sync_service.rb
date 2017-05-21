@@ -3,6 +3,7 @@ class MyAnimeListSyncService
   class MediaNotFound < StandardError; end
   class BadAuthorization < StandardError; end
   class ConnectFailed < StandardError; end
+  class UnknownError < StandardError; end
 
   ATARASHII_API_HOST = 'https://hbv3-mal-api.herokuapp.com/2.1/'.freeze
   MINE = '?mine=1'.freeze
