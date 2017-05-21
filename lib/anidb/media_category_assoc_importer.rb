@@ -23,7 +23,7 @@ class AnidbAssocMediaCategoryImport
       @genre_category_model = gc_data
     end
 
-    def associate_media_categores(media)
+    def associate_media_categories(media)
       genres = media.genres.map(&:name)
       return unless genres.empty?
       categories = genres.map { |g|
@@ -39,7 +39,7 @@ class AnidbAssocMediaCategoryImport
       puts 'Associating Manga Categories From Kitsu Genre Map'
       manga = Manga.includes(:genres).all
       manga.each do |m|
-        associate_media_categores(m)
+        associate_media_categories(m)
       end
     end
 
@@ -47,7 +47,7 @@ class AnidbAssocMediaCategoryImport
       puts 'Associating Excluded Anime With Categories From Kitsu Genre Map'
       anime = Anime.includes(:genres).where.not(id: exclude_ids)
       anime.each do |a|
-        associate_media_categores(a)
+        associate_media_categories(a)
       end
     end
 
