@@ -70,7 +70,7 @@ class MediaResource < BaseResource
     records.where(subtype: values)
   }
   filter :status, apply: ->(records, values, _opts) {
-    records.send(values[0]) if %w[finished current upcoming nya]
+    records.send(values[0]) if %w[tba unreleased upcoming current finished]
                                .include? values[0]
   }
 
