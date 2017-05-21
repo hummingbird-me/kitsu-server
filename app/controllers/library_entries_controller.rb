@@ -13,11 +13,14 @@ class LibraryEntriesController < ApplicationController
   def bulk_delete
     authorize_operation(:destroy?)
     operation_scope.destroy_all
+    render nothing: true, status: 204
   end
 
   def bulk_update
     authorize_operation(:update?)
-    operation_scope.update(update_params)
+    entries = operation_scope
+    entries.each { |r| r.update(update_params) }
+    render json: serialize_entries(entries)
   end
 
   def update_params
@@ -29,7 +32,22 @@ class LibraryEntriesController < ApplicationController
   end
 
   def operation_filters
-    params[:filter].transform_values { |v| v.split(',') }
-                   .select { |k, _| %i[id user_id].include?(k) }
+    params.require(:filter).permit(:id, :user_id)
+          .transform_values { |v| v.split(',') }
+          .select { |k, _| %w[id user_id].include?(k) }
+  end
+
+  private
+
+  def serialize_entries(entries)
+    serializer.serialize_to_hash(wrap_in_resources(entries))
+  end
+
+  def wrap_in_resources(entries)
+    entries.map { |entry| LibraryEntryResource.new(entry, context) }
+  end
+
+  def serializer
+    JSONAPI::ResourceSerializer.new(LibraryEntryResource)
   end
 end

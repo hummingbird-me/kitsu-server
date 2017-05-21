@@ -164,6 +164,10 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  before_destroy do
+    review&.update_attribute(:library_entry_id, nil)
+  end
+
   before_save do
     if status_changed? && completed? && media&.progress_limit
       # When marked completed, we try to update progress to the cap
