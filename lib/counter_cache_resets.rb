@@ -26,7 +26,7 @@ module CounterCacheResets
   end
 
   def category_counts
-    execute sql_for_habtm_media_total(
+    execute sql_for_habtm_media(
       Category,
       [Anime, Manga, Drama],
       counter_cache_column: 'total_media_count'
@@ -93,19 +93,19 @@ module CounterCacheResets
     ]
   end
 
-  def sql_for_habtm_media_total(model, media_models, counter_cache_column: nil, where: nil)
+  def sql_for_habtm_media(model, media_models, counter_cache_column: nil)
     temp_table = "#{model}_" + counter_cache_column
     plural_name_join_tables = []
     left_joins = []
     association = model.reflections[media_models[0].model_name.i18n_key.to_s]
     media_models.each do |m|
       temp_table_list = [model.model_name.plural, m.model_name.plural]
-      temp_table_list.sort_by!
-      plural_name_join_tables << "%s_%s" % [temp_table_list[0],temp_table_list[1]]
+      temp_table_list.sort!
+      plural_name_join_tables << "%s_%s" % [temp_table_list[0], temp_table_list[1]]
     end
     association_key = "%s.%s" % [plural_name_join_tables[0], association.foreign_key]
     plural_name_join_tables[1..-1].each do |jt|
-      left_joins << "LEFT JOIN %s on ( %s.%s = %s )"  %
+      left_joins << "LEFT JOIN %s on ( %s.%s = %s )" %
       [jt, jt, association.foreign_key, association_key]
     end
 
@@ -116,7 +116,7 @@ module CounterCacheResets
         SELECT #{association_key}, count(*) AS count
         FROM #{plural_name_join_tables[0]}
         #{left_joins.join(' ')}
-        GROUP BY #{association.foreign_key}
+        GROUP BY #{association_key}
       SQL
       <<-SQL.squish,
         CREATE INDEX ON #{temp_table} (
