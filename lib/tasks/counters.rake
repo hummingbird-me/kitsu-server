@@ -1,4 +1,5 @@
 namespace :counters do
+  require 'counter_cache_resets.rb'
   desc 'Update all counter caches'
   task :fix => :environment do
     CounterCacheResets.posts
@@ -6,5 +7,6 @@ namespace :counters do
     CounterCacheResets.reviews
     CounterCacheResets.users
     CounterCacheResets.groups
+    CounterCacheResets.category_counts
   end
 end

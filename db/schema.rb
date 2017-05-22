@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522051600) do
+ActiveRecord::Schema.define(version: 20170512081514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,20 +142,22 @@ ActiveRecord::Schema.define(version: 20170522051600) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title",                          null: false
+    t.string   "description"
+    t.string   "slug",                           null: false
     t.integer  "anidb_id"
     t.integer  "parent_id"
+    t.integer  "total_media_count",  default: 0, null: false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.string   "description"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
-    t.integer  "total_media_count",  default: 0, null: false
   end
 
   add_index "categories", ["anidb_id"], name: "index_categories_on_anidb_id", using: :btree
   add_index "categories", ["parent_id"], name: "index_categories_on_parent_id", using: :btree
+  add_index "categories", ["slug"], name: "index_categories_on_slug", using: :btree
 
   create_table "categories_dramas", id: false, force: :cascade do |t|
     t.integer "category_id", null: false

@@ -25,6 +25,14 @@ module CounterCacheResets
     execute sql_for(Manga, :favorites, counter_cache_column: 'favorites_count')
   end
 
+  def category_counts
+    execute sql_for_habtm_media_total(
+      Category,
+      [Anime, Manga, Drama],
+      counter_cache_column: 'total_media_count'
+    )
+  end
+
   def users
     execute sql_for(User, :library_entries,
       counter_cache_column: 'ratings_count',
@@ -80,6 +88,49 @@ module CounterCacheResets
             ), 0)"
           }.join(', ')
         }]::text[]::hstore
+      SQL
+      "DROP TABLE #{temp_table}"
+    ]
+  end
+
+  def sql_for_habtm_media_total(model, media_models, counter_cache_column: nil, where: nil)
+    temp_table = "#{model}_" + counter_cache_column
+    plural_name_join_tables = []
+    left_joins = []
+    association = model.reflections[media_models[0].model_name.i18n_key.to_s]
+    media_models.each do |m|
+      temp_table_list = [model.model_name.plural, m.model_name.plural]
+      temp_table_list.sort_by!
+      plural_name_join_tables << "%s_%s" % [temp_table_list[0],temp_table_list[1]]
+    end
+    association_key = "%s.%s" % [plural_name_join_tables[0], association.foreign_key]
+    plural_name_join_tables[1..-1].each do |jt|
+      left_joins << "LEFT JOIN %s on ( %s.%s = %s )"  %
+      [jt, jt, association.foreign_key, association_key]
+    end
+
+    [
+      "DROP TABLE IF EXISTS #{temp_table}",
+      <<-SQL.squish,
+        CREATE TEMP TABLE #{temp_table} AS
+        SELECT #{association_key}, count(*) AS count
+        FROM #{plural_name_join_tables[0]}
+        #{left_joins.join(' ')}
+        GROUP BY #{association.foreign_key}
+      SQL
+      <<-SQL.squish,
+        CREATE INDEX ON #{temp_table} (
+           #{association.foreign_key}
+        )
+      SQL
+      "VACUUM #{temp_table}",
+      <<-SQL.squish,
+        UPDATE #{model.table_name}
+        SET #{counter_cache_column} = COALESCE((
+          SELECT count
+          FROM #{temp_table}
+          WHERE #{association.foreign_key} = #{model.table_name}.id
+        ), 0)
       SQL
       "DROP TABLE #{temp_table}"
     ]

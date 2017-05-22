@@ -18,18 +18,18 @@ class AnidbAssocMediaCategoryImport
         '?' +
         utc
       ).read
-      gc_data = JSON.parse(genre_categeory_map)
-      gc_data.update(gc_data) { |_, v| Category.where(title: v)[0] if v }
-      @genre_category_model = gc_data
+      @gc_data = JSON.parse(genre_categeory_map)
+      @gc_data.update(@gc_data) { |_, v| Category.where(title: v)[0] if v }
     end
 
     def associate_media_categories(media)
-      genres = media.genres.map(&:name)
-      return unless genres.empty?
-      categories = genres.map { |g|
-        @genre_category_model[g]
-      }.compact
-      if categories
+      genres = media.genres
+      categories = []
+      genres.each do |g|
+        categories << @gc_data[g[:name]]
+      end
+      categories = categories.compact
+      if categories.any?
         media.categories = categories
         media.save
       end

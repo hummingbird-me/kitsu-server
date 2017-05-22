@@ -26,7 +26,9 @@ module Media
     update_index("media##{name.underscore}") { self }
 
     has_and_belongs_to_many :genres
-    has_and_belongs_to_many :categories, before_add: :inc_total_media_count, before_remove: :dec_total_media_count
+    has_and_belongs_to_many :categories, 
+      before_add: :inc_total_media_count, 
+      before_remove: :dec_total_media_count
     has_many :castings, as: 'media'
     has_many :installments, as: 'media'
     has_many :franchises, through: :installments
@@ -74,6 +76,7 @@ module Media
   end
 
   private
+
   def inc_total_media_count(model)
     Category.increment_counter('total_media_count', model.id)
   end

@@ -8,6 +8,7 @@
 #  image_file_name    :string
 #  image_file_size    :integer
 #  image_updated_at   :datetime
+#  slug               :string           not null, indexed
 #  title              :string           not null
 #  total_media_count  :integer          default(0), not null
 #  created_at         :datetime         not null
@@ -19,6 +20,7 @@
 #
 #  index_categories_on_anidb_id   (anidb_id)
 #  index_categories_on_parent_id  (parent_id)
+#  index_categories_on_slug       (slug)
 #
 
 require 'rails_helper'
