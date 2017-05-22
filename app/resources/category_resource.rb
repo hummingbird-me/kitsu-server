@@ -1,5 +1,5 @@
 class CategoryResource < BaseResource
-  attributes :title, :description
+  attributes :title, :description, :total_media_count
   attribute :image, format: :attachment
 
   has_one :parent

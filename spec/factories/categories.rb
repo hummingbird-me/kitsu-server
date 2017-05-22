@@ -9,6 +9,7 @@
 #  image_file_size    :integer
 #  image_updated_at   :datetime
 #  title              :string           not null
+#  total_media_count  :integer          default(0), not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  anidb_id           :integer          indexed
