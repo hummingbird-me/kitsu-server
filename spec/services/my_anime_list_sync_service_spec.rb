@@ -64,6 +64,21 @@ RSpec.describe MyAnimeListSyncService do
         end
       end
     end
+
+    describe '#format_date' do
+      context 'with start date' do
+        it 'should return a date in ISO-8601 format' do
+          le = build(:library_entry, started_at: DateTime.new(2013, 3, 14))
+          expect(subject.format_date(le.started_at)).to eq('2013-03-14')
+        end
+      end
+      context 'with empty date' do
+        it 'should return nil' do
+          le = build(:library_entry, started_at: nil)
+          expect(subject.format_date(le.started_at)).to eq(nil)
+        end
+      end
+    end
   end
 
   context 'Tyhpoeus Requests' do

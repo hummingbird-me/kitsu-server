@@ -47,6 +47,8 @@ class MyAnimeListSyncService
         put("animelist/anime/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
+          start: format_date(library_entry.started_at),
+          end: format_date(library_entry.finished_at),
           score: format_score(library_entry.rating),
           rewatch_count: library_entry.reconsume_count)
       elsif media_type == 'anime'
@@ -55,6 +57,8 @@ class MyAnimeListSyncService
           anime_id: mal_media_id,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
+          start: format_date(library_entry.started_at),
+          end: format_date(library_entry.finished_at),
           score: format_score(library_entry.rating))
       elsif media_type == 'manga' &&
             (response['id'].nil? || response['read_status'])
@@ -69,6 +73,8 @@ class MyAnimeListSyncService
         put("mangalist/manga/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
+          start: format_date(library_entry.started_at),
+          end: format_date(library_entry.finished_at),
           score: format_score(library_entry.rating),
           reread_count: library_entry.reconsume_count)
       else
@@ -77,6 +83,8 @@ class MyAnimeListSyncService
           manga_id: mal_media_id,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
+          start: format_date(library_entry.started_at),
+          end: format_date(library_entry.finished_at),
           score: format_score(library_entry.rating))
       end
     end
@@ -111,6 +119,10 @@ class MyAnimeListSyncService
   # it will not set the score
   def format_score(score)
     (score / 2).floor if score
+  end
+
+  def format_date(date)
+    date&.strftime('%F')
   end
 
   private

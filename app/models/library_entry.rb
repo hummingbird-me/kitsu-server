@@ -1,17 +1,19 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: library_entries
 #
 #  id              :integer          not null, primary key
+#  finished_at     :datetime
 #  media_type      :string           not null, indexed => [user_id], indexed => [user_id, media_id]
 #  notes           :text
 #  nsfw            :boolean          default(FALSE), not null
 #  private         :boolean          default(FALSE), not null, indexed
 #  progress        :integer          default(0), not null
+#  progressed_at   :datetime
 #  rating          :integer
 #  reconsume_count :integer          default(0), not null
 #  reconsuming     :boolean          default(FALSE), not null
+#  started_at      :datetime
 #  status          :integer          not null, indexed => [user_id]
 #  time_spent      :integer          default(0), not null
 #  volumes_owned   :integer          default(0), not null
@@ -34,7 +36,6 @@
 #  index_library_entries_on_user_id_and_media_type_and_media_id  (user_id,media_type,media_id) UNIQUE
 #  index_library_entries_on_user_id_and_status                   (user_id,status)
 #
-# rubocop:enable Metrics/LineLength
 
 class LibraryEntry < ApplicationRecord
   VALID_RATINGS = (2..20).to_a.freeze
@@ -169,12 +170,22 @@ class LibraryEntry < ApplicationRecord
   end
 
   before_save do
-    if status_changed? && completed? && media&.progress_limit
-      # When marked completed, we try to update progress to the cap
-      self.progress = media.progress_limit
-    elsif !status_changed? && progress == media&.progress_limit
-      # When in current and progress equals total episodes
-      self.status = :completed
+    if status_changed? && completed?
+      # update progress to the cap
+      self.progress = media.progress_limit if media&.progress_limit
+      # set finished_at and started_at for the first consume
+      self.started_at ||= Time.now unless imported
+      self.finished_at ||= Time.now unless imported
+    end
+
+    # When progress equals total episodes
+    self.status = :completed if !status_changed? &&
+                                progress == media&.progress_limit
+    unless imported
+      # When progress is changed, update progressed_at
+      self.progressed_at = Time.now if progress_changed?
+      # When marked current and started_at doesn't exist
+      self.started_at ||= Time.now if current?
     end
   end
 
