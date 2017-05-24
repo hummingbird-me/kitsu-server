@@ -27,4 +27,8 @@ require 'rails_helper'
 
 RSpec.describe Category, type: :model do
   subject { build(:category) }
+
+  it { should have_and_belong_to_many(:anime) }
+  it { should have_and_belong_to_many(:manga) }
+  it { should have_and_belong_to_many(:drama) }
 end

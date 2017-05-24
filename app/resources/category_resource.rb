@@ -11,5 +11,5 @@ class CategoryResource < BaseResource
 
   paginator :unlimited
 
-  filter :parent_id, :slug
+  filters :parent_id, :slug
 end
