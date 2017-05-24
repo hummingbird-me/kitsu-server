@@ -31,7 +31,6 @@ class AnidbAssocMediaCategoryImport
       categories = categories.compact
       if categories.any?
         media.categories = categories
-        media.save
       end
     end
 
@@ -68,7 +67,6 @@ class AnidbAssocMediaCategoryImport
         puts '      >found<'
         categories = Category.where(anidb_id: unfiltered_anime[:tags])
         kitsu_anime.categories = categories
-        kitsu_anime.save
         exclude_ids << kitsu_anime.id
       end
       exclude_ids
