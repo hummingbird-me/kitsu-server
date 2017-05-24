@@ -11,4 +11,8 @@ class LinkedAccountResource < BaseResource
   has_many :library_entry_logs
 
   filters :user_id
+
+  before_save do
+    @model.kind = "LinkedAccount::#{@model.kind}"
+  end
 end
