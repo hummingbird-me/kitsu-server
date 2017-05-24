@@ -25,7 +25,7 @@
 
 class Category < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :title, use: :slugged
+  friendly_id :title, use: %i[slugged finders history]
   resourcify
 
   has_many :category_favorite, dependent: :destroy
