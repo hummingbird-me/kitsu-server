@@ -92,7 +92,8 @@ class LibraryEntryResource < BaseResource
   end
 
   def self.sortable_fields(context)
-    fields = super + %i[anime.subtype manga.subtype drama.subtype]
+    fields = super + %i[anime.subtype manga.subtype drama.subtype
+                        anime.episode_count manga.chapter_count]
     TitleSortableFields.new(fields)
   end
 
