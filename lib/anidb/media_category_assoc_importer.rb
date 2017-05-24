@@ -67,6 +67,10 @@ class AnidbAssocMediaCategoryImport
         puts '      >found<'
         categories = Category.where(anidb_id: unfiltered_anime[:tags])
         kitsu_anime.categories = categories
+        kitsu_anime.mappings.create(
+          external_site: "anidb",
+          external_id: unfiltered_anime[:anidb_id]
+        )
         exclude_ids << kitsu_anime.id
       end
       exclude_ids
