@@ -1,17 +1,19 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: library_entries
 #
 #  id              :integer          not null, primary key
+#  finished_at     :datetime
 #  media_type      :string           not null, indexed => [user_id], indexed => [user_id, media_id]
 #  notes           :text
 #  nsfw            :boolean          default(FALSE), not null
 #  private         :boolean          default(FALSE), not null, indexed
 #  progress        :integer          default(0), not null
+#  progressed_at   :datetime
 #  rating          :integer
 #  reconsume_count :integer          default(0), not null
 #  reconsuming     :boolean          default(FALSE), not null
+#  started_at      :datetime
 #  status          :integer          not null, indexed => [user_id]
 #  time_spent      :integer          default(0), not null
 #  volumes_owned   :integer          default(0), not null
@@ -34,7 +36,6 @@
 #  index_library_entries_on_user_id_and_media_type_and_media_id  (user_id,media_type,media_id) UNIQUE
 #  index_library_entries_on_user_id_and_status                   (user_id,status)
 #
-# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
@@ -130,6 +131,47 @@ RSpec.describe LibraryEntry, type: :model do
         expect(anime).to receive(:default_progress_limit).and_return(10).once
         library_entry.valid?
         expect(library_entry.errors[:progress]).to be_blank
+      end
+    end
+  end
+
+  describe 'timestamp validation' do
+    let!(:library_entry) do
+      create(:library_entry, media: anime, status: :current, progress: 1)
+    end
+    context 'progressed_at validation' do
+      it 'should set progressed_at when progress is changed' do
+        expect(library_entry.progressed_at).to be_present
+      end
+    end
+    context 'started_at validation' do
+      it 'should set started_at when status is current' do
+        expect(library_entry.started_at).to be_present
+      end
+      it 'should not change started_at' do
+        started_at = library_entry.started_at
+        library_entry.status = :on_hold
+        library_entry.save!
+        library_entry.status = :current
+        library_entry.save!
+        expect(library_entry.started_at).to eq(started_at)
+      end
+    end
+    context 'finished_at validation' do
+      let!(:library_entry) do
+        create(:library_entry, media: anime, status: :completed)
+      end
+      it 'should set finished_at and started_at when status is completed' do
+        expect(library_entry.finished_at).to be_present
+        expect(library_entry.started_at).to be_present
+      end
+      it 'should not change finished_at' do
+        finished_at = library_entry.finished_at
+        library_entry.status = :current
+        library_entry.save!
+        library_entry.status = :completed
+        library_entry.save!
+        expect(library_entry.finished_at).to eq(finished_at)
       end
     end
   end

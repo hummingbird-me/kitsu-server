@@ -2,11 +2,13 @@ require 'rails_helper'
 
 RSpec.describe ListImport::MyAnimeListXML::Row do
   def create_mapping(media)
-    fail 'Media must be saved' unless media.persisted?
+    raise 'Media must be saved' unless media.persisted?
     prefix = media.class.name.underscore
     fake_id = rand(1..50_000)
-    create(:mapping, media: media, external_site: "myanimelist/#{prefix}",
-                                   external_id: fake_id)
+    create(:mapping,
+      media: media,
+      external_site: "myanimelist/#{prefix}",
+      external_id: fake_id)
   end
 
   context 'with an invalid node name' do
@@ -253,50 +255,50 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
       end
     end
 
-    describe '#start_date' do
+    describe '#started_at' do
       context 'with my_start_date being empty' do
         it 'should return nil' do
           xml = wrap_row '<my_start_date></my_start_date>'
           row = described_class.new(xml)
-          expect(row.start_date).to be_nil
+          expect(row.started_at).to be_nil
         end
       end
       context 'with an invalid date in my_start_date' do
         it 'should return nil' do
           xml = wrap_row '<my_start_date>fuckmyanimelist</my_start_date>'
           row = described_class.new(xml)
-          expect(row.start_date).to be_nil
+          expect(row.started_at).to be_nil
         end
       end
       context 'with a valid ISO 8601 date in my_start_date' do
         it 'should return a date object' do
           xml = wrap_row '<my_start_date>1993-10-11</my_start_date>'
           row = described_class.new(xml)
-          expect(row.start_date).to eq(Date.new(1993, 10, 11))
+          expect(row.started_at).to eq(Date.new(1993, 10, 11))
         end
       end
     end
 
-    describe '#finish_date' do
+    describe '#finished_at' do
       context 'with my_finish_date being empty' do
         it 'should return nil' do
           xml = wrap_row '<my_finish_date></my_finish_date>'
           row = described_class.new(xml)
-          expect(row.finish_date).to be_nil
+          expect(row.finished_at).to be_nil
         end
       end
       context 'with an invalid date in my_finish_date' do
         it 'should return nil' do
           xml = wrap_row '<my_finish_date>fuckmyanimelist</my_finish_date>'
           row = described_class.new(xml)
-          expect(row.finish_date).to be_nil
+          expect(row.finished_at).to be_nil
         end
       end
       context 'with a valid ISO 8601 date in my_finish_date' do
         it 'should return a date object' do
           xml = wrap_row '<my_finish_date>1993-10-11</my_finish_date>'
           row = described_class.new(xml)
-          expect(row.finish_date).to eq(Date.new(1993, 10, 11))
+          expect(row.finished_at).to eq(Date.new(1993, 10, 11))
         end
       end
     end
@@ -532,50 +534,50 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
       end
     end
 
-    describe '#start_date' do
+    describe '#started_at' do
       context 'with my_start_date being empty' do
         it 'should return nil' do
           xml = wrap_row '<my_start_date></my_start_date>'
           row = described_class.new(xml)
-          expect(row.start_date).to be_nil
+          expect(row.started_at).to be_nil
         end
       end
       context 'with an invalid date in my_start_date' do
         it 'should return nil' do
           xml = wrap_row '<my_start_date>fuckmyanimelist</my_start_date>'
           row = described_class.new(xml)
-          expect(row.start_date).to be_nil
+          expect(row.started_at).to be_nil
         end
       end
       context 'with a valid ISO 8601 date in my_start_date' do
         it 'should return a date object' do
           xml = wrap_row '<my_start_date>1993-10-11</my_start_date>'
           row = described_class.new(xml)
-          expect(row.start_date).to eq(Date.new(1993, 10, 11))
+          expect(row.started_at).to eq(Date.new(1993, 10, 11))
         end
       end
     end
 
-    describe '#finish_date' do
+    describe '#finished_at' do
       context 'with my_finish_date being empty' do
         it 'should return nil' do
           xml = wrap_row '<my_finish_date></my_finish_date>'
           row = described_class.new(xml)
-          expect(row.finish_date).to be_nil
+          expect(row.finished_at).to be_nil
         end
       end
       context 'with an invalid date in my_finish_date' do
         it 'should return nil' do
           xml = wrap_row '<my_finish_date>fuckmyanimelist</my_finish_date>'
           row = described_class.new(xml)
-          expect(row.finish_date).to be_nil
+          expect(row.finished_at).to be_nil
         end
       end
       context 'with a valid ISO 8601 date in my_finish_date' do
         it 'should return a date object' do
           xml = wrap_row '<my_finish_date>1993-10-11</my_finish_date>'
           row = described_class.new(xml)
-          expect(row.finish_date).to eq(Date.new(1993, 10, 11))
+          expect(row.finished_at).to eq(Date.new(1993, 10, 11))
         end
       end
     end

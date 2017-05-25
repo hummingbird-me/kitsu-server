@@ -10,7 +10,7 @@ class ListImport
       def type
         @type ||= if obj.key? :anime_title then :anime
                   elsif obj.key? :manga_title then :manga
-                  else raise "Invalid type"
+                  else raise 'Invalid type'
                   end
       end
 
@@ -56,7 +56,7 @@ class ListImport
       end
 
       def rating
-        return if obj[:score] == 0 || obj[:score].nil?
+        return if obj[:score].zero? || obj[:score].nil?
         obj[:score].to_i * 2
       end
 
@@ -64,22 +64,22 @@ class ListImport
         obj[:tags]
       end
 
-      def start_date
-        Date.strptime(obj[:start_date_string], '%F')
-      rescue ArgumentError
+      def started_at
+        DateTime.strptime(obj[:start_date_string], '%m-%d-%y')
+      rescue
         nil
       end
 
-      def finish_date
-        Date.strptime(obj[:finish_date_string], '%F')
-      rescue ArgumentError
+      def finished_at
+        DateTime.strptime(obj[:finish_date_string], '%m-%d-%y')
+      rescue
         nil
       end
 
       def data
-        %i[status progress rating].map do |k|
+        %i[status progress rating started_at finished_at].map { |k|
           [k, send(k)]
-        end.to_h
+        }.to_h
       end
     end
   end

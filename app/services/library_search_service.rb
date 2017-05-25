@@ -55,7 +55,7 @@ class LibrarySearchService < SearchService
     @result_entries = load_ids.each_with_object({}) do |kind, ids, out|
       # Load the entries
       entries = LibraryEntry.by_kind(kind).where("#{kind}_id" => ids)
-                            .includes(includes)
+      entries = entries.includes(includes) unless includes.blank?
       # Add them to our output hash
       out[kind] = entries.group_by(&:"#{kind}_id").map(&:first)
     end
@@ -89,7 +89,7 @@ class LibrarySearchService < SearchService
         should: [
           { multi_match: {
             fields: %w[titles.* abbreviated_titles],
-            query: _queries[:title],
+            query: _queries[:title].join(' '),
             fuzziness: 'AUTO',
             max_expansions: 15,
             prefix_length: 2
@@ -97,7 +97,7 @@ class LibrarySearchService < SearchService
           { multi_match: {
             fields: %w[titles.* abbreviated_titles],
             type: 'phrase_prefix',
-            query: _queries[:title],
+            query: _queries[:title].join(' '),
             boost: 1.2
           } }
         ]

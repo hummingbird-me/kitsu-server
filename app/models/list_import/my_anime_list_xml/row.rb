@@ -52,30 +52,29 @@ class ListImport
 
       def notes
         node.css('my_comments, my_tags').map(&:content).reject(&:blank?)
-          .join(';')
+            .join(';')
       end
 
       def volumes
         node.at_css('my_read_volumes')&.content&.to_i
       end
 
-      # TODO: actually pull these into LibraryEntry
-      def start_date
-        Date.strptime(node.at_css('my_start_date'), '%F')
+      def started_at
+        DateTime.strptime(node.at_css('my_start_date'), '%F')
       rescue ArgumentError
         nil
       end
 
-      def finish_date
-        Date.strptime(node.at_css('my_finish_date'), '%F')
+      def finished_at
+        DateTime.strptime(node.at_css('my_finish_date'), '%F')
       rescue ArgumentError
         nil
       end
 
       def data
-        %i[status progress rating reconsume_count notes].map do |k|
+        %i[status progress rating reconsume_count notes].map { |k|
           [k, send(k)]
-        end.to_h
+        }.to_h
       end
     end
   end

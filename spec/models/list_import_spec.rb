@@ -32,8 +32,14 @@ RSpec.describe ListImport do
         yield media[i], status: :current, progress: 1
       end
     end
-    def count; 10; end
-    def valid?(*); true; end
+
+    def count
+      10
+    end
+
+    def valid?(*)
+      true
+    end
   end
 
   subject { build(:list_import) }
@@ -56,11 +62,13 @@ RSpec.describe ListImport do
 
   describe '#apply!' do
     let(:user) { create(:user) }
-    subject { FakeImport.create(user: user, input_text: 'hi', strategy: :obliterate) }
+    subject do
+      FakeImport.create(user: user, input_text: 'hi', strategy: :obliterate)
+    end
 
     it 'should call #apply and update every 20 rows' do
       expect(subject).to receive(:apply) do |&block|
-        100.times { |i| block.call({ status: :running, progress: i }) }
+        100.times { |i| block.call(status: :running, progress: i) }
       end
       expect(subject).to receive(:update).exactly(5).times
       subject.apply!
@@ -84,9 +92,17 @@ RSpec.describe ListImport do
 
     context 'raising an error' do
       class ErrorFakeImport < ListImport
-        def each; raise 'An error'; end
-        def count; 7; end
-        def valid?(*); true; end
+        def each
+          raise 'An error'
+        end
+
+        def count
+          7
+        end
+
+        def valid?(*)
+          true
+        end
       end
       subject do
         ErrorFakeImport.create(user: user, input_text: 'hi', strategy: :greater)

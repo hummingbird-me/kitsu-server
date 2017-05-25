@@ -23,8 +23,8 @@ class LibraryEntryResource < BaseResource
 
   caching
 
-  attributes :status, :progress, :reconsuming, :reconsume_count, :notes,
-    :private, :updated_at
+  attributes :status, :progress, :volumes_owned, :reconsuming, :reconsume_count,
+    :notes, :private, :updated_at, :progressed_at, :started_at, :finished_at
 
   filters :user_id, :media_id, :media_type, :status, :anime_id, :manga_id,
     :drama_id
@@ -83,8 +83,17 @@ class LibraryEntryResource < BaseResource
   end
   # END DEPRECATED
 
+  def self.status_counts(filters, opts = {})
+    return if should_query?(filters)
+    statuses = LibraryEntry.statuses.invert
+    find_records(filters, opts).group(:status).count.transform_keys do |status|
+      statuses[status]
+    end
+  end
+
   def self.sortable_fields(context)
-    fields = super + %i[anime.subtype manga.subtype drama.subtype]
+    fields = super + %i[anime.subtype manga.subtype drama.subtype
+                        anime.episode_count manga.chapter_count]
     TitleSortableFields.new(fields)
   end
 

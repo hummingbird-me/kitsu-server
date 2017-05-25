@@ -26,18 +26,22 @@ class UserResource < BaseResource
   has_many :favorites
   has_many :reviews
   has_many :stats
-  
+
   # DEPRECATED: this method just hides the fact that website has moved
   def website
     _model.profile_links.where(profile_link_site_id: 29).first&.url
   end
-  
+
   def website=(value)
     _model.profile_links.where(profile_link_site_id: 29).update(url: value)
   end
 
   def self.attribute_caching_context(context)
     context[:current_user]&.resource_owner
+  end
+
+  def _remove
+    @model.destroy_later
   end
 
   filter :name, apply: ->(records, value, _o) { records.by_name(value.first) }

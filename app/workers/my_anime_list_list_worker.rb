@@ -43,6 +43,8 @@ class MyAnimeListListWorker
       rating: library_entry&.rating,
       reconsume_count: library_entry.reconsume_count,
       reconsuming: library_entry.reconsuming,
+      finished_at: library_entry.finished_at,
+      started_at: library_entry.started_at,
       status: library_entry.status,
       volumes_owned: library_entry.volumes_owned,
       # action_performed is either create, update, destroy

@@ -3,6 +3,7 @@ class MyAnimeListSyncService
   class MediaNotFound < StandardError; end
   class BadAuthorization < StandardError; end
   class ConnectFailed < StandardError; end
+  class UnknownError < StandardError; end
 
   ATARASHII_API_HOST = 'https://hbv3-mal-api.herokuapp.com/2.1/'.freeze
   MINE = '?mine=1'.freeze
@@ -46,6 +47,8 @@ class MyAnimeListSyncService
         put("animelist/anime/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
+          start: format_date(library_entry.started_at),
+          end: format_date(library_entry.finished_at),
           score: format_score(library_entry.rating),
           rewatch_count: library_entry.reconsume_count)
       elsif media_type == 'anime'
@@ -54,6 +57,8 @@ class MyAnimeListSyncService
           anime_id: mal_media_id,
           status: format_status(library_entry.status),
           episodes: library_entry.progress,
+          start: format_date(library_entry.started_at),
+          end: format_date(library_entry.finished_at),
           score: format_score(library_entry.rating))
       elsif media_type == 'manga' &&
             (response['id'].nil? || response['read_status'])
@@ -68,6 +73,8 @@ class MyAnimeListSyncService
         put("mangalist/manga/#{mal_media_id}", linked_account,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
+          start: format_date(library_entry.started_at),
+          end: format_date(library_entry.finished_at),
           score: format_score(library_entry.rating),
           reread_count: library_entry.reconsume_count)
       else
@@ -76,6 +83,8 @@ class MyAnimeListSyncService
           manga_id: mal_media_id,
           status: format_status(library_entry.status),
           chapters: library_entry.progress,
+          start: format_date(library_entry.started_at),
+          end: format_date(library_entry.finished_at),
           score: format_score(library_entry.rating))
       end
     end
@@ -85,7 +94,7 @@ class MyAnimeListSyncService
       action_performed: method,
       error_message: 'Login failed'
     )
-    linked_account.update(sync_to: true, disabled_reason: 'Login failed')
+    linked_account.update(sync_to: false, disabled_reason: 'Login failed')
   rescue MediaNotFound
     library_entry_log.update(
       sync_status: :error,
@@ -110,6 +119,10 @@ class MyAnimeListSyncService
   # it will not set the score
   def format_score(score)
     (score / 2).floor if score
+  end
+
+  def format_date(date)
+    date&.strftime('%F')
   end
 
   private

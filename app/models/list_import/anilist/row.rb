@@ -60,26 +60,31 @@ class ListImport
         node['notes']
       end
 
-      def my_start_date
+      def started_at
         return nil if node['started_on'].nil?
 
         date = node['started_on'].split('/')
 
-        Date.strptime(format_date(date), '%F')
+        DateTime.strptime(format_date(date), '%F')
+      rescue
+        nil
       end
 
-      def my_finish_date
+      def finished_at
         return nil if node['finished_on'].nil?
 
         date = node['finished_on'].split('/')
 
-        Date.strptime(format_date(date), '%F')
+        DateTime.strptime(format_date(date), '%F')
+      rescue
+        nil
       end
 
       def data
-        %i[status progress rating reconsume_count notes].map { |k|
-          [k, send(k)]
-        }.to_h
+        %i[status progress rating reconsume_count notes started_at finished_at]
+          .map { |k|
+            [k, send(k)]
+          }.to_h
       end
 
       private

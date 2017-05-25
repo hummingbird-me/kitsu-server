@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170511062519) do
+ActiveRecord::Schema.define(version: 20170515122347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -584,6 +584,9 @@ ActiveRecord::Schema.define(version: 20170511062519) do
     t.integer  "drama_id"
     t.integer  "rating"
     t.integer  "time_spent",      default: 0,     null: false
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.datetime "progressed_at"
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -1043,6 +1046,7 @@ ActiveRecord::Schema.define(version: 20170511062519) do
     t.datetime "updated_at",              null: false
   end
 
+  add_index "stats", ["type", "user_id"], name: "index_stats_on_type_and_user_id", unique: true, using: :btree
   add_index "stats", ["user_id"], name: "index_stats_on_user_id", using: :btree
 
   create_table "stories", force: :cascade do |t|
@@ -1177,6 +1181,7 @@ ActiveRecord::Schema.define(version: 20170511062519) do
     t.boolean  "cover_image_processing"
     t.integer  "rating_system",                           default: 0,           null: false
     t.integer  "theme",                                   default: 0,           null: false
+    t.datetime "deleted_at"
     t.string   "one_signal_id"
   end
 

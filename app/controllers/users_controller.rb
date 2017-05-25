@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
-  include Pundit
+  include CustomControllerHelpers
 
   http_basic_authenticate_with name: 'Production',
-    password: ENV['STAGING_SYNC_SECRET'], only: :prod_sync
+                               password: ENV['STAGING_SYNC_SECRET'],
+                               only: :prod_sync
   skip_before_action :validate_token!, only: :prod_sync
   skip_after_action :enforce_policy_use, only: %i[prod_sync recover]
 
@@ -22,11 +23,25 @@ class UsersController < ApplicationController
   end
 
   def prod_sync
+    return unless Rails.env.staging?
+
     id = params.require(:id)
     values = params.permit(:password_digest, :email, :name, :pro_expires_at)
 
     User.find_by(id: id)&.update(values)
 
     render json: id, status: 200
+  end
+
+  def profile_strength
+    user = current_user&.resource_owner
+    user_id = params.require(:id).to_i
+    unless user&.id == user_id
+      return render_jsonapi serialize_error(401, 'Not permitted'), status: 401
+    end
+
+    # Get strength from Stream
+    strength = RecommendationsService::Media.new(user).strength
+    render json: strength, status: 200
   end
 end
