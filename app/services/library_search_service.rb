@@ -55,11 +55,11 @@ class LibrarySearchService < SearchService
     @result_entries = load_ids.each_with_object({}) do |(kind, ids), out|
       # Load the entries
       entries = LibraryEntry.by_kind(kind).where("#{kind}_id" => ids)
-      entries = entries.includes(@includes) unless @includes.blank?
+      entries = entries.includes(_includes) unless _includes.blank?
       # Add them to our output hash
-      out[kind] = entries.group_by(&:"#{kind}_id").map do |id, entries|
+      out[kind] = entries.group_by(&:"#{kind}_id").map { |id, entries|
         { id => entries.first }
-      end.reduce(&:merge)
+      }.reduce(&:merge)
     end
   end
 
@@ -133,9 +133,11 @@ class LibrarySearchService < SearchService
   #
   # @return [ActiveRecord::Relation<LibraryEntry>] the resulting scope
   def filtered_library_entries
-    @entries ||= _filters.reduce(LibraryEntry) { |acc, (key, val)|
-                            acc.where(key => val)
-                          }
+    _filters[:media_type] = _filters[:kind]&.map(&:capitalize)
+    @entries ||= _filters.except(:kind).compact
+                         .reduce(LibraryEntry) { |acc, (key, val)|
+                           acc.where(key => val)
+                         }
                          .limit(20_000).visible_for(@current_user)
   end
 end
