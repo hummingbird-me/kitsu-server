@@ -40,6 +40,8 @@ class GetstreamWebhookService
     when 'CommentLike'
       target_id = activity['target'].split(':').last
       path = "/comments/#{target_id}"
+    when 'GroupInvite'
+      path = "/group-invite/#{model_id}"
     end
 
     "#{client_url}#{path}"
@@ -52,7 +54,7 @@ class GetstreamWebhookService
     actor_name = User.find_by(id: actor_id)&.name
 
     stringify = case activity['verb']
-                when 'follow', 'post', 'post_like', 'comment_like'
+                when 'follow', 'post', 'post_like', 'comment_like', 'invited'
                   I18n.t(activity['verb'].to_sym,
                     scope: [:notifications],
                     actor: actor_name)

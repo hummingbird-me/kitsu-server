@@ -60,6 +60,18 @@
       "to": ["notifications:4", "timeline:1", "timeline:4"],
       "updated_at": "2017-05-03T09:35:44.314Z",
       "verb": "comment"
+    },
+    {
+      "actor": "User:4",
+      "foreign_id": "GroupInvite:5",
+      "group": "45062_2017-05-03",
+      "id": "aa510500-2fd7-11e7-8080-800070a7e09f",
+      "object": "",
+      "origin": null,
+      "target": "",
+      "time": "2017-05-03T08:08:18.000000",
+      "to": ["notifications:2", "notifications:1", "timeline:2", "timeline:1", "user_aggr:1"],
+      "verb": "invited"
     }],
     "published_at":"2017-05-03T08:07:39.00000000:00",
     "feed":"notifications:1",

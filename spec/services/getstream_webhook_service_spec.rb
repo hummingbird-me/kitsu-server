@@ -49,6 +49,14 @@ RSpec.describe GetstreamWebhookService do
 
         it_should_behave_like 'correct action url', 'comments/5'
       end
+
+      context 'group invite activity' do
+        let(:request) do
+          JSON.parse(fixture('getstream_webhook/new_feed_request.json'))[7]
+        end
+
+        it_should_behave_like 'correct action url', 'group-invite/5'
+      end
     end
 
     context 'when dealing with multiple activities' do
@@ -87,6 +95,11 @@ RSpec.describe GetstreamWebhookService do
       it 'should localize comment like activity string' do
         expect(GetstreamWebhookService.new(request[3]).stringify_activity[:en])
           .to eq("#{actor.name} liked your comment.")
+      end
+
+      it 'should localize group invite activity string' do
+        expect(GetstreamWebhookService.new(request[7]).stringify_activity[:en])
+          .to eq("#{actor.name} invited you to a group.")
       end
     end
 
@@ -173,8 +186,8 @@ RSpec.describe GetstreamWebhookService do
     it 'should return localized summary' do
       expect(GetstreamWebhookService.new(webhook_req)
         .send(:summarize_activities))
-        .to eq('You got 2 follows, 1 post mention, and 1 comment '\
-          'while you were away.')
+        .to eq('You got 2 follows, 1 post mention, 1 comment'\
+          ', and 1 invite while you were away.')
     end
   end
 

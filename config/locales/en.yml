@@ -28,6 +28,7 @@ en:
     comment_mentioned: "%{actor} mentioned you in a comment."
     post_replied: "%{actor} replied to your post."
     comment_replied: "%{actor} replied to your comment."
+    invited: "%{actor} invited you to a group."
     followed_post:
       third_person: "%{actor} replied to their post."
       first_person: "%{actor} replied to your post."
@@ -50,3 +51,6 @@ en:
       comment:
         one: "1 comment"
         other: "%{count} comments"
+      invited:
+        one: "1 invite"
+        other: "%{count} invites"
