@@ -8,10 +8,9 @@ class OneSignalNotificationWorker
     one_signal_service = OneSignalNotificationService.new(
       service.stringify_activity,
       [service.feed_target.one_signal_id],
-      url: service.feed_url
+      url: service.feed_url,
+      chrome_web_icon: 'https://media.kitsu.io/kitsu-256.png'
     )
-    # TODO: Add 'chrome_web_icon:' url to show
-    # awesome kitsu icon in the notification.
     one_signal_service.notify_players!
   end
 end

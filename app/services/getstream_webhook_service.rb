@@ -47,37 +47,13 @@ class GetstreamWebhookService
 
   # Express activity of this feed in desired locale
   def stringify_activity
-    if activities.length > 1
-      activity_counts = activities.each_with_object(Hash.new(0)) do |act, out|
-        out[act['verb']] += 1
-      end
-
-      activity_summary = activity_counts.map do |k, v|
-        I18n.t(k.to_sym, scope: %i[notifications summary], count: v)
-      end
-
-      return Hash[locale, I18n.t(:sentence,
-        scope: %i[notifications summary],
-        summary: activity_summary.to_sentence)]
-    end
+    return Hash[locale, summarize_activities] if activities.length > 1
 
     actor_name = User.find_by(id: actor_id)&.name
 
     stringify = case activity['verb']
-                when 'follow'
-                  I18n.t(:followed,
-                    scope: [:notifications],
-                    actor: actor_name)
-                when 'post'
-                  I18n.t(:post_mentioned,
-                    scope: [:notifications],
-                    actor: actor_name)
-                when 'post_like'
-                  I18n.t(:post_like,
-                    scope: [:notifications],
-                    actor: actor_name)
-                when 'comment_like'
-                  I18n.t(:comment_like,
+                when 'follow', 'post', 'post_like', 'comment_like'
+                  I18n.t(activity['verb'].to_sym,
                     scope: [:notifications],
                     actor: actor_name)
                 when 'comment'
@@ -104,12 +80,59 @@ class GetstreamWebhookService
                         actor: actor_name)
                     end
                   else
-                    I18n.t(:follow_comment,
-                      scope: [:notifications],
-                      actor: actor_name)
+                    followed_post_activity(actor_name)
                   end
                 end
 
     Hash[locale, stringify]
+  end
+
+  private
+
+  # Summarize multiple activities request
+  # @return [String] localized activity summary
+  def summarize_activities
+    activity_counts = activities.each_with_object(Hash.new(0)) do |act, out|
+      out[act['verb']] += 1
+    end
+
+    activity_summary = activity_counts.map do |k, v|
+      I18n.t(k.to_sym, scope: %i[notifications summary], count: v)
+    end
+
+    I18n.t(:sentence,
+      scope: %i[notifications summary],
+      summary: activity_summary.to_sentence)
+  end
+
+  # Stringify comment activity of a followed post
+  # @param [String] actor_name the name of activity actor
+  # @return [String] localized activity
+  def followed_post_activity(actor_name)
+    target_post_id = activity['target'].split(':').last
+    target_post = Post.find_by(id: target_post_id)
+    target_post_author = target_post&.user
+    target_post_author_id = target_post_author&.id
+
+    unless target_post
+      return I18n.t(:other,
+        scope: %i[notifications followed_post],
+        actor: actor_name)
+    end
+
+    if target_post_author_id == actor_id
+      I18n.t(:third_person,
+        scope: %i[notifications followed_post],
+        actor: actor_name)
+    elsif target_post_author_id == feed_id
+      I18n.t(:first_person,
+        scope: %i[notifications followed_post],
+        actor: actor_name)
+    else
+      I18n.t(:someone,
+        scope: %i[notifications followed_post],
+        actor: actor_name,
+        author: target_post_author.name)
+    end
   end
 end

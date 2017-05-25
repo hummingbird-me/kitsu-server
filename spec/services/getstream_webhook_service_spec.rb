@@ -137,28 +137,104 @@ RSpec.describe GetstreamWebhookService do
         let(:comment) { webhook_req[4] }
 
         it 'should localize reply to post activity string' do
-          expect(GetstreamWebhookService.new(comment)
-            .stringify_activity[:en])
-            .to eq("#{actor.name} replied to the post you followed.")
+          service = GetstreamWebhookService.new(comment)
+          expect(service).to receive(:followed_post_activity).with(actor.name)
+          service.stringify_activity
         end
       end
     end
 
-    context 'multiple activities' do
+    context 'localization fallback' do
       let(:webhook_req) do
-        JSON.parse(fixture('getstream_webhook/multi_activity_req.json')).first
+        JSON.parse(fixture('getstream_webhook/post_reply_request.json'))
       end
+      let!(:actor) { FactoryGirl.create(:user, id: 4) }
+      let!(:target) { FactoryGirl.create(:user, id: 1, language: 'fr') }
+      let(:post_reply) { webhook_req.first }
+
+      it 'should localize mentioned in a comment activity string' do
+        expect(GetstreamWebhookService.new(post_reply)
+          .stringify_activity[:fr])
+          .to eq("#{actor.name} replied to your post.")
+      end
+    end
+  end
+
+  describe '#summarize_activities' do
+    let(:webhook_req) do
+      JSON.parse(fixture('getstream_webhook/multi_activity_req.json')).first
+    end
+
+    before do
+      FactoryGirl.create(:user, id: 4)
+      FactoryGirl.create(:user, id: 5)
+    end
+
+    it 'should return localized summary' do
+      expect(GetstreamWebhookService.new(webhook_req)
+        .send(:summarize_activities))
+        .to eq('You got 2 follows, 1 post mention, and 1 comment '\
+          'while you were away.')
+    end
+  end
+
+  describe '#followed_post_activity' do
+    let(:webhook_req) do
+      JSON.parse(fixture('getstream_webhook/post_reply_request.json'))
+    end
+
+    context 'when post author not found' do
+      let(:comment) { webhook_req[4] }
+
+      it 'should stringify activity without author name' do
+        expect(described_class.new(comment)
+          .send(:followed_post_activity, 'Tony'))
+          .to eq('Tony replied to a post.')
+      end
+    end
+
+    context 'when actor is the post author' do
+      let(:comment) { webhook_req[4] }
+      let!(:actor) { FactoryGirl.create(:user, id: 4) }
+      let!(:post) { FactoryGirl.create(:post, id: 11, user: actor) }
+
+      it 'should stringify activity with actor name' do
+        allow_any_instance_of(described_class).to receive(:actor_id)
+          .and_return(4)
+        expect(described_class.new(comment)
+          .send(:followed_post_activity, actor.name))
+          .to eq("#{actor.name} replied to their post.")
+      end
+    end
+
+    context 'when notifying post author' do
+      let(:comment) { webhook_req[4] }
+      let!(:feed_user) { FactoryGirl.create(:user, id: 6) }
 
       before do
-        FactoryGirl.create(:user, id: 4)
-        FactoryGirl.create(:user, id: 5)
+        FactoryGirl.create(:post, id: 11, user: feed_user)
+        allow_any_instance_of(described_class).to receive(:feed_id)
+          .and_return(6)
       end
 
-      it 'should return localized summary' do
-        expect(GetstreamWebhookService.new(webhook_req)
-          .stringify_activity[:en])
-          .to eq('You got 2 follows, 1 post mention, and 1 comment '\
-            'while you were away.')
+      it 'should stringify activity with actor name' do
+        expect(described_class.new(comment)
+          .send(:followed_post_activity, 'Tony'))
+          .to eq('Tony replied to your post.')
+      end
+    end
+
+    context 'when notifying someone who followed the post' do
+      let(:comment) { webhook_req[4] }
+      let!(:author) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:post, id: 11, user: author)
+      end
+
+      it 'should stringify activity with actor and author name' do
+        expect(described_class.new(comment)
+          .send(:followed_post_activity, 'Tony'))
+          .to eq("Tony replied to #{author.name}'s post.")
       end
     end
   end

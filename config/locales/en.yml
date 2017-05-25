@@ -21,14 +21,18 @@
 
 en:
   notifications:
-    followed: "%{actor} followed you."
-    post_mentioned: "%{actor} mentioned you in a post."
+    follow: "%{actor} followed you."
+    post: "%{actor} mentioned you in a post."
+    post_like: "%{actor} liked your post."
+    comment_like: "%{actor} liked your comment."
     comment_mentioned: "%{actor} mentioned you in a comment."
     post_replied: "%{actor} replied to your post."
     comment_replied: "%{actor} replied to your comment."
-    post_like: "%{actor} liked your post."
-    comment_like: "%{actor} liked your comment."
-    follow_comment: "%{actor} replied to the post you followed."
+    followed_post:
+      third_person: "%{actor} replied to their post."
+      first_person: "%{actor} replied to your post."
+      someone: "%{actor} replied to %{author}'s post."
+      other: "%{actor} replied to a post."
     summary:
       sentence: "You got %{summary} while you were away."
       follow:
