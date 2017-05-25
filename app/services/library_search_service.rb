@@ -43,7 +43,7 @@ class LibrarySearchService < SearchService
 
   # Loads the library entries and returns a nested hash keyed on type and id
   #
-  # @return [Hash<Symbol, Hash<Integer, LibraryEntry>>] the media
+  # @return [Hash<String, Hash<Integer, LibraryEntry>>] the media
   def result_entries
     return @result_entries if @result_entries
     # Zip them up by type
@@ -52,12 +52,14 @@ class LibrarySearchService < SearchService
       out[kind] << id.to_i
     end
     # For each type
-    @result_entries = load_ids.each_with_object({}) do |kind, ids, out|
+    @result_entries = load_ids.each_with_object({}) do |(kind, ids), out|
       # Load the entries
       entries = LibraryEntry.by_kind(kind).where("#{kind}_id" => ids)
-      entries = entries.includes(includes) unless includes.blank?
+      entries = entries.includes(@includes) unless @includes.blank?
       # Add them to our output hash
-      out[kind] = entries.group_by(&:"#{kind}_id").map(&:first)
+      out[kind] = entries.group_by(&:"#{kind}_id").map do |id, entries|
+        { id => entries.first }
+      end.reduce(&:merge)
     end
   end
 
