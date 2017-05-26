@@ -21,6 +21,8 @@
 #
 # rubocop:enable Metrics/LineLength
 
+require_dependency 'stream/custom_endpoint_client'
+
 class CategoryFavorite < ActiveRecord::Base
   belongs_to :user, required: true
   belongs_to :category, required: true
@@ -31,10 +33,10 @@ class CategoryFavorite < ActiveRecord::Base
   }
 
   after_save do
-  	@client ||= Stream::CustomEndpointClient.new
-  	category_favorites = self.where({user_id: user_id})
+  	client ||= Stream::CustomEndpointClient.new
+  	category_favorites = CategoryFavorite.where({user_id: user_id})
   	data = {
-  		"User:#{user_id}": { categories: media.categories.map(&:category_id) }
+  		"User:#{user_id}": { categories: category_favorites.map(&:category_id) }
   	}
   	client.upload_meta(data)
   end
