@@ -122,7 +122,13 @@ class LibrarySearchService < SearchService
   #
   # @return [Hash<String, Array<Integer>>] media ids by type
   def library_media_ids
-    %i[anime manga drama].map do |kind|
+    media_types = %w[anime manga drama]
+    # Only request the types that we are filtering on
+    if _filters.key? :kind
+      kinds = media_types & _filters[:kind].first.split(',')
+      media_types = kinds unless kinds.empty?
+    end
+    media_types.map do |kind|
       [kind, filtered_library_entries.by_kind(kind).pluck("#{kind}_id")]
     end
   end
@@ -134,7 +140,10 @@ class LibrarySearchService < SearchService
   # @return [ActiveRecord::Relation<LibraryEntry>] the resulting scope
   def filtered_library_entries
     # Kind doesn't exist on the library_entries table.
-    _filters[:media_type] = _filters[:kind]&.map(&:capitalize)
+    if _filters.key? :kind
+      _filters[:media_type] = _filters[:kind]&.first.split(',')
+                                                    .map(&:capitalize)
+    end
     # We support passing status as both a string and integer
     statuses = LibraryEntry.statuses
                            .values_at(*_filters[:status]).compact
