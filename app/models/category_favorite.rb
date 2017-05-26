@@ -32,7 +32,7 @@ class CategoryFavorite < ActiveRecord::Base
 
   after_save do
   	@client ||= Stream::CustomEndpointClient.new
-  	category_favorites = self.where({:user_id: user_id})
+  	category_favorites = self.where({user_id: user_id})
   	data = {
   		"User:#{user_id}": { categories: media.categories.map(&:category_id) }
   	}
