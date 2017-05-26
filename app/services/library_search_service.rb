@@ -133,7 +133,13 @@ class LibrarySearchService < SearchService
   #
   # @return [ActiveRecord::Relation<LibraryEntry>] the resulting scope
   def filtered_library_entries
+    # Kind doesn't exist on the library_entries table.
     _filters[:media_type] = _filters[:kind]&.map(&:capitalize)
+    # We support passing status as both a string and integer
+    statuses = LibraryEntry.statuses
+                           .values_at(*_filters[:status]).compact
+    statuses = _filters[:status] if statuses.empty?
+    _filters[:status] = statuses
     @entries ||= _filters.except(:kind).compact
                          .reduce(LibraryEntry) { |acc, (key, val)|
                            acc.where(key => val)
