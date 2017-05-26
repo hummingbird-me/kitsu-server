@@ -29,4 +29,13 @@ class CategoryFavorite < ActiveRecord::Base
     scope: :category_id,
     message: 'Cannot fave a category multiple times'
   }
+
+  after_save do
+  	@client ||= Stream::CustomEndpointClient.new
+  	category_favorites = self.where({:user_id: user_id})
+  	data = {
+  		"User:#{user_id}": { categories: media.categories.map(&:category_id) }
+  	}
+  	client.upload_meta(data)
+  end
 end
