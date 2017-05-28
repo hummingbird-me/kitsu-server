@@ -7,32 +7,41 @@ class MyAnimeListListWorker
     logs = kitsu_library(user_id).map do |le|
       [le, create_log(le, linked_account_id)]
     end
-    # Generate the syncs
-    syncs = logs.map do |(library_entry, log)|
-      MyAnimeListSyncService.new(library_entry, 'create', log)
+
+    %w[anime manga].each do |media_type|
+      media_type_xml = MyAnimeListXmlGeneratorService.new(
+        kitus_library(user_id, media_type),
+        media_type
+      ).generate_xml
+
     end
-    # Run the syncs
-    syncs.each do |sync|
-      # Suppress errors and keep going, we want to
-      begin
-        sync.execute_method
-      rescue StandardError => exception
-        # Queue a separate synv to retry
-        MyAnimeListSyncWorker.perform_async(
-          library_entry_id: sync.library_entry.id,
-          method: sync.method,
-          library_entry_log_id: sync.library_entry_log.id
-        )
-        Raven.capture_exception(exception)
-      end
-    end
+
+    # # Generate the syncs
+    # syncs = logs.map do |(library_entry, log)|
+    #   MyAnimeListSyncService.new(library_entry, 'create', log)
+    # end
+    # # Run the syncs
+    # syncs.each do |sync|
+    #   # Suppress errors and keep going, we want to
+    #   begin
+    #     sync.execute_method
+    #   rescue StandardError => exception
+    #     # Queue a separate synv to retry
+    #     MyAnimeListSyncWorker.perform_async(
+    #       library_entry_id: sync.library_entry.id,
+    #       method: sync.method,
+    #       library_entry_log_id: sync.library_entry_log.id
+    #     )
+    #     Raven.capture_exception(exception)
+    #   end
+    # end
   end
 
   private
 
-  def kitsu_library(user_id)
-    # will get all anime/manga library entries
-    @kitsu_library ||= User.find(user_id).library_entries
+  def kitsu_library(user_id, media_type)
+    # will get either anime or manga entries. Not both.
+    @kitsu_library ||= User.find(user_id).library_entries.by_kind(media_type)
   end
 
   def create_log(library_entry, linked_account_id)
