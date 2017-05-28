@@ -14,7 +14,10 @@ module Sluggable
     # HACK: we need to return a relation but want to handle historical slugs
     def by_slug(slug)
       record = where(slug: slug)
-      record = where(id: friendly.find(slug).id) if record.empty?
+      if record.empty?
+        value = slug.is_a?(Array) ? slug.first : slug
+        record = where(id: friendly.find(value).id)
+      end
       record
     rescue
       none
