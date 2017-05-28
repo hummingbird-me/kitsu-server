@@ -33,7 +33,7 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.blocking(blocked_users)
+      scope.where(deleted_at: nil).blocking(blocked_users)
     end
   end
 end
