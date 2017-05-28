@@ -73,6 +73,8 @@ gem 'sentry-raven' # Send error data to Sentry
 # Admin Panel
 gem 'rails_admin'
 gem 'sinatra' # used by sidekiq/web
+gem 'pghero'
+gem 'pg_query' # pghero indexes
 
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
