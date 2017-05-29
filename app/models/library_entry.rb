@@ -61,7 +61,7 @@ class LibraryEntry < ApplicationRecord
   end
   scope :privacy, ->(privacy) { where(private: !(privacy == :public)) }
   scope :visible_for, ->(user) {
-    scope = user && !user.sfw_filter? ? self : sfw
+    scope = user && !user.sfw_filter? ? all : sfw
 
     return scope.privacy(:public) unless user
     return scope if user.has_role?(:admin)

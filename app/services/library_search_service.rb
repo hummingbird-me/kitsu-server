@@ -43,7 +43,7 @@ class LibrarySearchService < SearchService
 
   # Loads the library entries and returns a nested hash keyed on type and id
   #
-  # @return [Hash<Symbol, Hash<Integer, LibraryEntry>>] the media
+  # @return [Hash<String, Hash<Integer, LibraryEntry>>] the media
   def result_entries
     return @result_entries if @result_entries
     # Zip them up by type
@@ -52,12 +52,14 @@ class LibrarySearchService < SearchService
       out[kind] << id.to_i
     end
     # For each type
-    @result_entries = load_ids.each_with_object({}) do |kind, ids, out|
+    @result_entries = load_ids.each_with_object({}) do |(kind, ids), out|
       # Load the entries
       entries = LibraryEntry.by_kind(kind).where("#{kind}_id" => ids)
-      entries = entries.includes(includes) unless includes.blank?
+      entries = entries.includes(_includes) unless _includes.blank?
       # Add them to our output hash
-      out[kind] = entries.group_by(&:"#{kind}_id").map(&:first)
+      out[kind] = entries.group_by(&:"#{kind}_id").map { |id, entries|
+        { id => entries.first }
+      }.reduce(&:merge)
     end
   end
 
@@ -120,7 +122,13 @@ class LibrarySearchService < SearchService
   #
   # @return [Hash<String, Array<Integer>>] media ids by type
   def library_media_ids
-    %i[anime manga drama].map do |kind|
+    media_types = %w[anime manga drama]
+    # Only request the types that we are filtering on
+    if _filters.key? :kind
+      kinds = media_types & _filters[:kind].first.split(',')
+      media_types = kinds unless kinds.empty?
+    end
+    media_types.map do |kind|
       [kind, filtered_library_entries.by_kind(kind).pluck("#{kind}_id")]
     end
   end
@@ -131,9 +139,16 @@ class LibrarySearchService < SearchService
   #
   # @return [ActiveRecord::Relation<LibraryEntry>] the resulting scope
   def filtered_library_entries
-    @entries ||= _filters.reduce(LibraryEntry) { |acc, (key, val)|
-                            acc.where(key => val)
-                          }
-                         .limit(20_000).visible_for(@current_user)
+    return @entries if @entries
+    # We support passing status as both a string and integer
+    statuses = LibraryEntry.statuses
+                           .values_at(*_filters[:status]).compact
+    statuses = _filters[:status] if statuses.empty?
+    _filters[:status] = statuses
+    @entries = _filters.except(:kind).compact
+                       .reduce(LibraryEntry) { |acc, (key, val)|
+                         acc.where(key => val)
+                       }
+                       .limit(20_000).visible_for(@current_user)
   end
 end
