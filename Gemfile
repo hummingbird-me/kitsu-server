@@ -58,6 +58,7 @@ gem 'stream-ruby', '~> 2.5.4' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'typhoeus' # Parallelize scraping tasks
+gem 'mechanize' # Automating interaction with websites
 
 # Rack Middleware
 gem 'rack-attack'

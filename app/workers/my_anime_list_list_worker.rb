@@ -9,11 +9,12 @@ class MyAnimeListListWorker
     end
 
     %w[anime manga].each do |media_type|
-      media_type_xml = MyAnimeListXmlGeneratorService.new(
+      mal_xml = MyAnimeListXmlGeneratorService.new(
         kitus_library(user_id, media_type),
         media_type
       ).generate_xml
 
+      file_upload = MyAnimeListFileUploadService.new(mal_xml, linked_account_id)
     end
 
     # # Generate the syncs
