@@ -294,6 +294,10 @@ GEM
     paranoia (2.2.1)
       activerecord (>= 4.0, < 5.1)
     pg (0.18.4)
+    pg_query (0.11.4)
+      json (>= 1.8, < 3)
+    pghero (1.7.0)
+      activerecord
     progress (3.3.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -553,6 +557,8 @@ DEPENDENCIES
   paperclip-optimizer
   paranoia (~> 2.0)
   pg
+  pg_query
+  pghero
   pry-rails
   puma
   puma_worker_killer

@@ -122,9 +122,11 @@ Rails.application.routes.draw do
     constraints(AdminConstraint) do
       mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
       mount Sidekiq::Web => '/sidekiq'
+      mount PgHero::Engine => '/pghero'
     end
     get '/admin', to: 'sessions#redirect'
     get '/sidekiq', to: 'sessions#redirect'
+    get '/pghero', to: 'sessions#redirect'
     resources :sessions, only: %i[new create]
 
     ### WebHooks
