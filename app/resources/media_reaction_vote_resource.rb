@@ -1,0 +1,2 @@
+class MediaReactionVoteResource < BaseResource
+end

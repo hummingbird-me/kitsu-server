@@ -70,6 +70,9 @@ Rails.application.routes.draw do
       # Reviews
       jsonapi_resources :reviews
       jsonapi_resources :review_likes
+      # Media Reactions
+      jsonapi_resources :media_reaction_votes
+      jsonapi_resources :media_reactions
       # Trending
       get '/trending/:namespace', to: 'trending#index'
       get '/recommendations/:namespace', to: 'recommendations#index'

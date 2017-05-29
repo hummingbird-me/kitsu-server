@@ -1,0 +1,2 @@
+class MediaReactionsPolicy < ApplicationPolicy
+end

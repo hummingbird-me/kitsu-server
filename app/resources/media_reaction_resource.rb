@@ -1,0 +1,2 @@
+class MediaReactionResource < BaseResource
+end
