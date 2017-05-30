@@ -25,6 +25,14 @@ module CounterCacheResets
     execute sql_for(Manga, :favorites, counter_cache_column: 'favorites_count')
   end
 
+  def category_counts
+    execute sql_for_habtm_media(
+      Category,
+      [Anime, Manga, Drama],
+      counter_cache_column: 'total_media_count'
+    )
+  end
+
   def users
     execute sql_for(User, :library_entries,
       counter_cache_column: 'ratings_count',
@@ -80,6 +88,46 @@ module CounterCacheResets
             ), 0)"
           }.join(', ')
         }]::text[]::hstore
+      SQL
+      "DROP TABLE #{temp_table}"
+    ]
+  end
+
+  def sql_for_habtm_media(model, media_models, counter_cache_column: nil)
+    temp_table = "#{model}_#{counter_cache_column}"
+    plural_name_join_tables = []
+    left_join = []
+    association = model.reflections[media_models[0].model_name.i18n_key.to_s]
+    media_models.each do |m|
+      temp_table_list = [model.model_name.plural, m.model_name.plural]
+      temp_table_list.sort!
+      plural_name_join_tables << "#{temp_table_list[0]}_#{temp_table_list[1]}"
+    end
+    plural_name_join_tables.each do |jt|
+      left_join << "select category_id from #{jt}"
+    end
+    [
+      "DROP TABLE IF EXISTS #{temp_table}",
+      <<-SQL.squish,
+        CREATE TEMP TABLE #{temp_table} AS
+        SELECT #{model.table_name}.id, count(concat_tables.#{association.foreign_key}) AS count
+        FROM #{model.table_name}
+        LEFT JOIN (
+           #{left_join.join(' union all ')}
+        ) concat_tables ON (#{model.table_name}.id = concat_tables.#{association.foreign_key})
+        GROUP BY #{model.table_name}.id
+      SQL
+      <<-SQL.squish,
+        CREATE INDEX ON #{temp_table} (id)
+      SQL
+      "VACUUM #{temp_table}",
+      <<-SQL.squish,
+        UPDATE #{model.table_name}
+        SET #{counter_cache_column} = COALESCE((
+          SELECT count
+          FROM #{temp_table}
+          WHERE id = #{model.table_name}.id
+        ), 0)
       SQL
       "DROP TABLE #{temp_table}"
     ]

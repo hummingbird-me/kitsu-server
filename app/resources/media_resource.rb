@@ -57,6 +57,7 @@ class MediaResource < BaseResource
   attributes :poster_image, :cover_image, format: :attachment
 
   has_many :genres
+  has_many :categories
   has_many :castings
   has_many :installments
   has_many :mappings
@@ -76,6 +77,10 @@ class MediaResource < BaseResource
   query :genres,
     apply: -> (values, _ctx) {
       { match: { genres: { query: values.join(' '), operator: 'and' } } }
+    }
+  query :categories,
+    apply: -> (values, _ctx) {
+      { match: { categories: { query: values.join(' '), operator: 'and' } } }
     }
   query :text,
     mode: :query,

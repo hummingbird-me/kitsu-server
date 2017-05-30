@@ -36,6 +36,10 @@ Rails.application.routes.draw do
 
       jsonapi_resources :favorites
 
+      ### Categories
+      jsonapi_resources :category_favorites
+      jsonapi_resources :categories
+
       ### Media
       jsonapi_resources :anime
       jsonapi_resources :manga
@@ -146,7 +150,7 @@ end
 
 # == Route Map
 #
-# I, [2017-04-28T00:33:17.625572 #36485]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-05-22T14:01:40.739096 #1176]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                          Prefix Verb      URI Pattern                                                                               Controller#Action
 #                        user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#show_relationship {:relationship=>"waifu"}
 #                                                 PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#update_relationship {:relationship=>"waifu"}
@@ -400,6 +404,45 @@ end
 #                                                 PATCH     /api/edge/favorites/:id(.:format)                                                         favorites#update
 #                                                 PUT       /api/edge/favorites/:id(.:format)                                                         favorites#update
 #                                                 DELETE    /api/edge/favorites/:id(.:format)                                                         favorites#destroy
+#            category_favorite_relationships_user GET       /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)           category_favorites#show_relationship {:relationship=>"user"}
+#                                                 PUT|PATCH /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)           category_favorites#update_relationship {:relationship=>"user"}
+#                                                 DELETE    /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)           category_favorites#destroy_relationship {:relationship=>"user"}
+#                          category_favorite_user GET       /api/edge/category-favorites/:category_favorite_id/user(.:format)                         users#get_related_resource {:relationship=>"user", :source=>"category_favorites"}
+#        category_favorite_relationships_category GET       /api/edge/category-favorites/:category_favorite_id/relationships/category(.:format)       category_favorites#show_relationship {:relationship=>"category"}
+#                                                 PUT|PATCH /api/edge/category-favorites/:category_favorite_id/relationships/category(.:format)       category_favorites#update_relationship {:relationship=>"category"}
+#                                                 DELETE    /api/edge/category-favorites/:category_favorite_id/relationships/category(.:format)       category_favorites#destroy_relationship {:relationship=>"category"}
+#                      category_favorite_category GET       /api/edge/category-favorites/:category_favorite_id/category(.:format)                     categories#get_related_resource {:relationship=>"category", :source=>"category_favorites"}
+#                              category_favorites GET       /api/edge/category-favorites(.:format)                                                    category_favorites#index
+#                                                 POST      /api/edge/category-favorites(.:format)                                                    category_favorites#create
+#                               category_favorite GET       /api/edge/category-favorites/:id(.:format)                                                category_favorites#show
+#                                                 PATCH     /api/edge/category-favorites/:id(.:format)                                                category_favorites#update
+#                                                 PUT       /api/edge/category-favorites/:id(.:format)                                                category_favorites#update
+#                                                 DELETE    /api/edge/category-favorites/:id(.:format)                                                category_favorites#destroy
+#                   category_relationships_parent GET       /api/edge/categories/:category_id/relationships/parent(.:format)                          categories#show_relationship {:relationship=>"parent"}
+#                                                 PUT|PATCH /api/edge/categories/:category_id/relationships/parent(.:format)                          categories#update_relationship {:relationship=>"parent"}
+#                                                 DELETE    /api/edge/categories/:category_id/relationships/parent(.:format)                          categories#destroy_relationship {:relationship=>"parent"}
+#                                 category_parent GET       /api/edge/categories/:category_id/parent(.:format)                                        categories#get_related_resource {:relationship=>"parent", :source=>"categories"}
+#                    category_relationships_anime GET       /api/edge/categories/:category_id/relationships/anime(.:format)                           categories#show_relationship {:relationship=>"anime"}
+#                                                 POST      /api/edge/categories/:category_id/relationships/anime(.:format)                           categories#create_relationship {:relationship=>"anime"}
+#                                                 PUT|PATCH /api/edge/categories/:category_id/relationships/anime(.:format)                           categories#update_relationship {:relationship=>"anime"}
+#                                                 DELETE    /api/edge/categories/:category_id/relationships/anime(.:format)                           categories#destroy_relationship {:relationship=>"anime"}
+#                                  category_anime GET       /api/edge/categories/:category_id/anime(.:format)                                         anime#get_related_resources {:relationship=>"anime", :source=>"categories"}
+#                    category_relationships_drama GET       /api/edge/categories/:category_id/relationships/drama(.:format)                           categories#show_relationship {:relationship=>"drama"}
+#                                                 POST      /api/edge/categories/:category_id/relationships/drama(.:format)                           categories#create_relationship {:relationship=>"drama"}
+#                                                 PUT|PATCH /api/edge/categories/:category_id/relationships/drama(.:format)                           categories#update_relationship {:relationship=>"drama"}
+#                                                 DELETE    /api/edge/categories/:category_id/relationships/drama(.:format)                           categories#destroy_relationship {:relationship=>"drama"}
+#                                  category_drama GET       /api/edge/categories/:category_id/drama(.:format)                                         dramas#get_related_resources {:relationship=>"drama", :source=>"categories"}
+#                    category_relationships_manga GET       /api/edge/categories/:category_id/relationships/manga(.:format)                           categories#show_relationship {:relationship=>"manga"}
+#                                                 POST      /api/edge/categories/:category_id/relationships/manga(.:format)                           categories#create_relationship {:relationship=>"manga"}
+#                                                 PUT|PATCH /api/edge/categories/:category_id/relationships/manga(.:format)                           categories#update_relationship {:relationship=>"manga"}
+#                                                 DELETE    /api/edge/categories/:category_id/relationships/manga(.:format)                           categories#destroy_relationship {:relationship=>"manga"}
+#                                  category_manga GET       /api/edge/categories/:category_id/manga(.:format)                                         manga#get_related_resources {:relationship=>"manga", :source=>"categories"}
+#                                      categories GET       /api/edge/categories(.:format)                                                            categories#index
+#                                                 POST      /api/edge/categories(.:format)                                                            categories#create
+#                                        category GET       /api/edge/categories/:id(.:format)                                                        categories#show
+#                                                 PATCH     /api/edge/categories/:id(.:format)                                                        categories#update
+#                                                 PUT       /api/edge/categories/:id(.:format)                                                        categories#update
+#                                                 DELETE    /api/edge/categories/:id(.:format)                                                        categories#destroy
 #                      anime_relationships_genres GET       /api/edge/anime/:anime_id/relationships/genres(.:format)                                  anime#show_relationship {:relationship=>"genres"}
 #                                                 POST      /api/edge/anime/:anime_id/relationships/genres(.:format)                                  anime#create_relationship {:relationship=>"genres"}
 #                                                 PUT|PATCH /api/edge/anime/:anime_id/relationships/genres(.:format)                                  anime#update_relationship {:relationship=>"genres"}
