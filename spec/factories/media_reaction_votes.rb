@@ -26,7 +26,5 @@ FactoryGirl.define do
   factory :media_reaction_vote do
     user
     media_reaction
-    #association :media_reaction, strategy: :build
-    #association :user, strategy: :build
   end
 end
