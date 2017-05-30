@@ -29,5 +29,4 @@ RSpec.describe MediaReactionVote, type: :model do
 
   it { should belong_to(:media_reaction) }
   it { should belong_to(:user) }
-  it { should validate_uniqueness_of(:media_reaction_vote).scoped_to(:user_id) }
 end

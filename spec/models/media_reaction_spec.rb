@@ -33,5 +33,4 @@ RSpec.describe MediaReaction, type: :model do
   it { should belong_to(:media) }
   it { should belong_to(:user) }
   it { should belong_to(:library_entry)}
-  it { should validate_uniqueness_of(:media).scoped_to(:user_id) }
 end
