@@ -150,7 +150,7 @@ end
 
 # == Route Map
 #
-# I, [2017-05-22T14:01:40.739096 #1176]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-05-30T12:54:01.333917 #91180]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                          Prefix Verb      URI Pattern                                                                               Controller#Action
 #                        user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#show_relationship {:relationship=>"waifu"}
 #                                                 PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#update_relationship {:relationship=>"waifu"}
@@ -448,6 +448,11 @@ end
 #                                                 PUT|PATCH /api/edge/anime/:anime_id/relationships/genres(.:format)                                  anime#update_relationship {:relationship=>"genres"}
 #                                                 DELETE    /api/edge/anime/:anime_id/relationships/genres(.:format)                                  anime#destroy_relationship {:relationship=>"genres"}
 #                                    anime_genres GET       /api/edge/anime/:anime_id/genres(.:format)                                                genres#get_related_resources {:relationship=>"genres", :source=>"anime"}
+#                  anime_relationships_categories GET       /api/edge/anime/:anime_id/relationships/categories(.:format)                              anime#show_relationship {:relationship=>"categories"}
+#                                                 POST      /api/edge/anime/:anime_id/relationships/categories(.:format)                              anime#create_relationship {:relationship=>"categories"}
+#                                                 PUT|PATCH /api/edge/anime/:anime_id/relationships/categories(.:format)                              anime#update_relationship {:relationship=>"categories"}
+#                                                 DELETE    /api/edge/anime/:anime_id/relationships/categories(.:format)                              anime#destroy_relationship {:relationship=>"categories"}
+#                                anime_categories GET       /api/edge/anime/:anime_id/categories(.:format)                                            categories#get_related_resources {:relationship=>"categories", :source=>"anime"}
 #                    anime_relationships_castings GET       /api/edge/anime/:anime_id/relationships/castings(.:format)                                anime#show_relationship {:relationship=>"castings"}
 #                                                 POST      /api/edge/anime/:anime_id/relationships/castings(.:format)                                anime#create_relationship {:relationship=>"castings"}
 #                                                 PUT|PATCH /api/edge/anime/:anime_id/relationships/castings(.:format)                                anime#update_relationship {:relationship=>"castings"}
@@ -509,6 +514,11 @@ end
 #                                                 PUT|PATCH /api/edge/manga/:manga_id/relationships/genres(.:format)                                  manga#update_relationship {:relationship=>"genres"}
 #                                                 DELETE    /api/edge/manga/:manga_id/relationships/genres(.:format)                                  manga#destroy_relationship {:relationship=>"genres"}
 #                                    manga_genres GET       /api/edge/manga/:manga_id/genres(.:format)                                                genres#get_related_resources {:relationship=>"genres", :source=>"manga"}
+#                  manga_relationships_categories GET       /api/edge/manga/:manga_id/relationships/categories(.:format)                              manga#show_relationship {:relationship=>"categories"}
+#                                                 POST      /api/edge/manga/:manga_id/relationships/categories(.:format)                              manga#create_relationship {:relationship=>"categories"}
+#                                                 PUT|PATCH /api/edge/manga/:manga_id/relationships/categories(.:format)                              manga#update_relationship {:relationship=>"categories"}
+#                                                 DELETE    /api/edge/manga/:manga_id/relationships/categories(.:format)                              manga#destroy_relationship {:relationship=>"categories"}
+#                                manga_categories GET       /api/edge/manga/:manga_id/categories(.:format)                                            categories#get_related_resources {:relationship=>"categories", :source=>"manga"}
 #                    manga_relationships_castings GET       /api/edge/manga/:manga_id/relationships/castings(.:format)                                manga#show_relationship {:relationship=>"castings"}
 #                                                 POST      /api/edge/manga/:manga_id/relationships/castings(.:format)                                manga#create_relationship {:relationship=>"castings"}
 #                                                 PUT|PATCH /api/edge/manga/:manga_id/relationships/castings(.:format)                                manga#update_relationship {:relationship=>"castings"}
@@ -560,6 +570,11 @@ end
 #                                                 PUT|PATCH /api/edge/drama/:drama_id/relationships/genres(.:format)                                  dramas#update_relationship {:relationship=>"genres"}
 #                                                 DELETE    /api/edge/drama/:drama_id/relationships/genres(.:format)                                  dramas#destroy_relationship {:relationship=>"genres"}
 #                                    drama_genres GET       /api/edge/drama/:drama_id/genres(.:format)                                                genres#get_related_resources {:relationship=>"genres", :source=>"dramas"}
+#                  drama_relationships_categories GET       /api/edge/drama/:drama_id/relationships/categories(.:format)                              dramas#show_relationship {:relationship=>"categories"}
+#                                                 POST      /api/edge/drama/:drama_id/relationships/categories(.:format)                              dramas#create_relationship {:relationship=>"categories"}
+#                                                 PUT|PATCH /api/edge/drama/:drama_id/relationships/categories(.:format)                              dramas#update_relationship {:relationship=>"categories"}
+#                                                 DELETE    /api/edge/drama/:drama_id/relationships/categories(.:format)                              dramas#destroy_relationship {:relationship=>"categories"}
+#                                drama_categories GET       /api/edge/drama/:drama_id/categories(.:format)                                            categories#get_related_resources {:relationship=>"categories", :source=>"dramas"}
 #                    drama_relationships_castings GET       /api/edge/drama/:drama_id/relationships/castings(.:format)                                dramas#show_relationship {:relationship=>"castings"}
 #                                                 POST      /api/edge/drama/:drama_id/relationships/castings(.:format)                                dramas#create_relationship {:relationship=>"castings"}
 #                                                 PUT|PATCH /api/edge/drama/:drama_id/relationships/castings(.:format)                                dramas#update_relationship {:relationship=>"castings"}
@@ -1311,8 +1326,10 @@ end
 #                                       sso_canny GET       /api/edge/sso/canny(.:format)                                                             sso#canny
 #                                     rails_admin           /api/admin                                                                                RailsAdmin::Engine
 #                                     sidekiq_web           /api/sidekiq                                                                              Sidekiq::Web
+#                                         pg_hero           /api/pghero                                                                               PgHero::Engine
 #                                           admin GET       /api/admin(.:format)                                                                      sessions#redirect
 #                                         sidekiq GET       /api/sidekiq(.:format)                                                                    sessions#redirect
+#                                          pghero GET       /api/pghero(.:format)                                                                     sessions#redirect
 #                                        sessions POST      /api/sessions(.:format)                                                                   sessions#create
 #                                     new_session GET       /api/sessions/new(.:format)                                                               sessions#new
 #                                   hooks_youtube GET       /api/hooks/youtube(.:format)                                                              webhooks#youtube_verify
@@ -1349,4 +1366,29 @@ end
 #       delete GET|DELETE  /:model_name/:id/delete(.:format)      rails_admin/main#delete
 # history_show GET         /:model_name/:id/history(.:format)     rails_admin/main#history_show
 #  show_in_app GET         /:model_name/:id/show_in_app(.:format) rails_admin/main#show_in_app
+#
+# Routes for PgHero::Engine:
+#               index_usage GET  (/:database)/index_usage(.:format)               pg_hero/home#index_usage
+#                     space GET  (/:database)/space(.:format)                     pg_hero/home#space
+#              live_queries GET  (/:database)/live_queries(.:format)              pg_hero/home#live_queries
+#                   queries GET  (/:database)/queries(.:format)                   pg_hero/home#queries
+#                    system GET  (/:database)/system(.:format)                    pg_hero/home#system
+#                 cpu_usage GET  (/:database)/cpu_usage(.:format)                 pg_hero/home#cpu_usage
+#          connection_stats GET  (/:database)/connection_stats(.:format)          pg_hero/home#connection_stats
+#     replication_lag_stats GET  (/:database)/replication_lag_stats(.:format)     pg_hero/home#replication_lag_stats
+#                load_stats GET  (/:database)/load_stats(.:format)                pg_hero/home#load_stats
+#                   explain GET  (/:database)/explain(.:format)                   pg_hero/home#explain
+#                      tune GET  (/:database)/tune(.:format)                      pg_hero/home#tune
+#               connections GET  (/:database)/connections(.:format)               pg_hero/home#connections
+#               maintenance GET  (/:database)/maintenance(.:format)               pg_hero/home#maintenance
+#                      kill POST (/:database)/kill(.:format)                      pg_hero/home#kill
+# kill_long_running_queries POST (/:database)/kill_long_running_queries(.:format) pg_hero/home#kill_long_running_queries
+#                  kill_all POST (/:database)/kill_all(.:format)                  pg_hero/home#kill_all
+#        enable_query_stats POST (/:database)/enable_query_stats(.:format)        pg_hero/home#enable_query_stats
+#                           POST (/:database)/explain(.:format)                   pg_hero/home#explain
+#         reset_query_stats POST (/:database)/reset_query_stats(.:format)         pg_hero/home#reset_query_stats
+#              system_stats GET  (/:database)/system_stats(.:format)              redirect(301, system)
+#               query_stats GET  (/:database)/query_stats(.:format)               redirect(301, queries)
+#                   indexes GET  (/:database)/indexes(.:format)                   redirect(301, index_usage)
+#                      root GET  /(:database)(.:format)                           pg_hero/home#index
 #

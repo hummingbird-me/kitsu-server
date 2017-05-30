@@ -8,6 +8,7 @@
 #  image_file_name    :string
 #  image_file_size    :integer
 #  image_updated_at   :datetime
+#  nsfw               :boolean          default(FALSE), not null
 #  slug               :string           not null, indexed
 #  title              :string           not null
 #  total_media_count  :integer          default(0), not null

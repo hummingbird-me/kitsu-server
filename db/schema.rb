@@ -12,6 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170515122347) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -140,18 +141,19 @@ ActiveRecord::Schema.define(version: 20170515122347) do
   add_index "castings", ["person_id"], name: "index_castings_on_person_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
-    t.string   "title",                          null: false
+    t.string   "title",                              null: false
     t.string   "description"
-    t.string   "slug",                           null: false
+    t.string   "slug",                               null: false
     t.integer  "anidb_id"
     t.integer  "parent_id"
-    t.integer  "total_media_count",  default: 0, null: false
+    t.integer  "total_media_count",  default: 0,     null: false
+    t.boolean  "nsfw",               default: false, null: false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   add_index "categories", ["anidb_id"], name: "index_categories_on_anidb_id", using: :btree
