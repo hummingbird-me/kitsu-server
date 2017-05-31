@@ -30,7 +30,8 @@ class MediaIndex < Chewy::Index
 
     # Get Streamers for a series
     def get_streamers(type, ids)
-      groupify StreamingLink.joins(:streamer)
+      groupify StreamingLink
+        .joins(:streamer)
         .where(media_id: ids, media_type: type).uniq
         .pluck(:media_id, 'streamers.site_name')
     end
@@ -38,13 +39,12 @@ class MediaIndex < Chewy::Index
 
   define_type Anime.includes(
     :genres,
-    :categories) do
-    crutch(:people) { |coll| MediaIndex.get_people 'Anime', coll.map(&:id) }
-    crutch(:characters) do |coll|
-      MediaIndex.get_characters 'Anime', coll.map(&:id)
-    end
-    crutch(:streamers) do |coll|
-      MediaIndex.get_streamers 'Anime', coll.map(&:id)
+    :categories
+  ) do
+    crutch(:people) { |c| MediaIndex.get_people 'Anime', c.map(&:id) }
+    crutch(:characters) { |c| MediaIndex.get_characters 'Anime', c.map(&:id) }
+    crutch(:streamers) do |c|
+      MediaIndex.get_streamers 'Anime', c.map(&:id)
     end
 
     root date_detection: false do
