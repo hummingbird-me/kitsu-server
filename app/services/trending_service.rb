@@ -28,7 +28,7 @@ class TrendingService
     followers.each do |uid|
       key = trending_key(uid)
       update_score(key, id, weight)
-      trim(key, limit: CATEGORY_LIMIT) if rand < TRIM_PROBABILITY
+      trim(key, limit: NETWORK_LIMIT) if rand < TRIM_PROBABILITY
     end
 
     handle_trending_categories(id, weight)
@@ -92,7 +92,7 @@ class TrendingService
     categories.each do |category|
       key = trending_category_key(category.id)
       update_score(key, id, weight)
-      trim(key, limit: NETWORK_LIMIT) if rand < TRIM_PROBABILITY
+      trim(key, limit: CATEGORY_LIMIT) if rand < TRIM_PROBABILITY
     end
   end
 
