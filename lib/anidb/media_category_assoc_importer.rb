@@ -29,9 +29,7 @@ class AnidbAssocMediaCategoryImport
         categories << @gc_data[g[:name]]
       end
       categories = categories.compact
-      if categories.any?
-        media.categories = categories
-      end
+      media.categories = categories if categories.any?
     end
 
     def associate_manga!
@@ -68,7 +66,7 @@ class AnidbAssocMediaCategoryImport
         categories = Category.where(anidb_id: unfiltered_anime[:tags])
         kitsu_anime.categories = categories
         kitsu_anime.mappings.create(
-          external_site: "anidb",
+          external_site: 'anidb',
           external_id: unfiltered_anime[:anidb_id]
         )
         exclude_ids << kitsu_anime.id

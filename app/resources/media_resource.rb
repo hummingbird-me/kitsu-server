@@ -79,7 +79,7 @@ class MediaResource < BaseResource
       { match: { genres: { query: values.join(' '), operator: 'and' } } }
     }
   query :categories,
-    apply: -> (values, _ctx) {
+    apply: ->(values, _ctx) {
       { match: { categories: { query: values.join(' '), operator: 'and' } } }
     }
   query :text,
