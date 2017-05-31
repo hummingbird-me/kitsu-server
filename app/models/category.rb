@@ -3,6 +3,7 @@
 # Table name: categories
 #
 #  id                 :integer          not null, primary key
+#  child_count        :integer          default(0), not null
 #  description        :string
 #  image_content_type :string
 #  image_file_name    :string
@@ -44,7 +45,11 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :anime
   has_and_belongs_to_many :manga
   has_and_belongs_to_many :drama
-  belongs_to :parent, class_name: 'Category', required: false
+  belongs_to :parent, class_name: 'Category', required: false,
+                      touch: true, counter_cache: 'child_count'
+  has_many :children, class_name: 'Category', 
+                      foreign_key: 'parent_id', dependent: :destroy
+
 
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]

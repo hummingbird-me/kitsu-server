@@ -3,6 +3,7 @@
 # Table name: categories
 #
 #  id                 :integer          not null, primary key
+#  child_count        :integer          default(0), not null
 #  description        :string
 #  image_content_type :string
 #  image_file_name    :string

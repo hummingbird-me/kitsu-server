@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170518220741) do
-
+ActiveRecord::Schema.define(version: 20170531082123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -154,6 +153,7 @@ ActiveRecord::Schema.define(version: 20170518220741) do
     t.datetime "image_updated_at"
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
+    t.integer  "child_count",        default: 0,     null: false
   end
 
   add_index "categories", ["anidb_id"], name: "index_categories_on_anidb_id", using: :btree
@@ -1222,10 +1222,10 @@ ActiveRecord::Schema.define(version: 20170518220741) do
     t.string   "title"
     t.boolean  "profile_completed",                       default: false,       null: false
     t.boolean  "feed_completed",                          default: false,       null: false
+    t.datetime "deleted_at"
     t.boolean  "cover_image_processing"
     t.integer  "rating_system",                           default: 0,           null: false
     t.integer  "theme",                                   default: 0,           null: false
-    t.datetime "deleted_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
