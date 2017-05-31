@@ -169,7 +169,7 @@ module StreamSync
     print "\n"
   end
 
-  def media_categories(klass)
+  def categories_for(klass)
     puts "#{klass.name}:"
     print ' => uploading'
     klass.includes(:categories).in_groups_of(990, false).each do |items|
