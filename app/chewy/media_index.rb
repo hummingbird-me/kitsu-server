@@ -30,19 +30,21 @@ class MediaIndex < Chewy::Index
 
     # Get Streamers for a series
     def get_streamers(type, ids)
-      groupify StreamingLink.joins(:streamer)
+      groupify StreamingLink
+        .joins(:streamer)
         .where(media_id: ids, media_type: type).uniq
         .pluck(:media_id, 'streamers.site_name')
     end
   end
 
-  define_type Anime.includes(:genres) do
-    crutch(:people) { |coll| MediaIndex.get_people 'Anime', coll.map(&:id) }
-    crutch(:characters) do |coll|
-      MediaIndex.get_characters 'Anime', coll.map(&:id)
-    end
-    crutch(:streamers) do |coll|
-      MediaIndex.get_streamers 'Anime', coll.map(&:id)
+  define_type Anime.includes(
+    :genres,
+    :categories
+  ) do
+    crutch(:people) { |c| MediaIndex.get_people 'Anime', c.map(&:id) }
+    crutch(:characters) { |c| MediaIndex.get_characters 'Anime', c.map(&:id) }
+    crutch(:streamers) do |c|
+      MediaIndex.get_streamers 'Anime', c.map(&:id)
     end
 
     root date_detection: false do
@@ -63,6 +65,7 @@ class MediaIndex < Chewy::Index
       field :year, type: 'short' # Update this before year 32,000
       field :season_year, type: 'short' # ^
       field :genres, value: ->(a) { a.genres.map(&:name) }
+      field :categories, value: ->(a) { a.categories.map(&:title) }
       field :user_count, type: 'integer'
       # Castings
       field :people, value: ->(a, crutch) { crutch.people[a.id] }
@@ -72,7 +75,7 @@ class MediaIndex < Chewy::Index
     end
   end
 
-  define_type Manga.includes(:genres) do
+  define_type Manga.includes(:genres, :categories) do
     crutch(:people) { |coll| get_people 'Anime', coll.map(&:id) }
     crutch(:characters) { |coll| get_characters 'Anime', coll.map(&:id) }
 
@@ -92,6 +95,7 @@ class MediaIndex < Chewy::Index
       field :start_date, :end_date, :created_at, type: 'date'
       field :year, type: 'short' # Update this before year 32,000
       field :genres, value: ->(a) { a.genres.map(&:name) }
+      field :categories, value: ->(a) { a.categories.map(&:title) }
       field :user_count, type: 'integer'
       # Castings
       field :people, value: ->(a, crutch) { crutch.people[a.id] }
@@ -99,7 +103,7 @@ class MediaIndex < Chewy::Index
     end
   end
 
-  define_type Drama.includes(:genres) do
+  define_type Drama.includes(:genres, :categories) do
     crutch(:people) { |coll| MediaIndex.get_people 'Drama', coll.map(&:id) }
     crutch(:characters) do |coll|
       MediaIndex.get_characters 'Drama', coll.map(&:id)
@@ -124,6 +128,7 @@ class MediaIndex < Chewy::Index
       field :start_date, :end_date, :created_at, type: 'date'
       field :year, type: 'short' # Update this before year 32,000
       field :genres, value: ->(a) { a.genres.map(&:name) }
+      field :categories, value: ->(a) { a.categories.map(&:title) }
       field :user_count, type: 'integer'
       # Castings
       field :people, value: ->(a, crutch) { crutch.people[a.id] }

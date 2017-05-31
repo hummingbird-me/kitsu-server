@@ -121,6 +121,12 @@ module StreamSync
     genres_for Drama
   end
 
+  def media_categories
+    categories_for Anime
+    categories_for Manga
+    categories_for Drama
+  end
+
   def user_ratings
     print ' => uploading'
     User.ids.in_groups_of(990, false).each do |user_ids|
@@ -156,6 +162,20 @@ module StreamSync
       data = items.map { |media|
         print '.' if rand(1..100) > 98
         [media.stream_id, { genres: media.genres.map(&:slug) }]
+      }.to_h
+      custom_endpoint_client.upload_meta(data)
+      print '^'
+    end
+    print "\n"
+  end
+
+  def categories_for(klass)
+    puts "#{klass.name}:"
+    print ' => uploading'
+    klass.includes(:categories).in_groups_of(990, false).each do |items|
+      data = items.map { |media|
+        print '.' if rand(1..100) > 98
+        [media.stream_id, { categories: media.categories.map(&:id) }]
       }.to_h
       custom_endpoint_client.upload_meta(data)
       print '^'

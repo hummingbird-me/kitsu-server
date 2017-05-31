@@ -70,6 +70,11 @@ ActiveRecord::Schema.define(version: 20170515122347) do
   add_index "anime_castings", ["anime_character_id"], name: "index_anime_castings_on_anime_character_id", using: :btree
   add_index "anime_castings", ["person_id"], name: "index_anime_castings_on_person_id", using: :btree
 
+  create_table "anime_categories", id: false, force: :cascade do |t|
+    t.integer "anime_id",    null: false
+    t.integer "category_id", null: false
+  end
+
   create_table "anime_characters", force: :cascade do |t|
     t.integer "anime_id",                 null: false
     t.integer "character_id",             null: false
@@ -134,6 +139,46 @@ ActiveRecord::Schema.define(version: 20170515122347) do
   add_index "castings", ["character_id"], name: "index_castings_on_character_id", using: :btree
   add_index "castings", ["media_id", "media_type"], name: "index_castings_on_media_id_and_media_type", using: :btree
   add_index "castings", ["person_id"], name: "index_castings_on_person_id", using: :btree
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "title",                              null: false
+    t.string   "description"
+    t.string   "slug",                               null: false
+    t.integer  "anidb_id"
+    t.integer  "parent_id"
+    t.integer  "total_media_count",  default: 0,     null: false
+    t.boolean  "nsfw",               default: false, null: false
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "categories", ["anidb_id"], name: "index_categories_on_anidb_id", using: :btree
+  add_index "categories", ["parent_id"], name: "index_categories_on_parent_id", using: :btree
+  add_index "categories", ["slug"], name: "index_categories_on_slug", using: :btree
+
+  create_table "categories_dramas", id: false, force: :cascade do |t|
+    t.integer "category_id", null: false
+    t.integer "drama_id",    null: false
+  end
+
+  create_table "categories_manga", id: false, force: :cascade do |t|
+    t.integer "category_id", null: false
+    t.integer "manga_id",    null: false
+  end
+
+  create_table "category_favorites", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "category_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "category_favorites", ["category_id"], name: "index_category_favorites_on_category_id", using: :btree
+  add_index "category_favorites", ["user_id"], name: "index_category_favorites_on_user_id", using: :btree
 
   create_table "chapters", force: :cascade do |t|
     t.integer  "manga_id"
@@ -1246,6 +1291,8 @@ ActiveRecord::Schema.define(version: 20170515122347) do
   add_foreign_key "anime_staff", "people"
   add_foreign_key "blocks", "users"
   add_foreign_key "blocks", "users", column: "blocked_id"
+  add_foreign_key "category_favorites", "categories"
+  add_foreign_key "category_favorites", "users"
   add_foreign_key "comment_likes", "comments"
   add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"

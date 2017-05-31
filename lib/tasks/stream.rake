@@ -22,6 +22,11 @@ namespace :stream do
     task media_genres: :environment do
       StreamSync.media_genres
     end
+
+    desc 'Synchronize media categories'
+    task media_categories: :environment do
+      StreamSync.media_categories
+    end
   end
 
   namespace :dump do
