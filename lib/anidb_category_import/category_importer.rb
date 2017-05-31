@@ -1,4 +1,4 @@
-class AnidbCategoryImport
+class CategoryImporter
   class ImportFile
     attr_reader :data
 

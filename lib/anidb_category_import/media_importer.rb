@@ -1,4 +1,4 @@
-class AnidbAssocMediaCategoryImport
+class MediaImporter
   class ImportFile
     attr_reader :data
 

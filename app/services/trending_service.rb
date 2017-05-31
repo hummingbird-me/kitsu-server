@@ -2,6 +2,7 @@ class TrendingService
   EPOCH = Date.new(2030, 1, 1).to_time.to_i
   ITEM_LIMIT = 200
   NETWORK_LIMIT = 20
+  CATEGORY_LIMIT = 20
   TRIM_PROBABILITY = 0.1
 
   attr_reader :namespace, :half_life, :user, :token
@@ -27,7 +28,7 @@ class TrendingService
     followers.each do |uid|
       key = trending_key(uid)
       update_score(key, id, weight)
-      trim(key, limit: NETWORK_LIMIT) if rand < TRIM_PROBABILITY
+      trim(key, limit: CATEGORY_LIMIT) if rand < TRIM_PROBABILITY
     end
 
     handle_trending_categories(id, weight)
