@@ -8,12 +8,12 @@ class MediaResource < BaseResource
   NUMBER = /(\d+(?:\.\d+)?)/
   NUMERIC_RANGE = /\A#{NUMBER}?(\.{2,3})?#{NUMBER}?\z/
   NUMERIC_QUERY = {
-    valid: -> (value, _ctx) {
+    valid: ->(value, _ctx) do
       matches = NUMERIC_RANGE.match(value)
       # You gotta provide at least *one* number
       matches && (matches[1].present? || matches[3].present?)
-    },
-    apply: -> (values, _ctx) {
+    end,
+    apply: ->(values, _ctx) do
       # We only accept the first value
       values.map do |value|
         matches = NUMERIC_RANGE.match(value)
@@ -33,7 +33,7 @@ class MediaResource < BaseResource
           matches[1]
         end
       end
-    }
+    end
   }.freeze
 
   caching
@@ -52,7 +52,9 @@ class MediaResource < BaseResource
     # Age Ratings
     :age_rating, :age_rating_guide,
     # Subtype
-    :subtype
+    :subtype,
+    # Airing/Publishing Status
+    :status
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
@@ -68,6 +70,10 @@ class MediaResource < BaseResource
     values = values.map { |v| records.subtypes[v] || v }
     records.where(subtype: values)
   }
+  filter :status, apply: ->(records, values, _opts) {
+    records.send(values[0]) if %w[tba unreleased upcoming current finished]
+                               .include? values[0]
+  }
 
   # Common ElasticSearch stuff
   query :year, NUMERIC_QUERY
@@ -75,7 +81,7 @@ class MediaResource < BaseResource
   query :user_count, NUMERIC_QUERY
   query :subtype
   query :genres,
-    apply: -> (values, _ctx) {
+    apply: ->(values, _ctx) {
       { match: { genres: { query: values.join(' '), operator: 'and' } } }
     }
   query :categories,
@@ -84,12 +90,12 @@ class MediaResource < BaseResource
     }
   query :text,
     mode: :query,
-    apply: -> (values, _ctx) {
+    apply: ->(values, _ctx) {
       {
         function_score: {
           script_score: {
             lang: 'expression',
-            script: "max(log10(doc['user_count'].value), 1) * _score",
+            script: "max(log10(doc['user_count'].value), 1) * _score"
           },
           query: {
             bool: {
@@ -114,4 +120,12 @@ class MediaResource < BaseResource
         }
       }
     }
+
+  def self.updatable_fields(context)
+    super - [:status]
+  end
+
+  def self.creatable_fields(context)
+    super - [:status]
+  end
 end
