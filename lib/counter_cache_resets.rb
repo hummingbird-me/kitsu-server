@@ -138,7 +138,6 @@ module CounterCacheResets
   def sql_for_self_ref_count(model, refrence_column, counter_cache_column: nil)
     temp_table = "#{model}_#{counter_cache_column}"
     association = model.reflections[refrence_column.to_s]
-    ref_column = refrence_column.to_s
     [
       "DROP TABLE IF EXISTS #{temp_table}",
       <<-SQL.squish,

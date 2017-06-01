@@ -1,7 +1,8 @@
 require 'unlimited_paginator'
 
 class CategoryResource < BaseResource
-  attributes :title, :description, :total_media_count, :slug, :nsfw, :child_count
+  attributes :title, :description, :total_media_count,
+    :slug, :nsfw, :child_count
   attribute :image, format: :attachment
 
   has_one :parent

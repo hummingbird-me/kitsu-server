@@ -47,7 +47,7 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :drama
   belongs_to :parent, class_name: 'Category', required: false,
                       touch: true, counter_cache: 'child_count'
-  has_many :children, class_name: 'Category', 
+  has_many :children, class_name: 'Category',
                       foreign_key: 'parent_id', dependent: :destroy
 
 
