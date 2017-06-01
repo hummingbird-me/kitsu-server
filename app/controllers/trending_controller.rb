@@ -26,6 +26,8 @@ class TrendingController < ApplicationController
   def trending
     if params[:in_network].present?
       trending_service.get_network(params[:limit] || 10)
+    elsif params[:in_category].present?
+      trending_service.get_category(params[:category], params[:limit] || 10)
     else
       trending_service.get(params[:limit] || 10)
     end
