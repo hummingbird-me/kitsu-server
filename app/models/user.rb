@@ -149,6 +149,7 @@ class User < ApplicationRecord
                                   foreign_key: 'moderator_id'
   has_many :site_announcements
   has_many :stats, dependent: :destroy
+  has_many :library_events, dependent: :destroy
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }, if: :email_changed?

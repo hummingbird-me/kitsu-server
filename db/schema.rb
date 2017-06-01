@@ -662,6 +662,23 @@ ActiveRecord::Schema.define(version: 20170518220741) do
 
   add_index "library_entry_logs", ["linked_account_id"], name: "index_library_entry_logs_on_linked_account_id", using: :btree
 
+  create_table "library_events", force: :cascade do |t|
+    t.integer  "library_entry_id",              null: false
+    t.integer  "user_id",                       null: false
+    t.integer  "anime_id"
+    t.integer  "manga_id"
+    t.integer  "drama_id"
+    t.integer  "event",                         null: false
+    t.jsonb    "changed_data",     default: {}, null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "library_events", ["anime_id"], name: "index_library_events_on_anime_id", using: :btree
+  add_index "library_events", ["drama_id"], name: "index_library_events_on_drama_id", using: :btree
+  add_index "library_events", ["manga_id"], name: "index_library_events_on_manga_id", using: :btree
+  add_index "library_events", ["user_id"], name: "index_library_events_on_user_id", using: :btree
+
   create_table "linked_accounts", force: :cascade do |t|
     t.integer  "user_id",                            null: false
     t.string   "external_user_id",                   null: false
@@ -758,25 +775,6 @@ ActiveRecord::Schema.define(version: 20170518220741) do
   end
 
   add_index "mappings", ["external_site", "external_id", "media_type", "media_id"], name: "index_mappings_on_external_and_media", unique: true, using: :btree
-
-  create_table "marathon_events", force: :cascade do |t|
-    t.integer  "marathon_id", null: false
-    t.integer  "unit_id"
-    t.string   "unit_type"
-    t.integer  "event",       null: false
-    t.integer  "status"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  create_table "marathons", force: :cascade do |t|
-    t.integer  "library_entry_id", null: false
-    t.boolean  "rewatch",          null: false
-    t.datetime "started_at"
-    t.datetime "ended_at"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-  end
 
   create_table "media_follows", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -1326,13 +1324,13 @@ ActiveRecord::Schema.define(version: 20170518220741) do
   add_foreign_key "groups", "group_categories", column: "category_id"
   add_foreign_key "leader_chat_messages", "groups"
   add_foreign_key "leader_chat_messages", "users"
+  add_foreign_key "library_events", "library_entries"
+  add_foreign_key "library_events", "users"
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"
   add_foreign_key "manga_staff", "manga"
   add_foreign_key "manga_staff", "people"
-  add_foreign_key "marathon_events", "marathons"
-  add_foreign_key "marathons", "library_entries"
   add_foreign_key "media_follows", "users"
   add_foreign_key "post_follows", "posts"
   add_foreign_key "post_follows", "users"

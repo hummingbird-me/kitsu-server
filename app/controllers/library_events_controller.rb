@@ -1,0 +1,2 @@
+class LibraryEventsController < ApplicationController
+end
