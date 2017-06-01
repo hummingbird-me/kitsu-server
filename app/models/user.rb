@@ -134,7 +134,20 @@ class User < ApplicationRecord
   has_many :post_follows, dependent: :destroy
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :destroy
+  has_many :group_action_logs, dependent: :destroy
+  has_many :group_bans, dependent: :destroy
+  has_many :group_invites, dependent: :destroy
   has_many :group_members, dependent: :destroy
+  has_many :group_reports
+  has_many :group_reports_as_moderator, class_name: 'GroupReport',
+                                        foreign_key: 'moderator_id'
+  has_many :group_ticket_messages, dependent: :destroy
+  has_many :group_tickets, dependent: :destroy
+  has_many :leader_chat_messages, dependent: :destroy
+  has_many :reports
+  has_many :reports_as_moderator, class_name: 'Report',
+                                  foreign_key: 'moderator_id'
+  has_many :site_announcements
   has_many :stats, dependent: :destroy
 
   validates :email, presence: true,
@@ -163,7 +176,6 @@ class User < ApplicationRecord
   validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
 
-  default_scope -> { where(deleted_at: nil) }
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
@@ -289,9 +301,14 @@ class User < ApplicationRecord
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
-    # Reparent other posts to the "Deleted" user
+    # Reparent relationships to the "Deleted" user
     posts.update_all(user_id: -10)
     comments.update_all(user_id: -10)
+    group_reports.update_all(user_id: -10)
+    group_reports_as_moderator.update_all(moderator_id: -10)
+    reports.update_all(user_id: -10)
+    reports_as_moderator.update_all(moderator_id: -10)
+    site_announcements.update_all(user_id: -10)
   end
 
   after_commit on: :create do
