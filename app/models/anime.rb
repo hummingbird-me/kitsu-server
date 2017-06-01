@@ -110,4 +110,11 @@ class Anime < ApplicationRecord
       prefix_length: 2
     }).preload.first
   end
+
+  before_save do
+    if episode_count == 1
+      self.start_date = end_date if start_date.nil? && !end_date.nil?
+      self.end_date = start_date if end_date.nil? && !start_date.nil?
+    end
+  end
 end
