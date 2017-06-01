@@ -1,0 +1,2 @@
+class MediaAttributesPolicy < ApplicationPolicy
+end

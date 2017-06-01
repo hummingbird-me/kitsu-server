@@ -777,6 +777,19 @@ ActiveRecord::Schema.define(version: 20170601214239) do
 
   add_index "mappings", ["external_site", "external_id", "media_type", "media_id"], name: "index_mappings_on_external_and_media", unique: true, using: :btree
 
+  create_table "media_attribute", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "media_id",   null: false
+    t.string   "media_type", null: false
+    t.integer  "pacing",     null: false
+    t.integer  "complexity", null: false
+    t.integer  "tone",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "media_attribute", ["user_id"], name: "index_media_attribute_on_user_id", using: :btree
+
   create_table "media_follows", force: :cascade do |t|
     t.integer  "user_id",    null: false
     t.integer  "media_id",   null: false
@@ -1332,6 +1345,7 @@ ActiveRecord::Schema.define(version: 20170601214239) do
   add_foreign_key "manga_characters", "manga"
   add_foreign_key "manga_staff", "manga"
   add_foreign_key "manga_staff", "people"
+  add_foreign_key "media_attribute", "users"
   add_foreign_key "media_follows", "users"
   add_foreign_key "post_follows", "posts"
   add_foreign_key "post_follows", "users"
