@@ -159,5 +159,9 @@ class ApplicationPolicy
       admin_scope = scope.respond_to?(:model) ? scope.model : scope
       user&.has_role?(:admin, admin_scope)
     end
+
+    def see_nsfw?
+      user ? !user.sfw_filter? : false
+    end
   end
 end
