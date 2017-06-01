@@ -31,6 +31,8 @@ module CounterCacheResets
       [Anime, Manga, Drama],
       counter_cache_column: 'total_media_count'
     )
+    execute sql_for_self_ref_count(Category, :parent,
+      counter_cache_column: 'child_count')
   end
 
   def users
@@ -127,6 +129,34 @@ module CounterCacheResets
           SELECT count
           FROM #{temp_table}
           WHERE id = #{model.table_name}.id
+        ), 0)
+      SQL
+      "DROP TABLE #{temp_table}"
+    ]
+  end
+
+  def sql_for_self_ref_count(model, refrence_column, counter_cache_column: nil)
+    temp_table = "#{model}_#{counter_cache_column}"
+    association = model.reflections[refrence_column.to_s]
+    [
+      "DROP TABLE IF EXISTS #{temp_table}",
+      <<-SQL.squish,
+        CREATE TEMP TABLE #{temp_table} AS
+        SELECT #{association.foreign_key}, count(id) AS count
+        FROM #{model.table_name}
+        WHERE #{association.foreign_key} IS NOT NULL
+        GROUP BY #{association.foreign_key}
+      SQL
+      <<-SQL.squish,
+        CREATE INDEX ON #{temp_table} (#{association.foreign_key})
+      SQL
+      "VACUUM #{temp_table}",
+      <<-SQL.squish,
+        UPDATE #{model.table_name}
+        SET #{counter_cache_column} = COALESCE((
+          SELECT count
+          FROM #{temp_table}
+          WHERE #{association.foreign_key} = #{model.table_name}.id
         ), 0)
       SQL
       "DROP TABLE #{temp_table}"
