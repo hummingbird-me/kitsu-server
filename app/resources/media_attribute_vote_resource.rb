@@ -1,0 +1,2 @@
+class MediaAttributeVoteResource < BaseResource
+end

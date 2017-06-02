@@ -1,0 +1,2 @@
+class MediaAttributeVotesPolicy < ApplicationPolicy
+end

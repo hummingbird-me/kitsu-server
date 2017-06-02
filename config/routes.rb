@@ -59,6 +59,8 @@ Rails.application.routes.draw do
       jsonapi_resources :streaming_links
       jsonapi_resources :streamers
       jsonapi_resources :media_relationships
+      jsonapi_resources :media_attributes
+      jsonapi_resources :media_attribute_votes
       jsonapi_resources :anime_productions
       jsonapi_resources :episodes
       jsonapi_resources :stats
@@ -150,7 +152,7 @@ end
 
 # == Route Map
 #
-# I, [2017-05-30T12:54:01.333917 #91180]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-06-02T05:53:12.487829 #35414]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                          Prefix Verb      URI Pattern                                                                               Controller#Action
 #                        user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#show_relationship {:relationship=>"waifu"}
 #                                                 PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#update_relationship {:relationship=>"waifu"}
@@ -806,6 +808,12 @@ end
 #                                                 PATCH     /api/edge/media-relationships/:id(.:format)                                               media_relationships#update
 #                                                 PUT       /api/edge/media-relationships/:id(.:format)                                               media_relationships#update
 #                                                 DELETE    /api/edge/media-relationships/:id(.:format)                                               media_relationships#destroy
+#                           media_attribute_votes GET       /api/edge/media-attribute-votes(.:format)                                                 media_attribute_votes#index
+#                                                 POST      /api/edge/media-attribute-votes(.:format)                                                 media_attribute_votes#create
+#                            media_attribute_vote GET       /api/edge/media-attribute-votes/:id(.:format)                                             media_attribute_votes#show
+#                                                 PATCH     /api/edge/media-attribute-votes/:id(.:format)                                             media_attribute_votes#update
+#                                                 PUT       /api/edge/media-attribute-votes/:id(.:format)                                             media_attribute_votes#update
+#                                                 DELETE    /api/edge/media-attribute-votes/:id(.:format)                                             media_attribute_votes#destroy
 #            anime_production_relationships_anime GET       /api/edge/anime-productions/:anime_production_id/relationships/anime(.:format)            anime_productions#show_relationship {:relationship=>"anime"}
 #                                                 PUT|PATCH /api/edge/anime-productions/:anime_production_id/relationships/anime(.:format)            anime_productions#update_relationship {:relationship=>"anime"}
 #                                                 DELETE    /api/edge/anime-productions/:anime_production_id/relationships/anime(.:format)            anime_productions#destroy_relationship {:relationship=>"anime"}

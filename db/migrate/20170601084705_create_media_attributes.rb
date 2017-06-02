@@ -1,12 +1,11 @@
 class CreateMediaAttributes < ActiveRecord::Migration
   def change
     create_table :media_attribute do |t|
-      t.references :user, foreign_key: true, index: true, null: false
-      t.references :media, null: false, polymorphic: true
-      t.integer :pacing, null: false
-      t.integer :complexity, null: false
-      t.integer :tone, null: false
-      t.timestamps null: false     
+      t.string :title, null: false, index: true, required: true
+      t.integer :high_vote_count, default: 0, null: false
+      t.integer :neutral_vote_count, default: 0, null: false
+      t.integer :low_vote_count, default: 0, null: false
+      t.timestamps null: false
     end
   end
 end
