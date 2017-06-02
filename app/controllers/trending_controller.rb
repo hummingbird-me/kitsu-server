@@ -24,10 +24,13 @@ class TrendingController < ApplicationController
   end
 
   def trending
+    limit = params[:limit].to_i || 10
     if params[:in_network].present?
-      trending_service.get_network(params[:limit] || 10)
+      trending_service.get_network(limit)
+    elsif params[:in_category].present?
+      trending_service.get_category(params[:category], limit)
     else
-      trending_service.get(params[:limit] || 10)
+      trending_service.get(limit)
     end
   end
 
