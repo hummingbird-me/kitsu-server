@@ -3,10 +3,17 @@ class UsersIndex < Chewy::Index
     def self.blocking(*user_ids)
       filter { _id(:or) != user_ids.flatten }
     end
+
+    def self.active
+      filter { deleted_at == nil }
+    end
+
     field :name
     field :past_names
     field :updated_at
+    field :deleted_at
   end
+
   define_type GroupMember.includes(:user, group: [:category]) do
     def self.blocking(*user_ids)
       filter { user_id(:or) != user_ids.flatten }
