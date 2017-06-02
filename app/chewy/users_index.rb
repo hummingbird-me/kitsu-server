@@ -18,6 +18,10 @@ class UsersIndex < Chewy::Index
       filter { (group_id(:or) == group_ids) | (public_visible == true) }
     end
 
+    def self.sfw
+      filter { (nsfw == false) & (group_category != 'nsfw') }
+    end
+
     field :group_id
     field :user_id
     field :rank
@@ -25,6 +29,7 @@ class UsersIndex < Chewy::Index
     field :past_names, value: ->(mem) { mem.user&.past_names }
     field :group_name, value: ->(mem) { mem.group&.name }
     field :group_category, value: ->(mem) { mem.group&.category&.slug }
+    field :nsfw, value: ->(mem) { mem.group&.nsfw }
     field :public_visible
     field :created_at
   end
