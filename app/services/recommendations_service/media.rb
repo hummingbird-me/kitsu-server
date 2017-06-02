@@ -25,6 +25,18 @@ class RecommendationsService
       reccs.map(&:first)
     end
 
+    def realtime_recommendations_for(klass)
+      res = client.get("realtime/#{user.id}/")
+      reccs = res.body.dig('results', klass.name)
+      reccs = reccs.reduce(&:merge)
+      media_ids = reccs.keys.map { |key| key.split(':').last.to_i }
+      media = klass.find(media_ids).index_by { |m| "#{m.class.name}:#{m.id}" }
+      reccs = reccs.transform_keys { |key| media[key] }
+      reccs = reccs.transform_values { |val| val['score'] }
+      reccs = reccs.sort_by(&:last).reverse
+      reccs.map(&:first)
+    end
+
     def strength
       res = client.get("profile_strength/#{user.id}/")
       strengths = res.body.dig('results', 'profile_strength')

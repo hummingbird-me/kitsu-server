@@ -9,10 +9,19 @@ class RecommendationsController < ApplicationController
     render_jsonapi serializer.serialize_to_hash(resources)
   end
 
+  def realtime
+    serializer = JSONAPI::ResourceSerializer.new(resource_class)
+    render_jsonapi serializer.serialize_to_hash(realtime_resources)
+  end
+
   private
 
   def resources
     recommendations.map { |item| resource_class.new(item, context) }
+  end
+
+  def realtime_resources
+    realtime_recommendations.map { |item| resource_class.new(item, context) }
   end
 
   def user
@@ -25,6 +34,10 @@ class RecommendationsController < ApplicationController
 
   def recommendations
     recommendations_service.recommendations_for(namespace_class)
+  end
+
+  def realtime_recommendations
+    recommendations_service.realtime_recommendations_for(namespace_class)
   end
 
   def namespace

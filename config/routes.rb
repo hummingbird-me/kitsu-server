@@ -73,6 +73,7 @@ Rails.application.routes.draw do
       # Trending
       get '/trending/:namespace', to: 'trending#index'
       get '/recommendations/:namespace', to: 'recommendations#index'
+      get '/recommendations/:namespace/realtime', to: 'recommendations#realtime'
 
       ### People/Characters/Companies
       jsonapi_resources :characters
