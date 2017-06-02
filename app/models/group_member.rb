@@ -53,6 +53,7 @@ class GroupMember < ApplicationRecord
   scope :leaders, -> { where.not(rank: 'pleb') }
   scope :blocking, ->(users) { where.not(user_id: users) }
   scope :visible_for, ->(u) { joins(:group).merge(Group.visible_for(u)) }
+  scope :sfw, ->() { joins(:group).merge(Group.sfw) }
 
   def has_permission?(perm)
     permissions.for_permission(perm).exists?

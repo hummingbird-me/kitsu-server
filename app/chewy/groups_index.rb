@@ -6,11 +6,16 @@ class GroupsIndex < Chewy::Index
       filter { (_id(:or) == members) | (privacy(:or) == %w[open restricted]) }
     end
 
+    def self.sfw
+      filter { (nsfw == false) & (category != 'nsfw') }
+    end
+
     field :name
     field :about
     field :locale
     field :tagline
     field :privacy
+    field :nsfw
     field :last_activity_at
     field :category, value: ->(g) { g.category.name }
   end

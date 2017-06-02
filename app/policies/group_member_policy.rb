@@ -19,7 +19,8 @@ class GroupMemberPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.blocking(blocked_users).visible_for(user)
+      filted_scope = see_nsfw? ? scope : scope.sfw
+      filted_scope.blocking(blocked_users).visible_for(user)
     end
   end
 end

@@ -54,7 +54,9 @@ class Group < ApplicationRecord
   friendly_id :name, use: %i[slugged finders history]
   processable :rules, RulesPipeline
   enum privacy: %i[open closed restricted]
+
   update_index('groups#group') { self }
+  update_index('users#group_member') { members }
 
   scope :public_visible, ->() { open.or(restricted) }
   scope :sfw, ->() { where(nsfw: false).where.not(category_id: 9) }
