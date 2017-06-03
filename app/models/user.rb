@@ -177,6 +177,7 @@ class User < ApplicationRecord
   validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
 
+  scope :active, ->() { where(deleted_at: nil) }
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
