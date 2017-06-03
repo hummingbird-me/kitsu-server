@@ -152,7 +152,7 @@ end
 
 # == Route Map
 #
-# I, [2017-06-03T06:44:34.719815 #5506]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-06-03T07:16:30.244924 #5941]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                           Prefix Verb      URI Pattern                                                                                   Controller#Action
 #                         user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                        users#show_relationship {:relationship=>"waifu"}
 #                                                  PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                        users#update_relationship {:relationship=>"waifu"}
@@ -930,6 +930,18 @@ end
 #                                                  PUT|PATCH /api/edge/media-reactions/:media_reaction_id/relationships/media(.:format)                    media_reactions#update_relationship {:relationship=>"media"}
 #                                                  DELETE    /api/edge/media-reactions/:media_reaction_id/relationships/media(.:format)                    media_reactions#destroy_relationship {:relationship=>"media"}
 #                             media_reaction_media GET       /api/edge/media-reactions/:media_reaction_id/media(.:format)                                  media#get_related_resource {:relationship=>"media", :source=>"media_reactions"}
+#               media_reaction_relationships_anime GET       /api/edge/media-reactions/:media_reaction_id/relationships/anime(.:format)                    media_reactions#show_relationship {:relationship=>"anime"}
+#                                                  PUT|PATCH /api/edge/media-reactions/:media_reaction_id/relationships/anime(.:format)                    media_reactions#update_relationship {:relationship=>"anime"}
+#                                                  DELETE    /api/edge/media-reactions/:media_reaction_id/relationships/anime(.:format)                    media_reactions#destroy_relationship {:relationship=>"anime"}
+#                             media_reaction_anime GET       /api/edge/media-reactions/:media_reaction_id/anime(.:format)                                  anime#get_related_resource {:relationship=>"anime", :source=>"media_reactions"}
+#               media_reaction_relationships_drama GET       /api/edge/media-reactions/:media_reaction_id/relationships/drama(.:format)                    media_reactions#show_relationship {:relationship=>"drama"}
+#                                                  PUT|PATCH /api/edge/media-reactions/:media_reaction_id/relationships/drama(.:format)                    media_reactions#update_relationship {:relationship=>"drama"}
+#                                                  DELETE    /api/edge/media-reactions/:media_reaction_id/relationships/drama(.:format)                    media_reactions#destroy_relationship {:relationship=>"drama"}
+#                             media_reaction_drama GET       /api/edge/media-reactions/:media_reaction_id/drama(.:format)                                  dramas#get_related_resource {:relationship=>"drama", :source=>"media_reactions"}
+#               media_reaction_relationships_manga GET       /api/edge/media-reactions/:media_reaction_id/relationships/manga(.:format)                    media_reactions#show_relationship {:relationship=>"manga"}
+#                                                  PUT|PATCH /api/edge/media-reactions/:media_reaction_id/relationships/manga(.:format)                    media_reactions#update_relationship {:relationship=>"manga"}
+#                                                  DELETE    /api/edge/media-reactions/:media_reaction_id/relationships/manga(.:format)                    media_reactions#destroy_relationship {:relationship=>"manga"}
+#                             media_reaction_manga GET       /api/edge/media-reactions/:media_reaction_id/manga(.:format)                                  manga#get_related_resource {:relationship=>"manga", :source=>"media_reactions"}
 #                media_reaction_relationships_user GET       /api/edge/media-reactions/:media_reaction_id/relationships/user(.:format)                     media_reactions#show_relationship {:relationship=>"user"}
 #                                                  PUT|PATCH /api/edge/media-reactions/:media_reaction_id/relationships/user(.:format)                     media_reactions#update_relationship {:relationship=>"user"}
 #                                                  DELETE    /api/edge/media-reactions/:media_reaction_id/relationships/user(.:format)                     media_reactions#destroy_relationship {:relationship=>"user"}
