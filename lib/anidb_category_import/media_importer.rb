@@ -53,7 +53,6 @@ class MediaImporter
       puts 'Associating Anime With Categories From AniDB Dump'
       data.each do |unfiltered_anime|
         unfiltered_anime = unfiltered_anime.deep_symbolize_keys
-        next unless unfiltered_anime[:tags]
         next unless unfiltered_anime[:mal_ids]
         puts 'looking up -> ' + unfiltered_anime[:canonical]
         kitsu_anime = nil
@@ -63,12 +62,13 @@ class MediaImporter
         end
         next unless kitsu_anime
         puts '      >found<'
-        categories = Category.where(anidb_id: unfiltered_anime[:tags])
-        kitsu_anime.categories = categories
-        kitsu_anime.mappings.create(
+        kitsu_anime.mappings.where(
           external_site: 'anidb',
           external_id: unfiltered_anime[:anidb_id]
-        )
+        ).first_or_create
+        next unless unfiltered_anime[:tags]
+        categories = Category.where(anidb_id: unfiltered_anime[:tags])
+        kitsu_anime.categories = categories
         exclude_ids << kitsu_anime.id
       end
       exclude_ids
