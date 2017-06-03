@@ -152,13 +152,10 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
   config.model('ListImport') { parent User }
   config.model('Favorite') { parent User }
-  config.model('Marathon') { parent User }
-  config.model('MarathonEvent') { parent User }
   config.model('Block') { parent User }
   config.model('Follow') { parent User }
   config.model('MediaFollow') { parent User }
   config.model('LibraryEntry') { parent User }
-
   config.model('LibraryEntryLog') { visible false }
 
   # Feed

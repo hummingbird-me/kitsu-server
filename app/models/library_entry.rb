@@ -47,7 +47,7 @@ class LibraryEntry < ApplicationRecord
   belongs_to :manga
   belongs_to :drama
   has_one :review, dependent: :destroy
-  has_many :marathons, dependent: :destroy
+  has_many :library_events, dependent: :destroy
 
   scope :sfw, -> { where(nsfw: false) }
   scope :by_kind, ->(*kinds) do
@@ -61,7 +61,7 @@ class LibraryEntry < ApplicationRecord
   end
   scope :privacy, ->(privacy) { where(private: !(privacy == :public)) }
   scope :visible_for, ->(user) {
-    scope = user && !user.sfw_filter? ? self : sfw
+    scope = user && !user.sfw_filter? ? all : sfw
 
     return scope.privacy(:public) unless user
     return scope if user.has_role?(:admin)
@@ -104,10 +104,6 @@ class LibraryEntry < ApplicationRecord
     follows = Follow.arel_table
     sql = follows.where(follows[:follower_id].eq(user_id)).project(:followed_id)
     where("user_id IN (#{sql.to_sql})")
-  end
-
-  def current_marathon
-    marathons.current.first_or_create
   end
 
   def progress_limit
@@ -223,16 +219,37 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_create do
+    # Activity History Stat will be using this
+    library_event = LibraryEvent.create_for(:added, self)
     # Stat STI
     case kind
     when :anime
       Stat::AnimeGenreBreakdown.increment(user, self)
       Stat::AnimeAmountConsumed.increment(user, self)
       Stat::AnimeFavoriteYear.increment(user, self)
+      Stat::AnimeActivityHistory.increment(user, library_event)
     when :manga
       Stat::MangaGenreBreakdown.increment(user, self)
       Stat::MangaAmountConsumed.increment(user, self)
       Stat::MangaFavoriteYear.increment(user, self)
+      Stat::MangaActivityHistory.increment(user, library_event)
+    end
+  end
+
+  after_update do
+    # Activity History Stat will be using this
+    library_event = LibraryEvent.create_for(:updated, self)
+    case kind
+    when :anime
+      Stat::AnimeActivityHistory.increment(user, library_event)
+      # special case checking if progress was increased or decreased
+      Stat::AnimeAmountConsumed.increment(user, self) if progress > progress_was
+      Stat::AnimeAmountConsumed.decrement(user, self) if progress < progress_was
+    when :manga
+      Stat::MangaActivityHistory.increment(user, library_event)
+      # special case checking if progress was increased or decreased
+      Stat::MangaAmountConsumed.increment(user, self) if progress > progress_was
+      Stat::MangaAmountConsumed.decrement(user, self) if progress < progress_was
     end
   end
 
@@ -244,10 +261,12 @@ class LibraryEntry < ApplicationRecord
       Stat::AnimeGenreBreakdown.decrement(user, self)
       Stat::AnimeAmountConsumed.decrement(user, self)
       Stat::AnimeFavoriteYear.decrement(user, self)
+      Stat::AnimeActivityHistory.decrement(user, self)
     when :manga
       Stat::MangaGenreBreakdown.decrement(user, self)
       Stat::MangaAmountConsumed.decrement(user, self)
       Stat::MangaFavoriteYear.decrement(user, self)
+      Stat::MangaActivityHistory.decrement(user, self)
     end
   end
 

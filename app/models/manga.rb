@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: manga
@@ -28,7 +27,6 @@
 #  serialization             :string(255)
 #  slug                      :string(255)
 #  start_date                :date
-#  status                    :integer
 #  subtype                   :integer          default(1), not null
 #  synopsis                  :text
 #  titles                    :hstore           default({}), not null
@@ -37,14 +35,12 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
-# rubocop:enable Metrics/LineLength
 
 class Manga < ApplicationRecord
   include Media
   include AgeRatings
 
   enum subtype: %i[manga novel manhua oneshot doujin manhwa oel]
-  enum status: %i[not_published publishing finished]
   alias_attribute :progress_limit, :chapter_count
   alias_attribute :manga_type, :subtype
 

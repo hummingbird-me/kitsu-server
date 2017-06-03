@@ -6,5 +6,6 @@ namespace :counters do
     CounterCacheResets.reviews
     CounterCacheResets.users
     CounterCacheResets.groups
+    CounterCacheResets.category_counts
   end
 end

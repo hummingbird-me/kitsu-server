@@ -57,7 +57,7 @@ class Group < ApplicationRecord
   update_index('groups#group') { self }
 
   scope :public_visible, ->() { open.or(restricted) }
-  scope :sfw, ->() { where(nsfw: false) }
+  scope :sfw, ->() { where(nsfw: false).where.not(category_id: 9) }
   scope :visible_for, ->(user) {
     # private == false || is a member
     return public_visible unless user

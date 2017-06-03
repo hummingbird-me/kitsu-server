@@ -1,6 +1,8 @@
 module Media
   extend ActiveSupport::Concern
 
+  STATUSES = %w[tba unreleased upcoming current finished].freeze
+
   included do
     include Titleable
     include Rateable
@@ -26,6 +28,9 @@ module Media
     update_index("media##{name.underscore}") { self }
 
     has_and_belongs_to_many :genres
+    has_and_belongs_to_many :categories,
+      before_add: :inc_total_media_count,
+      before_remove: :dec_total_media_count
     has_many :castings, as: 'media'
     has_many :installments, as: 'media'
     has_many :franchises, through: :installments
@@ -44,6 +49,25 @@ module Media
     has_many :favorites, as: 'item', dependent: :destroy,
                          inverse_of: :item
     delegate :year, to: :start_date, allow_nil: true
+
+    # finished: end date has passed
+    # current: currently between start and end date
+    # upcoming: starts within the next 3 months
+    # unreleased: starts in future, outside of upcoming range
+    # tba: dates are to be announced
+    scope :past, -> { where('start_date <= ?', Date.today) }
+    scope :finished, -> { past.where('end_date < ?', Date.today) }
+    scope :current, -> do
+      past.where('end_date >= ? OR end_date IS ?', Date.today, nil)
+    end
+    scope :future, -> { where('start_date > ?', Date.today) }
+    scope :upcoming, -> do
+      future.where('start_date <= ?', Date.today + 3.months)
+    end
+    scope :unreleased, -> do
+      future.where('start_date > ?', Date.today + 3.months)
+    end
+    scope :tba, -> { where('start_date IS ? AND end_date IS ?', nil, nil) }
 
     validates_attachment :poster_image, content_type: {
       content_type: %w[image/jpg image/jpeg image/png]
@@ -64,11 +88,29 @@ module Media
     (end_date || Date.today) - start_date if start_date
   end
 
+  def status
+    return :tba if start_date.nil? && end_date.nil?
+    return :finished if end_date&.past?
+    return :current if start_date&.past? || start_date&.today?
+    return :upcoming if start_date && start_date <= Date.today + 3.months
+    return :unreleased if start_date&.future?
+  end
+
   def feed
     @feed ||= MediaFeed.new(self.class.name, id)
   end
 
   def setup_feed
     feed.setup!
+  end
+
+  private
+
+  def inc_total_media_count(model)
+    Category.increment_counter('total_media_count', model.id)
+  end
+
+  def dec_total_media_count(model)
+    Category.decrement_counter('total_media_count', model.id)
   end
 end

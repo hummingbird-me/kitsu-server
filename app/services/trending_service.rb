@@ -2,6 +2,7 @@ class TrendingService
   EPOCH = Date.new(2030, 1, 1).to_time.to_i
   ITEM_LIMIT = 200
   NETWORK_LIMIT = 20
+  CATEGORY_LIMIT = 20
   TRIM_PROBABILITY = 0.1
 
   attr_reader :namespace, :half_life, :user, :token
@@ -29,6 +30,8 @@ class TrendingService
       update_score(key, id, weight)
       trim(key, limit: NETWORK_LIMIT) if rand < TRIM_PROBABILITY
     end
+
+    handle_trending_categories(id, weight)
   end
 
   def get(limit = 5)
@@ -73,6 +76,24 @@ class TrendingService
     key = "trending:#{ns}"
     key += ":user:#{uid}" if uid
     key
+  end
+
+  def trending_category_key(category_id)
+    ns = namespace
+    ns = ns.table_name if enrichable?
+    key = "trending:#{ns}"
+    key += ":category:#{category_id}"
+    key
+  end
+
+  def handle_trending_categories(id, weight = 1.0)
+    return unless %w[Anime Manga Drama].include?(namespace.name)
+    categories = namespace.includes(:categories).find_by(id: id).categories
+    categories.each do |category|
+      key = trending_category_key(category.id)
+      update_score(key, id, weight)
+      trim(key, limit: CATEGORY_LIMIT) if rand < TRIM_PROBABILITY
+    end
   end
 
   def update_score(key, id, weight = 1.0)

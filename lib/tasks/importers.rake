@@ -1,4 +1,18 @@
 namespace :importers do
+  namespace :anidb do
+    require 'anidb_category_import/category_importer'
+    require 'anidb_category_import/media_importer'
+    desc 'Import Categories'
+    task categories: :environment do |_t|
+      puts 'Importing Categories from AniDB dump'
+      CategoryImporter.new.run!
+    end
+    desc 'Import Media Associated Categories'
+    task media_assoc: :environment do |_t|
+      puts 'Importing Associated Categories from AniDB/Kitsu Genre Mapping'
+      MediaImporter.new.run!
+    end
+  end
   namespace :kitsu do
     desc 'Download only anime posters'
     task :posters, [:quantity] => [:environment] do |_t, args|
