@@ -79,6 +79,7 @@ class LibraryEntry < ApplicationRecord
     dropped: 5
   }
   attr_accessor :imported
+  alias_attribute :kind, :media_type
 
   validates :user, :status, :progress, :reconsume_count, presence: true
   validates :media, polymorphism: { type: Media }, presence: true
