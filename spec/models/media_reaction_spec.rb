@@ -39,7 +39,6 @@ require 'rails_helper'
 RSpec.describe MediaReaction, type: :model do
   subject { build(:media_reaction) }
 
-  it { should belong_to(:media) }
   it { should belong_to(:user) }
   it { should belong_to(:library_entry)}
 end

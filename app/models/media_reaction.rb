@@ -52,6 +52,7 @@ class MediaReaction < ActiveRecord::Base
   resourcify
 
   before_validation do
+    self.media = get_media
     self.progress = library_entry&.progress
   end
 
@@ -62,5 +63,15 @@ class MediaReaction < ActiveRecord::Base
       up_votes_count: up_votes_count,
       to: [media.feed]
     )
+  end
+
+  def get_media
+    if anime.present?
+      anime
+    elsif manga.present?
+      manga
+    elsif drama.present?
+      drama
+    end
   end
 end

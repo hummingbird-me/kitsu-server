@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe MediaReactionPolicy do
   let(:user) { token_for build(:user) }
-  let(:media_reaction) { build(:media_reaction, user: user.resource_owner) }
+  let(:anime) {build(:anime)}
+  let(:media_reaction) { build(:media_reaction, user: user.resource_owner, anime: anime) }
   let(:other) { build(:media_reaction) }
   subject { described_class }
 
