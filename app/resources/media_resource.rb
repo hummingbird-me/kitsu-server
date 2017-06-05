@@ -76,7 +76,7 @@ class MediaResource < BaseResource
   }
   filter :since, apply: ->(records, values, _options) {
     time = values.join.to_time
-    records.where('media.updated_at >= ?', time)
+    records.where('updated_at >= ?', time)
   }
 
   # Common ElasticSearch stuff
