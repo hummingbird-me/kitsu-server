@@ -23,9 +23,9 @@ class MediaAttribute < ActiveRecord::Base
   friendly_id :title, use: %i[slugged finders history]
   resourcify
 
-  has_and_belongs_to_many :anime
-  has_and_belongs_to_many :manga
-  has_and_belongs_to_many :drama
+  has_and_belongs_to_many :anime, join_table: 'anime_media_attributes'
+  has_and_belongs_to_many :manga, join_table: 'manga_media_attributes'
+  has_and_belongs_to_many :drama, join_table: 'dramas_media_attributes'
   has_many :media_attribute_vote, dependent: :destroy
 
   validates :title, presence: true
