@@ -152,7 +152,7 @@ end
 
 # == Route Map
 #
-# I, [2017-06-02T05:53:12.487829 #35414]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-06-05T04:06:59.652139 #15137]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                          Prefix Verb      URI Pattern                                                                               Controller#Action
 #                        user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#show_relationship {:relationship=>"waifu"}
 #                                                 PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#update_relationship {:relationship=>"waifu"}
@@ -808,6 +808,43 @@ end
 #                                                 PATCH     /api/edge/media-relationships/:id(.:format)                                               media_relationships#update
 #                                                 PUT       /api/edge/media-relationships/:id(.:format)                                               media_relationships#update
 #                                                 DELETE    /api/edge/media-relationships/:id(.:format)                                               media_relationships#destroy
+#             media_attribute_relationships_anime GET       /api/edge/media-attributes/:media_attribute_id/relationships/anime(.:format)              media_attributes#show_relationship {:relationship=>"anime"}
+#                                                 POST      /api/edge/media-attributes/:media_attribute_id/relationships/anime(.:format)              media_attributes#create_relationship {:relationship=>"anime"}
+#                                                 PUT|PATCH /api/edge/media-attributes/:media_attribute_id/relationships/anime(.:format)              media_attributes#update_relationship {:relationship=>"anime"}
+#                                                 DELETE    /api/edge/media-attributes/:media_attribute_id/relationships/anime(.:format)              media_attributes#destroy_relationship {:relationship=>"anime"}
+#                           media_attribute_anime GET       /api/edge/media-attributes/:media_attribute_id/anime(.:format)                            anime#get_related_resources {:relationship=>"anime", :source=>"media_attributes"}
+#             media_attribute_relationships_drama GET       /api/edge/media-attributes/:media_attribute_id/relationships/drama(.:format)              media_attributes#show_relationship {:relationship=>"drama"}
+#                                                 POST      /api/edge/media-attributes/:media_attribute_id/relationships/drama(.:format)              media_attributes#create_relationship {:relationship=>"drama"}
+#                                                 PUT|PATCH /api/edge/media-attributes/:media_attribute_id/relationships/drama(.:format)              media_attributes#update_relationship {:relationship=>"drama"}
+#                                                 DELETE    /api/edge/media-attributes/:media_attribute_id/relationships/drama(.:format)              media_attributes#destroy_relationship {:relationship=>"drama"}
+#                           media_attribute_drama GET       /api/edge/media-attributes/:media_attribute_id/drama(.:format)                            dramas#get_related_resources {:relationship=>"drama", :source=>"media_attributes"}
+#             media_attribute_relationships_manga GET       /api/edge/media-attributes/:media_attribute_id/relationships/manga(.:format)              media_attributes#show_relationship {:relationship=>"manga"}
+#                                                 POST      /api/edge/media-attributes/:media_attribute_id/relationships/manga(.:format)              media_attributes#create_relationship {:relationship=>"manga"}
+#                                                 PUT|PATCH /api/edge/media-attributes/:media_attribute_id/relationships/manga(.:format)              media_attributes#update_relationship {:relationship=>"manga"}
+#                                                 DELETE    /api/edge/media-attributes/:media_attribute_id/relationships/manga(.:format)              media_attributes#destroy_relationship {:relationship=>"manga"}
+#                           media_attribute_manga GET       /api/edge/media-attributes/:media_attribute_id/manga(.:format)                            manga#get_related_resources {:relationship=>"manga", :source=>"media_attributes"}
+#                                media_attributes GET       /api/edge/media-attributes(.:format)                                                      media_attributes#index
+#                                                 POST      /api/edge/media-attributes(.:format)                                                      media_attributes#create
+#                                 media_attribute GET       /api/edge/media-attributes/:id(.:format)                                                  media_attributes#show
+#                                                 PATCH     /api/edge/media-attributes/:id(.:format)                                                  media_attributes#update
+#                                                 PUT       /api/edge/media-attributes/:id(.:format)                                                  media_attributes#update
+#                                                 DELETE    /api/edge/media-attributes/:id(.:format)                                                  media_attributes#destroy
+#        media_attribute_vote_relationships_anime GET       /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/anime(.:format)    media_attribute_votes#show_relationship {:relationship=>"anime"}
+#                                                 PUT|PATCH /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/anime(.:format)    media_attribute_votes#update_relationship {:relationship=>"anime"}
+#                                                 DELETE    /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/anime(.:format)    media_attribute_votes#destroy_relationship {:relationship=>"anime"}
+#                      media_attribute_vote_anime GET       /api/edge/media-attribute-votes/:media_attribute_vote_id/anime(.:format)                  anime#get_related_resource {:relationship=>"anime", :source=>"media_attribute_votes"}
+#        media_attribute_vote_relationships_drama GET       /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/drama(.:format)    media_attribute_votes#show_relationship {:relationship=>"drama"}
+#                                                 PUT|PATCH /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/drama(.:format)    media_attribute_votes#update_relationship {:relationship=>"drama"}
+#                                                 DELETE    /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/drama(.:format)    media_attribute_votes#destroy_relationship {:relationship=>"drama"}
+#                      media_attribute_vote_drama GET       /api/edge/media-attribute-votes/:media_attribute_vote_id/drama(.:format)                  dramas#get_related_resource {:relationship=>"drama", :source=>"media_attribute_votes"}
+#        media_attribute_vote_relationships_manga GET       /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/manga(.:format)    media_attribute_votes#show_relationship {:relationship=>"manga"}
+#                                                 PUT|PATCH /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/manga(.:format)    media_attribute_votes#update_relationship {:relationship=>"manga"}
+#                                                 DELETE    /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/manga(.:format)    media_attribute_votes#destroy_relationship {:relationship=>"manga"}
+#                      media_attribute_vote_manga GET       /api/edge/media-attribute-votes/:media_attribute_vote_id/manga(.:format)                  manga#get_related_resource {:relationship=>"manga", :source=>"media_attribute_votes"}
+#         media_attribute_vote_relationships_user GET       /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/user(.:format)     media_attribute_votes#show_relationship {:relationship=>"user"}
+#                                                 PUT|PATCH /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/user(.:format)     media_attribute_votes#update_relationship {:relationship=>"user"}
+#                                                 DELETE    /api/edge/media-attribute-votes/:media_attribute_vote_id/relationships/user(.:format)     media_attribute_votes#destroy_relationship {:relationship=>"user"}
+#                       media_attribute_vote_user GET       /api/edge/media-attribute-votes/:media_attribute_vote_id/user(.:format)                   users#get_related_resource {:relationship=>"user", :source=>"media_attribute_votes"}
 #                           media_attribute_votes GET       /api/edge/media-attribute-votes(.:format)                                                 media_attribute_votes#index
 #                                                 POST      /api/edge/media-attribute-votes(.:format)                                                 media_attribute_votes#create
 #                            media_attribute_vote GET       /api/edge/media-attribute-votes/:id(.:format)                                             media_attribute_votes#show

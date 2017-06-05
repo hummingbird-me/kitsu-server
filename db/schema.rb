@@ -794,6 +794,7 @@ ActiveRecord::Schema.define(version: 20170602065925) do
 
   create_table "media_attribute", force: :cascade do |t|
     t.string   "title",                          null: false
+    t.string   "slug",                           null: false
     t.integer  "high_vote_count",    default: 0, null: false
     t.integer  "neutral_vote_count", default: 0, null: false
     t.integer  "low_vote_count",     default: 0, null: false
@@ -801,6 +802,7 @@ ActiveRecord::Schema.define(version: 20170602065925) do
     t.datetime "updated_at",                     null: false
   end
 
+  add_index "media_attribute", ["slug"], name: "index_media_attribute_on_slug", using: :btree
   add_index "media_attribute", ["title"], name: "index_media_attribute_on_title", using: :btree
 
   create_table "media_attribute_votes", force: :cascade do |t|
@@ -808,11 +810,17 @@ ActiveRecord::Schema.define(version: 20170602065925) do
     t.integer  "media_attribute_id", null: false
     t.integer  "media_id",           null: false
     t.string   "media_type",         null: false
+    t.integer  "anime_id"
+    t.integer  "manga_id"
+    t.integer  "drama_id"
     t.integer  "vote",               null: false
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end
 
+  add_index "media_attribute_votes", ["anime_id"], name: "index_media_attribute_votes_on_anime_id", using: :btree
+  add_index "media_attribute_votes", ["drama_id"], name: "index_media_attribute_votes_on_drama_id", using: :btree
+  add_index "media_attribute_votes", ["manga_id"], name: "index_media_attribute_votes_on_manga_id", using: :btree
   add_index "media_attribute_votes", ["media_attribute_id"], name: "index_media_attribute_votes_on_media_attribute_id", using: :btree
   add_index "media_attribute_votes", ["user_id", "media_id", "media_type", "media_attribute_id"], name: "index_user_media_attribute", unique: true, using: :btree
   add_index "media_attribute_votes", ["user_id"], name: "index_media_attribute_votes_on_user_id", using: :btree
@@ -1372,6 +1380,9 @@ ActiveRecord::Schema.define(version: 20170602065925) do
   add_foreign_key "manga_characters", "manga"
   add_foreign_key "manga_staff", "manga"
   add_foreign_key "manga_staff", "people"
+  add_foreign_key "media_attribute_votes", "anime"
+  add_foreign_key "media_attribute_votes", "dramas"
+  add_foreign_key "media_attribute_votes", "manga"
   add_foreign_key "media_attribute_votes", "users"
   add_foreign_key "media_follows", "users"
   add_foreign_key "post_follows", "posts"
