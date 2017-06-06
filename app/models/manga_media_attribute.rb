@@ -27,7 +27,6 @@
 
 class MangaMediaAttribute < ActiveRecord::Base
   self.table_name = 'manga_media_attributes'
-
   has_many :media_attribute_votes
   belongs_to :manga
   belongs_to :media_attribute

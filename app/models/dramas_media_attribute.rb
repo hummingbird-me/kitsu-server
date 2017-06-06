@@ -27,7 +27,6 @@
 
 class DramasMediaAttribute < ActiveRecord::Base
   self.table_name = 'dramas_media_attributes'
-
   has_many :media_attribute_votes
   belongs_to :drama
   belongs_to :media_attribute

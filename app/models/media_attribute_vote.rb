@@ -34,15 +34,21 @@ class MediaAttributeVote < ActiveRecord::Base
 
   counter_culture :anime_media_attributes,
     column_name: proc { |mav|
-      mav.vote != 'unvoted' && mav.anime_media_attributes ? "#{mav.vote}_vote_count" : nil
+      mav.vote != 'unvoted' &&
+        mav.anime_media_attributes ?
+        "#{mav.vote}_vote_count" : nil
     }
   counter_culture :manga_media_attributes,
     column_name: proc { |mav|
-      mav.vote != 'unvoted' && mav.manga_media_attributes ? "#{mav.vote}_vote_count" : nil
+      mav.vote != 'unvoted' &&
+        mav.manga_media_attributes ?
+        "#{mav.vote}_vote_count" : nil
     }
   counter_culture :dramas_media_attributes,
     column_name: proc { |mav|
-      mav.vote != 'unvoted' && mav.dramas_media_attributes ? "#{mav.vote}_vote_count" : nil
+      mav.vote != 'unvoted' &&
+        mav.dramas_media_attributes ?
+        "#{mav.vote}_vote_count" : nil
     }
 
   before_validation do
@@ -50,13 +56,12 @@ class MediaAttributeVote < ActiveRecord::Base
   end
 
   def get_media
-    puts anime_media_attributes.inspect
     if anime_media_attributes.present?
-      return Anime.where(id: anime_media_attributes.anime_id).first
+      Anime.find_by(id: anime_media_attributes.anime_id)
     elsif manga_media_attributes.present?
-      return Manga.where(id: manga_media_attributes.manga_id).first
+      Manga.find_by(id: manga_media_attributes.manga_id)
     elsif dramas_media_attributes.present?
-      return Drama.where(id: dramas_media_attributes.drama_id).first
+      Drama.find_by(id: dramas_media_attributes.drama_id)
     end
   end
 end

@@ -7,11 +7,11 @@ module MediaAttributesImport
     def associate_anime(attribute)
       anime = []
       Anime.all.each do |a|
-        anime << { anime: a, media_attribute: attribute}
+        anime << { anime: a, media_attribute: attribute }
       end
       
       begin
-       AnimeMediaAttribute.create!(anime)
+        AnimeMediaAttribute.create!(anime)
       rescue
       end
     end
@@ -19,7 +19,7 @@ module MediaAttributesImport
     def associate_drama(attribute)
       dramas = []
       Drama.all.each do |drama|
-        dramas << {drama: drama, media_attribute: attribute}
+        dramas << { drama: drama, media_attribute: attribute }
       end
 
       begin
