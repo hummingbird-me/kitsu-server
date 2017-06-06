@@ -8,6 +8,6 @@ class MediaReactionResource < BaseResource
   has_one :library_entry
   has_many :votes
 
-  filters :created_at, :up_votes_count, 
-  	:user_id, :anime_id, :drama_id, :manga_id
+  filters :created_at, :up_votes_count,
+    :user_id, :anime_id, :drama_id, :manga_id
 end

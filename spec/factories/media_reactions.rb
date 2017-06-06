@@ -20,9 +20,11 @@
 #
 #  index_media_reactions_on_anime_id                             (anime_id)
 #  index_media_reactions_on_drama_id                             (drama_id)
-#  index_media_reactions_on_library_entry_id                     (library_entry_id)
+#  index_media_reactions_on_library_entry_id
+#                                                        (library_entry_id)
 #  index_media_reactions_on_manga_id                             (manga_id)
-#  index_media_reactions_on_media_type_and_media_id_and_user_id  (media_type,media_id,user_id) UNIQUE
+#  index_media_reactions_on_media_type_and_media_id_and_user_id
+#                                      (media_type,media_id,user_id) UNIQUE
 #  index_media_reactions_on_user_id                              (user_id)
 #
 # Foreign Keys
@@ -36,10 +38,10 @@
 
 FactoryGirl.define do
   factory :media_reaction do
-    reaction { Faker::Lorem.characters(140)}
+    reaction { Faker::Lorem.characters(140) }
     association :anime, factory: :anime, strategy: :build
-    association :library_entry, factory: :library_entry, rating: 3.0, progress: 1,
-                strategy: :build
+    association :library_entry, factory: :library_entry, rating: 3.0,
+                                progress: 1, strategy: :build
     association :user, factory: :user, strategy: :build
   end
 end

@@ -20,9 +20,11 @@
 #
 #  index_media_reactions_on_anime_id                             (anime_id)
 #  index_media_reactions_on_drama_id                             (drama_id)
-#  index_media_reactions_on_library_entry_id                     (library_entry_id)
+#  index_media_reactions_on_library_entry_id
+#                                                         (library_entry_id)
 #  index_media_reactions_on_manga_id                             (manga_id)
-#  index_media_reactions_on_media_type_and_media_id_and_user_id  (media_type,media_id,user_id) UNIQUE
+#  index_media_reactions_on_media_type_and_media_id_and_user_id
+#                                       (media_type,media_id,user_id) UNIQUE
 #  index_media_reactions_on_user_id                              (user_id)
 #
 # Foreign Keys
@@ -40,5 +42,5 @@ RSpec.describe MediaReaction, type: :model do
   subject { build(:media_reaction) }
 
   it { should belong_to(:user) }
-  it { should belong_to(:library_entry)}
+  it { should belong_to(:library_entry) }
 end
