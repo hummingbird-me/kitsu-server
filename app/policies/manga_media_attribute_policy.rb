@@ -1,4 +1,4 @@
-class MediaAttributesPolicy < ApplicationPolicy
+class MangaMediaAttributePolicy < ApplicationPolicy
   def create?
     false
   end

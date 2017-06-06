@@ -2,33 +2,25 @@
 #
 # Table name: media_attribute_votes
 #
-#  id                 :integer          not null, primary key
-#  media_type         :string           not null, indexed => [user_id, media_id, media_attribute_id]
-#  vote               :integer          not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  anime_id           :integer          indexed
-#  drama_id           :integer          indexed
-#  manga_id           :integer          indexed
-#  media_attribute_id :integer          not null, indexed, indexed => [user_id, media_id, media_type]
-#  media_id           :integer          not null, indexed => [user_id, media_type, media_attribute_id]
-#  user_id            :integer          not null, indexed, indexed => [media_id, media_type, media_attribute_id]
+#  id                         :integer          not null, primary key
+#  media_type                 :string           not null, indexed => [user_id, media_id]
+#  vote                       :integer          not null
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  anime_media_attributes_id  :integer
+#  dramas_media_attributes_id :integer
+#  manga_media_attributes_id  :integer
+#  media_id                   :integer          not null, indexed => [user_id, media_type]
+#  user_id                    :integer          not null, indexed, indexed => [media_id, media_type]
 #
 # Indexes
 #
-#  index_media_attribute_votes_on_anime_id            (anime_id)
-#  index_media_attribute_votes_on_drama_id            (drama_id)
-#  index_media_attribute_votes_on_manga_id            (manga_id)
-#  index_media_attribute_votes_on_media_attribute_id  (media_attribute_id)
-#  index_media_attribute_votes_on_user_id             (user_id)
-#  index_user_media_attribute                         (user_id,media_id,media_type,media_attribute_id) UNIQUE
+#  index_media_attribute_votes_on_user_id  (user_id)
+#  index_user_media_on_media_attr_votes    (user_id,media_id,media_type) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_39b0c09be9  (user_id => users.id)
-#  fk_rails_49b7b50c01  (anime_id => anime.id)
-#  fk_rails_6eca31c4de  (manga_id => manga.id)
-#  fk_rails_ac232fc1fb  (drama_id => dramas.id)
 #
 
 require 'rails_helper'
@@ -37,5 +29,7 @@ RSpec.describe MediaAttributeVote, type: :model do
   subject { build(:media_attribute_vote) }
 
   it { should belong_to(:user) }
-  it { should belong_to(:media_attribute) }
+  it { should belong_to(:anime_media_attributes) }
+  it { should belong_to(:dramas_media_attributes) }
+  it { should belong_to(:manga_media_attributes) }
 end

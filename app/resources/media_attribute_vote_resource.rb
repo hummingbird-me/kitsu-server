@@ -1,9 +1,9 @@
 class MediaAttributeVoteResource < BaseResource
   attribute :vote
 
-  has_one :anime
-  has_one :drama
-  has_one :manga
+  has_one :anime_media_attributes
+  has_one :manga_media_attributes
+  has_one :dramas_media_attributes
   has_one :user
 
   filters :created_at, :user_id, :anime_id,

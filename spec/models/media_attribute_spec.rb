@@ -2,14 +2,11 @@
 #
 # Table name: media_attribute
 #
-#  id                 :integer          not null, primary key
-#  high_vote_count    :integer          default(0), not null
-#  low_vote_count     :integer          default(0), not null
-#  neutral_vote_count :integer          default(0), not null
-#  slug               :string           not null, indexed
-#  title              :string           not null, indexed
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  id         :integer          not null, primary key
+#  slug       :string           not null, indexed
+#  title      :string           not null, indexed
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 # Indexes
 #

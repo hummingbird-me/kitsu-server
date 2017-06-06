@@ -2,47 +2,47 @@
 #
 # Table name: media_attribute_votes
 #
-#  id                 :integer          not null, primary key
-#  media_type         :string           not null, indexed => [user_id, media_id, media_attribute_id]
-#  vote               :integer          not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  anime_id           :integer          indexed
-#  drama_id           :integer          indexed
-#  manga_id           :integer          indexed
-#  media_attribute_id :integer          not null, indexed, indexed => [user_id, media_id, media_type]
-#  media_id           :integer          not null, indexed => [user_id, media_type, media_attribute_id]
-#  user_id            :integer          not null, indexed, indexed => [media_id, media_type, media_attribute_id]
+#  id                         :integer          not null, primary key
+#  media_type                 :string           not null, indexed => [user_id, media_id]
+#  vote                       :integer          not null
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  anime_media_attributes_id  :integer
+#  dramas_media_attributes_id :integer
+#  manga_media_attributes_id  :integer
+#  media_id                   :integer          not null, indexed => [user_id, media_type]
+#  user_id                    :integer          not null, indexed, indexed => [media_id, media_type]
 #
 # Indexes
 #
-#  index_media_attribute_votes_on_anime_id            (anime_id)
-#  index_media_attribute_votes_on_drama_id            (drama_id)
-#  index_media_attribute_votes_on_manga_id            (manga_id)
-#  index_media_attribute_votes_on_media_attribute_id  (media_attribute_id)
-#  index_media_attribute_votes_on_user_id             (user_id)
-#  index_user_media_attribute                         (user_id,media_id,media_type,media_attribute_id) UNIQUE
+#  index_media_attribute_votes_on_user_id  (user_id)
+#  index_user_media_on_media_attr_votes    (user_id,media_id,media_type) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_39b0c09be9  (user_id => users.id)
-#  fk_rails_49b7b50c01  (anime_id => anime.id)
-#  fk_rails_6eca31c4de  (manga_id => manga.id)
-#  fk_rails_ac232fc1fb  (drama_id => dramas.id)
 #
 
 class MediaAttributeVote < ActiveRecord::Base
   enum vote: %i[unvoted low neutral high]
-  belongs_to :media_attribute, required: true
-  belongs_to :media, polymorphic: true, required: true
   belongs_to :user, required: true
-  belongs_to :anime
-  belongs_to :manga
-  belongs_to :drama
+  belongs_to :media, polymorphic: true, required: true
 
-  counter_culture :media_attribute,
-    column_name: proc { |model|
-      model.vote != 'unvoted' ? "#{model.vote}_vote_count" : nil
+  belongs_to :anime_media_attributes, class_name: 'AnimeMediaAttribute'
+  belongs_to :manga_media_attributes, class_name: 'MangaMediaAttribute'
+  belongs_to :dramas_media_attributes, class_name: 'DramasMediaAttribute'
+
+  counter_culture :anime_media_attributes,
+    column_name: proc { |mav|
+      mav.vote != 'unvoted' && mav.anime_media_attributes ? "#{mav.vote}_vote_count" : nil
+    }
+  counter_culture :manga_media_attributes,
+    column_name: proc { |mav|
+      mav.vote != 'unvoted' && mav.manga_media_attributes ? "#{mav.vote}_vote_count" : nil
+    }
+  counter_culture :dramas_media_attributes,
+    column_name: proc { |mav|
+      mav.vote != 'unvoted' && mav.dramas_media_attributes ? "#{mav.vote}_vote_count" : nil
     }
 
   before_validation do
@@ -50,12 +50,13 @@ class MediaAttributeVote < ActiveRecord::Base
   end
 
   def get_media
-    if anime.present?
-      anime
-    elsif manga.present?
-      manga
-    elsif drama.present?
-      drama
+    puts anime_media_attributes.inspect
+    if anime_media_attributes.present?
+      return Anime.where(id: anime_media_attributes.anime_id).first
+    elsif manga_media_attributes.present?
+      return Manga.where(id: manga_media_attributes.manga_id).first
+    elsif dramas_media_attributes.present?
+      return Drama.where(id: dramas_media_attributes.drama_id).first
     end
   end
 end

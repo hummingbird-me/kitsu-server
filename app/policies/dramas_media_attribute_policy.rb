@@ -1,4 +1,4 @@
-class MediaAttributesPolicy < ApplicationPolicy
+class DramasMediaAttributePolicy < ApplicationPolicy
   def create?
     false
   end
