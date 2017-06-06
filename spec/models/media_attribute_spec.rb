@@ -2,11 +2,14 @@
 #
 # Table name: media_attribute
 #
-#  id         :integer          not null, primary key
-#  slug       :string           not null, indexed
-#  title      :string           not null, indexed
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :integer          not null, primary key
+#  high_title    :string           not null
+#  low_title     :string           not null
+#  neutral_title :string           not null
+#  slug          :string           not null, indexed
+#  title         :string           not null, indexed
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 # Indexes
 #
@@ -19,7 +22,7 @@ require 'rails_helper'
 RSpec.describe MediaAttribute, type: :model do
   subject { build(:media_attribute) }
 
-  it { should have_and_belong_to_many(:anime) }
-  it { should have_and_belong_to_many(:manga) }
-  it { should have_and_belong_to_many(:drama) }
+  it { should have_many(:anime) }
+  it { should have_many(:manga) }
+  it { should have_many(:drama) }
 end

@@ -820,10 +820,13 @@ ActiveRecord::Schema.define(version: 20170602065925) do
   add_index "mappings", ["external_site", "external_id", "media_type", "media_id"], name: "index_mappings_on_external_and_media", unique: true, using: :btree
 
   create_table "media_attribute", force: :cascade do |t|
-    t.string   "title",      null: false
-    t.string   "slug",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "title",         null: false
+    t.string   "high_title",    null: false
+    t.string   "neutral_title", null: false
+    t.string   "low_title",     null: false
+    t.string   "slug",          null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   add_index "media_attribute", ["slug"], name: "index_media_attribute_on_slug", using: :btree

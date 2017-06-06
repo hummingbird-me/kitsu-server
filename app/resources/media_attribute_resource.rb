@@ -1,7 +1,7 @@
 require 'unlimited_paginator'
 
 class MediaAttributeResource < BaseResource
-  attribute :title
+  attributes :title, :high_title, :neutral_title, :low_title
 
   has_many :anime
   has_many :drama

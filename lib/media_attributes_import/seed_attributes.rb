@@ -2,6 +2,23 @@ module MediaAttributesImport
   class Seed
     def initialize
       @init_attributes = %w[Pacing Complexity Tone]
+      @init_attributes_titles = {
+        'Pacing' => {
+            'low' => 'Slow',
+            'neutral' => 'Neutral',
+            'high' => 'Fast'
+        },
+        'Complexity' => {
+            'low' => 'Simple',
+            'neutral' => 'Neutral',
+            'high' => 'Complex'
+        },
+        'Tone' => {
+            'low' => 'Light',
+            'neutral' => 'Neutral',
+            'high' => 'Dark'
+        }
+      }
     end
 
     def associate_anime(attribute)
@@ -33,7 +50,6 @@ module MediaAttributesImport
       Manga.all.each do |m|
         manga << { manga: m, media_attribute: attribute }
       end
-      
 
       begin
         MangaMediaAttribute.create!(manga)
@@ -44,7 +60,10 @@ module MediaAttributesImport
     def create_attributes!
       @init_attributes.each do |attribute|
         media_attribute = MediaAttribute.where(
-          title: attribute.titleize
+          title: attribute.titleize,
+          low_title: @init_attributes_titles[attribute]['low'].titleize,
+          neutral_title: @init_attributes_titles[attribute]['neutral'].titleize,
+          high_title: @init_attributes_titles[attribute]['high'].titleize
         ).first_or_create
         associate_anime(media_attribute)
         associate_drama(media_attribute)

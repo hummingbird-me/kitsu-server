@@ -2,11 +2,14 @@
 #
 # Table name: media_attribute
 #
-#  id         :integer          not null, primary key
-#  slug       :string           not null, indexed
-#  title      :string           not null, indexed
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :integer          not null, primary key
+#  high_title    :string           not null
+#  low_title     :string           not null
+#  neutral_title :string           not null
+#  slug          :string           not null, indexed
+#  title         :string           not null, indexed
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 # Indexes
 #
@@ -20,9 +23,12 @@ class MediaAttribute < ActiveRecord::Base
   friendly_id :title, use: %i[slugged finders history]
   resourcify
 
-  has_and_belongs_to_many :anime, join_table: 'anime_media_attributes'
-  has_and_belongs_to_many :manga, join_table: 'manga_media_attributes'
-  has_and_belongs_to_many :drama, join_table: 'dramas_media_attributes'
+  has_many :anime, through: :anime_media_attributes
+  has_many :anime_media_attributes
+  has_many :manga, through: :manga_media_attributes
+  has_many :manga_media_attributes
+  has_many :drama, through: :dramas_media_attributes
+  has_many :dramas_media_attributes
 
   validates :title, presence: true
 end
