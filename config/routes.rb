@@ -152,7 +152,6 @@ Rails.application.routes.draw do
   end
 end
 
-
 # == Route Map
 #
 # I, [2017-06-06T01:14:10.120734 #21063]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set

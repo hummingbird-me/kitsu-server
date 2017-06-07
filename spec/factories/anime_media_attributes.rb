@@ -31,4 +31,3 @@ FactoryGirl.define do
     media_attribute
   end
 end
-

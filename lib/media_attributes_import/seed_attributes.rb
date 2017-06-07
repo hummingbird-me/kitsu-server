@@ -4,19 +4,19 @@ module MediaAttributesImport
       @init_attributes = %w[Pacing Complexity Tone]
       @init_attributes_titles = {
         'Pacing' => {
-            'low' => 'Slow',
-            'neutral' => 'Neutral',
-            'high' => 'Fast'
+          'low' => 'Slow',
+          'neutral' => 'Neutral',
+          'high' => 'Fast'
         },
         'Complexity' => {
-            'low' => 'Simple',
-            'neutral' => 'Neutral',
-            'high' => 'Complex'
+          'low' => 'Simple',
+          'neutral' => 'Neutral',
+          'high' => 'Complex'
         },
         'Tone' => {
-            'low' => 'Light',
-            'neutral' => 'Neutral',
-            'high' => 'Dark'
+          'low' => 'Light',
+          'neutral' => 'Neutral',
+          'high' => 'Dark'
         }
       }
     end
@@ -26,10 +26,11 @@ module MediaAttributesImport
       Anime.all.each do |a|
         anime << { anime: a, media_attribute: attribute }
       end
-      
+
       begin
         AnimeMediaAttribute.create!(anime)
-      rescue
+      rescue ActiveRecord::RecordNotUnique => rnu
+        handle_record_not_unique(rnu)
       end
     end
 
@@ -41,7 +42,8 @@ module MediaAttributesImport
 
       begin
         DramasMediaAttribute.create!(dramas)
-      rescue
+      rescue ActiveRecord::RecordNotUnique => rnu
+        handle_record_not_unique(rnu)
       end
     end
 
@@ -53,9 +55,12 @@ module MediaAttributesImport
 
       begin
         MangaMediaAttribute.create!(manga)
-      rescue
+      rescue ActiveRecord::RecordNotUnique => rnu
+        handle_record_not_unique(rnu)
       end
     end
+
+    def handle_record_not_unique(rec) end
 
     def create_attributes!
       @init_attributes.each do |attribute|

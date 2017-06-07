@@ -3,15 +3,18 @@
 # Table name: media_attribute_votes
 #
 #  id                         :integer          not null, primary key
-#  media_type                 :string           not null, indexed => [user_id, media_id]
+#  media_type                 :string
+#                             not null, indexed => [user_id, media_id]
 #  vote                       :integer          not null
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #  anime_media_attributes_id  :integer
 #  dramas_media_attributes_id :integer
 #  manga_media_attributes_id  :integer
-#  media_id                   :integer          not null, indexed => [user_id, media_type]
-#  user_id                    :integer          not null, indexed, indexed => [media_id, media_type]
+#  media_id                   :integer
+#                            not null, indexed => [user_id, media_type]
+#  user_id                    :integer
+#                  not null, indexed, indexed => [media_id, media_type]
 #
 # Indexes
 #
@@ -34,28 +37,28 @@ class MediaAttributeVote < ActiveRecord::Base
 
   counter_culture :anime_media_attributes,
     column_name: proc { |mav|
-      mav.vote != 'unvoted' &&
-        mav.anime_media_attributes ?
-        "#{mav.vote}_vote_count" : nil
+      if mav.vote != 'unvoted' && mav.anime_media_attributes
+        "#{mav.vote}_vote_count"
+      end
     }
   counter_culture :manga_media_attributes,
     column_name: proc { |mav|
-      mav.vote != 'unvoted' &&
-        mav.manga_media_attributes ?
-        "#{mav.vote}_vote_count" : nil
+      if mav.vote != 'unvoted' && mav.manga_media_attributes
+        "#{mav.vote}_vote_count"
+      end
     }
   counter_culture :dramas_media_attributes,
     column_name: proc { |mav|
-      mav.vote != 'unvoted' &&
-        mav.dramas_media_attributes ?
-        "#{mav.vote}_vote_count" : nil
+      if mav.vote != 'unvoted' && mav.dramas_media_attributes
+        "#{mav.vote}_vote_count"
+      end
     }
 
   before_validation do
-    self.media = get_media
+    self.media = retrieve_media
   end
 
-  def get_media
+  def retrieve_media
     if anime_media_attributes.present?
       Anime.find_by(id: anime_media_attributes.anime_id)
     elsif manga_media_attributes.present?
