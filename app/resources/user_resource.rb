@@ -26,6 +26,7 @@ class UserResource < BaseResource
   has_many :favorites
   has_many :reviews
   has_many :stats
+  has_many :notification_setting_states
 
   # DEPRECATED: this method just hides the fact that website has moved
   def website

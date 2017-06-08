@@ -1,4 +1,18 @@
 namespace :importers do
+  namespace :notification_settings do
+    require 'notification_import/seed_notification_types'
+    require 'notification_import/seed_user_notification_states'
+    desc 'Import Notification Types'
+    task types: :environment do |_t|
+      puts 'Importing Types'
+      NotificationImport::SeedNotificationTypes.new.run!
+    end
+    desc 'Seed Existing User Notification States'
+    task users: :environment do |_t|
+      puts 'Seeding States'
+      NotificationImport::SeedUserNotificationStates.new.run!
+    end
+  end
   namespace :anidb do
     require 'anidb_category_import/category_importer'
     require 'anidb_category_import/media_importer'

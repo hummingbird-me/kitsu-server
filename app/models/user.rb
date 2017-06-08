@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -23,6 +22,7 @@
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
+#  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
@@ -47,7 +47,8 @@
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
 #  password_digest             :string(255)      default(""), not null
-#  past_names                  :string           default([]), not null, is an Array
+#  past_names                  :string           default([]), not null,
+#                                                          is an Array
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
 #  pro_expires_at              :datetime
@@ -89,7 +90,6 @@
 #
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
-# rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
   include WithCoverImage
@@ -150,6 +150,7 @@ class User < ApplicationRecord
   has_many :site_announcements
   has_many :stats, dependent: :destroy
   has_many :library_events, dependent: :destroy
+  has_many :notification_setting_states, dependent: :destroy
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }, if: :email_changed?
@@ -300,6 +301,15 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
+  def setup_notification_setting_states!
+    notification_settings = NotificationSetting.all
+    notification_setting_states = []
+    notification_settings.each do |ns|
+      notification_setting_states << { notification_setting: ns, user: self }
+    end
+    NotificationSettingState.create(notification_settings)
+  end
+
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
@@ -324,6 +334,9 @@ class User < ApplicationRecord
 
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
+
+    # Set up Notification Settings for User
+    setup_notification_setting_states!
   end
 
   after_save do
