@@ -303,11 +303,12 @@ class User < ApplicationRecord
 
   def setup_notification_setting_states!
     notification_settings = NotificationSetting.all
-    notification_setting_states = []
     notification_settings.each do |ns|
-      notification_setting_states << { notification_setting: ns, user: self }
+      NotificationSettingState.where(
+        notification_setting: ns,
+        user: self
+      ).first_or_create
     end
-    NotificationSettingState.create(notification_settings)
   end
 
   before_destroy do
@@ -334,9 +335,6 @@ class User < ApplicationRecord
 
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
-
-    # Set up Notification Settings for User
-    setup_notification_setting_states!
   end
 
   after_save do
@@ -347,6 +345,11 @@ class User < ApplicationRecord
         GlobalFeed.new.unfollow(profile_feed)
       end
     end
+  end
+
+  after_create do
+    # Set up Notification Settings for User
+    setup_notification_setting_states!
   end
 
   before_update do
