@@ -11,7 +11,8 @@
 #
 # Indexes
 #
-#  index_notification_setting_states_on_notification_setting_id  (notification_setting_id)
+#  index_notification_setting_states_on_notification_setting_id
+#                                         (notification_setting_id)
 #  index_notification_setting_states_on_user_id                  (user_id)
 #
 # Foreign Keys
