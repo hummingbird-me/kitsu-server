@@ -75,6 +75,9 @@ Rails.application.routes.draw do
       get '/recommendations/:namespace', to: 'recommendations#index'
       get '/recommendations/:namespace/realtime', to: 'recommendations#realtime'
 
+      get '/category_recommendations/:namespace', to: 'category_recommendations#index'
+      get '/cateogry_recommendations/:namespace/realtime', to: 'category_recommendations#realtime'
+
       ### People/Characters/Companies
       jsonapi_resources :characters
       jsonapi_resources :people
@@ -148,10 +151,9 @@ Rails.application.routes.draw do
   end
 end
 
-
 # == Route Map
 #
-# I, [2017-05-30T12:54:01.333917 #91180]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-06-08T01:19:16.829277 #37658]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                          Prefix Verb      URI Pattern                                                                               Controller#Action
 #                        user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#show_relationship {:relationship=>"waifu"}
 #                                                 PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                    users#update_relationship {:relationship=>"waifu"}
@@ -913,6 +915,9 @@ end
 #                                                 DELETE    /api/edge/review-likes/:id(.:format)                                                      review_likes#destroy
 #                                                 GET       /api/edge/trending/:namespace(.:format)                                                   trending#index
 #                                                 GET       /api/edge/recommendations/:namespace(.:format)                                            recommendations#index
+#                                                 GET       /api/edge/recommendations/:namespace/realtime(.:format)                                   recommendations#realtime
+#                                                 GET       /api/edge/category_recommendations/:namespace(.:format)                                   category_recommendations#index
+#                                                 GET       /api/edge/cateogry_recommendations/:namespace/realtime(.:format)                          category_recommendations#realtime
 #           character_relationships_primary_media GET       /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#show_relationship {:relationship=>"primary_media"}
 #                                                 PUT|PATCH /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#update_relationship {:relationship=>"primary_media"}
 #                                                 DELETE    /api/edge/characters/:character_id/relationships/primary-media(.:format)                  characters#destroy_relationship {:relationship=>"primary_media"}
