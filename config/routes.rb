@@ -76,7 +76,7 @@ Rails.application.routes.draw do
       get '/recommendations/:namespace/realtime', to: 'recommendations#realtime'
 
       get '/category_recommendations/:namespace', to: 'category_recommendations#index'
-      get '/cateogry_recommendations/:namespace/realtime', to: 'category_recommendations#realtime'
+      get '/category_recommendations/:namespace/realtime', to: 'category_recommendations#realtime'
 
       ### People/Characters/Companies
       jsonapi_resources :characters
