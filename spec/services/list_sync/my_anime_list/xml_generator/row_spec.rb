@@ -8,7 +8,7 @@ RSpec.describe ListSync::MyAnimeList::XmlGenerator::Row do
   before { allow(media).to receive(:mapping_for).and_return(mapping) }
 
   describe '#to_xml' do
-    subject { described_class.new(library_entry).to_xml }
+    subject { Nokogiri::XML(described_class.new(library_entry).to_xml) }
     context 'for an Anime' do
       let(:media) { build(:anime) }
       let(:library_entry) { build(:library_entry, anime: media, media: media) }
