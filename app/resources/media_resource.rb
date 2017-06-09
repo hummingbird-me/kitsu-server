@@ -74,6 +74,10 @@ class MediaResource < BaseResource
     records.send(values[0]) if %w[tba unreleased upcoming current finished]
                                .include? values[0]
   }
+  filter :since, apply: ->(records, values, _options) {
+    time = values.join.to_time
+    records.where('updated_at >= ?', time)
+  }
 
   # Common ElasticSearch stuff
   query :year, NUMERIC_QUERY
