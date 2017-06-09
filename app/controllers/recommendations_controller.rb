@@ -1,7 +1,7 @@
 class RecommendationsController < ApplicationController
   include CustomControllerHelpers
 
-  before_action :authenticate_user
+  before_action :authenticate_user!
   before_action :validate_namespace
 
   def index
@@ -22,10 +22,6 @@ class RecommendationsController < ApplicationController
 
   def realtime_resources
     realtime_recommendations.map { |item| resource_class.new(item, context) }
-  end
-
-  def user
-    doorkeeper_token&.resource_owner
   end
 
   def recommendations_service
@@ -50,12 +46,6 @@ class RecommendationsController < ApplicationController
 
   def resource_class
     "#{namespace}Resource".safe_constantize
-  end
-
-  def authenticate_user
-    unless user
-      render_jsonapi serialize_error(403, 'Must be logged in'), status: 403
-    end
   end
 
   def validate_namespace

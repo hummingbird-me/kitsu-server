@@ -1,7 +1,7 @@
 class CategoryRecommendationsController < ApplicationController
   include CustomControllerHelpers
 
-  before_action :authenticate_user
+  before_action :authenticate_user!
   before_action :validate_namespace
 
   def index
@@ -13,10 +13,6 @@ class CategoryRecommendationsController < ApplicationController
   end
 
   private
-
-  def user
-    doorkeeper_token&.resource_owner
-  end
 
   def recommendations_service
     RecommendationsService::Media.new(user)
@@ -38,16 +34,6 @@ class CategoryRecommendationsController < ApplicationController
 
   def namespace_class
     @namespace_class ||= namespace.safe_constantize
-  end
-
-  def resource_class
-    "#{namespace}Resource".safe_constantize
-  end
-
-  def authenticate_user
-    unless user
-      render_jsonapi serialize_error(403, 'Must be logged in'), status: 403
-    end
   end
 
   def validate_namespace
