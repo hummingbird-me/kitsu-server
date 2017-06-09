@@ -4,7 +4,8 @@
 #
 #  id              :integer          not null, primary key
 #  finished_at     :datetime
-#  media_type      :string           not null, indexed => [user_id], indexed => [user_id, media_id]
+#  media_type      :string           not null, indexed => [user_id],
+#                                    indexed => [user_id, media_id]
 #  notes           :text
 #  nsfw            :boolean          default(FALSE), not null
 #  private         :boolean          default(FALSE), not null, indexed
@@ -23,7 +24,8 @@
 #  drama_id        :integer          indexed
 #  manga_id        :integer          indexed
 #  media_id        :integer          not null, indexed => [user_id, media_type]
-#  user_id         :integer          not null, indexed, indexed => [media_type], indexed => [media_type, media_id], indexed => [status]
+#  user_id         :integer          not null, indexed, indexed => [media_type],
+#                         indexed => [media_type, media_id], indexed => [status]
 #
 # Indexes
 #
@@ -32,9 +34,10 @@
 #  index_library_entries_on_manga_id                             (manga_id)
 #  index_library_entries_on_private                              (private)
 #  index_library_entries_on_user_id                              (user_id)
-#  index_library_entries_on_user_id_and_media_type               (user_id,media_type)
-#  index_library_entries_on_user_id_and_media_type_and_media_id  (user_id,media_type,media_id) UNIQUE
-#  index_library_entries_on_user_id_and_status                   (user_id,status)
+#  index_library_entries_on_user_id_and_media_type     (user_id,media_type)
+#  index_library_entries_on_user_id_and_media_type_and_media_id
+#                                       (user_id,media_type,media_id) UNIQUE
+#  index_library_entries_on_user_id_and_status              (user_id,status)
 #
 
 class LibraryEntry < ApplicationRecord
@@ -48,7 +51,7 @@ class LibraryEntry < ApplicationRecord
   belongs_to :drama
   has_one :review, dependent: :destroy
   has_many :library_events, dependent: :destroy
-  has_many :media_reactions
+  has_one :media_reactions, dependent: :destroy
 
   scope :sfw, -> { where(nsfw: false) }
   scope :by_kind, ->(*kinds) do
