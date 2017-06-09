@@ -33,7 +33,7 @@ module ListSync
             xml.public_send(kind) do
               to_h.each { |k, v| xml.public_send(k, v) }
             end
-          }.doc.root
+          }.doc.root.to_xml
         end
 
         private

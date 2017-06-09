@@ -9,7 +9,7 @@ module ListSync
       end
 
       def to_xml
-        Nokogiri::XML::Builder.new do |xml|
+        Nokogiri::XML::Builder.new { |xml|
           xml.myanimelist do
             xml.myinfo do
               xml.user_export_type export_type
@@ -19,7 +19,7 @@ module ListSync
               xml << Row.new(entry).to_xml
             end
           end
-        end
+        }.to_xml
       end
 
       private
@@ -32,7 +32,7 @@ module ListSync
       end
 
       def library_entries
-        user.library_entries.by_kind(kind)
+        user.library_entries.by_kind(kind).includes(kind)
       end
     end
   end
