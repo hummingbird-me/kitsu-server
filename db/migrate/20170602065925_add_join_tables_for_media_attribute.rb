@@ -3,10 +3,8 @@ class AddJoinTablesForMediaAttribute < ActiveRecord::Migration
     create_table :anime_media_attributes do |t|
       t.references :anime, null: false, index: true,
                            foreign_key: true, required: true
-      ActiveRecord::Base.pluralize_table_names = false
       t.references :media_attribute, null: false, index: true,
                                      foreign_key: true, required: true
-      ActiveRecord::Base.pluralize_table_names = true
       t.integer :high_vote_count, default: 0, null: false
       t.integer :neutral_vote_count, default: 0, null: false
       t.integer :low_vote_count, default: 0, null: false
@@ -17,10 +15,8 @@ class AddJoinTablesForMediaAttribute < ActiveRecord::Migration
     create_table :dramas_media_attributes do |t|
       t.references :drama, null: false, index: true,
                            foreign_key: true, required: true
-      ActiveRecord::Base.pluralize_table_names = false
       t.references :media_attribute, null: false, index: true,
                                      foreign_key: true, required: true
-      ActiveRecord::Base.pluralize_table_names = true
       t.integer :high_vote_count, default: 0, null: false
       t.integer :neutral_vote_count, default: 0, null: false
       t.integer :low_vote_count, default: 0, null: false
@@ -31,10 +27,8 @@ class AddJoinTablesForMediaAttribute < ActiveRecord::Migration
     create_table :manga_media_attributes do |t|
       t.references :manga, null: false, index: true,
                            foreign_key: true, required: true
-      ActiveRecord::Base.pluralize_table_names = false
       t.references :media_attribute, null: false, index: true,
                                      foreign_key: true, required: true
-      ActiveRecord::Base.pluralize_table_names = true
       t.integer :high_vote_count, default: 0, null: false
       t.integer :neutral_vote_count, default: 0, null: false
       t.integer :low_vote_count, default: 0, null: false

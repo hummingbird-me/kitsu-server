@@ -1,6 +1,7 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
-# Table name: media_attribute
+# Table name: media_attributes
 #
 #  id            :integer          not null, primary key
 #  high_title    :string           not null
@@ -13,12 +14,12 @@
 #
 # Indexes
 #
-#  index_media_attribute_on_slug   (slug)
-#  index_media_attribute_on_title  (title)
+#  index_media_attributes_on_slug   (slug)
+#  index_media_attributes_on_title  (title)
 #
+# rubocop:enable Metrics/LineLength
 
 class MediaAttribute < ActiveRecord::Base
-  self.table_name = 'media_attribute'
   extend FriendlyId
   friendly_id :title, use: %i[slugged finders history]
   resourcify

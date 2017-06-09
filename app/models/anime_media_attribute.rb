@@ -20,7 +20,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_88955ab592  (media_attribute_id => media_attribute.id)
+#  fk_rails_88955ab592  (media_attribute_id => media_attributes.id)
 #  fk_rails_c8ff37f0ab  (anime_id => anime.id)
 #
 # rubocop:enable Metrics/LineLength

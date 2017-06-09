@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: media_attribute
+# Table name: media_attributes
 #
 #  id            :integer          not null, primary key
 #  high_title    :string           not null
@@ -13,8 +13,8 @@
 #
 # Indexes
 #
-#  index_media_attribute_on_slug   (slug)
-#  index_media_attribute_on_title  (title)
+#  index_media_attributes_on_slug   (slug)
+#  index_media_attributes_on_title  (title)
 #
 
 require 'rails_helper'

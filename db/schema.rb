@@ -819,19 +819,6 @@ ActiveRecord::Schema.define(version: 20170602065925) do
 
   add_index "mappings", ["external_site", "external_id", "media_type", "media_id"], name: "index_mappings_on_external_and_media", unique: true, using: :btree
 
-  create_table "media_attribute", force: :cascade do |t|
-    t.string   "title",         null: false
-    t.string   "high_title",    null: false
-    t.string   "neutral_title", null: false
-    t.string   "low_title",     null: false
-    t.string   "slug",          null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  add_index "media_attribute", ["slug"], name: "index_media_attribute_on_slug", using: :btree
-  add_index "media_attribute", ["title"], name: "index_media_attribute_on_title", using: :btree
-
   create_table "media_attribute_votes", force: :cascade do |t|
     t.integer  "user_id",                    null: false
     t.integer  "anime_media_attributes_id"
@@ -846,6 +833,19 @@ ActiveRecord::Schema.define(version: 20170602065925) do
 
   add_index "media_attribute_votes", ["user_id", "media_id", "media_type"], name: "index_user_media_on_media_attr_votes", unique: true, using: :btree
   add_index "media_attribute_votes", ["user_id"], name: "index_media_attribute_votes_on_user_id", using: :btree
+
+  create_table "media_attributes", force: :cascade do |t|
+    t.string   "title",         null: false
+    t.string   "high_title",    null: false
+    t.string   "neutral_title", null: false
+    t.string   "low_title",     null: false
+    t.string   "slug",          null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "media_attributes", ["slug"], name: "index_media_attributes_on_slug", using: :btree
+  add_index "media_attributes", ["title"], name: "index_media_attributes_on_title", using: :btree
 
   create_table "media_follows", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -1356,7 +1356,7 @@ ActiveRecord::Schema.define(version: 20170602065925) do
   add_foreign_key "anime_characters", "anime"
   add_foreign_key "anime_characters", "characters"
   add_foreign_key "anime_media_attributes", "anime"
-  add_foreign_key "anime_media_attributes", "media_attribute"
+  add_foreign_key "anime_media_attributes", "media_attributes"
   add_foreign_key "anime_staff", "anime"
   add_foreign_key "anime_staff", "people"
   add_foreign_key "blocks", "users"
@@ -1374,7 +1374,7 @@ ActiveRecord::Schema.define(version: 20170602065925) do
   add_foreign_key "drama_staff", "dramas"
   add_foreign_key "drama_staff", "people"
   add_foreign_key "dramas_media_attributes", "dramas"
-  add_foreign_key "dramas_media_attributes", "media_attribute"
+  add_foreign_key "dramas_media_attributes", "media_attributes"
   add_foreign_key "group_action_logs", "groups"
   add_foreign_key "group_action_logs", "users"
   add_foreign_key "group_bans", "groups"
@@ -1405,7 +1405,7 @@ ActiveRecord::Schema.define(version: 20170602065925) do
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"
   add_foreign_key "manga_media_attributes", "manga"
-  add_foreign_key "manga_media_attributes", "media_attribute"
+  add_foreign_key "manga_media_attributes", "media_attributes"
   add_foreign_key "manga_staff", "manga"
   add_foreign_key "manga_staff", "people"
   add_foreign_key "media_attribute_votes", "users"

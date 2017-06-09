@@ -20,13 +20,12 @@
 #
 # Foreign Keys
 #
-#  fk_rails_2f9d586d2c  (media_attribute_id => media_attribute.id)
+#  fk_rails_2f9d586d2c  (media_attribute_id => media_attributes.id)
 #  fk_rails_396f09ea2e  (drama_id => dramas.id)
 #
 # rubocop:enable Metrics/LineLength
 
 class DramasMediaAttribute < ActiveRecord::Base
-  self.table_name = 'dramas_media_attributes'
   has_many :media_attribute_votes
   belongs_to :drama
   belongs_to :media_attribute

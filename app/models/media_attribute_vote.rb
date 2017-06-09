@@ -1,20 +1,18 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: media_attribute_votes
 #
 #  id                         :integer          not null, primary key
-#  media_type                 :string
-#                             not null, indexed => [user_id, media_id]
+#  media_type                 :string           not null, indexed => [user_id, media_id]
 #  vote                       :integer          not null
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #  anime_media_attributes_id  :integer
 #  dramas_media_attributes_id :integer
 #  manga_media_attributes_id  :integer
-#  media_id                   :integer
-#                            not null, indexed => [user_id, media_type]
-#  user_id                    :integer
-#                  not null, indexed, indexed => [media_id, media_type]
+#  media_id                   :integer          not null, indexed => [user_id, media_type]
+#  user_id                    :integer          not null, indexed, indexed => [media_id, media_type]
 #
 # Indexes
 #
@@ -25,6 +23,7 @@
 #
 #  fk_rails_39b0c09be9  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class MediaAttributeVote < ActiveRecord::Base
   enum vote: %i[unvoted low neutral high]

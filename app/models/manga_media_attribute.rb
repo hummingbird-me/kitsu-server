@@ -20,13 +20,11 @@
 #
 # Foreign Keys
 #
-#  fk_rails_e94250c6cb  (media_attribute_id => media_attribute.id)
+#  fk_rails_e94250c6cb  (media_attribute_id => media_attributes.id)
 #  fk_rails_f3399555e8  (manga_id => manga.id)
-#
 # rubocop:enable Metrics/LineLength
 
 class MangaMediaAttribute < ActiveRecord::Base
-  self.table_name = 'manga_media_attributes'
   has_many :media_attribute_votes
   belongs_to :manga
   belongs_to :media_attribute
