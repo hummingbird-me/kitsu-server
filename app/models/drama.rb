@@ -51,6 +51,7 @@ class Drama < ApplicationRecord
 
   enum subtype: %i[drama movie special]
   has_many :media_attribute, through: :dramas_media_attributes
+  has_many :dramas_media_attributes
 
   has_attached_file :cover_image,
     url: '/:class/:attachment/:id/:style.:content_type_extension'

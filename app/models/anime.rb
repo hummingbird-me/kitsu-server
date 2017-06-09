@@ -60,6 +60,7 @@ class Anime < ApplicationRecord
   has_many :anime_characters, dependent: :destroy
   has_many :anime_staff, dependent: :destroy
   has_many :media_attribute, through: :anime_media_attributes
+  has_many :anime_media_attributes
   alias_attribute :show_type, :subtype
 
   rails_admin { fields :episode_count }
