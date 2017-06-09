@@ -720,6 +720,7 @@ ActiveRecord::Schema.define(version: 20170602065925) do
     t.string   "type",                               null: false
     t.boolean  "sync_to",            default: false, null: false
     t.string   "disabled_reason"
+    t.text     "session_data"
   end
 
   add_index "linked_accounts", ["user_id"], name: "index_linked_accounts_on_user_id", using: :btree
