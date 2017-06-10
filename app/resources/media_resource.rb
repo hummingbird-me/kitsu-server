@@ -84,6 +84,7 @@ class MediaResource < BaseResource
   query :average_rating, NUMERIC_QUERY
   query :user_count, NUMERIC_QUERY
   query :subtype
+  query :status
   query :genres,
     apply: ->(values, _ctx) {
       { match: { genres: { query: values.join(' '), operator: 'and' } } }
