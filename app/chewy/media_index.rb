@@ -61,6 +61,7 @@ class MediaIndex < Chewy::Index
       field :episode_count, type: 'short' # Max of 32k or so is reasonable
       field :average_rating, type: 'float'
       field :start_date, :end_date, :created_at, type: 'date'
+      field :status, type: 'string'
       field :season, type: 'string'
       field :year, type: 'short' # Update this before year 32,000
       field :season_year, type: 'short' # ^
@@ -93,6 +94,7 @@ class MediaIndex < Chewy::Index
       field :chapter_count, type: 'integer' # Manga run for a really long time
       field :average_rating, type: 'float'
       field :start_date, :end_date, :created_at, type: 'date'
+      field :status, type: 'string'
       field :year, type: 'short' # Update this before year 32,000
       field :genres, value: ->(a) { a.genres.map(&:name) }
       field :categories, value: ->(a) { a.categories.map(&:title) }
@@ -126,6 +128,7 @@ class MediaIndex < Chewy::Index
       field :episode_count, type: 'short' # Max of 32k or so is reasonable
       field :average_rating, type: 'float'
       field :start_date, :end_date, :created_at, type: 'date'
+      field :status, type: 'string'
       field :year, type: 'short' # Update this before year 32,000
       field :genres, value: ->(a) { a.genres.map(&:name) }
       field :categories, value: ->(a) { a.categories.map(&:title) }
