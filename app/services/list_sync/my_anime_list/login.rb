@@ -26,7 +26,7 @@ module ListSync
             form.password = @password
           end
           login_response = login_form.submit
-          if login_response.uri == 'login.php'
+          if login_response.uri.to_s.include?('login.php')
             @error_message = login_response.at_css('.badresult').content
             @signed_in = false
           else
