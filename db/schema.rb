@@ -1519,6 +1519,10 @@ ActiveRecord::Schema.define(version: 20171017003438) do
     t.text     "avatar_meta"
     t.text     "cover_image_meta"
     t.citext   "slug"
+    t.boolean  "never_signed_in_email_sent",              default: false,       null: false
+    t.boolean  "first_inactive_email_sent",               default: false,       null: false
+    t.boolean  "second_inactive_email_sent",              default: false,       null: false
+    t.boolean  "third_inactive_email_sent",               default: false,       null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

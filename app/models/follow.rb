@@ -56,5 +56,8 @@ class Follow < ApplicationRecord
   end
 
   # Update onboarding
-  after_create { follower.update_feed_completed! }
+  after_create do
+    follower.update_feed_completed!
+    UserMailer.notification(followed, 5, [follower]).deliver_later
+  end
 end

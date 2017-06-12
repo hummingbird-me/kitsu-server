@@ -31,6 +31,7 @@
 #  email                       :string(255)      default(""), indexed
 #  favorites_count             :integer          default(0), not null
 #  feed_completed              :boolean          default(FALSE), not null
+#  first_inactive_email_sent   :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
 #  gender                      :string
@@ -48,6 +49,7 @@
 #  mal_username                :string(255)
 #  media_reactions_count       :integer          default(0), not null
 #  name                        :string(255)
+#  never_signed_in_email_sent  :boolean          default(FALSE), not null
 #  ninja_banned                :boolean          default(FALSE)
 #  password_digest             :string(255)      default("")
 #  past_names                  :string           default([]), not null, is an Array
@@ -61,6 +63,7 @@
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
 #  reviews_count               :integer          default(0), not null
+#  second_inactive_email_sent  :boolean          default(FALSE), not null
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
@@ -68,6 +71,7 @@
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
+#  third_inactive_email_sent   :boolean          default(FALSE), not null
 #  time_zone                   :string
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
@@ -368,12 +372,35 @@ class User < ApplicationRecord
       # Push it onto the front and limit
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
     end
+
     self.previous_email = nil if confirmed_at_changed?
     if email_changed? && !Rails.env.staging?
       self.previous_email = email_was
       self.confirmed_at = nil
       UserMailer.confirmation(self).deliver_later
+    elsif email_changed == false && confirmed_at_was.nil? && confirmed_at?
+      # send out follow users
+      UserMailer.onboarding_follow_users(self).deliver_later
     end
+
+    if last_sign_in_at_was.nil? && last_sign_in_at?
+      # reset inactivity emails
+      self.first_inactive_email_sent = false
+      self.second_inactive_email_sent = false
+      self.third_inactive_email_sent = false
+      self.never_signed_in_email_sent = false
+    end
+
+    if likes_received_count_changed? && likes_received_count_was.zero?
+      # send notification email for first like
+      related_post_likes_users = PostLikes.where(
+        post: {
+          user: self
+        }
+      ).select(:user)
+      UserMailer.notification(self, 1, related_post_likes_users).deliver_later
+    end
+
     update_profile_completed
     update_feed_completed
   end
