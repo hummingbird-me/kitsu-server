@@ -6,7 +6,9 @@ RSpec.describe ListSync::MyAnimeList::Login do
 
   before do
     stub_request(:get, 'https://myanimelist.net/login.php')
-      .to_return(fixture('my_anime_list/login.html'))
+      .to_return(fixture('my_anime_list/sync/login.html'))
+    stub_request(:get, 'https://myanimelist.net/')
+      .to_return(status: 200)
   end
 
   describe '#success?' do
@@ -31,7 +33,7 @@ RSpec.describe ListSync::MyAnimeList::Login do
     context 'with invalid credentials' do
       before do
         stub_request(:post, /login\.php/)
-          .to_return(fixture('my_anime_list/login_failed.html'))
+          .to_return(fixture('my_anime_list/sync/login_failed.html'))
       end
 
       it 'should return false' do
