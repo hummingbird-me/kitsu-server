@@ -44,7 +44,7 @@ namespace :engagement do
       end
     end
   end
-  namespace notifications: :environment do
+  namespace :notifications do
     desc 'Sending post likes notification emails to users'
     task post_likes: :environment do
       now_time = Time.now

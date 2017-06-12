@@ -378,7 +378,7 @@ class User < ApplicationRecord
       self.previous_email = email_was
       self.confirmed_at = nil
       UserMailer.confirmation(self).deliver_later
-    elsif email_changed == false && confirmed_at_was.nil? && confirmed_at?
+    elsif email_changed? == false && confirmed_at_was.nil? && confirmed_at?
       # send out follow users
       UserMailer.onboarding_follow_users(self).deliver_later
     end
