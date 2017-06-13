@@ -3,6 +3,6 @@ class NotificationSettingResource < BaseResource
     :is_mobile_toggled, :setting_type
 
   has_one :user
-  
-  filters :id, :user_id 
+
+  filters :id, :user_id
 end
