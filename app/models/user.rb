@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -47,8 +48,7 @@
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
 #  password_digest             :string(255)      default(""), not null
-#  past_names                  :string           default([]), not null,
-#                                                          is an Array
+#  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
 #  pro_expires_at              :datetime
@@ -90,6 +90,7 @@
 #
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
   include WithCoverImage
@@ -301,16 +302,6 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
-  def setup_notification_setting_states!
-    notification_settings = NotificationSetting.all
-    notification_settings.each do |ns|
-      NotificationSettingState.where(
-        notification_setting: ns,
-        user: self
-      ).first_or_create
-    end
-  end
-
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
@@ -349,7 +340,7 @@ class User < ApplicationRecord
 
   after_create do
     # Set up Notification Settings for User
-    setup_notification_setting_states!
+    NotificationSetting.setup_notification_settings(self)
   end
 
   before_update do

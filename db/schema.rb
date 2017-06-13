@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607060252) do
+ActiveRecord::Schema.define(version: 20170607055017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,20 +92,6 @@ ActiveRecord::Schema.define(version: 20170607060252) do
 
   add_index "anime_genres", ["anime_id"], name: "index_anime_genres_on_anime_id", using: :btree
   add_index "anime_genres", ["genre_id"], name: "index_anime_genres_on_genre_id", using: :btree
-
-  create_table "anime_media_attributes", force: :cascade do |t|
-    t.integer  "anime_id",                       null: false
-    t.integer  "media_attribute_id",             null: false
-    t.integer  "high_vote_count",    default: 0, null: false
-    t.integer  "neutral_vote_count", default: 0, null: false
-    t.integer  "low_vote_count",     default: 0, null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-  end
-
-  add_index "anime_media_attributes", ["anime_id", "media_attribute_id"], name: "index_anime_media_attribute", unique: true, using: :btree
-  add_index "anime_media_attributes", ["anime_id"], name: "index_anime_media_attributes_on_anime_id", using: :btree
-  add_index "anime_media_attributes", ["media_attribute_id"], name: "index_anime_media_attributes_on_media_attribute_id", using: :btree
 
   create_table "anime_productions", force: :cascade do |t|
     t.integer "anime_id",                null: false
@@ -336,20 +322,6 @@ ActiveRecord::Schema.define(version: 20170607060252) do
     t.integer "drama_id", null: false
     t.integer "genre_id", null: false
   end
-
-  create_table "dramas_media_attributes", force: :cascade do |t|
-    t.integer  "drama_id",                       null: false
-    t.integer  "media_attribute_id",             null: false
-    t.integer  "high_vote_count",    default: 0, null: false
-    t.integer  "neutral_vote_count", default: 0, null: false
-    t.integer  "low_vote_count",     default: 0, null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-  end
-
-  add_index "dramas_media_attributes", ["drama_id", "media_attribute_id"], name: "index_drama_media_attribute", unique: true, using: :btree
-  add_index "dramas_media_attributes", ["drama_id"], name: "index_dramas_media_attributes_on_drama_id", using: :btree
-  add_index "dramas_media_attributes", ["media_attribute_id"], name: "index_dramas_media_attributes_on_media_attribute_id", using: :btree
 
   create_table "episodes", force: :cascade do |t|
     t.integer  "media_id",                                             null: false
@@ -786,20 +758,6 @@ ActiveRecord::Schema.define(version: 20170607060252) do
   add_index "manga_characters", ["manga_id", "character_id"], name: "index_manga_characters_on_manga_id_and_character_id", unique: true, using: :btree
   add_index "manga_characters", ["manga_id"], name: "index_manga_characters_on_manga_id", using: :btree
 
-  create_table "manga_media_attributes", force: :cascade do |t|
-    t.integer  "manga_id",                       null: false
-    t.integer  "media_attribute_id",             null: false
-    t.integer  "high_vote_count",    default: 0, null: false
-    t.integer  "neutral_vote_count", default: 0, null: false
-    t.integer  "low_vote_count",     default: 0, null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-  end
-
-  add_index "manga_media_attributes", ["manga_id", "media_attribute_id"], name: "index_manga_media_attribute", unique: true, using: :btree
-  add_index "manga_media_attributes", ["manga_id"], name: "index_manga_media_attributes_on_manga_id", using: :btree
-  add_index "manga_media_attributes", ["media_attribute_id"], name: "index_manga_media_attributes_on_media_attribute_id", using: :btree
-
   create_table "manga_staff", force: :cascade do |t|
     t.integer "manga_id",  null: false
     t.integer "person_id", null: false
@@ -818,34 +776,6 @@ ActiveRecord::Schema.define(version: 20170607060252) do
   end
 
   add_index "mappings", ["external_site", "external_id", "media_type", "media_id"], name: "index_mappings_on_external_and_media", unique: true, using: :btree
-
-  create_table "media_attribute", force: :cascade do |t|
-    t.string   "title",         null: false
-    t.string   "high_title",    null: false
-    t.string   "neutral_title", null: false
-    t.string   "low_title",     null: false
-    t.string   "slug",          null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  add_index "media_attribute", ["slug"], name: "index_media_attribute_on_slug", using: :btree
-  add_index "media_attribute", ["title"], name: "index_media_attribute_on_title", using: :btree
-
-  create_table "media_attribute_votes", force: :cascade do |t|
-    t.integer  "user_id",                    null: false
-    t.integer  "anime_media_attributes_id"
-    t.integer  "manga_media_attributes_id"
-    t.integer  "dramas_media_attributes_id"
-    t.integer  "media_id",                   null: false
-    t.string   "media_type",                 null: false
-    t.integer  "vote",                       null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-  end
-
-  add_index "media_attribute_votes", ["user_id", "media_id", "media_type"], name: "index_user_media_on_media_attr_votes", unique: true, using: :btree
-  add_index "media_attribute_votes", ["user_id"], name: "index_media_attribute_votes_on_user_id", using: :btree
 
   create_table "media_follows", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -875,22 +805,18 @@ ActiveRecord::Schema.define(version: 20170607060252) do
 
   add_index "not_interesteds", ["user_id"], name: "index_not_interesteds_on_user_id", using: :btree
 
-  create_table "notification_setting_states", force: :cascade do |t|
+  create_table "notification_settings", force: :cascade do |t|
+    t.integer  "setting_type",                           null: false
     t.integer  "user_id",                                null: false
-    t.integer  "notification_setting_id",                null: false
-    t.boolean  "is_toggled",              default: true
+    t.boolean  "is_email_toggled",        default: true
+    t.boolean  "is_web_toggled",          default: true
+    t.boolean  "is_mobile_toggled",       default: true
+    t.boolean  "is_fb_messenger_toggled", default: true
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
   end
 
-  add_index "notification_setting_states", ["notification_setting_id"], name: "index_notification_setting_states_on_notification_setting_id", using: :btree
-  add_index "notification_setting_states", ["user_id"], name: "index_notification_setting_states_on_user_id", using: :btree
-
-  create_table "notification_settings", force: :cascade do |t|
-    t.string   "setting_name", null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
+  add_index "notification_settings", ["user_id"], name: "index_notification_settings_on_user_id", using: :btree
 
   create_table "notifications", force: :cascade do |t|
     t.integer  "user_id"
@@ -1372,8 +1298,6 @@ ActiveRecord::Schema.define(version: 20170607060252) do
   add_foreign_key "anime_castings", "producers", column: "licensor_id"
   add_foreign_key "anime_characters", "anime"
   add_foreign_key "anime_characters", "characters"
-  add_foreign_key "anime_media_attributes", "anime"
-  add_foreign_key "anime_media_attributes", "media_attribute"
   add_foreign_key "anime_staff", "anime"
   add_foreign_key "anime_staff", "people"
   add_foreign_key "blocks", "users"
@@ -1390,8 +1314,6 @@ ActiveRecord::Schema.define(version: 20170607060252) do
   add_foreign_key "drama_characters", "dramas"
   add_foreign_key "drama_staff", "dramas"
   add_foreign_key "drama_staff", "people"
-  add_foreign_key "dramas_media_attributes", "dramas"
-  add_foreign_key "dramas_media_attributes", "media_attribute"
   add_foreign_key "group_action_logs", "groups"
   add_foreign_key "group_action_logs", "users"
   add_foreign_key "group_bans", "groups"
@@ -1421,14 +1343,10 @@ ActiveRecord::Schema.define(version: 20170607060252) do
   add_foreign_key "linked_accounts", "users"
   add_foreign_key "manga_characters", "characters"
   add_foreign_key "manga_characters", "manga"
-  add_foreign_key "manga_media_attributes", "manga"
-  add_foreign_key "manga_media_attributes", "media_attribute"
   add_foreign_key "manga_staff", "manga"
   add_foreign_key "manga_staff", "people"
-  add_foreign_key "media_attribute_votes", "users"
   add_foreign_key "media_follows", "users"
-  add_foreign_key "notification_setting_states", "notification_settings"
-  add_foreign_key "notification_setting_states", "users"
+  add_foreign_key "notification_settings", "users"
   add_foreign_key "post_follows", "posts"
   add_foreign_key "post_follows", "users"
   add_foreign_key "posts", "users"
