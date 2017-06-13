@@ -51,7 +51,7 @@ class LibraryEntry < ApplicationRecord
   belongs_to :drama
   has_one :review, dependent: :destroy
   has_many :library_events, dependent: :destroy
-  has_one :media_reactions, dependent: :destroy
+  has_one :media_reaction, dependent: :destroy
 
   scope :sfw, -> { where(nsfw: false) }
   scope :by_kind, ->(*kinds) do
