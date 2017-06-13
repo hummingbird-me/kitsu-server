@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe NotificationSettingPolicy do
   let(:user) { token_for build(:user) }
-  let(:setting) { build(:setting, user: user.resource_owner) }
-  let(:other) { build(:setting) }
+  let(:setting) { build(:notification_setting, user: user.resource_owner) }
+  let(:other) { build(:notification_setting) }
   subject { described_class }
 
   permissions :update? do
