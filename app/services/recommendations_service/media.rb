@@ -50,29 +50,23 @@ class RecommendationsService
 
     def enrich_category(klass, reccs)
       reccs = reccs.reduce(&:merge)
-      field_name = klass.model_name.i18n_key.to_s
-      field_key = field_name.to_sym
-
-      categories_objects = []
-      reccs.each do |key, val|
+      categories_reccs = []
+      reccs.each_with_index do |(key, val), index|
         val = val.reduce(&:merge)
         media_ids = val.keys.map do |v_key|
           v_key.split(':').last.to_i if v_key.include? klass.model_name
         end
-        media_ids.compact
-        category_object = Category.includes(
-          field_key
-        ).where(
-          field_key => { id: media_ids }
-        ).find_by(id: key.to_i)
-        next unless category_object
-        j_category_object = category_object.as_json(include: field_key)
-        j_category_object[field_name].sort_by do |e|
-          media_ids.index(e[:id]) || media_ids.length
-        end
-        categories_objects << j_category_object
+        media_ids = media_ids.compact
+        media = klass.where(id: media_ids).sort_by { |m| media_ids.index(m.id) }
+        category = Category.find_by(id: key.to_i)
+        next unless category
+        categories_reccs << CategoryRecommendation.new(
+          category: category,
+          media: media,
+          id: index
+        )
       end
-      categories_objects
+      categories_reccs
     end
 
     def enrich(klass, reccs)

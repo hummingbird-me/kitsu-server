@@ -5,14 +5,32 @@ class CategoryRecommendationsController < ApplicationController
   before_action :validate_namespace
 
   def index
-    render_jsonapi recommendations
+    serializer = CategoryRecommendationSerializer.new(
+      CategoryRecommendationResource, include: %w[category media]
+    )
+    render_jsonapi serializer.serialize_to_hash(resources)
   end
 
   def realtime
-    render_jsonapi realtime_recommendations
+    serializer = CategoryRecommendationSerializer.new(
+      CategoryRecommendationResource, include: %w[category media]
+    )
+    render_jsonapi serializer.serialize_to_hash(realtime_resources)
   end
 
   private
+
+  def resources
+    recommendations.map do |item|
+      CategoryRecommendationResource.new(item, context)
+    end
+  end
+
+  def realtime_resources
+    realtime_recommendations.map do |item|
+      CategoryRecommendationResource.new(item, context)
+    end
+  end
 
   def recommendations_service
     RecommendationsService::Media.new(user)
