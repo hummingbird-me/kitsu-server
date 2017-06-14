@@ -806,14 +806,14 @@ ActiveRecord::Schema.define(version: 20170607055017) do
   add_index "not_interesteds", ["user_id"], name: "index_not_interesteds_on_user_id", using: :btree
 
   create_table "notification_settings", force: :cascade do |t|
-    t.integer  "setting_type",                           null: false
-    t.integer  "user_id",                                null: false
-    t.boolean  "is_email_toggled",        default: true
-    t.boolean  "is_web_toggled",          default: true
-    t.boolean  "is_mobile_toggled",       default: true
-    t.boolean  "is_fb_messenger_toggled", default: true
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.integer  "setting_type",                        null: false
+    t.integer  "user_id",                             null: false
+    t.boolean  "email_enabled",        default: true
+    t.boolean  "web_enabled",          default: true
+    t.boolean  "mobile_enabled",       default: true
+    t.boolean  "fb_messenger_enabled", default: true
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   add_index "notification_settings", ["user_id"], name: "index_notification_settings_on_user_id", using: :btree

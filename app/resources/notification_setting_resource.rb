@@ -1,6 +1,6 @@
 class NotificationSettingResource < BaseResource
-  attributes :is_email_toggled, :is_fb_messenger_toggled,
-    :is_mobile_toggled, :setting_type
+  attributes :email_enabled, :fb_messenger_enabled,
+    :mobile_enabled, :web_enabled :setting_type
 
   has_one :user
 
