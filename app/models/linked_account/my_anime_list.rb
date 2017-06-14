@@ -49,6 +49,10 @@ class LinkedAccount
       end
     end
 
+    def list_sync
+      ListSync::MyAnimeList.new(self)
+    end
+
     after_save do
       MyAnimeListListWorker.perform_async(id, user_id) if sync_to?
     end

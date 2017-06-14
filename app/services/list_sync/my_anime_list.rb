@@ -10,9 +10,23 @@ module ListSync
       load_session!
     end
 
-    def sync_library(kind)
-      ListSync::MyAnimeList::XmlUploader.new(agent, library_xml_for(kind))
+    def logged_in?
+      ListSync::MyAnimeList::Login.new(agent, username, password).success?
     end
+
+    def sync!(kind)
+      ListSync::MyAnimeList::XmlUploader.new(agent, library_xml_for(kind)).run!
+    end
+
+    def update!(library_entry)
+      ListSync::MyAnimeList::LibraryUpdater.new(agent, library_entry).run!
+    end
+
+    def delete!(media)
+      ListSync::MyAnimeList::LibraryRemover.new(agent, media).run!
+    end
+
+    private
 
     def library_xml_for(kind)
       ListSync::MyAnimeList::XmlGenerator.new(linked_account.user, kind).to_xml
@@ -37,10 +51,6 @@ module ListSync
 
     def cookie_jar
       ListSync::MyAnimeList::CookieJar.new(@agent.cookie_jar)
-    end
-
-    def logged_in?
-      ListSync::MyAnimeList::Login.new(agent, username, password).success?
     end
   end
 end

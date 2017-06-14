@@ -8,7 +8,7 @@ module ListSync
         @xml = xml
       end
 
-      def upload!
+      def run!
         import_page = @agent.get('https://myanimelist.net/import.php')
         @results_page = import_page.form_with(name: 'importForm') { |form|
           form['csrf_token'] = csrf_token_on(import_page)
@@ -18,6 +18,7 @@ module ListSync
           upload.file_name = 'myanimelist.xml'
           upload.mime_type = 'application/xml'
         }.click_button
+        results
       end
 
       def results
