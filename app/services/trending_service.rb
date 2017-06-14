@@ -43,6 +43,11 @@ class TrendingService
     results_for(key, limit)
   end
 
+  def get_category(id, limit = 5)
+    key = trending_category_key(id)
+    results_for(key, limit)
+  end
+
   def trim(key, limit: 100)
     $redis.with do |conn|
       conn.zremrangebyrank(key, 0, -limit)

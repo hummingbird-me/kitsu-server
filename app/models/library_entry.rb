@@ -166,6 +166,10 @@ class LibraryEntry < ApplicationRecord
   end
 
   before_save do
+    # When progress equals total episodes
+    self.status = :completed if !status_changed? &&
+                                progress == media&.progress_limit
+
     if status_changed? && completed?
       # update progress to the cap
       self.progress = media.progress_limit if media&.progress_limit
@@ -174,9 +178,6 @@ class LibraryEntry < ApplicationRecord
       self.finished_at ||= Time.now unless imported
     end
 
-    # When progress equals total episodes
-    self.status = :completed if !status_changed? &&
-                                progress == media&.progress_limit
     unless imported
       # When progress is changed, update progressed_at
       self.progressed_at = Time.now if progress_changed?

@@ -48,6 +48,9 @@ module Media
       dependent: :destroy
     has_many :favorites, as: 'item', dependent: :destroy,
                          inverse_of: :item
+    has_many :media_attributes,
+      class_name: 'MediaAttribute',
+      dependent: :destroy
     delegate :year, to: :start_date, allow_nil: true
 
     # finished: end date has passed

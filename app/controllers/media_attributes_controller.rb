@@ -1,0 +1,2 @@
+class MediaAttributesController < ApplicationController
+end

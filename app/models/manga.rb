@@ -49,6 +49,8 @@ class Manga < ApplicationRecord
   has_many :chapters
   has_many :manga_characters, dependent: :destroy
   has_many :manga_staff, dependent: :destroy
+  has_many :media_attribute, through: :manga_media_attributes
+  has_many :manga_media_attributes
 
   validates :chapter_count, numericality: { greater_than: 0 }, allow_nil: true
 
@@ -67,5 +69,12 @@ class Manga < ApplicationRecord
       -> { [canonical_title, year] }, # attack-on-titan-2004
       -> { [canonical_title, year, subtype] } # attack-on-titan-2004-doujin
     ]
+  end
+
+  before_save do
+    if chapter_count == 1
+      self.start_date = end_date if start_date.nil? && !end_date.nil?
+      self.end_date = start_date if end_date.nil? && !start_date.nil?
+    end
   end
 end

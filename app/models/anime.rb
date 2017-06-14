@@ -59,6 +59,8 @@ class Anime < ApplicationRecord
   has_many :anime_productions, dependent: :destroy
   has_many :anime_characters, dependent: :destroy
   has_many :anime_staff, dependent: :destroy
+  has_many :media_attribute, through: :anime_media_attributes
+  has_many :anime_media_attributes
   alias_attribute :show_type, :subtype
 
   rails_admin { fields :episode_count }
@@ -109,5 +111,12 @@ class Anime < ApplicationRecord
       max_expansions: 15,
       prefix_length: 2
     }).preload.first
+  end
+
+  before_save do
+    if episode_count == 1
+      self.start_date = end_date if start_date.nil? && !end_date.nil?
+      self.end_date = start_date if end_date.nil? && !start_date.nil?
+    end
   end
 end

@@ -5,19 +5,22 @@ class LibraryEntriesController < ApplicationController
     has_permission = operation_scope.find_each.all? do |entry|
       LibraryEntryPolicy.new(current_user, entry).public_send(operation)
     end
-    unless has_permission
-      return render_jsonapi(serialize_error(401, 'Not permitted')), status: 401
+    if has_permission
+      true
+    else
+      render_jsonapi(serialize_error(401, 'Not permitted'), status: 401)
+      false
     end
   end
 
   def bulk_delete
-    authorize_operation(:destroy?)
+    return unless authorize_operation(:destroy?)
     operation_scope.destroy_all
     render nothing: true, status: 204
   end
 
   def bulk_update
-    authorize_operation(:update?)
+    return unless authorize_operation(:update?)
     entries = operation_scope
     entries.each { |r| r.update(update_params) }
     render json: serialize_entries(entries)

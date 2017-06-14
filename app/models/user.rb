@@ -177,6 +177,7 @@ class User < ApplicationRecord
   validates :password_digest, presence: true
   validates :facebook_id, uniqueness: true, allow_nil: true
 
+  scope :active, ->() { where(deleted_at: nil) }
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
@@ -302,6 +303,7 @@ class User < ApplicationRecord
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
+    Post.only_deleted.where(user_id: id).delete_all
     # Reparent relationships to the "Deleted" user
     posts.update_all(user_id: -10)
     comments.update_all(user_id: -10)
