@@ -22,7 +22,7 @@ module ListSync
       ListSync::MyAnimeList::LibraryUpdater.new(agent, library_entry).run!
     end
 
-    def delete!(media)
+    def destroy!(media)
       ListSync::MyAnimeList::LibraryRemover.new(agent, media).run!
     end
 
