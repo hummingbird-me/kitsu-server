@@ -59,6 +59,11 @@ Rails.application.routes.draw do
       jsonapi_resources :streaming_links
       jsonapi_resources :streamers
       jsonapi_resources :media_relationships
+      jsonapi_resources :media_attributes
+      jsonapi_resources :media_attribute_votes
+      jsonapi_resources :anime_media_attributes
+      jsonapi_resources :dramas_media_attributes
+      jsonapi_resources :manga_media_attributes
       jsonapi_resources :anime_productions
       jsonapi_resources :episodes
       jsonapi_resources :stats
@@ -76,6 +81,10 @@ Rails.application.routes.draw do
       # Trending
       get '/trending/:namespace', to: 'trending#index'
       get '/recommendations/:namespace', to: 'recommendations#index'
+      get '/recommendations/:namespace/realtime', to: 'recommendations#realtime'
+
+      get '/category_recommendations/:namespace', to: 'category_recommendations#index'
+      get '/category_recommendations/:namespace/realtime', to: 'category_recommendations#realtime'
 
       ### People/Characters/Companies
       jsonapi_resources :characters

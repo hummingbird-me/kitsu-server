@@ -1,0 +1,2 @@
+class MediaAttributeVotesController < ApplicationController
+end
