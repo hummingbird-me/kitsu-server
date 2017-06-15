@@ -11,19 +11,28 @@ module ListSync
     end
 
     def logged_in?
-      ListSync::MyAnimeList::Login.new(agent, username, password).success?
+      track_session do
+        ListSync::MyAnimeList::Login.new(agent, username, password).success?
+      end
     end
 
     def sync!(kind)
-      ListSync::MyAnimeList::XmlUploader.new(agent, library_xml_for(kind)).run!
+      track_session do
+        xml = library_xml_for(kind)
+        ListSync::MyAnimeList::XmlUploader.new(agent, xml).run!
+      end
     end
 
     def update!(library_entry)
-      ListSync::MyAnimeList::LibraryUpdater.new(agent, library_entry).run!
+      track_session do
+        ListSync::MyAnimeList::LibraryUpdater.new(agent, library_entry).run!
+      end
     end
 
     def destroy!(media)
-      ListSync::MyAnimeList::LibraryRemover.new(agent, media).run!
+      track_session do
+        ListSync::MyAnimeList::LibraryRemover.new(agent, media).run!
+      end
     end
 
     private
@@ -40,8 +49,12 @@ module ListSync
       linked_account.token
     end
 
+    def track_session
+      yield.tap { save_session! }
+    end
+
     def save_session!
-      linked_account.update(session_data: cookie_jar.dump)
+      linked_account.update!(session_data: cookie_jar.dump)
     end
 
     def load_session!
