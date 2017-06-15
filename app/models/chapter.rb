@@ -38,6 +38,10 @@ class Chapter < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png]
   }
 
+  def feed
+    ChapterFeed.new(id)
+  end
+
   before_save do
     self.synopsis = Sanitize.fragment(synopsis, Sanitize::Config::RESTRICTED)
   end

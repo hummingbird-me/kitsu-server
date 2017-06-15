@@ -74,6 +74,12 @@ class FeedsController < ApplicationController
       return false unless %w[Manga Anime Drama].include?(media_type)
       media = media_type.safe_constantize.find_by(id: media_id)
       media && show?(media)
+    when 'episode'
+      episode = Episode.find(params[:id])
+      show?(episode.anime)
+    when 'chapter'
+      chapter = Chapter.find(params[:id])
+      show?(chapter.manga)
     when 'user', 'user_aggr'
       user = User.find_by(id: params[:id])
       user && show?(user)
