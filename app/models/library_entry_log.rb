@@ -49,4 +49,12 @@ class LibraryEntryLog < ApplicationRecord
       linked_account: linked_account_id
     )
   end
+
+  # Returns a scope of records matching a provided library entry
+  def self.for_entry(library_entry)
+    where(
+      media_type: library_entry.media_type,
+      media_id: library_entry.media_id
+    )
+  end
 end

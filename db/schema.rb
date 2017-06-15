@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170614070503) do
+ActiveRecord::Schema.define(version: 20170615000439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -661,6 +661,7 @@ ActiveRecord::Schema.define(version: 20170614070503) do
     t.datetime "started_at"
     t.datetime "finished_at"
     t.datetime "progressed_at"
+    t.integer  "media_reaction_id"
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -720,6 +721,7 @@ ActiveRecord::Schema.define(version: 20170614070503) do
     t.string   "type",                               null: false
     t.boolean  "sync_to",            default: false, null: false
     t.string   "disabled_reason"
+    t.text     "session_data"
   end
 
   add_index "linked_accounts", ["user_id"], name: "index_linked_accounts_on_user_id", using: :btree
@@ -854,6 +856,39 @@ ActiveRecord::Schema.define(version: 20170614070503) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "media_reaction_votes", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "media_reaction_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "media_reaction_votes", ["media_reaction_id", "user_id"], name: "index_media_reaction_votes_on_media_reaction_id_and_user_id", unique: true, using: :btree
+  add_index "media_reaction_votes", ["media_reaction_id"], name: "index_media_reaction_votes_on_media_reaction_id", using: :btree
+  add_index "media_reaction_votes", ["user_id"], name: "index_media_reaction_votes_on_user_id", using: :btree
+
+  create_table "media_reactions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "media_id",                                 null: false
+    t.string   "media_type",                               null: false
+    t.integer  "anime_id"
+    t.integer  "manga_id"
+    t.integer  "drama_id"
+    t.integer  "library_entry_id"
+    t.integer  "up_votes_count",               default: 0, null: false
+    t.integer  "progress",                     default: 0, null: false
+    t.string   "reaction",         limit: 140
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  add_index "media_reactions", ["anime_id"], name: "index_media_reactions_on_anime_id", using: :btree
+  add_index "media_reactions", ["drama_id"], name: "index_media_reactions_on_drama_id", using: :btree
+  add_index "media_reactions", ["library_entry_id"], name: "index_media_reactions_on_library_entry_id", using: :btree
+  add_index "media_reactions", ["manga_id"], name: "index_media_reactions_on_manga_id", using: :btree
+  add_index "media_reactions", ["media_type", "media_id", "user_id"], name: "index_media_reactions_on_media_type_and_media_id_and_user_id", unique: true, using: :btree
+  add_index "media_reactions", ["user_id"], name: "index_media_reactions_on_user_id", using: :btree
 
   create_table "media_relationships", force: :cascade do |t|
     t.integer "source_id",        null: false
@@ -1409,6 +1444,7 @@ ActiveRecord::Schema.define(version: 20170614070503) do
   add_foreign_key "groups", "group_categories", column: "category_id"
   add_foreign_key "leader_chat_messages", "groups"
   add_foreign_key "leader_chat_messages", "users"
+  add_foreign_key "library_entries", "media_reactions"
   add_foreign_key "library_events", "library_entries"
   add_foreign_key "library_events", "users"
   add_foreign_key "linked_accounts", "users"
@@ -1421,6 +1457,13 @@ ActiveRecord::Schema.define(version: 20170614070503) do
   add_foreign_key "media_attribute_votes", "users"
   add_foreign_key "media_follows", "users"
   add_foreign_key "one_signal_players", "users"
+  add_foreign_key "media_reaction_votes", "media_reactions"
+  add_foreign_key "media_reaction_votes", "users"
+  add_foreign_key "media_reactions", "anime"
+  add_foreign_key "media_reactions", "dramas"
+  add_foreign_key "media_reactions", "library_entries"
+  add_foreign_key "media_reactions", "manga"
+  add_foreign_key "media_reactions", "users"
   add_foreign_key "post_follows", "posts"
   add_foreign_key "post_follows", "users"
   add_foreign_key "posts", "users"

@@ -36,6 +36,7 @@ module Media
     has_many :franchises, through: :installments
     has_many :library_entries, as: 'media', dependent: :destroy,
                                inverse_of: :media
+    has_many :media_reactions, dependent: :destroy
     has_many :mappings, as: 'media', dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
     has_many :media_relationships,
@@ -84,6 +85,10 @@ module Media
       -> { canonical_title },
       -> { titles[:en_jp] }
     ]
+  end
+
+  def mapping_for(site)
+    mappings.where(external_site: site).first
   end
 
   # How long the series ran for, or nil if the start date is unknown

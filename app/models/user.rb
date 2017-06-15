@@ -130,6 +130,7 @@ class User < ApplicationRecord
   has_many :library_entries, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :reviews, dependent: :destroy
+  has_many :media_reactions
   has_many :comment_likes, dependent: :destroy
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
