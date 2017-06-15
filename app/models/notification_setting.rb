@@ -32,7 +32,10 @@ class NotificationSetting < ActiveRecord::Base
     NOTIFICATION_TYPES.each do |st|
       NotificationSetting.where(
         setting_type: st,
-        user: user
+        user: user,
+        fb_messenger_enabled: false,
+        mobile_enabled: false,
+        email_enabled: false
       ).first_or_create
     end
   end
