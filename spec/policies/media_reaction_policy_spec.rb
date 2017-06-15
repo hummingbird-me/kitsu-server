@@ -11,9 +11,6 @@ RSpec.describe MediaReactionPolicy do
   subject { described_class }
 
   permissions :update? do
-    it('should not allow users') {
-      should_not permit(user, media_reaction)
-    }
     it('should not allow anons') {
       should_not permit(nil, media_reaction)
     }
