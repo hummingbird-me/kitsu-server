@@ -42,7 +42,6 @@ RSpec.describe OneSignalNotificationWorker do
       end
     end
 
-
     context 'when user does not subscribe to one signal' do
       let!(:target) { FactoryGirl.create(:user, id: 1) }
 

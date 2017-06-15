@@ -25,7 +25,7 @@ RSpec.describe OneSignalNotificationService do
       let!(:players) do
         FactoryGirl.create_list(:user, 2, :subscribed_to_one_signal)
       end
-      let(:player_ids) { players.flat_map { |p| p.one_signal_player_ids } }
+      let(:player_ids) { players.flat_map(&:one_signal_player_ids) }
       let(:service) do
         OneSignalNotificationService.new({ en: 'English message' }, player_ids)
       end
@@ -37,7 +37,7 @@ RSpec.describe OneSignalNotificationService do
       let!(:players) do
         FactoryGirl.create_list(:user, 2, :subscribed_to_one_signal)
       end
-      let(:player_ids) { players.flat_map { |p| p.one_signal_player_ids } }
+      let(:player_ids) { players.flat_map(&:one_signal_player_ids) }
       let(:service) do
         OneSignalNotificationService.new(
           { en: 'English message' },
@@ -58,7 +58,7 @@ RSpec.describe OneSignalNotificationService do
     let!(:players) do
       FactoryGirl.create_list(:user, 4, :subscribed_to_one_signal)
     end
-    let(:player_ids) { players.flat_map { |p| p.one_signal_player_ids } }
+    let(:player_ids) { players.flat_map(&:one_signal_player_ids) }
     let(:service) do
       OneSignalNotificationService.new({ en: 'English message' }, player_ids)
     end
@@ -106,7 +106,7 @@ RSpec.describe OneSignalNotificationService do
     let!(:players) do
       FactoryGirl.create_list(:user, 4, :subscribed_to_one_signal)
     end
-    let(:player_ids) { players.flat_map { |p| p.one_signal_player_ids } }
+    let(:player_ids) { players.flat_map(&:one_signal_player_ids) }
     let(:service) do
       OneSignalNotificationService.new({ en: 'English message' }, player_ids)
     end
@@ -121,7 +121,8 @@ RSpec.describe OneSignalNotificationService do
       end
 
       it 'should remove the one signal ids from the user' do
-        expect(OneSignalPlayer.where('player_id IN (?)', invalid_player_ids)).to be_empty
+        expect(OneSignalPlayer.where('player_id IN (?)', invalid_player_ids))
+          .to be_empty
         expect(OneSignalPlayer.all).not_to be_empty
       end
     end

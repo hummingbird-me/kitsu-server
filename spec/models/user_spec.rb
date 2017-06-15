@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -89,6 +90,7 @@
 #
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 
@@ -191,13 +193,15 @@ RSpec.describe User, type: :model do
   end
 
   describe '#one_signal_player_ids' do
-    it 'should return empty array when user does not subscribed to one singal' do
+    it 'should return empty array when not subscribed to one signal' do
       expect(persisted_user.one_signal_player_ids).to be_empty
     end
 
     it 'should return array of user one signal player ids' do
-      web = FactoryGirl.create(:one_signal_player, user: persisted_user)
-      mobile = FactoryGirl.create(:one_signal_player, platform: :mobile, user: persisted_user)
+      FactoryGirl.create(:one_signal_player, user: persisted_user)
+      FactoryGirl.create(:one_signal_player,
+        platform: :mobile,
+        user: persisted_user)
       expect(persisted_user.one_signal_player_ids.length).to eq(2)
     end
   end
