@@ -25,4 +25,12 @@
 class MediaReactionVote < ActiveRecord::Base
   belongs_to :media_reaction, required: true, counter_cache: :up_votes_count
   belongs_to :user, required: true
+
+  validate :vote_on_self
+
+  def vote_on_self
+  	if media_reaction.user == user
+  		errors.add(:user, 'You can not vote for yourself')
+  	end
+  end
 end
