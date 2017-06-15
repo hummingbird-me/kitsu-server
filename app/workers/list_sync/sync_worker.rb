@@ -10,7 +10,7 @@ module ListSync
       entries.map do |le|
         LibraryEntryLog.create_for(:update, le, linked_account)
       end
-      pending_logs = LibraryEntryLog.for_entry(library_entry).pending
+      pending_logs = LibraryEntryLog.pending
 
       linked_account.list_sync.sync!(:anime)
       linked_account.list_sync.sync!(:manga)

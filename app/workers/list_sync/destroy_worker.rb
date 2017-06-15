@@ -4,8 +4,11 @@ module ListSync
     sidekiq_options retry: 3, queue: 'sync'
 
     def perform(linked_account_id, media_type, media_id)
-      pending_logs = LibraryEntryLog.for_entry(library_entry).pending
       linked_account = LinkedAccount.find(linked_account_id)
+      pending_logs = LibraryEntryLog.where(media_type: media_type,
+                                           media_id: media_id,
+                                           linked_account_id: linked_account_id)
+                                    .pending
 
       media_class = media_type.safe_constantize
       media = media_class.find(media_id)
