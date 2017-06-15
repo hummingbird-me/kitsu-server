@@ -23,6 +23,7 @@
 #  anime_id        :integer          indexed
 #  drama_id        :integer          indexed
 #  manga_id        :integer          indexed
+#  media_reaction_id :integer
 #  media_id        :integer          not null, indexed => [user_id, media_type]
 #  user_id         :integer          not null, indexed, indexed => [media_type],
 #                         indexed => [media_type, media_id], indexed => [status]
@@ -39,6 +40,10 @@
 #                                       (user_id,media_type,media_id) UNIQUE
 #  index_library_entries_on_user_id_and_status              (user_id,status)
 #
+# Foreign Keys
+#
+#  fk_rails_a7e4cb3aba  (media_reaction_id => media_reactions.id)
+#
 
 class LibraryEntry < ApplicationRecord
   VALID_RATINGS = (2..20).to_a.freeze
@@ -50,8 +55,8 @@ class LibraryEntry < ApplicationRecord
   belongs_to :manga
   belongs_to :drama
   has_one :review, dependent: :destroy
-  has_many :library_events, dependent: :destroy
   has_one :media_reaction, dependent: :destroy
+  has_many :library_events, dependent: :destroy
 
   scope :sfw, -> { where(nsfw: false) }
   scope :by_kind, ->(*kinds) do

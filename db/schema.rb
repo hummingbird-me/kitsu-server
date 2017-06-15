@@ -10,7 +10,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 20170601214239) do
+
+ActiveRecord::Schema.define(version: 20170615000439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -632,6 +633,7 @@ ActiveRecord::Schema.define(version: 20170601214239) do
     t.datetime "started_at"
     t.datetime "finished_at"
     t.datetime "progressed_at"
+    t.integer  "media_reaction_id"
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -1357,6 +1359,7 @@ ActiveRecord::Schema.define(version: 20170601214239) do
   add_foreign_key "groups", "group_categories", column: "category_id"
   add_foreign_key "leader_chat_messages", "groups"
   add_foreign_key "leader_chat_messages", "users"
+  add_foreign_key "library_entries", "media_reactions"
   add_foreign_key "library_events", "library_entries"
   add_foreign_key "library_events", "users"
   add_foreign_key "linked_accounts", "users"
