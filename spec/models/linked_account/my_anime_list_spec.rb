@@ -7,6 +7,7 @@
 #  disabled_reason    :string
 #  encrypted_token    :string
 #  encrypted_token_iv :string
+#  session_data       :text
 #  share_from         :boolean          default(FALSE), not null
 #  share_to           :boolean          default(FALSE), not null
 #  sync_to            :boolean          default(FALSE), not null
@@ -29,32 +30,34 @@
 require 'rails_helper'
 
 RSpec.describe LinkedAccount::MyAnimeList do
-  subject { described_class.new }
-
-  before do
-    host = MyAnimeListSyncService::ATARASHII_API_HOST
-
-    stub_request(:get, "#{host}account/verify_credentials")
-      .with(
-        headers: {
-          Authorization: 'Basic dG95aGFtbWVyZWQ6ZmFrZWZha2U='
-        }
-      )
-      .to_return(status: 200)
-  end
-
   context 'validates' do
     describe '#verify_mal_credentials' do
-      context 'with the server returning 200' do
-        it 'should pass validation' do
+      context 'with valid login' do
+        it 'should have no errors' do
+          list_sync = instance_double(ListSync::MyAnimeList)
           subject = described_class.new(
-            sync_to: true,
             type: 'LinkedAccount::MyAnimeList',
             external_user_id: 'toyhammered',
             token: 'fakefake'
           )
+          allow(subject).to receive(:list_sync).and_return(list_sync)
+          expect(list_sync).to receive(:logged_in?).and_return(true)
           subject.valid?
           expect(subject.errors[:token]).to be_empty
+        end
+      end
+      context 'with invalid login' do
+        it 'should have an error' do
+          list_sync = instance_double(ListSync::MyAnimeList)
+          subject = described_class.new(
+            type: 'LinkedAccount::MyAnimeList',
+            external_user_id: 'toyhammered',
+            token: 'fakefake'
+          )
+          allow(subject).to receive(:list_sync).and_return(list_sync)
+          expect(list_sync).to receive(:logged_in?).and_return(false)
+          subject.valid?
+          expect(subject.errors[:token]).not_to be_empty
         end
       end
     end
