@@ -50,6 +50,7 @@ gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
 gem 'jsonapi-resources', '0.9.0'
+gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
@@ -58,7 +59,6 @@ gem 'stream-ruby', '~> 2.5.4' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'typhoeus' # Parallelize scraping tasks
-gem 'mechanize' # Automating interaction with websites
 
 # Rack Middleware
 gem 'rack-attack'
