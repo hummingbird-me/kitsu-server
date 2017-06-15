@@ -58,6 +58,10 @@ class MediaReaction < ActiveRecord::Base
     self.progress = library_entry&.progress
   end
 
+  before_update do
+    votes.destroy if reaction_changed?
+  end
+
   def stream_activity
     user.profile_feed.activities.new(
       progress: progress,

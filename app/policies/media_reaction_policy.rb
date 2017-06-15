@@ -2,10 +2,7 @@ class MediaReactionPolicy < ApplicationPolicy
   def create?
     record.user == user
   end
-
-  def update?
-    false
-  end
+  alias_method :update?, :create?
 
   def destroy?
     record.try(:user) == user || is_admin?
