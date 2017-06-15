@@ -4,10 +4,13 @@ class OneSignalNotificationWorker
 
   def perform(notification)
     service = GetstreamWebhookService.new(notification)
-    return unless service.feed_target&.one_signal_id
+    player_ids = service.feed_target&.one_signal_player_ids
+
+    return if player_ids.blank?
+
     one_signal_service = OneSignalNotificationService.new(
       service.stringify_activity,
-      [service.feed_target.one_signal_id],
+      player_ids,
       url: service.feed_url,
       chrome_web_icon: 'https://media.kitsu.io/kitsu-256.png'
     )

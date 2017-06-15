@@ -34,6 +34,15 @@ RSpec.describe OneSignalNotificationWorker do
       end
     end
 
+    context 'when user not found in our system' do
+      it 'should not initialize one signal notification service' do
+        service_class = double('OneSignalNotificationService')
+        expect(service_class).not_to receive(:new)
+        OneSignalNotificationWorker.perform_async(request)
+      end
+    end
+
+
     context 'when user does not subscribe to one signal' do
       let!(:target) { FactoryGirl.create(:user, id: 1) }
 

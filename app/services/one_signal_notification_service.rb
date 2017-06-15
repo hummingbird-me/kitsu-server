@@ -38,14 +38,14 @@ class OneSignalNotificationService
   def check_and_process_invalids(res)
     return unless res.key?(:errors)
     errors = res[:errors]
+    invalid_player_ids = []
     if errors.is_a?(Hash) && errors.key?(:invalid_player_ids)
       # Some one signal player ids are invalid
-      players = User.where('one_signal_id IN (?)', errors[:invalid_player_ids])
+      invalid_player_ids = errors[:invalid_player_ids]
     else
-      players = User.where('one_signal_id IN (?)', player_ids)
+      invalid_player_ids = player_ids
     end
-
-    players.update_all(one_signal_id: nil)
+    OneSignalPlayer.where('player_id IN (?)', invalid_player_ids).destroy_all
   end
 
   def app_id

@@ -155,7 +155,7 @@ end
 
 # == Route Map
 #
-# I, [2017-06-06T01:14:10.120734 #21063]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-06-15T08:15:10.550310 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -220,6 +220,11 @@ end
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/stats(.:format)                                                     users#update_relationship {:relationship=>"stats"}
 #                                                            DELETE    /api/edge/users/:user_id/relationships/stats(.:format)                                                     users#destroy_relationship {:relationship=>"stats"}
 #                                                 user_stats GET       /api/edge/users/:user_id/stats(.:format)                                                                   stats#get_related_resources {:relationship=>"stats", :source=>"users"}
+#                      user_relationships_one_signal_players GET       /api/edge/users/:user_id/relationships/one-signal-players(.:format)                                        users#show_relationship {:relationship=>"one_signal_players"}
+#                                                            POST      /api/edge/users/:user_id/relationships/one-signal-players(.:format)                                        users#create_relationship {:relationship=>"one_signal_players"}
+#                                                            PUT|PATCH /api/edge/users/:user_id/relationships/one-signal-players(.:format)                                        users#update_relationship {:relationship=>"one_signal_players"}
+#                                                            DELETE    /api/edge/users/:user_id/relationships/one-signal-players(.:format)                                        users#destroy_relationship {:relationship=>"one_signal_players"}
+#                                    user_one_signal_players GET       /api/edge/users/:user_id/one-signal-players(.:format)                                                      one_signal_players#get_related_resources {:relationship=>"one_signal_players", :source=>"users"}
 #                                                      users GET       /api/edge/users(.:format)                                                                                  users#index
 #                                                            POST      /api/edge/users(.:format)                                                                                  users#create
 #                                                       user GET       /api/edge/users/:id(.:format)                                                                              users#show
@@ -1431,6 +1436,7 @@ end
 #                                                new_session GET       /api/sessions/new(.:format)                                                                                sessions#new
 #                                              hooks_youtube GET       /api/hooks/youtube(.:format)                                                                               webhooks#youtube_verify
 #                                                            POST      /api/hooks/youtube(.:format)                                                                               webhooks#youtube_notify
+#                                            hooks_getstream POST      /api/hooks/getstream(.:format)                                                                             webhooks#getstream_firehose
 #                                             user__prodsync POST      /api/user/_prodsync(.:format)                                                                              users#prod_sync
 #                                                            GET       /api/oauth/authorize/:code(.:format)                                                                       doorkeeper/authorizations#show
 #                                        oauth_authorization GET       /api/oauth/authorize(.:format)                                                                             doorkeeper/authorizations#new

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602065925) do
+ActiveRecord::Schema.define(version: 20170614070503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -932,6 +932,16 @@ ActiveRecord::Schema.define(version: 20170602065925) do
   add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "one_signal_players", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "player_id"
+    t.integer  "platform"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "one_signal_players", ["user_id"], name: "index_one_signal_players_on_user_id", using: :btree
+
   create_table "partner_codes", force: :cascade do |t|
     t.integer  "partner_deal_id",             null: false
     t.string   "code",            limit: 255, null: false
@@ -1295,12 +1305,10 @@ ActiveRecord::Schema.define(version: 20170602065925) do
     t.integer  "rating_system",                           default: 0,           null: false
     t.integer  "theme",                                   default: 0,           null: false
     t.datetime "deleted_at"
-    t.string   "one_signal_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["facebook_id"], name: "index_users_on_facebook_id", unique: true, using: :btree
-  add_index "users", ["one_signal_id"], name: "index_users_on_one_signal_id", using: :btree
   add_index "users", ["to_follow"], name: "index_users_on_to_follow", using: :btree
   add_index "users", ["waifu_id"], name: "index_users_on_waifu_id", using: :btree
 
@@ -1412,6 +1420,7 @@ ActiveRecord::Schema.define(version: 20170602065925) do
   add_foreign_key "manga_staff", "people"
   add_foreign_key "media_attribute_votes", "users"
   add_foreign_key "media_follows", "users"
+  add_foreign_key "one_signal_players", "users"
   add_foreign_key "post_follows", "posts"
   add_foreign_key "post_follows", "users"
   add_foreign_key "posts", "users"

@@ -25,7 +25,7 @@ RSpec.describe OneSignalNotificationService do
       let!(:players) do
         FactoryGirl.create_list(:user, 2, :subscribed_to_one_signal)
       end
-      let(:player_ids) { players.map { |p| p&.one_signal_id }.compact }
+      let(:player_ids) { players.flat_map { |p| p.one_signal_player_ids } }
       let(:service) do
         OneSignalNotificationService.new({ en: 'English message' }, player_ids)
       end
@@ -37,7 +37,7 @@ RSpec.describe OneSignalNotificationService do
       let!(:players) do
         FactoryGirl.create_list(:user, 2, :subscribed_to_one_signal)
       end
-      let(:player_ids) { players.map { |p| p&.one_signal_id }.compact }
+      let(:player_ids) { players.flat_map { |p| p.one_signal_player_ids } }
       let(:service) do
         OneSignalNotificationService.new(
           { en: 'English message' },
@@ -58,7 +58,7 @@ RSpec.describe OneSignalNotificationService do
     let!(:players) do
       FactoryGirl.create_list(:user, 4, :subscribed_to_one_signal)
     end
-    let(:player_ids) { players.map { |p| p&.one_signal_id }.compact }
+    let(:player_ids) { players.flat_map { |p| p.one_signal_player_ids } }
     let(:service) do
       OneSignalNotificationService.new({ en: 'English message' }, player_ids)
     end
@@ -106,21 +106,23 @@ RSpec.describe OneSignalNotificationService do
     let!(:players) do
       FactoryGirl.create_list(:user, 4, :subscribed_to_one_signal)
     end
-    let(:player_ids) { players.map { |p| p&.one_signal_id }.compact }
+    let(:player_ids) { players.flat_map { |p| p.one_signal_player_ids } }
     let(:service) do
       OneSignalNotificationService.new({ en: 'English message' }, player_ids)
     end
 
     context 'with some invalid ids' do
+      let(:invalid_player_ids) { player_ids.first(2) }
       before do
         service.send(:check_and_process_invalids, errors: {
-          invalid_player_ids: player_ids
+          invalid_player_ids: invalid_player_ids
         })
         players.each(&:reload)
       end
 
-      it 'should remove the one signal id from the user' do
-        expect(players.first(2).map { |p| p&.one_signal_id }.compact).to eq([])
+      it 'should remove the one signal ids from the user' do
+        expect(OneSignalPlayer.where('player_id IN (?)', invalid_player_ids)).to be_empty
+        expect(OneSignalPlayer.all).not_to be_empty
       end
     end
 
@@ -131,8 +133,8 @@ RSpec.describe OneSignalNotificationService do
         players.each(&:reload)
       end
 
-      it 'should remove the one signal id from the user' do
-        expect(players.map { |p| p&.one_signal_id }.compact).to eq([])
+      it 'should remove the one signal ids from the user' do
+        expect(OneSignalPlayer.all).to be_empty
       end
     end
   end
