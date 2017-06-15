@@ -166,6 +166,10 @@ class LibraryEntry < ApplicationRecord
   end
 
   before_save do
+    # When progress equals total episodes
+    self.status = :completed if !status_changed? &&
+                                progress == media&.progress_limit
+
     if status_changed? && completed?
       # update progress to the cap
       self.progress = media.progress_limit if media&.progress_limit
@@ -174,9 +178,6 @@ class LibraryEntry < ApplicationRecord
       self.finished_at ||= Time.now unless imported
     end
 
-    # When progress equals total episodes
-    self.status = :completed if !status_changed? &&
-                                progress == media&.progress_limit
     unless imported
       # When progress is changed, update progressed_at
       self.progressed_at = Time.now if progress_changed?
@@ -208,14 +209,6 @@ class LibraryEntry < ApplicationRecord
 
     media.trending_vote(user, 0.5) if progress_changed?
     media.trending_vote(user, 1.0) if status_changed?
-  end
-
-  after_commit(on: :create) do
-    sync_entry(:create) # mal exporter
-  end
-
-  after_commit(on: :update) do
-    sync_entry(:update) # mal exporter
   end
 
   after_create do
@@ -254,7 +247,6 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_destroy do
-    sync_entry(:delete) # mal exporter
     # Stat STI
     case kind
     when :anime
@@ -270,31 +262,26 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  after_commit(on: :create, if: :sync_to_mal?) do
+    LibraryEntryLog.create_for(:create, self, myanimelist_linked_account)
+    ListSync::UpdateWorker.perform_async(myanimelist_linked_account, id)
+  end
+
+  after_commit(on: :update, if: :sync_to_mal?) do
+    LibraryEntryLog.create_for(:update, self, myanimelist_linked_account)
+    ListSync::UpdateWorker.perform_async(myanimelist_linked_account, id)
+  end
+
+  after_commit(on: :destroy, if: :sync_to_mal?) do
+    LibraryEntryLog.create_for(:destroy, self, myanimelist_linked_account)
+    ListSync::DestroyWorker.perform_async(myanimelist_linked_account,
+      media_type, media_id)
+  end
+
   def sync_to_mal?
     return unless media_type.in? %w[Anime Manga]
 
     myanimelist_linked_account.present?
-  end
-
-  def sync_entry(method)
-    return unless sync_to_mal?
-
-    # create log
-    library_entry_log = LibraryEntryLog.create_for(
-      method, self, myanimelist_linked_account
-    )
-
-    MyAnimeListSyncWorker.perform_async(
-      # for create & update
-      library_entry_id: id,
-      # for delete
-      user_id: user_id,
-      media_id: media_id,
-      media_type: media_type,
-      # for all
-      method: method,
-      library_entry_log_id: library_entry_log.id
-    )
   end
 
   def myanimelist_linked_account

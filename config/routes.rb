@@ -59,6 +59,11 @@ Rails.application.routes.draw do
       jsonapi_resources :streaming_links
       jsonapi_resources :streamers
       jsonapi_resources :media_relationships
+      jsonapi_resources :media_attributes
+      jsonapi_resources :media_attribute_votes
+      jsonapi_resources :anime_media_attributes
+      jsonapi_resources :dramas_media_attributes
+      jsonapi_resources :manga_media_attributes
       jsonapi_resources :anime_productions
       jsonapi_resources :episodes
       jsonapi_resources :stats
@@ -1359,42 +1364,3 @@ end
 #                    oauth_authorized_application DELETE    /api/oauth/authorized_applications/:id(.:format)                                          doorkeeper/authorized_applications#destroy
 #                                oauth_token_info GET       /api/oauth/token/info(.:format)                                                           doorkeeper/token_info#show
 #                                            root GET       /api(.:format)                                                                            home#index
-#
-# Routes for RailsAdmin::Engine:
-#    dashboard GET         /                                      rails_admin/main#dashboard
-#        index GET|POST    /:model_name(.:format)                 rails_admin/main#index
-#          new GET|POST    /:model_name/new(.:format)             rails_admin/main#new
-#       export GET|POST    /:model_name/export(.:format)          rails_admin/main#export
-#  bulk_delete POST|DELETE /:model_name/bulk_delete(.:format)     rails_admin/main#bulk_delete
-#  bulk_action POST        /:model_name/bulk_action(.:format)     rails_admin/main#bulk_action
-#         show GET         /:model_name/:id(.:format)             rails_admin/main#show
-#         edit GET|PUT     /:model_name/:id/edit(.:format)        rails_admin/main#edit
-#       delete GET|DELETE  /:model_name/:id/delete(.:format)      rails_admin/main#delete
-# history_show GET         /:model_name/:id/history(.:format)     rails_admin/main#history_show
-#  show_in_app GET         /:model_name/:id/show_in_app(.:format) rails_admin/main#show_in_app
-#
-# Routes for PgHero::Engine:
-#               index_usage GET  (/:database)/index_usage(.:format)               pg_hero/home#index_usage
-#                     space GET  (/:database)/space(.:format)                     pg_hero/home#space
-#              live_queries GET  (/:database)/live_queries(.:format)              pg_hero/home#live_queries
-#                   queries GET  (/:database)/queries(.:format)                   pg_hero/home#queries
-#                    system GET  (/:database)/system(.:format)                    pg_hero/home#system
-#                 cpu_usage GET  (/:database)/cpu_usage(.:format)                 pg_hero/home#cpu_usage
-#          connection_stats GET  (/:database)/connection_stats(.:format)          pg_hero/home#connection_stats
-#     replication_lag_stats GET  (/:database)/replication_lag_stats(.:format)     pg_hero/home#replication_lag_stats
-#                load_stats GET  (/:database)/load_stats(.:format)                pg_hero/home#load_stats
-#                   explain GET  (/:database)/explain(.:format)                   pg_hero/home#explain
-#                      tune GET  (/:database)/tune(.:format)                      pg_hero/home#tune
-#               connections GET  (/:database)/connections(.:format)               pg_hero/home#connections
-#               maintenance GET  (/:database)/maintenance(.:format)               pg_hero/home#maintenance
-#                      kill POST (/:database)/kill(.:format)                      pg_hero/home#kill
-# kill_long_running_queries POST (/:database)/kill_long_running_queries(.:format) pg_hero/home#kill_long_running_queries
-#                  kill_all POST (/:database)/kill_all(.:format)                  pg_hero/home#kill_all
-#        enable_query_stats POST (/:database)/enable_query_stats(.:format)        pg_hero/home#enable_query_stats
-#                           POST (/:database)/explain(.:format)                   pg_hero/home#explain
-#         reset_query_stats POST (/:database)/reset_query_stats(.:format)         pg_hero/home#reset_query_stats
-#              system_stats GET  (/:database)/system_stats(.:format)              redirect(301, system)
-#               query_stats GET  (/:database)/query_stats(.:format)               redirect(301, queries)
-#                   indexes GET  (/:database)/indexes(.:format)                   redirect(301, index_usage)
-#                      root GET  /(:database)(.:format)                           pg_hero/home#index
-#

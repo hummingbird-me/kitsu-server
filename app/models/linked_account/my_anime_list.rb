@@ -7,6 +7,7 @@
 #  disabled_reason    :string
 #  encrypted_token    :string
 #  encrypted_token_iv :string
+#  session_data       :text
 #  share_from         :boolean          default(FALSE), not null
 #  share_to           :boolean          default(FALSE), not null
 #  sync_to            :boolean          default(FALSE), not null
@@ -31,25 +32,17 @@ class LinkedAccount
     validate :verify_mal_credentials
 
     def verify_mal_credentials
-      # Check to make sure username/password is valid
-      host = MyAnimeListSyncService::ATARASHII_API_HOST
-      response = Typhoeus::Request.get(
-        "#{host}account/verify_credentials",
-        userpwd: "#{external_user_id}:#{token}"
-      )
-
-      if response.code == 200
-        true
-      elsif response.code == 403 || response.code == 401
+      unless list_sync.logged_in?
         errors.add(:token, 'Username or password was incorrect.')
-      else
-        errors.add(:token, 'An unknown error occurred and we were unable to link
-                            your account.'.squish)
       end
     end
 
-    after_save do
-      MyAnimeListListWorker.perform_async(id, user_id) if sync_to?
+    def list_sync
+      ListSync::MyAnimeList.new(self)
+    end
+
+    after_commit(on: :create) do
+      ListSync::SyncWorker.perform_async(id, user_id) if sync_to?
     end
   end
 end

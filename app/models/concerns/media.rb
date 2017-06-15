@@ -48,6 +48,9 @@ module Media
       dependent: :destroy
     has_many :favorites, as: 'item', dependent: :destroy,
                          inverse_of: :item
+    has_many :media_attributes,
+      class_name: 'MediaAttribute',
+      dependent: :destroy
     delegate :year, to: :start_date, allow_nil: true
 
     # finished: end date has passed
@@ -81,6 +84,10 @@ module Media
       -> { canonical_title },
       -> { titles[:en_jp] }
     ]
+  end
+
+  def mapping_for(site)
+    mappings.where(external_site: site).first
   end
 
   # How long the series ran for, or nil if the start date is unknown
