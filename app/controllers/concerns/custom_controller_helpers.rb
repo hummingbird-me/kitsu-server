@@ -33,4 +33,14 @@ module CustomControllerHelpers
   def render_jsonapi(data, opts = {})
     render opts.merge(json: data, content_type: JSONAPI::MEDIA_TYPE)
   end
+
+  def user
+    doorkeeper_token&.resource_owner
+  end
+
+  def authenticate_user!
+    unless user
+      render_jsonapi serialize_error(403, 'Must be logged in'), status: 403
+    end
+  end
 end
