@@ -23,6 +23,7 @@
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
+#  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
@@ -129,6 +130,7 @@ class User < ApplicationRecord
   has_many :library_entries, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :reviews, dependent: :destroy
+  has_many :media_reactions
   has_many :comment_likes, dependent: :destroy
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
