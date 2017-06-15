@@ -27,6 +27,8 @@ Rails.application.routes.draw do
       # Permissions
       jsonapi_resources :user_roles
       jsonapi_resources :roles
+      # One Signal Players
+      jsonapi_resources :one_signal_players
 
       ### Library
       delete '/library-entries/_bulk', to: 'library_entries#bulk_delete'
@@ -155,7 +157,7 @@ end
 
 # == Route Map
 #
-# I, [2017-06-15T08:15:10.550310 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-06-15T17:11:58.303306 #11]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -359,6 +361,16 @@ end
 #                                                            PATCH     /api/edge/roles/:id(.:format)                                                                              roles#update
 #                                                            PUT       /api/edge/roles/:id(.:format)                                                                              roles#update
 #                                                            DELETE    /api/edge/roles/:id(.:format)                                                                              roles#destroy
+#                       one_signal_player_relationships_user GET       /api/edge/one-signal-players/:one_signal_player_id/relationships/user(.:format)                            one_signal_players#show_relationship {:relationship=>"user"}
+#                                                            PUT|PATCH /api/edge/one-signal-players/:one_signal_player_id/relationships/user(.:format)                            one_signal_players#update_relationship {:relationship=>"user"}
+#                                                            DELETE    /api/edge/one-signal-players/:one_signal_player_id/relationships/user(.:format)                            one_signal_players#destroy_relationship {:relationship=>"user"}
+#                                     one_signal_player_user GET       /api/edge/one-signal-players/:one_signal_player_id/user(.:format)                                          users#get_related_resource {:relationship=>"user", :source=>"one_signal_players"}
+#                                         one_signal_players GET       /api/edge/one-signal-players(.:format)                                                                     one_signal_players#index
+#                                                            POST      /api/edge/one-signal-players(.:format)                                                                     one_signal_players#create
+#                                          one_signal_player GET       /api/edge/one-signal-players/:id(.:format)                                                                 one_signal_players#show
+#                                                            PATCH     /api/edge/one-signal-players/:id(.:format)                                                                 one_signal_players#update
+#                                                            PUT       /api/edge/one-signal-players/:id(.:format)                                                                 one_signal_players#update
+#                                                            DELETE    /api/edge/one-signal-players/:id(.:format)                                                                 one_signal_players#destroy
 #                                      library_entries__bulk DELETE    /api/edge/library-entries/_bulk(.:format)                                                                  library_entries#bulk_delete
 #                                                            PATCH     /api/edge/library-entries/_bulk(.:format)                                                                  library_entries#bulk_update
 #                                                            PUT       /api/edge/library-entries/_bulk(.:format)                                                                  library_entries#bulk_update

@@ -1,2 +1,5 @@
-class OneSignalPlayerResource < JSONAPI::Resource
+class OneSignalPlayerResource < BaseResource
+  attributes :player_id, :platform
+
+  has_one :user
 end
