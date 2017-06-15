@@ -29,8 +29,8 @@ class MediaReactionVote < ActiveRecord::Base
   validate :vote_on_self
 
   def vote_on_self
-  	if media_reaction.user == user
-  		errors.add(:user, 'You can not vote for yourself')
-  	end
+    if media_reaction.user == user
+      errors.add(:user, 'You can not vote for yourself')
+    end
   end
 end
