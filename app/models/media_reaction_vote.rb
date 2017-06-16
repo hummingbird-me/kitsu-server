@@ -23,8 +23,10 @@
 # rubocop:enable Metrics/LineLength
 
 class MediaReactionVote < ActiveRecord::Base
-  belongs_to :media_reaction, required: true, counter_cache: :up_votes_count
+  belongs_to :media_reaction, required: true
   belongs_to :user, required: true
+
+  counter_culture :media_reaction, column_name: 'up_votes_count'
 
   validate :vote_on_self
 
