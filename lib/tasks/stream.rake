@@ -30,6 +30,23 @@ namespace :stream do
   end
 
   namespace :dump do
+    namespace :split do
+      desc 'Dump split profiles'
+      task profiles: :environment do
+        StreamDump.split_profiles.each { |instr| STDOUT.puts instr.to_json }
+      end
+
+      desc 'Dump split media'
+      task media: :environment do
+        StreamDump.split_media.each { |instr| STDOUT.puts instr.to_json }
+      end
+
+      desc 'Dump split timelines'
+      task timeline: :environment do
+        StreamDump.split_timelines.each { |instr| STDOUT.puts instr.to_json }
+      end
+    end
+
     desc 'Dump posts in the mass import format for Stream'
     task posts: :environment do
       StreamDump.posts.each { |instr| STDOUT.puts instr.to_json }
