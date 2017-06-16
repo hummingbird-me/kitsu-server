@@ -38,7 +38,7 @@ class LinkedAccount
     end
 
     def list_sync
-      ListSync::MyAnimeList.new(self)
+      @list_sync ||= ListSync::MyAnimeList.new(self)
     end
 
     after_commit(on: :create) do
