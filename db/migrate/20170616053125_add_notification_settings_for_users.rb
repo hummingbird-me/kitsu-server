@@ -1,6 +1,6 @@
 class AddNotificationSettingsForUsers < ActiveRecord::Migration
   def change
-  	all_users = User.all
+    all_users = User.all
     all_users_notifications = []
     all_users.each do |user|
       NotificationSetting::NOTIFICATION_TYPES.each do |st|
