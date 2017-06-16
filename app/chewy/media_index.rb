@@ -68,6 +68,7 @@ class MediaIndex < Chewy::Index
       field :genres, value: ->(a) { a.genres.map(&:name) }
       field :categories, value: ->(a) { a.categories.map(&:title) }
       field :user_count, type: 'integer'
+      field :favorites_count, type: 'integer'
       # Castings
       field :people, value: ->(a, crutch) { crutch.people[a.id] }
       field :characters, value: ->(a, crutch) { crutch.characters[a.id] }
