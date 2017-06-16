@@ -14,7 +14,7 @@ class Feed
     end
 
     def activities(*)
-      ActivityList.new(self)
+      ActivityList.new(self).with_type(aggregated? ? :aggregated : :flat)
     end
 
     def aggregated?
