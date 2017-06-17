@@ -59,7 +59,7 @@ class MediaReaction < ActiveRecord::Base
   end
 
   before_update do
-    votes.destroy if reaction_changed?
+    votes.destroy_all if reaction_changed?
   end
 
   def stream_activity
