@@ -196,7 +196,7 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_save do
-    # Disable activities on import
+    # Disable activities and trending vote on import
     unless imported || private?
       activity.rating(rating)&.create if rating_changed? && rating.present?
       activity.status(status)&.create if status_changed?
@@ -205,6 +205,8 @@ class LibraryEntry < ApplicationRecord
       if progress_changed? && !status_changed?
         activity.progress(progress)&.create
       end
+      media.trending_vote(user, 0.5) if progress_changed?
+      media.trending_vote(user, 1.0) if status_changed?
     end
 
     if rating_changed?
@@ -215,9 +217,6 @@ class LibraryEntry < ApplicationRecord
       user.update_feed_completed!
       user.update_profile_completed!
     end
-
-    media.trending_vote(user, 0.5) if progress_changed?
-    media.trending_vote(user, 1.0) if status_changed?
   end
 
   after_create do
@@ -289,6 +288,7 @@ class LibraryEntry < ApplicationRecord
 
   def sync_to_mal?
     return unless media_type.in? %w[Anime Manga]
+    return false if imported
 
     myanimelist_linked_account.present?
   end
