@@ -42,7 +42,6 @@ class LinkedAccount
     end
 
     after_commit(on: :create) do
-      list_sync.save_session!
       ListSync::SyncWorker.perform_async(id, user_id) if sync_to?
     end
   end

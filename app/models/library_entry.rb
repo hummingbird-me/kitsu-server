@@ -273,17 +273,17 @@ class LibraryEntry < ApplicationRecord
 
   after_commit(on: :create, if: :sync_to_mal?) do
     LibraryEntryLog.create_for(:create, self, myanimelist_linked_account)
-    ListSync::UpdateWorker.perform_async(myanimelist_linked_account, id)
+    ListSync::UpdateWorker.perform_async(myanimelist_linked_account.id, id)
   end
 
   after_commit(on: :update, if: :sync_to_mal?) do
     LibraryEntryLog.create_for(:update, self, myanimelist_linked_account)
-    ListSync::UpdateWorker.perform_async(myanimelist_linked_account, id)
+    ListSync::UpdateWorker.perform_async(myanimelist_linked_account.id, id)
   end
 
   after_commit(on: :destroy, if: :sync_to_mal?) do
     LibraryEntryLog.create_for(:destroy, self, myanimelist_linked_account)
-    ListSync::DestroyWorker.perform_async(myanimelist_linked_account,
+    ListSync::DestroyWorker.perform_async(myanimelist_linked_account.id,
       media_type, media_id)
   end
 
