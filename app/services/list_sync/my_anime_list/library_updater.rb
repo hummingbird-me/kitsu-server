@@ -59,12 +59,12 @@ module ListSync
       end
 
       def mal_status_key
-        case library_entry.status
-        when :current then 1
-        when :completed then 2
-        when :on_hold then 3
-        when :dropped then 4
-        when :planned then 6
+        case library_entry.status.to_s
+        when 'current' then 1
+        when 'completed' then 2
+        when 'on_hold' then 3
+        when 'dropped' then 4
+        when 'planned' then 6
         end
       end
 
