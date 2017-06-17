@@ -29,7 +29,7 @@
 
 class LinkedAccount
   class MyAnimeList < LinkedAccount
-    validate :verify_mal_credentials
+    validate :verify_mal_credentials, if: :token_changed?
 
     def verify_mal_credentials
       unless list_sync.logged_in?
