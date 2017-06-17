@@ -50,6 +50,7 @@ gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches
 gem 'friendly_id' # slug-urls-are-cool
 gem 'jsonapi-resources', '0.9.0'
+gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
 gem 'paranoia', '~> 2.0' # Faux deletion
