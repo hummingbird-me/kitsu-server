@@ -11,7 +11,7 @@ module ListSync
 
       %i[anime manga].each do |kind|
         # Create Logs
-        logs = entries.for_kind(kind).map do |le|
+        logs = entries.by_kind(kind).map do |le|
           LibraryEntryLog.create_for(:update, le, linked_account)
         end
         capture_sync_errors(linked_account, logs) do
