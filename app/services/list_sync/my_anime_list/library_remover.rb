@@ -5,6 +5,7 @@ module ListSync
 
       def run!
         check_authentication!
+        copy_csrf_token_into(delete_form)
         results_page = delete_form.click_button
 
         if results_page.at_css('.badresult')

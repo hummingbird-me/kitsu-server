@@ -13,6 +13,7 @@ module ListSync
       def run!
         check_authentication!
         fill_form
+        copy_csrf_token_into(update_form)
         results_page = update_form.click_button
 
         if results_page.at_css('.badresult')

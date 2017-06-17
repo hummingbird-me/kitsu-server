@@ -30,6 +30,13 @@ module ListSync
         edit_page.search('meta[name="csrf_token"]').first['content']
       end
 
+      # MyAnimeList copies the CSRF token into the form using JavaScript, but
+      # Mechanize can't run JS, so we manually copy it into the form before
+      # submission.
+      def copy_csrf_token_into(form)
+        form['csrf_token'] = csrf_token
+      end
+
       def mal_id
         @mal_id ||= media.mapping_for("myanimelist/#{media_kind}")&.external_id
       end
