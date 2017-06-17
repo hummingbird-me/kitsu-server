@@ -48,14 +48,14 @@ class LinkedAccount < ApplicationRecord
     end
   end
 
-  def self.without_syncing(reason = 'Temporarily disabled')
+  def self.without_syncing(reason = nil)
     sync_enabled = where(sync_to: true)
     sync_enabled.update_all(sync_to: false, disabled_reason: reason)
     yield
-    sync_enabled.update_all(sync_to: true, disabled_reason: reason)
+    sync_enabled.update_all(sync_to: true, disabled_reason: nil)
   end
 
-  def self.disable_syncing_for(user, reason = 'Temporarily disabled', &block)
+  def self.disable_syncing_for(user, reason = nil, &block)
     where(user: user).without_syncing(reason, &block)
   end
 end

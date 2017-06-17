@@ -17,7 +17,7 @@ class LibraryEntriesController < ApplicationController
     return unless authorize_operation(:destroy?)
     # Disable syncing of full-library deletes
     if params.dig(:filter, :user_id).present?
-      LinkedAccount.disable_syncing_for(user, 'Kitsu Library Resetting') do
+      LinkedAccount.disable_syncing_for(user) do
         operation_scope.destroy_all
       end
     else
