@@ -47,4 +47,15 @@ class LinkedAccount < ApplicationRecord
       errors.add(:type, 'must be a LinkedAccount class')
     end
   end
+
+  def self.without_syncing(reason = 'Temporarily disabled')
+    sync_enabled = where(sync: true)
+    sync_enabled.update_all(sync: false, disabled_reason: reason)
+    yield
+    sync_enabled.update_all(sync: true, disabled_reason: reason)
+  end
+
+  def self.disable_syncing_for(user, reason = 'Temporarily disabled', &block)
+    where(user: user).without_syncing(reason, &block)
+  end
 end
