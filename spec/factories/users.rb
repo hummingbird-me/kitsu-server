@@ -23,6 +23,7 @@
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
+#  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
@@ -107,6 +108,12 @@ FactoryGirl.define do
 
     trait :with_avatar do
       avatar { Faker::Company.logo }
+    end
+
+    trait :subscribed_to_one_signal do
+      after(:create) do |user|
+        create(:one_signal_player, user: user)
+      end
     end
   end
 end

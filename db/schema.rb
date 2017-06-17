@@ -967,6 +967,16 @@ ActiveRecord::Schema.define(version: 20170615000439) do
   add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "one_signal_players", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "player_id"
+    t.integer  "platform"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "one_signal_players", ["user_id"], name: "index_one_signal_players_on_user_id", using: :btree
+
   create_table "partner_codes", force: :cascade do |t|
     t.integer  "partner_deal_id",             null: false
     t.string   "code",            limit: 255, null: false
@@ -1446,6 +1456,7 @@ ActiveRecord::Schema.define(version: 20170615000439) do
   add_foreign_key "manga_staff", "people"
   add_foreign_key "media_attribute_votes", "users"
   add_foreign_key "media_follows", "users"
+  add_foreign_key "one_signal_players", "users"
   add_foreign_key "media_reaction_votes", "media_reactions"
   add_foreign_key "media_reaction_votes", "users"
   add_foreign_key "media_reactions", "anime"

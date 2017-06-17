@@ -1,0 +1,80 @@
+[
+  {
+    "deleted":[],
+    "new":[{
+      "actor": "User:4",
+      "followed": "User:1",
+      "foreign_id": "Follow:9",
+      "group": "45011_2017-05-03",
+      "id": "93121780-2fd7-11e7-8080-8001551856b0",
+      "object": "Follow:9",
+      "origin": null,
+      "target": null,
+      "time": "2017-05-03T08:07:39.000000",
+      "to": ["notifications:1"],
+      "verb": "follow"
+    },
+    {
+      "actor": "User:5",
+      "followed": "User:1",
+      "foreign_id": "Follow:10",
+      "group": "45011_2017-05-03",
+      "id": "93121780-2fd7-11e7-8080-8001551856b0",
+      "object": "Follow:9",
+      "origin": null,
+      "target": null,
+      "time": "2017-05-03T08:07:39.000000",
+      "to": ["notifications:1"],
+      "verb": "follow"
+    },
+    {
+      "actor": "User:4",
+      "comments_count": 0,
+      "foreign_id": "Post:12",
+      "group": "45008_2017-05-03",
+      "id": "e12d1800-2fe3-11e7-8080-8001260b259f",
+      "nsfw": false,
+      "object":"Post:12",
+      "origin":null,
+      "post_id":12,
+      "post_likes_count":0,
+      "target":null,
+      "time":"2017-05-03T09:35:44.000000",
+      "to": ["notifications:4", "timeline:1", "timeline:4"],
+      "updated_at": "2017-05-03T09:35:44.314Z",
+      "verb": "post"
+    },
+    {
+      "actor": "User:4",
+      "comments_count": 0,
+      "foreign_id": "Post:12",
+      "group": "45008_2017-05-03",
+      "id": "e12d1800-2fe3-11e7-8080-8001260b259f",
+      "nsfw": false,
+      "object":"Post:12",
+      "origin":null,
+      "post_id":12,
+      "post_likes_count":0,
+      "target":null,
+      "time":"2017-05-03T09:35:44.000000",
+      "to": ["notifications:4", "timeline:1", "timeline:4"],
+      "updated_at": "2017-05-03T09:35:44.314Z",
+      "verb": "comment"
+    },
+    {
+      "actor": "User:4",
+      "foreign_id": "GroupInvite:5",
+      "group": "45062_2017-05-03",
+      "id": "aa510500-2fd7-11e7-8080-800070a7e09f",
+      "object": "",
+      "origin": null,
+      "target": "",
+      "time": "2017-05-03T08:08:18.000000",
+      "to": ["notifications:2", "notifications:1", "timeline:2", "timeline:1", "user_aggr:1"],
+      "verb": "invited"
+    }],
+    "published_at":"2017-05-03T08:07:39.00000000:00",
+    "feed":"notifications:1",
+    "app_id": "123"
+  }
+]

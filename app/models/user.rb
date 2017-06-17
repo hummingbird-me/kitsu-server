@@ -153,6 +153,8 @@ class User < ApplicationRecord
   has_many :stats, dependent: :destroy
   has_many :library_events, dependent: :destroy
 
+  has_many :one_signal_players, dependent: :destroy
+
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }, if: :email_changed?
   validates :name, presence: true,
@@ -226,6 +228,10 @@ class User < ApplicationRecord
 
   def previous_name
     past_names.first
+  end
+
+  def one_signal_player_ids
+    one_signal_players.pluck(:player_id).compact
   end
 
   def add_ip(new_ip)
