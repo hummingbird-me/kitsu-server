@@ -11,7 +11,9 @@ module ListSync
     end
 
     def logged_in?
-      ListSync::MyAnimeList::Login.new(agent, username, password).success?
+      track_session do
+        ListSync::MyAnimeList::Login.new(agent, username, password).success?
+      end
     end
 
     def sync!(kind)
@@ -34,7 +36,12 @@ module ListSync
     end
 
     def save_session!
-      linked_account.update!(session_data: cookie_jar.dump)
+      session = cookie_jar.dump
+      if linked_account.persisted?
+        linked_account.update_column(:session_data, session)
+      else
+        linked_account.session_data = session
+      end
     end
 
     private
