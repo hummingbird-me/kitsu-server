@@ -19,7 +19,13 @@ class FavoriteResource < BaseResource
 
   def fav_rank
     if _model.fav_rank_position
-      _model.fav_rank_position + 1
+      case _model.fav_rank_position
+      when :first then 1
+      when :last then 9_999_999
+      when :up, :down then nil
+      when Integer then _model.fav_rank_position + 1
+      else _model.fav_rank
+      end
     else
       _model.fav_rank
     end
