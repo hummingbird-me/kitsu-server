@@ -15,6 +15,8 @@ class SpaceOutRanksForFavorites < ActiveRecord::Migration
         )) * 20) AS rank
         FROM favorites
     SQL
+    execute "CREATE INDEX ON fav_ranks (id)"
+    execute "VACUUM fav_ranks"
     say_with_time 'Updating rank column for favorites' do
       Favorite.all.update_in_batches(<<-SQL.squish)
         fav_rank = (
