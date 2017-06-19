@@ -36,16 +36,16 @@ class UserMailer < ApplicationMailer
       subject_user_stub = related_users.first.name.to_s
     end
 
-    subject_days_hash = {
-      1 => "#{related_users.first.name} liked your post on Kitsu",
+    subject_kind_hash = {
+      1 => "#{subject_user_stub} liked your post on Kitsu",
       2 => "#{subject_user_stub} liked your post",
       3 => "#{subject_user_stub} replied to your post)",
       4 => "#{subject_user_stub} mentioned you on Kitsu",
-      5 => "#{related_users.first.name} followed you on Kitsu",
+      5 => "#{subject_user_stub} followed you on Kitsu",
       6 => "#{subject_user_stub} posted on your profile"
     }
-    return unless subject_days_hash.key? notification_kind
-    mail to: user.email, subject: subject_days_hash[notification_kind]
+    return unless subject_kind_hash.key? notification_kind
+    mail to: user.email, subject: subject_kind_hash[notification_kind]
   end
 
   def password_reset(user)

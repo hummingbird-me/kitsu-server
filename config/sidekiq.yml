@@ -47,3 +47,15 @@ production:
   UploadRemovalWorker:
     # Twice a day
     cron: '0 0 */12 * * *'
+  UserEngagementMinuteWorker:
+    # Every 15 min
+    cron: 0 */15 * * * *'
+  UserEngagementHourWorker:
+    # Every hour
+    cron: '0 0 */1 * * *'
+  UserEngagementHourlyWorker:
+    # Every 6 hours, 10 min into the hour
+    cron: '0 10 */6 * * *'
+  UserEngagementDailyWorker:
+    # Once a day
+    cron: '0 0 0 * * *'
