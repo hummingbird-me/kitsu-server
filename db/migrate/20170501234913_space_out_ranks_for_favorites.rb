@@ -7,7 +7,7 @@ class SpaceOutRanksForFavorites < ActiveRecord::Migration
 
   def change
     execute <<-SQL.squish
-      CREATE TEMPORARY VIEW fav_ranks (id, rank) AS
+      CREATE TEMPORARY TABLE fav_ranks (id, rank) AS
         SELECT id, ((row_number() OVER (
           PARTITION BY user_id, item_type
           ORDER BY fav_rank ASC,
@@ -21,6 +21,7 @@ class SpaceOutRanksForFavorites < ActiveRecord::Migration
           SELECT rank FROM fav_ranks WHERE fav_ranks.id = favorites.id
         )
       SQL
+    execute 'DROP TABLE fav_ranks'
     end
   end
 end
