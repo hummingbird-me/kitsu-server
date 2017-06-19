@@ -208,7 +208,7 @@ RSpec.describe User, type: :model do
 
   describe '#profile_feed' do
     it 'should return a Feed::ProfileFeed instance' do
-      expect(subject.profile_feed).to be_a(Feed::ProfileFeed)
+      expect(subject.profile_feed).to be_a(ProfileFeed)
     end
   end
 
