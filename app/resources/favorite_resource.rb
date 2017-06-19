@@ -17,6 +17,10 @@ class FavoriteResource < BaseResource
     SQL
   end
 
+  def fav_rank
+    _model.fav_rank_position || _model.fav_rank
+  end
+
   def fav_rank=(val)
     _model.fav_rank_position = val
   end
