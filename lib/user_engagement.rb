@@ -117,7 +117,7 @@ module UserEngagement
         user,
         4,
         mentionees
-      ).deliver_later    
+      ).deliver_later
     end
   end
 
