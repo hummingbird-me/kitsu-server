@@ -18,10 +18,14 @@ class FavoriteResource < BaseResource
   end
 
   def fav_rank
-    _model.fav_rank_position || _model.fav_rank
+    if _model.fav_rank_position
+      _model.fav_rank_position + 1
+    else
+      _model.fav_rank
+    end
   end
 
   def fav_rank=(val)
-    _model.fav_rank_position = val
+    _model.fav_rank_position = (val - 1)
   end
 end
