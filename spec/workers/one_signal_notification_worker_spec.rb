@@ -2,9 +2,9 @@ require 'rails_helper'
 require 'sidekiq/testing'
 
 RSpec.describe OneSignalNotificationWorker do
-  around(:each) do
+  around(:each) do |example|
     Sidekiq::Worker.clear_all
-    Sidekiq::Testing.inline! { yield }
+    Sidekiq::Testing.inline! { example.run }
   end
 
   describe '#perform' do
