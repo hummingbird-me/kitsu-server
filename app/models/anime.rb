@@ -103,6 +103,15 @@ class Anime < ApplicationRecord
     end
   end
 
+  def sync_episodes
+    (1..episode_count).each do |n|
+      next if episodes.exists?(number: n)
+      episodes.create!(number: n, season_number: 1, titles: {
+        en_jp: "Episode #{n}"
+      })
+    end
+  end
+
   def self.fuzzy_find(title)
     MediaIndex::Anime.query(multi_match: {
       fields: %w[titles.* abbreviated_titles synopsis actors characters],
@@ -118,5 +127,7 @@ class Anime < ApplicationRecord
       self.start_date = end_date if start_date.nil? && !end_date.nil?
       self.end_date = start_date if end_date.nil? && !start_date.nil?
     end
+
+    sync_episodes if episode_count && episodes.length < episode_count
   end
 end

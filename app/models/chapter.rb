@@ -34,6 +34,7 @@ class Chapter < ApplicationRecord
 
   validates :manga, presence: true
   validates :number, presence: true
+  validates :volume_number, presence: true
   validates_attachment :thumbnail, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]
   }
