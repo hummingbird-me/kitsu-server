@@ -85,7 +85,9 @@ class Manga < ApplicationRecord
       self.start_date = end_date if start_date.nil? && !end_date.nil?
       self.end_date = start_date if end_date.nil? && !start_date.nil?
     end
+  end
 
+  after_save do
     sync_chapters if chapter_count && chapters.length < chapter_count
   end
 end

@@ -127,7 +127,9 @@ class Anime < ApplicationRecord
       self.start_date = end_date if start_date.nil? && !end_date.nil?
       self.end_date = start_date if end_date.nil? && !start_date.nil?
     end
+  end
 
+  after_save do
     sync_episodes if episode_count && episodes.length < episode_count
   end
 end
