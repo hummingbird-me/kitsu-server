@@ -50,7 +50,7 @@ class Drama < ApplicationRecord
   include Episodic
 
   enum subtype: %i[drama movie special]
-  has_many :media_attribute, through: :dramas_media_attributes
+  has_many :media_attributes, through: :dramas_media_attributes
   has_many :dramas_media_attributes
 
   has_attached_file :cover_image,
