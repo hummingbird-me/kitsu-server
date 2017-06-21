@@ -152,6 +152,7 @@ class User < ApplicationRecord
   has_many :site_announcements
   has_many :stats, dependent: :destroy
   has_many :library_events, dependent: :destroy
+  has_many :notification_setting_states, dependent: :destroy
 
   has_many :one_signal_players, dependent: :destroy
 
@@ -343,6 +344,11 @@ class User < ApplicationRecord
         GlobalFeed.new.unfollow(profile_feed)
       end
     end
+  end
+
+  after_create do
+    # Set up Notification Settings for User
+    NotificationSetting.setup_notification_settings(self)
   end
 
   before_update do

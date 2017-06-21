@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       # Permissions
       jsonapi_resources :user_roles
       jsonapi_resources :roles
+      jsonapi_resources :notification_settings
       # One Signal Players
       jsonapi_resources :one_signal_players
 

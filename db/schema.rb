@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615000439) do
+ActiveRecord::Schema.define(version: 20170616053125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -910,6 +910,19 @@ ActiveRecord::Schema.define(version: 20170615000439) do
 
   add_index "not_interesteds", ["user_id"], name: "index_not_interesteds_on_user_id", using: :btree
 
+  create_table "notification_settings", force: :cascade do |t|
+    t.integer  "setting_type",                        null: false
+    t.integer  "user_id",                             null: false
+    t.boolean  "email_enabled",        default: true
+    t.boolean  "web_enabled",          default: true
+    t.boolean  "mobile_enabled",       default: true
+    t.boolean  "fb_messenger_enabled", default: true
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "notification_settings", ["user_id"], name: "index_notification_settings_on_user_id", using: :btree
+
   create_table "notifications", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "source_id"
@@ -1456,6 +1469,7 @@ ActiveRecord::Schema.define(version: 20170615000439) do
   add_foreign_key "manga_staff", "people"
   add_foreign_key "media_attribute_votes", "users"
   add_foreign_key "media_follows", "users"
+  add_foreign_key "notification_settings", "users"
   add_foreign_key "one_signal_players", "users"
   add_foreign_key "media_reaction_votes", "media_reactions"
   add_foreign_key "media_reaction_votes", "users"
