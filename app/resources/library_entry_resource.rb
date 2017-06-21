@@ -53,6 +53,7 @@ class LibraryEntryResource < BaseResource
   has_one :manga
   has_one :drama
   has_one :review, eager_load_on_include: false
+  has_one :media_reaction
   has_one :media, polymorphic: true
   has_one :unit, polymorphic: true, eager_load_on_include: false
   has_one :next_unit, polymorphic: true, eager_load_on_include: false

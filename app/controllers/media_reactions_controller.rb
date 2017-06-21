@@ -1,0 +1,2 @@
+class MediaReactionsController < ApplicationController
+end

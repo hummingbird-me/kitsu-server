@@ -49,6 +49,10 @@ class Episode < ApplicationRecord
     average(:length)
   end
 
+  def feed
+    EpisodeFeed.new(id)
+  end
+
   before_save do
     self.synopsis = Sanitize.fragment(synopsis, Sanitize::Config::RESTRICTED)
   end

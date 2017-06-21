@@ -75,7 +75,7 @@ class Post < ApplicationRecord
   end
 
   def other_feeds
-    [media&.feed].compact
+    [media&.feed, spoiled_unit&.feed].compact
   end
 
   def notified_feeds

@@ -112,9 +112,9 @@ module StreamDump
 
     activities.each do |act|
       if Feed::MEDIA_VERBS.include?(act.verb)
-        media_activities << act.activities.first
+        media_activities << act
       elsif Feed::POST_VERBS.include?(act.verb)
-        posts_activities << act.activities.first
+        posts_activities << act
       end
     end
 

@@ -45,9 +45,13 @@ module Kitsu
     # TODO: fix or kill rails_admin, bring this back
     # config.autoload_paths << "#{Rails.root}/lib"
 
+    # Set log level to LOG_LEVEL environment variable
+    config.log_level = ENV['LOG_LEVEL'] || :info
+
+    # Normally we wanna be API-only, but we mount some admin panels in, so... :(
     config.api_only = false
 
-    # Eable CORS
+    # Enable CORS
     config.middleware.insert_before 0, 'Rack::Cors' do
       allow do
         origins '*'

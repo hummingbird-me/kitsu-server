@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: group_neighbors
@@ -16,9 +15,9 @@
 #
 # Foreign Keys
 #
+#  fk_rails_0bf66d4208  (source_id => groups.id)
 #  fk_rails_f61dff96a9  (destination_id => groups.id)
 #
-# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :group_neighbor do

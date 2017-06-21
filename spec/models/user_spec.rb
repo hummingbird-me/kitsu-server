@@ -23,6 +23,7 @@
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
+#  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
@@ -191,9 +192,23 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#one_signal_player_ids' do
+    it 'should return empty array when not subscribed to one signal' do
+      expect(persisted_user.one_signal_player_ids).to be_empty
+    end
+
+    it 'should return array of user one signal player ids' do
+      FactoryGirl.create(:one_signal_player, user: persisted_user)
+      FactoryGirl.create(:one_signal_player,
+        platform: :mobile,
+        user: persisted_user)
+      expect(persisted_user.one_signal_player_ids.length).to eq(2)
+    end
+  end
+
   describe '#profile_feed' do
     it 'should return a Feed::ProfileFeed instance' do
-      expect(subject.profile_feed).to be_a(Feed::ProfileFeed)
+      expect(subject.profile_feed).to be_a(ProfileFeed)
     end
   end
 

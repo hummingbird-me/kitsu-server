@@ -45,7 +45,7 @@ class Feed
 
   # Get the ActivityList for this Feed, optionally requesting a specific filter
   # and/or type.
-  def activities_for(filter: nil, type: nil)
+  def activities_for(filter: nil, type: _feed_type)
     Feed::ActivityList.new(self).filter(filter).with_type(type)
   end
   alias_method :activities, :activities_for

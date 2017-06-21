@@ -1,4 +1,12 @@
 namespace :importers do
+  namespace :media_attributes do
+    require 'media_attributes_import/seed_attributes'
+    desc 'Create Initial Attributes and Associate with Media'
+    task seed: :environment do |_t|
+      puts 'Create Initial Attributes and Associate with Media'
+      MediaAttributesImport::Seed.new.run!
+    end
+  end
   namespace :anidb do
     require 'anidb_category_import/category_importer'
     require 'anidb_category_import/media_importer'

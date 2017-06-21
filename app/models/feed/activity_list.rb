@@ -228,7 +228,7 @@ class Feed
         limit_ratio: @limit_ratio,
         includes: @including,
         feed: stream_feed,
-        aggregated: feed.aggregated?
+        aggregated: (feed_type == :aggregated)
       }
     end
   end
