@@ -1469,11 +1469,7 @@ ActiveRecord::Schema.define(version: 20170620005334) do
   add_foreign_key "manga_staff", "people"
   add_foreign_key "media_attribute_votes", "users"
   add_foreign_key "media_follows", "users"
-<<<<<<< HEAD
   add_foreign_key "notification_settings", "users"
-  add_foreign_key "one_signal_players", "users"
-=======
->>>>>>> Backfill episodes and chapters
   add_foreign_key "media_reaction_votes", "media_reactions"
   add_foreign_key "media_reaction_votes", "users"
   add_foreign_key "media_reactions", "anime"

@@ -39,6 +39,13 @@ class Chapter < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png]
   }
 
+  def self.create_defaults(count)
+    chapters = ((1..count).to_a - pluck(:number)).map do |n|
+      new(number: n, volume_number: 1, titles: { en_jp: "Chapter #{n}" })
+    end
+    transaction { chapters.each(&:save) }
+  end
+
   def feed
     ChapterFeed.new(id)
   end

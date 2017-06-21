@@ -71,15 +71,6 @@ class Manga < ApplicationRecord
     ]
   end
 
-  def sync_chapters
-    (1..chapter_count).each do |n|
-      next if chapters.exists?(number: n)
-      chapters.create!(number: n, volume_number: 1, titles: {
-        en_jp: "Chapter #{n}"
-      })
-    end
-  end
-
   before_save do
     if chapter_count == 1
       self.start_date = end_date if start_date.nil? && !end_date.nil?
@@ -88,6 +79,7 @@ class Manga < ApplicationRecord
   end
 
   after_save do
-    sync_chapters if chapter_count && chapters.length < chapter_count
+    chapters.create_defaults(chapter_count) if
+      chapter_count && chapters.length < chapter_count
   end
 end

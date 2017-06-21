@@ -96,4 +96,12 @@ RSpec.describe Anime, type: :model do
       expect(nov_anime.season).to eq(:fall)
     end
   end
+
+  describe 'sync_episodes' do
+    it 'should create episodes when episode_count is changed' do
+      create(:anime, episode_count: 5)
+      anime = Anime.last
+      expect(anime.episodes.length).to eq(anime.episode_count)
+    end
+  end
 end

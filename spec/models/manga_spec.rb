@@ -49,4 +49,12 @@ RSpec.describe Manga, type: :model do
       expect(subject.default_progress_limit).to eq(5000)
     end
   end
+
+  describe 'sync_chapters' do
+    it 'should create chapters when chapter_count is changed' do
+      create(:manga, chapter_count: 5)
+      manga = Manga.last
+      expect(manga.chapters.length).to eq(manga.chapter_count)
+    end
+  end
 end
