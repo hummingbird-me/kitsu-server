@@ -58,6 +58,16 @@ class Follow < ApplicationRecord
   # Update onboarding
   after_create do
     follower.update_feed_completed!
-    UserMailer.notification(followed, 5, [follower]).deliver_later
+    notification_setting = followed.notification_settings.where(
+      setting_type: 3,
+      email_enabled: true
+    )
+    unless notification_setting.empty?
+      UserMailer.notification(
+        followed,
+        5,
+        [follower]
+      ).deliver_later
+    end
   end
 end

@@ -2,7 +2,7 @@ module UserEngagement
   module_function
 
   def send_inactive_notification
-    inactive_users = User.where(
+    inactive_users = User.includes(:notification_settings).where(
       last_sign_in_at: nil,
       never_signed_in_email_sent: true
     )
@@ -13,7 +13,7 @@ module UserEngagement
       user.save
     end
 
-    inactive_users = User.where(
+    inactive_users = User.includes(:notification_settings).where(
       last_sign_in_at: 28.days.ago..18.days.ago,
       third_inactive_email_sent: false
     )
@@ -23,7 +23,7 @@ module UserEngagement
       user.save
     end
 
-    inactive_users = User.where(
+    inactive_users = User.includes(:notification_settings).where(
       last_sign_in_at: 18.days.ago..9.days.ago,
       second_inactive_email_sent: false
     )
@@ -33,7 +33,7 @@ module UserEngagement
       user.save
     end
 
-    inactive_users = User.where(
+    inactive_users = User.includes(:notification_settings).where(
       last_sign_in_at: 9.days.ago..Time.now,
       first_inactive_email_sent: false
     )
@@ -47,8 +47,12 @@ module UserEngagement
   def send_post_likes_notification
     now_time = Time.now
     prev_time = 6.hours.ago
-    inactive_users = User.where(
-      last_sign_in_at: prev_time..now_time
+    inactive_users = User.includes(:notification_settings).where(
+      last_sign_in_at: prev_time..now_time,
+      notification_settings: {
+        setting_type: 2,
+        email_enabled: true
+      }
     )
     inactive_users.each do |user|
       related_post_likes_users = PostLike.where(
@@ -69,8 +73,12 @@ module UserEngagement
   def send_post_replies_notification
     now_time = Time.now
     prev_time = 1.hour.ago
-    inactive_users = User.where(
-      last_sign_in_at: prev_time..now_time
+    inactive_users = User.includes(:notification_settings).where(
+      last_sign_in_at: prev_time..now_time,
+      notification_settings: {
+        setting_type: 1,
+        email_enabled: true
+      }
     )
     inactive_users.each do |user|
       related_post_replies_users = Comment.where(
@@ -91,8 +99,12 @@ module UserEngagement
   def send_mention_notification
     now_time = Time.now
     prev_time = 15.minutes.ago
-    inactive_users = User.where(
-      last_sign_in_at: prev_time..now_time
+    inactive_users = User.includes(:notification_settings).where(
+      last_sign_in_at: prev_time..now_time,
+      notification_settings: {
+        setting_type: 0,
+        email_enabled: true
+      }
     )
     recent_profile_posts = Post.where(
       created_at: prev_time..now_time
@@ -124,8 +136,12 @@ module UserEngagement
   def send_new_profile_posts_notification
     now_time = Time.now
     prev_time = 15.minutes.ago
-    inactive_users = User.where(
-      last_sign_in_at: prev_time..now_time
+    inactive_users = User.includes(:notification_settings).where(
+      last_sign_in_at: prev_time..now_time,
+      notification_settings: {
+        setting_type: 4,
+        email_enabled: true
+      }
     )
     inactive_users.each do |user|
       related_profile_posts_users = Post.where(
