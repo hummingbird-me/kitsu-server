@@ -109,6 +109,7 @@ RSpec.describe User, type: :model do
   it { should validate_uniqueness_of(:name).case_insensitive }
   it { should validate_uniqueness_of(:email).case_insensitive }
   it { should have_many(:library_events).dependent(:destroy) }
+  it { should have_many(:notification_settings).dependent(:destroy) }
 
   describe 'by_name scope' do
     it 'should match case-insensitively' do

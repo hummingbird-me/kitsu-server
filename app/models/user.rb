@@ -152,7 +152,7 @@ class User < ApplicationRecord
   has_many :site_announcements
   has_many :stats, dependent: :destroy
   has_many :library_events, dependent: :destroy
-  has_many :notification_setting_states, dependent: :destroy
+  has_many :notification_settings, dependent: :destroy
 
   has_many :one_signal_players, dependent: :destroy
 
