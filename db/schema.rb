@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615000439) do
+ActiveRecord::Schema.define(version: 20170624005938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,16 +127,16 @@ ActiveRecord::Schema.define(version: 20170615000439) do
   add_index "anime_staff", ["person_id"], name: "index_anime_staff_on_person_id", using: :btree
 
   create_table "bestowments", force: :cascade do |t|
-    t.string   "badge_id",                null: false
-    t.integer  "user_id",                 null: false
-    t.integer  "progress",    default: 0, null: false
-    t.integer  "rank",        default: 0
-    t.datetime "bestowed_at"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "title"
-    t.text     "description"
+    t.string   "badge_id",               null: false
+    t.integer  "user_id",                null: false
+    t.integer  "progress",   default: 0, null: false
+    t.integer  "rank",       default: 0
+    t.datetime "earned_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
+
+  add_index "bestowments", ["user_id", "badge_id", "rank"], name: "index_bestowments_on_user_id_and_badge_id_and_rank", unique: true, using: :btree
 
   create_table "blocks", force: :cascade do |t|
     t.integer  "user_id",    null: false

@@ -2,16 +2,18 @@
 #
 # Table name: bestowments
 #
-#  id          :integer          not null, primary key
-#  bestowed_at :datetime
-#  description :text
-#  progress    :integer          default(0), not null
-#  rank        :integer          default(0)
-#  title       :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  badge_id    :string           not null
-#  user_id     :integer          not null
+#  id         :integer          not null, primary key
+#  earned_at  :datetime
+#  progress   :integer          default(0), not null
+#  rank       :integer          default(0), indexed => [user_id, badge_id]
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  badge_id   :string           not null, indexed => [user_id, rank]
+#  user_id    :integer          not null, indexed => [badge_id, rank]
+#
+# Indexes
+#
+#  index_bestowments_on_user_id_and_badge_id_and_rank  (user_id,badge_id,rank) UNIQUE
 #
 # Foreign Keys
 #
