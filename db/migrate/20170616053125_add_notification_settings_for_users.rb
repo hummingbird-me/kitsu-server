@@ -1,4 +1,5 @@
 class AddNotificationSettingsForUsers < ActiveRecord::Migration
+  disable_ddl_transaction!
   def change
     User.find_each do |user|
       all_users_notifications = []
