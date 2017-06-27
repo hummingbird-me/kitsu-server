@@ -33,7 +33,7 @@ class Badge
 
       # Declare the goal for the badge
       def bestow_when(value = nil)
-        _ranks[1] = value ? ->(progress) { progress > value } : Proc.new
+        _ranks[1] = value ? ->(progress) { value / progress } : Proc.new
       end
 
       def hidden

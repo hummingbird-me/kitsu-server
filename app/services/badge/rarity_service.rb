@@ -13,6 +13,7 @@ class Badge
     end
 
     def percent
+      # TODO: Replace User.count with something more optimized
       @percent ||= count.to_f / User.count
     end
 
