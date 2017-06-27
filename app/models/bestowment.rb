@@ -20,49 +20,16 @@
 #  fk_rails_5b7b2d53b8  (user_id => users.id)
 #
 
-class Bestowment < ActiveRecord::Base
+class Bestowment < ApplicationRecord
   belongs_to :user, required: true
 
   validates :badge_id, presence: true
 
-  after_create do
-    BestowmentCash.first_or_create(
-      badge_id: badge_id,
-      rank: rank
-    ).inc
-  end
-
-  def bestowed?
-    !bestowed_at.nil? && bestowed_at < Time.now
+  def earned?
+    earned_at && earned_at < Time.now
   end
 
   def badge
-    badge_id.safe_constantize.new(user)
-  end
-
-  def users_have
-    all_users_count = User.count
-    with_this_badge = Bestowment.where(badge_id: badge_id, rank: rank).count
-    (with_this_badge.to_f / all_users_count.to_f) * 100
-  end
-
-  def rarity
-    if users_have < 2
-      'Epic'
-    elsif users_have < 20
-      'Rare'
-    elsif users_have < 50
-      'Uncommon'
-    else
-      'Common'
-    end
-  end
-
-  def goal
-    badge.goal
-  end
-
-  def progress
-    badge.progress
+    badge_id.safe_constantize.new(rank)
   end
 end
