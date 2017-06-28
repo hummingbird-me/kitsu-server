@@ -6,7 +6,8 @@ class Badge
       attr_reader :goal
 
       def initialize(&block)
-        super.instance_eval(&block)
+        super
+        instance_eval(&block)
       end
 
       def bestow_when(goal)
