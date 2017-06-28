@@ -1491,7 +1491,6 @@ ActiveRecord::Schema.define(version: 20170624005938) do
   add_foreign_key "reviews", "library_entries"
   add_foreign_key "site_announcements", "users"
   add_foreign_key "stats", "users"
-  add_foreign_key "bestowments", "users"
   add_foreign_key "streaming_links", "streamers"
   add_foreign_key "users", "posts", column: "pinned_post_id"
 end
