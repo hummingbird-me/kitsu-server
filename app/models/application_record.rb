@@ -43,7 +43,7 @@ class ApplicationRecord < ActiveRecord::Base
              elsif respond_to?(:user) then self.user
              else self
              end
-      BestowmentWorker.perform_async(klass, user.id)
+      Badge::BestowmentWorker.perform_async(klass, user.id)
     end
   end
 end
