@@ -80,19 +80,19 @@ module StreamDump
     end
   end
 
-  def group_timeline_migration(scope = User)
+  def group_timeline_demigration(scope = User)
     results = each_user(scope) do |user_id|
       group_ids = GroupMember.where(user_id: user_id).pluck(:group_id)
       group_feeds = group_ids.map { |id| "group:#{id}" }
 
       [
         {
-          instruction: 'follow',
+          instruction: 'unfollow',
           feedId: "group_timeline:#{user_id}",
           data: group_feeds
         },
         {
-          instruction: 'unfollow',
+          instruction: 'follow',
           feedId: "timeline:#{user_id}",
           data: group_feeds
         }
