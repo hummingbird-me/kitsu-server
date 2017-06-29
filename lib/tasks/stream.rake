@@ -32,6 +32,7 @@ namespace :stream do
   namespace :dump do
     task load_dumper: :environment do
       require 'stream_dump'
+      ApplicationRecord.logger = Logger.new(nil)
     end
 
     namespace :split do
@@ -48,6 +49,12 @@ namespace :stream do
       desc 'Dump split timelines'
       task timeline: :load_dumper do
         StreamDump.split_timelines.each { |instr| STDOUT.puts instr.to_json }
+      end
+
+      desc 'Dump split follows'
+      task follows: :load_dumper do
+        StreamDump.follows.each { |instr| STDOUT.puts instr.to_json }
+        StreamDump.split_auto_follows.each { |instr| STDOUT.puts instr.to_json }
       end
     end
 
@@ -73,23 +80,25 @@ namespace :stream do
 
     desc 'Dump group stuff'
     task groups: :load_dumper do
-      ApplicationRecord.logger = Logger.new(nil)
       StreamDump.group_posts.each { |instr| STDOUT.puts instr.to_json }
       StreamDump.group_memberships.each { |instr| STDOUT.puts instr.to_json }
       StreamDump.group_auto_follows.each { |instr| STDOUT.puts instr.to_json }
     end
 
-    desc 'Dump group timeline migration'
+    desc 'Dump group posts'
+    task group_posts: :load_dumper do
+      StreamDump.group_posts.each { |instr| STDOUT.puts instr.to_json }
+    end
+
+    desc 'Dump group timeline demigration'
     task group_timeline: :load_dumper do
-      ApplicationRecord.logger = Logger.new(nil)
-      StreamDump.group_timeline_migration.each do |instr|
+      StreamDump.group_timeline_demigration.each do |instr|
         STDOUT.puts instr.to_json
       end
     end
 
     desc 'Dump library base'
     task private_library: :load_dumper do
-      ApplicationRecord.logger = Logger.new(nil)
       StreamDump.private_library_feed.each do |instr|
         STDOUT.puts instr.to_json
       end
