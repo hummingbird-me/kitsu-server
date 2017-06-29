@@ -176,15 +176,40 @@ module StreamDump
   end
 
   def follows(scope = User)
-    each_user(scope) do |user_id|
+    flatten each_user(scope) do |user_id|
       follows = Follow.where(follower: user_id).pluck(:followed_id)
-      follow_self = [Feed.user(user_id).stream_id]
-      {
-        instruction: 'follow',
-        feedId: Feed.timeline(user_id).stream_id,
-        data: follows.map { |uid| Feed.user(uid).stream_id } + follow_self
-      }
+      ['media', 'posts', nil].map do |filter|
+        source_group = ['timeline', filter].compact.join('_')
+        source_feed = "#{source_group}:#{user_id}"
+        profile_group = ['user', filter].compact.join('_')
+        self_feed = "#{profile_group}:#{user_id}"
+        {
+          instruction: 'follow',
+          feedId: source_feed,
+          data: follows.map { |uid| "#{profile_group}:#{uid}" } + [self_feed]
+        }
+      end
     end
+  end
+
+  def split_auto_follows(scope = User)
+    flatten each_user(scope) do |user_id|
+      ['media', 'posts', nil].map do |filter|
+        source_group = ['user', filter, 'aggr'].compact.join('_')
+        source_feed = "#{source_group}:#{user_id}"
+        target_group = ['user', filter].compact.join('_')
+        target_feed = "#{target_group}:#{user_id}"
+        {
+          instruction: 'follow',
+          feedId: source_feed,
+          data: [target_feed]
+        }
+      end
+    end
+  end
+
+  def flatten(enumerator)
+    enumerator.lazy_map { |x| x }
   end
 
   def group_memberships(scope = User)
