@@ -69,8 +69,8 @@
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
-#  visited_at                  :datetime
 #  waifu_or_husbando           :string(255)
+#  visited_at                  :datetime
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  facebook_id                 :string(255)      indexed
@@ -308,6 +308,29 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
+  def update_visited_at
+    self.visited_at = Time.now
+  end
+
+  def update_visited_at!
+    # Only bump the visited_at time once an hour
+    update_visited_at.save! if visited_at < 1.hour.ago
+  end
+
+  def update_consecutive_days
+    return unless visited_at_changed?
+    # Count consecutive days
+    this_visit_date = visited_at.in_time_zone(time_zone).to_date
+    last_visit_date = visited_at_was.in_time_zone(time_zone).to_date
+    days_since_last_visit = this_visit_date - last_visit_date
+    # If it's been one day, increment it.  If it's been longer, reset it.
+    if days_since_last_visit == 1
+      self.consecutive_days += 1
+    elsif days_since_last_visit > 1
+      self.consecutive_days = 1
+    end
+  end
+
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
@@ -358,17 +381,6 @@ class User < ApplicationRecord
     end
     update_profile_completed
     update_feed_completed
-
-    if last_login_changed?
-      # Count consecutive days
-      between = (
-        last_login.beginning_of_day - last_login_was.beginning_of_day
-      ) / 1.days
-      if between > 1
-        self.consecutive_days = 1
-      elsif between == 1
-        self.consecutive_days += 1
-      end
-    end
+    update_consecutive_days
   end
 end
