@@ -20,10 +20,11 @@ class Badge
     if _progress.nil?
       []
     else
-      progress = user.instance_eval(&_progress) if _progress
+      context = OpenStruct.new(user: user)
+      progress = context.instance_eval(&_progress) if _progress
       # Lambdas are picky about arity, so we need to make sure we match that.
       params = [progress].compact
-      _ranks.map { |rank, fn| [rank, fn.call(*params)] }
+      _ranks.map { |rank, fn| [rank, context.instance_exec(*params, &fn)] }
     end
   end
 end
