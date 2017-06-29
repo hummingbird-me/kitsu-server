@@ -324,9 +324,11 @@ class User < ApplicationRecord
   def update_consecutive_days
     return unless visited_at_changed?
     # Count consecutive days
-    this_visit_date = visited_at.in_time_zone(time_zone).to_date
-    last_visit_date = visited_at_was.in_time_zone(time_zone).to_date
-    days_since_last_visit = this_visit_date - last_visit_date
+    this_visit = visited_at.in_time_zone(time_zone)
+    last_visit = if visited_at_was then visited_at_was.in_time_zone(time_zone)
+                 else 12.years.ago
+                 end
+    days_since_last_visit = this_visit.to_date - last_visit.to_date
     # If it's been one day, increment it.  If it's been longer, reset it.
     if days_since_last_visit == 1
       self.consecutive_days += 1
