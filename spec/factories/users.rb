@@ -38,7 +38,6 @@
 #  ip_addresses                :inet             default([]), is an Array
 #  language                    :string
 #  last_backup                 :datetime
-#  last_login                  :datetime
 #  last_recommendations_update :datetime
 #  last_sign_in_at             :datetime
 #  life_spent_on_anime         :integer          default(0), not null
@@ -70,6 +69,7 @@
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
+#  visited_at                  :datetime
 #  waifu_or_husbando           :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
