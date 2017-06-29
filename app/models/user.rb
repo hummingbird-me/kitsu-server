@@ -313,6 +313,7 @@ class User < ApplicationRecord
 
   def update_visited_at
     self.visited_at = Time.now
+    self
   end
 
   def update_visited_at!
