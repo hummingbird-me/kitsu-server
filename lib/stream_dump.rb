@@ -211,7 +211,7 @@ module StreamDump
   end
 
   def flatten(enumerator)
-    enumerator.lazy_map { |x| x }
+    enumerator.flat_map { |x| x }
   end
 
   def group_memberships(scope = User)
