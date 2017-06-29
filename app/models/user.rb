@@ -345,10 +345,6 @@ class User < ApplicationRecord
     end
   end
 
-  def finished?
-    email.present? && bio.present?
-  end
-
   before_update do
     if name_changed?
       # Push it onto the front and limit
