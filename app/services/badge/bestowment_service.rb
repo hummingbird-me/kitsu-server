@@ -14,7 +14,8 @@ class Badge
     def run!
       tracked_ranks.each do |(rank, progress)|
         bestowment = bestowment_for(rank).first_or_initialize
-        bestowment.progress = progress
+        # Ratcheting - progress can only increase, never decrease.
+        bestowment.progress = [bestowment.progres, progress].max
         bestowment.save!
       end
     end
