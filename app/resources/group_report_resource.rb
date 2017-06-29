@@ -1,8 +1,7 @@
 class GroupReportResource < BaseResource
   include GroupActionLogger
 
-  attributes :reason, :status, :explanation, :created_at, :naughty_type,
-    :naughty_id
+  attributes :reason, :status, :explanation, :naughty_type, :naughty_id
 
   has_one :group
   has_one :naughty, polymorphic: true
@@ -18,8 +17,4 @@ class GroupReportResource < BaseResource
     status if action == :update
   end
   log_target []
-
-  def self.sortable_fields(context)
-    super(context) << :created_at
-  end
 end

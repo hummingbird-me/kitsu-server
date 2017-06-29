@@ -3,7 +3,7 @@ class LibraryEventResource < BaseResource
 
   attributes :notes, :nsfw, :private, :progress, :rating, :reconsuming,
     :reconsume_count, :volumes_owned, :time_spent, :status, :event,
-    :changed_data, :created_at
+    :changed_data
 
   has_one :library_entry
   has_one :user

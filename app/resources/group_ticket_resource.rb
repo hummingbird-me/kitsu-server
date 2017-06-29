@@ -1,7 +1,7 @@
 class GroupTicketResource < BaseResource
   include GroupActionLogger
 
-  attributes :status, :created_at
+  attribute :status
 
   has_one :user
   has_one :group
@@ -33,9 +33,7 @@ class GroupTicketResource < BaseResource
     }
 
   log_verb do |action|
-    if action == :update && previous_changes.include?('status')
-      status
-    end
+    status if action == :update && previous_changes.include?('status')
   end
   log_target []
 end

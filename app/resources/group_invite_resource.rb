@@ -1,7 +1,7 @@
 class GroupInviteResource < BaseResource
   include GroupActionLogger
 
-  attributes :accepted_at, :created_at, :declined_at, :revoked_at
+  attributes :accepted_at, :declined_at, :revoked_at
 
   has_one :user
   has_one :group
