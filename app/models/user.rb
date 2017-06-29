@@ -317,7 +317,7 @@ class User < ApplicationRecord
 
   def update_visited_at!
     # Only bump the visited_at time once an hour
-    update_visited_at.save! if visited_at < 1.hour.ago
+    update_visited_at.save! if visited_at.nil? || visited_at < 1.hour.ago
   end
 
   def update_consecutive_days
