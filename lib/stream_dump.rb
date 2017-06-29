@@ -154,7 +154,7 @@ module StreamDump
       next if data.blank?
       {
         instruction: 'add_activities',
-        feedId: Feed.group(group_id).stream_id,
+        feedId: "group_aggr:#{group_id}",
         data: data
       }
     end

@@ -16,7 +16,7 @@ module StreamDump
                     else Feed.user(user_id)
                     end
       media_feed = Feed.media(media_type, media_id) if media_id
-      as_post = becomes(Post)
+      as_post = becomes(::Post)
       target_feed.activities.new(
         time: updated_at,
         updated_at: updated_at,
