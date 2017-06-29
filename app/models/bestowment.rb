@@ -25,6 +25,13 @@ class Bestowment < ApplicationRecord
 
   validates :badge_id, presence: true
 
+  scope :for_rank, ->(rank) { where(rank: rank) }
+  scope :for_badge, ->(badge) do
+    badge = badge.class.name unless badge.is_a?(String)
+    where(badge_id: badge)
+  end
+  scope :for_user, ->(user) { where(user_id: user) }
+
   def earned?
     earned_at && earned_at < Time.now
   end
