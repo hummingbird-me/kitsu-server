@@ -1,6 +1,6 @@
 class BestowmentResource < BaseResource
-  attributes :badge_id, :rank, :progress, :bestowed_at, :title,
-    :description, :goal, :rarity, :users_have
+  attributes :rank, :progress, :earned_at
 
   has_one :user
+  has_one :badge
 end
