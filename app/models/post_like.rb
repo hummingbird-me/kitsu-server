@@ -18,6 +18,8 @@
 class PostLike < ApplicationRecord
   include WithActivity
 
+  update_bestowment_for 'LikingFeedPostsBadge', on: :create
+
   belongs_to :user, required: true
   belongs_to :post, required: true, counter_cache: true, touch: true
 
@@ -35,7 +37,8 @@ class PostLike < ApplicationRecord
       to: notify
     )
   end
-  after_create do 
+
+  after_create do
     user.update_feed_completed!
   end
 end

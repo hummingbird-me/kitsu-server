@@ -106,10 +106,13 @@ class User < ApplicationRecord
   ].freeze
 
   enum rating_system: %i[simple advanced regular]
+  enum theme: %i[light dark]
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
   update_index('users#user') { self }
-  enum theme: %i[light dark]
+  update_bestowment_for 'ConsecutiveDaysBadge', if: :consecutive_days_changed?
+  update_bestowment_for 'TheAdventureBeginsBadge'
+  update_bestowment_for 'StaffBadge', if: :title_changed?
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'

@@ -1,6 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
-  
+
   WHITELISTED_ADMIN_FIELDS = %w[episode_count chapter_count volume_count].freeze
 
   def stream_id
@@ -34,5 +34,16 @@ class ApplicationRecord < ActiveRecord::Base
   def destroy_later
     update(deleted_at: Time.now) if attributes.include?('deleted_at')
     DestructionWorker.perform_async(self.class.name, id)
+  end
+
+  def self.update_bestowment_for(klass, opts = {}, &block)
+    after_commit(opts.slice(:if, :on)) do
+      user = if block_passed? then instance_eval(&block)
+             elsif opts[:user] then send(opts[:user])
+             elsif respond_to?(:user) then self.user
+             else self
+             end
+      BestowmentWorker.perform_async(klass, user.id)
+    end
   end
 end
