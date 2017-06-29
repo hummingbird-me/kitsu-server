@@ -176,7 +176,7 @@ module StreamDump
   end
 
   def follows(scope = User)
-    flatten each_user(scope) do |user_id|
+    results = each_user(scope) do |user_id|
       follows = Follow.where(follower: user_id).pluck(:followed_id)
       ['media', 'posts', nil].map do |filter|
         source_group = ['timeline', filter].compact.join('_')
@@ -190,10 +190,11 @@ module StreamDump
         }
       end
     end
+    flatten(results)
   end
 
   def split_auto_follows(scope = User)
-    flatten each_user(scope) do |user_id|
+    results = each_user(scope) do |user_id|
       ['media', 'posts', nil].map do |filter|
         source_group = ['user', filter, 'aggr'].compact.join('_')
         source_feed = "#{source_group}:#{user_id}"
@@ -206,6 +207,7 @@ module StreamDump
         }
       end
     end
+    flatten(results)
   end
 
   def flatten(enumerator)
