@@ -6,6 +6,8 @@
 #  id            :integer          not null, primary key
 #  external_site :string           not null, indexed => [external_id, media_type, media_id]
 #  media_type    :string           not null, indexed => [external_site, external_id, media_id]
+#  created_at    :datetime
+#  updated_at    :datetime
 #  external_id   :string           not null, indexed => [external_site, media_type, media_id]
 #  media_id      :integer          not null, indexed => [external_site, external_id, media_type]
 #

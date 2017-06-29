@@ -3,9 +3,11 @@
 #
 # Table name: users_roles
 #
-#  id      :integer          not null, primary key
-#  role_id :integer          indexed => [user_id]
-#  user_id :integer          indexed => [role_id]
+#  id         :integer          not null, primary key
+#  created_at :datetime
+#  updated_at :datetime
+#  role_id    :integer          indexed => [user_id]
+#  user_id    :integer          indexed => [role_id]
 #
 # Indexes
 #

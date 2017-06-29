@@ -5,6 +5,8 @@
 #
 #  id           :integer          not null, primary key
 #  role         :integer          default(1), not null
+#  created_at   :datetime
+#  updated_at   :datetime
 #  character_id :integer          not null, indexed, indexed => [drama_id]
 #  drama_id     :integer          not null, indexed, indexed => [character_id]
 #

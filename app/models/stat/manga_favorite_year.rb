@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: stats
@@ -18,6 +19,7 @@
 #
 #  fk_rails_9e94901167  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class Stat < ApplicationRecord
   class MangaFavoriteYear < Stat

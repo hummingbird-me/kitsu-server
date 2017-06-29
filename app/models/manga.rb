@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: manga
@@ -35,6 +36,7 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
+# rubocop:enable Metrics/LineLength
 
 class Manga < ApplicationRecord
   include Media

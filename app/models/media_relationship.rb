@@ -7,6 +7,8 @@
 #  destination_type :string           not null
 #  role             :integer          not null
 #  source_type      :string           not null, indexed => [source_id]
+#  created_at       :datetime
+#  updated_at       :datetime
 #  destination_id   :integer          not null
 #  source_id        :integer          not null, indexed => [source_type]
 #

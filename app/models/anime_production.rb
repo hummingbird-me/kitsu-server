@@ -5,6 +5,8 @@
 #
 #  id          :integer          not null, primary key
 #  role        :integer          default(0)
+#  created_at  :datetime
+#  updated_at  :datetime
 #  anime_id    :integer          not null, indexed
 #  producer_id :integer          not null, indexed
 #

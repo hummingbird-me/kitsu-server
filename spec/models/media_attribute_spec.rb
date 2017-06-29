@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: media_attributes
@@ -16,6 +17,7 @@
 #  index_media_attributes_on_slug   (slug)
 #  index_media_attributes_on_title  (title)
 #
+# rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
 

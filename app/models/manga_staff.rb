@@ -3,10 +3,12 @@
 #
 # Table name: manga_staff
 #
-#  id        :integer          not null, primary key
-#  role      :string
-#  manga_id  :integer          not null, indexed, indexed => [person_id]
-#  person_id :integer          not null, indexed => [manga_id], indexed
+#  id         :integer          not null, primary key
+#  role       :string
+#  created_at :datetime
+#  updated_at :datetime
+#  manga_id   :integer          not null, indexed, indexed => [person_id]
+#  person_id  :integer          not null, indexed => [manga_id], indexed
 #
 # Indexes
 #

@@ -23,6 +23,7 @@
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
+#  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
 #  email                       :string(255)      default(""), not null, indexed
@@ -72,7 +73,6 @@
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  facebook_id                 :string(255)      indexed
-#  one_signal_id               :string           indexed
 #  pinned_post_id              :integer
 #  pro_membership_plan_id      :integer
 #  stripe_customer_id          :string(255)
@@ -81,11 +81,10 @@
 #
 # Indexes
 #
-#  index_users_on_email          (email) UNIQUE
-#  index_users_on_facebook_id    (facebook_id) UNIQUE
-#  index_users_on_one_signal_id  (one_signal_id)
-#  index_users_on_to_follow      (to_follow)
-#  index_users_on_waifu_id       (waifu_id)
+#  index_users_on_email        (email) UNIQUE
+#  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_to_follow    (to_follow)
+#  index_users_on_waifu_id     (waifu_id)
 #
 # Foreign Keys
 #

@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: notification_settings
@@ -20,6 +21,7 @@
 #
 #  fk_rails_0c95e91db7  (user_id => users.id)
 #
+# rubocop:enable Metrics/LineLength
 
 FactoryGirl.define do
   factory :notification_setting do
