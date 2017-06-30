@@ -8,7 +8,7 @@ module IgnorePreloadingNils
     #
     # Why do we have this?  Look for the comment labelled "HACK"
     # TODO: make this hack work on JR 0.10
-    def self.preload_included_fragments(resources, records, serializer, options)
+    def preload_included_fragments(resources, records, serializer, options)
       return if resources.empty?
       res_ids = resources.keys
 
