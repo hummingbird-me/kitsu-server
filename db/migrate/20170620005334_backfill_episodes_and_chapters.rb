@@ -1,4 +1,5 @@
 class BackfillEpisodesAndChapters < ActiveRecord::Migration
+  self.disable_ddl_transaction!
   def change
     Anime.joins(:episodes)
          .group('anime.id')
