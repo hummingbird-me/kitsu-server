@@ -23,8 +23,8 @@ module StreamDump
   end
 
   def split_timelines(scope = User)
-    results = each_user(scope) do |user_id|
-      split_feed(TimelineFeed.new(user_id))
+    results = each_user(scope).with_index do |user_id|
+      split_feed(TimelineFeed.new(user_id), limit: 500)
     end
     # Flatten the results lazily
     results.flat_map { |x| x }
@@ -102,7 +102,7 @@ module StreamDump
     results.flat_map { |x| x }
   end
 
-  def split_feed(feed)
+  def split_feed(feed, limit: nil)
     activities = feed.activities_for(type: :flat).unenriched.to_enum
 
     posts_activities = []
@@ -115,6 +115,9 @@ module StreamDump
         media_activities << act
       elsif Feed::POST_VERBS.include?(act.verb)
         posts_activities << act
+      end
+      if limit && posts_activities.size > limit && media_activities.size > limit
+        break
       end
     end
 
