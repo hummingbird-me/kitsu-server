@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616053125) do
+ActiveRecord::Schema.define(version: 20170620005334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -640,24 +640,24 @@ ActiveRecord::Schema.define(version: 20170616053125) do
   add_index "leader_chat_messages", ["user_id"], name: "index_leader_chat_messages_on_user_id", using: :btree
 
   create_table "library_entries", force: :cascade do |t|
-    t.integer  "user_id",                         null: false
-    t.integer  "media_id",                        null: false
-    t.integer  "status",                          null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.integer  "progress",        default: 0,     null: false
-    t.boolean  "private",         default: false, null: false
+    t.integer  "user_id",                           null: false
+    t.integer  "media_id",                          null: false
+    t.integer  "status",                            null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "progress",          default: 0,     null: false
+    t.boolean  "private",           default: false, null: false
     t.text     "notes"
-    t.integer  "reconsume_count", default: 0,     null: false
-    t.boolean  "reconsuming",     default: false, null: false
-    t.string   "media_type",                      null: false
-    t.integer  "volumes_owned",   default: 0,     null: false
-    t.boolean  "nsfw",            default: false, null: false
+    t.integer  "reconsume_count",   default: 0,     null: false
+    t.boolean  "reconsuming",       default: false, null: false
+    t.string   "media_type",                        null: false
+    t.integer  "volumes_owned",     default: 0,     null: false
+    t.boolean  "nsfw",              default: false, null: false
     t.integer  "anime_id"
     t.integer  "manga_id"
     t.integer  "drama_id"
     t.integer  "rating"
-    t.integer  "time_spent",      default: 0,     null: false
+    t.integer  "time_spent",        default: 0,     null: false
     t.datetime "started_at"
     t.datetime "finished_at"
     t.datetime "progressed_at"
@@ -1470,7 +1470,6 @@ ActiveRecord::Schema.define(version: 20170616053125) do
   add_foreign_key "media_attribute_votes", "users"
   add_foreign_key "media_follows", "users"
   add_foreign_key "notification_settings", "users"
-  add_foreign_key "one_signal_players", "users"
   add_foreign_key "media_reaction_votes", "media_reactions"
   add_foreign_key "media_reaction_votes", "users"
   add_foreign_key "media_reactions", "anime"
@@ -1478,6 +1477,7 @@ ActiveRecord::Schema.define(version: 20170616053125) do
   add_foreign_key "media_reactions", "library_entries"
   add_foreign_key "media_reactions", "manga"
   add_foreign_key "media_reactions", "users"
+  add_foreign_key "one_signal_players", "users"
   add_foreign_key "post_follows", "posts"
   add_foreign_key "post_follows", "users"
   add_foreign_key "posts", "users"

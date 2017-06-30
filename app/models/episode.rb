@@ -49,6 +49,13 @@ class Episode < ApplicationRecord
     average(:length)
   end
 
+  def self.create_defaults(count)
+    episodes = ((1..count).to_a - pluck(:number)).map do |n|
+      new(number: n, season_number: 1, titles: { en_jp: "Episode #{n}" })
+    end
+    transaction { episodes.each(&:save) }
+  end
+
   def feed
     EpisodeFeed.new(id)
   end

@@ -119,4 +119,9 @@ class Anime < ApplicationRecord
       self.end_date = start_date if end_date.nil? && !start_date.nil?
     end
   end
+
+  after_commit do
+    episodes.create_defaults(episode_count) if
+      episode_count && episodes.length < episode_count
+  end
 end
