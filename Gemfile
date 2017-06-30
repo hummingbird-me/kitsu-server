@@ -75,6 +75,7 @@ gem 'sitemap_generator' # Generate Sitemaps
 gem 'stream-ruby', '~> 2.7.0' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
+gem 'stripe' # Money!
 gem 'typhoeus' # Parallelize scraping tasks
 
 # Rack Middleware
