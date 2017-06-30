@@ -23,7 +23,7 @@ module StreamDump
   end
 
   def split_timelines(scope = User)
-    results = each_user(scope).with_index do |user_id|
+    results = each_user(scope) do |user_id|
       split_feed(TimelineFeed.new(user_id), limit: 500)
     end
     # Flatten the results lazily
