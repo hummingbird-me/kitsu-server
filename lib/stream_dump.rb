@@ -24,7 +24,7 @@ module StreamDump
 
   def split_timelines(scope = User)
     results = each_user(scope) do |user_id|
-      split_feed(TimelineFeed.new(user_id))
+      split_feed(TimelineFeed.new(user_id), limit: 500)
     end
     # Flatten the results lazily
     results.flat_map { |x| x }
@@ -80,19 +80,19 @@ module StreamDump
     end
   end
 
-  def group_timeline_migration(scope = User)
+  def group_timeline_demigration(scope = User)
     results = each_user(scope) do |user_id|
       group_ids = GroupMember.where(user_id: user_id).pluck(:group_id)
       group_feeds = group_ids.map { |id| "group:#{id}" }
 
       [
         {
-          instruction: 'follow',
+          instruction: 'unfollow',
           feedId: "group_timeline:#{user_id}",
           data: group_feeds
         },
         {
-          instruction: 'unfollow',
+          instruction: 'follow',
           feedId: "timeline:#{user_id}",
           data: group_feeds
         }
@@ -102,7 +102,7 @@ module StreamDump
     results.flat_map { |x| x }
   end
 
-  def split_feed(feed)
+  def split_feed(feed, limit: nil)
     activities = feed.activities_for(type: :flat).unenriched.to_enum
 
     posts_activities = []
@@ -115,6 +115,9 @@ module StreamDump
         media_activities << act
       elsif Feed::POST_VERBS.include?(act.verb)
         posts_activities << act
+      end
+      if limit && posts_activities.size > limit && media_activities.size > limit
+        break
       end
     end
 
@@ -154,7 +157,7 @@ module StreamDump
       next if data.blank?
       {
         instruction: 'add_activities',
-        feedId: Feed.group(group_id).stream_id,
+        feedId: "group_aggr:#{group_id}",
         data: data
       }
     end
@@ -176,15 +179,42 @@ module StreamDump
   end
 
   def follows(scope = User)
-    each_user(scope) do |user_id|
+    results = each_user(scope) do |user_id|
       follows = Follow.where(follower: user_id).pluck(:followed_id)
-      follow_self = [Feed.user(user_id).stream_id]
-      {
-        instruction: 'follow',
-        feedId: Feed.timeline(user_id).stream_id,
-        data: follows.map { |uid| Feed.user(uid).stream_id } + follow_self
-      }
+      ['media', 'posts', nil].map do |filter|
+        source_group = ['timeline', filter].compact.join('_')
+        source_feed = "#{source_group}:#{user_id}"
+        profile_group = ['user', filter].compact.join('_')
+        self_feed = "#{profile_group}:#{user_id}"
+        {
+          instruction: 'follow',
+          feedId: source_feed,
+          data: follows.map { |uid| "#{profile_group}:#{uid}" } + [self_feed]
+        }
+      end
     end
+    flatten(results)
+  end
+
+  def split_auto_follows(scope = User)
+    results = each_user(scope) do |user_id|
+      ['media', 'posts', nil].map do |filter|
+        source_group = ['user', filter, 'aggr'].compact.join('_')
+        source_feed = "#{source_group}:#{user_id}"
+        target_group = ['user', filter].compact.join('_')
+        target_feed = "#{target_group}:#{user_id}"
+        {
+          instruction: 'follow',
+          feedId: source_feed,
+          data: [target_feed]
+        }
+      end
+    end
+    flatten(results)
+  end
+
+  def flatten(enumerator)
+    enumerator.flat_map { |x| x }
   end
 
   def group_memberships(scope = User)

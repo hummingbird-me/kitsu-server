@@ -79,4 +79,9 @@ class Manga < ApplicationRecord
       self.end_date = start_date if end_date.nil? && !start_date.nil?
     end
   end
+
+  after_save do
+    chapters.create_defaults(chapter_count) if
+      chapter_count && chapters.length < chapter_count
+  end
 end

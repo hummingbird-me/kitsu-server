@@ -11,12 +11,12 @@ module StreamDump
     }
 
     def stream_activity
-      target_feed = if target_group_id? then Feed.group(target_group_id)
-                    elsif target_user_id? then Feed.user(target_user_id)
-                    else Feed.user(user_id)
+      target_feed = if target_group_id? then GroupFeed.new(target_group_id)
+                    elsif target_user_id? then ProfileFeed.new(target_user_id)
+                    else ProfileFeed.new(user_id)
                     end
-      media_feed = Feed.media(media_type, media_id) if media_id
-      as_post = becomes(Post)
+      media_feed = MediaFeed.new(media_type, media_id) if media_id
+      as_post = becomes(::Post)
       target_feed.activities.new(
         time: updated_at,
         updated_at: updated_at,
