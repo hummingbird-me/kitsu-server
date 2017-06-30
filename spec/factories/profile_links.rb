@@ -5,6 +5,8 @@
 #
 #  id                   :integer          not null, primary key
 #  url                  :string           not null
+#  created_at           :datetime
+#  updated_at           :datetime
 #  profile_link_site_id :integer          not null, indexed, indexed => [user_id]
 #  user_id              :integer          not null, indexed, indexed => [profile_link_site_id]
 #

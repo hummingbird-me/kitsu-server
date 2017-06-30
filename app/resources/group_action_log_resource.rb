@@ -1,5 +1,5 @@
 class GroupActionLogResource < BaseResource
-  attributes :created_at, :verb
+  attribute :verb
 
   has_one :user
   has_one :group

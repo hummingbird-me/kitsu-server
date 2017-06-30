@@ -1,5 +1,5 @@
 class GroupMemberNoteResource < BaseResource
-  attributes :content, :content_formatted, :created_at
+  attributes :content, :content_formatted
 
   has_one :group_member
   has_one :user

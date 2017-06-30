@@ -1,6 +1,6 @@
 class ReviewResource < BaseResource
   attributes :content, :content_formatted, :likes_count, :progress, :rating,
-    :source, :spoiler, :created_at, :updated_at
+    :source, :spoiler
 
   caching
 

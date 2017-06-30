@@ -6,6 +6,8 @@
 #  id                 :integer          not null, primary key
 #  locale             :string           not null, indexed => [drama_character_id, person_id]
 #  notes              :string
+#  created_at         :datetime
+#  updated_at         :datetime
 #  drama_character_id :integer          not null, indexed => [person_id, locale], indexed
 #  licensor_id        :integer
 #  person_id          :integer          not null, indexed => [drama_character_id, locale], indexed

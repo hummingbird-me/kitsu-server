@@ -22,6 +22,7 @@
 #
 #  fk_rails_e94250c6cb  (media_attribute_id => media_attributes.id)
 #  fk_rails_f3399555e8  (manga_id => manga.id)
+#
 # rubocop:enable Metrics/LineLength
 
 class MangaMediaAttribute < ActiveRecord::Base

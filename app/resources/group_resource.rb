@@ -72,10 +72,6 @@ class GroupResource < BaseResource
       }
     }
 
-  def self.sortable_fields(context)
-    super(context) << :created_at
-  end
-
   log_verb do |action|
     next unless action == :update
     previous_changes.keys.map { |key|

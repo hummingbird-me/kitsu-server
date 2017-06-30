@@ -6,8 +6,7 @@ class BaseResource < JSONAPI::Resource
   include SearchableResource
   include ResourceInheritance
 
-  # TODO: ensure the models all have these!
-  # attributes :created_at, :updated_at
+  attributes :created_at, :updated_at
 
   def respond_to?(method_name, include_private = false)
     if method_name.to_s.end_with?('_id')

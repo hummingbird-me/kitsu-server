@@ -1,5 +1,5 @@
 class GroupTicketMessageResource < BaseResource
-  attributes :kind, :content, :created_at
+  attributes :kind, :content
 
   has_one :ticket
   has_one :user

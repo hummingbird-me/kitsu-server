@@ -4,7 +4,7 @@ if Rails.env.development?
   Annotate.set_defaults(
     'classified_sort'         => 'true',
     'exclude_controllers'     => 'true',
-    'force'                   => 'false',
+    'force'                   => 'true',
     'format_bare'             => 'true',
     'hide_limit_column_types' => 'integer,boolean',
     'routes'                  => 'true',

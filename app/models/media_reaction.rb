@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: media_reactions
@@ -20,11 +21,9 @@
 #
 #  index_media_reactions_on_anime_id                             (anime_id)
 #  index_media_reactions_on_drama_id                             (drama_id)
-#  index_media_reactions_on_library_entry_id
-#                                                    (library_entry_id)
+#  index_media_reactions_on_library_entry_id                     (library_entry_id)
 #  index_media_reactions_on_manga_id                             (manga_id)
-#  index_media_reactions_on_media_type_and_media_id_and_user_id
-#                                           (media_type,media_id,user_id) UNIQUE
+#  index_media_reactions_on_media_type_and_media_id_and_user_id  (media_type,media_id,user_id) UNIQUE
 #  index_media_reactions_on_user_id                              (user_id)
 #
 # Foreign Keys
@@ -35,6 +34,7 @@
 #  fk_rails_bbc29d526d  (library_entry_id => library_entries.id)
 #  fk_rails_db814b132f  (anime_id => anime.id)
 #
+# rubocop:enable Metrics/LineLength
 
 class MediaReaction < ActiveRecord::Base
   include WithActivity

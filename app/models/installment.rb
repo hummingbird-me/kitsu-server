@@ -7,6 +7,8 @@
 #  media_type   :string           not null, indexed => [media_id]
 #  position     :integer          default(0), not null
 #  tag          :string
+#  created_at   :datetime
+#  updated_at   :datetime
 #  franchise_id :integer          indexed
 #  media_id     :integer          indexed => [media_type]
 #

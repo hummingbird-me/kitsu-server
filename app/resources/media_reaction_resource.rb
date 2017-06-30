@@ -1,5 +1,5 @@
 class MediaReactionResource < BaseResource
-  attributes :reaction, :created_at, :up_votes_count
+  attributes :reaction, :up_votes_count
 
   has_one :anime
   has_one :drama
