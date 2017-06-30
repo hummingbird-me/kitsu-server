@@ -146,7 +146,7 @@ class BaseResource < JSONAPI::Resource
           .map{|row| row.last(2) }
           .reject{|row| target_resources[klass.name].has_key?(row.first) }
           .uniq
-        target_resources[klass.name].merge! CachedResourceFragment.fetch_fragments(
+        target_resources[klass.name].merge! JSONAPI::CachedResourceFragment.fetch_fragments(
           klass, serializer, context, sub_cache_ids
         )
       else
