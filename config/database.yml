@@ -5,7 +5,7 @@ default: &default
   connect_timeout: 5
   checkout_timeout: 2
   variables:
-    lock_timeout: 3s
+    lock_timeout: 6s
     statement_timeout: 15s
 
 development:
