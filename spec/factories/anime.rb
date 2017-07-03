@@ -28,9 +28,9 @@
 #  rating_rank               :integer
 #  slug                      :string(255)      indexed
 #  start_date                :date
-#  started_airing_date_known :boolean          default(TRUE), not null
 #  subtype                   :integer          default(1), not null
 #  synopsis                  :text             default(""), not null
+#  tba                       :string
 #  titles                    :hstore           default({}), not null
 #  user_count                :integer          default(0), not null, indexed
 #  created_at                :datetime         not null

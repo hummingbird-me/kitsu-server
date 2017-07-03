@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170629184039) do
+ActiveRecord::Schema.define(version: 20170702234704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20170629184039) do
     t.integer  "poster_image_file_size"
     t.datetime "poster_image_updated_at"
     t.integer  "cover_image_top_offset",                                        default: 0,       null: false
-    t.boolean  "started_airing_date_known",                                     default: true,    null: false
     t.hstore   "titles",                                                        default: {},      null: false
     t.string   "canonical_title",                                               default: "en_jp", null: false
     t.string   "abbreviated_titles",                                                                           array: true
@@ -51,6 +50,7 @@ ActiveRecord::Schema.define(version: 20170629184039) do
     t.integer  "rating_rank"
     t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
+    t.string   "tba"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -320,7 +320,6 @@ ActiveRecord::Schema.define(version: 20170629184039) do
     t.integer  "subtype"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "started_airing_date_known",                         default: true,    null: false
     t.text     "synopsis"
     t.string   "youtube_video_id"
     t.string   "country",                                           default: "ja",    null: false
@@ -342,6 +341,7 @@ ActiveRecord::Schema.define(version: 20170629184039) do
     t.integer  "rating_rank"
     t.integer  "favorites_count",                                   default: 0,       null: false
     t.boolean  "cover_image_processing"
+    t.string   "tba"
   end
 
   add_index "dramas", ["slug"], name: "index_dramas_on_slug", using: :btree
@@ -793,6 +793,7 @@ ActiveRecord::Schema.define(version: 20170629184039) do
     t.string   "age_rating_guide"
     t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
+    t.string   "tba"
   end
 
   create_table "manga_characters", force: :cascade do |t|
