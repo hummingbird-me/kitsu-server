@@ -54,7 +54,7 @@ class MediaResource < BaseResource
     # Subtype
     :subtype,
     # Airing/Publishing Status
-    :status
+    :status, :tba
   # Images
   attributes :poster_image, :cover_image, format: :attachment
 
