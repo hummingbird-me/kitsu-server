@@ -39,6 +39,16 @@ class LibraryEvent < ApplicationRecord
   # remove validation of changed_data
   validates :event, presence: true
 
+  scope :by_kind, ->(*kinds) do
+    t = arel_table
+    columns = kinds.map { |k| t[:"#{k}_id"] }
+    scope = columns.shift.not_eq(nil)
+    columns.each do |col|
+      scope = scope.or(col.not_eq(nil))
+    end
+    where(scope)
+  end
+
   def self.create_for(event, library_entry)
     LibraryEvent.create!(
       # instead of polymorphic media

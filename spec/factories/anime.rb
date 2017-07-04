@@ -60,13 +60,13 @@ FactoryGirl.define do
       age_rating 'R18'
     end
 
-    trait :genres do
+    trait :categories do
       transient do
         amount 5
       end
 
       after(:create) do |anime, evaluator|
-        anime.genres = create_list(:genre, evaluator.amount)
+        anime.categories = create_list(:category, evaluator.amount)
       end
     end
   end

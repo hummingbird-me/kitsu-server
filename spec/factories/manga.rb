@@ -45,13 +45,13 @@ FactoryGirl.define do
     average_rating { rand(1.0..100.0) }
     start_date { Faker::Date.backward(10_000) }
 
-    trait :genres do
+    trait :categories do
       transient do
         amount 5
       end
 
       after(:create) do |manga, evaluator|
-        manga.genres = create_list(:genre, evaluator.amount)
+        manga.categories = create_list(:category, evaluator.amount)
       end
     end
   end

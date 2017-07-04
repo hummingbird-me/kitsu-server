@@ -29,7 +29,6 @@ RSpec.describe Stat::MangaActivityHistory do
   let(:manga1) { create(:manga) }
   let!(:le) { create(:library_entry, user: user, manga: manga) }
   let!(:le1) { create(:library_entry, user: user, manga: manga1) }
-  let!(:event) { create(:library_event, user: user, library_entry: le) }
 
   before(:each) do
     subject = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
@@ -40,8 +39,8 @@ RSpec.describe Stat::MangaActivityHistory do
     it 'should add all library entries related to user' do
       record = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
 
-      expect(record.stats_data['total']).to eq(3)
-      expect(record.stats_data['activity'].count).to eq(3)
+      expect(record.stats_data['total']).to eq(2)
+      expect(record.stats_data['activity'].count).to eq(2)
     end
   end
 
@@ -52,8 +51,8 @@ RSpec.describe Stat::MangaActivityHistory do
     end
     it 'should update all stats_data' do
       record = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
-      expect(record.stats_data['total']).to eq(4)
-      expect(record.stats_data['activity'].count).to eq(4)
+      expect(record.stats_data['total']).to eq(3)
+      expect(record.stats_data['activity'].count).to eq(3)
     end
   end
 
