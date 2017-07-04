@@ -10,7 +10,8 @@ class Stat < ApplicationRecord
 
     # Fully regenerate data
     def recalculate!
-      entries = user.library_entries.eager_load(media_column)
+      entries = user.library_entries.by_kind(media_column)
+                    .eager_load(media_column)
                     .where.not(media_length => nil)
 
       # clear stats_data
@@ -25,7 +26,7 @@ class Stat < ApplicationRecord
     end
 
     class_methods do
-      def increment(user, library_entry)
+      def increment(user, library_entry, updated = false)
         record = user.stats.find_or_initialize_by(
           type: "Stat::#{media_type}AmountConsumed"
         )
@@ -34,7 +35,7 @@ class Stat < ApplicationRecord
           record.stats_data['all_time'] = DEFAULT_STATS.deep_dup
         end
 
-        record.stats_data['all_time']['total_media'] += 1
+        record.stats_data['all_time']['total_media'] += 1 unless updated
         record.stats_data['all_time']['total_progress'] +=
           progress_difference(library_entry)
         # No way to track time for Manga
@@ -46,11 +47,11 @@ class Stat < ApplicationRecord
         record.save!
       end
 
-      def decrement(user, library_entry)
+      def decrement(user, library_entry, updated = false)
         record = user.stats.find_by(type: "Stat::#{media_type}AmountConsumed")
         return unless record
 
-        record.stats_data['all_time']['total_media'] -= 1
+        record.stats_data['all_time']['total_media'] -= 1 unless updated
         record.stats_data['all_time']['total_progress'] -=
           progress_difference(library_entry)
         # No way to track time for Manga

@@ -243,13 +243,19 @@ class LibraryEntry < ApplicationRecord
     when :anime
       Stat::AnimeActivityHistory.increment(user, library_event)
       # special case checking if progress was increased or decreased
-      Stat::AnimeAmountConsumed.increment(user, self) if progress > progress_was
-      Stat::AnimeAmountConsumed.decrement(user, self) if progress < progress_was
+      if progress > progress_was
+        Stat::AnimeAmountConsumed.increment(user, self, true)
+      else
+        Stat::AnimeAmountConsumed.decrement(user, self, true)
+      end
     when :manga
       Stat::MangaActivityHistory.increment(user, library_event)
       # special case checking if progress was increased or decreased
-      Stat::MangaAmountConsumed.increment(user, self) if progress > progress_was
-      Stat::MangaAmountConsumed.decrement(user, self) if progress < progress_was
+      if progress > progress_was
+        Stat::MangaAmountConsumed.increment(user, self, true)
+      else
+        Stat::MangaAmountConsumed.decrement(user, self, true)
+      end
     end
   end
 
