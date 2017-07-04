@@ -224,12 +224,12 @@ class LibraryEntry < ApplicationRecord
     # Stat STI
     case kind
     when :anime
-      Stat::AnimeGenreBreakdown.increment(user, self)
+      Stat::AnimeCategoryBreakdown.increment(user, self)
       Stat::AnimeAmountConsumed.increment(user, self)
       Stat::AnimeFavoriteYear.increment(user, self)
       Stat::AnimeActivityHistory.increment(user, library_event)
     when :manga
-      Stat::MangaGenreBreakdown.increment(user, self)
+      Stat::MangaCategoryBreakdown.increment(user, self)
       Stat::MangaAmountConsumed.increment(user, self)
       Stat::MangaFavoriteYear.increment(user, self)
       Stat::MangaActivityHistory.increment(user, library_event)
@@ -263,12 +263,12 @@ class LibraryEntry < ApplicationRecord
     # Stat STI
     case kind
     when :anime
-      Stat::AnimeGenreBreakdown.decrement(user, self)
+      Stat::AnimeCategoryBreakdown.decrement(user, self)
       Stat::AnimeAmountConsumed.decrement(user, self)
       Stat::AnimeFavoriteYear.decrement(user, self)
       Stat::AnimeActivityHistory.decrement(user, self)
     when :manga
-      Stat::MangaGenreBreakdown.decrement(user, self)
+      Stat::MangaCategoryBreakdown.decrement(user, self)
       Stat::MangaAmountConsumed.decrement(user, self)
       Stat::MangaFavoriteYear.decrement(user, self)
       Stat::MangaActivityHistory.decrement(user, self)

@@ -8,7 +8,8 @@ class Stat < ApplicationRecord
     }.freeze
 
     def recalculate!
-      years = user.library_entries.eager_load(media_column)
+      years = user.library_entries.by_kind(media_column)
+                  .eager_load(media_column)
                   .where.not(media_start_date => nil)
                   .group("date_part('year', #{media_start_date})::integer")
                   .count

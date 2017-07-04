@@ -22,17 +22,17 @@
 # rubocop:enable Metrics/LineLength
 
 class Stat < ApplicationRecord
-  class AnimeGenreBreakdown < Stat
-    include Stat::GenreBreakdown
+  class MangaCategoryBreakdown < Stat
+    include Stat::CategoryBreakdown
 
     # for recalculate!
     def media_column
-      :anime
+      :manga
     end
 
     # for class methods
     def self.media_type
-      'Anime'
+      'Manga'
     end
   end
 end
