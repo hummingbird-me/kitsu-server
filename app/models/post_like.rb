@@ -22,11 +22,18 @@ class PostLike < ApplicationRecord
   belongs_to :post, required: true, counter_cache: true, touch: true
 
   validates :post, uniqueness: { scope: :user_id }
+  validate :post_closed
 
   counter_culture :user, column_name: 'likes_given_count'
   counter_culture %i[post user], column_name: 'likes_received_count'
 
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
+
+  def post_closed
+    if post&.closed && post&.ama
+      errors.add(:post, 'cannot make anymore likes on this ama')
+    end
+  end
 
   def stream_activity
     notify = [post.user.notifications] unless post.user == user
@@ -35,7 +42,7 @@ class PostLike < ApplicationRecord
       to: notify
     )
   end
-  after_create do 
+  after_create do
     user.update_feed_completed!
   end
 end

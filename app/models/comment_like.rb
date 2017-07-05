@@ -29,6 +29,13 @@ class CommentLike < ApplicationRecord
   belongs_to :comment, required: true, counter_cache: :likes_count, touch: true
 
   validates :comment, uniqueness: { scope: :user_id }
+  validate :post_closed
+
+  def post_closed
+    if comment.post.closed && comment.post.ama
+      errors.add(:comment, 'cannot like comments on this ama')
+    end
+  end
 
   def stream_activity
     notify = [comment.user.notifications] unless comment.user == user

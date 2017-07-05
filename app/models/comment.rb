@@ -53,6 +53,7 @@ class Comment < ApplicationRecord
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
   validates :content, length: { maximum: 9_000 }
+  validate :post_closed
 
   def stream_activity
     to = []
@@ -84,12 +85,18 @@ class Comment < ApplicationRecord
     errors.add(:parent, 'cannot have a parent of their own') if parent&.parent
   end
 
+  def post_closed
+    if post&.closed && post&.ama
+      errors.add(:post, 'cannot make any more comments on this ama')
+    end
+  end
+
   before_update do
     self.edited_at = Time.now if content_changed?
     true
   end
   after_create do
     user.update_feed_completed!
-    #PostFollow.create(user: user, post: post)
+    # PostFollow.create(user: user, post: post)
   end
 end

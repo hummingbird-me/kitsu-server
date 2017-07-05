@@ -29,4 +29,15 @@ RSpec.describe PostFollow, type: :model do
   it { should belong_to(:post) }
   it { should belong_to(:user) }
   it { should validate_uniqueness_of(:post).scoped_to(:user_id) }
+
+  context 'which is on AMA that is closed' do
+    let(:post) { build(:post, ama: true, closed: true) }
+    let(:post_follow) { build(:post_follow, post: post) }
+
+    subject { post_follow }
+
+    it 'should not be valid' do
+      should_not be_valid
+    end
+  end
 end

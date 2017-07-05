@@ -1,0 +1,41 @@
+# rubocop:disable Metrics/LineLength
+# == Schema Information
+#
+# Table name: ama_subscribers
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  ama_id     :integer          not null, indexed
+#  user_id    :integer          not null, indexed
+#
+# Indexes
+#
+#  index_ama_subscribers_on_ama_id   (ama_id)
+#  index_ama_subscribers_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_3b1c2ec3ee  (user_id => users.id)
+#  fk_rails_4ac07cb7f6  (ama_id => amas.id)
+#
+# rubocop:enable Metrics/LineLength
+
+class AmaSubscriber < ActiveRecord::Base
+  belongs_to :user, required: true
+  belongs_to :ama, required: true
+
+  after_commit(on: :create) do
+    ama.posts.each do |post|
+      user.notifications.follow(post.comments_feed, scrollback: 0)
+    end
+    user.notifications.follow(ama.original_post.comments_feed, scrollback: 0)
+  end
+
+  after_commit(on: :destroy) do
+    ama.posts.each do |post|
+      user.notifications.unfollow(post.comments_feed, scrollback: 0)
+    end
+    user.notifications.unfollow(ama.original_post.comments_feed, scrollback: 0)
+  end
+end

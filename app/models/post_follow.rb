@@ -26,6 +26,13 @@ class PostFollow < ApplicationRecord
   belongs_to :post, required: true
 
   validates :post, uniqueness: { scope: :user_id }
+  validate :post_closed
+
+  def post_closed
+    if post.closed && post.ama
+      errors.add(:post, 'cannot follow this ama anymore')
+    end
+  end
 
   after_commit(on: :create) do
     user.notifications.follow(post.comments_feed, scrollback: 0)

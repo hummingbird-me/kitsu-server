@@ -18,6 +18,29 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   enable_extension "hstore"
   enable_extension "pg_trgm"
 
+  create_table "ama_subscribers", force: :cascade do |t|
+    t.integer  "ama_id",     null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "ama_subscribers", ["ama_id"], name: "index_ama_subscribers_on_ama_id", using: :btree
+  add_index "ama_subscribers", ["user_id"], name: "index_ama_subscribers_on_user_id", using: :btree
+
+  create_table "amas", force: :cascade do |t|
+    t.string   "description",      null: false
+    t.integer  "author_id",        null: false
+    t.integer  "original_post_id", null: false
+    t.datetime "start_date",       null: false
+    t.datetime "end_date",         null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "amas", ["author_id"], name: "index_amas_on_author_id", using: :btree
+  add_index "amas", ["original_post_id"], name: "index_amas_on_original_post_id", using: :btree
+
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
     t.integer  "age_rating"
@@ -1104,8 +1127,10 @@ ActiveRecord::Schema.define(version: 20170724000734) do
     t.integer  "top_level_comments_count", default: 0,     null: false
     t.datetime "edited_at"
     t.string   "target_interest"
+    t.integer  "ama_id"
   end
 
+  add_index "posts", ["ama_id"], name: "index_posts_on_ama_id", using: :btree
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
 
   create_table "pro_membership_plans", force: :cascade do |t|
@@ -1450,6 +1475,10 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   add_index "votes", ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true, using: :btree
   add_index "votes", ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type", using: :btree
 
+  add_foreign_key "ama_subscribers", "amas"
+  add_foreign_key "ama_subscribers", "users"
+  add_foreign_key "amas", "posts", column: "original_post_id"
+  add_foreign_key "amas", "users", column: "author_id"
   add_foreign_key "anime_castings", "anime_characters"
   add_foreign_key "anime_castings", "people"
   add_foreign_key "anime_castings", "producers", column: "licensor_id"
@@ -1522,6 +1551,7 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   add_foreign_key "one_signal_players", "users"
   add_foreign_key "post_follows", "posts"
   add_foreign_key "post_follows", "users"
+  add_foreign_key "posts", "amas"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "profile_links", "profile_link_sites"
