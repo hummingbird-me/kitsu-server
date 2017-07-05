@@ -1,7 +1,6 @@
 class EpisodeFeed < Feed
-  include UnsuffixedAggregatedFeed
-
-  def setup!
-    # No Setup
+  def self.follows_for_progress(media, progress)
+    episode_ids = media.episodes.for_progress(progress).ids
+    episode_ids.map { |id| new(id) }
   end
 end
