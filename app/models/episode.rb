@@ -40,6 +40,10 @@ class Episode < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png]
   }
 
+  scope :for_progress, ->(progress) do
+    order(:season_number, :number).limit(progress)
+  end
+
   def self.length_mode
     mode, count = order(count: :desc).group(:length).count.first
     { mode: mode, count: count }

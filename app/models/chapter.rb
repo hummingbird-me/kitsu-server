@@ -39,6 +39,10 @@ class Chapter < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png]
   }
 
+  scope :for_progress, ->(progress) do
+    order(:volume_number, :number).limit(progress)
+  end
+
   def self.create_defaults(count)
     chapters = ((1..count).to_a - pluck(:number)).map do |n|
       new(number: n, volume_number: 1, titles: { en_jp: "Chapter #{n}" })
