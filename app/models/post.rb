@@ -72,6 +72,8 @@ class Post < ApplicationRecord
   validates :media, polymorphism: { type: Media }, allow_blank: true
   # posting to a group, posting to a profile, and posting to an interest are mutually exclusive.
   validates_with ExclusivityValidator, over: %i[target_user target_group target_interest]
+  validates :target_user, absence: true, if: :target_group
+  validate :ama_closed
 
   def feed
     PostFeed.new(id)
@@ -126,6 +128,16 @@ class Post < ApplicationRecord
 
   def mentioned_users
     User.by_name(processed_content[:mentioned_usernames])
+  end
+
+  def ama_closed
+    return unless ama
+    return if ama.author == user
+    now_time = Time.now
+
+    unless ama.start_time <= now_time && ama.end_time >= now_time
+      errors.add(:post, 'cannot follow this ama anymore')
+    end
   end
 
   before_save do

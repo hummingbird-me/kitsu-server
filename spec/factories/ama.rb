@@ -25,13 +25,11 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Ama < ActiveRecord::Base
-  has_one :author, required: true, class_name: 'User'
-  has_one :original_post, required: true, class_name: 'Post'
-  has_many :posts, dependent: :destroy
-  has_many :ama_subscribers, dependent: :destroy
-
-  before_validation do
-    self.end_date = start_date + 1.hour
+FactoryGirl.define do
+  factory :ama do
+    start_date { Time.now }
+    description { Faker::Lorem.sentence }
+    association :author, factory: :user, strategy: :build
+    association :original_post, factory: :post, strategy: :build
   end
 end

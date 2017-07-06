@@ -25,17 +25,19 @@ ActiveRecord::Schema.define(version: 20170724000734) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "ama_subscribers", ["ama_id", "user_id"], name: "index_ama_subscribers_on_ama_id_and_user_id", unique: true, using: :btree
   add_index "ama_subscribers", ["ama_id"], name: "index_ama_subscribers_on_ama_id", using: :btree
   add_index "ama_subscribers", ["user_id"], name: "index_ama_subscribers_on_user_id", using: :btree
 
   create_table "amas", force: :cascade do |t|
-    t.string   "description",      null: false
-    t.integer  "author_id",        null: false
-    t.integer  "original_post_id", null: false
-    t.datetime "start_date",       null: false
-    t.datetime "end_date",         null: false
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.string   "description",                       null: false
+    t.integer  "author_id",                         null: false
+    t.integer  "original_post_id",                  null: false
+    t.integer  "ama_subscribers_count", default: 0, null: false
+    t.datetime "start_date",                        null: false
+    t.datetime "end_date",                          null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
   add_index "amas", ["author_id"], name: "index_amas_on_author_id", using: :btree

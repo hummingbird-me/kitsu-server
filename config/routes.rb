@@ -40,6 +40,10 @@ Rails.application.routes.draw do
 
       jsonapi_resources :favorites
 
+      ### AMA
+      jsonapi_resources :amas
+      jsonapi_resources :ama_subscribers
+
       ### Categories
       jsonapi_resources :category_favorites
       jsonapi_resources :categories
@@ -451,6 +455,36 @@ end
 #                                                            PATCH     /api/edge/favorites/:id(.:format)                                                                          favorites#update
 #                                                            PUT       /api/edge/favorites/:id(.:format)                                                                          favorites#update
 #                                                            DELETE    /api/edge/favorites/:id(.:format)                                                                          favorites#destroy
+#                                   ama_relationships_author GET       /api/edge/amas/:ama_id/relationships/author(.:format)                                                      amas#show_relationship {:relationship=>"author"}
+#                                                            PUT|PATCH /api/edge/amas/:ama_id/relationships/author(.:format)                                                      amas#update_relationship {:relationship=>"author"}
+#                                                            DELETE    /api/edge/amas/:ama_id/relationships/author(.:format)                                                      amas#destroy_relationship {:relationship=>"author"}
+#                                                 ama_author GET       /api/edge/amas/:ama_id/author(.:format)                                                                    users#get_related_resource {:relationship=>"author", :source=>"amas"}
+#                            ama_relationships_original_post GET       /api/edge/amas/:ama_id/relationships/original-post(.:format)                                               amas#show_relationship {:relationship=>"original_post"}
+#                                                            PUT|PATCH /api/edge/amas/:ama_id/relationships/original-post(.:format)                                               amas#update_relationship {:relationship=>"original_post"}
+#                                                            DELETE    /api/edge/amas/:ama_id/relationships/original-post(.:format)                                               amas#destroy_relationship {:relationship=>"original_post"}
+#                                          ama_original_post GET       /api/edge/amas/:ama_id/original-post(.:format)                                                             posts#get_related_resource {:relationship=>"original_post", :source=>"amas"}
+#                                    ama_relationships_posts GET       /api/edge/amas/:ama_id/relationships/posts(.:format)                                                       amas#show_relationship {:relationship=>"posts"}
+#                                                            POST      /api/edge/amas/:ama_id/relationships/posts(.:format)                                                       amas#create_relationship {:relationship=>"posts"}
+#                                                            PUT|PATCH /api/edge/amas/:ama_id/relationships/posts(.:format)                                                       amas#update_relationship {:relationship=>"posts"}
+#                                                            DELETE    /api/edge/amas/:ama_id/relationships/posts(.:format)                                                       amas#destroy_relationship {:relationship=>"posts"}
+#                                                  ama_posts GET       /api/edge/amas/:ama_id/posts(.:format)                                                                     posts#get_related_resources {:relationship=>"posts", :source=>"amas"}
+#                          ama_relationships_ama_subscribers GET       /api/edge/amas/:ama_id/relationships/ama-subscribers(.:format)                                             amas#show_relationship {:relationship=>"ama_subscribers"}
+#                                                            POST      /api/edge/amas/:ama_id/relationships/ama-subscribers(.:format)                                             amas#create_relationship {:relationship=>"ama_subscribers"}
+#                                                            PUT|PATCH /api/edge/amas/:ama_id/relationships/ama-subscribers(.:format)                                             amas#update_relationship {:relationship=>"ama_subscribers"}
+#                                                            DELETE    /api/edge/amas/:ama_id/relationships/ama-subscribers(.:format)                                             amas#destroy_relationship {:relationship=>"ama_subscribers"}
+#                                        ama_ama_subscribers GET       /api/edge/amas/:ama_id/ama-subscribers(.:format)                                                           ama_subscribers#get_related_resources {:relationship=>"ama_subscribers", :source=>"amas"}
+#                                                       amas GET       /api/edge/amas(.:format)                                                                                   amas#index
+#                                                            POST      /api/edge/amas(.:format)                                                                                   amas#create
+#                                                        ama GET       /api/edge/amas/:id(.:format)                                                                               amas#show
+#                                                            PATCH     /api/edge/amas/:id(.:format)                                                                               amas#update
+#                                                            PUT       /api/edge/amas/:id(.:format)                                                                               amas#update
+#                                                            DELETE    /api/edge/amas/:id(.:format)                                                                               amas#destroy
+#                                            ama_subscribers GET       /api/edge/ama-subscribers(.:format)                                                                        ama_subscribers#index
+#                                                            POST      /api/edge/ama-subscribers(.:format)                                                                        ama_subscribers#create
+#                                             ama_subscriber GET       /api/edge/ama-subscribers/:id(.:format)                                                                    ama_subscribers#show
+#                                                            PATCH     /api/edge/ama-subscribers/:id(.:format)                                                                    ama_subscribers#update
+#                                                            PUT       /api/edge/ama-subscribers/:id(.:format)                                                                    ama_subscribers#update
+#                                                            DELETE    /api/edge/ama-subscribers/:id(.:format)                                                                    ama_subscribers#destroy
 #                       category_favorite_relationships_user GET       /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)                            category_favorites#show_relationship {:relationship=>"user"}
 #                                                            PUT|PATCH /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)                            category_favorites#update_relationship {:relationship=>"user"}
 #                                                            DELETE    /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)                            category_favorites#destroy_relationship {:relationship=>"user"}
@@ -1166,6 +1200,10 @@ end
 #                                                            PUT|PATCH /api/edge/posts/:post_id/relationships/spoiled-unit(.:format)                                              posts#update_relationship {:relationship=>"spoiled_unit"}
 #                                                            DELETE    /api/edge/posts/:post_id/relationships/spoiled-unit(.:format)                                              posts#destroy_relationship {:relationship=>"spoiled_unit"}
 #                                          post_spoiled_unit GET       /api/edge/posts/:post_id/spoiled-unit(.:format)                                                            spoiled_units#get_related_resource {:relationship=>"spoiled_unit", :source=>"posts"}
+#                                     post_relationships_ama GET       /api/edge/posts/:post_id/relationships/ama(.:format)                                                       posts#show_relationship {:relationship=>"ama"}
+#                                                            PUT|PATCH /api/edge/posts/:post_id/relationships/ama(.:format)                                                       posts#update_relationship {:relationship=>"ama"}
+#                                                            DELETE    /api/edge/posts/:post_id/relationships/ama(.:format)                                                       posts#destroy_relationship {:relationship=>"ama"}
+#                                                   post_ama GET       /api/edge/posts/:post_id/ama(.:format)                                                                     amas#get_related_resource {:relationship=>"ama", :source=>"posts"}
 #                              post_relationships_post_likes GET       /api/edge/posts/:post_id/relationships/post-likes(.:format)                                                posts#show_relationship {:relationship=>"post_likes"}
 #                                                            POST      /api/edge/posts/:post_id/relationships/post-likes(.:format)                                                posts#create_relationship {:relationship=>"post_likes"}
 #                                                            PUT|PATCH /api/edge/posts/:post_id/relationships/post-likes(.:format)                                                posts#update_relationship {:relationship=>"post_likes"}

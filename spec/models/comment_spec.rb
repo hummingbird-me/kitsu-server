@@ -57,7 +57,8 @@ RSpec.describe Comment, type: :model do
   end
 
   context 'which is on AMA that is closed' do
-    let(:post) { build(:post, ama: true, closed: true) }
+    let(:ama) { build(:ama, start_time: 6.hours.ago) }
+    let(:post) { build(:post, ama: ama) }
     let(:comment) { build(:comment, post: post) }
 
     subject { comment }

@@ -1,0 +1,2 @@
+class AmaController < ApplicationController
+end

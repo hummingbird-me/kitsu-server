@@ -25,7 +25,8 @@ RSpec.describe PostLike, type: :model do
   it { should validate_uniqueness_of(:post).scoped_to(:user_id) }
 
   context 'which is on AMA that is closed' do
-    let(:post) { build(:post, ama: true, closed: true) }
+    let(:ama) { build(:ama, start_time: 6.hours.ago) }
+    let(:post) { build(:post, ama: ama) }
     let(:post_like) { build(:post_like, post: post) }
 
     subject { post_like }

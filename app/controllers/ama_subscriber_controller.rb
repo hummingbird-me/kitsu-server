@@ -1,0 +1,2 @@
+class AmaSubscriberController < ApplicationController
+end

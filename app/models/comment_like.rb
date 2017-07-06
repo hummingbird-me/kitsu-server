@@ -29,10 +29,15 @@ class CommentLike < ApplicationRecord
   belongs_to :comment, required: true, counter_cache: :likes_count, touch: true
 
   validates :comment, uniqueness: { scope: :user_id }
-  validate :post_closed
+  validate :ama_closed
 
-  def post_closed
-    if comment.post.closed && comment.post.ama
+  def ama_closed
+    ama = comment.post.ama
+    return unless ama
+    return if ama.author == user
+    now_time = Time.now
+
+    unless ama.start_time <= now_time && ama.end_time >= now_time
       errors.add(:comment, 'cannot like comments on this ama')
     end
   end

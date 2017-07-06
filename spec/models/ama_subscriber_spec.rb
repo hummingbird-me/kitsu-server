@@ -22,23 +22,11 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class AmaSubscriber < ActiveRecord::Base
-  belongs_to :user, required: true
-  belongs_to :ama, required: true, counter_cache: true
+require 'rails_helper'
 
-  validates :ama_id, uniqueness: { scope: :user_id }
+RSpec.describe AmaSubscriber, type: :model do
+  subject { build(:ama_subscriber) }
 
-  after_commit(on: :create) do
-    ama.posts.each do |post|
-      user.notifications.follow(post.comments_feed, scrollback: 0)
-    end
-    user.notifications.follow(ama.original_post.comments_feed, scrollback: 0)
-  end
-
-  after_commit(on: :destroy) do
-    ama.posts.each do |post|
-      user.notifications.unfollow(post.comments_feed)
-    end
-    user.notifications.unfollow(ama.original_post.comments_feed)
-  end
+  it { should have_one(:ama) }
+  it { should have_one(:user) }
 end

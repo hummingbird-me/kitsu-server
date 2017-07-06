@@ -25,13 +25,12 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Ama < ActiveRecord::Base
-  has_one :author, required: true, class_name: 'User'
-  has_one :original_post, required: true, class_name: 'Post'
-  has_many :posts, dependent: :destroy
-  has_many :ama_subscribers, dependent: :destroy
+require 'rails_helper'
 
-  before_validation do
-    self.end_date = start_date + 1.hour
-  end
+RSpec.describe Ama, type: :model do
+  subject { build(:ama) }
+
+  it { should have_one(:author) }
+  it { should have_one(:original_post) }
+  it { should have_one(:original_post) }
 end

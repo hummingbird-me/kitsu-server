@@ -19,6 +19,7 @@
 #  top_level_comments_count :integer          default(0), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  ama_id                   :integer          indexed
 #  media_id                 :integer
 #  spoiled_unit_id          :integer
 #  target_group_id          :integer
@@ -27,12 +28,14 @@
 #
 # Indexes
 #
+#  index_posts_on_ama_id      (ama_id)
 #  index_posts_on_deleted_at  (deleted_at)
 #
 # Foreign Keys
 #
 #  fk_rails_5b5ddfd518  (user_id => users.id)
 #  fk_rails_6fac2de613  (target_user_id => users.id)
+#  fk_rails_a9229d0c7d  (ama_id => amas.id)
 #
 # rubocop:enable Metrics/LineLength
 
@@ -126,5 +129,16 @@ RSpec.describe Post, type: :model do
     post = build(:post, target_group: group, target_user: user)
     post.valid?
     expect(post.errors).to include(:target_group, :target_user)
+  end
+
+  context 'which is on AMA that is closed' do
+    let(:ama) { build(:ama, start_time: 6.hours.ago) }
+    let(:post) { build(:post, ama: ama) }
+
+    subject { post_follow }
+
+    it 'should not be valid' do
+      should_not be_valid
+    end
   end
 end
