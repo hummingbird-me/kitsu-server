@@ -51,14 +51,13 @@ module Onebox
       end
 
       def album?
-        response =
-          Onebox::Helpers.fetch_response(
-            "http://api.imgur.com/oembed.json?url=#{url}"
-          ) rescue '{}'
-        oembed_data = Onebox::Helpers.symbolize_keys(::MultiJson.load(response))
+        response = Typhoeus.get(
+          "http://api.imgur.com/oembed.json?url=#{CGI.escape(url)}"
+        ) rescue '{}'
+        oembed_data =
+          Onebox::Helpers.symbolize_keys(::MultiJson.load(response.body))
         imgur_data_id =
-          Nokogiri::HTML(oembed_data[:html])
-                  .xpath('//blockquote').attr('data-id')
+          Nokogiri::HTML(oembed_data[:html]).css('blockquote').attr('data-id')
         imgur_data_id.to_s[%r{a\/}]
       end
 
