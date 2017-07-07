@@ -52,7 +52,6 @@ class Category < ApplicationRecord
   has_many :children, class_name: 'Category',
                       foreign_key: 'parent_id', dependent: :destroy
 
-
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]
   }
