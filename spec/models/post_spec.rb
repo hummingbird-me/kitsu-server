@@ -132,10 +132,10 @@ RSpec.describe Post, type: :model do
   end
 
   context 'which is on AMA that is closed' do
-    let(:ama) { build(:ama, start_time: 6.hours.ago) }
+    let(:ama) { create(:ama, start_date: 6.hours.ago) }
     let(:post) { build(:post, ama: ama) }
 
-    subject { post_follow }
+    subject { post }
 
     it 'should not be valid' do
       should_not be_valid

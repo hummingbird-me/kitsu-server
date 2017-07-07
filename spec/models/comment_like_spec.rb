@@ -29,15 +29,14 @@ RSpec.describe CommentLike, type: :model do
   it { should belong_to(:comment).counter_cache(:likes_count) }
 
   context 'which is on AMA that is closed' do
-    let(:ama) { build(:ama, start_time: 6.hours.ago) }
-    let(:post) { build(:post, ama: ama) }
-    let(:comment) { build(:comment, post: post) }
-    let(:comment_like) { build(:comment_like, comment: comment) }
-
-    subject { comment_like }
-
     it 'should not be valid' do
-      should_not be_valid
+      ama = create(:ama)
+      post = create(:post, ama: ama)
+      comment = build(:comment, post: post)
+      ama.start_date = 6.hours.ago
+      ama.save
+      comment_like = build(:comment_like, comment: comment)
+      expect(comment_like).not_to be_valid
     end
   end
 end

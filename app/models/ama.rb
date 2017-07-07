@@ -25,9 +25,9 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Ama < ActiveRecord::Base
-  has_one :author, required: true, class_name: 'User'
-  has_one :original_post, required: true, class_name: 'Post'
+class Ama < ApplicationRecord
+  belongs_to :author, required: true, class_name: 'User'
+  belongs_to :original_post, required: true, class_name: 'Post'
   has_many :posts, dependent: :destroy
   has_many :ama_subscribers, dependent: :destroy
 

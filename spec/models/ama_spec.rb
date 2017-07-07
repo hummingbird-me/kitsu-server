@@ -30,7 +30,7 @@ require 'rails_helper'
 RSpec.describe Ama, type: :model do
   subject { build(:ama) }
 
-  it { should have_one(:author) }
-  it { should have_one(:original_post) }
-  it { should have_one(:original_post) }
+  it { should belong_to(:author) }
+  it { should belong_to(:original_post) }
+  it { should have_many(:posts) }
 end

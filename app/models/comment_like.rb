@@ -32,12 +32,13 @@ class CommentLike < ApplicationRecord
   validate :ama_closed
 
   def ama_closed
+    return unless comment.post
+    return unless comment.post.ama
     ama = comment.post.ama
-    return unless ama
     return if ama.author == user
     now_time = Time.now
 
-    unless ama.start_time <= now_time && ama.end_time >= now_time
+    unless ama.start_date <= now_time && ama.end_date >= now_time
       errors.add(:comment, 'cannot like comments on this ama')
     end
   end

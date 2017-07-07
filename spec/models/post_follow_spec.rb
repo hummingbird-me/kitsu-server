@@ -31,7 +31,7 @@ RSpec.describe PostFollow, type: :model do
   it { should validate_uniqueness_of(:post).scoped_to(:user_id) }
 
   context 'which is on AMA that is closed' do
-    let(:ama) { build(:ama, start_time: 6.hours.ago) }
+    let(:ama) { create(:ama, start_date: 6.hours.ago) }
     let(:post) { build(:post, ama: ama) }
     let(:post_follow) { build(:post_follow, post: post) }
 

@@ -27,6 +27,6 @@ require 'rails_helper'
 RSpec.describe AmaSubscriber, type: :model do
   subject { build(:ama_subscriber) }
 
-  it { should have_one(:ama) }
-  it { should have_one(:user) }
+  it { should belong_to(:ama) }
+  it { should belong_to(:user) }
 end

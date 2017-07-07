@@ -57,14 +57,13 @@ RSpec.describe Comment, type: :model do
   end
 
   context 'which is on AMA that is closed' do
-    let(:ama) { build(:ama, start_time: 6.hours.ago) }
-    let(:post) { build(:post, ama: ama) }
-    let(:comment) { build(:comment, post: post) }
-
-    subject { comment }
-
     it 'should not be valid' do
-      should_not be_valid
+      ama = create(:ama)
+      post = create(:post, ama: ama)
+      ama.start_date = 6.hours.ago
+      ama.save
+      comment = build(:comment, post: post)
+      expect(comment).not_to be_valid
     end
   end
 end
