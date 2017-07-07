@@ -9,5 +9,5 @@ class MediaReactionResource < BaseResource
   has_many :votes
 
   filters :created_at, :up_votes_count,
-    :user_id, :anime_id, :drama_id, :manga_id
+    :user_id, :anime_id, :drama_id, :manga_id, :media_type
 end
