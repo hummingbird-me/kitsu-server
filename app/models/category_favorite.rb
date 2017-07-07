@@ -23,7 +23,7 @@
 
 require_dependency 'stream/custom_endpoint_client'
 
-class CategoryFavorite < ActiveRecord::Base
+class CategoryFavorite < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :category, required: true
 
