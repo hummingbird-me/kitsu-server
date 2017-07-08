@@ -282,6 +282,10 @@ class User < ApplicationRecord
     @library_feed ||= PrivateLibraryFeed.new(id)
   end
 
+  def interest_timeline_for(interest)
+    "#{interest.to_s.classify}TimelineFeed".safe_constantize.new(id)
+  end
+
   def update_feed_completed
     return self if feed_completed?
     if library_entries.rated.count >= 5 && following.count >= 5 &&

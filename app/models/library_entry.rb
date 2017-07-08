@@ -149,12 +149,9 @@ class LibraryEntry < ApplicationRecord
   end
 
   def kind
-    if anime.present?
-      :anime
-    elsif manga.present?
-      :manga
-    elsif drama.present?
-      :drama
+    if anime.present? then :anime
+    elsif manga.present? then :manga
+    elsif drama.present? then :drama
     end
   end
 
@@ -216,6 +213,10 @@ class LibraryEntry < ApplicationRecord
       user.update_feed_completed!
       user.update_profile_completed!
     end
+  end
+
+  after_save if: :progress_changed? do
+    user.interest_timeline_for(kind).follow_units_for(media, progress)
   end
 
   after_create do
