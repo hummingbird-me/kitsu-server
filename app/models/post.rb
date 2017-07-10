@@ -61,7 +61,8 @@ class Post < ApplicationRecord
   validates :media, presence: true, if: :spoiled_unit
   validates :content, length: { maximum: 9_000 }
   validates :media, polymorphism: { type: Media }, allow_blank: true
-  validates :target_user, absence: true, if: :target_group
+  # posting to a group, posting to a profile, and posting to an interest are mutually exclusive.
+  validates_with ExclusivityValidator, on: %i[target_user target_group target_interest]
 
   def feed
     PostFeed.new(id)
