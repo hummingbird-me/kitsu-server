@@ -25,10 +25,10 @@ class MediaFollow < ApplicationRecord
   scope :for_library_entry, ->(le) { where(media: le.media, user: le.user) }
 
   after_create do
-    user.timeline.follow(media.feed)
+    user.interest_timeline_for(media_type).follow(media.feed)
   end
 
   after_destroy do
-    user.timeline.unfollow(media.feed)
+    user.interest_timeline_for(media_type).unfollow(media.feed)
   end
 end

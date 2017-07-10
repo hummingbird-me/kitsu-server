@@ -22,7 +22,7 @@ RSpec.describe MediaFollow, type: :model do
   let(:timeline) { double(:feed).as_null_object }
 
   before do
-    allow(subject.user).to receive(:timeline).and_return(timeline)
+    allow(subject.user).to receive(:interest_timeline_for).and_return(timeline)
   end
 
   subject { build(:media_follow) }
@@ -33,7 +33,7 @@ RSpec.describe MediaFollow, type: :model do
   it { should validate_presence_of(:media) }
 
   it 'should follow the media feed on save' do
-    expect(subject.user.timeline).to receive(:follow)
+    expect(timeline).to receive(:follow)
       .with(subject.media.feed)
     subject.save!
   end
