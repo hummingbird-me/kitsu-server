@@ -27,7 +27,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Category < ActiveRecord::Base
+class Category < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: %i[slugged finders history]
   resourcify
@@ -51,7 +51,6 @@ class Category < ActiveRecord::Base
                       touch: true, counter_cache: 'child_count'
   has_many :children, class_name: 'Category',
                       foreign_key: 'parent_id', dependent: :destroy
-
 
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]

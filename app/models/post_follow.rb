@@ -21,7 +21,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class PostFollow < ActiveRecord::Base
+class PostFollow < ApplicationRecord
   belongs_to :user, required: true, touch: true
   belongs_to :post, required: true
 

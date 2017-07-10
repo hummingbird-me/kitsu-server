@@ -20,7 +20,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class OneSignalPlayer < ActiveRecord::Base
+class OneSignalPlayer < ApplicationRecord
   belongs_to :user
 
   enum platform: %i[web mobile]
