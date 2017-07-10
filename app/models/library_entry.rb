@@ -196,11 +196,8 @@ class LibraryEntry < ApplicationRecord
     unless imported || private?
       activity.rating(rating)&.create if rating_changed? && rating.present?
       activity.status(status)&.create if status_changed?
-      # If the progress has changed, make an activity unless the status is also
-      # changing
-      if progress_changed? && !status_changed?
-        activity.progress(progress)&.create
-      end
+      # If the progress has changed, make an activity unless the status is also changing
+      activity.progress(progress)&.create if progress_changed? && !status_changed?
       media.trending_vote(user, 0.5) if progress_changed?
       media.trending_vote(user, 1.0) if status_changed?
     end
