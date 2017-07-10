@@ -32,7 +32,7 @@ class Feed
   # via {#follows_for} and then sending them to {Feed::StreamFeed#follow_many}
   # in batches of up to 1000.
   def follow_many(targets, scrollback: 30)
-    follows = targets.map { |target| follows_for(target) }.reduce(&:merge)
+    follows = targets.flat_map { |target| follows_for(target) }
     # Split the follows into groups of 990 to stay below the limit.  I'm not
     # certain, but I believe the limit is 1000 follows per follow_many request.
     follows.in_groups_of(990, false) do |follow_batch|
