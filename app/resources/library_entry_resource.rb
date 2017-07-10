@@ -48,6 +48,14 @@ class LibraryEntryResource < BaseResource
     records.following(values.join(','))
   }
 
+  filter :follows, apply: ->(records, values, options) {
+    current_user = options[:context][:current_user]
+    return records if current_user.nil?
+    records.joins(user: :followers)
+           .where('follows.follower_id': current_user.resource_owner_id)
+           .where(anime_id: values[0])
+  }
+
   has_one :user
   has_one :anime
   has_one :manga
