@@ -219,6 +219,18 @@ class LibraryEntry < ApplicationRecord
     user.interest_timeline_for(kind).follow_units_for(media, progress)
   end
 
+  after_save if: :status_changed? do
+    if dropped?
+      MediaFollow.for_library_entry(self).destroy_all
+    else
+      MediaFollow.for_library_entry(self).first_or_create!
+    end
+  end
+
+  after_destroy do
+    MediaFollow.for_library_entry(self).destroy_all
+  end
+
   after_create do
     # Activity History Stat will be using this
     library_event = LibraryEvent.create_for(:added, self)
