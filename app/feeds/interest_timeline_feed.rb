@@ -8,6 +8,15 @@ class InterestTimelineFeed < Feed
   include UnsuffixedAggregatedFeed
 
   def self.global_for(interest)
-    new(global, interest)
+    new('global', interest)
+  end
+
+  def self.global
+    new('global')
+  end
+
+  def default_auto_follows
+    global_follow = { source: stream_feed, target: self.class.global }
+    [global_follow, *super]
   end
 end
