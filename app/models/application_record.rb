@@ -1,10 +1,10 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
-  
+
   WHITELISTED_ADMIN_FIELDS = %w[episode_count chapter_count volume_count].freeze
 
   def stream_id
-    "#{self.class.name}:#{self.id}"
+    "#{self.class.name}:#{id}"
   end
 
   def self.paperclip_definitions
