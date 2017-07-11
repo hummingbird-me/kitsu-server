@@ -22,23 +22,13 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class AmaSubscriber < ApplicationRecord
+class AMASubscriber < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :ama, required: true, counter_cache: true
 
   validates :ama_id, uniqueness: { scope: :user_id }
-
-  after_commit(on: :create) do
-    ama.posts.each do |post|
-      user.notifications.follow(post.comments_feed, scrollback: 0)
-    end
-    user.notifications.follow(ama.original_post.comments_feed, scrollback: 0)
-  end
-
-  after_commit(on: :destroy) do
-    ama.posts.each do |post|
-      user.notifications.unfollow(post.comments_feed)
-    end
-    user.notifications.unfollow(ama.original_post.comments_feed)
-  end
+  validates :ama, active_ama: {
+    message: 'can not subscribe to this AMA',
+    user: :user
+  }
 end

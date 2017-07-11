@@ -1,4 +1,4 @@
-class AmaSubscriberPolicy < ApplicationPolicy
+class AMASubscriberPolicy < ApplicationPolicy
   def create?
     record.user == user
   end

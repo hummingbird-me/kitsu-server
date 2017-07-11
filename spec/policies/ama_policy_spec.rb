@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AmaPolicy do
+RSpec.describe AMAPolicy do
   let(:user) { token_for build(:user, id: 1) }
   let(:other) { token_for build(:user, id: 2) }
   let(:ama) { build(:ama, author: user.resource_owner) }

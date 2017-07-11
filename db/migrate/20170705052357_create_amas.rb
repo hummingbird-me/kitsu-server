@@ -1,4 +1,4 @@
-class CreateAmas < ActiveRecord::Migration
+class CreateAMAs < ActiveRecord::Migration
   def change
     create_table :amas do |t|
       t.string :description, null: false, required: true

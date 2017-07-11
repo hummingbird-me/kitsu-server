@@ -30,8 +30,8 @@ RSpec.describe CommentLike, type: :model do
 
   context 'which is on AMA that is closed' do
     it 'should not be valid' do
-      ama = create(:ama)
-      post = create(:post, ama: ama)
+      post = create(:post)
+      ama = create(:ama, original_post: post)
       comment = build(:comment, post: post)
       ama.start_date = 6.hours.ago
       ama.save

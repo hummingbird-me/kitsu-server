@@ -25,13 +25,37 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class Ama < ApplicationRecord
+class AMA < ApplicationRecord
   belongs_to :author, required: true, class_name: 'User'
   belongs_to :original_post, required: true, class_name: 'Post'
-  has_many :posts, dependent: :destroy
   has_many :ama_subscribers, dependent: :destroy
+
+  scope :for_original_post, ->(post) { where(original_post: post) }
+
+  def send_ama_notifciation
+    subscriber_notifications = ama_subscribers.map(&:user).map(&:notifications)
+    original_post.feed.activities.new(
+      target: original_post,
+      actor: author,
+      object: self,
+      foreign_id: self,
+      verb: self.class.name.underscore,
+      time: Time.now,
+      to: subscriber_notifications
+    )
+  end
+
+  def open?
+    now_time = Time.now
+    start_date <= now_time && end_date >= now_time
+  end
 
   before_validation do
     self.end_date = start_date + 1.hour
+  end
+
+  after_commit do
+    ama_starting_soon_time = start_date - 1.hour
+    AMAStartingWorker.perform_at(self, ama_starting_soon_time)
   end
 end

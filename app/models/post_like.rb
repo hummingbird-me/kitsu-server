@@ -22,23 +22,16 @@ class PostLike < ApplicationRecord
   belongs_to :post, required: true, counter_cache: true, touch: true
 
   validates :post, uniqueness: { scope: :user_id }
-  validate :ama_closed
+  validates :post, active_ama: {
+    message: 'cannot like this AMA',
+    post: true,
+    user: :user
+  }
 
   counter_culture :user, column_name: 'likes_given_count'
   counter_culture %i[post user], column_name: 'likes_received_count'
 
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
-
-  def ama_closed
-    ama = post.ama
-    return unless ama
-    return if ama.author == user
-    now_time = Time.now
-
-    unless ama.start_date <= now_time && ama.end_date >= now_time
-      errors.add(:post, 'cannot make anymore likes on this ama')
-    end
-  end
 
   def stream_activity
     notify = [post.user.notifications] unless post.user == user

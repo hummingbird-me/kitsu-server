@@ -1,4 +1,4 @@
-class AmaPolicy < ApplicationPolicy
+class AMAPolicy < ApplicationPolicy
   def update?
     record.author == user
   end

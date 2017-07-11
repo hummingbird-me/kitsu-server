@@ -24,7 +24,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AmaSubscriber, type: :model do
+RSpec.describe AMASubscriber, type: :model do
   subject { build(:ama_subscriber) }
 
   it { should belong_to(:ama) }

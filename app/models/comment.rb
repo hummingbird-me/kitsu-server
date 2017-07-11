@@ -53,7 +53,11 @@ class Comment < ApplicationRecord
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
   validates :content, length: { maximum: 9_000 }
-  validate :ama_closed
+  validates :post, active_ama: {
+    message: 'cannot make any more comments on this AMA',
+    post: :post,
+    user: :user
+  }
 
   def stream_activity
     to = []
@@ -83,18 +87,6 @@ class Comment < ApplicationRecord
 
   def no_grandparents
     errors.add(:parent, 'cannot have a parent of their own') if parent&.parent
-  end
-
-  def ama_closed
-    return unless post
-    return unless post.ama
-    ama = post.ama
-    return if ama.author == user
-    now_time = Time.now
-
-    unless ama.start_date <= now_time && ama.end_date >= now_time
-      errors.add(:post, 'cannot make any more comments on this ama')
-    end
   end
 
   before_update do
