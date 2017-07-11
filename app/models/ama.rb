@@ -56,6 +56,6 @@ class AMA < ApplicationRecord
 
   after_commit do
     ama_starting_soon_time = start_date - 1.hour
-    AMAStartingWorker.perform_at(self, ama_starting_soon_time)
+    AMAStartingWorker.perform_at(ama_starting_soon_time, self)
   end
 end
