@@ -28,6 +28,18 @@ class NotificationSetting < ApplicationRecord
   enum setting_type: NOTIFICATION_TYPES
   belongs_to :user
 
+  def self.get_stream_kitsu_notification_type(type, stream_mentions, feed_id)
+    stream_kitsu_notification_setting_map = {
+      follow: :follows,
+      post: :posts,
+      post_like: :likes,
+      comment_like: :likes,
+      invited: nil,
+      comment: 'mentions'.to_sym ? stream_mentions.include?(feed_id.to_i) : :posts
+    }
+    stream_kitsu_notification_setting_map[type.to_sym]
+  end
+
   def self.setup_notification_settings(user)
     NOTIFICATION_TYPES.each do |st|
       NotificationSetting.where(

@@ -8,9 +8,19 @@ class OneSignalNotificationWorker
 
     return if player_ids.blank?
 
+    stream_activity = service&.activity
+
+    notif_type = NotificationSetting.get_stream_kitsu_notification_type(
+      stream_activity['verb'],
+      stream_activity['mentioned_users'] || [],
+      service&.feed_id
+    )
+
+    filtered_player_ids = OneSignalPlayer.filter_player_ids(player_ids, notif_type)
+
     one_signal_service = OneSignalNotificationService.new(
       service.stringify_activity,
-      player_ids,
+      filtered_player_ids,
       url: service.feed_url,
       chrome_web_icon: 'https://media.kitsu.io/kitsu-256.png'
     )
