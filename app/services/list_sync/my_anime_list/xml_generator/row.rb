@@ -57,10 +57,14 @@ module ListSync
         end
 
         def started_at
+          return if entry.started_at.nil?
+
           { my_start_date: entry.started_at&.strftime('%F') }
         end
 
         def finished_at
+          return if entry.finished_at.nil?
+
           { my_finish_date: entry.finished_at&.strftime('%F') }
         end
 
