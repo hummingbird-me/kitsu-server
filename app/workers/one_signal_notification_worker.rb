@@ -10,7 +10,7 @@ class OneSignalNotificationWorker
 
     stream_activity = service&.activity
 
-    notif_type = NotificationSetting.get_stream_kitsu_notification_type(
+    notif_type = NotificationSetting.type_for_activity(
       stream_activity['verb'],
       stream_activity['mentioned_users'] || [],
       service&.feed_id
