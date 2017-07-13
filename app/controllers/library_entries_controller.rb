@@ -20,15 +20,15 @@ class LibraryEntriesController < ApplicationController
       reaction_ids: [],
       attributes_ids: []
     }
-    
+
     library_entries = LibraryEntry.includes(
-      :media_reaction, 
+      :media_reaction,
       media: :media_attribute_votes
     ).where(user: user)
 
     library_entries.each do |entry|
-      missing_library_engagement[:rating_ids] << entry.id if entry.rating == nil
-      missing_library_engagement[:reaction_ids] << entry.id if entry.media_reaction == nil
+      missing_library_engagement[:rating_ids] << entry.id if entry.rating.nil?
+      missing_library_engagement[:reaction_ids] << entry.id if entry.media_reaction.nil?
       votes = entry.media.media_attribute_votes.select { |mv| mv.vote == :unvoted }
       missing_library_engagement[:attributes_ids] << entry.id unless votes.empty?
     end
