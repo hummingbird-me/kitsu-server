@@ -61,6 +61,7 @@ RSpec.describe Comment, type: :model do
       post = create(:post)
       ama = create(:ama, original_post: post)
       ama.start_date = 6.hours.ago
+      ama.end_date = ama.start_date + 1.hour
       ama.save
       comment = build(:comment, post: post)
       expect(comment).not_to be_valid

@@ -32,7 +32,7 @@ class AMA < ApplicationRecord
 
   scope :for_original_post, ->(post) { where(original_post: post) }
 
-  def send_ama_notifciation
+  def send_ama_notification
     subscriber_notifications = ama_subscribers.map(&:user).map(&:notifications)
     original_post.feed.activities.new(
       target: original_post,
@@ -46,12 +46,12 @@ class AMA < ApplicationRecord
   end
 
   def open?
-    now_time = Time.now
-    start_date <= now_time && end_date >= now_time
+    (start_date..end_date).cover?(Time.now)
   end
 
   before_validation do
-    self.end_date = start_date + 1.hour
+    self.end_date = start_date + 1.hour if start_date.to_i >= end_date.to_i
+    self.end_date ||= start_date + 1.hour
   end
 
   after_commit do

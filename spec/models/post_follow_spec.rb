@@ -35,6 +35,7 @@ RSpec.describe PostFollow, type: :model do
       post = create(:post)
       ama = create(:ama, original_post: post)
       ama.start_date = 6.hours.ago
+      ama.end_date = ama.start_date + 1.hour
       ama.save
       post_follow = build(:post_follow, post: post)
       expect(post_follow).not_to be_valid

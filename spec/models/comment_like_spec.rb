@@ -34,6 +34,7 @@ RSpec.describe CommentLike, type: :model do
       ama = create(:ama, original_post: post)
       comment = build(:comment, post: post)
       ama.start_date = 6.hours.ago
+      ama.end_date = ama.start_date + 1.hour
       ama.save
       comment_like = build(:comment_like, comment: comment)
       expect(comment_like).not_to be_valid

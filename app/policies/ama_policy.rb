@@ -1,11 +1,13 @@
 class AMAPolicy < ApplicationPolicy
   def update?
-    record.author == user
+    record.author == user || is_admin?
   end
 
   def destroy?
     record.author == user || is_admin?
   end
 
-  alias_method :create?, :update?
+  def create?
+    is_admin?
+  end
 end

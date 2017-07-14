@@ -29,6 +29,7 @@ RSpec.describe PostLike, type: :model do
       post = create(:post)
       ama = create(:ama, original_post: post)
       ama.start_date = 6.hours.ago
+      ama.end_date = ama.start_date + 1.hour
       ama.save
       post_like = build(:post_like, post: post)
       expect(post_like).not_to be_valid
