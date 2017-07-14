@@ -58,6 +58,10 @@ namespace :stream do
       end
     end
 
+    task progress_follows: :load_dumper do
+      StreamDump.library_progress_follows.each { |instr| STDOUT.puts instr.to_json }
+    end
+
     desc 'Dump posts in the mass import format for Stream'
     task posts: :load_dumper do
       StreamDump.posts.each { |instr| STDOUT.puts instr.to_json }

@@ -213,6 +213,35 @@ module StreamDump
     flatten(results)
   end
 
+  def library_progress_follows(scope = User)
+    results = each_user(scope) do |user_id|
+      anime_entries = LibraryEntry.where(user_id: user_id).by_kind(:anime)
+      manga_entries = LibraryEntry.where(user_id: user_id).by_kind(:manga)
+      episode_ids = anime_entries.joins(<<-SQL).pluck('episodes.id')
+        JOIN episodes ON (episodes.number <= progress OR reconsume_count > 1)
+                      AND episodes.media_id = library_entries.anime_id
+                      AND episodes.media_type = 'Anime'
+      SQL
+      chapter_ids = manga_entries.joins(<<-SQL).pluck('chapters.id')
+        JOIN chapters ON (chapters.number <= progress OR reconsume_count > 1)
+                      AND chapters.manga_id = library_entries.manga_id
+      SQL
+      [
+        {
+          instruction: 'follow',
+          feedId: AnimeTimelineFeed.new(user_id).stream_id,
+          data: episode_ids.map { |id| "episode:#{id}" }
+        },
+        {
+          instruction: 'follow',
+          feedId: MangaTimelineFeed.new(user_id).stream_id,
+          data: chapter_ids.map { |id| "chapter:#{id}" }
+        }
+      ]
+    end
+    flatten(results)
+  end
+
   def flatten(enumerator)
     enumerator.flat_map { |x| x }
   end
