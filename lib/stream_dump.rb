@@ -215,17 +215,41 @@ module StreamDump
 
   def library_progress_follows(scope = User)
     results = each_user(scope) do |user_id|
+      # Load Library Data
       anime_entries = LibraryEntry.where(user_id: user_id).by_kind(:anime)
       manga_entries = LibraryEntry.where(user_id: user_id).by_kind(:manga)
-      episode_ids = anime_entries.joins(<<-SQL).pluck('episodes.id')
+
+      ### Anime Episodes
+      # Get the episodes for the progress, and add a row_number by reverse order of episode number.
+      # This allows us to filter based on the "recency" of episodes
+      episode_ids = anime_entries.select(<<-SELECTS.squish).joins(<<-JOINS.squish)
+        episodes.id,
+        row_number() OVER (
+          PARTITION BY episodes.media_type, episodes.media_id
+          ORDER BY episodes.number DESC
+        )
+      SELECTS
         JOIN episodes ON (episodes.number <= progress OR reconsume_count > 1)
                       AND episodes.media_id = library_entries.anime_id
                       AND episodes.media_type = 'Anime'
-      SQL
-      chapter_ids = manga_entries.joins(<<-SQL).pluck('chapters.id')
+      JOINS
+      # Grab the Episode IDs for the last 3 episodes the user has seen, for each show
+      episode_ids = Episode.from(episode_ids).where('row_number <= 3').pluck('subquery.id')
+
+      ### Manga Chapters
+      # Get the chapters for the progress, and add a row_number by reverse order of chapter number.
+      # As above, this allows us to filter to just the last few chapters.
+      chapter_ids = manga_entries.select(<<-SELECTS.squish).joins(<<-JOINS.squish)
+        chapters.id,
+        row_number() OVER (PARTITION BY chapters.manga_id ORDER BY chapters.number DESC)
+      SELECTS
         JOIN chapters ON (chapters.number <= progress OR reconsume_count > 1)
                       AND chapters.manga_id = library_entries.manga_id
-      SQL
+      JOINS
+      # Grab the Chapter IDS for the last 3 chapters the user has seen, for each show
+      chapter_ids = Chapter.from(chapter_ids).where('row_number <= 3').pluck('subquery.id')
+
+      # Generate the follows JSON
       [
         {
           instruction: 'follow',
