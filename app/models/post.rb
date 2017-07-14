@@ -58,10 +58,6 @@ class Post < ApplicationRecord
 
   validates :content, :content_formatted, presence: true
   validates :media, presence: true, if: :spoiled_unit
-  validates :spoiler, acceptance: {
-    accept: true,
-    message: 'must be true if spoiled_unit is provided'
-  }, if: :spoiled_unit
   validates :content, length: { maximum: 9_000 }
   validates :media, polymorphism: { type: Media }, allow_blank: true
   validates :target_user, absence: true, if: :target_group
