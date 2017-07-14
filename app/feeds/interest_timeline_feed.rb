@@ -7,8 +7,12 @@
 class InterestTimelineFeed < Feed
   include UnsuffixedAggregatedFeed
 
+  def self.for_interest(interest)
+    "#{interest.classify}TimelineFeed".safe_constantize
+  end
+
   def self.global_for(interest)
-    new('global', interest)
+    for_interest(interest)&.global
   end
 
   def self.global
