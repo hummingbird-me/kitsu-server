@@ -15,7 +15,7 @@ class LibraryEntriesController < ApplicationController
 
   def issues
     authenticate_user!
-    missing_library_engagement = {
+    missing_library_data = {
       rating_ids: [],
       reaction_ids: [],
       attributes_ids: []
@@ -27,12 +27,12 @@ class LibraryEntriesController < ApplicationController
     ).where(user: user)
 
     library_entries.each do |entry|
-      missing_library_engagement[:rating_ids] << entry.id if entry.rating.nil?
-      missing_library_engagement[:reaction_ids] << entry.id if entry.media_reaction.nil?
+      missing_library_data[:rating_ids] << entry.id if entry.rating.nil? && entry.status.completed?
+      missing_library_data[:reaction_ids] << entry.id if entry.media_reaction.nil?
       votes = entry.media.media_attribute_votes.select { |mv| mv.vote == :unvoted }
-      missing_library_engagement[:attributes_ids] << entry.id unless votes.empty?
+      missing_library_data[:attributes_ids] << entry.id unless votes.empty?
     end
-    render json: missing_library_engagement
+    render json: missing_library_data
   end
 
   def bulk_delete
