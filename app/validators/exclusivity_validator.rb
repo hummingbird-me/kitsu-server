@@ -8,13 +8,13 @@ class ExclusivityValidator < ActiveModel::Validator
   end
 
   def validate(record)
-    values = attrs.map { |a| record.public_send(a) }
-    present_count = values.count(&:present?)
+    values = attrs.map { |a| [a, record.public_send(a)] }.to_h
+    present = values.select { |_, v| v.present? }.keys
 
-    return if present_count <= limit
+    return if present.count <= limit
 
-    attrs.each do |attr|
-      other_attrs = attrs - [attr]
+    present.each do |attr|
+      other_attrs = present - [attr]
       message = "cannot be set while #{other_attrs.join(', ')} are present"
       record.errors.add(attr, message)
     end
