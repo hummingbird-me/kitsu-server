@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ExclusivityValidator do
   context 'with a limit of 1' do
-    subject { described_class.new(on: %i[foo bar baz], limit: 1) }
+    subject { described_class.new(over: %i[foo bar baz], limit: 1) }
     RecordClass = Struct.new(:foo, :bar, :baz) do
       extend ActiveModel::Naming
       include ActiveModel::Validations
@@ -27,7 +27,7 @@ RSpec.describe ExclusivityValidator do
   end
 
   context 'with a limit of 3' do
-    subject { described_class.new(on: %i[foo bar baz bat fud], limit: 3) }
+    subject { described_class.new(over: %i[foo bar baz bat fud], limit: 3) }
     RecordClass = Struct.new(:foo, :bar, :baz, :bat, :fud) do
       extend ActiveModel::Naming
       include ActiveModel::Validations

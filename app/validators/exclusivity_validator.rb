@@ -3,7 +3,7 @@ class ExclusivityValidator < ActiveModel::Validator
 
   def initialize(options)
     super
-    @attrs = options[:on]
+    @attrs = options[:over]
     @limit = options[:limit] || 1
   end
 

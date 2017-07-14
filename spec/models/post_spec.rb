@@ -118,7 +118,13 @@ RSpec.describe Post, type: :model do
         expect(subject.nsfw).to eq(true)
       end
     end
+  end
 
-    it { should validate_absence_of(:target_user) }
+  it 'should not allow target_group and target_user to coexist' do
+    group = build(:group)
+    user = build(:user)
+    post = build(:post, target_group: group, target_user: user)
+    post.valid?
+    expect(post.errors).to include(:target_group, :target_user)
   end
 end
