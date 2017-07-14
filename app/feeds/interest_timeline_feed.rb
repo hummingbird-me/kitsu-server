@@ -8,7 +8,7 @@ class InterestTimelineFeed < Feed
   include UnsuffixedAggregatedFeed
 
   def self.for_interest(interest)
-    "#{interest.classify}TimelineFeed".safe_constantize
+    "#{interest.classify}TimelineFeed".safe_constantize if interest
   end
 
   def self.global_for(interest)
