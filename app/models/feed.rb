@@ -87,7 +87,7 @@ class Feed
 
   # Look up the class for a given feed name
   def self.class_for(name)
-    (@feeds && @feeds[name])
+    (@feeds && @feeds[name]) || "#{name.to_s.classify}Feed".safe_constantize
   end
 
   def self.feeds
