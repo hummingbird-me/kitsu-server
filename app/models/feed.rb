@@ -8,7 +8,7 @@ class Feed
 
   # Common sets of verbs to filter on
   MEDIA_VERBS = %w[updated rated progressed].to_set.freeze
-  POST_VERBS = %w[post comment follow review].to_set.freeze
+  POST_VERBS = %w[post comment follow review media_reaction].to_set.freeze
 
   attr_reader :id
 
