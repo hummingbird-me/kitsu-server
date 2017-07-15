@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         post :import_from_facebook, on: :collection
         post :import_from_twitter, on: :collection
       end
+      jsonapi_resources :media_ignores
       jsonapi_resources :post_follows
       jsonapi_resources :blocks
       # Imports & Linked Accounts

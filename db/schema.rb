@@ -873,13 +873,16 @@ ActiveRecord::Schema.define(version: 20170716054623) do
   add_index "media_attributes", ["slug"], name: "index_media_attributes_on_slug", using: :btree
   add_index "media_attributes", ["title"], name: "index_media_attributes_on_title", using: :btree
 
-  create_table "media_follows", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "media_id",   null: false
-    t.string   "media_type", null: false
+  create_table "media_ignores", force: :cascade do |t|
+    t.integer  "media_id"
+    t.string   "media_type"
+    t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "media_ignores", ["media_type", "media_id"], name: "index_media_ignores_on_media_type_and_media_id", using: :btree
+  add_index "media_ignores", ["user_id"], name: "index_media_ignores_on_user_id", using: :btree
 
   create_table "media_reaction_votes", force: :cascade do |t|
     t.integer  "user_id"
@@ -1505,7 +1508,7 @@ ActiveRecord::Schema.define(version: 20170716054623) do
   add_foreign_key "manga_staff", "manga"
   add_foreign_key "manga_staff", "people"
   add_foreign_key "media_attribute_votes", "users"
-  add_foreign_key "media_follows", "users"
+  add_foreign_key "media_ignores", "users"
   add_foreign_key "media_reaction_votes", "media_reactions"
   add_foreign_key "media_reaction_votes", "users"
   add_foreign_key "media_reactions", "anime"

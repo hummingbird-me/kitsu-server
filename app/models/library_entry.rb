@@ -172,8 +172,7 @@ class LibraryEntry < ApplicationRecord
 
   before_save do
     # When progress equals total episodes
-    self.status = :completed if !status_changed? &&
-                                progress == media&.progress_limit
+    self.status = :completed if !status_changed? && progress == media&.progress_limit
 
     if status_changed? && completed?
       # update progress to the cap
@@ -213,19 +212,7 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_save if: :progress_changed? do
-    user.interest_timeline_for(kind).follow_units_for(media, progress)
-  end
-
-  after_save if: :status_changed? do
-    if dropped?
-      MediaFollow.for_library_entry(self).destroy_all
-    else
-      MediaFollow.for_library_entry(self).first_or_create!
-    end
-  end
-
-  after_destroy do
-    MediaFollow.for_library_entry(self).destroy_all
+    MediaFollowUpdateWorker.perform_async(media)
   end
 
   after_create do
