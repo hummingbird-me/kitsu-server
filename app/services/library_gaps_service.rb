@@ -9,6 +9,7 @@ class LibraryGapsService
         ON votes.media_id = library_entries.media_id
         AND votes.media_type = library_entries.media_type
         AND votes.user_id = library_entries.user_id
+        AND votes.vote <> 0
       LEFT OUTER JOIN media_reactions reacts
         ON reacts.library_entry_id = library_entries.id
     JOINS
