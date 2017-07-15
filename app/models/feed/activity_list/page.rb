@@ -2,7 +2,7 @@ class Feed
   class ActivityList
     class Page
       # Verbs which get their groups stripped to one activity
-      STRIPPED_VERBS = Set.new(%w[post comment follow review]).freeze
+      STRIPPED_VERBS = Set.new(%w[post comment follow review media_reaction]).freeze
 
       attr_reader :opts, :data
 
