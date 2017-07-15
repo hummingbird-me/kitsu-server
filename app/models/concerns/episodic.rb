@@ -10,9 +10,7 @@ module Episodic
     return if num.nil?
 
     # If it's less than half of episodes, use average instead
-    if episode_count && num < (episode_count / 2)
-      length = episodes.length_average
-    end
+    length = episodes.length_average if episode_count && num < (episode_count / 2)
 
     update(episode_length: length)
   end

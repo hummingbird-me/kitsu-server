@@ -69,6 +69,7 @@ Rails.application.routes.draw do
       jsonapi_resources :manga_media_attributes
       jsonapi_resources :anime_productions
       jsonapi_resources :episodes
+      jsonapi_resources :chapters
       jsonapi_resources :stats
       # DEPRECATED: Legacy systems
       jsonapi_resources :castings
@@ -165,7 +166,7 @@ end
 
 # == Route Map
 #
-# I, [2017-06-29T19:58:01.167132 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-07-13T02:18:15.738360 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -971,6 +972,16 @@ end
 #                                                            PATCH     /api/edge/episodes/:id(.:format)                                                                           episodes#update
 #                                                            PUT       /api/edge/episodes/:id(.:format)                                                                           episodes#update
 #                                                            DELETE    /api/edge/episodes/:id(.:format)                                                                           episodes#destroy
+#                                chapter_relationships_manga GET       /api/edge/chapters/:chapter_id/relationships/manga(.:format)                                               chapters#show_relationship {:relationship=>"manga"}
+#                                                            PUT|PATCH /api/edge/chapters/:chapter_id/relationships/manga(.:format)                                               chapters#update_relationship {:relationship=>"manga"}
+#                                                            DELETE    /api/edge/chapters/:chapter_id/relationships/manga(.:format)                                               chapters#destroy_relationship {:relationship=>"manga"}
+#                                              chapter_manga GET       /api/edge/chapters/:chapter_id/manga(.:format)                                                             manga#get_related_resource {:relationship=>"manga", :source=>"chapters"}
+#                                                   chapters GET       /api/edge/chapters(.:format)                                                                               chapters#index
+#                                                            POST      /api/edge/chapters(.:format)                                                                               chapters#create
+#                                                    chapter GET       /api/edge/chapters/:id(.:format)                                                                           chapters#show
+#                                                            PATCH     /api/edge/chapters/:id(.:format)                                                                           chapters#update
+#                                                            PUT       /api/edge/chapters/:id(.:format)                                                                           chapters#update
+#                                                            DELETE    /api/edge/chapters/:id(.:format)                                                                           chapters#destroy
 #                                    stat_relationships_user GET       /api/edge/stats/:stat_id/relationships/user(.:format)                                                      stats#show_relationship {:relationship=>"user"}
 #                                                  stat_user GET       /api/edge/stats/:stat_id/user(.:format)                                                                    users#get_related_resource {:relationship=>"user", :source=>"stats"}
 #                                                      stats GET       /api/edge/stats(.:format)                                                                                  stats#index

@@ -54,7 +54,6 @@ RSpec.describe Post, type: :model do
     subject { build(:post, spoiled_unit: build(:episode)) }
     it { should validate_presence_of(:media) }
     it { should allow_value(true).for(:spoiler) }
-    it { should_not allow_value(false).for(:spoiler) }
   end
 
   context 'with a media' do
