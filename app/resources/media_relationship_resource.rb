@@ -9,4 +9,6 @@ class MediaRelationshipResource < BaseResource
 
   has_one :source, polymorphic: true
   has_one :destination, polymorphic: true
+
+  filter :source_id, :destination_id
 end

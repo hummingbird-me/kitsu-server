@@ -23,23 +23,24 @@
 
 require 'rails_helper'
 
-RSpec.describe Stat::AnimeGenreBreakdown do
+RSpec.describe Stat::MangaCategoryBreakdown do
   let(:user) { create(:user) }
-  let(:anime) { create(:anime, :genres) }
-  let!(:le) { create(:library_entry, user: user, anime: anime) }
+  let(:manga) { create(:manga, :categories) }
+  let!(:le) { create(:library_entry, user: user, manga: manga) }
 
   describe '#recalculate!' do
     it 'should create Stat' do
-      subject = Stat.find_by(user: user, type: 'Stat::AnimeGenreBreakdown')
+      subject = Stat.find_by(user: user, type: 'Stat::MangaCategoryBreakdown')
       subject.recalculate!
 
-      expect(Stat.last.stats_data).to_not be_nil
+      stat = Stat.find_by(user: user, type: 'Stat::MangaCategoryBreakdown')
+      expect(stat.stats_data).to_not be_nil
     end
   end
 
   describe '#self.increment' do
     it 'should have 5 total' do
-      record = Stat.find_by(user: user, type: 'Stat::AnimeGenreBreakdown')
+      record = Stat.find_by(user: user, type: 'Stat::MangaCategoryBreakdown')
 
       expect(record.stats_data['total']).to eq(5)
     end
@@ -47,10 +48,10 @@ RSpec.describe Stat::AnimeGenreBreakdown do
 
   describe '#self.decrement' do
     before do
-      Stat::AnimeGenreBreakdown.decrement(user, le)
+      Stat::MangaCategoryBreakdown.decrement(user, le)
     end
     it 'should have 0 total' do
-      record = Stat.find_by(user: user, type: 'Stat::AnimeGenreBreakdown')
+      record = Stat.find_by(user: user, type: 'Stat::MangaCategoryBreakdown')
 
       expect(record.stats_data['total']).to eq(0)
     end

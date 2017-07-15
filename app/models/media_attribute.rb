@@ -19,7 +19,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class MediaAttribute < ActiveRecord::Base
+class MediaAttribute < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: %i[slugged finders history]
   resourcify

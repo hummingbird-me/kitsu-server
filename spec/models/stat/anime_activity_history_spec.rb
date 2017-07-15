@@ -29,7 +29,6 @@ RSpec.describe Stat::AnimeActivityHistory do
   let(:anime1) { create(:anime) }
   let!(:le) { create(:library_entry, user: user, anime: anime) }
   let!(:le1) { create(:library_entry, user: user, anime: anime1) }
-  let!(:event) { create(:library_event, user: user, library_entry: le) }
 
   before(:each) do
     subject = Stat.find_by(user: user, type: 'Stat::AnimeActivityHistory')
@@ -39,9 +38,8 @@ RSpec.describe Stat::AnimeActivityHistory do
   describe '#recalculate!' do
     it 'should add all library entries related to user' do
       record = Stat.find_by(user: user, type: 'Stat::AnimeActivityHistory')
-
-      expect(record.stats_data['total']).to eq(3)
-      expect(record.stats_data['activity'].count).to eq(3)
+      expect(record.stats_data['total']).to eq(2)
+      expect(record.stats_data['activity'].count).to eq(2)
     end
   end
 
@@ -52,8 +50,9 @@ RSpec.describe Stat::AnimeActivityHistory do
     end
     it 'should update all stats_data' do
       record = Stat.find_by(user: user, type: 'Stat::AnimeActivityHistory')
-      expect(record.stats_data['total']).to eq(4)
-      expect(record.stats_data['activity'].count).to eq(4)
+
+      expect(record.stats_data['total']).to eq(3)
+      expect(record.stats_data['activity'].count).to eq(3)
     end
   end
 

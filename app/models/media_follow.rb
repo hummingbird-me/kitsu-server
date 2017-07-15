@@ -16,7 +16,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class MediaFollow < ActiveRecord::Base
+class MediaFollow < ApplicationRecord
   belongs_to :user, required: true, touch: true
   belongs_to :media, required: true, polymorphic: true
 

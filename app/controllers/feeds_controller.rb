@@ -76,7 +76,7 @@ class FeedsController < ApplicationController
       media && show?(media)
     when 'episode'
       episode = Episode.find(params[:id])
-      show?(episode.anime)
+      show?(episode.media)
     when 'chapter'
       chapter = Chapter.find(params[:id])
       show?(chapter.manga)

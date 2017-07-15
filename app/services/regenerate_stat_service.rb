@@ -1,11 +1,11 @@
 class RegenerateStatService
   class << self
-    def anime_genre_breakdown
-      user_stat(:anime, 'Stat::AnimeGenreBreakdown')
+    def anime_category_breakdown
+      user_stat(:anime, 'Stat::AnimeCategoryBreakdown')
     end
 
-    def manga_genre_breakdown
-      user_stat(:manga, 'Stat::MangaGenreBreakdown')
+    def manga_category_breakdown
+      user_stat(:manga, 'Stat::MangaCategoryBreakdown')
     end
 
     def anime_amount_consumed

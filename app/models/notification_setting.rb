@@ -23,10 +23,19 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class NotificationSetting < ActiveRecord::Base
+class NotificationSetting < ApplicationRecord
   NOTIFICATION_TYPES = %i[mentions replies likes follows posts].freeze
   enum setting_type: NOTIFICATION_TYPES
   belongs_to :user
+
+  def self.type_for_activity(type, stream_mentions, feed_id)
+    case type
+    when :follow then :follows
+    when :post then :posts
+    when :post_like, :comment_like then :likes
+    when :comment then stream_mentions.include?(feed_id.to_i) ? :mentions : :posts
+    end
+  end
 
   def self.setup_notification_settings(user)
     NOTIFICATION_TYPES.each do |st|

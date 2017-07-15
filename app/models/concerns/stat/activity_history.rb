@@ -8,7 +8,8 @@ class Stat < ApplicationRecord
     }.freeze
 
     def recalculate!
-      activity = user.library_events.eager_load(media_column)
+      activity = user.library_events.by_kind(media_column)
+                     .eager_load(media_column)
 
       # clear stats_data
       self.stats_data = {}

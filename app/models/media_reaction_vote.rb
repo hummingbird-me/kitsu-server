@@ -22,7 +22,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class MediaReactionVote < ActiveRecord::Base
+class MediaReactionVote < ApplicationRecord
   belongs_to :media_reaction, required: true
   belongs_to :user, required: true
 

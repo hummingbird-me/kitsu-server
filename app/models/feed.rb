@@ -8,7 +8,7 @@ class Feed
 
   # Common sets of verbs to filter on
   MEDIA_VERBS = %w[updated rated progressed].to_set.freeze
-  POST_VERBS = %w[post comment follow review].to_set.freeze
+  POST_VERBS = %w[post comment follow review media_reaction].to_set.freeze
 
   attr_reader :id
 
@@ -87,7 +87,7 @@ class Feed
 
   # Look up the class for a given feed name
   def self.class_for(name)
-    (@feeds && @feeds[name])
+    (@feeds && @feeds[name]) || "#{name.to_s.classify}Feed".safe_constantize
   end
 
   def self.feeds

@@ -36,7 +36,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class MediaReaction < ActiveRecord::Base
+class MediaReaction < ApplicationRecord
   include WithActivity
 
   belongs_to :user, required: true

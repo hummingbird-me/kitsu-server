@@ -3,8 +3,8 @@ class StatResource < BaseResource
 
   include STIResource
   # STI, put all inheritance here
-  model_hint model: Stat::AnimeGenreBreakdown
-  model_hint model: Stat::MangaGenreBreakdown
+  model_hint model: Stat::AnimeCategoryBreakdown
+  model_hint model: Stat::MangaCategoryBreakdown
   model_hint model: Stat::AnimeAmountConsumed
   model_hint model: Stat::MangaAmountConsumed
   model_hint model: Stat::AnimeFavoriteYear
