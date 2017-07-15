@@ -145,7 +145,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       :dropbox_token, :dropbox_secret, :last_backup, :stripe_token,
       :stripe_customer_id, :import_status, :import_from, :import_error,
       :profile_completed, :feed_completed, :followers, :following, :comments,
-      :posts, :media_follows, :blocks, :last_recommendations_update, :title,
+      :posts, :blocks, :last_recommendations_update, :title,
       :library_entries
     navigation_label 'Users'
     weight(-10)
@@ -154,7 +154,6 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('Favorite') { parent User }
   config.model('Block') { parent User }
   config.model('Follow') { parent User }
-  config.model('MediaFollow') { parent User }
   config.model('LibraryEntry') { parent User }
   config.model('LibraryEntryLog') { visible false }
 

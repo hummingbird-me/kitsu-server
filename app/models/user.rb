@@ -120,7 +120,6 @@ class User < ApplicationRecord
                        dependent: :destroy
   has_many :comments
   has_many :posts
-  has_many :media_follows, dependent: :destroy
   has_many :blocks, dependent: :destroy
   has_many :blocked, class_name: 'Block', foreign_key: 'blocked_id',
                      dependent: :destroy

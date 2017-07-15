@@ -1,1 +1,0 @@
-class MediaFollowsController < ApplicationController; end
