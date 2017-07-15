@@ -19,10 +19,4 @@ RSpec.describe AnimeTimelineFeed do
       expect(described_class.global.stream_id).to eq('interest_timeline:global-Anime')
     end
   end
-
-  describe '.global_for(interest)' do
-    it 'should cause an error' do
-      expect { described_class.global_for('Test') }.to raise_error(ArgumentError)
-    end
-  end
 end
