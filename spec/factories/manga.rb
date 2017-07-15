@@ -30,6 +30,7 @@
 #  start_date                :date
 #  subtype                   :integer          default(1), not null
 #  synopsis                  :text
+#  tba                       :string
 #  titles                    :hstore           default({}), not null
 #  user_count                :integer          default(0), not null
 #  volume_count              :integer

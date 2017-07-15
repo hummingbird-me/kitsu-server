@@ -166,7 +166,7 @@ end
 
 # == Route Map
 #
-# I, [2017-07-13T02:18:15.738360 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-07-03T00:02:08.352974 #9]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
