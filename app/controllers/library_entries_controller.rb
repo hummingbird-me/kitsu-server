@@ -13,6 +13,13 @@ class LibraryEntriesController < ApplicationController
     end
   end
 
+  def issues
+    authenticate_user!
+    entries = LibraryEntry.where(user: user)
+    missing = LibraryGapsService.new(entries).missing_engagement_ids
+    render json: missing
+  end
+
   def bulk_delete
     return unless authorize_operation(:destroy?)
     # Disable syncing of full-library deletes
