@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170702234704) do
+ActiveRecord::Schema.define(version: 20170716054623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -905,9 +905,11 @@ ActiveRecord::Schema.define(version: 20170702234704) do
     t.string   "reaction",         limit: 140
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
+    t.datetime "deleted_at"
   end
 
   add_index "media_reactions", ["anime_id"], name: "index_media_reactions_on_anime_id", using: :btree
+  add_index "media_reactions", ["deleted_at"], name: "index_media_reactions_on_deleted_at", using: :btree
   add_index "media_reactions", ["drama_id"], name: "index_media_reactions_on_drama_id", using: :btree
   add_index "media_reactions", ["library_entry_id"], name: "index_media_reactions_on_library_entry_id", using: :btree
   add_index "media_reactions", ["manga_id"], name: "index_media_reactions_on_manga_id", using: :btree
