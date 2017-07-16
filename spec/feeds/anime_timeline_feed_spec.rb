@@ -5,6 +5,7 @@ RSpec.describe AnimeTimelineFeed do
 
   describe '#follow_units_for' do
     it 'should call #follow_many with a bunch of episode follows' do
+      skip
       # Mock our follows_for_progress method
       episode_feeds = (0..10).map { |e| EpisodeFeed.new(e) }
       allow(EpisodeFeed).to receive(:follows_for_progress).and_return(episode_feeds)
