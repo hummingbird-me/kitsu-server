@@ -4,6 +4,7 @@
 # Table name: media_reactions
 #
 #  id               :integer          not null, primary key
+#  deleted_at       :datetime         indexed
 #  media_type       :string           not null, indexed => [media_id, user_id]
 #  progress         :integer          default(0), not null
 #  reaction         :string(140)
@@ -20,6 +21,7 @@
 # Indexes
 #
 #  index_media_reactions_on_anime_id                             (anime_id)
+#  index_media_reactions_on_deleted_at                           (deleted_at)
 #  index_media_reactions_on_drama_id                             (drama_id)
 #  index_media_reactions_on_library_entry_id                     (library_entry_id)
 #  index_media_reactions_on_manga_id                             (manga_id)
@@ -38,6 +40,8 @@
 
 class MediaReaction < ApplicationRecord
   include WithActivity
+
+  acts_as_paranoid
 
   belongs_to :user, required: true
   belongs_to :media, polymorphic: true, required: true
