@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       jsonapi_resources :one_signal_players
 
       ### Library
+      get '/library-entries/_issues', to: 'library_entries#issues'
       delete '/library-entries/_bulk', to: 'library_entries#bulk_delete'
       patch '/library-entries/_bulk', to: 'library_entries#bulk_update'
       put '/library-entries/_bulk', to: 'library_entries#bulk_update'
@@ -166,7 +167,7 @@ end
 
 # == Route Map
 #
-# I, [2017-07-03T00:02:08.352974 #9]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-07-13T06:45:04.931696 #10565]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -395,6 +396,7 @@ end
 #                                                            PATCH     /api/edge/one-signal-players/:id(.:format)                                                                 one_signal_players#update
 #                                                            PUT       /api/edge/one-signal-players/:id(.:format)                                                                 one_signal_players#update
 #                                                            DELETE    /api/edge/one-signal-players/:id(.:format)                                                                 one_signal_players#destroy
+#                                    library_entries__issues GET       /api/edge/library-entries/_issues(.:format)                                                                library_entries#issues
 #                                      library_entries__bulk DELETE    /api/edge/library-entries/_bulk(.:format)                                                                  library_entries#bulk_delete
 #                                                            PATCH     /api/edge/library-entries/_bulk(.:format)                                                                  library_entries#bulk_update
 #                                                            PUT       /api/edge/library-entries/_bulk(.:format)                                                                  library_entries#bulk_update

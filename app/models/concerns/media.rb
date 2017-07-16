@@ -52,6 +52,9 @@ module Media
     has_many :media_attributes,
       class_name: 'MediaAttribute',
       dependent: :destroy
+    has_many :media_attribute_votes,
+      class_name: 'MediaAttributeVote',
+      dependent: :destroy
     delegate :year, to: :start_date, allow_nil: true
 
     # finished: end date has passed
