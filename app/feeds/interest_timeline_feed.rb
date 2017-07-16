@@ -16,7 +16,7 @@ class InterestTimelineFeed < Feed
   end
 
   def self.global
-    media = self.class.name.sub(/TimelineFeed\z/, '')
+    media = name.sub(/TimelineFeed\z/, '')
     global_for(media)
   end
 
