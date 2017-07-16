@@ -73,7 +73,7 @@ class Post < ApplicationRecord
   end
 
   def other_feeds
-    interest_feed = InterestTimelineFeed.global_for(target_interest)
+    interest_feed = InterestGlobalFeed.new(target_interest)
     [media&.feed, spoiled_unit&.feed, interest_feed].compact
   end
 

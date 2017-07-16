@@ -16,7 +16,7 @@ RSpec.describe InterestTimelineFeed do
       expect(follows).to include(
         match(
           source: 'interest_timeline:123-Test',
-          target: 'interest_timeline:global-Test'
+          target: 'interest_global:Test'
         )
       )
     end
@@ -24,14 +24,14 @@ RSpec.describe InterestTimelineFeed do
 
   describe '.global' do
     it 'should return the global feed for the subclass' do
-      expect(TestTimelineFeed.global.stream_id).to eq('interest_timeline:global-Test')
+      expect(TestTimelineFeed.global.stream_id).to eq('interest_global:Test')
     end
   end
 
   describe '.global_for(interest)' do
     it 'should return the global feed for the interest provided' do
       global = described_class.global_for('Test')
-      expect(global.stream_id).to eq('interest_timeline:global-Test')
+      expect(global.stream_id).to eq('interest_global:Test')
     end
   end
 end

@@ -12,11 +12,12 @@ class InterestTimelineFeed < Feed
   end
 
   def self.global_for(interest)
-    for_interest(interest)&.global
+    InterestGlobalFeed.new(interest)
   end
 
   def self.global
-    new('global')
+    media = self.class.name.sub(/TimelineFeed\z/, '')
+    global_for(media)
   end
 
   def default_auto_follows
