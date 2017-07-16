@@ -17,6 +17,23 @@ module ListSync
     end
 
     def sync!(kind)
+      # Import first so that we have all their MAL data
+      import!(kind)
+      # Export back to MAL, just to make sure any merged data takes effect
+      export!(kind)
+    end
+
+    def import!(kind)
+      track_session do
+        ListImport::MyAnimeListXML.new(
+          import_file: their_xml_for(kind),
+          user: linked_account.user,
+          strategy: :greater
+        ).run
+      end
+    end
+
+    def export!(kind)
       track_session do
         xml = library_xml_for(kind)
         ListSync::MyAnimeList::XmlUploader.new(agent, xml).run!
@@ -48,6 +65,10 @@ module ListSync
 
     def library_xml_for(kind)
       ListSync::MyAnimeList::XmlGenerator.new(linked_account.user, kind).to_xml
+    end
+
+    def their_xml_for(kind)
+      ListSync::MyAnimeList::XmlDownloader.new(agent, kind).file
     end
 
     def username
