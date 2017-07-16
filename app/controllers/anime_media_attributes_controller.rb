@@ -1,0 +1,1 @@
+class AnimeMediaAttributesController < ApplicationController; end
