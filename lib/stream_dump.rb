@@ -210,6 +210,43 @@ module StreamDump
     flatten(results)
   end
 
+  def unit_posts
+    posts = StreamDump::Post.where.not(spoiled_unit_id: nil)
+                            .order(:spoiled_unit_type, :spoiled_unit_id)
+    count = posts.count(:all)
+    bar = progress_bar('Posts', count)
+    chunks = posts.find_each.chunk { |post| [post.spoiled_unit_type, post.spoiled_unit_id] }
+    chunks.map do |(unit_type, unit_id), unit_posts|
+      bar.progress += unit_posts.length
+      data = unit_posts.map(&:completed_stream_activity).compact
+      {
+        instruction: 'add_activities',
+        feedId: "#{unit_type.underscore}:#{unit_id}",
+        data: data
+      }
+    end
+  end
+
+  def unit_auto_follows
+    episodes = each_id(Episode) do |episode_id|
+      {
+        instruction: 'follow',
+        feedId: "episode_aggr:#{episode_id}",
+        data: ["episode:#{episode_id}"],
+        activity_copy_limit: 20
+      }
+    end
+    chapters = each_id(Chapter) do |chapter_id|
+      {
+        instruction: 'follow',
+        feedId: "chapter_aggr:#{chapter_id}",
+        data: ["chapter:#{chapter_id}"],
+        activity_copy_limit: 20
+      }
+    end
+    chapters + episodes
+  end
+
   def library_progress_follows(scope = User)
     anime_global = InterestGlobalFeed.new('Anime').stream_id
     manga_global = InterestGlobalFeed.new('Manga').stream_id
