@@ -73,8 +73,12 @@ class Post < ApplicationRecord
   end
 
   def other_feeds
-    interest_feed = InterestGlobalFeed.new(target_interest)
-    [media&.feed, spoiled_unit&.feed, interest_feed].compact
+    feeds = []
+    feeds << InterestGlobalFeed.new(target_interest) if target_interest
+    # Don't fan out beyond aggregated feed
+    feeds << media&.feed&.no_fanout
+    feeds << spoiled_unit&.feed
+    feeds.compact
   end
 
   def notified_feeds
