@@ -1,1 +1,0 @@
-class DramaMediaAttributesController < ApplicationController; end
