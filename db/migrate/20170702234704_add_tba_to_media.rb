@@ -1,6 +1,5 @@
 class AddTbaToMedia < ActiveRecord::Migration
   def change
-    execute 'SET lock_timeout TO DEFAULT'
     %i[anime dramas].each do |table|
       change_table table do |t|
         t.string :tba

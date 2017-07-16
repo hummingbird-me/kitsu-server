@@ -2,11 +2,13 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV['DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 40 %>
+<% unless $0.include?('rake') || $0.include?('sidekiq') %>
   connect_timeout: 5
   checkout_timeout: 2
   variables:
     lock_timeout: 6s
     statement_timeout: 15s
+<% end %>
 
 development:
   <<: *default
