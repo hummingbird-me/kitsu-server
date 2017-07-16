@@ -35,8 +35,7 @@ module StreamDump
       entries = LibraryEntry.where(user_id: user_id)
                             .pluck(:id, :status, :rating, :progress,
                               :updated_at, :media_type, :media_id)
-      entries = entries.map do |(id, status, rating, progress, updated_at,
-                                 media_type, media_id)|
+      entries = entries.map do |(id, status, rating, progress, updated_at, media_type, media_id)|
         [
           {
             # STATUS
@@ -116,9 +115,7 @@ module StreamDump
       elsif Feed::POST_VERBS.include?(act.verb)
         posts_activities << act
       end
-      if limit && posts_activities.size > limit && media_activities.size > limit
-        break
-      end
+      break if limit && posts_activities.size > limit && media_activities.size > limit
     end
 
     [
@@ -214,56 +211,64 @@ module StreamDump
   end
 
   def library_progress_follows(scope = User)
+    anime_global = InterestGlobalFeed.new('Anime').stream_id
+    manga_global = InterestGlobalFeed.new('Manga').stream_id
+
     results = each_user(scope) do |user_id|
-      # Load Library Data
-      anime_entries = LibraryEntry.where(user_id: user_id).by_kind(:anime)
-      manga_entries = LibraryEntry.where(user_id: user_id).by_kind(:manga)
-
-      ### Anime Episodes
-      # Get the episodes for the progress, and add a row_number by reverse order of episode number.
-      # This allows us to filter based on the "recency" of episodes
-      episode_ids = anime_entries.select(<<-SELECTS.squish).joins(<<-JOINS.squish)
-        episodes.id,
-        row_number() OVER (
-          PARTITION BY episodes.media_type, episodes.media_id
-          ORDER BY episodes.number DESC
-        )
-      SELECTS
-        JOIN episodes ON (episodes.number <= progress OR reconsume_count > 1)
-                      AND episodes.media_id = library_entries.anime_id
-                      AND episodes.media_type = 'Anime'
-      JOINS
-      # Grab the Episode IDs for the last 3 episodes the user has seen, for each show
-      episode_ids = Episode.from(episode_ids).where('row_number <= 3').pluck('subquery.id')
-
-      ### Manga Chapters
-      # Get the chapters for the progress, and add a row_number by reverse order of chapter number.
-      # As above, this allows us to filter to just the last few chapters.
-      chapter_ids = manga_entries.select(<<-SELECTS.squish).joins(<<-JOINS.squish)
-        chapters.id,
-        row_number() OVER (PARTITION BY chapters.manga_id ORDER BY chapters.number DESC)
-      SELECTS
-        JOIN chapters ON (chapters.number <= progress OR reconsume_count > 1)
-                      AND chapters.manga_id = library_entries.manga_id
-      JOINS
-      # Grab the Chapter IDS for the last 3 chapters the user has seen, for each show
-      chapter_ids = Chapter.from(chapter_ids).where('row_number <= 3').pluck('subquery.id')
-
-      # Generate the follows JSON
       [
         {
           instruction: 'follow',
           feedId: AnimeTimelineFeed.new(user_id).stream_id,
-          data: episode_ids.map { |id| "episode:#{id}" }
+          data: anime_follows_for(user_id) + [anime_global]
         },
         {
           instruction: 'follow',
           feedId: MangaTimelineFeed.new(user_id).stream_id,
-          data: chapter_ids.map { |id| "chapter:#{id}" }
+          data: manga_follows_for(user_id) + [manga_global]
         }
       ]
     end
     flatten(results)
+  end
+
+  def anime_follows_for(user_id)
+    anime_entries = LibraryEntry.where(user_id: user_id).by_kind(:anime)
+    anime_ids = anime_entries.pluck(:anime_id)
+    # Get the episodes for the progress, and add a row_number by reverse order of episode number.
+    # This allows us to filter based on the "recency" of episodes
+    episode_ids = anime_entries.select(<<-SELECTS.squish).joins(<<-JOINS.squish)
+      episodes.id,
+      row_number() OVER (
+        PARTITION BY episodes.media_type, episodes.media_id
+        ORDER BY episodes.number DESC
+      )
+    SELECTS
+      JOIN episodes ON (episodes.number <= progress OR reconsume_count > 1)
+                    AND episodes.media_id = library_entries.anime_id
+                    AND episodes.media_type = 'Anime'
+    JOINS
+    # Grab the Episode IDs for the last 3 episodes the user has seen, for each show
+    episode_ids = Episode.from(episode_ids).where('row_number <= 3').pluck('subquery.id')
+    # Convert them to Stream IDs
+    episode_ids.map { |id| "episode:#{id}" } + anime_ids.map { |id| "anime:#{id}" }
+  end
+
+  def manga_follows_for(user_id)
+    manga_entries = LibraryEntry.where(user_id: user_id).by_kind(:manga)
+    manga_ids = manga_entries.pluck(:manga_id)
+    # Get the chapters for the progress, and add a row_number by reverse order of chapter number.
+    # As above, this allows us to filter to just the last few chapters.
+    chapter_ids = manga_entries.select(<<-SELECTS.squish).joins(<<-JOINS.squish)
+      chapters.id,
+      row_number() OVER (PARTITION BY chapters.manga_id ORDER BY chapters.number DESC)
+    SELECTS
+      JOIN chapters ON (chapters.number <= progress OR reconsume_count > 1)
+                    AND chapters.manga_id = library_entries.manga_id
+    JOINS
+    # Grab the Chapter IDS for the last 3 chapters the user has seen, for each show
+    chapter_ids = Chapter.from(chapter_ids).where('row_number <= 3').pluck('subquery.id')
+    # Convert them to Stream IDs
+    chapter_ids.map { |id| "chapter:#{id}" } + manga_ids.map { |id| "manga:#{id}" }
   end
 
   def flatten(enumerator)
