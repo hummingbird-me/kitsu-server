@@ -3,8 +3,5 @@ class MangaTimelineFeed < InterestTimelineFeed
     super(user_id, 'Manga')
   end
 
-  def follow_units_for(media, progress)
-    feeds = ChapterFeed.follows_for_progress(media, progress)
-    follow_many(feeds)
-  end
+  delegate :follows_for_progress, to: :ChapterFeed
 end
