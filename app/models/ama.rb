@@ -50,8 +50,7 @@ class AMA < ApplicationRecord
   end
 
   before_validation do
-    self.end_date = start_date + 1.hour if start_date.to_i >= end_date.to_i
-    self.end_date ||= start_date + 1.hour
+    self.end_date = start_date + 1.hour if end_date.blank? || start_date >= end_date
   end
 
   after_commit do
