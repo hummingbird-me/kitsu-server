@@ -211,7 +211,7 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
-  after_save if: :progress_changed? do
+  after_commit on: :update, if: :progress_changed? do
     MediaFollowUpdateWorker.perform_async(id, :update, progress_was, progress)
   end
 
