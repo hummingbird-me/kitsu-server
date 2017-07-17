@@ -58,6 +58,14 @@ namespace :stream do
       end
     end
 
+    task unit_auto_follows: :load_dumper do
+      StreamDump.unit_auto_follows.each { |instr| STDOUT.puts instr.to_json }
+    end
+
+    task unit_posts: :load_dumper do
+      StreamDump.unit_posts.each { |instr| STDOUT.puts instr.to_json }
+    end
+
     task progress_follows: :load_dumper do
       StreamDump.library_progress_follows.each { |instr| STDOUT.puts instr.to_json }
     end
