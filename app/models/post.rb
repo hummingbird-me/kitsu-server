@@ -55,6 +55,11 @@ class Post < ApplicationRecord
   has_many :comments, dependent: :destroy
 
   scope :in_group, ->(group) { where(target_group: group) }
+  scope :visible_for, ->(user) {
+    joins(:target_group).merge(Group.visible_for(user))
+                        .or(joins(:target_group)
+                        .where(target_group_id: nil))
+  }
 
   validates :content, :content_formatted, presence: true
   validates :media, presence: true, if: :spoiled_unit
