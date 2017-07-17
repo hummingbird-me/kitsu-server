@@ -8,7 +8,6 @@ class PostLikePolicy < ApplicationPolicy
   def create?
     return false if user&.blocked?(record.post.user)
     return false if user&.has_role?(:banned)
-    return false if group && !member?
     record.user == user
   end
   alias_method :destroy?, :create?
