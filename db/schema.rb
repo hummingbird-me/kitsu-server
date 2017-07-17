@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716054623) do
+ActiveRecord::Schema.define(version: 20170717043528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -913,7 +913,7 @@ ActiveRecord::Schema.define(version: 20170716054623) do
   add_index "media_reactions", ["drama_id"], name: "index_media_reactions_on_drama_id", using: :btree
   add_index "media_reactions", ["library_entry_id"], name: "index_media_reactions_on_library_entry_id", using: :btree
   add_index "media_reactions", ["manga_id"], name: "index_media_reactions_on_manga_id", using: :btree
-  add_index "media_reactions", ["media_type", "media_id", "user_id"], name: "index_media_reactions_on_media_type_and_media_id_and_user_id", unique: true, using: :btree
+  add_index "media_reactions", ["media_type", "media_id", "user_id"], name: "index_media_reactions_on_media_type_and_media_id_and_user_id", unique: true, where: "(deleted_at IS NULL)", using: :btree
   add_index "media_reactions", ["user_id"], name: "index_media_reactions_on_user_id", using: :btree
 
   create_table "media_relationships", force: :cascade do |t|
