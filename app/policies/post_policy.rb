@@ -12,7 +12,6 @@ class PostPolicy < ApplicationPolicy
     return false if user&.blocked?(record.target_user)
     return false if user&.has_role?(:banned)
     if group
-      return false unless member?
       return false if group.restricted? && !has_group_permission?(:content)
     end
     is_owner?
