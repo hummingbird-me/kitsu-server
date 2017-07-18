@@ -52,7 +52,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.excluded_models += %w[
     LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink
     ReviewLike UserRole Role GroupTicket Franchise Casting Report CommentLike
-    Installment LinkedAccount::MyAnimeList
+    Installment LinkedAccount::MyAnimeList MediaAttributeVote
   ]
 
   # Anime
