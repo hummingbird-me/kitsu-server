@@ -11,6 +11,7 @@ class CommentPolicy < ApplicationPolicy
   def create?
     return false if user&.blocked?(record.post.user)
     return false if user&.has_role?(:banned)
+    return false if group && banned_from_group?
     is_owner?
   end
 
