@@ -244,7 +244,7 @@ module StreamDump
         activity_copy_limit: 20
       }
     end
-    chapters + episodes
+    flatten([chapters, episodes])
   end
 
   def library_progress_follows(scope = User)
