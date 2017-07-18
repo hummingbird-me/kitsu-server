@@ -218,7 +218,7 @@ module StreamDump
     chunks = posts.find_each.chunk { |post| [post.spoiled_unit_type, post.spoiled_unit_id] }
     chunks.map do |(unit_type, unit_id), unit_posts|
       bar.progress += unit_posts.length
-      data = unit_posts.map(&:completed_stream_activity).compact
+      data = unit_posts.map(&:complete_stream_activity).compact
       {
         instruction: 'add_activities',
         feedId: "#{unit_type.underscore}:#{unit_id}",
@@ -228,7 +228,7 @@ module StreamDump
   end
 
   def unit_auto_follows
-    episodes = each_id(Episode) do |episode_id|
+    episodes = each_id(Episode, 'Episode') do |episode_id|
       {
         instruction: 'follow',
         feedId: "episode_aggr:#{episode_id}",
@@ -236,7 +236,7 @@ module StreamDump
         activity_copy_limit: 20
       }
     end
-    chapters = each_id(Chapter) do |chapter_id|
+    chapters = each_id(Chapter, 'Chapter') do |chapter_id|
       {
         instruction: 'follow',
         feedId: "chapter_aggr:#{chapter_id}",
