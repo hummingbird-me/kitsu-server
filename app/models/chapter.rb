@@ -57,4 +57,6 @@ class Chapter < ApplicationRecord
   before_save do
     self.synopsis = Sanitize.fragment(synopsis, Sanitize::Config::RESTRICTED)
   end
+
+  after_commit(on: :create) { feed.setup! }
 end

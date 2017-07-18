@@ -72,4 +72,6 @@ class Episode < ApplicationRecord
   end
   after_save { media.recalculate_episode_length! if length_changed? }
   after_destroy { media.recalculate_episode_length! }
+
+  after_commit(on: :create) { feed.setup! }
 end
