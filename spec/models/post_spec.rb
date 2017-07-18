@@ -15,6 +15,7 @@
 #  post_likes_count         :integer          default(0), not null
 #  spoiled_unit_type        :string
 #  spoiler                  :boolean          default(FALSE), not null
+#  target_interest          :string
 #  top_level_comments_count :integer          default(0), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
@@ -61,8 +62,8 @@ RSpec.describe Post, type: :model do
     subject { build(:post, media: media) }
     let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
 
-    it 'should have an activity with media\'s feed in "to" list' do
-      expect(activity[:to]).to include("media:Anime-#{media.id}")
+    it 'should have an activity with media\'s aggregated feed in "to" list' do
+      expect(activity[:to]).to include("media_aggr:Anime-#{media.id}")
     end
   end
 
@@ -117,7 +118,13 @@ RSpec.describe Post, type: :model do
         expect(subject.nsfw).to eq(true)
       end
     end
+  end
 
-    it { should validate_absence_of(:target_user) }
+  it 'should not allow target_group and target_user to coexist' do
+    group = build(:group)
+    user = build(:user)
+    post = build(:post, target_group: group, target_user: user)
+    post.valid?
+    expect(post.errors).to include(:target_group, :target_user)
   end
 end

@@ -27,6 +27,19 @@ class Feed
     Feed::StreamFeed.follow_many(follows_for(target), scrollback)
   end
 
+  # Follow multiple Feeds, optionally with a scrollback.
+  # Under the hood, this acts similar to {#follow}, generating a list of follows
+  # via {#follows_for} and then sending them to {Feed::StreamFeed#follow_many}
+  # in batches of up to 1000.
+  def follow_many(targets, scrollback: 30)
+    follows = targets.flat_map { |target| follows_for(target) }
+    # Split the follows into groups of 990 to stay below the limit.  I'm not
+    # certain, but I believe the limit is 1000 follows per follow_many request.
+    follows.in_groups_of(990, false) do |follow_batch|
+      Feed::StreamFeed.follow_many(follow_batch, scrollback)
+    end
+  end
+
   # Unfollow another Feed, optionally keeping the history
   def unfollow(target, keep_history: false)
     # Stream doesn't provide an unfollow_many method, so we just gotta settle
@@ -167,7 +180,7 @@ class Feed
   def default_auto_follows
     return unless _feed_type == :aggregated
     base_follow = { source: stream_feed, target: stream_activity_target }
-    filter_follows = _filters.map do |filter, options|
+    filter_follows = _filters.map do |filter, _options|
       {
         source: Feed::StreamFeed.new({
           type: :aggregated,

@@ -120,7 +120,6 @@ class User < ApplicationRecord
                        dependent: :destroy
   has_many :comments
   has_many :posts
-  has_many :media_follows, dependent: :destroy
   has_many :blocks, dependent: :destroy
   has_many :blocked, class_name: 'Block', foreign_key: 'blocked_id',
                      dependent: :destroy
@@ -280,6 +279,10 @@ class User < ApplicationRecord
 
   def library_feed
     @library_feed ||= PrivateLibraryFeed.new(id)
+  end
+
+  def interest_timeline_for(interest)
+    "#{interest.to_s.classify}TimelineFeed".safe_constantize.new(id)
   end
 
   def update_feed_completed

@@ -149,12 +149,9 @@ class LibraryEntry < ApplicationRecord
   end
 
   def kind
-    if anime.present?
-      :anime
-    elsif manga.present?
-      :manga
-    elsif drama.present?
-      :drama
+    if anime.present? then :anime
+    elsif manga.present? then :manga
+    elsif drama.present? then :drama
     end
   end
 
@@ -175,8 +172,7 @@ class LibraryEntry < ApplicationRecord
 
   before_save do
     # When progress equals total episodes
-    self.status = :completed if !status_changed? &&
-                                progress == media&.progress_limit
+    self.status = :completed if !status_changed? && progress == media&.progress_limit
 
     if status_changed? && completed?
       # update progress to the cap
@@ -199,11 +195,8 @@ class LibraryEntry < ApplicationRecord
     unless imported || private?
       activity.rating(rating)&.create if rating_changed? && rating.present?
       activity.status(status)&.create if status_changed?
-      # If the progress has changed, make an activity unless the status is also
-      # changing
-      if progress_changed? && !status_changed?
-        activity.progress(progress)&.create
-      end
+      # If the progress has changed, make an activity unless the status is also changing
+      activity.progress(progress)&.create if progress_changed? && !status_changed?
       media.trending_vote(user, 0.5) if progress_changed?
       media.trending_vote(user, 1.0) if status_changed?
     end
@@ -216,6 +209,18 @@ class LibraryEntry < ApplicationRecord
       user.update_feed_completed!
       user.update_profile_completed!
     end
+  end
+
+  after_commit on: :update, if: :progress_changed? do
+    MediaFollowUpdateWorker.perform_async(id, :update, progress_was, progress)
+  end
+
+  after_commit on: :destroy do
+    MediaFollowUpdateWorker.perform_async(id, :destroy, progress_was)
+  end
+
+  after_commit on: :create do
+    MediaFollowUpdateWorker.perform_async(id, :create, progress)
   end
 
   after_create do

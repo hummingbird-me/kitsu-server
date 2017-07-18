@@ -8,4 +8,10 @@ module UnsuffixedAggregatedFeed
     super(filter: filter, type: :flat)
   end
   alias_method :stream_feed, :stream_feed_for
+
+  # Unsuffixed aggregated feeds don't automatically follow a corresponding flat
+  # feed, so we override the #default_auto_follows method to disable that.
+  def default_auto_follows
+    []
+  end
 end

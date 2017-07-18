@@ -1,4 +1,4 @@
-class MediaFollowResource < BaseResource
+class MediaIgnoreResource < BaseResource
   has_one :user
   has_one :media, polymorphic: true
 

@@ -15,9 +15,7 @@ class Feed
       json.symbolize_keys!
       json[:time] = json[:time]&.strftime('%Y-%m-%dT%H:%M:%S%:z')
       json[:to] = json[:to]&.compact&.map do |val|
-        if val.respond_to?(:stream_activity_target)
-          val = val.stream_activity_target
-        end
+        val = val.stream_activity_target if val.respond_to?(:stream_activity_target)
         Feed.get_stream_id(val)
       end
       json.compact

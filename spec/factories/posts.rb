@@ -15,6 +15,7 @@
 #  post_likes_count         :integer          default(0), not null
 #  spoiled_unit_type        :string
 #  spoiler                  :boolean          default(FALSE), not null
+#  target_interest          :string
 #  top_level_comments_count :integer          default(0), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null

@@ -48,7 +48,7 @@ class MediaActivityService
       act.actor ||= user
       act.object ||= library_entry
       act.to ||= []
-      act.to << media&.feed
+      act.to << media&.feed&.no_fanout
       act.to << user.library_feed
       act.media ||= media
       act.nsfw ||= media.try(:nsfw?)

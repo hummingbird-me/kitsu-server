@@ -15,6 +15,7 @@
 #  post_likes_count         :integer          default(0), not null
 #  spoiled_unit_type        :string
 #  spoiler                  :boolean          default(FALSE), not null
+#  target_interest          :string
 #  top_level_comments_count :integer          default(0), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
@@ -60,7 +61,8 @@ class Post < ApplicationRecord
   validates :media, presence: true, if: :spoiled_unit
   validates :content, length: { maximum: 9_000 }
   validates :media, polymorphism: { type: Media }, allow_blank: true
-  validates :target_user, absence: true, if: :target_group
+  # posting to a group, posting to a profile, and posting to an interest are mutually exclusive.
+  validates_with ExclusivityValidator, over: %i[target_user target_group target_interest]
 
   def feed
     PostFeed.new(id)
@@ -71,7 +73,12 @@ class Post < ApplicationRecord
   end
 
   def other_feeds
-    [media&.feed, spoiled_unit&.feed].compact
+    feeds = []
+    feeds << InterestGlobalFeed.new(target_interest) if target_interest
+    # Don't fan out beyond aggregated feed
+    feeds << media&.feed&.no_fanout
+    feeds << spoiled_unit&.feed
+    feeds.compact
   end
 
   def notified_feeds
