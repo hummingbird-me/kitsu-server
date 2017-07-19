@@ -3,7 +3,7 @@ class PostResource < BaseResource
 
   attributes :content, :content_formatted, :comments_count, :post_likes_count,
     :spoiler, :nsfw, :blocked, :deleted_at, :top_level_comments_count,
-    :edited_at
+    :edited_at, :target_interest
 
   has_one :user
   has_one :target_user
@@ -12,4 +12,12 @@ class PostResource < BaseResource
   has_one :spoiled_unit, polymorphic: true
   has_many :post_likes
   has_many :comments
+
+  def target_interest=(val)
+    _model.target_interest = val.underscore.classify
+  end
+
+  def target_interest
+    _model.target_interest.underscore.dasherize
+  end
 end
