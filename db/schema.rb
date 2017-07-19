@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170724000734) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -1318,6 +1317,22 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   add_index "substories", ["target_id"], name: "index_substories_on_target_id", using: :btree
   add_index "substories", ["user_id"], name: "index_substories_on_user_id", using: :btree
 
+  create_table "uploads", force: :cascade do |t|
+    t.integer  "user_id",              null: false
+    t.integer  "post_id"
+    t.integer  "comment_id"
+    t.string   "content_file_name"
+    t.string   "content_content_type"
+    t.integer  "content_file_size"
+    t.datetime "content_updated_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "uploads", ["comment_id"], name: "index_uploads_on_comment_id", using: :btree
+  add_index "uploads", ["post_id"], name: "index_uploads_on_post_id", using: :btree
+  add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255, default: "",          null: false
     t.string   "name",                        limit: 255
@@ -1533,5 +1548,8 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   add_foreign_key "site_announcements", "users"
   add_foreign_key "stats", "users"
   add_foreign_key "streaming_links", "streamers"
+  add_foreign_key "uploads", "comments"
+  add_foreign_key "uploads", "posts"
+  add_foreign_key "uploads", "users"
   add_foreign_key "users", "posts", column: "pinned_post_id"
 end

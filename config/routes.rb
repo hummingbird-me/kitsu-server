@@ -137,6 +137,10 @@ Rails.application.routes.draw do
       post '/groups/:id/_read', to: 'groups#read'
       # Integrations
       get '/sso/canny', to: 'sso#canny'
+      # Uploads
+      post '/uploads/_bulk', to: 'uploads#bulk_create'
+      patch '/uploads/:id', to: 'uploads#update'
+      put '/uploads/:id', to: 'uploads#update'
     end
 
     ### Admin Panel
@@ -1521,6 +1525,9 @@ end
 #                                                            GET       /api/edge/groups/:id/_stats(.:format)                                                                      groups#stats
 #                                                            POST      /api/edge/groups/:id/_read(.:format)                                                                       groups#read
 #                                                  sso_canny GET       /api/edge/sso/canny(.:format)                                                                              sso#canny
+#                                              uploads__bulk POST      /api/edge/uploads/_bulk(.:format)                                                                          uploads#bulk_create
+#                                                            PATCH     /api/edge/uploads/_bulk(.:format)                                                                          uploads#bulk_update
+#                                                            PUT       /api/edge/uploads/_bulk(.:format)                                                                          uploads#bulk_update
 #                                                rails_admin           /api/admin                                                                                                 RailsAdmin::Engine
 #                                                sidekiq_web           /api/sidekiq                                                                                               Sidekiq::Web
 #                                                    pg_hero           /api/pghero                                                                                                PgHero::Engine
