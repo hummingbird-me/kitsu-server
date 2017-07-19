@@ -18,6 +18,6 @@ class PostResource < BaseResource
   end
 
   def target_interest
-    _model.target_interest.underscore.dasherize
+    _model.target_interest.underscore.dasherize if _model.target_interest
   end
 end
