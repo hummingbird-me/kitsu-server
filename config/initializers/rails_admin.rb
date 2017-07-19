@@ -48,13 +48,15 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Display canonical_title for label on media
   config.label_methods += %i[canonical_title site_name]
 
-  # Omitted for security reasons (and Franchise/Casting/Installment deprecated)
+  # Omitted for security reasons (and Casting is deprecated)
   config.excluded_models += %w[
-    LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink
-    ReviewLike UserRole Role GroupTicket Franchise Casting Report CommentLike
-    Installment LinkedAccount::MyAnimeList MediaAttributeVote
+    LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink ReviewLike UserRole Role
+    GroupTicket Casting Report CommentLike LinkedAccount::MyAnimeList MediaAttributeVote
   ]
 
+  # Franchise
+  config.model 'Franchise'
+  config.model('Installment') { parent Franchise }
   # Anime
   config.model 'Anime' do
     field :id
