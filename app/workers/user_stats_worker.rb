@@ -1,3 +1,6 @@
+# HACK: will want to try and find a way to abstract this into something nicer.
+# Need to find a similarity between these stats.
+
 class UserStatsWorker
   include Sidekiq::Worker
 
