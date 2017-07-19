@@ -80,6 +80,10 @@ class FeedsController < ApplicationController
     when 'chapter'
       chapter = Chapter.find(params[:id])
       show?(chapter.manga)
+    when 'interest_timeline'
+      user_id, interest = params[:id].split('-')
+      return false unless %w[Manga Anime Drama].include?(interest)
+      user_id == current_user&.resource_owner_id
     when 'user', 'user_aggr'
       user = User.find_by(id: params[:id])
       user && show?(user)
