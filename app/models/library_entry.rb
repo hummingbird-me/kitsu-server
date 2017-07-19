@@ -127,9 +127,7 @@ class LibraryEntry < ApplicationRecord
     default_cap = [media&.default_progress_limit, 50].compact.max
 
     if progress_cap&.nonzero?
-      if progress > progress_cap
-        errors.add(:progress, 'cannot exceed length of media')
-      end
+      errors.add(:progress, 'cannot exceed length of media') if progress > progress_cap
     elsif default_cap && progress > default_cap
       errors.add(:progress, 'is rather unreasonably high')
     end
@@ -241,54 +239,15 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_create do
-    # Activity History Stat will be using this
-    library_event = LibraryEvent.create_for(:added, self)
-    # Stat STI
-    case kind
-    when :anime
-      Stat::AnimeCategoryBreakdown.increment(user, self)
-      Stat::AnimeAmountConsumed.increment(user, self)
-      Stat::AnimeFavoriteYear.increment(user, self)
-    when :manga
-      Stat::MangaCategoryBreakdown.increment(user, self)
-      Stat::MangaAmountConsumed.increment(user, self)
-      Stat::MangaFavoriteYear.increment(user, self)
-    end
+    UserStats.perform_async(:added, kind, user, self)
   end
 
   after_update do
-    # Activity History Stat will be using this
-    library_event = LibraryEvent.create_for(:updated, self)
-    case kind
-    when :anime
-      # special case checking if progress was increased or decreased
-      if progress > progress_was
-        Stat::AnimeAmountConsumed.increment(user, self, true)
-      elsif progress < progress_was
-        Stat::AnimeAmountConsumed.decrement(user, self, true)
-      end
-    when :manga
-      # special case checking if progress was increased or decreased
-      if progress > progress_was
-        Stat::MangaAmountConsumed.increment(user, self, true)
-      elsif progress < progress_was
-        Stat::MangaAmountConsumed.decrement(user, self, true)
-      end
-    end
+    UserStats.perform_async(:updated, kind, user, self)
   end
 
   after_destroy do
-    # Stat STI
-    case kind
-    when :anime
-      Stat::AnimeCategoryBreakdown.decrement(user, self)
-      Stat::AnimeAmountConsumed.decrement(user, self)
-      Stat::AnimeFavoriteYear.decrement(user, self)
-    when :manga
-      Stat::MangaCategoryBreakdown.decrement(user, self)
-      Stat::MangaAmountConsumed.decrement(user, self)
-      Stat::MangaFavoriteYear.decrement(user, self)
-    end
+    UserStats.perform_async(:destroyed, kind, user, self)
   end
 
   after_commit(on: :create, if: :sync_to_mal?) do
