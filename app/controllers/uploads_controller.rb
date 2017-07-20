@@ -1,22 +1,20 @@
-class UploadController < ApplicationController
+class UploadsController < ApplicationController
   include CustomControllerHelpers
   before_action :authenticate_user!
 
   def bulk_create
-    files_to_upload = params[:files].map { |file| {user: user, content: file} }
+    files_to_upload = params[:files].map { |file| { user: user, content: file } }
     uploads = Upload.create(files_to_upload)
     render json: serialize_entries(uploads)
   end
 
   def update
-    upload = Upload.find(id: params[:upload_id], user: user)
-    unless upload
-      render_jsonapi serialize_error(401, 'Not permitted'), status: 401
-    end
+    upload = Upload.find(id: params[:id], user: user)
+    render_jsonapi serialize_error(401, 'Not permitted'), status: 401 unless upload
 
-    if params.has_key?(:post)
+    if params.key?(:post)
       upload.post = params[:post]
-    elsif params.has_key?(:comment)
+    elsif params.key?(:comment)
       upload.comment = params[:comment]
     else
       render_jsonapi serialize_error(400, 'Needs related post or comment field'), status: 400

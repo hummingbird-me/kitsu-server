@@ -27,10 +27,11 @@
 #  fk_rails_62b822a2d6  (comment_id => comments.id)
 #
 # rubocop:enable Metrics/LineLength
+include ActionDispatch::TestProcess
 
 FactoryGirl.define do
   factory :upload do
     user
-    content { Faker::Avatar.image }
+    content { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'image.png'), 'image/png') }
   end
 end

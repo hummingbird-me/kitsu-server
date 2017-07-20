@@ -33,4 +33,7 @@ class Upload < ApplicationRecord
   belongs_to :post
   belongs_to :comment
   has_attached_file :content, required: true
+  validates_attachment_content_type :content, content_type: [
+    'image/jpg', 'image/jpeg', 'image/png', 'image/gif'
+  ]
 end
