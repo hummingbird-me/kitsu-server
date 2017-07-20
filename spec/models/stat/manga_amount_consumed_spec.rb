@@ -28,20 +28,13 @@ RSpec.describe Stat::MangaAmountConsumed do
   let(:user) { create(:user) }
   let(:manga) { create(:manga) }
   let(:manga1) { create(:manga) }
-  let!(:le) do
-    create(
-      :library_entry, user: user, manga: manga, progress: 10, time_spent: 0
-    )
-  end
-  let!(:le1) do
-    create(
-      :library_entry, user: user, manga: manga1, progress: 5, time_spent: 0
-    )
-  end
+  let(:le) { create(:library_entry, user: user, manga: manga, progress: 10, time_spent: 0) }
+  let(:le1) { create(:library_entry, user: user, manga: manga1, progress: 5, time_spent: 0) }
 
-  before(:each) do
-    subject = Stat.find_by(user: user, type: 'Stat::MangaAmountConsumed')
-    subject.recalculate!
+  before do
+    Stat::MangaAmountConsumed.increment(user, le)
+    Stat::MangaAmountConsumed.increment(user, le1)
+    user.stats.find_or_initialize_by(type: 'Stat::MangaAmountConsumed').recalculate!
   end
 
   describe '#recalculate!' do
