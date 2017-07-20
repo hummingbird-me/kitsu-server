@@ -79,10 +79,10 @@ class GroupMember < ApplicationRecord
   end
 
   after_create do
-    user.group_timeline.follow(group.feed)
+    user.timeline.follow(group.feed)
   end
 
   after_destroy do
-    user.group_timeline.unfollow(group.feed)
+    user.timeline.unfollow(group.feed)
   end
 end
