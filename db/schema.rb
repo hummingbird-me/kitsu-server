@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170717043528) do
+ActiveRecord::Schema.define(version: 20170721020210) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -411,6 +411,7 @@ ActiveRecord::Schema.define(version: 20170717043528) do
     t.integer  "follower_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.boolean  "hidden"
   end
 
   add_index "follows", ["followed_id", "follower_id"], name: "index_follows_on_followed_id_and_follower_id", unique: true, using: :btree
@@ -527,6 +528,7 @@ ActiveRecord::Schema.define(version: 20170717043528) do
     t.datetime "updated_at"
     t.integer  "rank",         default: 0, null: false
     t.integer  "unread_count", default: 0, null: false
+    t.boolean  "hidden"
   end
 
   add_index "group_members", ["group_id"], name: "index_group_members_on_group_id", using: :btree
