@@ -4,7 +4,7 @@
 # Table name: group_members
 #
 #  id           :integer          not null, primary key
-#  hidden       :boolean
+#  hidden       :boolean          default(TRUE), not null
 #  rank         :integer          default(0), not null, indexed
 #  unread_count :integer          default(0), not null
 #  created_at   :datetime
