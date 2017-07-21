@@ -17,6 +17,11 @@ class GroupMemberPolicy < ApplicationPolicy
     is_owner? || has_group_permission?(required_permission)
   end
 
+  def visible_attributes(all)
+    is_owner? ? all : all - %i[hidden]
+  end
+  alias_method :editable_attributes, :visible_attributes
+
   class Scope < Scope
     def resolve
       filted_scope = see_nsfw? ? scope : scope.sfw
