@@ -30,6 +30,7 @@ module Episodic
 
   included do
     has_many :episodes, as: 'media', dependent: :destroy, inverse_of: 'media'
+    accepts_nested_attributes_for :episodes, allow_destroy: true
     has_many :streaming_links, as: 'media', dependent: :destroy
     alias_attribute :progress_limit, :episode_count
 
