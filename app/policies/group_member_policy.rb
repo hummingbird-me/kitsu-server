@@ -5,6 +5,7 @@ class GroupMemberPolicy < ApplicationPolicy
     required_permission = record.pleb? ? :members : :leaders
     is_owner? || has_group_permission?(required_permission)
   end
+  alias_method :update?, :destroy?
 
   def create?
     return false unless is_owner?
@@ -20,14 +21,7 @@ class GroupMemberPolicy < ApplicationPolicy
   def visible_attributes(all)
     is_owner? ? all : all - %i[hidden]
   end
-
-  def editable_attributes(_all)
-    if is_owner?
-      %i[hidden]
-    elsif has_group_permission?(:leaders)
-      %i[rank]
-    end
-  end
+  alias_method :editable_attributes, :visible_attributes
 
   class Scope < Scope
     def resolve
