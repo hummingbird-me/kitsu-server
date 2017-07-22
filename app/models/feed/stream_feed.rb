@@ -19,7 +19,7 @@ class Feed
 
     def aggregated?
       %w[notifications timeline group_timeline global
-         site_announcements].include?(@group) ||
+         site_announcements interest_timeline].include?(@group) ||
         @group.end_with?('_aggr')
     end
 
