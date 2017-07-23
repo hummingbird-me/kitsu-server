@@ -182,12 +182,16 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
 
   config.model 'Episode' do
-    # TODO: Apply for other media types
-    parent Anime
     fields :id, :media
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
     fields :canonical_title, :number, :season_number, :synopsis, :airdate,
       :length, :thumbnail
     include_all_fields
+    field :media_id do
+      filterable true
+    end
+    field :media_type do
+      filterable true
+    end
   end
 end
