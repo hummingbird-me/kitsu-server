@@ -164,6 +164,9 @@ class LibraryEntry < ApplicationRecord
       kind = media_type&.underscore
       send("#{kind}=", media) if kind
     end
+
+    self.nsfw = AgeRatings::UNSAFE_AGE_RATINGS.include? media.age_rating if media_id_changed?
+    true
   end
 
   before_destroy do
