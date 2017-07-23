@@ -27,7 +27,7 @@ class UserPolicy < ApplicationPolicy
       all
     else
       all - %i[email password confirmed previous_email language time_zone
-                country share_to_global title_language_preference sfw_filter]
+               country share_to_global title_language_preference sfw_filter]
     end
   end
 
