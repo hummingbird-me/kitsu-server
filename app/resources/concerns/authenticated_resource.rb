@@ -15,23 +15,21 @@ module AuthenticatedResource
     policy.try(:visible_attributes, all) || all
   end
 
-  class_methods do
-    def class_policy(context)
-      Pundit.policy!(context[:current_user], _model_class)
+  def replace_fields(field_data)
+    allowed_fields = if _model.persisted?
+                       all = self.class.updatable_fields(@context)
+                       policy.try(:editable_attributes, all) || all
+                     else
+                       all = self.class.creatable_fields(@context)
+                       policy.try(:creatable_attributes, all) ||
+                         policy.try(:editable_attributes, all) ||
+                         all
+                     end
+    used_fields = field_data.values.map(&:keys).inject(&:|)
+    disallowed_fields = (used_fields - allowed_fields)
+    unless disallowed_fields.empty?
+      raise JSONAPI::Exceptions::ParametersNotAllowed, disallowed_fields
     end
-
-    def updatable_fields(context)
-      policy = class_policy(context)
-      all = super(context)
-      policy.try(:editable_attributes, all) || all
-    end
-
-    def creatable_fields(context)
-      policy = class_policy(context)
-      all = super(context)
-      policy.try(:creatable_attributes, all) ||
-        policy.try(:editable_attributes, all) ||
-        all
-    end
+    super
   end
 end
