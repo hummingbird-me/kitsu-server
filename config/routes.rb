@@ -167,7 +167,7 @@ end
 
 # == Route Map
 #
-# I, [2017-07-13T06:45:04.931696 #10565]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-07-22T20:22:18.377937 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -202,11 +202,6 @@ end
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/profile-links(.:format)                                             users#update_relationship {:relationship=>"profile_links"}
 #                                                            DELETE    /api/edge/users/:user_id/relationships/profile-links(.:format)                                             users#destroy_relationship {:relationship=>"profile_links"}
 #                                         user_profile_links GET       /api/edge/users/:user_id/profile-links(.:format)                                                           profile_links#get_related_resources {:relationship=>"profile_links", :source=>"users"}
-#                           user_relationships_media_follows GET       /api/edge/users/:user_id/relationships/media-follows(.:format)                                             users#show_relationship {:relationship=>"media_follows"}
-#                                                            POST      /api/edge/users/:user_id/relationships/media-follows(.:format)                                             users#create_relationship {:relationship=>"media_follows"}
-#                                                            PUT|PATCH /api/edge/users/:user_id/relationships/media-follows(.:format)                                             users#update_relationship {:relationship=>"media_follows"}
-#                                                            DELETE    /api/edge/users/:user_id/relationships/media-follows(.:format)                                             users#destroy_relationship {:relationship=>"media_follows"}
-#                                         user_media_follows GET       /api/edge/users/:user_id/media-follows(.:format)                                                           media_follows#get_related_resources {:relationship=>"media_follows", :source=>"users"}
 #                              user_relationships_user_roles GET       /api/edge/users/:user_id/relationships/user-roles(.:format)                                                users#show_relationship {:relationship=>"user_roles"}
 #                                                            POST      /api/edge/users/:user_id/relationships/user-roles(.:format)                                                users#create_relationship {:relationship=>"user_roles"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/user-roles(.:format)                                                users#update_relationship {:relationship=>"user_roles"}
@@ -274,20 +269,20 @@ end
 #                                                            PATCH     /api/edge/follows/:id(.:format)                                                                            follows#update
 #                                                            PUT       /api/edge/follows/:id(.:format)                                                                            follows#update
 #                                                            DELETE    /api/edge/follows/:id(.:format)                                                                            follows#destroy
-#                            media_follow_relationships_user GET       /api/edge/media-follows/:media_follow_id/relationships/user(.:format)                                      media_follows#show_relationship {:relationship=>"user"}
-#                                                            PUT|PATCH /api/edge/media-follows/:media_follow_id/relationships/user(.:format)                                      media_follows#update_relationship {:relationship=>"user"}
-#                                                            DELETE    /api/edge/media-follows/:media_follow_id/relationships/user(.:format)                                      media_follows#destroy_relationship {:relationship=>"user"}
-#                                          media_follow_user GET       /api/edge/media-follows/:media_follow_id/user(.:format)                                                    users#get_related_resource {:relationship=>"user", :source=>"media_follows"}
-#                           media_follow_relationships_media GET       /api/edge/media-follows/:media_follow_id/relationships/media(.:format)                                     media_follows#show_relationship {:relationship=>"media"}
-#                                                            PUT|PATCH /api/edge/media-follows/:media_follow_id/relationships/media(.:format)                                     media_follows#update_relationship {:relationship=>"media"}
-#                                                            DELETE    /api/edge/media-follows/:media_follow_id/relationships/media(.:format)                                     media_follows#destroy_relationship {:relationship=>"media"}
-#                                         media_follow_media GET       /api/edge/media-follows/:media_follow_id/media(.:format)                                                   media#get_related_resource {:relationship=>"media", :source=>"media_follows"}
-#                                              media_follows GET       /api/edge/media-follows(.:format)                                                                          media_follows#index
-#                                                            POST      /api/edge/media-follows(.:format)                                                                          media_follows#create
-#                                               media_follow GET       /api/edge/media-follows/:id(.:format)                                                                      media_follows#show
-#                                                            PATCH     /api/edge/media-follows/:id(.:format)                                                                      media_follows#update
-#                                                            PUT       /api/edge/media-follows/:id(.:format)                                                                      media_follows#update
-#                                                            DELETE    /api/edge/media-follows/:id(.:format)                                                                      media_follows#destroy
+#                            media_ignore_relationships_user GET       /api/edge/media-ignores/:media_ignore_id/relationships/user(.:format)                                      media_ignores#show_relationship {:relationship=>"user"}
+#                                                            PUT|PATCH /api/edge/media-ignores/:media_ignore_id/relationships/user(.:format)                                      media_ignores#update_relationship {:relationship=>"user"}
+#                                                            DELETE    /api/edge/media-ignores/:media_ignore_id/relationships/user(.:format)                                      media_ignores#destroy_relationship {:relationship=>"user"}
+#                                          media_ignore_user GET       /api/edge/media-ignores/:media_ignore_id/user(.:format)                                                    users#get_related_resource {:relationship=>"user", :source=>"media_ignores"}
+#                           media_ignore_relationships_media GET       /api/edge/media-ignores/:media_ignore_id/relationships/media(.:format)                                     media_ignores#show_relationship {:relationship=>"media"}
+#                                                            PUT|PATCH /api/edge/media-ignores/:media_ignore_id/relationships/media(.:format)                                     media_ignores#update_relationship {:relationship=>"media"}
+#                                                            DELETE    /api/edge/media-ignores/:media_ignore_id/relationships/media(.:format)                                     media_ignores#destroy_relationship {:relationship=>"media"}
+#                                         media_ignore_media GET       /api/edge/media-ignores/:media_ignore_id/media(.:format)                                                   media#get_related_resource {:relationship=>"media", :source=>"media_ignores"}
+#                                              media_ignores GET       /api/edge/media-ignores(.:format)                                                                          media_ignores#index
+#                                                            POST      /api/edge/media-ignores(.:format)                                                                          media_ignores#create
+#                                               media_ignore GET       /api/edge/media-ignores/:id(.:format)                                                                      media_ignores#show
+#                                                            PATCH     /api/edge/media-ignores/:id(.:format)                                                                      media_ignores#update
+#                                                            PUT       /api/edge/media-ignores/:id(.:format)                                                                      media_ignores#update
+#                                                            DELETE    /api/edge/media-ignores/:id(.:format)                                                                      media_ignores#destroy
 #                             post_follow_relationships_post GET       /api/edge/post-follows/:post_follow_id/relationships/post(.:format)                                        post_follows#show_relationship {:relationship=>"post"}
 #                                                            PUT|PATCH /api/edge/post-follows/:post_follow_id/relationships/post(.:format)                                        post_follows#update_relationship {:relationship=>"post"}
 #                                                            DELETE    /api/edge/post-follows/:post_follow_id/relationships/post(.:format)                                        post_follows#destroy_relationship {:relationship=>"post"}
