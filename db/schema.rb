@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170721022437) do
+ActiveRecord::Schema.define(version: 20170724000734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -409,9 +409,9 @@ ActiveRecord::Schema.define(version: 20170721022437) do
   create_table "follows", force: :cascade do |t|
     t.integer  "followed_id"
     t.integer  "follower_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.boolean  "hidden",      default: true, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "hidden",      default: false, null: false
   end
 
   add_index "follows", ["followed_id", "follower_id"], name: "index_follows_on_followed_id_and_follower_id", unique: true, using: :btree
@@ -522,13 +522,13 @@ ActiveRecord::Schema.define(version: 20170721022437) do
   end
 
   create_table "group_members", force: :cascade do |t|
-    t.integer  "user_id",                     null: false
-    t.integer  "group_id",                    null: false
+    t.integer  "user_id",                      null: false
+    t.integer  "group_id",                     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "rank",         default: 0,    null: false
-    t.integer  "unread_count", default: 0,    null: false
-    t.boolean  "hidden",       default: true, null: false
+    t.integer  "rank",         default: 0,     null: false
+    t.integer  "unread_count", default: 0,     null: false
+    t.boolean  "hidden",       default: false, null: false
   end
 
   add_index "group_members", ["group_id"], name: "index_group_members_on_group_id", using: :btree

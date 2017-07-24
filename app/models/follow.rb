@@ -4,7 +4,7 @@
 # Table name: follows
 #
 #  id          :integer          not null, primary key
-#  hidden      :boolean          default(TRUE), not null
+#  hidden      :boolean          default(FALSE), not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  followed_id :integer          indexed => [follower_id]
