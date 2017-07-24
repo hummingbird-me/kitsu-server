@@ -26,7 +26,7 @@ require 'rails_helper'
 RSpec.describe Stat::AnimeCategoryBreakdown do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, :categories) }
-  let!(:le) { create(:library_entry, user: user, anime: anime) }
+  let!(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
 
   describe '#recalculate!' do
     it 'should create Stat' do
@@ -43,6 +43,7 @@ RSpec.describe Stat::AnimeCategoryBreakdown do
       record = Stat.find_by(user: user, type: 'Stat::AnimeCategoryBreakdown')
 
       expect(record.stats_data['total']).to eq(5)
+      expect(record.stats_data['total_media']).to eq(1)
     end
   end
 
@@ -54,6 +55,7 @@ RSpec.describe Stat::AnimeCategoryBreakdown do
       record = Stat.find_by(user: user, type: 'Stat::AnimeCategoryBreakdown')
 
       expect(record.stats_data['total']).to eq(0)
+      expect(record.stats_data['total_media']).to eq(0)
     end
   end
 end
