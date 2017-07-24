@@ -17,7 +17,7 @@ module Stream
     def follow_many(event)
       return unless logger.debug?
       name = format_name('Follow', event.duration, CYAN)
-      follows = event.payload[:follows].map { |f| [f[:source], f[:target]] }.to_h
+      follows = event.payload[:follows].map { |f| { f[:source] => f[:target] } }
       debug "  #{name}  #{format_follows(follows)}"
     end
 
