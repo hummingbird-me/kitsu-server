@@ -21,7 +21,12 @@ class GroupMemberPolicy < ApplicationPolicy
   def visible_attributes(all)
     is_owner? ? all : all - %i[hidden]
   end
-  alias_method :editable_attributes, :visible_attributes
+
+  def editable_attributes(all)
+    attrs = all - %i[hidden] unless is_owner?
+    return attrs - %i[rank] unless has_group_permission?(:leaders)
+    attrs
+  end
 
   class Scope < Scope
     def resolve
