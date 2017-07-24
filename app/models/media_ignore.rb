@@ -22,7 +22,7 @@
 # rubocop:enable Metrics/LineLength
 
 class MediaIgnore < ApplicationRecord
-  belongs_to :media, required: true
+  belongs_to :media, polymorphic: true, required: true
   belongs_to :user, required: true
 
   validates :media, polymorphism: { type: Media }
