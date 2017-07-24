@@ -125,6 +125,11 @@ class Feed
     (@feeds && @feeds.key?(name.to_s)) || super
   end
 
+  def filter(filter)
+    @filter = filter
+    self
+  end
+
   def setup!
     Feed::StreamFeed.follow_many(default_auto_follows, 100)
   end
@@ -133,6 +138,7 @@ class Feed
   delegate :readonly_token, to: :stream_feed
 
   def stream_follow_target(opts = {})
+    opts = opts.merge(filter: @filter) if @filter
     Feed::StreamFeed.new({ type: :flat, name: _feed_name }.merge(opts), id)
   end
 
