@@ -56,6 +56,7 @@ class Post < ApplicationRecord
   belongs_to :target_group, class_name: 'Group'
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
+  belongs_to :community_recommendations
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
   has_many :comments, dependent: :destroy
