@@ -7,6 +7,8 @@ class MediaFollowUpdateWorker
     media = media_class.find(media_id)
     media_follow = MediaFollowService.new(user, media)
     media_follow.public_send(action, *[progress_was, progress].compact)
+  rescue ActiveRecord::RecordNotFound => ex
+    Raven.capture_exception(ex)
   end
 
   def self.perform_for_entry(entry, action, progress_was = nil, progress = nil)
