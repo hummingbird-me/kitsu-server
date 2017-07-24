@@ -8,7 +8,7 @@ class MediaFollowService
 
   def create(progress)
     return if ignored?
-    timeline.follow(media.feed)
+    timeline.follow(media_posts_feed)
     timeline.update_unit_follows(media, nil, progress)
   end
 
@@ -18,7 +18,7 @@ class MediaFollowService
   end
 
   def destroy(progress_was)
-    timeline.unfollow(media.feed)
+    timeline.unfollow(media_posts_feed)
     timeline.update_unit_follows(media, progress_was, nil)
   end
 
@@ -26,6 +26,10 @@ class MediaFollowService
 
   def timeline
     user.interest_timeline_for(media.class.name)
+  end
+
+  def media_posts_feed
+    media.feed.filter(:posts)
   end
 
   def ignored?
