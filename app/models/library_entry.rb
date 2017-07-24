@@ -212,15 +212,15 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_commit on: :update, if: :progress_changed? do
-    MediaFollowUpdateWorker.perform_async(id, :update, progress_was, progress)
+    MediaFollowUpdateWorker.perform_for_entry(self, :update, progress_was, progress)
   end
 
   after_commit on: :destroy do
-    MediaFollowUpdateWorker.perform_async(id, :destroy, progress_was)
+    MediaFollowUpdateWorker.perform_for_entry(self, :destroy, progress_was)
   end
 
   after_commit on: :create do
-    MediaFollowUpdateWorker.perform_async(id, :create, progress)
+    MediaFollowUpdateWorker.perform_for_entry(self, :create, progress)
   end
 
   after_create do
