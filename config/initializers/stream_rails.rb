@@ -19,3 +19,6 @@ end
 StreamRails.configure do |config|
   config.timeout = 20
 end
+
+require 'stream/log_subscriber'
+Stream::LogSubscriber.attach_to :getstream

@@ -29,7 +29,7 @@ class Feed
     alias_method :stream_feed_for, :stream_feed
 
     def get(*args)
-      instrument('load', args: args) do
+      instrument('load', args: args, feed: self) do
         client_feed.get(*args)
       end
     end
@@ -89,7 +89,7 @@ class Feed
     end
 
     def instrument(key, extra = {}, &block)
-      self.class.intrument(key, extra, &block)
+      self.class.instrument(key, extra, &block)
     end
   end
 end
