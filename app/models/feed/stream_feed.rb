@@ -29,15 +29,21 @@ class Feed
     alias_method :stream_feed_for, :stream_feed
 
     def get(*args)
-      client_feed.get(*args)
+      instrument('load', args: args) do
+        client_feed.get(*args)
+      end
     end
 
     def follow(feed)
-      client_feed.follow(feed.group, feed.id)
+      instrument('follow', source: client_feed, target: feed) do
+        client_feed.follow(feed.group, feed.id)
+      end
     end
 
     def unfollow(feed, keep_history: false)
-      client_feed.unfollow(feed.group, feed.id, keep_history: keep_history)
+      instrument('unfollow', source: client_feed, target: feed) do
+        client_feed.unfollow(feed.group, feed.id, keep_history: keep_history)
+      end
     end
 
     def self.follow_many(follows, scrollback)
@@ -46,7 +52,9 @@ class Feed
           value.respond_to?(:stream_id) ? value.stream_id : value
         end
       end
-      StreamRails.client.follow_many(follows, scrollback)
+      instrument('follow_many', follows: follows, scrollback: scrollback) do
+        StreamRails.client.follow_many(follows, scrollback)
+      end
     end
 
     def stream_id
@@ -55,6 +63,10 @@ class Feed
 
     def self.client
       StreamRails.client
+    end
+
+    def self.instrument(key, extra = {}, &block)
+      ActiveSupport::Notifications.instrument("#{key}.getstream", extra, &block)
     end
 
     private
@@ -74,6 +86,10 @@ class Feed
       else
         group
       end
+    end
+
+    def instrument(key, extra = {}, &block)
+      self.class.intrument(key, extra, &block)
     end
   end
 end
