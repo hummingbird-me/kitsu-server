@@ -11,7 +11,7 @@ module Stream
       return unless logger.debug?
       payload = event.payload
       name = format_name('Unfollow', event.duration, CYAN)
-      debug "  #{name}  #{format_follows(payload[:source], payload[:target])}"
+      debug "  #{name}  #{format_follows(payload[:source] => payload[:target])}"
     end
 
     def follow_many(event)
@@ -25,7 +25,7 @@ module Stream
       return unless logger.debug?
       payload = event.payload
       name = format_name('Load Feed', event.duration, MAGENTA)
-      debug "  #{name}  #{payload[:feed].stream_id}  #{payload[:args]}"
+      debug "  #{name}  #{format_feed(payload[:feed])}  #{payload[:args]}"
     end
 
     private
@@ -33,12 +33,16 @@ module Stream
     def format_follows(*follows)
       follows = follows.flatten
       follows.flat_map { |follow|
-        follow.map { |source, target| "#{source} -> #{target}" }
+        follow.map { |source, target| "#{format_feed(source)} -> #{format_feed(target)}" }
       }.join(', ')
     end
 
     def format_name(name, duration, color)
       self.color("#{name} (#{duration.round(1)}ms)", color, true)
+    end
+
+    def format_feed(feed)
+      ::Feed.get_stream_id(feed)
     end
   end
 end
