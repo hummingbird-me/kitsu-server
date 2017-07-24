@@ -102,6 +102,11 @@ class Group < ApplicationRecord
     GroupFeed.new(id)
   end
 
+  before_validation do
+    self.nsfw = category_id == 9 if category_id_changed?
+    true
+  end
+
   # Not bothering with teardown because the group ID won't be reused (so who
   # cares?)
   after_commit(on: :create) do
