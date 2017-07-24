@@ -41,7 +41,10 @@ class Follow < ApplicationRecord
   validate :validate_not_yourself
 
   # Set up follows in Stream
-  after_commit(on: %i[update create], if: :hidden_changed?) do
+  after_commit(on: :create) do
+    follower.timeline.follow(followed.profile_feed) unless hidden?
+  end
+  after_commit(on: :update, if: :hidden_changed?) do
     if hidden?
       follower.timeline.unfollow(followed.profile_feed)
     else
