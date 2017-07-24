@@ -1,7 +1,8 @@
 class FollowPolicy < ApplicationPolicy
   def create?
-    record.follower == user
+    is_owner?
   end
+  alias_method :update?, :create?
   alias_method :destroy?, :create?
 
   def visible_attributes(all)
