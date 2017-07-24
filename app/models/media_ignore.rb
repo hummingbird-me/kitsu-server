@@ -29,10 +29,14 @@ class MediaIgnore < ApplicationRecord
 
   scope :for_library_entry, ->(le) { where(media: le.media, user: le.user) }
 
-  # TODO: try and break this into a service which wraps this task.  We need to unfollow the media
-  # feed and all episodes when this record is created, and then on deletion we create the episode
-  # follows and media follow again.  We also need to enforce this stuff on LibraryEntry triggering
-  # updates.
-  # after_commit(on: :create) { user.interest_timeline_for(media_type).unfollow(media.feed) }
-  # after_commit(on: :destroy) { user.interest_timeline_for(media_type).follow(media.feed) }
+  def library_entry
+    LibraryEntry.find_by(user: user, media: media)
+  end
+
+  def media_follow_service
+    MediaFollowService.new(user, media)
+  end
+
+  after_commit(on: :create) { media_follow_service.destroy(library_entry&.progress) }
+  after_commit(on: :destroy) { media_follow_service.create(library_entry&.progress) }
 end
