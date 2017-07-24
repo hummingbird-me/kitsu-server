@@ -51,6 +51,10 @@ class Feed
     end
   end
 
+  def unfollow_many(targets, keep_history: false)
+    targets.each { |target| unfollow(target, keep_history: keep_history) }
+  end
+
   # Compare two Feed instances.  Basically, compare feed name and ID
   def ==(other)
     _feed_name == other._feed_name && id == other.id

@@ -41,7 +41,7 @@ class Feed
     end
 
     def unfollow(feed, keep_history: false)
-      instrument('unfollow', source: client_feed, target: feed) do
+      instrument('unfollow', source: self, target: feed) do
         client_feed.unfollow(feed.group, feed.id, keep_history: keep_history)
       end
     end

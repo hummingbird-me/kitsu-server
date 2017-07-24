@@ -34,7 +34,10 @@ class InterestTimelineFeed < Feed
     new_units = follows_for_progress(media, progress) if progress
 
     # Don't unfollow just to refollow
-    unfollow_many(previous_units - new_units) if progress_was
+    if progress_was
+      previous_units -= new_units if progress
+      unfollow_many(previous_units)
+    end
     follow_many(new_units) if progress
   end
 end
