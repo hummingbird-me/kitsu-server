@@ -15,6 +15,7 @@ class Feed
     class_methods do # rubocop:disable Metrics/BlockLength
       # Add a filter option to the feed class
       def filter(name, options = {})
+        options[:hash] = [name, options[:verb].hash || options[:proc]].hash
         options[:proc] = ->(activity) do
           options[:verb].include?(activity[:verb])
         end
@@ -35,13 +36,13 @@ class Feed
       # Generates unique identifiers for each filter, based on the parameters
       # which filter it
       def _filter_keys
-        _filters.map { |key, opts| [[key, opts].hash, key] }.to_h
+        _filters.map { |key, opts| [opts[:hash], key] }.to_h
       end
 
       # Gets the filters which intersect between this and another Feed class
       def filters_shared_with(target)
-        shared_filter_keys = [_filter_keys.keys & target._filter_keys.keys]
-        _filters.slice(*shared_filter_keys)
+        shared_filter_hashes = (_filter_keys.keys & target._filter_keys.keys)
+        _filter_keys.values_at(*shared_filter_hashes)
       end
 
       def inherited(subclass)
