@@ -79,11 +79,15 @@ class GroupMember < ApplicationRecord
     group.public_visible?
   end
 
-  after_create do
-    user.timeline.follow(group.feed)
+  after_commit(on: %i[update create], if: :hidden_changed?) do
+    if hidden?
+      user.timeline.unfollow(group.feed)
+    else
+      user.timeline.follow(group.feed)
+    end
   end
 
-  after_destroy do
+  after_commit(on: :destroy) do
     user.timeline.unfollow(group.feed)
   end
 end
