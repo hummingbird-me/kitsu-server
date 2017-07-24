@@ -27,8 +27,8 @@ RSpec.describe Stat::AnimeFavoriteYear do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, start_date: 'Tue, 19 Apr 2016') }
   let(:anime1) { create(:anime, start_date: 'Tue, 19 Apr 2014') }
-  let!(:le) { create(:library_entry, user: user, anime: anime) }
-  let!(:le1) { create(:library_entry, user: user, anime: anime1) }
+  let!(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
+  let!(:le1) { create(:library_entry, user: user, anime: anime1, progress: 1) }
 
   before(:each) do
     subject = Stat.find_by(user: user, type: 'Stat::AnimeFavoriteYear')
@@ -42,6 +42,7 @@ RSpec.describe Stat::AnimeFavoriteYear do
       expect(record.stats_data['all_years']['2016']).to eq(1)
       expect(record.stats_data['all_years']['2014']).to eq(1)
       expect(record.stats_data['total']).to eq(2)
+      expect(record.stats_data['total_media']).to eq(2)
     end
   end
 
@@ -56,6 +57,7 @@ RSpec.describe Stat::AnimeFavoriteYear do
 
       expect(record.stats_data['all_years']['2012']).to eq(1)
       expect(record.stats_data['total']).to eq(3)
+      expect(record.stats_data['total_media']).to eq(3)
     end
   end
 
@@ -68,6 +70,7 @@ RSpec.describe Stat::AnimeFavoriteYear do
 
       expect(record.stats_data['all_years']['2016']).to eq(0)
       expect(record.stats_data['total']).to eq(1)
+      expect(record.stats_data['total_media']).to eq(1)
     end
   end
 end

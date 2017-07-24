@@ -4,22 +4,27 @@ class Stat < ApplicationRecord
 
     DEFAULT_STATS = {
       'total' => 0,
+      'total_media' => 0,
       'all_years' => {}
     }.freeze
 
     def recalculate!
-      years = user.library_entries.by_kind(media_column)
-                  .eager_load(media_column)
-                  .where.not(media_start_date => nil)
-                  .group("date_part('year', #{media_start_date})::integer")
-                  .count
+      years = library_entries.group("date_part('year', #{media_start_date})::integer").count
 
       # clear everything
       self.stats_data = {}
       stats_data['all_years'] = years
       stats_data['total'] = years.values.reduce(:+)
+      stats_data['total_media'] = library_entries.count
 
       save!
+    end
+
+    def library_entries
+      @le ||= user.library_entries.by_kind(media_column)
+                  .where('progress > 0')
+                  .eager_load(media_column)
+                  .where.not(media_start_date => nil)
     end
 
     class_methods do
@@ -36,10 +41,13 @@ class Stat < ApplicationRecord
 
         # check if year exists in object
         record.stats_data['all_years'][start_date] ||= 0
+        record.stats_data['total'] ||= 0
+        record.stats_data['total_media'] ||= 0
+
         # increment year by 1
         record.stats_data['all_years'][start_date] += 1
-        # increment total by 1
         record.stats_data['total'] += 1
+        record.stats_data['total_media'] += 1
 
         record.save!
       end
@@ -60,8 +68,8 @@ class Stat < ApplicationRecord
         return unless record.stats_data['all_years'][start_date]
         # decrement year by 1
         record.stats_data['all_years'][start_date] -= 1
-        # decrement total by 1
         record.stats_data['total'] -= 1
+        record.stats_data['total_media'] -= 1
 
         record.save!
       end

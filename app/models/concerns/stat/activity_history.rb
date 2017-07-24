@@ -28,6 +28,11 @@ class Stat < ApplicationRecord
         )
 
         record.stats_data = DEFAULT_STATS.deep_dup if record.new_record?
+
+        # In case recalculate has not been run this will prevent any errors
+        record.stats_data['activity'] ||= []
+        record.stats_data['total'] ||= 0
+
         # add 1 to total
         record.stats_data['total'] += 1
         # push library_event into activity array

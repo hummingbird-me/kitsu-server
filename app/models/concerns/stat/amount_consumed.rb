@@ -10,7 +10,7 @@ class Stat < ApplicationRecord
 
     # Fully regenerate data
     def recalculate!
-      entries = user.library_entries.by_kind(media_column)
+      entries = user.library_entries.by_kind(media_column).where('progress > 0')
                     .eager_load(media_column)
                     .where.not(media_length => nil)
 
@@ -31,9 +31,11 @@ class Stat < ApplicationRecord
           type: "Stat::#{media_type}AmountConsumed"
         )
 
-        if record.new_record?
-          record.stats_data['all_time'] = DEFAULT_STATS.deep_dup
-        end
+        record.stats_data['all_time'] = DEFAULT_STATS.deep_dup if record.new_record?
+        # In case recalculate has not been run this will prevent any errors
+        record.stats_data['all_time']['total_media'] ||= 0
+        record.stats_data['all_time']['total_progress'] ||= 0
+        record.stats_data['all_time']['total_time'] ||= 0
 
         record.stats_data['all_time']['total_media'] += 1 unless updated
         record.stats_data['all_time']['total_progress'] +=
