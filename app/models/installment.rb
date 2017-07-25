@@ -20,7 +20,8 @@
 # rubocop:enable Metrics/LineLength
 
 class Installment < ApplicationRecord
-  acts_as_list
+  include RankedModel
+  ranks :position
 
   validates :tag, length: { maximum: 40 }
   validates :media, polymorphism: { type: Media }

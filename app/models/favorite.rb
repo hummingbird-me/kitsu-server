@@ -21,7 +21,8 @@
 # rubocop:enable Metrics/LineLength
 
 class Favorite < ApplicationRecord
-  acts_as_list column: 'fav_rank', scope: %i[user_id item_type]
+  include RankedModel
+  ranks :fav_rank, with_same: %i[user_id item_type]
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :item, polymorphic: true, required: true
