@@ -23,8 +23,9 @@ class GroupMemberPolicy < ApplicationPolicy
   end
 
   def editable_attributes(all)
-    attrs = all - %i[hidden] unless is_owner?
-    return attrs - %i[rank] unless has_group_permission?(:leaders)
+    attrs = all
+    attrs -= %i[hidden] unless is_owner?
+    attrs -= %i[rank] unless has_group_permission?(:leaders)
     attrs
   end
 
