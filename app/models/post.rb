@@ -10,7 +10,7 @@
 #  content_formatted        :text             not null
 #  deleted_at               :datetime         indexed
 #  edited_at                :datetime
-#  media_type               :string
+#  media_type               :string           indexed => [media_id]
 #  nsfw                     :boolean          default(FALSE), not null
 #  post_likes_count         :integer          default(0), not null
 #  spoiled_unit_type        :string
@@ -19,7 +19,7 @@
 #  top_level_comments_count :integer          default(0), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
-#  media_id                 :integer
+#  media_id                 :integer          indexed => [media_type]
 #  spoiled_unit_id          :integer
 #  target_group_id          :integer
 #  target_user_id           :integer
@@ -27,7 +27,8 @@
 #
 # Indexes
 #
-#  index_posts_on_deleted_at  (deleted_at)
+#  index_posts_on_deleted_at      (deleted_at)
+#  posts_media_type_media_id_idx  (media_type,media_id)
 #
 # Foreign Keys
 #
