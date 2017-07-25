@@ -9,8 +9,11 @@ class CommentLikePolicy < ApplicationPolicy
     return false if user&.blocked?(record.comment.user)
     return false if user&.blocked?(record.comment.post.user)
     return false if user&.has_role?(:banned)
-    return false if group && !member?
-    record.user == user
+    if group
+      return false if banned_from_group?
+      return false if group.private? && !member?
+    end
+    is_owner?
   end
   alias_method :destroy?, :create?
 

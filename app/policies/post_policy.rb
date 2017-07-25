@@ -8,12 +8,13 @@ class PostPolicy < ApplicationPolicy
     is_owner?
   end
 
-  def create?
+  def create? # rubocop:disable Metrics/PerceivedComplexity
     return false if user&.blocked?(record.target_user)
     return false if user&.has_role?(:banned)
     if group
-      return false unless member?
+      return false if banned_from_group?
       return false if group.restricted? && !has_group_permission?(:content)
+      return false if group.private? && !member?
     end
     is_owner?
   end
@@ -33,7 +34,7 @@ class PostPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where.not(user_id: blocked_users)
+      scope.visible_for(user).where.not(user_id: blocked_users)
     end
   end
 end
