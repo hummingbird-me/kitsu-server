@@ -8,12 +8,13 @@ class PostPolicy < ApplicationPolicy
     is_owner?
   end
 
-  def create?
+  def create? # rubocop:disable Metrics/PerceivedComplexity
     return false if user&.blocked?(record.target_user)
     return false if user&.has_role?(:banned)
     if group
       return false if banned_from_group?
       return false if group.restricted? && !has_group_permission?(:content)
+      return false if group.private? && !member?
     end
     is_owner?
   end
