@@ -14,7 +14,7 @@ class PostPolicy < ApplicationPolicy
     if group
       return false if banned_from_group?
       return false if group.restricted? && !has_group_permission?(:content)
-      return false if group.private? && !member?
+      return false if group.closed? && !member?
     end
     is_owner?
   end

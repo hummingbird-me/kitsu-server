@@ -11,7 +11,7 @@ class CommentLikePolicy < ApplicationPolicy
     return false if user&.has_role?(:banned)
     if group
       return false if banned_from_group?
-      return false if group.private? && !member?
+      return false if group.closed? && !member?
     end
     is_owner?
   end
