@@ -13,7 +13,7 @@ module GroupPermissionsHelpers
   #
   # @return [GroupMember, nil] the membership of the current user in the group
   def member
-    group.member_for(user)
+    group&.member_for(user)
   end
 
   # Is the current user a member of the group?
@@ -42,6 +42,7 @@ module GroupPermissionsHelpers
   # @param [Symbol] permission what permission we are inquiring about
   # @return [Boolean] whether the current member has that permission
   def has_group_permission?(permission)
+    return false unless group
     return true if is_admin?
     member? && member.has_permission?(permission)
   end
