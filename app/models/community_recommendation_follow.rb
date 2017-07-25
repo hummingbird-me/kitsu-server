@@ -23,5 +23,7 @@
 
 class CommunityRecommendationFollow < ApplicationRecord
   belongs_to :user, required: true
-  belongs_to :community_recommendation_requests, required: true
+  belongs_to :community_recommendation_request, required: true
+
+  scope :for_request, ->(request) { where(community_recommendation_request: request) }
 end

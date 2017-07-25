@@ -25,7 +25,7 @@ class CommunityRecommendationRequest < ApplicationRecord
   has_many :community_recommendations
 
   validates :description, presence: true
-  validates :description, presence: true
+  validates :title, presence: true
 
   after_create do 
     CommunityRecommendation.create(
