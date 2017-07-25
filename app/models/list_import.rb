@@ -64,17 +64,19 @@ class ListImport < ApplicationRecord
 
     yield({ status: :running, total: count, progress: 0 })
     LibraryEntry.transaction do
-      each_with_index do |(media, data), index|
-        next unless media.present?
-        # Cap the progress
-        limit = media.progress_limit || media.default_progress_limit
-        data[:progress] = [data[:progress], limit].compact.min
-        # Merge the library entries
-        le = LibraryEntry.where(user: user, media: media).first_or_initialize
-        le.imported = true
-        le = merged_entry(le, data)
-        le.save! unless le.status.nil?
-        yield({ status: :running, total: count, progress: index + 1 })
+      Chewy.strategy(:atomic) do
+        each_with_index do |(media, data), index|
+          next unless media.present?
+          # Cap the progress
+          limit = media.progress_limit || media.default_progress_limit
+          data[:progress] = [data[:progress], limit].compact.min
+          # Merge the library entries
+          le = LibraryEntry.where(user: user, media: media).first_or_initialize
+          le.imported = true
+          le = merged_entry(le, data)
+          le.save! unless le.status.nil?
+          yield({ status: :running, total: count, progress: index + 1 })
+        end
       end
     end
     yield({ status: :completed, total: count, progress: count })
@@ -128,6 +130,6 @@ class ListImport < ApplicationRecord
   end
 
   after_commit(on: :create) do
-    ListImportWorker.perform_async(id)
+    ListImportWorker.perform_async(id) unless running?
   end
 end
