@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ListImport::AnimePlanet::Row do
+  before { skip 'Anime-Planet has blocked our servers :(' }
   let(:anime) { fixture('list_import/anime_planet/toy-anime.html') }
   let(:manga) { fixture('list_import/anime_planet/toy-manga.html') }
 

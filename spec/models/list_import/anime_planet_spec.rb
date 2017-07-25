@@ -25,6 +25,7 @@
 require 'rails_helper'
 
 RSpec.describe ListImport::AnimePlanet do
+  before { skip 'Anime-Planet has blocked our servers :(' }
   before do
     host = described_class::ANIME_PLANET_HOST
     extensions = '?mylist_view=grid&per_page=480&sort=title&page='
