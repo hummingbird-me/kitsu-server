@@ -128,6 +128,6 @@ class ListImport < ApplicationRecord
   end
 
   after_commit(on: :create) do
-    ListImportWorker.perform_async(id)
+    ListImportWorker.perform_async(id) unless running?
   end
 end

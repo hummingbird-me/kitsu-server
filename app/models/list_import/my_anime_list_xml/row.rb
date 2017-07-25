@@ -43,7 +43,8 @@ class ListImport
 
       def rating
         # 10-point scale to 20-point scale
-        node.at_css('my_score').content.to_f * 2
+        value = node.at_css('my_score').content
+        value.to_i * 2 unless value == '0' || value.empty?
       end
 
       def reconsume_count

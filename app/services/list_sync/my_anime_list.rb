@@ -25,11 +25,14 @@ module ListSync
 
     def import!(kind)
       track_session do
-        ListImport::MyAnimeListXML.new(
-          import_file: their_xml_for(kind),
+        import = ListImport::MyAnimeListXML.new(
+          input_file: their_xml_for(kind),
           user: linked_account.user,
-          strategy: :greater
-        ).run
+          strategy: :greater,
+          status: :running
+        )
+        import.save!
+        import.apply!
       end
     end
 
