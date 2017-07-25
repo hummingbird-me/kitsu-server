@@ -59,6 +59,7 @@ GEM
     after_commit_action (1.0.1)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
+    aggregate (0.2.2)
     annotate (2.7.1)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 12.0)
@@ -185,6 +186,7 @@ GEM
       tilt
     hashdiff (0.3.2)
     hashie (3.5.5)
+    hetchy (1.0.0)
     hiredis (0.6.1)
     hitimes (1.2.4)
     html-pipeline (2.5.0)
@@ -231,6 +233,16 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kramdown (1.13.2)
+    librato-metrics (2.1.2)
+      aggregate (~> 0.2.2)
+      faraday
+    librato-rack (2.0.3)
+      hetchy (~> 1.0)
+      librato-metrics (~> 2.1.0)
+    librato-rails (2.1.0)
+      activesupport (>= 3.0)
+      librato-rack (~> 2.0.0)
+      railties (>= 3.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -564,6 +576,7 @@ DEPENDENCIES
   json_expressions
   jsonapi-resources (= 0.9.0)
   kramdown
+  librato-rails
   lograge
   mechanize
   nokogiri (~> 1.7.1)

@@ -116,4 +116,5 @@ group :production, :staging do
   gem 'puma_worker_killer'
   gem 'rails_12factor' # Log to stdout, serve assets
   gem 'skylight' # Performance Monitoring
+  gem 'librato-rails' # Metrics
 end
