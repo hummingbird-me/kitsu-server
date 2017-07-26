@@ -1,5 +1,6 @@
 class LibraryEntriesController < ApplicationController
   include CustomControllerHelpers
+  before_action :authenticate_user!, only: %i[issues]
 
   def authorize_operation(operation)
     has_permission = operation_scope.find_each.all? do |entry|
@@ -14,7 +15,6 @@ class LibraryEntriesController < ApplicationController
   end
 
   def issues
-    authenticate_user!
     entries = LibraryEntry.where(user: user)
     missing = LibraryGapsService.new(entries).missing_engagement_ids
     render json: missing
