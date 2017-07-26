@@ -52,7 +52,7 @@ class ListImport
     def xml
       return @xml if @xml
 
-      data = open(input_file.path)
+      data = open(input_file.url)
       data = Zlib::GzipReader.new(data) if gzipped?         # Unzip
       data = data.read
       # We can't fix Xinil, but we can fix his mess.
