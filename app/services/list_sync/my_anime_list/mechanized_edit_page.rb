@@ -22,7 +22,7 @@ module ListSync
 
       def edit_page
         return @edit_page if @edit_page
-        raise ListSync::RemoteError, 'Not found on MAL' unless mal_id
+        raise ListSync::NotFoundError unless mal_id
         url = "https://myanimelist.net/ownlist/#{media_kind}/#{mal_id}/edit"
         @edit_page = @agent.get(url)
       end

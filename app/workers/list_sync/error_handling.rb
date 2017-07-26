@@ -4,6 +4,8 @@ module ListSync
 
     def capture_sync_errors(linked_account, pending_logs)
       yield
+    rescue ListSync::NotFoundError
+      error! pending_logs, 'No equivalent'
     rescue ListSync::AuthenticationError
       linked_account.update!(sync_to: false, disabled_reason: 'Login failed')
       error! pending_logs, 'Login failed'
