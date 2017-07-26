@@ -57,6 +57,7 @@ class Stat < ApplicationRecord
         )
 
         return unless record
+        return if record.stats_data['total_media'].nil?
 
         library_entry.media.categories.each do |category|
           next unless record.stats_data['all_categories'][category.slug]

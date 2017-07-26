@@ -54,7 +54,9 @@ class Stat < ApplicationRecord
 
       def decrement(user, library_entry)
         record = user.stats.find_by(type: "Stat::#{media_type}FavoriteYear")
+
         return unless record
+        return if record.stats_data['total_media'].nil?
 
         start_date = library_entry.media.start_date&.year&.to_s
         # if start_date doesn't exist, no need to continue
