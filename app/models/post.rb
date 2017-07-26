@@ -10,6 +10,7 @@
 #  content_formatted           :text             not null
 #  deleted_at                  :datetime         indexed
 #  edited_at                   :datetime
+#  embed                       :jsonb
 #  media_type                  :string           indexed => [media_id]
 #  nsfw                        :boolean          default(FALSE), not null
 #  post_likes_count            :integer          default(0), not null

@@ -9,6 +9,7 @@
 #  content_formatted :text             not null
 #  deleted_at        :datetime         indexed
 #  edited_at         :datetime
+#  embed             :jsonb
 #  likes_count       :integer          default(0), not null
 #  replies_count     :integer          default(0), not null
 #  created_at        :datetime         not null

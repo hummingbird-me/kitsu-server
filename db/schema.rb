@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "likes_count",       default: 0,     null: false
     t.integer  "replies_count",     default: 0,     null: false
     t.datetime "edited_at"
+    t.jsonb    "embed"
   end
 
   add_index "comments", ["deleted_at"], name: "index_comments_on_deleted_at", using: :btree
@@ -1132,6 +1133,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "top_level_comments_count", default: 0,     null: false
     t.datetime "edited_at"
     t.string   "target_interest"
+    t.jsonb    "embed"
   end
 
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
