@@ -20,25 +20,10 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class CommunityRecommendationRequest < ApplicationRecord
-  include WithActivity
-
-  belongs_to :user
-  has_many :community_recommendations
-
-  validates :description, presence: true
-  validates :title, presence: true
-
-  def stream_activity
-    user.profile_feed.activities.new(
-      title: title
-    )
-  end
-
-  after_create do
-    CommunityRecommendationFollow.create(
-      user: user,
-      community_recommendation_request: self
-    )
+FactoryGirl.define do
+  factory :community_recommendation_request do
+    user
+    description { Faker::Lorem.sentence }
+    title { Faker::Name.name }
   end
 end

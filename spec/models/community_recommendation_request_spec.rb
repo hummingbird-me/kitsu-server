@@ -20,25 +20,8 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class CommunityRecommendationRequest < ApplicationRecord
-  include WithActivity
+require 'rails_helper'
 
-  belongs_to :user
-  has_many :community_recommendations
-
-  validates :description, presence: true
-  validates :title, presence: true
-
-  def stream_activity
-    user.profile_feed.activities.new(
-      title: title
-    )
-  end
-
-  after_create do
-    CommunityRecommendationFollow.create(
-      user: user,
-      community_recommendation_request: self
-    )
-  end
+RSpec.describe CommunityRecommendationRequest, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end

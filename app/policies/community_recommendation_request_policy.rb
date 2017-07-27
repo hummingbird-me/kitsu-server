@@ -1,7 +1,6 @@
-class CommunityRecommendationRequestsPolicy < ApplicationPolicy
+class CommunityRecommendationRequestPolicy < ApplicationPolicy
   def update?
-    return true if is_admin?
-    is_owner?
+    is_owner? || is_admin?
   end
 
   def create?

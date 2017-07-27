@@ -1,4 +1,4 @@
-class CommunityRecommendationFollowsPolicy < ApplicationPolicy
+class CommunityRecommendationFollowPolicy < ApplicationPolicy
   def update?
     false
   end
