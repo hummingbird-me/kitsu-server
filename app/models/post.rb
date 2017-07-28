@@ -46,10 +46,12 @@ require_dependency 'html/pipeline/onebox_filter'
 class Post < ApplicationRecord
   include WithActivity
   include ContentProcessable
+  include ContentEmbeddable
 
   acts_as_paranoid
   resourcify
   processable :content, LongPipeline
+  embed_links_in :content, to: :embed
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'
