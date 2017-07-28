@@ -30,6 +30,4 @@ require 'rails_helper'
 RSpec.describe Upload, type: :model do
   subject { build(:upload) }
   it { should belong_to(:user) }
-  it { should belong_to(:post) }
-  it { should belong_to(:comment) }
 end
