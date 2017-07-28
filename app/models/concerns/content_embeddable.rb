@@ -3,20 +3,14 @@ module ContentEmbeddable
 
   class_methods do
     def embed_links_in(content_attr, to:)
-      url_var = :"@#{to}_url"
+      url_attr = :"#{to}_url"
       processed_attr = :"processed_#{content_attr}"
 
-      define_method("#{to}=") do |value|
-        if value.is_a?(String)
-          instance_variable_set(url_var, value)
-        else
-          super(value)
-        end
-      end
+      attr_accessor url_attr
 
       validate do
         processed = send(processed_attr)
-        embed_url = instance_variable_get(url_var)
+        embed_url = send(url_attr)
         if embed_url && !processed[:embeddable_links].include?(embed_url)
           errors.add(to, 'must exist in content')
         end
@@ -24,7 +18,7 @@ module ContentEmbeddable
 
       before_validation do
         processed = send(processed_attr)
-        embed_url = instance_variable_get(url_var)
+        embed_url = send(url_attr)
         self.embed = embed_url ? EmbedService.new(embed_url).as_json : processed[:embed]
       end
     end
