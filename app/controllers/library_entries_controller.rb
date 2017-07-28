@@ -15,7 +15,7 @@ class LibraryEntriesController < ApplicationController
   end
 
   def issues
-    entries = LibraryEntry.where(user: user).order(:reaction_skipped, finished_at: :desc)
+    entries = LibraryEntry.where(user: user).order(:reaction_skipped, :rating, finished_at: :desc)
     missing = LibraryGapsService.new(entries).missing_engagement_ids
     render json: missing
   end
