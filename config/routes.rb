@@ -111,6 +111,7 @@ Rails.application.routes.draw do
       post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
       post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
       delete '/feeds/:group/:id/activities/:uuid', to: 'feeds#destroy_activity'
+      post '/embeds', to: 'embeds#create'
 
       ### Site Announcements
       jsonapi_resources :site_announcements
