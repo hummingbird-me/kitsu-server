@@ -33,6 +33,7 @@
 class Comment < ApplicationRecord
   include WithActivity
   include ContentProcessable
+  include ContentEmbeddable
 
   acts_as_paranoid
   resourcify
@@ -40,6 +41,7 @@ class Comment < ApplicationRecord
     'top_level_comments_count' if model.parent.blank?
   }
   processable :content, LongPipeline
+  embed_links_in :content, to: :embed
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :post, required: true, counter_cache: true, touch: true
