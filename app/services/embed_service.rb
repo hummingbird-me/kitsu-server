@@ -9,6 +9,10 @@ class EmbedService
     @url = url
   end
 
+  def as_json
+    embedder.as_json
+  end
+
   def to_json
     Rails.cache.fetch(cache_id, expires_in: EXPIRY) do
       embedder.to_json
