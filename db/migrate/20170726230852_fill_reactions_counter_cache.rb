@@ -1,7 +1,4 @@
-require 'update_in_batches'
-
 class FillReactionsCounterCache < ActiveRecord::Migration
-  using UpdateInBatches
   disable_ddl_transaction!
 
   def change
