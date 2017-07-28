@@ -25,7 +25,7 @@ class PostPolicy < ApplicationPolicy
   end
 
   def editable_attributes(all)
-    all - [:content_formatted]
+    all - %i[content_formatted embed]
   end
 
   def group
