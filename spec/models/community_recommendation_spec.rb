@@ -33,5 +33,11 @@
 require 'rails_helper'
 
 RSpec.describe CommunityRecommendation, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { build(:community_recommendation) }
+
+  it { should belong_to(:anime) }
+  it { should belong_to(:manga) }
+  it { should belong_to(:drama) }
+  it { should have_many(:reasons) }
+  it { should belong_to(:community_recommendation_request) }
 end

@@ -24,5 +24,8 @@
 require 'rails_helper'
 
 RSpec.describe CommunityRecommendationFollow, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { build(:community_recommendation_follow) }
+
+  it { should belong_to(:community_recommendation_request) }
+  it { should belong_to(:user) }
 end

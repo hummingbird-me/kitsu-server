@@ -23,5 +23,8 @@
 require 'rails_helper'
 
 RSpec.describe CommunityRecommendationRequest, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { build(:community_recommendation_request) }
+
+  it { should have_many(:community_recommendations) }
+  it { should belong_to(:user) }
 end
