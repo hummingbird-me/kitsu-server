@@ -1,10 +1,9 @@
 class UploadResource < BaseResource
   include ScopelessResource
-  attribute :content
+  attribute :content, format: :attachment
 
   has_one :user
-  has_one :post
-  has_one :comment
+  has_one :owner
 
-  filters :id, :user_id, :post_id, :comment_id
+  filters :id, :user_id, :owner_id, :owner_type
 end

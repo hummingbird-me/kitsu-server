@@ -8,30 +8,26 @@
 #  content_file_name    :string
 #  content_file_size    :integer
 #  content_updated_at   :datetime
+#  owner_type           :string           indexed => [owner_id]
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  comment_id           :integer          indexed
-#  post_id              :integer          indexed
+#  owner_id             :integer          indexed => [owner_type]
 #  user_id              :integer          not null, indexed
 #
 # Indexes
 #
-#  index_uploads_on_comment_id  (comment_id)
-#  index_uploads_on_post_id     (post_id)
-#  index_uploads_on_user_id     (user_id)
+#  index_uploads_on_owner_type_and_owner_id  (owner_type,owner_id)
+#  index_uploads_on_user_id                  (user_id)
 #
 # Foreign Keys
 #
-#  fk_rails_127111e6ac  (post_id => posts.id)
 #  fk_rails_15d41e668d  (user_id => users.id)
-#  fk_rails_62b822a2d6  (comment_id => comments.id)
 #
 # rubocop:enable Metrics/LineLength
 
 class Upload < ApplicationRecord
   belongs_to :user, required: true
-  belongs_to :post
-  belongs_to :comment
+  belongs_to :owner, polymorphic: true
   has_attached_file :content, required: true
   validates_attachment_content_type :content, content_type: [
     'image/jpg', 'image/jpeg', 'image/png', 'image/gif'

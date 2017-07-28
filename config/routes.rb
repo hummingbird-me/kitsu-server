@@ -139,8 +139,7 @@ Rails.application.routes.draw do
       get '/sso/canny', to: 'sso#canny'
       # Uploads
       post '/uploads/_bulk', to: 'uploads#bulk_create'
-      patch '/uploads/:id', to: 'uploads#update'
-      put '/uploads/:id', to: 'uploads#update'
+      jsonapi_resources :uploads
     end
 
     ### Admin Panel
@@ -171,7 +170,7 @@ end
 
 # == Route Map
 #
-# I, [2017-07-22T20:22:18.377937 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-07-28T06:03:33.803533 #3392]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -1526,8 +1525,24 @@ end
 #                                                            POST      /api/edge/groups/:id/_read(.:format)                                                                       groups#read
 #                                                  sso_canny GET       /api/edge/sso/canny(.:format)                                                                              sso#canny
 #                                              uploads__bulk POST      /api/edge/uploads/_bulk(.:format)                                                                          uploads#bulk_create
-#                                                            PATCH     /api/edge/uploads/_bulk(.:format)                                                                          uploads#bulk_update
-#                                                            PUT       /api/edge/uploads/_bulk(.:format)                                                                          uploads#bulk_update
+#                                  upload_relationships_user GET       /api/edge/uploads/:upload_id/relationships/user(.:format)                                                  uploads#show_relationship {:relationship=>"user"}
+#                                                            PUT|PATCH /api/edge/uploads/:upload_id/relationships/user(.:format)                                                  uploads#update_relationship {:relationship=>"user"}
+#                                                            DELETE    /api/edge/uploads/:upload_id/relationships/user(.:format)                                                  uploads#destroy_relationship {:relationship=>"user"}
+#                                                upload_user GET       /api/edge/uploads/:upload_id/user(.:format)                                                                users#get_related_resource {:relationship=>"user", :source=>"uploads"}
+#                                  upload_relationships_post GET       /api/edge/uploads/:upload_id/relationships/post(.:format)                                                  uploads#show_relationship {:relationship=>"post"}
+#                                                            PUT|PATCH /api/edge/uploads/:upload_id/relationships/post(.:format)                                                  uploads#update_relationship {:relationship=>"post"}
+#                                                            DELETE    /api/edge/uploads/:upload_id/relationships/post(.:format)                                                  uploads#destroy_relationship {:relationship=>"post"}
+#                                                upload_post GET       /api/edge/uploads/:upload_id/post(.:format)                                                                posts#get_related_resource {:relationship=>"post", :source=>"uploads"}
+#                               upload_relationships_comment GET       /api/edge/uploads/:upload_id/relationships/comment(.:format)                                               uploads#show_relationship {:relationship=>"comment"}
+#                                                            PUT|PATCH /api/edge/uploads/:upload_id/relationships/comment(.:format)                                               uploads#update_relationship {:relationship=>"comment"}
+#                                                            DELETE    /api/edge/uploads/:upload_id/relationships/comment(.:format)                                               uploads#destroy_relationship {:relationship=>"comment"}
+#                                             upload_comment GET       /api/edge/uploads/:upload_id/comment(.:format)                                                             comments#get_related_resource {:relationship=>"comment", :source=>"uploads"}
+#                                                    uploads GET       /api/edge/uploads(.:format)                                                                                uploads#index
+#                                                            POST      /api/edge/uploads(.:format)                                                                                uploads#create
+#                                                     upload GET       /api/edge/uploads/:id(.:format)                                                                            uploads#show
+#                                                            PATCH     /api/edge/uploads/:id(.:format)                                                                            uploads#update
+#                                                            PUT       /api/edge/uploads/:id(.:format)                                                                            uploads#update
+#                                                            DELETE    /api/edge/uploads/:id(.:format)                                                                            uploads#destroy
 #                                                rails_admin           /api/admin                                                                                                 RailsAdmin::Engine
 #                                                sidekiq_web           /api/sidekiq                                                                                               Sidekiq::Web
 #                                                    pg_hero           /api/pghero                                                                                                PgHero::Engine

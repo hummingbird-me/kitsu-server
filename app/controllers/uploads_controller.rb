@@ -8,21 +8,6 @@ class UploadsController < ApplicationController
     render json: serialize_entries(uploads)
   end
 
-  def update
-    upload = Upload.find(id: params[:id], user: user)
-    render_jsonapi serialize_error(401, 'Not permitted'), status: 401 unless upload
-
-    if params.key?(:post)
-      upload.post = params[:post]
-    elsif params.key?(:comment)
-      upload.comment = params[:comment]
-    else
-      render_jsonapi serialize_error(400, 'Needs related post or comment field'), status: 400
-    end
-    upload.save
-    render json: serializer.serialize_to_hash(UploadResource.new(upload, context))
-  end
-
   private
 
   def serialize_entries(entries)
