@@ -1,4 +1,4 @@
-class ReblogPolicy < ApplicationPolicy
+class RepostPolicy < ApplicationPolicy
   def create?
     is_owner?
   end

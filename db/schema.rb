@@ -1196,16 +1196,6 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.datetime "updated_at",             null: false
   end
 
-  create_table "reblogs", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "post_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "reblogs", ["post_id"], name: "index_reblogs_on_post_id", using: :btree
-  add_index "reblogs", ["user_id"], name: "index_reblogs_on_user_id", using: :btree
-
   create_table "recommendations", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "created_at",      null: false
@@ -1230,6 +1220,16 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_index "reports", ["naughty_id", "user_id"], name: "index_reports_on_naughty_id_and_user_id", unique: true, using: :btree
   add_index "reports", ["naughty_type", "naughty_id"], name: "index_reports_on_naughty_type_and_naughty_id", using: :btree
   add_index "reports", ["status"], name: "index_reports_on_status", using: :btree
+
+  create_table "reposts", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "post_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "reposts", ["post_id"], name: "index_reposts_on_post_id", using: :btree
+  add_index "reposts", ["user_id"], name: "index_reposts_on_user_id", using: :btree
 
   create_table "review_likes", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -1584,10 +1584,10 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "profile_links", "profile_link_sites"
   add_foreign_key "profile_links", "users"
-  add_foreign_key "reblogs", "posts"
-  add_foreign_key "reblogs", "users"
   add_foreign_key "reports", "users"
   add_foreign_key "reports", "users", column: "moderator_id"
+  add_foreign_key "reposts", "posts"
+  add_foreign_key "reposts", "users"
   add_foreign_key "review_likes", "users"
   add_foreign_key "reviews", "library_entries"
   add_foreign_key "site_announcements", "users"

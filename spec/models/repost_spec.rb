@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/LineLength
 # == Schema Information
 #
-# Table name: reblogs
+# Table name: reposts
 #
 #  id         :integer          not null, primary key
 #  created_at :datetime         not null
@@ -11,8 +11,8 @@
 #
 # Indexes
 #
-#  index_reblogs_on_post_id  (post_id)
-#  index_reblogs_on_user_id  (user_id)
+#  index_reposts_on_post_id  (post_id)
+#  index_reposts_on_user_id  (user_id)
 #
 # Foreign Keys
 #
@@ -21,9 +21,9 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
-  factory :reblog do
-    association :user, strategy: :build
-    association :post, strategy: :build
-  end
+require 'rails_helper'
+
+RSpec.describe Repost, type: :model do
+  it { should belong_to(:user) }
+  it { should belong_to(:post) }
 end
