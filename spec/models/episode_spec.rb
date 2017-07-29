@@ -4,6 +4,7 @@
 # Table name: episodes
 #
 #  id                     :integer          not null, primary key
+#  absolute_number        :integer
 #  airdate                :date
 #  canonical_title        :string           default("en_jp"), not null
 #  length                 :integer
