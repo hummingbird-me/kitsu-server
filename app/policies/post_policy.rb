@@ -36,8 +36,7 @@ class PostPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where.not(user_id: blocked_users)
-      #scope.visible_for(user).where.not(user_id: blocked_users)
+      scope.visible_for(user).where.not(user_id: blocked_users)
     end
   end
 end

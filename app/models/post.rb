@@ -63,11 +63,30 @@ class Post < ApplicationRecord
   has_one :ama, foreign_key: 'original_post_id'
   has_many :reposts, dependent: :delete_all
 
+  scope :sfw, -> { where(nsfw: false) }
   scope :in_group, ->(group) { where(target_group: group) }
   scope :visible_for, ->(user) {
-    joins(:target_group).merge(Group.visible_for(user))
-                        .or(joins(:target_group)
-                        .where(target_group_id: nil))
+    scope = user && !user.sfw_filter? ? all : sfw
+
+    left_join = <<~SQL
+      LEFT OUTER JOIN groups g
+      ON g.id = target_group_id
+    SQL
+    group_visible = <<~SQL
+      posts.target_group_id IS NULL
+      OR (g.privacy = 0 OR g.privacy = 2)
+    SQL
+
+    return scope.joins(left_join).distinct.where(group_visible) unless user
+
+    scope.joins(left_join).distinct.where(<<~SQL)
+      #{group_visible}
+      OR g.id IN (
+        SELECT group_members.group_id
+        FROM group_members
+        WHERE group_members.user_id = #{user.id}
+      )
+    SQL
   }
 
   validates :content, :content_formatted, presence: true, unless: :uploads
