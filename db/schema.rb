@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
     t.string   "tba"
+    t.integer  "episode_count_guess"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -824,6 +825,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
     t.string   "tba"
+    t.integer  "chapter_count_guess"
   end
 
   create_table "manga_characters", force: :cascade do |t|

@@ -10,6 +10,7 @@
 #  average_rating            :decimal(5, 2)
 #  canonical_title           :string           default("en_jp"), not null
 #  chapter_count             :integer
+#  chapter_count_guess       :integer
 #  cover_image_content_type  :string(255)
 #  cover_image_file_name     :string(255)
 #  cover_image_file_size     :integer
@@ -72,6 +73,12 @@ class Manga < ApplicationRecord
       -> { [canonical_title, year] }, # attack-on-titan-2004
       -> { [canonical_title, year, subtype] } # attack-on-titan-2004-doujin
     ]
+  end
+
+  def update_episode_count_guess(guess)
+    self.chapter_count_guess = guess
+    save!
+    chapters.create_defaults(chapter_count_guess) if chapters.length < chapter_count_guess
   end
 
   before_save do

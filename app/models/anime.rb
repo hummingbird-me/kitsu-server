@@ -17,6 +17,7 @@
 #  cover_image_updated_at    :datetime
 #  end_date                  :date
 #  episode_count             :integer
+#  episode_count_guess       :integer
 #  episode_length            :integer
 #  favorites_count           :integer          default(0), not null
 #  popularity_rank           :integer
@@ -103,6 +104,12 @@ class Anime < ApplicationRecord
     end
   end
 
+  def update_episode_count_guess(guess)
+    self.episode_count_guess = guess
+    save!
+    episodes.create_defaults(episode_count_guess) if episodes.length < episode_count_guess
+  end
+
   def self.fuzzy_find(title)
     MediaIndex::Anime.query(multi_match: {
       fields: %w[titles.* abbreviated_titles synopsis actors characters],
@@ -120,7 +127,7 @@ class Anime < ApplicationRecord
     end
   end
 
-  after_commit do
+  after_save do
     episodes.create_defaults(episode_count) if
       episode_count && episodes.length < episode_count
   end
