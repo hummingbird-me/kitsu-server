@@ -82,6 +82,8 @@ class Manga < ApplicationRecord
   end
 
   before_save do
+    self.chapter_count_guess = nil if chapter_count
+
     if chapter_count == 1
       self.start_date = end_date if start_date.nil? && !end_date.nil?
       self.end_date = start_date if end_date.nil? && !start_date.nil?
@@ -90,6 +92,6 @@ class Manga < ApplicationRecord
 
   after_save do
     chapters.create_defaults(chapter_count) if
-      chapter_count && chapters.length < chapter_count
+      chapter_count_changed? && chapters.length != chapter_count
   end
 end

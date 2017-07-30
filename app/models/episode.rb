@@ -59,6 +59,7 @@ class Episode < ApplicationRecord
       new(number: n, season_number: 1, titles: { en_jp: "Episode #{n}" })
     end
     transaction { episodes.each(&:save) }
+    where("number > #{count}").destroy_all
   end
 
   def feed
