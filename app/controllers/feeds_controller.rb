@@ -68,8 +68,8 @@ class FeedsController < ApplicationController
   end
 
   def feed_visible?
-    case params[:group]
-    when 'media', 'media_aggr'
+    case params[:group].sub(/_aggr\z/, '')
+    when 'media'
       media_type, media_id = params[:id].split('-')
       return false unless %w[Manga Anime Drama].include?(media_type)
       media = media_type.safe_constantize.find_by(id: media_id)
@@ -84,17 +84,17 @@ class FeedsController < ApplicationController
       user_id, interest = params[:id].split('-')
       return false unless %w[Manga Anime Drama].include?(interest)
       user_id.to_i == current_user&.resource_owner_id
-    when 'user', 'user_aggr'
+    when 'user'
       user = User.find_by(id: params[:id])
       user && show?(user)
-    when 'group', 'group_aggr'
+    when 'group'
       group = Group.find_by(id: params[:id])
       group && show?(group)
     when 'site_announcements', 'notifications', 'timeline', 'group_timeline'
       user = User.find_by(id: params[:id])
       user == current_user&.resource_owner
     when 'global' then true
-    when 'reports_aggr'
+    when 'reports'
       user = current_user&.resource_owner
       if params[:id] == 'global'
         # Is admin of something?
