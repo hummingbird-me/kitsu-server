@@ -75,7 +75,7 @@ class Manga < ApplicationRecord
     ]
   end
 
-  def update_episode_count_guess(guess)
+  def update_chapter_count_guess(guess)
     self.chapter_count_guess = guess
     save!
     chapters.create_defaults(chapter_count_guess) if chapters.length < chapter_count_guess
