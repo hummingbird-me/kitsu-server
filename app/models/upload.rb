@@ -29,6 +29,14 @@ class Upload < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :owner, polymorphic: true
   has_attached_file :content, required: true
+  scope :orphan, -> {
+    where(
+      post: nil,
+      comment: nil
+    ).where(
+      ['created_at > ?', 11.hours.ago]
+    )
+  }
   validates_attachment_content_type :content, content_type: [
     'image/jpg', 'image/jpeg', 'image/png', 'image/gif'
   ]
