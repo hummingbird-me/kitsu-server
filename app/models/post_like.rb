@@ -24,7 +24,6 @@ class PostLike < ApplicationRecord
   validates :post, uniqueness: { scope: :user_id }
   validates :post, active_ama: {
     message: 'cannot like this AMA',
-    post: true,
     user: :user
   }
 

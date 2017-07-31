@@ -1,8 +1,8 @@
 class ActiveAMAValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    ama = if options.key?(:comment)
+    ama = if value.respond_to?(:post)
             AMA.for_original_post(value.post).first
-          elsif options.key?(:post)
+          elsif value.is_a?(Post)
             AMA.for_original_post(value).first
           else
             value

@@ -28,7 +28,6 @@ class PostFollow < ApplicationRecord
   validates :post, uniqueness: { scope: :user_id }
   validates :post, active_ama: {
     message: 'cannot follow this AMA',
-    post: true,
     user: :user
   }
 

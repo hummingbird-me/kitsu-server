@@ -31,7 +31,6 @@ class CommentLike < ApplicationRecord
   validates :comment, uniqueness: { scope: :user_id }
   validates :comment, active_ama: {
     message: 'cannot like comments on this AMA',
-    comment: true,
     user: :user
   }
 

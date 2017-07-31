@@ -55,7 +55,6 @@ class Comment < ApplicationRecord
   validates :content, length: { maximum: 9_000 }
   validates :post, active_ama: {
     message: 'cannot make any more comments on this AMA',
-    post: :post,
     user: :user
   }
 

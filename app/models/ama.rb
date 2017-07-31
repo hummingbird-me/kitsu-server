@@ -32,16 +32,18 @@ class AMA < ApplicationRecord
 
   scope :for_original_post, ->(post) { where(original_post: post) }
 
+  def feed
+    @feed ||= AMAFeed.new(id)
+  end
+
   def send_ama_notification
-    subscriber_notifications = ama_subscribers.map(&:user).map(&:notifications)
-    original_post.feed.activities.new(
+    feed.activities.new(
       target: original_post,
       actor: author,
       object: self,
       foreign_id: self,
       verb: self.class.name.underscore,
-      time: Time.now,
-      to: subscriber_notifications
+      time: Time.now
     )
   end
 
