@@ -31,6 +31,8 @@
 # rubocop:enable Metrics/LineLength
 
 class CommunityRecommendation < ApplicationRecord
+  include RetrieveMedia
+
   belongs_to :anime
   belongs_to :manga
   belongs_to :drama
@@ -38,34 +40,14 @@ class CommunityRecommendation < ApplicationRecord
   belongs_to :community_recommendation_request, required: true
   has_many :reasons, class_name: 'Post'
 
-  before_validation do
-    self.media = retrieve_media
-  end
-
   def send_community_recommendation(reason)
-    follower_notifications = CommunityRecommendationFollow.for_request(
-      community_recommendation_request
-    ).map(
-      &:user
-    ).map(&:notifications)
-    community_recommendation_request.user.profile_feed.activities.new(
+    community_recommendation_request.feed.activities.new(
       target: reason,
       actor: reason.user,
       object: self,
       foreign_id: self,
       verb: self.class.name.underscore,
-      time: Time.now,
-      to: follower_notifications
-    )
-  end
-
-  def retrieve_media
-    if anime.present?
-      anime
-    elsif manga.present?
-      manga
-    elsif drama.present?
-      drama
-    end
+      time: Time.now
+    ).create
   end
 end

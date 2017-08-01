@@ -29,6 +29,10 @@ class CommunityRecommendationRequest < ApplicationRecord
   validates :description, presence: true
   validates :title, presence: true
 
+  def feed
+    @feed ||= CommunityRecommendationRequestFeed.new(id)
+  end
+
   def stream_activity
     user.profile_feed.activities.new(
       title: title
