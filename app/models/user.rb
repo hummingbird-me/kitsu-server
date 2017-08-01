@@ -94,6 +94,7 @@
 # rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
+  include AlgoliaSearch
   include WithCoverImage
   include WithAvatar
 
@@ -111,6 +112,10 @@ class User < ApplicationRecord
   has_secure_password
   update_index('users#user') { self }
   enum theme: %i[light dark]
+
+  algoliasearch do
+    attribute :name, :past_names, :created_at, :followers_count
+  end
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
