@@ -95,14 +95,15 @@
 class User < ApplicationRecord
   include WithCoverImage
   include WithAvatar
+  include OnDestroyReparent
+  include WithFeeds
 
   PAST_NAMES_LIMIT = 10
   PAST_IPS_LIMIT = 20
   RESERVED_NAMES = %w[
-    admin administrator connect dashboard developer developers edit favorites
-    feature featured features feed follow followers following hummingbird index
-    javascript json kitsu sysadmin sysadministrator system unfollow user users
-    wiki you staff mod
+    admin administrator connect dashboard developer developers edit favorites feature featured
+    features feed follow followers following hummingbird index javascript json kitsu sysadmin
+    sysadministrator system unfollow user users wiki you staff mod
   ].freeze
 
   enum rating_system: %i[simple advanced regular]
@@ -114,15 +115,12 @@ class User < ApplicationRecord
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false
-  has_many :followers, class_name: 'Follow', foreign_key: 'followed_id',
-                       dependent: :destroy
-  has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
-                       dependent: :destroy
+  has_many :followers, class_name: 'Follow', foreign_key: 'followed_id', dependent: :destroy
+  has_many :following, class_name: 'Follow', foreign_key: 'follower_id', dependent: :destroy
   has_many :comments
   has_many :posts
   has_many :blocks, dependent: :destroy
-  has_many :blocked, class_name: 'Block', foreign_key: 'blocked_id',
-                     dependent: :destroy
+  has_many :blocked, class_name: 'Block', foreign_key: 'blocked_id', dependent: :destroy
   has_many :linked_accounts, dependent: :destroy
   has_many :profile_links, dependent: :destroy
   has_many :user_roles, dependent: :destroy
@@ -140,14 +138,12 @@ class User < ApplicationRecord
   has_many :group_invites, dependent: :destroy
   has_many :group_members, dependent: :destroy
   has_many :group_reports
-  has_many :group_reports_as_moderator, class_name: 'GroupReport',
-                                        foreign_key: 'moderator_id'
+  has_many :group_reports_as_moderator, class_name: 'GroupReport', foreign_key: 'moderator_id'
   has_many :group_ticket_messages, dependent: :destroy
   has_many :group_tickets, dependent: :destroy
   has_many :leader_chat_messages, dependent: :destroy
   has_many :reports
-  has_many :reports_as_moderator, class_name: 'Report',
-                                  foreign_key: 'moderator_id'
+  has_many :reports_as_moderator, class_name: 'Report', foreign_key: 'moderator_id'
   has_many :site_announcements
   has_many :stats, dependent: :destroy
   has_many :library_events, dependent: :destroy
@@ -257,29 +253,12 @@ class User < ApplicationRecord
     title == 'Staff' || title == 'Mod'
   end
 
-  def profile_feed
-    @profile_feed ||= ProfileFeed.new(id)
-  end
-
-  def timeline
-    @timeline ||= TimelineFeed.new(id)
-  end
-
-  def group_timeline
-    @group_timeline ||= GroupTimelineFeed.new(id)
-  end
-
-  def notifications
-    @notifications ||= NotificationsFeed.new(id)
-  end
-
-  def site_announcements_feed
-    @site_announcements_feed ||= SiteAnnouncementsFeed.new(id)
-  end
-
-  def library_feed
-    @library_feed ||= PrivateLibraryFeed.new(id)
-  end
+  has_feed :profile_feed
+  has_feed :timeline
+  has_feed :group_timeline, setup: false # TODO: remove this
+  has_feed :notifications, setup: false
+  has_feed :site_announcements_feed
+  has_feed :library_feed, class_name: 'PrivateLibraryFeed'
 
   def interest_timeline_for(interest)
     "#{interest.to_s.classify}TimelineFeed".safe_constantize.new(id)
@@ -311,18 +290,24 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
+  # Reparenting "public-owned" data associated with the user when the account is deleted.  By
+  # "public-owned" we mean content which has value to the community outside of the user's profile.
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
+    # Actually delete them. TODO: delete any associated reports too
     Post.only_deleted.where(user_id: id).delete_all
+  end
+
+  with_options to_id: -10 do
     # Reparent relationships to the "Deleted" user
-    posts.update_all(user_id: -10)
-    comments.update_all(user_id: -10)
-    group_reports.update_all(user_id: -10)
-    group_reports_as_moderator.update_all(moderator_id: -10)
-    reports.update_all(user_id: -10)
-    reports_as_moderator.update_all(moderator_id: -10)
-    site_announcements.update_all(user_id: -10)
+    on_destroy_reparent :posts
+    on_destroy_reparent :comments
+    on_destroy_reparent :group_reports
+    on_destroy_reparent :group_reports_as_moderator
+    on_destroy_reparent :reports
+    on_destroy_reparent :reports_as_moderator
+    on_destroy_reparent :site_announcements
   end
 
   after_commit on: :create do
@@ -330,9 +315,6 @@ class User < ApplicationRecord
     UserMailer.confirmation(self).deliver_later
 
     # Set up feeds
-    profile_feed.setup!
-    timeline.setup!
-    site_announcements_feed.setup!
     AnimeTimelineFeed.new(id).setup!
     MangaTimelineFeed.new(id).setup!
     DramaTimelineFeed.new(id).setup!
