@@ -31,12 +31,11 @@ class AMASubscriber < ApplicationRecord
     message: 'can not subscribe to this AMA',
     user: :user
   }
-
-  after_create do
+  after_commit on: :create do
     user.notifications.follow(ama.feed)
   end
 
-  before_destroy do
+  after_commit on: :destroy do
     user.notifications.unfollow(ama.feed)
   end
 end

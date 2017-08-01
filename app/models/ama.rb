@@ -44,7 +44,7 @@ class AMA < ApplicationRecord
       foreign_id: self,
       verb: self.class.name.underscore,
       time: Time.now
-    )
+    ).create
   end
 
   def open?
