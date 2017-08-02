@@ -220,18 +220,8 @@ class LibraryEntry < ApplicationRecord
     end
 
     if progress_changed?
-      case kind
-      when :anime
-        guess = [(progress + 1), anime.default_progress_limit].min
-        anime.update_episode_count_guess(guess) if
-          !anime.episode_count &&
-          (!anime.episode_count_guess || anime.episode_count_guess <= guess)
-      when :manga
-        guess = [(progress + 1), manga.default_progress_limit].min
-        manga.update_chapter_count_guess(guess) if
-          !manga.chapter_count &&
-          (!manga.chapter_count_guess || manga.chapter_count_guess <= guess)
-      end
+      guess = [(progress + 1), media.default_progress_limit].min
+      media.update_unit_count_guess(guess)
     end
   end
 
