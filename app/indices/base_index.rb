@@ -34,6 +34,13 @@ class BaseIndex
       end
       super
     end
+
+    def index!(model)
+      model.find_in_batches do |group|
+        serialized = group.map { |m| new(m).as_json }
+        index.add_objects(serialized)
+      end
+    end
   end
 
   delegate :index, to: :class
