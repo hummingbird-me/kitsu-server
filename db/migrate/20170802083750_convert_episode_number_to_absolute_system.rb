@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class FillAbsoluteNumberForEpisodes < ActiveRecord::Migration
+class ConvertEpisodeNumberToAbsoluteSystem < ActiveRecord::Migration
   using UpdateInBatches
   disable_ddl_transaction!
 
@@ -18,7 +18,7 @@ class FillAbsoluteNumberForEpisodes < ActiveRecord::Migration
     execute "VACUUM absolute_numbers"
     say_with_time 'Filling absolute_number column for episodes' do
       Episode.all.update_in_batches(<<-SQL.squish)
-        absolute_number = (
+        number = (
           SELECT abs FROM absolute_numbers WHERE absolute_numbers.id = episodes.id
         )
       SQL

@@ -184,7 +184,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model 'Episode' do
     fields :id, :media
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    fields :canonical_title, :number, :absolute_number, :season_number, :synopsis, :airdate,
+    fields :canonical_title, :number, :relative_number, :season_number, :synopsis, :airdate,
       :length, :thumbnail
     include_all_fields
     field :media_id do
