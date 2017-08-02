@@ -94,6 +94,10 @@ class Anime < ApplicationRecord
     end
   end
 
+  def season_changed?
+    start_date_changed?
+  end
+
   # Season year is the year, adjusted so that December is part of the next year
   def season_year
     if start_date.try(:month) == 12
@@ -102,6 +106,8 @@ class Anime < ApplicationRecord
       year
     end
   end
+  alias_method :season_year_changed?, :season_changed?
+  alias_method :year_changed?, :season_changed?
 
   def self.fuzzy_find(title)
     MediaIndex::Anime.query(multi_match: {

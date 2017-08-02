@@ -115,6 +115,10 @@ module Media
     feed.setup!
   end
 
+  def poster_image_changed?
+    poster_image.dirty?
+  end
+
   private
 
   def inc_total_media_count(model)
