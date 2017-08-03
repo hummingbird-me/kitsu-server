@@ -36,6 +36,7 @@ class PostPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
+      return scope if is_admin?
       scope.visible_for(user).where.not(user_id: blocked_users)
     end
   end
