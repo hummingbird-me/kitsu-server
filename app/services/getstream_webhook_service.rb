@@ -44,7 +44,7 @@ class GetstreamWebhookService
       path = "/group-invite/#{model_id}"
     end
 
-    "#{client_url}#{path}"
+    "#{client_url}#{path}?notification=#{activity['id']}"
   end
 
   # Express activity of this feed in desired locale
