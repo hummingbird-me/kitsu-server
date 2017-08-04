@@ -3,4 +3,5 @@ class AlgoliaUsersIndex < BaseIndex
 
   attributes :name, :past_names
   attribute :followers_count, frequency: 2.5
+  attribute :avatar, format: AttachmentValueFormatter
 end
