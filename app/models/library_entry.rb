@@ -164,6 +164,9 @@ class LibraryEntry < ApplicationRecord
       kind = media_type&.underscore
       send("#{kind}=", media) if kind
     end
+
+    self.nsfw = media.nsfw? if media_id_changed?
+    true
   end
 
   before_destroy do
