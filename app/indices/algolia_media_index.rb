@@ -19,4 +19,9 @@ class AlgoliaMediaIndex < BaseIndex
   # Display Only
   attribute :slug
   attribute :poster_image, format: AttachmentValueFormatter
+
+  has_many :categories, as: :title
+  has_many :people, as: :name, via: 'castings.person'
+  has_many :characters, as: :name, via: 'castings.character'
+  has_many :streamers, as: :site_name, via: 'streaming_links.streamer'
 end
