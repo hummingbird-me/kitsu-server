@@ -1396,6 +1396,7 @@ ActiveRecord::Schema.define(version: 20170728231327) do
     t.integer  "rating_system",                           default: 0,           null: false
     t.integer  "theme",                                   default: 0,           null: false
     t.datetime "deleted_at"
+    t.integer  "media_reactions_count",                   default: 0,           null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

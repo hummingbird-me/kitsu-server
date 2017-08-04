@@ -7,8 +7,8 @@ class UserResource < BaseResource
     :waifu_or_husbando, :followers_count, :facebook_id, :following_count,
     :life_spent_on_anime, :birthday, :gender, :comments_count, :favorites_count,
     :likes_given_count, :reviews_count, :likes_received_count, :posts_count,
-    :ratings_count, :pro_expires_at, :title, :profile_completed,
-    :feed_completed, :website
+    :ratings_count, :media_reactions_count, :pro_expires_at, :title,
+    :profile_completed, :feed_completed, :website
   attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 

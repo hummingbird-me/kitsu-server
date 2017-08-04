@@ -43,7 +43,7 @@ class MediaReaction < ApplicationRecord
 
   acts_as_paranoid
 
-  belongs_to :user, required: true
+  belongs_to :user, required: true, counter_cache: true
   belongs_to :media, polymorphic: true, required: true
   belongs_to :anime
   belongs_to :manga
