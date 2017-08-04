@@ -13,12 +13,22 @@ class BaseIndex
 
     def has_many(name, as:, via: name) # rubocop:disable Style/PredicateName
       self._associations ||= []
-      self._associations << { attr: as, association: via, name: name }
+      self._associations << { attr: as, association: via, name: name, plurality: :many }
     end
-    alias_method :has_one, :has_many
+
+    def has_one(name, as:, via: name) # rubocop:disable Style/PredicateName
+      self._associations ||= []
+      self._associations << { attr: as, association: via, name: name, plurality: :one }
+    end
 
     def _association_names
       @_association_names ||= self._associations.map { |assoc| assoc[:name] }
+      return [] unless self._associations
+    end
+
+    def _singular_associations
+      return [] unless self._associations
+      @_singular_associations ||= self._associations.select { |assoc| assoc[:plurality] == :one }
     end
 
     def _attribute_names
@@ -55,6 +65,7 @@ class BaseIndex
     end
 
     def applicable_associations_for(model)
+      return [] unless _associations
       _associations.reject { |assoc| target_association_for(model, assoc[:association]).nil? }
     end
 
@@ -82,7 +93,7 @@ class BaseIndex
 
     def pluck_for_associations(model, associations)
       <<-PLUCK
-        #{model.table_name}.id,
+        #{model.table_name}.id#{',' unless associations.empty?}
         #{associations.map { |assoc|
           select_for_association(target_association_for(model, assoc[:association]), assoc[:attr])
         }.compact.join(', ')}
@@ -90,14 +101,28 @@ class BaseIndex
     end
 
     def associated_for(records)
+      # Get the model
       model = records.model
+      # Get the associations which apply to this model
       associations = applicable_associations_for(model)
+      # Generate the output hash keys
       association_keys = associations.map { |assoc| assoc[:name].to_sym }
+      # Generate the joins hash
       joins_hash = joins_hash_for(associations.map { |x| x[:association] })
+      # Generate the pluck string
       plucks = pluck_for_associations(model, associations)
-      data = records.eager_load(joins_hash).group("#{model.table_name}.id").uniq.pluck(plucks)
+
+      # Add the joins, group by the ID, pluck the data
+      data = records.eager_load(joins_hash).group("#{model.table_name}.id").pluck(plucks)
+      # For each row like [id, assoc, assoc, assoc, assoc, ...]
       data.map { |(id, *values)|
-        [id, association_keys.zip(values).to_h.transform_values(&:compact)]
+        # Zip it up into [id, assoc_name => assoc, assoc_name => assoc, ...] and compact the data
+        associated = association_keys.zip(values).to_h.transform_values(&:compact)
+        # For has_one associations, drop later values
+        _singular_associations.each do |assoc|
+          associated[assoc[:name]] = associated[assoc[:name]].first
+        end
+        [id, associated]
       }.to_h
     end
   end
