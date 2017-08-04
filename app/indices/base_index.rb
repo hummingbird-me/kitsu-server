@@ -1,6 +1,6 @@
 class BaseIndex
-  class_attribute :_attributes, :_index
-  attr_reader :_model, :_new
+  class_attribute :_attributes, :_index, :_associations
+  attr_reader :_model, :_new, :_associated
 
   class << self
     def attribute(*names, frequency: nil, format: nil)
@@ -10,6 +10,15 @@ class BaseIndex
       end
     end
     alias_method :attributes, :attribute
+
+    def has_many(name, as:, via: name) # rubocop:disable Style/PredicateName
+      self._associations ||= []
+      self._associations << { attr: as, association: via, name: name }
+    end
+
+    def _association_names
+      @_association_names ||= self._associations.map { |assoc| assoc[:name] }
+    end
 
     def _attribute_names
       @_names ||= self._attributes.map { |attr| attr[:name] }
@@ -37,17 +46,67 @@ class BaseIndex
 
     def index!(model)
       model.find_in_batches do |group|
-        serialized = group.map { |m| new(m).as_json }
+        # HACK: Rails 4.x doesn't have an in_batches method which returns scopes
+        associated = associated_for(model.where(id: group.map(&:id)))
+        serialized = group.map { |record| new(record, associated: associated[record.id]).as_json }
         index.add_objects(serialized)
       end
+    end
+
+    def applicable_associations_for(model)
+      _associations.reject { |assoc| target_association_for(model, assoc[:association]).nil? }
+    end
+
+    def joins_hash_for(*keys)
+      keys.flatten.each_with_object({}) do |key, acc|
+        key_parts = key.to_s.split('.').map!(&:to_sym)
+        key_parts.reduce(acc) do |hash, elem|
+          hash[elem] ||= {}
+        end
+      end
+    end
+
+    def target_association_for(base, key)
+      key.to_s.split('.').reduce(base) do |acc, k|
+        acc = acc.klass if acc.is_a? ActiveRecord::Reflection::AbstractReflection
+        return nil unless acc.reflections[k]
+        acc.reflections[k]
+      end
+    end
+
+    def select_for_association(association, column)
+      return unless association
+      "array_agg(DISTINCT #{association.table_name}.#{column})"
+    end
+
+    def pluck_for_associations(model, associations)
+      <<-PLUCK
+        #{model.table_name}.id,
+        #{associations.map { |assoc|
+          select_for_association(target_association_for(model, assoc[:association]), assoc[:attr])
+        }.compact.join(', ')}
+      PLUCK
+    end
+
+    def associated_for(records)
+      model = records.model
+      associations = applicable_associations_for(model)
+      association_keys = associations.map { |assoc| assoc[:name].to_sym }
+      joins_hash = joins_hash_for(associations.map { |x| x[:association] })
+      plucks = pluck_for_associations(model, associations)
+      data = records.eager_load(joins_hash).group("#{model.table_name}.id").uniq.pluck(plucks)
+      data.map { |(id, *values)|
+        [id, association_keys.zip(values).to_h.transform_values(&:compact)]
+      }.to_h
     end
   end
 
   delegate :index, to: :class
 
-  def initialize(model, new: true)
+  def initialize(model, new: true, associated: {})
     @_model = model
     @_new = new
+    @_associated = associated
   end
 
   def _attribute_names
@@ -104,6 +163,7 @@ class BaseIndex
       value = respond_to?(attr[:name]) ? send(attr[:name]) : _model.send(attr[:name])
       acc[attr[:name]] = attr[:format] ? attr[:format].format(value) : value
     end
+    res.merge!(_associated) if _associated
     res.transform_keys { |k| k.to_s.camelize(:lower) }
   end
 end
