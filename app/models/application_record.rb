@@ -35,4 +35,8 @@ class ApplicationRecord < ActiveRecord::Base
     update(deleted_at: Time.now) if attributes.include?('deleted_at')
     DestructionWorker.perform_async(self.class.name, id)
   end
+
+  def self.update_algolia(index_klass)
+    after_commit { index_klass.safe_constantize.new(self).save! }
+  end
 end

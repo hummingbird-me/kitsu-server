@@ -46,6 +46,7 @@ class Post < ApplicationRecord
   acts_as_paranoid
   resourcify
   processable :content, LongPipeline
+  update_algolia('AlgoliaPostsIndex')
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'

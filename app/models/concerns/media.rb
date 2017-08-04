@@ -26,6 +26,7 @@ module Media
     }
 
     update_index("media##{name.underscore}") { self }
+    update_algolia('AlgoliaMediaIndex')
 
     has_and_belongs_to_many :genres
     has_and_belongs_to_many :categories,

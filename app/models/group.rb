@@ -57,6 +57,7 @@ class Group < ApplicationRecord
 
   update_index('groups#group') { self }
   update_index('users#group_member') { members }
+  update_algolia('AlgoliaGroupsIndex')
 
   scope :public_visible, ->() { open.or(restricted) }
   scope :sfw, ->() { where(nsfw: false).where.not(category_id: 9) }
