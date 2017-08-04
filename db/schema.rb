@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170728231327) do
+ActiveRecord::Schema.define(version: 20170802083750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -382,6 +382,7 @@ ActiveRecord::Schema.define(version: 20170728231327) do
     t.hstore   "titles",                             default: {},      null: false
     t.string   "canonical_title",                    default: "en_jp", null: false
     t.string   "media_type",                                           null: false
+    t.integer  "relative_number"
   end
 
   add_index "episodes", ["media_type", "media_id"], name: "index_episodes_on_media_type_and_media_id", using: :btree
