@@ -17,6 +17,7 @@ class LibraryGapsService
     GROUP
       library_entries.id,
       COUNT(votes.id),
+      library_entries.reaction_skipped,
       COUNT(reacts.id),
       COUNT(rating)
     PLUCK
@@ -25,9 +26,9 @@ class LibraryGapsService
       attributes: [],
       reaction: [],
       rating: []
-    ) do |(id, votes, reactions, ratings), out|
+    ) do |(id, votes, reaction_skipped, reactions, ratings), out|
       out[:attributes] << id if votes.zero?
-      out[:reaction] << id if reactions.zero?
+      out[:reaction] << id if reactions.zero? && [0, 1].include?(reaction_skipped)
       out[:rating] << id if ratings.zero?
     end
   end
