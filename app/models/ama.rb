@@ -31,6 +31,8 @@ class AMA < ApplicationRecord
   has_many :ama_subscribers, dependent: :destroy
 
   scope :for_original_post, ->(post) { where(original_post: post) }
+  scope :past_ama, -> { where('end_date <= ?', Date.today) }
+  scope :future_ama, -> { where('end_date > ?', Date.today) }
 
   def feed
     @feed ||= AMAFeed.new(id)

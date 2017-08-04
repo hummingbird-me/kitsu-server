@@ -7,4 +7,13 @@ class AMAResource < BaseResource
   has_many :ama_subscribers
 
   filters :end_date, :start_date, :ama_subscribers_count
+  filter :status, apply: ->(records, values, _opts) {
+    values.inject(records.none) do |query, value|
+      if %w[past_ama future_ama].include? value
+        query.or(records.send(value))
+      else
+        query
+      end
+    end
+  }
 end
