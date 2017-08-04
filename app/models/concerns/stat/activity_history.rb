@@ -1,24 +1,93 @@
+require 'pp'
+
 class Stat < ApplicationRecord
   module ActivityHistory
     extend ActiveSupport::Concern
 
+    # Example of stats:
+    # 'days' => {
+    #   '2017' => {
+    #     '08' => {
+    #       '20' => {
+    #
+    #       }
+    #     }
+    #   }
+    # }
+
     DEFAULT_STATS = {
-      'total' => 0,
-      'activity' => []
+      'days' => {},
+      'first_event_date' => Time.now.to_date,
+      'week_high_score' => 0,
+      'total_progress' => 0
     }.freeze
 
     def recalculate!
-      activity = user.library_events.by_kind(media_column)
-                     .eager_load(media_column)
-
-      # clear stats_data
       self.stats_data = {}
-      self.stats_data = {
-        total: activity.count,
-        activity: activity # collection of events
-      }
+
+      date_trunc = "date_trunc('day', library_events.created_at)"
+      progress = "((changed_data#>>'{progress,1}')::integer - (changed_data#>>'{progress,0}')::integer)"
+
+      case media_column
+      when :anime then watch_time = "sum(#{progress} * anime.episode_length)"
+      when :manga then watch_time = 0
+      end
+
+      activity_dates = user.library_events.where("changed_data ? 'progress'")
+                           .group(date_trunc)
+                           .eager_load(media_column)
+                           .order("#{date_trunc} ASC")
+                           .pluck("#{date_trunc}, sum(#{progress}), #{watch_time}")
+
+      # Set all the days with 0
+      stats_data['days'] = pregenerate_all_days(activity_dates.first[0])
+      # Set default for total_progress on top level
+      stats_data['total_progress'] = 0
+      # Record the date their first library_event was created
+      stats_data['first_event_date'] = activity_dates.first[0].to_date
+      # Set the progress and time for each day
+      # Set the total_progress from all days
+      activity_dates.each do |date, amount, time|
+        stats_data['days'][date.year][date.month][date.day] = {
+          'total_progress' => amount,
+          'total_time' => time
+        }
+        stats_data['total_progress'] += amount
+      end
+      # Set the week_high_score from their first library_event date
+      stats_data['week_high_score'] = week_high_score(activity_dates.first[0])
 
       save!
+    end
+
+    def pregenerate_all_days(start_date)
+      dates = start_date.to_date..Time.now.to_date
+
+      stats_data['days'] = dates.each_with_object(preset_hash) do |date, h|
+        h[date.year][date.month][date.day] = {
+          'total_progress' => 0,
+          'total_time' => 0
+        }
+      end
+    end
+
+    def preset_hash
+      Hash.new { |h, y| h[y] = Hash.new { |h2, m| h2[m] = Hash.new { |h3, d| h3[d] = {} } } }
+    end
+
+    def week_high_score(start_date)
+      dates = start_date.to_date..Time.now.to_date
+      current = []
+      highest = 0
+
+      dates.each do |date|
+        current << stats_data['days'][date.year][date.month][date.day]['total_progress']
+
+        highest = current.sum if current.sum > highest
+        current.shift if current.count == 7
+      end
+
+      highest
     end
 
     class_methods do
