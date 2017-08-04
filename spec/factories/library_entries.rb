@@ -12,6 +12,7 @@
 #  progress          :integer          default(0), not null
 #  progressed_at     :datetime
 #  rating            :integer
+#  reaction_skipped  :integer          default(0), not null
 #  reconsume_count   :integer          default(0), not null
 #  reconsuming       :boolean          default(FALSE), not null
 #  started_at        :datetime

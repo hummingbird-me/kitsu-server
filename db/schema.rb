@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170726230941) do
+ActiveRecord::Schema.define(version: 20170728231327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -682,6 +682,7 @@ ActiveRecord::Schema.define(version: 20170726230941) do
     t.datetime "finished_at"
     t.datetime "progressed_at"
     t.integer  "media_reaction_id"
+    t.integer  "reaction_skipped",  default: 0,     null: false
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -1489,7 +1490,6 @@ ActiveRecord::Schema.define(version: 20170726230941) do
   add_foreign_key "group_member_notes", "group_members"
   add_foreign_key "group_member_notes", "users"
   add_foreign_key "group_neighbors", "groups", column: "destination_id"
-  add_foreign_key "group_neighbors", "groups", column: "source_id"
   add_foreign_key "group_permissions", "group_members"
   add_foreign_key "group_reports", "groups"
   add_foreign_key "group_reports", "users"

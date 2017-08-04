@@ -12,6 +12,7 @@
 #  progress          :integer          default(0), not null
 #  progressed_at     :datetime
 #  rating            :integer
+#  reaction_skipped  :integer          default(0), not null
 #  reconsume_count   :integer          default(0), not null
 #  reconsuming       :boolean          default(FALSE), not null
 #  started_at        :datetime
@@ -85,6 +86,11 @@ class LibraryEntry < ApplicationRecord
     completed: 3,
     on_hold: 4,
     dropped: 5
+  }
+  enum reaction_skipped: {
+    unskipped: 0,
+    skipped: 1,
+    ignored: 2
   }
   attr_accessor :imported
 
