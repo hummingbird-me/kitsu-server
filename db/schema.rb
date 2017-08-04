@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724000734) do
+ActiveRecord::Schema.define(version: 20170726230941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "anime", force: :cascade do |t|
@@ -1107,6 +1108,7 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   end
 
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
+  add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
 
   create_table "pro_membership_plans", force: :cascade do |t|
     t.string   "name",                       null: false
@@ -1393,6 +1395,7 @@ ActiveRecord::Schema.define(version: 20170724000734) do
     t.integer  "rating_system",                           default: 0,           null: false
     t.integer  "theme",                                   default: 0,           null: false
     t.datetime "deleted_at"
+    t.integer  "media_reactions_count",                   default: 0,           null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
