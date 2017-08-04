@@ -15,6 +15,7 @@ class BaseIndex
       self._associations ||= []
       self._associations << { attr: as, association: via, name: name }
     end
+    alias_method :has_one, :has_many
 
     def _association_names
       @_association_names ||= self._associations.map { |assoc| assoc[:name] }
