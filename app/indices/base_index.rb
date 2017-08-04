@@ -104,10 +104,14 @@ class BaseIndex
 
   delegate :index, to: :class
 
-  def initialize(model, new: true, associated: {})
+  def initialize(model, new: true, associated: nil)
     @_model = model
     @_new = new
-    @_associated = associated
+    @_associated = associated || load_associated
+  end
+
+  def load_associated
+    self.class.associated_for(_model.class.where(id: _model.id))[_model.id]
   end
 
   def _attribute_names
@@ -120,8 +124,6 @@ class BaseIndex
   end
 
   def dirty?
-    return true if _new
-
     _attributes.each do |attr|
       changed = "#{attr[:name]}_changed?"
       puts attr[:name]
@@ -129,7 +131,6 @@ class BaseIndex
               elsif _model.respond_to?(changed) then _model.send(changed)
               else true
               end
-      puts 'dirty' if dirty
       dirty &&= rand(100.0) <= attr[:frequency] if attr[:frequency]
       return true if dirty
     end
@@ -138,11 +139,11 @@ class BaseIndex
   end
 
   def save!
-    return unless dirty?
-
-    if _new
+    if _new || model.new_record?
       index.add_object(as_json)
-    else
+    elsif model.destroyed?
+      index.delete_object(algolia_id)
+    elsif dirty?
       index.save_object(as_json)
     end
   end
