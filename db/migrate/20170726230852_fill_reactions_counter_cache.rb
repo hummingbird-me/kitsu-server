@@ -4,6 +4,6 @@ class FillReactionsCounterCache < ActiveRecord::Migration
   disable_ddl_transaction!
 
   def change
-    CounterCacheResets.sql_for(User, :media_reactions).each { |sql| execute sql }
+    CounterCacheResets.sql_for(User, :media_reactions, where: 'deleted_at IS NULL').each { |sql| execute sql }
   end
 end
