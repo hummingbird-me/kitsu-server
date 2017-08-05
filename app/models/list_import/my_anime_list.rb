@@ -50,12 +50,24 @@ class ListImport
 
     def each
       data.each do |row|
-        row = Row.new(row)
+        row = Row.new(row, date_format)
         yield row.media, row.data
       end
     end
 
     private
+
+    def date_format
+      @date_format ||= data.each do |row|
+        format = nil
+        row.fetch_values('start_date_string', 'finish_date_string').each do |date|
+          place1, place2 = date.split('-').map(&:to_i)
+          break format = '%d-%m-%y' if place1 > 12
+          break format = '%m-%d-%y' if place2 > 12
+        end
+        break format if format
+      end
+    end
 
     def data
       @data ||= %w[animelist mangalist].map { |l| list(l) }.reduce(&:+)
