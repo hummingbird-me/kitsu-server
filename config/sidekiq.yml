@@ -16,3 +16,5 @@ production:
     every: 12h
   LibraryEntryLogRemovalWorker:
     every: 12h
+  UploadRemovalWorker:
+    every: 12h
