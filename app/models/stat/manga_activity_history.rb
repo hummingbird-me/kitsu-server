@@ -34,5 +34,9 @@ class Stat < ApplicationRecord
     def self.media_type
       'Manga'
     end
+
+    def self.media_length(_le)
+      0
+    end
   end
 end
