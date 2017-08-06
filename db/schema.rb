@@ -19,6 +19,31 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
+  create_table "ama_subscribers", force: :cascade do |t|
+    t.integer  "ama_id",     null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "ama_subscribers", ["ama_id", "user_id"], name: "index_ama_subscribers_on_ama_id_and_user_id", unique: true, using: :btree
+  add_index "ama_subscribers", ["ama_id"], name: "index_ama_subscribers_on_ama_id", using: :btree
+  add_index "ama_subscribers", ["user_id"], name: "index_ama_subscribers_on_user_id", using: :btree
+
+  create_table "amas", force: :cascade do |t|
+    t.string   "description",                       null: false
+    t.integer  "author_id",                         null: false
+    t.integer  "original_post_id",                  null: false
+    t.integer  "ama_subscribers_count", default: 0, null: false
+    t.datetime "start_date",                        null: false
+    t.datetime "end_date",                          null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "amas", ["author_id"], name: "index_amas_on_author_id", using: :btree
+  add_index "amas", ["original_post_id"], name: "index_amas_on_original_post_id", using: :btree
+
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
     t.integer  "age_rating"
@@ -1470,6 +1495,10 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_index "votes", ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true, using: :btree
   add_index "votes", ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type", using: :btree
 
+  add_foreign_key "ama_subscribers", "amas"
+  add_foreign_key "ama_subscribers", "users"
+  add_foreign_key "amas", "posts", column: "original_post_id"
+  add_foreign_key "amas", "users", column: "author_id"
   add_foreign_key "anime_castings", "anime_characters"
   add_foreign_key "anime_castings", "people"
   add_foreign_key "anime_castings", "producers", column: "licensor_id"

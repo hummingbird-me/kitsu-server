@@ -33,8 +33,10 @@ require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
   it { should belong_to(:post).counter_cache(true) }
-  it { should belong_to(:parent).class_name('Comment')
-    .counter_cache('replies_count') }
+  it {
+    should belong_to(:parent).class_name('Comment')
+                             .counter_cache('replies_count')
+  }
   it { should belong_to(:user) }
   it { should have_many(:replies).class_name('Comment').dependent(:destroy) }
   it { should have_many(:likes).class_name('CommentLike').dependent(:destroy) }
@@ -52,5 +54,17 @@ RSpec.describe Comment, type: :model do
     comment = build(:comment, parent: parent)
     expect(comment).not_to be_valid
     expect(comment.errors[:parent]).to be_present
+  end
+
+  context 'which is on AMA that is closed' do
+    it 'should not be valid' do
+      post = create(:post)
+      ama = create(:ama, original_post: post)
+      ama.start_date = 6.hours.ago
+      ama.end_date = ama.start_date + 1.hour
+      ama.save
+      comment = build(:comment, post: post)
+      expect(comment).not_to be_valid
+    end
   end
 end

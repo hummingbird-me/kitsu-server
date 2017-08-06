@@ -54,6 +54,10 @@ class Comment < ApplicationRecord
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
   validates :content, length: { maximum: 9_000 }
+  validates :post, active_ama: {
+    message: 'cannot make any more comments on this AMA',
+    user: :user
+  }
 
   def stream_activity
     to = []
