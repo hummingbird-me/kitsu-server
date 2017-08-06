@@ -58,15 +58,16 @@ class ListImport
     private
 
     def date_format
-      @date_format ||= data.each do |row|
-        format = nil
+      return @date_format if @date_format
+      # if any dates have values higher than 12, assume the date format
+      data.each do |row|
         row.fetch_values('start_date_string', 'finish_date_string').each do |date|
           place1, place2 = date.split('-').map(&:to_i)
-          break format = '%d-%m-%y' if place1 > 12
-          break format = '%m-%d-%y' if place2 > 12
+          return @date_format = '%d-%m-%y' if place1 > 12
+          return @date_format = '%m-%d-%y' if place2 > 12
         end
-        break format if format
       end
+      nil
     end
 
     def data
