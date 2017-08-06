@@ -3,8 +3,9 @@ class ListImport
     class Row
       attr_reader :obj
 
-      def initialize(obj)
+      def initialize(obj, date_format)
         @obj = obj.deep_symbolize_keys
+        @date_format = date_format
       end
 
       def type
@@ -65,13 +66,13 @@ class ListImport
       end
 
       def started_at
-        DateTime.strptime(obj[:start_date_string], '%m-%d-%y')
+        DateTime.strptime(obj[:start_date_string], @date_format) if @date_format
       rescue
         nil
       end
 
       def finished_at
-        DateTime.strptime(obj[:finish_date_string], '%m-%d-%y')
+        DateTime.strptime(obj[:finish_date_string], @date_format) if @date_format
       rescue
         nil
       end
