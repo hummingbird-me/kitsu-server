@@ -47,6 +47,7 @@ class Comment < ApplicationRecord
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
                      dependent: :destroy
   has_many :likes, class_name: 'CommentLike', dependent: :destroy
+  has_many :uploads, as: 'owner', dependent: :destroy
 
   scope :in_group, ->(group) { joins(:post).merge(Post.in_group(group)) }
 

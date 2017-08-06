@@ -9,6 +9,7 @@
 #  length                 :integer
 #  media_type             :string           not null, indexed => [media_id]
 #  number                 :integer
+#  relative_number        :integer
 #  season_number          :integer
 #  synopsis               :text
 #  thumbnail_content_type :string(255)

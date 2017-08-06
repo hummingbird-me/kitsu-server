@@ -11,10 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724000734) do
+ActiveRecord::Schema.define(version: 20170802083750) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "ama_subscribers", force: :cascade do |t|
@@ -405,6 +407,7 @@ ActiveRecord::Schema.define(version: 20170724000734) do
     t.hstore   "titles",                             default: {},      null: false
     t.string   "canonical_title",                    default: "en_jp", null: false
     t.string   "media_type",                                           null: false
+    t.integer  "relative_number"
   end
 
   add_index "episodes", ["media_type", "media_id"], name: "index_episodes_on_media_type_and_media_id", using: :btree
@@ -705,6 +708,7 @@ ActiveRecord::Schema.define(version: 20170724000734) do
     t.datetime "finished_at"
     t.datetime "progressed_at"
     t.integer  "media_reaction_id"
+    t.integer  "reaction_skipped",  default: 0,     null: false
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
@@ -1131,6 +1135,7 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   end
 
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
+  add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
 
   create_table "pro_membership_plans", force: :cascade do |t|
     t.string   "name",                       null: false
@@ -1342,6 +1347,21 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   add_index "substories", ["target_id"], name: "index_substories_on_target_id", using: :btree
   add_index "substories", ["user_id"], name: "index_substories_on_user_id", using: :btree
 
+  create_table "uploads", force: :cascade do |t|
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.integer  "user_id",              null: false
+    t.string   "content_file_name"
+    t.string   "content_content_type"
+    t.integer  "content_file_size"
+    t.datetime "content_updated_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "uploads", ["owner_type", "owner_id"], name: "index_uploads_on_owner_type_and_owner_id", using: :btree
+  add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255, default: "",          null: false
     t.string   "name",                        limit: 255
@@ -1417,6 +1437,7 @@ ActiveRecord::Schema.define(version: 20170724000734) do
     t.integer  "rating_system",                           default: 0,           null: false
     t.integer  "theme",                                   default: 0,           null: false
     t.datetime "deleted_at"
+    t.integer  "media_reactions_count",                   default: 0,           null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -1514,7 +1535,6 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   add_foreign_key "group_member_notes", "group_members"
   add_foreign_key "group_member_notes", "users"
   add_foreign_key "group_neighbors", "groups", column: "destination_id"
-  add_foreign_key "group_neighbors", "groups", column: "source_id"
   add_foreign_key "group_permissions", "group_members"
   add_foreign_key "group_reports", "groups"
   add_foreign_key "group_reports", "users"
@@ -1561,5 +1581,6 @@ ActiveRecord::Schema.define(version: 20170724000734) do
   add_foreign_key "site_announcements", "users"
   add_foreign_key "stats", "users"
   add_foreign_key "streaming_links", "streamers"
+  add_foreign_key "uploads", "users"
   add_foreign_key "users", "posts", column: "pinned_post_id"
 end

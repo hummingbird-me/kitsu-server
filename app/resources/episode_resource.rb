@@ -1,7 +1,7 @@
 class EpisodeResource < BaseResource
   caching
 
-  attributes :titles, :canonical_title, :season_number, :number, :synopsis,
+  attributes :titles, :canonical_title, :season_number, :number, :relative_number, :synopsis,
     :airdate, :length
   attribute :thumbnail, format: :attachment
 

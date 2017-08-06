@@ -13,6 +13,7 @@ class PostResource < BaseResource
   has_one :ama
   has_many :post_likes
   has_many :comments
+  has_many :uploads
 
   def target_interest=(val)
     _model.target_interest = val.underscore.classify
