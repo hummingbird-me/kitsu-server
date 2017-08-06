@@ -45,6 +45,7 @@
 #  likes_received_count        :integer          default(0), not null
 #  location                    :string(255)
 #  mal_username                :string(255)
+#  media_reactions_count       :integer          default(0), not null
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
 #  password_digest             :string(255)      default(""), not null
