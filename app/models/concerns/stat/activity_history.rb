@@ -26,7 +26,9 @@ class Stat < ApplicationRecord
       self.stats_data = {}
 
       date_trunc = "date_trunc('day', library_events.created_at)"
-      progress = "((changed_data#>>'{progress,1}')::integer - (changed_data#>>'{progress,0}')::integer)"
+      progress_0 = "(changed_data#>>'{progress,0}')::integer"
+      progress_1 = "(changed_data#>>'{progress,1}')::integer"
+      progress = "(#{progress_1} - #{progress_0})"
 
       case media_column
       when :anime then watch_time = "sum(#{progress} * anime.episode_length)"
@@ -62,6 +64,7 @@ class Stat < ApplicationRecord
     end
 
     def generate_missing_days(start_date)
+      # not happy about having to use Time.now but I think I have to...
       dates = start_date.to_date..Time.now.to_date
 
       dates.each_with_object(preset_hash) do |date, h|
@@ -86,13 +89,18 @@ class Stat < ApplicationRecord
       Hash.new { |h, y| h[y] = Hash.new { |h2, m| h2[m] = Hash.new { |h3, d| h3[d] = {} } } }
     end
 
+    # This is a reference inside of the record.stats_data hash
+    def day(date)
+      stats_data['days'][date.year.to_s][date.month.to_s][date.day.to_s]
+    end
+
     def week_high_score(start_date)
-      dates = start_date.to_date..Time.now.to_date
+      dates = start_date.to_date..stats_data['last_update_date'].to_date
       current = []
       highest = 0
 
       dates.each do |date|
-        current << stats_data['days'][date.year.to_s][date.month.to_s][date.day.to_s]['total_progress']
+        current << day(date)['total_progress']
 
         highest = current.sum if current.sum > highest
         current.shift if current.count == 7
@@ -108,15 +116,18 @@ class Stat < ApplicationRecord
       if stats_data['first_event_date'].to_date > 6.days.ago(library_event.created_at).to_date
         dates = (stats_data['first_event_date'].to_date..library_event.created_at.to_date)
       else
-        dates = (6.days.ago(stats_data['last_update_date'].to_date).to_date..library_event.created_at.to_date)
+        six_days_ago = 6.days.ago(stats_data['last_update_date'].to_date).to_date
+        dates = (six_days_ago..library_event.created_at.to_date)
       end
 
-      dates.each do |d|
-        last_week_score << stats_data['days'][d.year.to_s][d.month.to_s][d.day.to_s]['total_progress']
+      dates.each do |date|
+        last_week_score << day(date)['total_progress']
       end
       last_week_score.compact!
 
-      stats_data['week_high_score'] = last_week_score.sum if last_week_score.sum > stats_data['week_high_score']
+      if last_week_score.sum > stats_data['week_high_score']
+        stats_data['week_high_score'] = last_week_score.sum
+      end
 
       self
     end
@@ -153,31 +164,26 @@ class Stat < ApplicationRecord
           record.stats_data['last_update_date'] = event_created
         end
 
-        # reusable var instead of long statement below
-        day = record.stats_data['days'][event_created.year.to_s][event_created.month.to_s][event_created.day.to_s]
         # populate all the days that are missing since their last update
         record = record.find_missing_days(library_event)
 
         # update the library_event day that is being referenced
-        day['total_progress'] += library_event.progress
-        day['total_time'] += media_time(library_event)
+        record.day(event_created)['total_progress'] += library_event.progress
+        record.day(event_created)['total_time'] += media_time(library_event)
         record.stats_data['total_progress'] += library_event.progress
 
         # check if any of the 3 above methods are less than 0
         # don't want to deal with any negatives
-        record = record.check_for_negatives(day)
+        record = record.check_for_negatives(record.day(event_created))
 
         # resetting week_high_score if negative progress
         if library_event.progress.negative?
-          record.stats_data['week_high_score'] = record.week_high_score(record.stats_data['first_event_date'])
+          first_event_date = record.stats_data['first_event_date']
+          record.stats_data['week_high_score'] = record.week_high_score(first_event_date)
         else
           # update week high score
           record = record.update_week_high_score(library_event)
         end
-
-        p '*' * 10
-        pp record
-        p '*' * 10
 
         record.save!
       end
