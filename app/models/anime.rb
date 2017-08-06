@@ -105,11 +105,10 @@ class Anime < ApplicationRecord
   end
 
   def update_unit_count_guess(guess)
-    if !episode_count &&
-       (!episode_count_guess || episode_count_guess <= guess)
-      update(episode_count_guess: guess)
-      episodes.create_defaults(episode_count_guess) if episodes.length < episode_count_guess
-    end
+    return if episode_count
+    return if episode_count_guess && episode_count_guess > guess
+    update(episode_count_guess: guess)
+    episodes.create_defaults(episode_count_guess) if episodes.length < episode_count_guess
   end
 
   def self.fuzzy_find(title)

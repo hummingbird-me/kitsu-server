@@ -76,11 +76,10 @@ class Manga < ApplicationRecord
   end
 
   def update_unit_count_guess(guess)
-    if !chapter_count &&
-       (!chapter_count_guess || chapter_count_guess <= guess)
-      update(chapter_count_guess: guess)
-      chapters.create_defaults(chapter_count_guess) if chapters.length < chapter_count_guess
-    end
+    return if chapter_count
+    return if chapter_count_guess && chapter_count_guess > guess
+    update(chapter_count_guess: guess)
+    chapters.create_defaults(chapter_count_guess) if chapters.length < chapter_count_guess
   end
 
   before_save do
