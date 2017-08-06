@@ -45,6 +45,10 @@ class WebhooksController < ApplicationController
     head status: 200
   end
 
+  def getstream_verify
+    render text: StreamRails.client.api_key
+  end
+
   private
 
   def linked_account
