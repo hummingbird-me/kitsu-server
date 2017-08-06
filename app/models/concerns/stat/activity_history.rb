@@ -1,5 +1,3 @@
-require 'pp'
-
 class Stat < ApplicationRecord
   module ActivityHistory
     extend ActiveSupport::Concern
@@ -15,10 +13,11 @@ class Stat < ApplicationRecord
     #   }
     # }
 
+    # both dates will be overwritten, just needed the format
     DEFAULT_STATS = {
       'days' => {},
-      'first_event_date' => Time.now.to_date,
-      'last_update_date' => Time.now.to_date,
+      'first_event_date' => 5.years.ago,
+      'last_update_date' => 5.years.ago,
       'week_high_score' => 0,
       'total_progress' => 0
     }.freeze
@@ -41,7 +40,7 @@ class Stat < ApplicationRecord
                            .pluck("#{date_trunc}, sum(#{progress}), #{watch_time}")
 
       # Set all the days with 0
-      stats_data['days'] = pregenerate_all_days(activity_dates.first[0])
+      stats_data['days'] = generate_missing_days(activity_dates.first[0])
       # Set default for total_progress on top level
       stats_data['total_progress'] = 0
       # Record the date their first library_event was created
@@ -59,11 +58,10 @@ class Stat < ApplicationRecord
       # Set the week_high_score from their first library_event date
       stats_data['week_high_score'] = week_high_score(activity_dates.first[0])
 
-      pp stats_data
       save!
     end
 
-    def pregenerate_all_days(start_date)
+    def generate_missing_days(start_date)
       dates = start_date.to_date..Time.now.to_date
 
       dates.each_with_object(preset_hash) do |date, h|
@@ -72,6 +70,16 @@ class Stat < ApplicationRecord
           'total_time' => 0
         }
       end
+    end
+
+    def find_missing_days(library_event)
+      last_update = stats_data['last_update_date'].to_date + 1.day
+
+      if last_update <= library_event.created_at.to_date
+        stats_data['days'].deep_merge!(record.generate_missing_days(last_update))
+      end
+
+      self
     end
 
     def preset_hash
@@ -93,9 +101,38 @@ class Stat < ApplicationRecord
       highest
     end
 
+    def update_week_high_score(library_event)
+      last_week_score = []
+
+      # checks to make sure 7 days worth of data exists.
+      if stats_data['first_event_date'].to_date > 6.days.ago(library_event.created_at).to_date
+        dates = (stats_data['first_event_date'].to_date..library_event.created_at.to_date)
+      else
+        dates = (6.days.ago(stats_data['last_update_date'].to_date).to_date..library_event.created_at.to_date)
+      end
+
+      dates.each do |d|
+        last_week_score << stats_data['days'][d.year.to_s][d.month.to_s][d.day.to_s]['total_progress']
+      end
+      last_week_score.compact!
+
+      stats_data['week_high_score'] = last_week_score.sum if last_week_score.sum > stats_data['week_high_score']
+
+      self
+    end
+
+    def check_for_negatives(day)
+      day['total_progress'] = 0 if day['total_progress'].negative?
+      day['total_time'] = 0 if day['total_time'].negative?
+      stats_data['total_progress'] = 0 if stats_data['total_progress'].negative?
+
+      self
+    end
+
     class_methods do
       def increment(user, library_event)
         # return if library_event does not contain progress
+        return unless library_event.progress
 
         record = user.stats.find_or_initialize_by(
           type: "Stat::#{media_type}ActivityHistory"
@@ -103,55 +140,60 @@ class Stat < ApplicationRecord
 
         if record.new_record?
           record.stats_data = DEFAULT_STATS.deep_dup
-          record.stats_data['days'] = record.pregenerate_all_days(record.stats_data['last_update_date'])
+          record.stats_data['first_event_date'] = library_event.created_at.to_date
+
+          record.stats_data['days'] = record.generate_missing_days(library_event.created_at.to_date)
         end
 
-        last_update = record.stats_data['last_update_date'].to_date + 1.day
-        event_created = library_event['created_at'].to_date
-
-        # pregenerate all the missing days information
-        if last_update <= event_created
-          record.stats_data['days'].deep_merge!(record.pregenerate_all_days(last_update))
+        event_created = library_event.created_at.to_date
+        # maintain when they last updated
+        # the if will prevent any issues with sidekiq failures/retries
+        # only update if what is currently in there is less than created_at date
+        if record.stats_data['last_update_date'].to_date < event_created
+          record.stats_data['last_update_date'] = event_created
         end
+
+        # reusable var instead of long statement below
+        day = record.stats_data['days'][event_created.year.to_s][event_created.month.to_s][event_created.day.to_s]
+        # populate all the days that are missing since their last update
+        record = record.find_missing_days(library_event)
 
         # update the library_event day that is being referenced
-        total_progress = library_event.changed_data['progress'][1] - library_event.changed_data['progress'][0]
-        total_time = (library_event.media_episode_length * total_progress)
-        record.stats_data['days'][event_created.year.to_s][event_created.month.to_s][event_created.day.to_s]['total_progress'] += total_progress
-        record.stats_data['days'][event_created.year.to_s][event_created.month.to_s][event_created.day.to_s]['total_time'] += total_time
-        record.stats_data['total_progress'] += total_progress
+        day['total_progress'] += library_event.progress
+        day['total_time'] += media_time(library_event)
+        record.stats_data['total_progress'] += library_event.progress
 
-        record.stats_data['last_update_data'] = event_created
+        # check if any of the 3 above methods are less than 0
+        # don't want to deal with any negatives
+        record = record.check_for_negatives(day)
 
-        dates = (6.days.ago.to_date..Time.now.to_date).to_date
-        check_week_high = []
-
-        dates.each do |date|
-          check_week_high << record.stats_data['days'][date.year.to_s][date.month.to_s][date.day.to_s]['total_progress']
+        # resetting week_high_score if negative progress
+        if library_event.progress.negative?
+          record.stats_data['week_high_score'] = record.week_high_score(record.stats_data['first_event_date'])
+        else
+          # update week high score
+          record = record.update_week_high_score(library_event)
         end
 
-        # update week high score
-        record.stats_data['week_high_score'] = check_week_high if check_week_high > record.stats_data['week_high_score']
-
-
-
+        p '*' * 10
+        pp record
+        p '*' * 10
 
         record.save!
       end
 
-      def decrement(user, library_entry)
-        record = user.stats.find_by(type: "Stat::#{media_type}ActivityHistory")
-        return unless record
+      # this will call the self.media_length in the specific activity
+      # ie: AnimeActivityHistory or MangaActivityHistory
+      def media_time(le)
+        media_length(le) * le.progress
+      end
 
-        record.stats_data['activity'].delete_if do |library_event|
-          # skip events of the library_entry not deleted
-          next unless library_event['library_entry_id'] == library_entry.id
-          # decrease total by 1
-          record.stats_data['total'] -= 1
-          # remove event from array (automatic, delete_if)
-        end
+      def decrement(user)
+        record = user.stats.find_or_initialize_by(
+          type: "Stat::#{media_type}ActivityHistory"
+        )
 
-        record.save!
+        record.recalculate!
       end
     end
   end
