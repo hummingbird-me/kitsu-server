@@ -1,0 +1,1 @@
+class OneSignalPlayersController < ApplicationController; end
