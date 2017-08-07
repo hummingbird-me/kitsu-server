@@ -36,9 +36,9 @@ class OneSignalPlayer < ApplicationRecord
       user_setting = player.user.notification_settings.select { |setting|
         setting.setting_type == notif_type
       }.first
-      acc << if player.web && user_setting&.web_enabled
+      acc << if player.web? && user_setting&.web_enabled
                player.id
-             elsif player.mobile && user_setting&.mobile_enabled
+             elsif player.mobile? && user_setting&.mobile_enabled
                player.id
              end
     end
