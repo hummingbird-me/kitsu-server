@@ -60,7 +60,7 @@ class Post < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :uploads, as: 'owner', dependent: :destroy
   has_one :ama, foreign_key: 'original_post_id'
-  has_many :reposts, dependent: :destroy
+  has_many :reposts, dependent: :delete_all
 
   scope :in_group, ->(group) { where(target_group: group) }
   scope :visible_for, ->(user) {
@@ -147,5 +147,12 @@ class Post < ApplicationRecord
   after_create do
     media.trending_vote(user, 2.0) if media.present?
     GroupUnreadFanoutWorker.perform_async(target_group_id, user_id) if target_group.present?
+  end
+
+  before_destroy do
+    deletions = reposts.pluck(:user_id, :id).map do |user_id, repost_id|
+      [['user', user_id], { foreign_id: "repost:#{repost_id}" }]
+    end
+    ActivityDeletionWorker.perform_async(deletions)
   end
 end
