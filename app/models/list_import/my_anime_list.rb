@@ -62,6 +62,7 @@ class ListImport
       # if any dates have values higher than 12, assume the date format
       data.each do |row|
         row.fetch_values('start_date_string', 'finish_date_string').each do |date|
+          next unless date.present?
           place1, place2 = date.split('-').map(&:to_i)
           return @date_format = '%d-%m-%y' if place1 > 12
           return @date_format = '%m-%d-%y' if place2 > 12
