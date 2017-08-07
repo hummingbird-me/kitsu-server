@@ -1,7 +1,7 @@
 class WebhooksController < ApplicationController
   include CustomControllerHelpers
 
-  before_action :check_linked_account_param, except: :getstream_firehose
+  before_action :check_linked_account_param, except: %i[getstream_firehose getstream_verify]
 
   def youtube_verify
     mode = params['hub.mode']
