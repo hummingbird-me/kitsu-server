@@ -28,12 +28,11 @@ class Repost < ApplicationRecord
   belongs_to :post, required: true
 
   def stream_activity
-    data = post.complete_stream_activity
     user.profile_feed.activities.new(
-      data.merge(
-        verb: 'repost',
-        actor: user
-      )
+      object: post,
+      nsfw: post.nsfw,
+      foreign_id: self,
+      verb: 'repost'
     )
   end
 end
