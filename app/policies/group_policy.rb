@@ -2,7 +2,7 @@ class GroupPolicy < ApplicationPolicy
   include GroupPermissionsHelpers
 
   def create?
-    !!user
+    user ? true : false
   end
 
   def update?
@@ -17,14 +17,14 @@ class GroupPolicy < ApplicationPolicy
     return all if is_admin?
 
     all - %i[members_count leaders_count neighbors_count rules_formatted
-             featured name]
+             featured name pinned_post_id]
   end
 
   def creatable_attributes(all)
     return all if is_admin?
 
     all - %i[members_count leaders_count neighbors_count rules_formatted
-             featured]
+             featured pinned_post_id]
   end
 
   def group

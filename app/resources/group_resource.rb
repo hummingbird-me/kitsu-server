@@ -6,7 +6,7 @@ class GroupResource < BaseResource
 
   attributes :about, :locale, :members_count, :name, :nsfw, :privacy, :rules,
     :rules_formatted, :leaders_count, :neighbors_count, :featured, :tagline,
-    :last_activity_at
+    :last_activity_at, :pinned_post_id
   attributes :avatar, :cover_image, format: :attachment
 
   filter :featured, verify: ->(values, _) {
@@ -32,6 +32,7 @@ class GroupResource < BaseResource
   has_many :leader_chat_messages
   has_many :action_logs
   has_one :category
+  has_one :pinned_post
 
   after_create do
     # Make the current user into an owner when they create it
@@ -42,7 +43,7 @@ class GroupResource < BaseResource
   index GroupsIndex::Group
   query :query,
     mode: :query,
-    apply: -> (values, _ctx) {
+    apply: ->(values, _ctx) {
       {
         bool: {
           should: [

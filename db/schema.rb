@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170802083750) do
+ActiveRecord::Schema.define(version: 20170807084811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -654,6 +654,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "category_id",                                          null: false
     t.string   "tagline",                  limit: 60
     t.datetime "last_activity_at"
+    t.integer  "pinned_post_id"
   end
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
@@ -1112,30 +1113,29 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_index "post_likes", ["post_id"], name: "index_post_likes_on_post_id", using: :btree
 
   create_table "posts", force: :cascade do |t|
-    t.integer  "user_id",                                  null: false
+    t.integer  "user_id",                                     null: false
     t.integer  "target_user_id"
-    t.text     "content",                                  null: false
-    t.text     "content_formatted",                        null: false
+    t.text     "content",                                     null: false
+    t.text     "content_formatted",                           null: false
     t.integer  "media_id"
     t.string   "media_type"
-    t.boolean  "spoiler",                  default: false, null: false
-    t.boolean  "nsfw",                     default: false, null: false
-    t.boolean  "blocked",                  default: false, null: false
+    t.boolean  "spoiler",                     default: false, null: false
+    t.boolean  "nsfw",                        default: false, null: false
+    t.boolean  "blocked",                     default: false, null: false
     t.integer  "spoiled_unit_id"
     t.string   "spoiled_unit_type"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.datetime "deleted_at"
     t.integer  "target_group_id"
-    t.integer  "post_likes_count",         default: 0,     null: false
-    t.integer  "comments_count",           default: 0,     null: false
-    t.integer  "top_level_comments_count", default: 0,     null: false
+    t.integer  "post_likes_count",            default: 0,     null: false
+    t.integer  "comments_count",              default: 0,     null: false
+    t.integer  "top_level_comments_count",    default: 0,     null: false
     t.datetime "edited_at"
     t.string   "target_interest"
   end
 
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
-  add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
 
   create_table "pro_membership_plans", force: :cascade do |t|
     t.string   "name",                       null: false
@@ -1535,6 +1535,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_foreign_key "group_member_notes", "group_members"
   add_foreign_key "group_member_notes", "users"
   add_foreign_key "group_neighbors", "groups", column: "destination_id"
+  add_foreign_key "group_neighbors", "groups", column: "source_id"
   add_foreign_key "group_permissions", "group_members"
   add_foreign_key "group_reports", "groups"
   add_foreign_key "group_reports", "users"
@@ -1545,6 +1546,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_foreign_key "group_tickets", "users"
   add_foreign_key "group_tickets", "users", column: "assignee_id"
   add_foreign_key "groups", "group_categories", column: "category_id"
+  add_foreign_key "groups", "posts", column: "pinned_post_id"
   add_foreign_key "leader_chat_messages", "groups"
   add_foreign_key "leader_chat_messages", "users"
   add_foreign_key "library_entries", "media_reactions"
