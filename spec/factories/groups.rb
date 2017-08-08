@@ -31,6 +31,7 @@
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  category_id              :integer          not null, indexed
+#  pinned_post_id           :integer
 #
 # Indexes
 #
@@ -40,6 +41,7 @@
 # Foreign Keys
 #
 #  fk_rails_a61500b09c  (category_id => group_categories.id)
+#  fk_rails_ae0dbbc874  (pinned_post_id => posts.id)
 #
 # rubocop:enable Metrics/LineLength
 

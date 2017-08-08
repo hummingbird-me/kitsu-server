@@ -2,7 +2,7 @@ class GroupPolicy < ApplicationPolicy
   include GroupPermissionsHelpers
 
   def create?
-    !!user
+    user ? true : false
   end
 
   def update?
@@ -15,16 +15,12 @@ class GroupPolicy < ApplicationPolicy
 
   def editable_attributes(all)
     return all if is_admin?
-
-    all - %i[members_count leaders_count neighbors_count rules_formatted
-             featured name]
+    all - %i[members_count leaders_count neighbors_count rules_formatted featured name]
   end
 
   def creatable_attributes(all)
     return all if is_admin?
-
-    all - %i[members_count leaders_count neighbors_count rules_formatted
-             featured]
+    all - %i[members_count leaders_count neighbors_count rules_formatted featured name]
   end
 
   def group

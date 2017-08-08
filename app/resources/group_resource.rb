@@ -32,6 +32,7 @@ class GroupResource < BaseResource
   has_many :leader_chat_messages
   has_many :action_logs
   has_one :category
+  has_one :pinned_post
 
   after_create do
     # Make the current user into an owner when they create it
@@ -42,7 +43,7 @@ class GroupResource < BaseResource
   index GroupsIndex::Group
   query :query,
     mode: :query,
-    apply: -> (values, _ctx) {
+    apply: ->(values, _ctx) {
       {
         bool: {
           should: [

@@ -31,6 +31,7 @@
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  category_id              :integer          not null, indexed
+#  pinned_post_id           :integer
 #
 # Indexes
 #
@@ -40,6 +41,7 @@
 # Foreign Keys
 #
 #  fk_rails_a61500b09c  (category_id => group_categories.id)
+#  fk_rails_ae0dbbc874  (pinned_post_id => posts.id)
 #
 # rubocop:enable Metrics/LineLength
 
@@ -78,6 +80,7 @@ class Group < ApplicationRecord
   has_many :bans, class_name: 'GroupBan', dependent: :destroy
   has_many :action_logs, class_name: 'GroupActionLog', dependent: :destroy
   belongs_to :category, class_name: 'GroupCategory'
+  belongs_to :pinned_post, class_name: 'Post', required: false
 
   validates :name, presence: true,
                    length: { in: 3..50 },
