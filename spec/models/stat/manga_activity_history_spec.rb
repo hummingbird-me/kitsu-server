@@ -26,44 +26,92 @@ require 'rails_helper'
 RSpec.describe Stat::MangaActivityHistory do
   let(:user) { create(:user) }
   let(:manga) { create(:manga) }
-  let(:manga1) { create(:manga) }
   let!(:le) { create(:library_entry, user: user, manga: manga) }
-  let!(:le1) { create(:library_entry, user: user, manga: manga1) }
 
-  before(:each) do
-    subject = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
-    subject.recalculate!
+  def update_same_library_entries(amount)
+    library_entry = LibraryEntry.first
+
+    amount.times do |index|
+      library_entry.update(progress: index + 1)
+    end
+  end
+
+  def create_library_entries(amount)
+    amount.times do
+      manga1 = create(:manga)
+      create(:library_entry, user: user, manga: manga1, progress: 1)
+    end
+  end
+
+  def day(record, date)
+    record.stats_data['days'][date.year.to_s][date.month.to_s][date.day.to_s]
   end
 
   describe '#recalculate!' do
     it 'should add all library entries related to user' do
+      create_library_entries(2)
+      library_event = LibraryEvent.last
       record = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
+      date = library_event.created_at.to_date
+      record.recalculate!
 
-      expect(record.stats_data['total']).to eq(2)
-      expect(record.stats_data['activity'].count).to eq(2)
+      expect(day(record, date)['total_time']).to eq(0)
+      expect(day(record, date)['total_progress']).to eq(2)
+      expect(record.stats_data['total_progress']).to eq(2)
+      expect(record.stats_data['week_high_score']).to eq(2)
+      expect(record.stats_data['last_update_date']).to eq(date)
     end
   end
 
   describe '#increment' do
-    before do
-      manga2 = create(:manga)
-      create(:library_entry, user: user, manga: manga2)
-    end
-    it 'should update all stats_data' do
-      record = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
-      expect(record.stats_data['total']).to eq(3)
-      expect(record.stats_data['activity'].count).to eq(3)
-    end
-  end
+    context 'positive progress change' do
+      it 'should work with 1 increment' do
+        update_same_library_entries(1)
+        library_event = LibraryEvent.last
+        record = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
+        date = library_event.created_at.to_date
 
-  describe '#decrement' do
-    before do
-      Stat::MangaActivityHistory.decrement(user, le)
+        expect(day(record, date)['total_time']).to eq(0)
+        expect(day(record, date)['total_progress']).to eq(1)
+        expect(record.stats_data['total_progress']).to eq(1)
+        expect(record.stats_data['week_high_score']).to eq(1)
+        expect(record.stats_data['last_update_date']).to eq(date.to_s)
+      end
+
+      context 'adding new anime with different dates' do
+        it 'should work with 3 increments with progress changes' do
+          skip('Can only test once background workers are implemented for stats')
+        end
+
+        it 'should work with 9 increments with progress changes' do
+          skip('Can only test once background workers are implemented for stats')
+        end
+      end
+
+      context 'updating same anime' do
+        it 'should work with 3 increments with progress changes' do
+          update_same_library_entries(3)
+          library_event = LibraryEvent.last
+          record = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
+          date = library_event.created_at.to_date
+
+          expect(day(record, date)['total_time']).to eq(0)
+          expect(day(record, date)['total_progress']).to eq(3)
+          expect(record.stats_data['total_progress']).to eq(3)
+          expect(record.stats_data['week_high_score']).to eq(3)
+          expect(record.stats_data['last_update_date']).to eq(date.to_s)
+        end
+      end
     end
-    it 'should remove all library events from stats_data' do
-      record = Stat.find_by(user: user, type: 'Stat::MangaActivityHistory')
-      expect(record.stats_data['total']).to eq(1)
-      expect(record.stats_data['activity'].count).to eq(1)
+
+    context 'negative progress change' do
+      it 'should not return any negative numbers with 1 negative increment' do
+        skip('Can only test once background workers are implemented for stats')
+      end
+
+      it 'should work with 3 increments with 1 negative increment' do
+        skip('Can only test once background workers are implemented for stats')
+      end
     end
   end
 end

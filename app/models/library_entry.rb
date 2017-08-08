@@ -271,12 +271,12 @@ class LibraryEntry < ApplicationRecord
       Stat::AnimeCategoryBreakdown.decrement(user, self)
       Stat::AnimeAmountConsumed.decrement(user, self)
       Stat::AnimeFavoriteYear.decrement(user, self)
-      Stat::AnimeActivityHistory.decrement(user, self)
+      Stat::AnimeActivityHistory.decrement(user)
     when :manga
       Stat::MangaCategoryBreakdown.decrement(user, self)
       Stat::MangaAmountConsumed.decrement(user, self)
       Stat::MangaFavoriteYear.decrement(user, self)
-      Stat::MangaActivityHistory.decrement(user, self)
+      Stat::MangaActivityHistory.decrement(user)
     end
   end
 
