@@ -26,9 +26,9 @@ class Stat < ApplicationRecord
       self.stats_data = {}
 
       date_trunc = "date_trunc('day', library_events.created_at)"
-      progress_0 = "(changed_data#>>'{progress,0}')::integer"
-      progress_1 = "(changed_data#>>'{progress,1}')::integer"
-      progress = "(#{progress_1} - #{progress_0})"
+      progress0 = "(changed_data#>>'{progress,0}')::integer"
+      progress1 = "(changed_data#>>'{progress,1}')::integer"
+      progress = "(#{progress1} - #{progress0})"
 
       case media_column
       when :anime then watch_time = "sum(#{progress} * anime.episode_length)"
