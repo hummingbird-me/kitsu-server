@@ -6,7 +6,7 @@ class GroupResource < BaseResource
 
   attributes :about, :locale, :members_count, :name, :nsfw, :privacy, :rules,
     :rules_formatted, :leaders_count, :neighbors_count, :featured, :tagline,
-    :last_activity_at, :pinned_post_id
+    :last_activity_at
   attributes :avatar, :cover_image, format: :attachment
 
   filter :featured, verify: ->(values, _) {
