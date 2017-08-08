@@ -10,6 +10,7 @@
 #  average_rating            :decimal(5, 2)
 #  canonical_title           :string           default("en_jp"), not null
 #  chapter_count             :integer
+#  chapter_count_guess       :integer
 #  cover_image_content_type  :string(255)
 #  cover_image_file_name     :string(255)
 #  cover_image_file_size     :integer

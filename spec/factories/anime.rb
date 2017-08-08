@@ -17,6 +17,7 @@
 #  cover_image_updated_at    :datetime
 #  end_date                  :date
 #  episode_count             :integer
+#  episode_count_guess       :integer
 #  episode_length            :integer
 #  favorites_count           :integer          default(0), not null
 #  popularity_rank           :integer
