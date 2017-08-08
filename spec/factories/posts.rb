@@ -11,6 +11,7 @@
 #  deleted_at               :datetime         indexed
 #  edited_at                :datetime
 #  media_type               :string           indexed => [media_id]
+#  embed                    :jsonb
 #  nsfw                     :boolean          default(FALSE), not null
 #  post_likes_count         :integer          default(0), not null
 #  spoiled_unit_type        :string

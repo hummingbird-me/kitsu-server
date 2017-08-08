@@ -10,6 +10,7 @@
 #  content_formatted           :text             not null
 #  deleted_at                  :datetime         indexed
 #  edited_at                   :datetime
+#  embed                       :jsonb
 #  media_type                  :string           indexed => [media_id]
 #  nsfw                        :boolean          default(FALSE), not null
 #  post_likes_count            :integer          default(0), not null
@@ -45,10 +46,12 @@ require_dependency 'html/pipeline/onebox_filter'
 class Post < ApplicationRecord
   include WithActivity
   include ContentProcessable
+  include ContentEmbeddable
 
   acts_as_paranoid
   resourcify
   processable :content, LongPipeline
+  embed_links_in :content, to: :embed
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'
