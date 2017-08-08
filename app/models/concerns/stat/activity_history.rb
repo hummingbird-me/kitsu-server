@@ -2,7 +2,7 @@ class Stat < ApplicationRecord
   module ActivityHistory
     extend ActiveSupport::Concern
 
-    # Example of stats:
+    # Example of days stats:
     # 'days' => {
     #   '2017' => {
     #     '08' => {
@@ -156,6 +156,10 @@ class Stat < ApplicationRecord
           record.stats_data['days'] = record.generate_missing_days(library_event.created_at.to_date)
         end
 
+        # this is to prevent any errors for initial generation of this stat
+        # while we do the migration.
+        return if record.stats_data.key?('activity')
+
         event_created = library_event.created_at.to_date
         # maintain when they last updated
         # the if will prevent any issues with sidekiq failures/retries
@@ -195,6 +199,9 @@ class Stat < ApplicationRecord
       end
 
       def decrement(user)
+        # TODO: add Librato metrics to see how many times this method
+        # is actually called
+        # I don't think it will be called very often.
         record = user.stats.find_or_initialize_by(
           type: "Stat::#{media_type}ActivityHistory"
         )

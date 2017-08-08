@@ -273,14 +273,12 @@ class LibraryEntry < ApplicationRecord
       Stat::AnimeCategoryBreakdown.decrement(user, self)
       Stat::AnimeAmountConsumed.decrement(user, self, options)
       Stat::AnimeFavoriteYear.decrement(user, self)
-      # TODO: Change this before merging PR 201
-      # Stat::AnimeActivityHistory.decrement(user, library_entry)
+      Stat::AnimeActivityHistory.decrement(user)
     when :manga
       Stat::MangaCategoryBreakdown.decrement(user, self)
       Stat::MangaAmountConsumed.decrement(user, self, options)
       Stat::MangaFavoriteYear.decrement(user, self)
-      # TODO: Change this before merging PR 201
-      # Stat::MangaActivityHistory.decrement(user, library_entry)
+      Stat::MangaActivityHistory.decrement(user)
     end
   end
 
