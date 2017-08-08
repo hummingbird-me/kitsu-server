@@ -15,18 +15,12 @@ class GroupPolicy < ApplicationPolicy
 
   def editable_attributes(all)
     return all if is_admin?
-    attrs = all
-    attrs -= %i[members_count leaders_count neighbors_count rules_formatted featured name]
-    attrs -= %i[pinned_post_id] unless record.owners.include? user
-    attrs
+    all - %i[members_count leaders_count neighbors_count rules_formatted featured name]
   end
 
   def creatable_attributes(all)
     return all if is_admin?
-    attrs = all
-    attrs -= %i[members_count leaders_count neighbors_count rules_formatted featured name]
-    attrs -= %i[pinned_post_id] unless record.owners.include? user
-    attrs
+    all - %i[members_count leaders_count neighbors_count rules_formatted featured name]
   end
 
   def group
