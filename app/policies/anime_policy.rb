@@ -8,4 +8,14 @@ class AnimePolicy < ApplicationPolicy
       end
     end
   end
+
+  class AlgoliaScope < AlgoliaScope
+    def resolve
+      if user && !user.sfw_filter?
+        ''
+      else
+        'NOT ageRating:R18'
+      end
+    end
+  end
 end

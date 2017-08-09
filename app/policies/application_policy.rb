@@ -80,9 +80,7 @@ class ApplicationPolicy
   #   requested resource.
   # @raise [OAuth::ForbiddenTokenError]
   def require_scope!(*scopes)
-    unless has_scope?(*scopes)
-      raise OAuth::ForbiddenTokenError.for_scopes(scopes)
-    end
+    raise OAuth::ForbiddenTokenError.for_scopes(scopes) unless has_scope?(*scopes)
   end
 
   # Politely ask if the user has an admin role for the record.  If your "scope"
@@ -162,6 +160,23 @@ class ApplicationPolicy
 
     def see_nsfw?
       user ? !user.sfw_filter? : false
+    end
+  end
+
+  class AlgoliaScope
+    attr_reader :user, :token
+
+    def initialize(token)
+      @token = token
+      @user = token&.resource_owner
+    end
+
+    def resolve
+      ''
+    end
+
+    def blocked_users
+      Block.hidden_for(user)
     end
   end
 end

@@ -36,4 +36,10 @@ class UserPolicy < ApplicationPolicy
       scope.active.blocking(blocked_users)
     end
   end
+
+  class AlgoliaScope < AlgoliaScope
+    def resolve
+      blocked_users.map { |id| "id != #{id}" }.join(' AND ')
+    end
+  end
 end
