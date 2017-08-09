@@ -19,3 +19,5 @@ production:
     every: 12h
   UploadRemovalWorker:
     every: 12h
+  HuluMappingWorker:
+    every: 24h
