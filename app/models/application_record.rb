@@ -36,7 +36,9 @@ class ApplicationRecord < ActiveRecord::Base
     DestructionWorker.perform_async(self.class.name, id)
   end
 
+  class_attribute :algolia_index
   def self.update_algolia(index_klass)
+    self.algolia_index ||= index_klass
     after_commit { index_klass.safe_constantize.new(self).save! }
   end
 end
