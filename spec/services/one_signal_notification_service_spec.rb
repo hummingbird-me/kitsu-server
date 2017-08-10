@@ -96,7 +96,7 @@ RSpec.describe OneSignalNotificationService do
       end
 
       it 'should raise an error' do
-        expect { service.notify_players! }.to raise_error
+        expect { service.notify_players! }.to raise_error(OneSignalNotificationService::NotifyError)
       end
     end
   end

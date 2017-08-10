@@ -1,5 +1,13 @@
 # Service to make OneSignal API
 class OneSignalNotificationService
+  class NotifyError < StandardError
+    def initialize(res)
+      super("Bad OneSignal push
+        timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body}
+        request: #{res.req.original_options[:body]}")
+    end
+  end
+
   ONE_SIGNAL_URL = 'https://onesignal.com/api'.freeze
 
   attr_reader :content, :player_ids, :opts
@@ -23,7 +31,7 @@ class OneSignalNotificationService
   # Send notification to OneSignal
   def notify_players!
     # POST request to one signal server
-    req = Typhoeus::Request.new("#{ONE_SIGNAL_URL}/v1/notifications",
+    res = Typhoeus::Request.new("#{ONE_SIGNAL_URL}/v1/notifications",
       method: :post,
       headers: {
         'Content-Type'  => 'application/json;charset=utf-8',
@@ -31,13 +39,7 @@ class OneSignalNotificationService
       },
       body: request_json)
 
-    res = req.run
-
-    unless res.success?
-      raise "Bad OneSignal push
-        timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body}
-        request: #{req.original_options[:body]}"
-    end
+    raise NotifyError(res) unless res.success?
     check_and_process_invalids(JSON.parse(res.body))
   end
 
