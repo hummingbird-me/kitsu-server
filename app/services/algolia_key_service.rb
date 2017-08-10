@@ -1,7 +1,7 @@
 class AlgoliaKeyService
   def initialize(model, token)
     @model = model
-    @index = model.algolia_index
+    @index = model.algolia_index.safe_constantize
     @token = token
     @user = token&.resource_owner
   end
@@ -11,7 +11,7 @@ class AlgoliaKeyService
   end
 
   def index
-    @index._index
+    @index.index_name
   end
 
   def scope
