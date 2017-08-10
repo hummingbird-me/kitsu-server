@@ -37,4 +37,13 @@ class GroupPolicy < ApplicationPolicy
       scope.sfw.visible_for(user)
     end
   end
+
+  class AlgoliaScope < AlgoliaScope
+    def resolve
+      group_ids = GroupMember.joins(:group).merge(Group.closed).for_user(user).pluck(:group_id)
+      groups = group_ids.map { |id| "id = #{id}" }.join(' OR ')
+      visible_groups = "#{groups} OR privacy:open OR privacy:restricted"
+      see_nsfw? ? visible_groups : "(#{visible_groups}) AND NOT nsfw:true"
+    end
+  end
 end
