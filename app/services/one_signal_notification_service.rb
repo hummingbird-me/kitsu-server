@@ -34,8 +34,9 @@ class OneSignalNotificationService
     res = req.run
 
     unless res.success?
-      raise "Bad OneSignal push;
-        timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body} request: #{req}"
+      raise "Bad OneSignal push
+        timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body}
+        request: #{req.original_options[:body]}"
     end
     check_and_process_invalids(JSON.parse(res.body))
   end
