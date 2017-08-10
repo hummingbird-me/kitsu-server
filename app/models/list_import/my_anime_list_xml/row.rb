@@ -52,11 +52,12 @@ class ListImport
       end
 
       def notes
-        node.css('my_comments, my_tags').map(&:content).reject(&:blank?)
-            .join(';')
+        comments = node.at_css('my_comments').content
+        tags = node.at_css('my_tags').content
+        tags.present? ? [comments, tags].join("\n=== MAL Tags ===\n") : comments
       end
 
-      def volumes
+      def volumes_owned
         node.at_css('my_read_volumes')&.content&.to_i
       end
 
@@ -73,9 +74,8 @@ class ListImport
       end
 
       def data
-        %i[status progress rating reconsume_count notes started_at finished_at].map { |k|
-          [k, send(k)]
-        }.to_h
+        %i[status progress rating reconsume_count notes volumes_owned
+           started_at finished_at].map { |k| [k, send(k)] }.to_h
       end
     end
   end

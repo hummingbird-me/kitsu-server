@@ -32,8 +32,7 @@ class ListImport
     }, presence: true
 
     def count
-      xml.css('user_total_anime, user_total_manga').map(&:content).map(&:to_i).
-        sum
+      xml.css('user_total_anime, user_total_manga').map(&:content).map(&:to_i).sum
     end
 
     def each

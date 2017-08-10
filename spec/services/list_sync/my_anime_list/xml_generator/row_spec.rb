@@ -52,6 +52,10 @@ RSpec.describe ListSync::MyAnimeList::XmlGenerator::Row do
         expect(subject.at_css('my_read_chapters')).not_to be_nil
       end
 
+      it 'should have a my_read_volumes node' do
+        expect(subject.at_css('my_read_volumes')).not_to be_nil
+      end
+
       it 'should have a my_times_read node' do
         expect(subject.at_css('my_times_read')).not_to be_nil
       end
@@ -79,6 +83,15 @@ RSpec.describe ListSync::MyAnimeList::XmlGenerator::Row do
 
       it 'should have a my_score node with half the Kitsu rating' do
         expect(subject.at_css('my_score').content).to eq((rating / 2).to_s)
+      end
+    end
+
+    context 'with comments and notes' do
+      before { library_entry.notes = "Some comments\n=== MAL Tags ===\ntag1, tag2, tag3" }
+
+      it 'should have comments and tags parsed from notes' do
+        expect(subject.at_css('my_comments').content).to eq('Some comments')
+        expect(subject.at_css('my_tags').content).to eq('tag1, tag2, tag3')
       end
     end
   end

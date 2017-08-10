@@ -217,13 +217,13 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
         end
       end
       context 'when my_comments is blank' do
-        it 'should return the value in my_tags' do
+        it 'should return the value in my_tags with prefix' do
           xml = wrap_row <<~EOF
             <my_comments><![CDATA[]]></my_comments>
             <my_tags><![CDATA[Ohai]]></my_tags>
           EOF
           row = described_class.new(xml)
-          expect(row.notes).to eq('Ohai')
+          expect(row.notes).to eq("\n=== MAL Tags ===\nOhai")
         end
       end
       context 'when my_comments and my_tags are both blank' do
@@ -237,21 +237,21 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
         end
       end
       context 'when my_comments and my_tags are both present' do
-        it 'should return both, separated by a semicolon' do
+        it 'should return both, separated by the prefix' do
           xml = wrap_row <<~EOF
             <my_comments><![CDATA[Oha]]></my_comments>
             <my_tags><![CDATA[you]]></my_tags>
           EOF
           row = described_class.new(xml)
-          expect(row.notes).to eq('Oha;you')
+          expect(row.notes).to eq("Oha\n=== MAL Tags ===\nyou")
         end
       end
     end
 
-    describe '#volumes' do
+    describe '#volumes_owned' do
       it "should return nil because MyAnimeList doesn't have anime volumes" do
         row = described_class.new(wrap_row(''))
-        expect(row.volumes).to be_nil
+        expect(row.volumes_owned).to be_nil
       end
     end
 
@@ -495,13 +495,13 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
         end
       end
       context 'when my_comments is blank' do
-        it 'should return the value in my_tags' do
+        it 'should return the value in my_tags with prefix' do
           xml = wrap_row <<~EOF
             <my_comments><![CDATA[]]></my_comments>
             <my_tags><![CDATA[Ohai]]></my_tags>
           EOF
           row = described_class.new(xml)
-          expect(row.notes).to eq('Ohai')
+          expect(row.notes).to eq("\n=== MAL Tags ===\nOhai")
         end
       end
       context 'when my_comments and my_tags are both blank' do
@@ -515,21 +515,22 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
         end
       end
       context 'when my_comments and my_tags are both present' do
-        it 'should return both, separated by a semicolon' do
+        it 'should return both, separated by the prefix' do
           xml = wrap_row <<~EOF
             <my_comments><![CDATA[Oha]]></my_comments>
             <my_tags><![CDATA[you]]></my_tags>
           EOF
           row = described_class.new(xml)
-          expect(row.notes).to eq('Oha;you')
+          expect(row.notes).to eq("Oha\n=== MAL Tags ===\nyou")
         end
       end
     end
 
-    describe '#volumes' do
-      it "should return nil because MyAnimeList doesn't have anime volumes" do
-        row = described_class.new(wrap_row(''))
-        expect(row.volumes).to be_nil
+    describe '#volumes_owned' do
+      it 'should return the value in my_read_volumes' do
+        xml = wrap_row '<my_read_volumes>3</my_read_volumes>'
+        row = described_class.new(xml)
+        expect(row.volumes_owned).to eq(3)
       end
     end
 
