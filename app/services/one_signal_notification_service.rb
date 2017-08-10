@@ -31,8 +31,7 @@ class OneSignalNotificationService
   # Send notification to OneSignal
   def notify_players!
     # POST request to one signal server
-    res = Typhoeus::Request.new("#{ONE_SIGNAL_URL}/v1/notifications",
-      method: :post,
+    res = Typhoeus.post("#{ONE_SIGNAL_URL}/v1/notifications",
       headers: {
         'Content-Type'  => 'application/json;charset=utf-8',
         'Authorization' => "Basic #{api_key}"
