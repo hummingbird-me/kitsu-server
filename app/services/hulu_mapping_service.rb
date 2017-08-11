@@ -9,7 +9,7 @@ class HuluMappingService
     @since = since
   end
 
-  # TODO: figure out if there is a way to offset by date? `since` is available for /assets
+  # Grabs all available series from hulu, maps them as wel as their episodes
   def sync_series_and_episodes
     ActiveRecord::Base.logger = Logger.new(nil)
     Chewy.strategy(:bypass)
