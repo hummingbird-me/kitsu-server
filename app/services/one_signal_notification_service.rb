@@ -1,13 +1,5 @@
 # Service to make OneSignal API
 class OneSignalNotificationService
-  class NotifyError < StandardError
-    def initialize(res)
-      super("Bad OneSignal push
-        timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body}
-        request: #{res.request.original_options[:body]}")
-    end
-  end
-
   ONE_SIGNAL_URL = 'https://onesignal.com/api'.freeze
 
   attr_reader :content, :player_ids, :opts
@@ -38,7 +30,11 @@ class OneSignalNotificationService
       },
       body: request_json)
 
-    raise OneSignalNotificationService::NotifyError(res) unless res.success?
+    unless res.success?
+      raise "Bad OneSignal push
+        timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body}
+        request: #{res.request.original_options[:body]}"
+    end
     check_and_process_invalids(JSON.parse(res.body))
   end
 
