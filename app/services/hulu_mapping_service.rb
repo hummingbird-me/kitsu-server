@@ -18,6 +18,7 @@ class HuluMappingService
     series_res = Typhoeus.get(
       "#{HULU_URL}/series?guid=#{guid}&primary_category=animation&offset=#{offset}&limit=#{limit}"
     )
+    return unless series_res.sucess?
     hulu_anime = JSON.parse(series_res.body)['results']
     hulu_anime.each do |item|
       item = item.deep_symbolize_keys
@@ -28,35 +29,43 @@ class HuluMappingService
       }
       kitsu_anime = Mapping.guess('Anime', mapping_object)
       next unless kitsu_anime
-      # creating mapping with series to kitsu anime
-      kitsu_anime.mappings.where(
+      get_hulu_episodes_for_series(kitsu_anime, series_id)
+    end
+  end
+
+  def get_hulu_episodes_for_series(kitsu_anime, series_id)
+    # creating mapping with series to kitsu anime
+    kitsu_anime.mappings.where(
+      external_site: 'hulu',
+      external_id: series_id
+    ).first_or_create
+
+    # grab available episodes from hulu with anime
+    since_param = since.advance(hours: -24).strftime('%F') if since
+    ep_url = "#{HULU_URL}/assets?guid=#{guid}&series_id=#{series_id}&type=episode&limit=#{limit}"
+    ep_url += "&since=#{since_param}" if since
+    episode_res = Typhoeus.get(
+      ep_url
+    )
+    return unless episode_res.sucess?
+    hulu_episodes = JSON.parse(episode_res.body)
+    sync_episodes_for_anime(hulu_episodes)
+  end
+
+  def sync_episodes_for_anime(hulu_episodes)
+    hulu_ep_hash = hulu_episodes.each_with_object({}) do |ep, acc|
+      ep = ep.deep_symbolize_keys
+      acc[ep[:number]] = ep
+    end
+
+    # create episode mapping for each episode on kitsu if hulu has it
+    kitsu_anime.episodes.each do |ep|
+      next unless hulu_ep_hash.key?(ep.number)
+      Mapping.where(
+        media: ep,
         external_site: 'hulu',
-        external_id: series_id
+        external_id: hulu_ep_hash[ep.number][:site_id]
       ).first_or_create
-
-      # grab available episodes from hulu with anime
-      since_param = since.advance(hours: -24).strftime('%F') if since
-      episodes_url = "#{HULU_URL}/assets?guid=#{guid}&series_id=#{series_id}"
-      episodes_url += "&type=episode&limit=#{limit}"
-      episodes_url += "&since=#{since_param}" if since
-      episode_res = Typhoeus.get(
-        episodes_url
-      )
-      hulu_episodes = JSON.parse(episode_res.body)
-      hulu_ep_hash = hulu_episodes.each_with_object({}) do |ep, acc|
-        ep = ep.deep_symbolize_keys
-        acc[ep[:number]] = ep
-      end
-
-      # create episode mapping for each episode on kitsu if hulu has it
-      kitsu_anime.episodes.each do |ep|
-        next unless hulu_ep_hash.key?(ep.number)
-        Mapping.where(
-          media: ep,
-          external_site: 'hulu',
-          external_id: hulu_ep_hash[ep.number][:site_id]
-        ).first_or_create
-      end
     end
   end
 
