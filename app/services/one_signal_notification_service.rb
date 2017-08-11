@@ -4,7 +4,7 @@ class OneSignalNotificationService
     def initialize(res)
       super("Bad OneSignal push
         timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body}
-        request: #{res.req.original_options[:body]}")
+        request: #{res.request.original_options[:body]}")
     end
   end
 
@@ -38,7 +38,7 @@ class OneSignalNotificationService
       },
       body: request_json)
 
-    raise NotifyError(res) unless res.success?
+    raise OneSignalNotificationService::NotifyError(res) unless res.success?
     check_and_process_invalids(JSON.parse(res.body))
   end
 
