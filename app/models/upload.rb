@@ -8,6 +8,7 @@
 #  content_file_name    :string
 #  content_file_size    :integer
 #  content_updated_at   :datetime
+#  order                :integer
 #  owner_type           :string           indexed => [owner_id]
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
@@ -26,9 +27,14 @@
 # rubocop:enable Metrics/LineLength
 
 class Upload < ApplicationRecord
+  include RankedModel
+  ranks :order, with_same: %i[owner_type owner_id]
+
   belongs_to :user, required: true
   belongs_to :owner, polymorphic: true
+
   has_attached_file :content, required: true
+
   scope :orphan, -> {
     where(
       post: nil,
@@ -37,6 +43,7 @@ class Upload < ApplicationRecord
       ['created_at > ?', 11.hours.ago]
     )
   }
+
   validates_attachment_content_type :content, content_type: [
     'image/jpg', 'image/jpeg', 'image/png', 'image/gif'
   ]
