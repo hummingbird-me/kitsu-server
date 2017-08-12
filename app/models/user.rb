@@ -94,7 +94,6 @@
 # rubocop:enable Metrics/LineLength
 
 class User < ApplicationRecord
-  include AlgoliaSearch
   include WithCoverImage
   include WithAvatar
 
