@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Webhooks::GetstreamController, type: :controller do
+  let(:username) { ENV['STREAM_WEBHOOK_USER'] }
+  let(:password) { ENV['STREAM_WEBHOOK_PASS'] }
+  let(:auth) { "Basic #{Base64.encode64("#{username}:#{password}")}" }
+
+  before do
+    @request.headers['Authorization'] = auth
+  end
+
   describe '#verify' do
     before { get :verify }
 

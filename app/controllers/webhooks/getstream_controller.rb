@@ -2,6 +2,9 @@ module Webhooks
   class GetstreamController < ApplicationController
     include CustomControllerHelpers
 
+    http_basic_authenticate_with name: ENV['STREAM_WEBHOOK_USER'],
+                                 password: ENV['STREAM_WEBHOOK_PASS']
+
     def verify
       render text: StreamRails.client.api_key
     end
