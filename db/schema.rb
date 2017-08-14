@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170919034156) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -249,9 +248,11 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.integer  "thumbnail_file_size"
     t.datetime "thumbnail_updated_at"
     t.text     "thumbnail_meta"
+    t.integer  "volume_id"
   end
 
   add_index "chapters", ["manga_id"], name: "index_chapters_on_manga_id", using: :btree
+  add_index "chapters", ["volume_id"], name: "index_chapters_on_volume_id", using: :btree
 
   create_table "characters", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -1565,6 +1566,16 @@ ActiveRecord::Schema.define(version: 20170919034156) do
 
   add_index "videos", ["episode_id"], name: "index_videos_on_episode_id", using: :btree
 
+  create_table "volumes", force: :cascade do |t|
+    t.string   "title",      null: false
+    t.string   "isbn",       null: false
+    t.integer  "manga_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "volumes", ["manga_id"], name: "index_volumes_on_manga_id", using: :btree
+
   create_table "votes", force: :cascade do |t|
     t.integer  "target_id",                              null: false
     t.string   "target_type", limit: 255,                null: false
@@ -1594,6 +1605,7 @@ ActiveRecord::Schema.define(version: 20170919034156) do
   add_foreign_key "blocks", "users", column: "blocked_id"
   add_foreign_key "category_favorites", "categories"
   add_foreign_key "category_favorites", "users"
+  add_foreign_key "chapters", "volumes"
   add_foreign_key "comment_likes", "comments"
   add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"
@@ -1678,4 +1690,5 @@ ActiveRecord::Schema.define(version: 20170919034156) do
   add_foreign_key "uploads", "users"
   add_foreign_key "user_ip_addresses", "users"
   add_foreign_key "users", "posts", column: "pinned_post_id"
+  add_foreign_key "volumes", "manga"
 end
