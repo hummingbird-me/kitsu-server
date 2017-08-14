@@ -51,6 +51,7 @@ class Post < ApplicationRecord
   acts_as_paranoid
   resourcify
   processable :content, LongPipeline
+  update_algolia 'AlgoliaPostsIndex'
   embed_links_in :content, to: :embed
 
   belongs_to :user, required: true, counter_cache: true

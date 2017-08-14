@@ -110,6 +110,7 @@ class User < ApplicationRecord
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password
   update_index('users#user') { self }
+  update_algolia('AlgoliaUsersIndex')
   enum theme: %i[light dark]
 
   belongs_to :pro_membership_plan, required: false

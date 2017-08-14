@@ -66,6 +66,12 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     aggregate (0.2.2)
+    algoliasearch (1.12.7)
+      httpclient (~> 2.8.3)
+      json (>= 1.5.1)
+    algoliasearch-rails (1.19.1)
+      algoliasearch (~> 1.12.4)
+      json (>= 1.5.1)
     annotate (2.7.1)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 12.0)
@@ -209,6 +215,7 @@ GEM
     http-form_data (1.0.1)
     http_parser.rb (0.6.0)
     http_signatures (0.2.2)
+    httpclient (2.8.3)
     i18n (0.8.6)
     image_optim (0.24.2)
       exifr (~> 1.2, >= 1.2.2)
@@ -555,6 +562,7 @@ PLATFORMS
 
 DEPENDENCIES
   addressable
+  algoliasearch-rails
   annotate
   attr_encrypted (~> 3.0.0)
   aws-sdk

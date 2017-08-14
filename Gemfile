@@ -7,8 +7,9 @@ gem 'rails', '4.2.8'
 gem 'rails-api'
 
 # Database Stuff
+gem 'algoliasearch-rails' # Future Search
 gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens
-gem 'chewy' # ElasticSearch
+gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
 gem 'pg' # Postgres

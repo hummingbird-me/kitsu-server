@@ -140,6 +140,10 @@ Rails.application.routes.draw do
       post '/group-invites/:id/_revoke', to: 'group_invites#revoke'
       get '/groups/:id/_stats', to: 'groups#stats'
       post '/groups/:id/_read', to: 'groups#read'
+
+      get '/algolia-keys/:action', controller: 'algolia_keys'
+      get '/algolia-keys', to: 'algolia_keys#all'
+
       # Integrations
       get '/sso/canny', to: 'sso#canny'
       # Uploads
@@ -1580,6 +1584,8 @@ end
 #                                                            POST      /api/edge/group-invites/:id/_revoke(.:format)                                                              group_invites#revoke
 #                                                            GET       /api/edge/groups/:id/_stats(.:format)                                                                      groups#stats
 #                                                            POST      /api/edge/groups/:id/_read(.:format)                                                                       groups#read
+#                                                            GET       /api/edge/algolia-keys/:action(.:format)                                                                   algolia_keys#:action
+#                                               algolia_keys GET       /api/edge/algolia-keys(.:format)                                                                           algolia_keys#all
 #                                                  sso_canny GET       /api/edge/sso/canny(.:format)                                                                              sso#canny
 #                                              uploads__bulk POST      /api/edge/uploads/_bulk(.:format)                                                                          uploads#bulk_create
 #                                  upload_relationships_user GET       /api/edge/uploads/:upload_id/relationships/user(.:format)                                                  uploads#show_relationship {:relationship=>"user"}
