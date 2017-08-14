@@ -95,9 +95,8 @@ RSpec.describe OneSignalNotificationService do
         }.to_json)
       end
 
-      it 'should not trigger invalid check method' do
-        expect(service).not_to receive(:check_and_process_invalids)
-        service.notify_players!
+      it 'should raise an error' do
+        expect { service.notify_players! }.to raise_error(/Bad OneSignal push/i)
       end
     end
   end

@@ -64,8 +64,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     field :abbreviated_titles, :serialized do
       html_attributes rows: '6', cols: '70'
     end
-    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
-      :cover_image, :age_rating, :age_rating_guide, :episode_count
+    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image, :cover_image,
+      :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :producers, :average_rating, :cover_image_top_offset
@@ -83,9 +83,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     field :abbreviated_titles, :serialized do
       html_attributes rows: '6', cols: '70'
     end
-    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
-      :cover_image, :age_rating, :age_rating_guide, :chapter_count,
-      :volume_count
+    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image, :cover_image,
+      :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :average_rating, :cover_image_top_offset

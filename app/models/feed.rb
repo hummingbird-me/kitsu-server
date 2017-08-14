@@ -177,7 +177,7 @@ class Feed
     shared_filters = self.class.filters_shared_with(target.class)
     follows += shared_filters.map do |filter|
       {
-        source: stream_feed(filter: filter),
+        source: stream_feed_for(filter: filter),
         target: target.stream_follow_target(filter: filter)
       }
     end

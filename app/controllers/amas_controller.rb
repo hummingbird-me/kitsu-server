@@ -1,0 +1,2 @@
+class AmasController < ApplicationController
+end

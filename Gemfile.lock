@@ -10,6 +10,12 @@ GIT
       stream-ruby (~> 2.4)
 
 GIT
+  remote: git://github.com/nuckchorris/rack-timeout.git
+  revision: 0e01a118a02c6843643cface4c10d10f7f002582
+  specs:
+    rack-timeout (0.4.2)
+
+GIT
   remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
   revision: 94b1e6345e63cb380a0185436f62f42a2d340491
   specs:
@@ -605,6 +611,7 @@ DEPENDENCIES
   pundit-resources
   rack-attack
   rack-cors
+  rack-timeout!
   rails (= 4.2.8)
   rails-api
   rails_12factor

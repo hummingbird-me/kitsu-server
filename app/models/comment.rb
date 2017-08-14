@@ -9,6 +9,7 @@
 #  content_formatted :text             not null
 #  deleted_at        :datetime         indexed
 #  edited_at         :datetime
+#  embed             :jsonb
 #  likes_count       :integer          default(0), not null
 #  replies_count     :integer          default(0), not null
 #  created_at        :datetime         not null
@@ -32,6 +33,7 @@
 class Comment < ApplicationRecord
   include WithActivity
   include ContentProcessable
+  include ContentEmbeddable
 
   acts_as_paranoid
   resourcify
@@ -39,6 +41,7 @@ class Comment < ApplicationRecord
     'top_level_comments_count' if model.parent.blank?
   }
   processable :content, LongPipeline
+  embed_links_in :content, to: :embed
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :post, required: true, counter_cache: true, touch: true
@@ -47,12 +50,17 @@ class Comment < ApplicationRecord
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
                      dependent: :destroy
   has_many :likes, class_name: 'CommentLike', dependent: :destroy
+  has_many :uploads, as: 'owner', dependent: :destroy
 
   scope :in_group, ->(group) { joins(:post).merge(Post.in_group(group)) }
 
   validates :content, :content_formatted, presence: true
   validate :no_grandparents
   validates :content, length: { maximum: 9_000 }
+  validates :post, active_ama: {
+    message: 'cannot make any more comments on this AMA',
+    user: :user
+  }
 
   def stream_activity
     to = []
@@ -90,6 +98,6 @@ class Comment < ApplicationRecord
   end
   after_create do
     user.update_feed_completed!
-    #PostFollow.create(user: user, post: post)
+    # PostFollow.create(user: user, post: post)
   end
 end

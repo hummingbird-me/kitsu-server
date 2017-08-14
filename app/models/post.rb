@@ -3,37 +3,41 @@
 #
 # Table name: posts
 #
-#  id                       :integer          not null, primary key
-#  blocked                  :boolean          default(FALSE), not null
-#  comments_count           :integer          default(0), not null
-#  content                  :text             not null
-#  content_formatted        :text             not null
-#  deleted_at               :datetime         indexed
-#  edited_at                :datetime
-#  media_type               :string           indexed => [media_id]
-#  nsfw                     :boolean          default(FALSE), not null
-#  post_likes_count         :integer          default(0), not null
-#  spoiled_unit_type        :string
-#  spoiler                  :boolean          default(FALSE), not null
-#  target_interest          :string
-#  top_level_comments_count :integer          default(0), not null
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  media_id                 :integer          indexed => [media_type]
-#  spoiled_unit_id          :integer
-#  target_group_id          :integer
-#  target_user_id           :integer
-#  user_id                  :integer          not null
+#  id                          :integer          not null, primary key
+#  blocked                     :boolean          default(FALSE), not null
+#  comments_count              :integer          default(0), not null
+#  content                     :text             not null
+#  content_formatted           :text             not null
+#  deleted_at                  :datetime         indexed
+#  edited_at                   :datetime
+#  embed                       :jsonb
+#  media_type                  :string           indexed => [media_id]
+#  nsfw                        :boolean          default(FALSE), not null
+#  post_likes_count            :integer          default(0), not null
+#  spoiled_unit_type           :string
+#  spoiler                     :boolean          default(FALSE), not null
+#  target_interest             :string
+#  top_level_comments_count    :integer          default(0), not null
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  community_recommendation_id :integer          indexed
+#  media_id                    :integer          indexed => [media_type]
+#  spoiled_unit_id             :integer
+#  target_group_id             :integer
+#  target_user_id              :integer
+#  user_id                     :integer          not null
 #
 # Indexes
 #
-#  index_posts_on_deleted_at      (deleted_at)
+#  index_posts_on_community_recommendation_id  (community_recommendation_id)
+#  index_posts_on_deleted_at                   (deleted_at)
 #  posts_media_type_media_id_idx  (media_type,media_id)
 #
 # Foreign Keys
 #
 #  fk_rails_5b5ddfd518  (user_id => users.id)
 #  fk_rails_6fac2de613  (target_user_id => users.id)
+#  fk_rails_f82460b586  (community_recommendation_id => community_recommendations.id)
 #
 # rubocop:enable Metrics/LineLength
 
@@ -42,11 +46,13 @@ require_dependency 'html/pipeline/onebox_filter'
 class Post < ApplicationRecord
   include WithActivity
   include ContentProcessable
+  include ContentEmbeddable
 
   acts_as_paranoid
   resourcify
   processable :content, LongPipeline
-  update_algolia('AlgoliaPostsIndex')
+  update_algolia 'AlgoliaPostsIndex'
+  embed_links_in :content, to: :embed
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :target_user, class_name: 'User'
@@ -56,6 +62,8 @@ class Post < ApplicationRecord
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :uploads, as: 'owner', dependent: :destroy
+  has_one :ama, foreign_key: 'original_post_id'
 
   scope :in_group, ->(group) { where(target_group: group) }
   scope :visible_for, ->(user) {
@@ -70,6 +78,7 @@ class Post < ApplicationRecord
   validates :media, polymorphism: { type: Media }, allow_blank: true
   # posting to a group, posting to a profile, and posting to an interest are mutually exclusive.
   validates_with ExclusivityValidator, over: %i[target_user target_group target_interest]
+  validates :target_user, absence: true, if: :target_group
 
   def feed
     PostFeed.new(id)
@@ -140,8 +149,6 @@ class Post < ApplicationRecord
 
   after_create do
     media.trending_vote(user, 2.0) if media.present?
-    if target_group.present?
-      GroupUnreadFanoutWorker.perform_async(target_group_id, user_id)
-    end
+    GroupUnreadFanoutWorker.perform_async(target_group_id, user_id) if target_group.present?
   end
 end

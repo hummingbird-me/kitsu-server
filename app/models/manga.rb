@@ -10,6 +10,7 @@
 #  average_rating            :decimal(5, 2)
 #  canonical_title           :string           default("en_jp"), not null
 #  chapter_count             :integer
+#  chapter_count_guess       :integer
 #  cover_image_content_type  :string(255)
 #  cover_image_file_name     :string(255)
 #  cover_image_file_size     :integer
@@ -74,7 +75,16 @@ class Manga < ApplicationRecord
     ]
   end
 
+  def update_unit_count_guess(guess)
+    return if chapter_count
+    return if chapter_count_guess && chapter_count_guess > guess
+    update(chapter_count_guess: guess)
+    chapters.create_defaults(chapter_count_guess) if chapters.length < chapter_count_guess
+  end
+
   before_save do
+    self.chapter_count_guess = nil if chapter_count
+
     if chapter_count == 1
       self.start_date = end_date if start_date.nil? && !end_date.nil?
       self.end_date = start_date if end_date.nil? && !start_date.nil?
@@ -83,6 +93,6 @@ class Manga < ApplicationRecord
 
   after_save do
     chapters.create_defaults(chapter_count) if
-      chapter_count && chapters.length < chapter_count
+      chapter_count_changed? && chapters.length != chapter_count
   end
 end

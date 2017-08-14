@@ -22,6 +22,10 @@ class PostLike < ApplicationRecord
   belongs_to :post, required: true, counter_cache: true, touch: true
 
   validates :post, uniqueness: { scope: :user_id }
+  validates :post, active_ama: {
+    message: 'cannot like this AMA',
+    user: :user
+  }
 
   counter_culture :user, column_name: 'likes_given_count'
   counter_culture %i[post user], column_name: 'likes_received_count'
@@ -35,7 +39,7 @@ class PostLike < ApplicationRecord
       to: notify
     )
   end
-  after_create do 
+  after_create do
     user.update_feed_completed!
   end
 end

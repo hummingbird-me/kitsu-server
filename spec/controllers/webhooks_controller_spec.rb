@@ -56,6 +56,7 @@ RSpec.describe WebhooksController, type: :controller do
       let(:hmac) { OpenSSL::HMAC.hexdigest('SHA1', secret, body).to_s }
 
       before do
+        stub_request(:get, 'http://www.youtube.com/watch?v=VIDEO_ID').to_return(status: 200)
         allow(YoutubeService::Subscription).to receive(:secret)
           .and_return(secret)
         @request.headers['Content-Type'] = 'application/atom+xml'

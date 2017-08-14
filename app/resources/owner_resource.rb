@@ -1,0 +1,1 @@
+class OwnerResource < BaseResource; end

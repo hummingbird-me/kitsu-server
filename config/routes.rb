@@ -40,6 +40,10 @@ Rails.application.routes.draw do
 
       jsonapi_resources :favorites
 
+      ### AMA
+      jsonapi_resources :amas
+      jsonapi_resources :ama_subscribers
+
       ### Categories
       jsonapi_resources :category_favorites
       jsonapi_resources :categories
@@ -107,6 +111,7 @@ Rails.application.routes.draw do
       post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
       post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
       delete '/feeds/:group/:id/activities/:uuid', to: 'feeds#destroy_activity'
+      post '/embeds', to: 'embeds#create'
 
       ### Site Announcements
       jsonapi_resources :site_announcements
@@ -141,6 +146,9 @@ Rails.application.routes.draw do
 
       # Integrations
       get '/sso/canny', to: 'sso#canny'
+      # Uploads
+      post '/uploads/_bulk', to: 'uploads#bulk_create'
+      jsonapi_resources :uploads
     end
 
     ### Admin Panel
@@ -157,6 +165,7 @@ Rails.application.routes.draw do
     ### WebHooks
     get '/hooks/youtube', to: 'webhooks#youtube_verify'
     post '/hooks/youtube', to: 'webhooks#youtube_notify'
+    get '/hooks/getstream', to: 'webhooks#getstream_verify'
     post '/hooks/getstream', to: 'webhooks#getstream_firehose'
 
     ### Staging Sync
@@ -171,7 +180,7 @@ end
 
 # == Route Map
 #
-# I, [2017-07-22T20:22:18.377937 #10]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-08-07T07:20:56.990927 #3535]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -455,6 +464,39 @@ end
 #                                                            PATCH     /api/edge/favorites/:id(.:format)                                                                          favorites#update
 #                                                            PUT       /api/edge/favorites/:id(.:format)                                                                          favorites#update
 #                                                            DELETE    /api/edge/favorites/:id(.:format)                                                                          favorites#destroy
+#                                   ama_relationships_author GET       /api/edge/amas/:ama_id/relationships/author(.:format)                                                      amas#show_relationship {:relationship=>"author"}
+#                                                            PUT|PATCH /api/edge/amas/:ama_id/relationships/author(.:format)                                                      amas#update_relationship {:relationship=>"author"}
+#                                                            DELETE    /api/edge/amas/:ama_id/relationships/author(.:format)                                                      amas#destroy_relationship {:relationship=>"author"}
+#                                                 ama_author GET       /api/edge/amas/:ama_id/author(.:format)                                                                    users#get_related_resource {:relationship=>"author", :source=>"amas"}
+#                            ama_relationships_original_post GET       /api/edge/amas/:ama_id/relationships/original-post(.:format)                                               amas#show_relationship {:relationship=>"original_post"}
+#                                                            PUT|PATCH /api/edge/amas/:ama_id/relationships/original-post(.:format)                                               amas#update_relationship {:relationship=>"original_post"}
+#                                                            DELETE    /api/edge/amas/:ama_id/relationships/original-post(.:format)                                               amas#destroy_relationship {:relationship=>"original_post"}
+#                                          ama_original_post GET       /api/edge/amas/:ama_id/original-post(.:format)                                                             posts#get_related_resource {:relationship=>"original_post", :source=>"amas"}
+#                          ama_relationships_ama_subscribers GET       /api/edge/amas/:ama_id/relationships/ama-subscribers(.:format)                                             amas#show_relationship {:relationship=>"ama_subscribers"}
+#                                                            POST      /api/edge/amas/:ama_id/relationships/ama-subscribers(.:format)                                             amas#create_relationship {:relationship=>"ama_subscribers"}
+#                                                            PUT|PATCH /api/edge/amas/:ama_id/relationships/ama-subscribers(.:format)                                             amas#update_relationship {:relationship=>"ama_subscribers"}
+#                                                            DELETE    /api/edge/amas/:ama_id/relationships/ama-subscribers(.:format)                                             amas#destroy_relationship {:relationship=>"ama_subscribers"}
+#                                        ama_ama_subscribers GET       /api/edge/amas/:ama_id/ama-subscribers(.:format)                                                           ama_subscribers#get_related_resources {:relationship=>"ama_subscribers", :source=>"amas"}
+#                                                       amas GET       /api/edge/amas(.:format)                                                                                   amas#index
+#                                                            POST      /api/edge/amas(.:format)                                                                                   amas#create
+#                                                        ama GET       /api/edge/amas/:id(.:format)                                                                               amas#show
+#                                                            PATCH     /api/edge/amas/:id(.:format)                                                                               amas#update
+#                                                            PUT       /api/edge/amas/:id(.:format)                                                                               amas#update
+#                                                            DELETE    /api/edge/amas/:id(.:format)                                                                               amas#destroy
+#                          ama_subscriber_relationships_user GET       /api/edge/ama-subscribers/:ama_subscriber_id/relationships/user(.:format)                                  ama_subscribers#show_relationship {:relationship=>"user"}
+#                                                            PUT|PATCH /api/edge/ama-subscribers/:ama_subscriber_id/relationships/user(.:format)                                  ama_subscribers#update_relationship {:relationship=>"user"}
+#                                                            DELETE    /api/edge/ama-subscribers/:ama_subscriber_id/relationships/user(.:format)                                  ama_subscribers#destroy_relationship {:relationship=>"user"}
+#                                        ama_subscriber_user GET       /api/edge/ama-subscribers/:ama_subscriber_id/user(.:format)                                                users#get_related_resource {:relationship=>"user", :source=>"ama_subscribers"}
+#                           ama_subscriber_relationships_ama GET       /api/edge/ama-subscribers/:ama_subscriber_id/relationships/ama(.:format)                                   ama_subscribers#show_relationship {:relationship=>"ama"}
+#                                                            PUT|PATCH /api/edge/ama-subscribers/:ama_subscriber_id/relationships/ama(.:format)                                   ama_subscribers#update_relationship {:relationship=>"ama"}
+#                                                            DELETE    /api/edge/ama-subscribers/:ama_subscriber_id/relationships/ama(.:format)                                   ama_subscribers#destroy_relationship {:relationship=>"ama"}
+#                                         ama_subscriber_ama GET       /api/edge/ama-subscribers/:ama_subscriber_id/ama(.:format)                                                 amas#get_related_resource {:relationship=>"ama", :source=>"ama_subscribers"}
+#                                            ama_subscribers GET       /api/edge/ama-subscribers(.:format)                                                                        ama_subscribers#index
+#                                                            POST      /api/edge/ama-subscribers(.:format)                                                                        ama_subscribers#create
+#                                             ama_subscriber GET       /api/edge/ama-subscribers/:id(.:format)                                                                    ama_subscribers#show
+#                                                            PATCH     /api/edge/ama-subscribers/:id(.:format)                                                                    ama_subscribers#update
+#                                                            PUT       /api/edge/ama-subscribers/:id(.:format)                                                                    ama_subscribers#update
+#                                                            DELETE    /api/edge/ama-subscribers/:id(.:format)                                                                    ama_subscribers#destroy
 #                       category_favorite_relationships_user GET       /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)                            category_favorites#show_relationship {:relationship=>"user"}
 #                                                            PUT|PATCH /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)                            category_favorites#update_relationship {:relationship=>"user"}
 #                                                            DELETE    /api/edge/category-favorites/:category_favorite_id/relationships/user(.:format)                            category_favorites#destroy_relationship {:relationship=>"user"}
@@ -1170,6 +1212,10 @@ end
 #                                                            PUT|PATCH /api/edge/posts/:post_id/relationships/spoiled-unit(.:format)                                              posts#update_relationship {:relationship=>"spoiled_unit"}
 #                                                            DELETE    /api/edge/posts/:post_id/relationships/spoiled-unit(.:format)                                              posts#destroy_relationship {:relationship=>"spoiled_unit"}
 #                                          post_spoiled_unit GET       /api/edge/posts/:post_id/spoiled-unit(.:format)                                                            spoiled_units#get_related_resource {:relationship=>"spoiled_unit", :source=>"posts"}
+#                                     post_relationships_ama GET       /api/edge/posts/:post_id/relationships/ama(.:format)                                                       posts#show_relationship {:relationship=>"ama"}
+#                                                            PUT|PATCH /api/edge/posts/:post_id/relationships/ama(.:format)                                                       posts#update_relationship {:relationship=>"ama"}
+#                                                            DELETE    /api/edge/posts/:post_id/relationships/ama(.:format)                                                       posts#destroy_relationship {:relationship=>"ama"}
+#                                                   post_ama GET       /api/edge/posts/:post_id/ama(.:format)                                                                     amas#get_related_resource {:relationship=>"ama", :source=>"posts"}
 #                              post_relationships_post_likes GET       /api/edge/posts/:post_id/relationships/post-likes(.:format)                                                posts#show_relationship {:relationship=>"post_likes"}
 #                                                            POST      /api/edge/posts/:post_id/relationships/post-likes(.:format)                                                posts#create_relationship {:relationship=>"post_likes"}
 #                                                            PUT|PATCH /api/edge/posts/:post_id/relationships/post-likes(.:format)                                                posts#update_relationship {:relationship=>"post_likes"}
@@ -1180,6 +1226,11 @@ end
 #                                                            PUT|PATCH /api/edge/posts/:post_id/relationships/comments(.:format)                                                  posts#update_relationship {:relationship=>"comments"}
 #                                                            DELETE    /api/edge/posts/:post_id/relationships/comments(.:format)                                                  posts#destroy_relationship {:relationship=>"comments"}
 #                                              post_comments GET       /api/edge/posts/:post_id/comments(.:format)                                                                comments#get_related_resources {:relationship=>"comments", :source=>"posts"}
+#                                 post_relationships_uploads GET       /api/edge/posts/:post_id/relationships/uploads(.:format)                                                   posts#show_relationship {:relationship=>"uploads"}
+#                                                            POST      /api/edge/posts/:post_id/relationships/uploads(.:format)                                                   posts#create_relationship {:relationship=>"uploads"}
+#                                                            PUT|PATCH /api/edge/posts/:post_id/relationships/uploads(.:format)                                                   posts#update_relationship {:relationship=>"uploads"}
+#                                                            DELETE    /api/edge/posts/:post_id/relationships/uploads(.:format)                                                   posts#destroy_relationship {:relationship=>"uploads"}
+#                                               post_uploads GET       /api/edge/posts/:post_id/uploads(.:format)                                                                 uploads#get_related_resources {:relationship=>"uploads", :source=>"posts"}
 #                                                      posts GET       /api/edge/posts(.:format)                                                                                  posts#index
 #                                                            POST      /api/edge/posts(.:format)                                                                                  posts#create
 #                                                       post GET       /api/edge/posts/:id(.:format)                                                                              posts#show
@@ -1222,6 +1273,11 @@ end
 #                                                            PUT|PATCH /api/edge/comments/:comment_id/relationships/replies(.:format)                                             comments#update_relationship {:relationship=>"replies"}
 #                                                            DELETE    /api/edge/comments/:comment_id/relationships/replies(.:format)                                             comments#destroy_relationship {:relationship=>"replies"}
 #                                            comment_replies GET       /api/edge/comments/:comment_id/replies(.:format)                                                           comments#get_related_resources {:relationship=>"replies", :source=>"comments"}
+#                              comment_relationships_uploads GET       /api/edge/comments/:comment_id/relationships/uploads(.:format)                                             comments#show_relationship {:relationship=>"uploads"}
+#                                                            POST      /api/edge/comments/:comment_id/relationships/uploads(.:format)                                             comments#create_relationship {:relationship=>"uploads"}
+#                                                            PUT|PATCH /api/edge/comments/:comment_id/relationships/uploads(.:format)                                             comments#update_relationship {:relationship=>"uploads"}
+#                                                            DELETE    /api/edge/comments/:comment_id/relationships/uploads(.:format)                                             comments#destroy_relationship {:relationship=>"uploads"}
+#                                            comment_uploads GET       /api/edge/comments/:comment_id/uploads(.:format)                                                           uploads#get_related_resources {:relationship=>"uploads", :source=>"comments"}
 #                                                   comments GET       /api/edge/comments(.:format)                                                                               comments#index
 #                                                            POST      /api/edge/comments(.:format)                                                                               comments#create
 #                                                    comment GET       /api/edge/comments/:id(.:format)                                                                           comments#show
@@ -1314,6 +1370,10 @@ end
 #                                                            PUT|PATCH /api/edge/groups/:group_id/relationships/category(.:format)                                                groups#update_relationship {:relationship=>"category"}
 #                                                            DELETE    /api/edge/groups/:group_id/relationships/category(.:format)                                                groups#destroy_relationship {:relationship=>"category"}
 #                                             group_category GET       /api/edge/groups/:group_id/category(.:format)                                                              group_categories#get_related_resource {:relationship=>"category", :source=>"groups"}
+#                            group_relationships_pinned_post GET       /api/edge/groups/:group_id/relationships/pinned-post(.:format)                                             groups#show_relationship {:relationship=>"pinned_post"}
+#                                                            PUT|PATCH /api/edge/groups/:group_id/relationships/pinned-post(.:format)                                             groups#update_relationship {:relationship=>"pinned_post"}
+#                                                            DELETE    /api/edge/groups/:group_id/relationships/pinned-post(.:format)                                             groups#destroy_relationship {:relationship=>"pinned_post"}
+#                                          group_pinned_post GET       /api/edge/groups/:group_id/pinned-post(.:format)                                                           posts#get_related_resource {:relationship=>"pinned_post", :source=>"groups"}
 #                                                     groups GET       /api/edge/groups(.:format)                                                                                 groups#index
 #                                                            POST      /api/edge/groups(.:format)                                                                                 groups#create
 #                                                      group GET       /api/edge/groups/:id(.:format)                                                                             groups#show
@@ -1527,6 +1587,21 @@ end
 #                                                            GET       /api/edge/algolia-keys/:action(.:format)                                                                   algolia_keys#:action
 #                                               algolia_keys GET       /api/edge/algolia-keys(.:format)                                                                           algolia_keys#all
 #                                                  sso_canny GET       /api/edge/sso/canny(.:format)                                                                              sso#canny
+#                                              uploads__bulk POST      /api/edge/uploads/_bulk(.:format)                                                                          uploads#bulk_create
+#                                  upload_relationships_user GET       /api/edge/uploads/:upload_id/relationships/user(.:format)                                                  uploads#show_relationship {:relationship=>"user"}
+#                                                            PUT|PATCH /api/edge/uploads/:upload_id/relationships/user(.:format)                                                  uploads#update_relationship {:relationship=>"user"}
+#                                                            DELETE    /api/edge/uploads/:upload_id/relationships/user(.:format)                                                  uploads#destroy_relationship {:relationship=>"user"}
+#                                                upload_user GET       /api/edge/uploads/:upload_id/user(.:format)                                                                users#get_related_resource {:relationship=>"user", :source=>"uploads"}
+#                                 upload_relationships_owner GET       /api/edge/uploads/:upload_id/relationships/owner(.:format)                                                 uploads#show_relationship {:relationship=>"owner"}
+#                                                            PUT|PATCH /api/edge/uploads/:upload_id/relationships/owner(.:format)                                                 uploads#update_relationship {:relationship=>"owner"}
+#                                                            DELETE    /api/edge/uploads/:upload_id/relationships/owner(.:format)                                                 uploads#destroy_relationship {:relationship=>"owner"}
+#                                               upload_owner GET       /api/edge/uploads/:upload_id/owner(.:format)                                                               owners#get_related_resource {:relationship=>"owner", :source=>"uploads"}
+#                                                    uploads GET       /api/edge/uploads(.:format)                                                                                uploads#index
+#                                                            POST      /api/edge/uploads(.:format)                                                                                uploads#create
+#                                                     upload GET       /api/edge/uploads/:id(.:format)                                                                            uploads#show
+#                                                            PATCH     /api/edge/uploads/:id(.:format)                                                                            uploads#update
+#                                                            PUT       /api/edge/uploads/:id(.:format)                                                                            uploads#update
+#                                                            DELETE    /api/edge/uploads/:id(.:format)                                                                            uploads#destroy
 #                                                rails_admin           /api/admin                                                                                                 RailsAdmin::Engine
 #                                                sidekiq_web           /api/sidekiq                                                                                               Sidekiq::Web
 #                                                    pg_hero           /api/pghero                                                                                                PgHero::Engine
@@ -1537,7 +1612,8 @@ end
 #                                                new_session GET       /api/sessions/new(.:format)                                                                                sessions#new
 #                                              hooks_youtube GET       /api/hooks/youtube(.:format)                                                                               webhooks#youtube_verify
 #                                                            POST      /api/hooks/youtube(.:format)                                                                               webhooks#youtube_notify
-#                                            hooks_getstream POST      /api/hooks/getstream(.:format)                                                                             webhooks#getstream_firehose
+#                                            hooks_getstream GET       /api/hooks/getstream(.:format)                                                                             webhooks#getstream_verify
+#                                                            POST      /api/hooks/getstream(.:format)                                                                             webhooks#getstream_firehose
 #                                             user__prodsync POST      /api/user/_prodsync(.:format)                                                                              users#prod_sync
 #                                                            GET       /api/oauth/authorize/:code(.:format)                                                                       doorkeeper/authorizations#show
 #                                        oauth_authorization GET       /api/oauth/authorize(.:format)                                                                             doorkeeper/authorizations#new

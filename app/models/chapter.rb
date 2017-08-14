@@ -48,6 +48,7 @@ class Chapter < ApplicationRecord
       new(number: n, volume_number: 1, titles: { en_jp: "Chapter #{n}" })
     end
     transaction { chapters.each(&:save) }
+    where("number > #{count}").destroy_all
   end
 
   def feed

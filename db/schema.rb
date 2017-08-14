@@ -11,13 +11,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170802083750) do
+ActiveRecord::Schema.define(version: 20170812072909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+
+  create_table "ama_subscribers", force: :cascade do |t|
+    t.integer  "ama_id",     null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "ama_subscribers", ["ama_id", "user_id"], name: "index_ama_subscribers_on_ama_id_and_user_id", unique: true, using: :btree
+  add_index "ama_subscribers", ["ama_id"], name: "index_ama_subscribers_on_ama_id", using: :btree
+  add_index "ama_subscribers", ["user_id"], name: "index_ama_subscribers_on_user_id", using: :btree
+
+  create_table "amas", force: :cascade do |t|
+    t.string   "description",                       null: false
+    t.integer  "author_id",                         null: false
+    t.integer  "original_post_id",                  null: false
+    t.integer  "ama_subscribers_count", default: 0, null: false
+    t.datetime "start_date",                        null: false
+    t.datetime "end_date",                          null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "amas", ["author_id"], name: "index_amas_on_author_id", using: :btree
+  add_index "amas", ["original_post_id"], name: "index_amas_on_original_post_id", using: :btree
 
   create_table "anime", force: :cascade do |t|
     t.string   "slug",                      limit: 255
@@ -52,6 +77,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
     t.string   "tba"
+    t.integer  "episode_count_guess"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -265,6 +291,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "likes_count",       default: 0,     null: false
     t.integer  "replies_count",     default: 0,     null: false
     t.datetime "edited_at"
+    t.jsonb    "embed"
   end
 
   add_index "comments", ["deleted_at"], name: "index_comments_on_deleted_at", using: :btree
@@ -629,6 +656,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "category_id",                                          null: false
     t.string   "tagline",                  limit: 60
     t.datetime "last_activity_at"
+    t.integer  "pinned_post_id"
   end
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
@@ -799,6 +827,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
     t.integer  "favorites_count",                                               default: 0,       null: false
     t.boolean  "cover_image_processing"
     t.string   "tba"
+    t.integer  "chapter_count_guess"
   end
 
   create_table "manga_characters", force: :cascade do |t|
@@ -1087,30 +1116,30 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_index "post_likes", ["post_id"], name: "index_post_likes_on_post_id", using: :btree
 
   create_table "posts", force: :cascade do |t|
-    t.integer  "user_id",                                  null: false
+    t.integer  "user_id",                                     null: false
     t.integer  "target_user_id"
-    t.text     "content",                                  null: false
-    t.text     "content_formatted",                        null: false
+    t.text     "content",                                     null: false
+    t.text     "content_formatted",                           null: false
     t.integer  "media_id"
     t.string   "media_type"
-    t.boolean  "spoiler",                  default: false, null: false
-    t.boolean  "nsfw",                     default: false, null: false
-    t.boolean  "blocked",                  default: false, null: false
+    t.boolean  "spoiler",                     default: false, null: false
+    t.boolean  "nsfw",                        default: false, null: false
+    t.boolean  "blocked",                     default: false, null: false
     t.integer  "spoiled_unit_id"
     t.string   "spoiled_unit_type"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.datetime "deleted_at"
     t.integer  "target_group_id"
-    t.integer  "post_likes_count",         default: 0,     null: false
-    t.integer  "comments_count",           default: 0,     null: false
-    t.integer  "top_level_comments_count", default: 0,     null: false
+    t.integer  "post_likes_count",            default: 0,     null: false
+    t.integer  "comments_count",              default: 0,     null: false
+    t.integer  "top_level_comments_count",    default: 0,     null: false
     t.datetime "edited_at"
     t.string   "target_interest"
+    t.jsonb    "embed"
   end
 
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
-  add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
 
   create_table "pro_membership_plans", force: :cascade do |t|
     t.string   "name",                       null: false
@@ -1322,6 +1351,22 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_index "substories", ["target_id"], name: "index_substories_on_target_id", using: :btree
   add_index "substories", ["user_id"], name: "index_substories_on_user_id", using: :btree
 
+  create_table "uploads", force: :cascade do |t|
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.integer  "user_id",              null: false
+    t.string   "content_file_name"
+    t.string   "content_content_type"
+    t.integer  "content_file_size"
+    t.datetime "content_updated_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "order"
+  end
+
+  add_index "uploads", ["owner_type", "owner_id"], name: "index_uploads_on_owner_type_and_owner_id", using: :btree
+  add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255, default: "",          null: false
     t.string   "name",                        limit: 255
@@ -1455,6 +1500,10 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_index "votes", ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true, using: :btree
   add_index "votes", ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type", using: :btree
 
+  add_foreign_key "ama_subscribers", "amas"
+  add_foreign_key "ama_subscribers", "users"
+  add_foreign_key "amas", "posts", column: "original_post_id"
+  add_foreign_key "amas", "users", column: "author_id"
   add_foreign_key "anime_castings", "anime_characters"
   add_foreign_key "anime_castings", "people"
   add_foreign_key "anime_castings", "producers", column: "licensor_id"
@@ -1491,6 +1540,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_foreign_key "group_member_notes", "group_members"
   add_foreign_key "group_member_notes", "users"
   add_foreign_key "group_neighbors", "groups", column: "destination_id"
+  add_foreign_key "group_neighbors", "groups", column: "source_id"
   add_foreign_key "group_permissions", "group_members"
   add_foreign_key "group_reports", "groups"
   add_foreign_key "group_reports", "users"
@@ -1501,6 +1551,7 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_foreign_key "group_tickets", "users"
   add_foreign_key "group_tickets", "users", column: "assignee_id"
   add_foreign_key "groups", "group_categories", column: "category_id"
+  add_foreign_key "groups", "posts", column: "pinned_post_id"
   add_foreign_key "leader_chat_messages", "groups"
   add_foreign_key "leader_chat_messages", "users"
   add_foreign_key "library_entries", "media_reactions"
@@ -1537,5 +1588,6 @@ ActiveRecord::Schema.define(version: 20170802083750) do
   add_foreign_key "site_announcements", "users"
   add_foreign_key "stats", "users"
   add_foreign_key "streaming_links", "streamers"
+  add_foreign_key "uploads", "users"
   add_foreign_key "users", "posts", column: "pinned_post_id"
 end

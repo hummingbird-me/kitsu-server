@@ -1,7 +1,7 @@
 class WebhooksController < ApplicationController
   include CustomControllerHelpers
 
-  before_action :check_linked_account_param, except: :getstream_firehose
+  before_action :check_linked_account_param, except: %i[getstream_firehose getstream_verify]
 
   def youtube_verify
     mode = params['hub.mode']
@@ -43,6 +43,10 @@ class WebhooksController < ApplicationController
     end
 
     head status: 200
+  end
+
+  def getstream_verify
+    render text: StreamRails.client.api_key
   end
 
   private

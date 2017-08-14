@@ -30,7 +30,12 @@ class OneSignalNotificationService
       },
       body: request_json)
 
-    check_and_process_invalids(JSON.parse(res.body)) if res.success?
+    unless res.success?
+      raise "Bad OneSignal push
+        timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body}
+        request: #{res.request.original_options[:body]}"
+    end
+    check_and_process_invalids(JSON.parse(res.body))
   end
 
   private

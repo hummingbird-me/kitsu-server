@@ -218,6 +218,11 @@ class LibraryEntry < ApplicationRecord
       user.update_feed_completed!
       user.update_profile_completed!
     end
+
+    if progress_changed?
+      guess = [(progress + 1), media.default_progress_limit].min
+      media.update_unit_count_guess(guess)
+    end
   end
 
   after_commit on: :update, if: :progress_changed? do
