@@ -4,7 +4,7 @@ class AlgoliaKeysController < ApplicationController
   def all
     render json: {
       users: json_for(User),
-      post: json_for(Post),
+      posts: json_for(Post),
       media: json_for(Anime),
       groups: json_for(Group)
     }
