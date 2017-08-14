@@ -178,5 +178,9 @@ class ApplicationPolicy
     def blocked_users
       Block.hidden_for(user)
     end
+
+    def see_nsfw?
+      user ? !user.sfw_filter? : false
+    end
   end
 end
