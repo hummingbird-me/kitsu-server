@@ -27,8 +27,10 @@ class PostLike < ApplicationRecord
     user: :user
   }
 
-  counter_culture :user, column_name: 'likes_given_count'
-  counter_culture %i[post user], column_name: 'likes_received_count'
+  counter_culture :user, column_name: 'likes_given_count',
+                         execute_after_commit: true
+  counter_culture %i[post user], column_name: 'likes_received_count',
+                                 execute_after_commit: true
 
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
 
