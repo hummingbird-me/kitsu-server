@@ -110,7 +110,8 @@ class LibraryEntry < ApplicationRecord
   validate :progress_limit
   validate :one_media_present
 
-  counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating }
+  counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating },
+                         execute_after_commit: true
   scope :rated, -> { where.not(rating: nil) }
   scope :following, ->(user) do
     user_id = user.respond_to?(:id) ? user.id : user
