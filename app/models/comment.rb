@@ -39,7 +39,7 @@ class Comment < ApplicationRecord
   resourcify
   counter_culture :post, column_name: ->(model) {
     'top_level_comments_count' if model.parent.blank?
-  }
+  }, execute_after_commit: true
   processable :content, LongPipeline
   embed_links_in :content, to: :embed
 
