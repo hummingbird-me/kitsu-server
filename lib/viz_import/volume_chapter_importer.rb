@@ -20,9 +20,10 @@ class VolumeChapterImporter
         external_site: 'viz',
         external_id: viz_volume[:isbn]
       ).first_or_create
+      kitsu_volume
     end
 
-    def update_chapters_and_volume_assoc(kitsu_manga, viz_volume)
+    def update_chapters_and_volume_assoc(kitsu_manga, viz_volume, kitsu_volume)
       viz_volume_number = viz_volume[:title].split(/\D/).reject(&:empty?).map(&:to_i)
 
       # need to some how extract chapter numbers from viz data
@@ -58,8 +59,8 @@ class VolumeChapterImporter
                       end
         next unless kitsu_manga
         kitsu_manga_cache[viz_volume[:series]] = kitsu_manga
-        create_and_map_manga_with_volume(kitsu_manga, viz_volume)
-        update_chapters_and_volume_assoc(kitsu_manga, viz_volume)
+        kitsu_volume = create_and_map_manga_with_volume(kitsu_manga, viz_volume)
+        update_chapters_and_volume_assoc(kitsu_manga, viz_volume, kitsu_volume)
       end
     end
   end
