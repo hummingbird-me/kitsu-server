@@ -23,16 +23,19 @@ class VolumeChapterImporter
       kitsu_volume
     end
 
-    def update_chapters_and_volume_assoc(kitsu_manga, viz_volume, kitsu_volume)
-      viz_volume_number = viz_volume[:title].split(/\D/).reject(&:empty?).map(&:to_i)
-
+    def map_chapters_to_titles(viz_volume)
       # need to some how extract chapter numbers from viz data
-      chapter_title = viz_volume[:chapters].each_with_object({}) do |chapter, output|
+      viz_volume[:chapters].each_with_object({}) do |chapter, output|
         chapter_ids = chapter[:name].split(/\D/).reject(&:empty?).map(&:to_i)
         next if chapter_ids.empty?
         next if output.key?(chapter_ids[0])
         output[chapter_ids[0]] = chapter[:name]
       end
+    end
+
+    def update_chapters_and_volume_assoc(kitsu_manga, viz_volume, kitsu_volume)
+      viz_volume_number = viz_volume[:title].split(/\D/).reject(&:empty?).map(&:to_i)
+      chapter_title = map_chapters_to_titles(viz_volume)
 
       # create reference to volume on chapter
       kitsu_manga.chapters.each do |c|
