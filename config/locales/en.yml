@@ -21,36 +21,38 @@
 
 en:
   notifications:
-    follow: "%{actor} followed you."
-    post: "%{actor} mentioned you in a post."
-    post_like: "%{actor} liked your post."
-    comment_like: "%{actor} liked your comment."
-    comment_mentioned: "%{actor} mentioned you in a comment."
-    post_replied: "%{actor} replied to your post."
-    comment_replied: "%{actor} replied to your comment."
-    invited: "%{actor} invited you to a group."
-    followed_post:
-      third_person: "%{actor} replied to their post."
-      first_person: "%{actor} replied to your post."
-      someone: "%{actor} replied to %{author}'s post."
-      other: "%{actor} replied to a post."
-    summary:
-      sentence: "You got %{summary} while you were away."
-      follow:
-        one: "1 follow"
-        other: "%{count} follows"
+    mention:
+      post: "%{actor} mentioned you in a post."
+      comment: "%{actor} mentioned you in a comment."
+    follow:
+      zero: "%{actor} followed you."
+      one: "%{actor} and %{actor_two} followed you."
+      other: "%{actor} and %{count} others followed you."
+    post_like:
+      zero: "%{actor} liked your post."
+      one: "%{actor} and {actor_two} liked your post."
+      other: "%{actor} and %{count} others liked your post."
+    comment_like:
+      zero: "%{actor} liked your comment."
+      one: "%{actor} and {actor_two} liked your comment."
+      other: "%{actor} and %{count} others liked your comment."
+    reply:
       post:
-        one: "1 post mention"
-        other: "%{count} post mentions"
-      post_like:
-        one: "1 post like"
-        other: "%{count} post likes"
-      comment_like:
-        one: "1 comment like"
-        other: "%{count} comment likes"
+        you:
+          zero: "%{actor} replied to your post."
+          one: "%{actor} and %{actor_two} replied to your post."
+          other: "%{actor} and %{count} others replied to your post."
+        themself: "%{actor} replied to their post."
+        author:
+          zero: "%{actor} replied to %{author}'s post"
+          one: "%{actor} and %{actor_two} replied to %{author}'s post"
+          other: "%{actor} and %{count} others replied to %{author}'s post"
+        unknown:
+          zero: "%{actor} replied to a post."
+          one: "%{actor} and %{actor_two} replied to a post."
+          other: "%{actor} and %{count} others replied to a post."
       comment:
-        one: "1 comment"
-        other: "%{count} comments"
-      invited:
-        one: "1 invite"
-        other: "%{count} invites"
+        zero: "%{actor} replied to your comment."
+        one: "%{actor} and %{actor_two} replied to your comment."
+        other: "%{actor} and %{count} others replied to your comment."
+    invited: "%{actor} invited you to a group."

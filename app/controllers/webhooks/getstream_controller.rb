@@ -10,12 +10,12 @@ module Webhooks
     end
 
     def notify
-      notifications = JSON.parse(request.body.read)
+      feeds = JSON.parse(request.body.read)
 
       # Since it may be up to 100 per request, send the notifications in background to prevent
       # timeouts and handle errors better.
-      notifications.each do |notification|
-        OneSignalNotificationWorker.perform_async(notification) unless notification['new'].empty?
+      feeds.each do |feed|
+        OneSignalNotificationWorker.perform_async(feed) unless feed['new'].empty?
       end
 
       head status: 200

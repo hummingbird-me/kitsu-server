@@ -55,6 +55,10 @@ class Feed
       end
     end
 
+    def group
+      @group ||= feed.activities.find_group_for(id)
+    end
+
     def create
       feed.activities.add(self)
     end
