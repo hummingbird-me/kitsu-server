@@ -28,7 +28,7 @@
 #  user_id                  :integer          not null
 #
 # Indexes
-#  
+#
 #  index_posts_on_community_recommendation_id  (community_recommendation_id)
 #  index_posts_on_deleted_at      (deleted_at)
 #  posts_media_type_media_id_idx  (media_type,media_id)
