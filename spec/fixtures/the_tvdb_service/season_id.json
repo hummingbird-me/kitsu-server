@@ -1,0 +1,44 @@
+{
+    "links": {
+        "first": 1,
+        "last": 1,
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "absoluteNumber": null,
+            "airedEpisodeNumber": 1,
+            "airedSeason": 0,
+            "airedSeasonID": 493892,
+            "dvdEpisodeNumber": null,
+            "dvdSeason": null,
+            "episodeName": "The Humans' Law of the Jungle #1",
+            "firstAired": "2012-09-19",
+            "id": 4407308,
+            "language": {
+                "episodeName": "en",
+                "overview": ""
+            },
+            "lastUpdated": 1350523009,
+            "overview": null
+        },
+        {
+            "absoluteNumber": 1,
+            "airedEpisodeNumber": 1,
+            "airedSeason": 1,
+            "airedSeasonID": 493893,
+            "dvdEpisodeNumber": null,
+            "dvdSeason": null,
+            "episodeName": "The Fairies' Secret Factory (1)",
+            "firstAired": "2012-07-02",
+            "id": 4352632,
+            "language": {
+                "episodeName": "en",
+                "overview": "en"
+            },
+            "lastUpdated": 1463405334,
+            "overview": "After speaking with the Fairies about problems the humans have been having, mysterious things start to show up around the village."
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+{
+    "links": {
+        "first": 1,
+        "last": 1,
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "absoluteNumber": 1,
+            "airedEpisodeNumber": 1,
+            "airedSeason": 1,
+            "airedSeasonID": 29753,
+            "dvdEpisodeNumber": null,
+            "dvdSeason": null,
+            "episodeName": "Every Good Story Has a Hidden Side",
+            "firstAired": "2006-04-08",
+            "id": 345591,
+            "language": {
+                "episodeName": "en",
+                "overview": "en"
+            },
+            "lastUpdated": 1455493718,
+            "overview": "After being bribed by a high authority from the palace, Shuurei enters the Imperial Palace as the Emperor's consort and unofficial tutor, in keeping her promise to encourage the prince to rise to the responsiblities of the Emperor and to begin taking interest in the country and the throne. "
+        },
+        {
+            "absoluteNumber": 2,
+            "airedEpisodeNumber": 2,
+            "airedSeason": 1,
+            "airedSeasonID": 29753,
+            "dvdEpisodeNumber": null,
+            "dvdSeason": null,
+            "episodeName": "A Frog in a Well Does Not Know the Great Ocean",
+            "firstAired": "2006-04-15",
+            "id": 345592,
+            "language": {
+                "episodeName": "en",
+                "overview": "en"
+            },
+            "lastUpdated": 1455493912,
+            "overview": "Shuurei teaches Ryuuki about daily life by taking him on an excursion through the Imperial City. "
+        }
+    ]
+}
