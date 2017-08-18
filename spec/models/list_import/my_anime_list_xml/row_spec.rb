@@ -6,7 +6,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     prefix = media.class.name.underscore
     fake_id = rand(1..50_000)
     create(:mapping,
-      media: media,
+      item: media,
       external_site: "myanimelist/#{prefix}",
       external_id: fake_id)
   end

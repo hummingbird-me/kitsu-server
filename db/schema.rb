@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170812072909) do
+ActiveRecord::Schema.define(version: 20170818204827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -871,13 +871,13 @@ ActiveRecord::Schema.define(version: 20170812072909) do
   create_table "mappings", force: :cascade do |t|
     t.string   "external_site", null: false
     t.string   "external_id",   null: false
-    t.integer  "media_id",      null: false
-    t.string   "media_type",    null: false
+    t.integer  "item_id",       null: false
+    t.string   "item_type",     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "mappings", ["external_site", "external_id", "media_type", "media_id"], name: "index_mappings_on_external_and_media", unique: true, using: :btree
+  add_index "mappings", ["external_site", "external_id", "item_type", "item_id"], name: "index_mappings_on_external_and_item", unique: true, using: :btree
 
   create_table "media_attribute_votes", force: :cascade do |t|
     t.integer  "user_id",                    null: false

@@ -38,7 +38,7 @@ module Media
     has_many :library_entries, as: 'media', dependent: :destroy,
                                inverse_of: :media
     has_many :media_reactions, dependent: :destroy
-    has_many :mappings, as: 'media', dependent: :destroy
+    has_many :mappings, as: 'item', dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
     has_many :media_relationships,
       class_name: 'MediaRelationship',
