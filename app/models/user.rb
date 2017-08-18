@@ -16,6 +16,7 @@
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
 #  confirmed_at                :datetime
+#  consecutive_days            :integer          default(0), not null
 #  country                     :string(2)
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
@@ -29,6 +30,7 @@
 #  email                       :string(255)      default(""), not null, indexed
 #  favorites_count             :integer          default(0), not null
 #  feed_completed              :boolean          default(FALSE), not null
+#  first_inactive_email_sent   :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
 #  gender                      :string
@@ -47,6 +49,7 @@
 #  mal_username                :string(255)
 #  media_reactions_count       :integer          default(0), not null
 #  name                        :string(255)
+#  never_signed_in_email_sent  :boolean          default(FALSE), not null
 #  ninja_banned                :boolean          default(FALSE)
 #  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
@@ -60,16 +63,19 @@
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
 #  reviews_count               :integer          default(0), not null
+#  second_inactive_email_sent  :boolean          default(FALSE), not null
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
+#  third_inactive_email_sent   :boolean          default(FALSE), not null
 #  time_zone                   :string
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
+#  visited_at                  :datetime
 #  waifu_or_husbando           :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
@@ -157,7 +163,7 @@ class User < ApplicationRecord
   has_many :notification_settings, dependent: :destroy
   has_many :one_signal_players, dependent: :destroy
   has_many :reposts, dependent: :destroy
-
+  has_many :user_ipaddresses, dependent: :destroy
   validates :email, :name, :password, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
@@ -190,9 +196,6 @@ class User < ApplicationRecord
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
-  scope :alts_of, ->(user) do
-    where('ip_addresses && ARRAY[?]::inet[]', user.ip_addresses.map(&:to_s))
-  end
   scope :followed_first, ->(user) {
     user_id = sanitize(user.id)
     joins(<<-SQL.squish).order('(f.id IS NULL) ASC')
@@ -239,15 +242,12 @@ class User < ApplicationRecord
   end
 
   def add_ip(new_ip)
-    unless ip_addresses.include?(new_ip)
-      ips = [new_ip, *ip_addresses].compact.first(PAST_IPS_LIMIT)
-      update_attribute(:ip_addresses, ips)
-    end
-    ip_addresses
+    UserIpaddress.where(user: self, ip_address: new_ip).first_or_create
+    UserIpaddress.where(user: self).map(&:ip_address)
   end
 
   def alts
-    User.alts_of(self)
+    UserIpaddress.where(user: self).map(&:user)
   end
 
   def update_title(_role)
