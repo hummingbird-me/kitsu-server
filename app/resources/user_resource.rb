@@ -43,6 +43,7 @@ class UserResource < BaseResource
     @model.destroy_later
   end
 
+  filter :slug
   filter :name, apply: ->(records, value, _o) { records.by_name(value.first) }
   filter :self, apply: ->(records, _v, options) {
     current_user = options[:context][:current_user]&.resource_owner
