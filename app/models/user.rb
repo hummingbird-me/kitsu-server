@@ -62,6 +62,7 @@
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
+#  slug                        :citext
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
@@ -161,6 +162,7 @@ class User < ApplicationRecord
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
                     if: ->(user) { user.registered? && user.email_changed? }
+  validates :slug, uniqueness: { case_sensitive: false }, if: :slug_changed?
   validates :name, uniqueness: { case_sensitive: false },
                    length: { minimum: 3, maximum: 20 },
                    if: ->(user) { user.registered? && user.name_changed? },

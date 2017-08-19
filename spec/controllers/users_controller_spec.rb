@@ -63,6 +63,7 @@
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
+#  slug                        :citext
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
