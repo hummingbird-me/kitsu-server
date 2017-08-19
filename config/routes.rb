@@ -106,6 +106,7 @@ Rails.application.routes.draw do
       jsonapi_resources :comments
       jsonapi_resources :comment_likes
       jsonapi_resources :reports
+      jsonapi_resources :reposts
       resources :activities, only: %i[destroy]
       get '/feeds/:group/:id', to: 'feeds#show'
       post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
@@ -1316,6 +1317,20 @@ end
 #                                                            PATCH     /api/edge/reports/:id(.:format)                                                                            reports#update
 #                                                            PUT       /api/edge/reports/:id(.:format)                                                                            reports#update
 #                                                            DELETE    /api/edge/reports/:id(.:format)                                                                            reports#destroy
+#                                  repost_relationships_user GET       /api/edge/reposts/:repost_id/relationships/user(.:format)                                                  reposts#show_relationship {:relationship=>"user"}
+#                                                            PUT|PATCH /api/edge/reposts/:repost_id/relationships/user(.:format)                                                  reposts#update_relationship {:relationship=>"user"}
+#                                                            DELETE    /api/edge/reposts/:repost_id/relationships/user(.:format)                                                  reposts#destroy_relationship {:relationship=>"user"}
+#                                                repost_user GET       /api/edge/reposts/:repost_id/user(.:format)                                                                users#get_related_resource {:relationship=>"user", :source=>"reposts"}
+#                                  repost_relationships_post GET       /api/edge/reposts/:repost_id/relationships/post(.:format)                                                  reposts#show_relationship {:relationship=>"post"}
+#                                                            PUT|PATCH /api/edge/reposts/:repost_id/relationships/post(.:format)                                                  reposts#update_relationship {:relationship=>"post"}
+#                                                            DELETE    /api/edge/reposts/:repost_id/relationships/post(.:format)                                                  reposts#destroy_relationship {:relationship=>"post"}
+#                                                repost_post GET       /api/edge/reposts/:repost_id/post(.:format)                                                                posts#get_related_resource {:relationship=>"post", :source=>"reposts"}
+#                                                    reposts GET       /api/edge/reposts(.:format)                                                                                reposts#index
+#                                                            POST      /api/edge/reposts(.:format)                                                                                reposts#create
+#                                                     repost GET       /api/edge/reposts/:id(.:format)                                                                            reposts#show
+#                                                            PATCH     /api/edge/reposts/:id(.:format)                                                                            reposts#update
+#                                                            PUT       /api/edge/reposts/:id(.:format)                                                                            reposts#update
+#                                                            DELETE    /api/edge/reposts/:id(.:format)                                                                            reposts#destroy
 #                                                   activity DELETE    /api/edge/activities/:id(.:format)                                                                         activities#destroy
 #                                                            GET       /api/edge/feeds/:group/:id(.:format)                                                                       feeds#show
 #                                                            POST      /api/edge/feeds/:group/:id/_read(.:format)                                                                 feeds#mark_read

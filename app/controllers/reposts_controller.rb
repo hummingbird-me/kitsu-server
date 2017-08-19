@@ -1,0 +1,2 @@
+class RepostsController < ApplicationController
+end

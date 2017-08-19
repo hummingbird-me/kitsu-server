@@ -155,6 +155,7 @@ class User < ApplicationRecord
   has_many :library_events, dependent: :destroy
   has_many :notification_settings, dependent: :destroy
   has_many :one_signal_players, dependent: :destroy
+  has_many :reposts, dependent: :destroy
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }, if: :email_changed?
