@@ -313,6 +313,9 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
+  # TODO: remove once slugs are live on frontend
+  before_validation(if: :name_changed?) { self.slug = name }
+
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
