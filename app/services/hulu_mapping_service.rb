@@ -4,7 +4,7 @@ class HuluMappingService
 
   attr_reader :since
 
-  # Initialize services with GetStream webhook request
+  # Initialize service with optional datetime
   def initialize(since = nil)
     @since = since
   end
@@ -62,7 +62,7 @@ class HuluMappingService
     kitsu_anime.episodes.each do |ep|
       next unless hulu_ep_hash.key?(ep.number)
       Mapping.where(
-        media: ep,
+        item: ep,
         external_site: 'hulu',
         external_id: hulu_ep_hash[ep.number][:site_id]
       ).first_or_create
