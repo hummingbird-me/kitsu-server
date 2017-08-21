@@ -159,11 +159,10 @@ class User < ApplicationRecord
   has_many :reposts, dependent: :destroy
 
   validates :email, :name, :password, absence: true, if: :unregistered?
-  validates :email, presence: true,
-                    uniqueness: { case_sensitive: false },
+  validates :email, :name, :password_digest, presence: true, if: :registered?
+  validates :email, uniqueness: { case_sensitive: false },
                     if: ->(user) { user.registered? && user.email_changed? }
-  validates :name, presence: true,
-                   uniqueness: { case_sensitive: false },
+  validates :name, uniqueness: { case_sensitive: false },
                    length: { minimum: 3, maximum: 20 },
                    if: ->(user) { user.registered? && user.name_changed? },
                    format: {
@@ -184,7 +183,6 @@ class User < ApplicationRecord
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
   validates :password, length: { maximum: 72 }, if: :registered?
-  validates :password_digest, presence: true, if: :registered?
   validates :facebook_id, uniqueness: true, allow_nil: true
 
   scope :active, ->() { where(deleted_at: nil) }
