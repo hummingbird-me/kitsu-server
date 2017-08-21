@@ -113,6 +113,22 @@ RSpec.describe User, type: :model do
   it { should have_many(:notification_settings).dependent(:destroy) }
   it { should have_many(:reposts).dependent(:destroy) }
 
+  context 'for an unregistered user' do
+    subject { build(:user, :unregistered) }
+
+    it { should validate_absence_of(:name) }
+    it { should validate_absence_of(:email) }
+    it { should validate_absence_of(:password) }
+  end
+
+  context 'for a registered user' do
+    subject { build(:user, password: nil) }
+
+    it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:email) }
+    it { should validate_presence_of(:password_digest) }
+  end
+
   describe 'by_name scope' do
     it 'should match case-insensitively' do
       u = User.by_name(persisted_user.name).first

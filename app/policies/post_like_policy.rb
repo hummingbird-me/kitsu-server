@@ -6,6 +6,8 @@ class PostLikePolicy < ApplicationPolicy
   end
 
   def create?
+    return false unless user
+    return false if user.unregistered?
     return false if user&.blocked?(record.post.user)
     return false if user&.has_role?(:banned)
     if group

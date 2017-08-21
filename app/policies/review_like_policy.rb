@@ -4,6 +4,9 @@ class ReviewLikePolicy < ApplicationPolicy
   end
 
   def create?
+    return false unless user
+    return false if user.unregistered?
+    return false if user.blocked?(record.review.user)
     record.user == user
   end
   alias_method :destroy?, :create?

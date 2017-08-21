@@ -107,6 +107,13 @@ FactoryGirl.define do
       after(:create) { |user| user.add_role(:admin, Anime) }
     end
 
+    trait :unregistered do
+      status :unregistered
+      password nil
+      name nil
+      email nil
+    end
+
     trait :with_avatar do
       avatar { Faker::Company.logo }
     end
