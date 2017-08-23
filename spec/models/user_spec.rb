@@ -35,7 +35,6 @@
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
-#  ip_addresses                :inet             default([]), is an Array
 #  language                    :string
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
