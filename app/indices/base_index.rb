@@ -44,6 +44,19 @@ class BaseIndex
       self._index = value
     end
 
+    def search(search_query, model)
+      kind = model.name.downcase
+      res = index.search(search_query).deep_symbolize_keys
+      res_ids = res[:hits].each_with_object({}) do |value, acc|
+        if acc.key?(value[:kind])
+          acc[value[:kind]] << value[:id]
+        else
+          acc[value[:kind]] = [value[:id]]
+        end
+      end
+      model.where(id: res_ids[kind])
+    end
+
     def index
       @_index ||= Algolia::Index.new(index_name)
     end

@@ -28,6 +28,11 @@ class Mapping < ApplicationRecord
     find_by(external_site: site, external_id: id).try(:item)
   end
 
+  def self.guess_algolia(type, query)
+    Algolia.init application_id: ENV['ALGOLIA_APP_ID'], api_key: ENV['ALGOLIA_SEARCH_KEY']
+    AlgoliaMediaIndex.search(query, type.constantize).first
+  end
+
   def self.guess(type, info)
     results = "MediaIndex::#{type}".constantize.query(
       function_score: {
