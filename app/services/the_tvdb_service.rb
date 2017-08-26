@@ -2,50 +2,76 @@ class TheTvdbService
   BASE_URL = 'https://api.thetvdb.com'.freeze
   API_KEY = ENV['THE_TVDB_API_KEY'].freeze
 
+  attr_accessor :media_id
+
   def initialize
     @token = api_token
   end
 
-  def nightly_import!
-  end
+  # This will update all mappings to have a season number
+  # This should be run ONLY ONCE, unless we import data from somewhere else.
+  def update_mapping_seasons!
+    return if mapping_data.blank?
 
-  def weekly_import!
-    return if missing_data.empty?
+    mapping_data['Anime'].each do |media_ids|
+      # set the media_id (this is for our database)
+      self.media_id = media_ids[0]
+      series_id = media_ids[1]['thetvdb/series'][1]
+      season_id = media_ids[1]['thetvdb/season'][1] if media_ids[1].try(:[], 'thetvdb/season')
 
-    missing_data['Anime'].each do |media_ids|
-      media_id = media_ids[0]
+      response = get(build_episode_path(series_id, season_id))
 
-      # check if the external_sites exist.
-      series_id = media_ids[1].try(:[], 'thetvdb/series')
-      season_id = media_ids[1].try(:[], 'thetvdb/season')
+      unless response.code == 200
+        # will be deleted the mappings if their is a 404 response code
+        raise 'Something bad has happened related to TVDB.' unless response.code == 404
 
-      # will get the data from tvdb
-      # TODO: need to figure out how to skip if it returns nothing (404)
-      # TODO: will also need to add a check if episode_count and data.count are equal.
-      # will most likly break this out of 1 method.
-      get(build_episode_path(series_id, season_id)).try(:[], 'data')&.each do |tvdb_episode|
-        # this is only a check if season_id actually exists.
-        # otherwise the data is already filtered.
-        next if season_id.present?
-        next unless tvdb_episode['airedSeasonID'] == season_id
-        next if tvdb_episode['absoluteNumber'].nil?
+        # delete series mapping
+        series_id = media_ids[1]['thetvdb/series'][0]
+        Mapping.delete(series_id)
 
-        row = Row.new(media_id, tvdb_episode)
-        row.update_episode!
-        # row.update_mapping!
+        # delete season mapping if it exists
+        if season_id
+          season_id = media_ids[1]['thetvdb/season'][0]
+          Mapping.delete(season_id)
+        end
+
+        next
       end
+
+      response = JSON.parse(response.body)
+
+      # Filters depending on if a airedSeasonID is present
+      if season_id.present?
+        response['data'] = response['data'].select do |ep|
+          ep['airedSeasonID'] == season_id.to_i && ep['airedSeason'].present?
+        end
+      else
+        response['data'] = response['data'].select do |ep|
+          ep['airedSeason'].present?
+        end
+      end
+
+      season_number = response['data'].count.zero? ? 1 : response['data'].first['airedSeason']
+
+      m = Mapping.where(
+        external_site: 'thetvdb/season',
+        media_id: media_id,
+        media_type: 'Anime'
+      ).first_or_initialize
+
+      m.external_id = season_number.to_s
+      m.save! if m.changed?
     end
   end
 
-  def missing_data
+  # grabs all Mappings
+  def mapping_data
     @md ||= Mapping.where(external_site: %w[thetvdb/series thetvdb/season])
-                   .joins('LEFT OUTER JOIN episodes ON mappings.media_id = episodes.media_id AND mappings.media_type = episodes.media_type')
-                   .where(episodes: { thumbnail_file_name: nil })
-                   .distinct.pluck(:media_type, :media_id, :external_site, :external_id)
-                   .each_with_object({}) { |(media_type, media_id, external_site, external_id), acc|
+                   .pluck(:id, :media_type, :media_id, :external_site, :external_id)
+                   .each_with_object({}) { |(id, media_type, media_id, external_site, external_id), acc|
                      acc[media_type] ||= {}
                      acc[media_type][media_id] ||= {}
-                     acc[media_type][media_id][external_site] = external_id
+                     acc[media_type][media_id][external_site] = [id, external_id]
                    }
   end
 
@@ -62,9 +88,9 @@ class TheTvdbService
 
     response = request.run
 
-    return JSON.parse(response.body)['token'] unless response.code != 200
+    return JSON.parse(response.body)['token'] if response.code == 200
 
-    # throw some error and abort.
+    raise "#{response.code}: apikey/api token is invalid."
   end
 
   def get(url)
@@ -76,19 +102,20 @@ class TheTvdbService
       })
 
     response = request.run
-
-    return JSON.parse(response.body) unless response.code != 200
-
-    # need to handle 404, might just return response and check code above.
+    response
   end
 
   def build_url(url)
     "#{BASE_URL}#{url}"
   end
 
-  def build_episode_path(series, season)
+  def build_episode_path(series, season_number)
+    season_number ||= 1
     path = "/series/#{series}/episodes"
-    path += '/query?airedSeason=1' unless season
+    # I am assuming that no show has more than 25 seasons
+    # and that the airedSeasonID is going to always be greater than that.
+    # and we will catch any errors when we send the response.
+    path += "/query?airedSeason=#{season_number}" if season_number.to_i < 25
 
     path
   end
