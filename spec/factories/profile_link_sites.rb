@@ -92,7 +92,7 @@ FactoryGirl.define do
 
     # Tumblr
     trait :tumblr do
-      validate_find '\A(https?://)?(www.)?(?<username>[a-zA-Z0-9]+)(.tumblr.com)?\z'
+      validate_find '\A(https?://)?(www.)?(?<username>[a-zA-Z0-9_\-]+)(.tumblr.com)?\z'
       validate_replace '\k<username>.tumblr.com'
     end
 

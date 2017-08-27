@@ -304,14 +304,27 @@ RSpec.describe ProfileLinkSite, type: :model do
             www.toyhammered.tumblr.com
             toyhammered.tumblr.com
             toyhammered
-            toy-is-sexy
-            toy_is_cooler_than_nuck
           ]
           site = build(:profile_link_site, :tumblr)
 
           urls.each do |url|
             temp = site.validate_find.match(url)
             expect(temp[:username]).to eq('toyhammered')
+          end
+        end
+
+        it 'should work with special characters - and _' do
+          urls = %w[
+            toy-is-sexy
+            toy_is_cooler_than_nuck
+            toy-is_also-cooler_than-matt
+          ]
+          site = build(:profile_link_site, :tumblr)
+
+          urls.each do |url|
+            temp = site.validate_find.match(url)
+            p temp[:username]
+            expect(temp[:username]).not_to be_nil
           end
         end
       end
