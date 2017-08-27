@@ -304,6 +304,8 @@ RSpec.describe ProfileLinkSite, type: :model do
             www.toyhammered.tumblr.com
             toyhammered.tumblr.com
             toyhammered
+            toy-is-sexy
+            toy_is_cooler_than_nuck
           ]
           site = build(:profile_link_site, :tumblr)
 
