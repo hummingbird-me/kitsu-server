@@ -323,7 +323,6 @@ RSpec.describe ProfileLinkSite, type: :model do
 
           urls.each do |url|
             temp = site.validate_find.match(url)
-            p temp[:username]
             expect(temp[:username]).not_to be_nil
           end
         end
