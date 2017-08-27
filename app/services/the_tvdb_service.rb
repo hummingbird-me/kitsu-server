@@ -55,38 +55,39 @@ class TheTvdbService
 
       m = Mapping.where(
         external_site: 'thetvdb/season',
-        media_id: media_id,
-        media_type: 'Anime'
+        item_id: media_id,
+        item_type: 'Anime'
       ).first_or_initialize
 
       m.external_id = season_number.to_s
-      m.save! if m.changed?
+      m.save!
     end
   end
 
   # grabs all Mappings
   def mapping_data
     @md ||= Mapping.where(external_site: %w[thetvdb/series thetvdb/season])
-                   .pluck(:id, :media_type, :media_id, :external_site, :external_id)
-                   .each_with_object({}) { |(id, media_type, media_id, external_site, external_id), acc|
-                     acc[media_type] ||= {}
-                     acc[media_type][media_id] ||= {}
-                     acc[media_type][media_id][external_site] = [id, external_id]
+                   .pluck(:id, :item_type, :item_id, :external_site, :external_id)
+                   .each_with_object({}) { |(id, item_type, item_id, external_site, external_id), acc|
+                     acc[item_type] ||= {}
+                     acc[item_type][item_id] ||= {}
+                     acc[item_type][item_id][external_site] = [id, external_id]
                    }
   end
 
   def api_token
+    return @token if @token.present?
+
     body = { apikey: API_KEY }.to_json
 
-    request = Typhoeus::Request.new(build_url('/login'),
-      method: :post,
+    response = Typhoeus::Request.post(
+      build_url('/login'),
       body: body,
       headers: {
         'Content-Type' => 'application/json',
         'Accept' => 'application/json'
-      })
-
-    response = request.run
+      }
+    )
 
     return JSON.parse(response.body)['token'] if response.code == 200
 
@@ -94,15 +95,13 @@ class TheTvdbService
   end
 
   def get(url)
-    request = Typhoeus::Request.new(build_url(url),
-      method: :get,
+    Typhoeus::Request.get(
+      build_url(url),
       headers: {
         'Accept' => 'application/json',
-        'Authorization' => "Bearer #{@token}"
-      })
-
-    response = request.run
-    response
+        'Authorization' => "Bearer #{api_token}"
+      }
+    )
   end
 
   def build_url(url)
