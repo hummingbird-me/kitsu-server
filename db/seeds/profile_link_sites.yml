@@ -61,7 +61,7 @@ discord:
 tumblr:
   id: 13
   name: Tumblr
-  validate_find: '\A(https?://)?(www.)?(?<username>[a-zA-z0-9]+)(.tumblr.com)?/?\z'
+  validate_find: '\A(https?://)?(www.)?(?<username>[a-zA-z0-9_\-]+)(.tumblr.com)?/?\z'
   validate_replace: 'https://\k<username>.tumblr.com/'
 soundcloud:
   id: 14
