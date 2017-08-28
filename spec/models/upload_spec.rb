@@ -8,8 +8,8 @@
 #  content_file_name    :string
 #  content_file_size    :integer
 #  content_updated_at   :datetime
-#  order                :integer
 #  owner_type           :string           indexed => [owner_id]
+#  upload_order         :integer
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  owner_id             :integer          indexed => [owner_type]

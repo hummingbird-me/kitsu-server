@@ -181,7 +181,7 @@ end
 
 # == Route Map
 #
-# I, [2017-08-07T07:20:56.990927 #3535]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-08-28T04:14:16.484700 #88577]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -845,10 +845,10 @@ end
 #                                                            PATCH     /api/edge/manga-staff/:id(.:format)                                                                        manga_staff#update
 #                                                            PUT       /api/edge/manga-staff/:id(.:format)                                                                        manga_staff#update
 #                                                            DELETE    /api/edge/manga-staff/:id(.:format)                                                                        manga_staff#destroy
-#                                mapping_relationships_media GET       /api/edge/mappings/:mapping_id/relationships/media(.:format)                                               mappings#show_relationship {:relationship=>"media"}
-#                                                            PUT|PATCH /api/edge/mappings/:mapping_id/relationships/media(.:format)                                               mappings#update_relationship {:relationship=>"media"}
-#                                                            DELETE    /api/edge/mappings/:mapping_id/relationships/media(.:format)                                               mappings#destroy_relationship {:relationship=>"media"}
-#                                              mapping_media GET       /api/edge/mappings/:mapping_id/media(.:format)                                                             media#get_related_resource {:relationship=>"media", :source=>"mappings"}
+#                                 mapping_relationships_item GET       /api/edge/mappings/:mapping_id/relationships/item(.:format)                                                mappings#show_relationship {:relationship=>"item"}
+#                                                            PUT|PATCH /api/edge/mappings/:mapping_id/relationships/item(.:format)                                                mappings#update_relationship {:relationship=>"item"}
+#                                                            DELETE    /api/edge/mappings/:mapping_id/relationships/item(.:format)                                                mappings#destroy_relationship {:relationship=>"item"}
+#                                               mapping_item GET       /api/edge/mappings/:mapping_id/item(.:format)                                                              items#get_related_resource {:relationship=>"item", :source=>"mappings"}
 #                                                   mappings GET       /api/edge/mappings(.:format)                                                                               mappings#index
 #                                                            POST      /api/edge/mappings(.:format)                                                                               mappings#create
 #                                                    mapping GET       /api/edge/mappings/:id(.:format)                                                                           mappings#show
@@ -1336,6 +1336,7 @@ end
 #                                                            POST      /api/edge/feeds/:group/:id/_read(.:format)                                                                 feeds#mark_read
 #                                                            POST      /api/edge/feeds/:group/:id/_seen(.:format)                                                                 feeds#mark_seen
 #                                                            DELETE    /api/edge/feeds/:group/:id/activities/:uuid(.:format)                                                      feeds#destroy_activity
+#                                                     embeds POST      /api/edge/embeds(.:format)                                                                                 embeds#create
 #                       site_announcement_relationships_user GET       /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)                            site_announcements#show_relationship {:relationship=>"user"}
 #                                                            PUT|PATCH /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)                            site_announcements#update_relationship {:relationship=>"user"}
 #                                                            DELETE    /api/edge/site-announcements/:site_announcement_id/relationships/user(.:format)                            site_announcements#destroy_relationship {:relationship=>"user"}

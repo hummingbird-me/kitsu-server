@@ -8,8 +8,8 @@
 #  content_file_name    :string
 #  content_file_size    :integer
 #  content_updated_at   :datetime
-#  order                :integer
 #  owner_type           :string           indexed => [owner_id]
+#  upload_order         :integer
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  owner_id             :integer          indexed => [owner_type]
@@ -28,7 +28,7 @@
 
 class Upload < ApplicationRecord
   include RankedModel
-  ranks :order, with_same: %i[owner_type owner_id]
+  ranks :upload_order, with_same: %i[owner_type owner_id]
 
   belongs_to :user, required: true
   belongs_to :owner, polymorphic: true

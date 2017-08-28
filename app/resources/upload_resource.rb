@@ -3,8 +3,8 @@ class UploadResource < BaseResource
   include RankedResource
 
   attribute :content, format: :attachment
-  attribute :order
-  ranks :order
+  attribute :upload_order
+  ranks :upload_order
 
   has_one :user
   has_one :owner, polymorhic: true
