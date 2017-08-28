@@ -194,7 +194,7 @@ class LibraryEntry < ApplicationRecord
 
     unless imported
       # When progress is changed, update progressed_at
-      self.progressed_at = Time.now if progress_changed?
+      self.progressed_at = Time.now if progress_changed? || status_changed?
       # When marked current and started_at doesn't exist
       self.started_at ||= Time.now if current?
     end
