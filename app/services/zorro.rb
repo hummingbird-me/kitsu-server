@@ -10,5 +10,16 @@ module Zorro
     TimelinePost = Client['TimelinePost']
     Thread = Client['Thread']
     AnimeProgress = Client['AnimeProgress']
+
+    def self.assoc(assoc)
+      case assoc
+      when String
+        collection, id = assoc.split('$')
+        Zorro::Client[collection].find(_id: id).limit(1).first
+      when Hash
+        collection, id = assoc.values_at('className', 'objectId')
+        Zorro::Client[collection].find(_id: id).limit(1).first
+      end
+    end
   end
 end
