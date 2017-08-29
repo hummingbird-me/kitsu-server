@@ -6,6 +6,8 @@
 #  id                          :integer          not null, primary key
 #  about                       :string(500)      default(""), not null
 #  about_formatted             :text
+#  ao_password                 :string
+#  ao_pro                      :integer
 #  approved_edit_count         :integer          default(0)
 #  avatar_content_type         :string(255)
 #  avatar_file_name            :string(255)
@@ -75,6 +77,8 @@
 #  waifu_or_husbando           :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
+#  ao_facebook_id              :string
+#  ao_id                       :string
 #  facebook_id                 :string(255)      indexed
 #  pinned_post_id              :integer
 #  pro_membership_plan_id      :integer

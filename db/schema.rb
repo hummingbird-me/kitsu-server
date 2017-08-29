@@ -1525,6 +1525,10 @@ ActiveRecord::Schema.define(version: 20180114070606) do
     t.text     "avatar_meta"
     t.text     "cover_image_meta"
     t.citext   "slug"
+    t.string   "ao_id"
+    t.string   "ao_password"
+    t.string   "ao_facebook_id"
+    t.integer  "ao_pro"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
