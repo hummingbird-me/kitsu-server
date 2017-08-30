@@ -1,5 +1,3 @@
-require_dependency 'zorro/anime_importer'
-
 module Zorro
   class AnimeMapper
     SELECTED_FIELDS = %w[myAnimeListID traktID anilistID tvdbID hashtags].map { |k|
@@ -8,12 +6,17 @@ module Zorro
 
     def run!
       each_anime do |kitsu_id, anime|
+        # Import Anime Mappings
         create_mapping('aozora', anime['_id'], kitsu_id)
         mal_id = anime['myAnimeListID']
         create_mapping('myanimelist/anime', mal_id, kitsu_id) if mal_id
         create_mapping('trakt', anime['traktID'], kitsu_id) if anime['traktID']
         create_mapping('anilist', "anime/#{anime['anilistID']}", kitsu_id) if anime['anilistID']
         create_mapping('thetvdb/series', anime['tvdbID'], kitsu_id) if anime['tvdbID']
+        # Import Hashtags
+        hashtags.each do |tag|
+          Hashtag.find_or_create(tag, item_type: 'Anime', item_id: kitsu_id)
+        end
       end
     end
 
