@@ -3,6 +3,10 @@ require_dependency 'zorro/wrapper'
 module Zorro
   class Wrapper
     class User < Wrapper
+      def details
+        @details ||= assoc(@data['_p_details'])
+      end
+
       def name
         @data['aozoraUsername']
       end
@@ -15,12 +19,64 @@ module Zorro
         @data['_hashed_password']
       end
 
-      def merge_onto(user)
+      def followers_count
+        @details['followersCount']
+      end
+
+      def following_count
+        @details['followingCount']
+      end
+
+      def about
+        @details['about']
+      end
+
+      def avatar
+        file(@details['avatarRegular'])
+      end
+
+      def cover_image
+        file(@data['banner'])
+      end
+
+      def pro?
+        @data['badges'].include?('PRO')
+      end
+
+      def pro_plus?
+        @data['badges'].include?('PRO+')
+      end
+
+      def pro_tier
+        return :pro if pro?
+        return :pro_plus if pro_plus?
+        nil
+      end
+
+      def admin?
+        @data['badges'].include?('Admin')
+      end
+
+      # Some stuff is *always* merged
+      def initial_merge_onto(user)
+        password_key = user.password_digest? ? :ao_password : :password_digest
+        user.assign_attributes(
+          password_key => password_digest,
+          ao_id: id,
+          ao_pro: pro_tier
+        )
+      end
+
+      # Other things are only *sometimes* merged
+      def full_merge_onto(user)
         user.assign_attributes(
           name: name,
-          aozora_id: id,
-          email: email,
-          password_digest: password_digest
+          about: about,
+          followers_count: followers_count,
+          following_count: following_count,
+          avatar: avatar,
+          cover_image: cover_image,
+          email: email
         )
       end
     end
