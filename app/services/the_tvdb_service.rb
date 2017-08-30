@@ -25,6 +25,9 @@ class TheTvdbService
         # will be deleted the mappings if their is a 404 response code
         raise 'Something bad has happened related to TVDB.' unless response.code == 404
 
+        # This can technically be removed because we will be deleting them all afterwards
+        # but it will help make sure at end that the numbers match up.
+
         # delete series mapping
         series_id = media_ids[1]['thetvdb/series'][0]
         Mapping.delete(series_id)
@@ -54,12 +57,12 @@ class TheTvdbService
       season_number = response['data'].count.zero? ? 1 : response['data'].first['airedSeason']
 
       m = Mapping.where(
-        external_site: 'thetvdb/season',
+        external_site: 'thetvdb',
         item_id: media_id,
         item_type: 'Anime'
       ).first_or_initialize
 
-      m.external_id = season_number.to_s
+      m.external_id = "#{series_id}/#{season_number}"
       m.save!
     end
   end
