@@ -2,84 +2,44 @@ class TheTvdbService
   BASE_URL = 'https://api.thetvdb.com'.freeze
   API_KEY = ENV['THE_TVDB_API_KEY'].freeze
 
-  attr_accessor :media_id
-
-  def initialize
-    @token = api_token
-  end
-
-  # This will update all mappings to have a season number
-  # This should be run ONLY ONCE, unless we import data from somewhere else.
-  def update_mapping_seasons!
+  # This will create new mappings that combine series/season together.
+  def create_tvdb_mapping!
     return if mapping_data.blank?
 
     mapping_data['Anime'].each do |media_ids|
       # set the media_id (this is for our database)
-      self.media_id = media_ids[0]
-      series_id = media_ids[1]['thetvdb/series'][1]
-      season_id = media_ids[1]['thetvdb/season'][1] if media_ids[1].try(:[], 'thetvdb/season')
+      media_id = media_ids[0]
+      series_id = media_ids[1]['thetvdb/series']
+      season_id = media_ids[1]['thetvdb/season']
 
       response = get(build_episode_path(series_id, season_id))
 
-      unless response.code == 200
-        # will be deleted the mappings if their is a 404 response code
-        raise 'Something bad has happened related to TVDB.' unless response.code == 404
-
-        # This can technically be removed because we will be deleting them all afterwards
-        # but it will help make sure at end that the numbers match up.
-
-        # delete series mapping
-        series_id = media_ids[1]['thetvdb/series'][0]
-        Mapping.delete(series_id)
-
-        # delete season mapping if it exists
-        if season_id
-          season_id = media_ids[1]['thetvdb/season'][0]
-          Mapping.delete(season_id)
-        end
-
-        next
-      end
+      next if response.code == 404
+      raise 'TVDB Error' unless response.success?
 
       response = JSON.parse(response.body)
 
       # Filters depending on if a airedSeasonID is present
-      if season_id.present?
-        response['data'] = response['data'].select do |ep|
-          ep['airedSeasonID'] == season_id.to_i && ep['airedSeason'].present?
-        end
-      else
-        response['data'] = response['data'].select do |ep|
-          ep['airedSeason'].present?
-        end
-      end
+      response['data'] = season_filter(response['data'], season_id)
 
-      season_number = response['data'].count.zero? ? 1 : response['data'].first['airedSeason']
-
-      m = Mapping.where(
-        external_site: 'thetvdb',
-        item_id: media_id,
-        item_type: 'Anime'
-      ).first_or_initialize
-
-      m.external_id = "#{series_id}/#{season_number}"
-      m.save!
+      season_number = find_season_number(response['data'])
+      create_mapping(media_id, series_id, season_number)
     end
   end
 
   # grabs all Mappings
   def mapping_data
     @md ||= Mapping.where(external_site: %w[thetvdb/series thetvdb/season])
-                   .pluck(:id, :item_type, :item_id, :external_site, :external_id)
-                   .each_with_object({}) { |(id, item_type, item_id, external_site, external_id), acc|
+                   .pluck(:item_type, :item_id, :external_site, :external_id)
+                   .each_with_object({}) do |(item_type, item_id, external_site, external_id), acc|
                      acc[item_type] ||= {}
                      acc[item_type][item_id] ||= {}
-                     acc[item_type][item_id][external_site] = [id, external_id]
-                   }
+                     acc[item_type][item_id][external_site] = external_id
+                   end
   end
 
   def api_token
-    return @token if @token.present?
+    return @token if @token
 
     body = { apikey: API_KEY }.to_json
 
@@ -92,7 +52,10 @@ class TheTvdbService
       }
     )
 
-    return JSON.parse(response.body)['token'] if response.code == 200
+    if response.success?
+      @token = JSON.parse(response.body)['token']
+      return @token
+    end
 
     raise "#{response.code}: apikey/api token is invalid."
   end
@@ -111,14 +74,34 @@ class TheTvdbService
     "#{BASE_URL}#{url}"
   end
 
-  def build_episode_path(series, season_number)
+  def build_episode_path(series_id, season_number)
     season_number ||= 1
-    path = "/series/#{series}/episodes"
+    path = "/series/#{series_id}/episodes"
     # I am assuming that no show has more than 25 seasons
     # and that the airedSeasonID is going to always be greater than that.
     # and we will catch any errors when we send the response.
     path += "/query?airedSeason=#{season_number}" if season_number.to_i < 25
-
     path
+  end
+
+  def season_filter(episodes, season_id)
+    return episodes.select { |ep| ep['airedSeason'].present? } if season_id.blank?
+
+    episodes.select { |ep| ep['airedSeasonID'] == season_id.to_i && ep['airedSeason'].present? }
+  end
+
+  def find_season_number(episodes)
+    episodes.count.zero? ? 1 : episodes.first['airedSeason']
+  end
+
+  def create_mapping(media_id, series_id, season_number)
+    mapping = Mapping.where(
+      external_site: 'thetvdb',
+      item_id: media_id,
+      item_type: 'Anime'
+    ).first_or_initialize
+
+    mapping.external_id = "#{series_id}/#{season_number}"
+    mapping.save!
   end
 end
