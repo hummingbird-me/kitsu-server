@@ -189,17 +189,17 @@ class LibraryEntry < ApplicationRecord
       self.progress = media.progress_limit if media&.progress_limit
     end
 
-    return if imported
+    unless imported
+      self.progressed_at = Time.now if status_changed? || progress_changed?
 
-    self.progressed_at = Time.now if status_changed? || progress_changed?
+      if status_changed?
+        self.started_at ||= Time.now if current?
+        self.started_at ||= Time.now if completed?
+        self.finished_at ||= Time.now if completed?
+      end
 
-    if status_changed?
-      self.started_at ||= Time.now if current?
-      self.started_at ||= Time.now if completed?
-      self.finished_at ||= Time.now if completed?
+      self.status = :current if progress_changed? && !status_changed?
     end
-
-    self.status = :current if progress_changed? && !status_changed?
   end
 
   after_save do
