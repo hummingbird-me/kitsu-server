@@ -29,7 +29,8 @@ module Rateable
           COALESCE(rating_frequencies->'#{rating}', '0')::integer + #{diff}
         )::text)
     EOF
-    UpdateRatingFrequencyWorker.perform_async(self, update_query)
+    class_name = self.class.name.to_s
+    UpdateRatingFrequencyWorker.perform_async(class_name, id, update_query)
   end
 
   def decrement_rating_frequency(rating)

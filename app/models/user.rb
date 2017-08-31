@@ -16,7 +16,6 @@
 #  birthday                    :date
 #  comments_count              :integer          default(0), not null
 #  confirmed_at                :datetime
-#  consecutive_days            :integer          default(0), not null
 #  country                     :string(2)
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
@@ -30,7 +29,6 @@
 #  email                       :string(255)      default(""), not null, indexed
 #  favorites_count             :integer          default(0), not null
 #  feed_completed              :boolean          default(FALSE), not null
-#  first_inactive_email_sent   :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
 #  following_count             :integer          default(0)
 #  gender                      :string
@@ -62,19 +60,16 @@
 #  rejected_edit_count         :integer          default(0)
 #  remember_created_at         :datetime
 #  reviews_count               :integer          default(0), not null
-#  second_inactive_email_sent  :boolean          default(FALSE), not null
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
-#  third_inactive_email_sent   :boolean          default(FALSE), not null
 #  time_zone                   :string
 #  title                       :string
 #  title_language_preference   :string(255)      default("canonical")
 #  to_follow                   :boolean          default(FALSE), indexed
-#  visited_at                  :datetime
 #  waifu_or_husbando           :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
