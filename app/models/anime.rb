@@ -114,7 +114,6 @@ class Anime < ApplicationRecord
     return if episode_count
     return if episode_count_guess && episode_count_guess > guess
     update(episode_count_guess: guess)
-    episodes.create_defaults(episode_count_guess) if episodes.length < episode_count_guess
   end
 
   def self.fuzzy_find(title)
@@ -137,7 +136,9 @@ class Anime < ApplicationRecord
   end
 
   after_save do
-    episodes.create_defaults(episode_count) if
-      episode_count_changed? && episodes.length != episode_count
+    %w[episode_count episode_count_guess].each do |count|
+      target = send(count)
+      episodes.create_defaults(target) if send("#{count}_changed?") && episodes.length != target
+    end
   end
 end

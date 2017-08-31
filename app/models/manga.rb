@@ -79,7 +79,6 @@ class Manga < ApplicationRecord
     return if chapter_count
     return if chapter_count_guess && chapter_count_guess > guess
     update(chapter_count_guess: guess)
-    chapters.create_defaults(chapter_count_guess) if chapters.length < chapter_count_guess
   end
 
   before_save do
@@ -92,7 +91,9 @@ class Manga < ApplicationRecord
   end
 
   after_save do
-    chapters.create_defaults(chapter_count) if
-      chapter_count_changed? && chapters.length != chapter_count
+    %w[chapter_count chapter_count_guess].each do |count|
+      target = send(count)
+      chapters.create_defaults(target) if send("#{count}_changed?") && chapters.length != target
+    end
   end
 end
