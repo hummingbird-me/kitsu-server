@@ -162,7 +162,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('Comment') { parent Post }
 
   config.model 'Mapping' do
-    fields :id, :media
+    fields :id, :item
     field(:external_id) { label 'External ID' }
     field :external_site, :enum do
       enum do
