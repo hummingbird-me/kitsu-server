@@ -76,8 +76,7 @@ class Manga < ApplicationRecord
   end
 
   def update_unit_count_guess(guess)
-    return if chapter_count || chapter_count_guess != guess
-    update(chapter_count_guess: guess)
+    update(chapter_count_guess: guess) unless chapter_count
   end
 
   before_save do
