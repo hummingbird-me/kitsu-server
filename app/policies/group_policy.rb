@@ -20,7 +20,7 @@ class GroupPolicy < ApplicationPolicy
 
   def creatable_attributes(all)
     return all if is_admin?
-    all - %i[members_count leaders_count neighbors_count rules_formatted featured name]
+    all - %i[members_count leaders_count neighbors_count rules_formatted featured]
   end
 
   def group
