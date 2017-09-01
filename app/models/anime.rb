@@ -111,8 +111,7 @@ class Anime < ApplicationRecord
   alias_method :year_changed?, :season_changed?
 
   def update_unit_count_guess(guess)
-    return if episode_count
-    return if episode_count_guess && episode_count_guess > guess
+    return if episode_count || episode_count_guess != guess
     update(episode_count_guess: guess)
   end
 
@@ -136,9 +135,10 @@ class Anime < ApplicationRecord
   end
 
   after_save do
-    %w[episode_count episode_count_guess].each do |count|
-      target = send(count)
-      episodes.create_defaults(target) if send("#{count}_changed?") && episodes.length != target
+    if episode_count_guess_changed? && episodes.length != episode_count_guess
+      episodes.create_defaults(episode_count_guess || 0)
+    elsif episode_count_changed? && episodes.length != episode_count
+      episodes.create_defaults(episode_count || 0)
     end
   end
 end

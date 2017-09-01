@@ -76,8 +76,7 @@ class Manga < ApplicationRecord
   end
 
   def update_unit_count_guess(guess)
-    return if chapter_count
-    return if chapter_count_guess && chapter_count_guess > guess
+    return if chapter_count || chapter_count_guess != guess
     update(chapter_count_guess: guess)
   end
 
@@ -91,9 +90,10 @@ class Manga < ApplicationRecord
   end
 
   after_save do
-    %w[chapter_count chapter_count_guess].each do |count|
-      target = send(count)
-      chapters.create_defaults(target) if send("#{count}_changed?") && chapters.length != target
+    if chapter_count_guess_changed? && chapters.length != chapter_count_guess
+      chapters.create_defaults(chapter_count_guess || 0)
+    elsif chapter_count_changed? && chapters.length != chapter_count
+      chapters.create_defaults(chapter_count || 0)
     end
   end
 end
