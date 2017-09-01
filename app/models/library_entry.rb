@@ -265,7 +265,7 @@ class LibraryEntry < ApplicationRecord
       # special case checking if progress was increased or decreased
       if progress > progress_was
         Stat::AnimeAmountConsumed.increment(user, self, true)
-      else
+      elsif progress < progress_was
         Stat::AnimeAmountConsumed.decrement(user, self, true)
       end
     when :manga
@@ -273,7 +273,7 @@ class LibraryEntry < ApplicationRecord
       # special case checking if progress was increased or decreased
       if progress > progress_was
         Stat::MangaAmountConsumed.increment(user, self, true)
-      else
+      elsif progress < progress_was
         Stat::MangaAmountConsumed.decrement(user, self, true)
       end
     end
