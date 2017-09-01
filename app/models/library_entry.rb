@@ -187,16 +187,18 @@ class LibraryEntry < ApplicationRecord
     if status_changed? && completed?
       # update progress to the cap
       self.progress = media.progress_limit if media&.progress_limit
-      # set finished_at and started_at for the first consume
-      self.started_at ||= Time.now unless imported
-      self.finished_at ||= Time.now unless imported
     end
 
     unless imported
-      # When progress is changed, update progressed_at
-      self.progressed_at = Time.now if progress_changed? || status_changed?
-      # When marked current and started_at doesn't exist
-      self.started_at ||= Time.now if current?
+      self.progressed_at = Time.now if status_changed? || progress_changed?
+
+      if status_changed?
+        self.started_at ||= Time.now if current?
+        self.started_at ||= Time.now if completed?
+        self.finished_at ||= Time.now if completed?
+      end
+
+      self.status = :current if progress_changed? && !status_changed?
     end
   end
 
