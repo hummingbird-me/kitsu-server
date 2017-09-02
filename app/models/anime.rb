@@ -111,10 +111,8 @@ class Anime < ApplicationRecord
   alias_method :year_changed?, :season_changed?
 
   def update_unit_count_guess(guess)
-    return if episode_count
-    return if episode_count_guess && episode_count_guess > guess
+    return if episode_count || (episode_count_guess && episode_count_guess > guess)
     update(episode_count_guess: guess)
-    episodes.create_defaults(episode_count_guess) if episodes.length < episode_count_guess
   end
 
   def self.fuzzy_find(title)
@@ -137,7 +135,10 @@ class Anime < ApplicationRecord
   end
 
   after_save do
-    episodes.create_defaults(episode_count) if
-      episode_count_changed? && episodes.length != episode_count
+    if episode_count_guess_changed? && episodes.length != episode_count_guess
+      episodes.create_defaults(episode_count_guess || 0)
+    elsif episode_count_changed? && episodes.length != episode_count
+      episodes.create_defaults(episode_count || 0)
+    end
   end
 end
