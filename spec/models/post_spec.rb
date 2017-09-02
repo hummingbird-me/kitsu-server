@@ -46,7 +46,6 @@ RSpec.describe Post, type: :model do
   it { should belong_to(:user) }
   it { should validate_presence_of(:user) }
   it { should belong_to(:target_user).class_name('User') }
-  it { should validate_presence_of(:content) }
   it { should belong_to(:media) }
   it { should belong_to(:spoiled_unit) }
   it { should have_many(:post_likes).dependent(:destroy) }
