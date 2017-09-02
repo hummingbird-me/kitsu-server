@@ -111,7 +111,7 @@ class Anime < ApplicationRecord
   alias_method :year_changed?, :season_changed?
 
   def update_unit_count_guess(guess)
-    return if episode_count || (episode_count_guess && episode_count_guess < guess)
+    return if episode_count || (episode_count_guess && episode_count_guess > guess)
     update(episode_count_guess: guess)
   end
 
