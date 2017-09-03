@@ -56,6 +56,7 @@ class BaseIndex
     end
 
     def index!(model)
+      return if Rails.env.development?
       model.find_in_batches do |group|
         # HACK: Rails 4.x doesn't have an in_batches method which returns scopes
         associated = associated_for(model.where(id: group.map(&:id)))
@@ -164,6 +165,7 @@ class BaseIndex
   end
 
   def save!
+    return if Rails.env.development?
     if _new || model.new_record?
       index.add_object(as_json)
     elsif model.destroyed?
