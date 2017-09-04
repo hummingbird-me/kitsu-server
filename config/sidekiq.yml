@@ -19,3 +19,7 @@ production:
     every: 12h
   UploadRemovalWorker:
     every: 12h
+  TheTvdbDailyWorker:
+    every: 1d
+  TheTvdbWeeklyWorker:
+    every: 7d
