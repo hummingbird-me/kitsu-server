@@ -163,25 +163,26 @@ class User < ApplicationRecord
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
                     if: ->(user) { user.registered? && user.email_changed? }
-  validates :slug, uniqueness: { case_sensitive: false }, if: :slug_changed?
-  validates :name, uniqueness: { case_sensitive: false },
-                   length: { minimum: 3, maximum: 20 },
-                   if: ->(user) { user.registered? && user.name_changed? },
+  validates :slug, uniqueness: { case_sensitive: false },
                    format: {
                      with: /\A[_A-Za-z0-9]+\z/,
                      message: <<-EOF.squish
                        can only contain letters, numbers, and underscores.
                      EOF
-                   }
-  validates :name, format: {
+                   },
+                   if: :slug_changed?
+  validates :slug, format: {
     with: /\A[A-Za-z0-9]/,
     message: 'must begin with a letter or number'
-  }, if: :registered?
-  validates :name, format: {
+  }, if: :slug_changed?
+  validates :slug, format: {
     without: /\A[0-9]*\z/,
     message: 'cannot be entirely numbers'
-  }, if: :registered?
-  validate :not_reserved_username, if: :registered?
+  }, if: :slug_changed?
+  validate :not_reserved_slug, if: :registered?
+  validates :name, presence: true,
+                   length: { minimum: 3, maximum: 20 },
+                   if: ->(user) { user.registered? && user.name_changed? }
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
   validates :password, length: { maximum: 72 }, if: :registered?
@@ -207,8 +208,8 @@ class User < ApplicationRecord
     where('lower(email)=? OR lower(name)=?', *(identification * 2)).first
   end
 
-  def not_reserved_username
-    errors.add(:name, 'is reserved') if RESERVED_NAMES.include?(name&.downcase)
+  def not_reserved_slug
+    errors.add(:slug, 'is reserved') if RESERVED_NAMES.include?(slug&.downcase)
   end
 
   def pro?
