@@ -108,7 +108,7 @@ RSpec.describe User, type: :model do
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }
-  it { should validate_uniqueness_of(:name).case_insensitive }
+  it { should validate_uniqueness_of(:slug).case_insensitive }
   it { should validate_uniqueness_of(:email).case_insensitive }
   it { should have_many(:library_events).dependent(:destroy) }
   it { should have_many(:notification_settings).dependent(:destroy) }
@@ -138,9 +138,9 @@ RSpec.describe User, type: :model do
   end
 
   it 'should reserve certain names case-insensitively' do
-    user = User.new(name: 'admin')
+    user = User.new(slug: 'admin')
     expect(user).to be_invalid
-    expect(user.errors[:name]).not_to be_empty
+    expect(user.errors[:slug]).not_to be_empty
   end
 
   describe 'find_for_auth' do
