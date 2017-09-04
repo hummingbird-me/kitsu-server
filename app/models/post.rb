@@ -11,7 +11,7 @@
 #  deleted_at                  :datetime         indexed
 #  edited_at                   :datetime
 #  embed                       :jsonb
-#  media_type                  :string           indexed => [media_id]
+#  media_type                  :string
 #  nsfw                        :boolean          default(FALSE), not null
 #  post_likes_count            :integer          default(0), not null
 #  spoiled_unit_type           :string
@@ -21,7 +21,7 @@
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  community_recommendation_id :integer          indexed
-#  media_id                    :integer          indexed => [media_type]
+#  media_id                    :integer
 #  spoiled_unit_id             :integer
 #  target_group_id             :integer
 #  target_user_id              :integer
@@ -31,7 +31,6 @@
 #
 #  index_posts_on_community_recommendation_id  (community_recommendation_id)
 #  index_posts_on_deleted_at                   (deleted_at)
-#  posts_media_type_media_id_idx  (media_type,media_id)
 #
 # Foreign Keys
 #

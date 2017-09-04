@@ -32,6 +32,7 @@ gem 'delayed_paperclip'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
 gem 'paperclip', '~> 5.0'
+gem 'paperclip-meta'
 gem 'paperclip-optimizer'
 
 # Background tasks
@@ -75,10 +76,10 @@ gem 'oj_mimic_json' # Hook it in place of JSON gem
 gem 'sentry-raven' # Send error data to Sentry
 
 # Admin Panel
+gem 'pg_query' # pghero indexes
+gem 'pghero'
 gem 'rails_admin'
 gem 'sinatra' # used by sidekiq/web
-gem 'pghero'
-gem 'pg_query' # pghero indexes
 
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
@@ -115,8 +116,8 @@ group :test do
 end
 
 group :production, :staging do
+  gem 'librato-rails' # Metrics
   gem 'puma_worker_killer'
   gem 'rails_12factor' # Log to stdout, serve assets
   gem 'skylight' # Performance Monitoring
-  gem 'librato-rails' # Metrics
 end
