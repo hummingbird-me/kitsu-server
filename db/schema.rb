@@ -298,6 +298,7 @@ ActiveRecord::Schema.define(version: 20180114070606) do
     t.integer  "replies_count",     default: 0,     null: false
     t.datetime "edited_at"
     t.jsonb    "embed"
+    t.string   "ao_id"
   end
 
   add_index "comments", ["deleted_at"], name: "index_comments_on_deleted_at", using: :btree
@@ -1201,6 +1202,7 @@ ActiveRecord::Schema.define(version: 20180114070606) do
     t.string   "target_interest"
     t.jsonb    "embed"
     t.integer  "community_recommendation_id"
+    t.string   "ao_id"
   end
 
   add_index "posts", ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id", using: :btree

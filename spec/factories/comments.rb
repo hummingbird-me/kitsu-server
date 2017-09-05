@@ -14,6 +14,7 @@
 #  replies_count     :integer          default(0), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  ao_id             :string
 #  parent_id         :integer          indexed
 #  post_id           :integer          not null, indexed
 #  user_id           :integer          not null
