@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/LineLength
 # == Schema Information
 #
-# Table name: user_ipaddresses
+# Table name: user_ip_addresses
 #
 #  id         :integer          not null, primary key
 #  ip_address :inet             not null, indexed => [user_id]
@@ -11,8 +11,8 @@
 #
 # Indexes
 #
-#  index_user_ipaddresses_on_ip_address_and_user_id  (ip_address,user_id) UNIQUE
-#  index_user_ipaddresses_on_user_id                 (user_id)
+#  index_user_ip_addresses_on_ip_address_and_user_id  (ip_address,user_id) UNIQUE
+#  index_user_ip_addresses_on_user_id                 (user_id)
 #
 # Foreign Keys
 #
@@ -20,7 +20,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-class UserIpaddress < ApplicationRecord
+class UserIpAddress < ApplicationRecord
   belongs_to :user, required: true
 
   validates :ip_address, presence: true

@@ -1377,15 +1377,15 @@ ActiveRecord::Schema.define(version: 20170828080526) do
   add_index "uploads", ["owner_type", "owner_id"], name: "index_uploads_on_owner_type_and_owner_id", using: :btree
   add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
 
-  create_table "user_ipaddresses", force: :cascade do |t|
+  create_table "user_ip_addresses", force: :cascade do |t|
     t.integer  "user_id",    null: false
     t.inet     "ip_address", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_index "user_ipaddresses", ["ip_address", "user_id"], name: "index_user_ipaddresses_on_ip_address_and_user_id", unique: true, using: :btree
-  add_index "user_ipaddresses", ["user_id"], name: "index_user_ipaddresses_on_user_id", using: :btree
+  add_index "user_ip_addresses", ["ip_address", "user_id"], name: "index_user_ip_addresses_on_ip_address_and_user_id", unique: true, using: :btree
+  add_index "user_ip_addresses", ["user_id"], name: "index_user_ip_addresses_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255, default: ""
@@ -1611,6 +1611,6 @@ ActiveRecord::Schema.define(version: 20170828080526) do
   add_foreign_key "stats", "users"
   add_foreign_key "streaming_links", "streamers"
   add_foreign_key "uploads", "users"
-  add_foreign_key "user_ipaddresses", "users"
+  add_foreign_key "user_ip_addresses", "users"
   add_foreign_key "users", "posts", column: "pinned_post_id"
 end
