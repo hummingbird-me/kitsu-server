@@ -1,15 +1,17 @@
 module Zorro
-  Client = Mongo::Client.new(ENV['AOZORA_MONGO_URL'])
+  Client = Mongo::Client.new(ENV['AOZORA_MONGO_URL']) if ENV['AOZORA_MONGO_URL'].present?
 
   module DB
-    # Shortcuts to various collections
-    User = Client['_User']
-    UserDetails = Client['UserDetails']
-    Anime = Client['Anime']
-    Post = Client['Post']
-    TimelinePost = Client['TimelinePost']
-    Thread = Client['Thread']
-    AnimeProgress = Client['AnimeProgress']
+    if ENV['AOZORA_MONGO_URL'].present?
+      # Shortcuts to various collections
+      User = Client['_User']
+      UserDetails = Client['UserDetails']
+      Anime = Client['Anime']
+      Post = Client['Post']
+      TimelinePost = Client['TimelinePost']
+      Thread = Client['Thread']
+      AnimeProgress = Client['AnimeProgress']
+    end
 
     def self.assoc(assoc)
       case assoc
