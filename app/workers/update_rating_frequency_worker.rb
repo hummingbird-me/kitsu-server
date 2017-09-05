@@ -1,10 +1,10 @@
 class UpdateRatingFrequencyWorker
   include Sidekiq::Worker
 
-  def perform(class_name, class_id, query)
-    class_ = class_name.safe_constantize
-    class_obj = class_.find(class_id)
-    class_.where(id: class_id).update_all(query)
-    class_obj.touch
+  def perform(klass_name, klass_id, query)
+    klass = klass_name.safe_constantize
+    klass_obj = klass.find(klass_id)
+    klass.where(id: klass_id).update_all(query)
+    klass_obj.touch
   end
 end

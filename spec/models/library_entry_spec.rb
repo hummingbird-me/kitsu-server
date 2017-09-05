@@ -46,7 +46,6 @@
 # rubocop:enable Metrics/LineLength
 
 require 'rails_helper'
-require 'sidekiq/testing'
 
 RSpec.describe LibraryEntry, type: :model do
   let(:anime) { create(:anime, episode_count: 5) }

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'sidekiq/testing'
 
 RSpec.shared_examples 'media' do
   include_examples 'titleable'

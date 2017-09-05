@@ -46,7 +46,6 @@
 #  mal_username                :string(255)
 #  media_reactions_count       :integer          default(0), not null
 #  name                        :string(255)
-#  never_signed_in_email_sent  :boolean          default(FALSE), not null
 #  ninja_banned                :boolean          default(FALSE)
 #  password_digest             :string(255)      default(""), not null
 #  past_names                  :string           default([]), not null, is an Array
@@ -157,7 +156,7 @@ class User < ApplicationRecord
   has_many :notification_settings, dependent: :destroy
   has_many :one_signal_players, dependent: :destroy
   has_many :reposts, dependent: :destroy
-  has_many :user_ipaddresses, dependent: :destroy
+  has_many :ip_addresses, dependent: :destroy, class_name: 'UserIpAddress'
   validates :email, :name, :password, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
@@ -236,12 +235,11 @@ class User < ApplicationRecord
   end
 
   def add_ip(new_ip)
-    UserIpaddress.where(user: self, ip_address: new_ip).first_or_create
-    UserIpaddress.where(user: self).map(&:ip_address)
+    ip_addresses.where(ip_address: new_ip).first_or_create
   end
 
   def alts
-    UserIpaddress.where(user: self).map(&:user)
+    UserIpAddress.where(ip_address: ip_addresses.select(:ip_address)).includes(:user).map(&:user)
   end
 
   def update_title(_role)
