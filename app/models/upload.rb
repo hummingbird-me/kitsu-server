@@ -37,8 +37,8 @@ class Upload < ApplicationRecord
 
   scope :orphan, -> {
     where(
-      post: nil,
-      comment: nil
+      owner_type: nil,
+      owner_id: nil
     ).where(
       ['created_at > ?', 11.hours.ago]
     )
