@@ -6,7 +6,7 @@ class InsertExistingUserIpAddressAndRemoveColumnFromUsers < ActiveRecord::Migrat
       user.ip_addresses.each do |ip|
         all_users_notifications << {ip_address: ip, user: user}
       end
-      UserIpaddress.create(all_users_notifications)
+      UserIpAddress.create(all_users_notifications)
     end
     remove_column :users, :ip_addresses, :inet
   end
