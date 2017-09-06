@@ -46,13 +46,29 @@ RSpec.describe Post, type: :model do
   it { should belong_to(:user) }
   it { should validate_presence_of(:user) }
   it { should belong_to(:target_user).class_name('User') }
-  it { should validate_presence_of(:content) }
   it { should belong_to(:media) }
   it { should belong_to(:spoiled_unit) }
   it { should have_many(:post_likes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
   it { should validate_length_of(:content).is_at_most(9_000) }
   it { should have_many(:reposts).dependent(:delete_all) }
+
+  subject { build(:post, content: nil) }
+
+  context 'with content' do
+    before { subject.content = 'some content' }
+
+    it { should_not validate_presence_of(:uploads) }
+  end
+
+  context 'with uploads' do
+    before do
+      subject.uploads = [build(:upload)]
+      subject.content = nil
+    end
+
+    it { should_not validate_presence_of(:content) }
+  end
 
   context 'with a spoiled unit' do
     subject { build(:post, spoiled_unit: build(:episode)) }
