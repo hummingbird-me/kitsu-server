@@ -183,7 +183,8 @@ class BaseIndex
     {
       kind: _model.class.name.underscore.dasherize,
       id: _model.id,
-      objectID: algolia_id
+      objectID: algolia_id,
+      _tags: [algolia_id]
     }
   end
 
