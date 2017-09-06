@@ -43,23 +43,21 @@ RSpec.describe Comment, type: :model do
   it { should have_many(:likes).class_name('CommentLike').dependent(:destroy) }
   it { should validate_length_of(:content).is_at_most(9_000) }
 
-  context 'with content or uploads' do
-    subject { build(:comment, content: nil) }
+  subject { build(:comment, content: nil) }
 
-    context 'with content' do
-      before { subject.content = 'some content' }
+  context 'with content' do
+    before { subject.content = 'some content' }
 
-      it { should_not validate_presence_of(:uploads) }
+    it { should_not validate_presence_of(:uploads) }
+  end
+
+  context 'with uploads' do
+    before do
+      subject.uploads = [build(:upload)]
+      subject.content = nil
     end
 
-    context 'with uploads' do
-      before do
-        subject.uploads = [build(:upload)]
-        subject.content = nil
-      end
-
-      it { should_not validate_presence_of(:content) }
-    end
+    it { should_not validate_presence_of(:content) }
   end
 
   it 'should convert basic markdown to fill in content_formatted' do
