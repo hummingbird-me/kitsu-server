@@ -23,14 +23,8 @@ module Rateable
 
   def update_rating_frequency(rating, diff)
     return if rating.nil?
-    update_query = <<-EOF
-      rating_frequencies = rating_frequencies
-        || hstore('#{rating}', (
-          COALESCE(rating_frequencies->'#{rating}', '0')::integer + #{diff}
-        )::text)
-    EOF
-    self.class.where(id: id).update_all(update_query)
-    touch
+    class_name = self.class.name.to_s
+    UpdateRatingFrequencyWorker.perform_async(class_name, id, rating, diff)
   end
 
   def decrement_rating_frequency(rating)

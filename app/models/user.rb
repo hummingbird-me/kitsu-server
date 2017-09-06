@@ -35,7 +35,6 @@
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
-#  ip_addresses                :inet             default([]), is an Array
 #  language                    :string
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
@@ -157,7 +156,7 @@ class User < ApplicationRecord
   has_many :notification_settings, dependent: :destroy
   has_many :one_signal_players, dependent: :destroy
   has_many :reposts, dependent: :destroy
-
+  has_many :ip_addresses, dependent: :destroy, class_name: 'UserIpAddress'
   validates :email, :name, :password, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
@@ -190,9 +189,6 @@ class User < ApplicationRecord
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
-  scope :alts_of, ->(user) do
-    where('ip_addresses && ARRAY[?]::inet[]', user.ip_addresses.map(&:to_s))
-  end
   scope :followed_first, ->(user) {
     user_id = sanitize(user.id)
     joins(<<-SQL.squish).order('(f.id IS NULL) ASC')
@@ -239,15 +235,11 @@ class User < ApplicationRecord
   end
 
   def add_ip(new_ip)
-    unless ip_addresses.include?(new_ip)
-      ips = [new_ip, *ip_addresses].compact.first(PAST_IPS_LIMIT)
-      update_attribute(:ip_addresses, ips)
-    end
-    ip_addresses
+    ip_addresses.where(ip_address: new_ip).first_or_create
   end
 
   def alts
-    User.alts_of(self)
+    UserIpAddress.where(ip_address: ip_addresses.select(:ip_address)).includes(:user).map(&:user)
   end
 
   def update_title(_role)
