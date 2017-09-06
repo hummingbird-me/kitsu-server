@@ -53,6 +53,25 @@ RSpec.describe Post, type: :model do
   it { should validate_length_of(:content).is_at_most(9_000) }
   it { should have_many(:reposts).dependent(:delete_all) }
 
+  context 'with content or uploads' do
+    subject { build(:post, content: nil) }
+
+    context 'with content' do
+      before { subject.content = 'some content' }
+
+      it { should_not validate_presence_of(:uploads) }
+    end
+
+    context 'with uploads' do
+      before do
+        subject.uploads = [build(:upload)]
+        subject.content = nil
+      end
+
+      it { should_not validate_presence_of(:content) }
+    end
+  end
+
   context 'with a spoiled unit' do
     subject { build(:post, spoiled_unit: build(:episode)) }
     it { should validate_presence_of(:media) }

@@ -70,6 +70,8 @@ class Post < ApplicationRecord
                         .where(target_group_id: nil))
   }
 
+  validates :content, :content_formatted, presence: true, unless: :uploads
+  validates :uploads, presence: true, unless: :content
   validates :media, presence: true, if: :spoiled_unit
   validates :content, length: { maximum: 9_000 }
   validates :media, polymorphism: { type: Media }, allow_blank: true

@@ -55,6 +55,8 @@ class Comment < ApplicationRecord
   scope :in_group, ->(group) { joins(:post).merge(Post.in_group(group)) }
 
   validate :no_grandparents
+  validates :content, :content_formatted, presence: true, unless: :uploads
+  validates :uploads, presence: true, unless: :content
   validates :content, length: { maximum: 9_000 }
   validates :post, active_ama: {
     message: 'cannot make any more comments on this AMA',
