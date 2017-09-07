@@ -19,7 +19,7 @@ class LibrarySearchService < SearchService
   #
   # @return [Integer] the total number of results
   def total_count
-    result_media.total_count
+    algolia_result_media.length
   end
 
   # Sets the current user for the search, so we can handle hiding library
@@ -36,9 +36,7 @@ class LibrarySearchService < SearchService
   #
   # @return [Array<Array<String, String>>] an array of [type, id] pairs
   def result_media_ids
-    @result_media_ids ||= result_media.only(:_id, :_type).to_a.map do |res|
-      res._data.slice('_type', '_id').values
-    end
+    @result_media_ids ||= algolia_result_media.map { |res| res.slice(:kind, :id).values }
   end
 
   # Loads the library entries and returns a nested hash keyed on type and id
@@ -61,59 +59,23 @@ class LibrarySearchService < SearchService
     end
   end
 
-  # Apply the library entry filter, the media query, and apply includes and
-  # orders
+  # Applies filter search for querying algolia for library entries
   #
-  # @return [MediaIndex] the index filtered
-  def result_media
-    # Filter by LibraryEntry Media IDs
-    query = MediaIndex.filter(library_entry_filter)
-    # Pagination
-    query = apply_offset_to(query)
-    query = apply_limit_to(query)
-    # Order
-    query = apply_order_to(query)
-    # Apply media query
-    query = query.query(media_query)
-    query
+  # @return [Hash<String, *>] from algolia response
+  def algolia_result_media
+    AlgoliaMediaIndex.library_search(_queries[:title].join(' '), algolia_library_entry_filter)
   end
 
-  # Generates a query that matches the media by their information.
+  # Returns a string of media_type_media_id seperated by OR which will be used to query algolia
   #
-  # @todo move this into a MediaSearchService
-  #
-  # @return [Hash] the ElasticSearch query object
-  def media_query
-    {
-      bool: {
-        should: [
-          { multi_match: {
-            fields: %w[titles.* abbreviated_titles],
-            query: _queries[:title].join(' '),
-            fuzziness: 'AUTO',
-            max_expansions: 15,
-            prefix_length: 2
-          } },
-          { multi_match: {
-            fields: %w[titles.* abbreviated_titles],
-            type: 'phrase_prefix',
-            query: _queries[:title].join(' '),
-            boost: 1.2
-          } }
-        ]
-      }
-    }
-  end
-
-  # Generates a `bool` query that `should` match all media in the filtered
-  # library entries.  Should be applied as a `filter` on the Chewy scope
-  #
-  # @return [Hash] the ElasticSearch query object
-  def library_entry_filter
-    id_filters = library_media_ids.map do |type, ids|
-      { ids: { type: type, values: ids } }
+  # @return String
+  def algolia_library_entry_filter
+    id_filters = library_media_ids.each_with_object([]) do |(type, ids), out|
+      ids.each do |type_id|
+        out << "#{type}_#{type_id}"
+      end
     end
-    { bool: { should: id_filters } }
+    "(#{id_filters.join(' OR ')})"
   end
 
   # Returns the IDs of all media that match the filters provided

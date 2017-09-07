@@ -24,4 +24,16 @@ class AlgoliaMediaIndex < BaseIndex
   has_many :people, as: :name, via: 'castings.person'
   has_many :characters, as: :name, via: 'castings.character'
   has_many :streamers, as: :site_name, via: 'streaming_links.streamer'
+
+  def self.library_search(search_query, filter)
+    filter_hash = {
+      filters: filter,
+      attributesToRetrieve: %w[id kind]
+    }
+    res = index.search(
+      search_query,
+      filter_hash
+    ).deep_symbolize_keys
+    res[:hits]
+  end
 end

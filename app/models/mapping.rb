@@ -29,8 +29,7 @@ class Mapping < ApplicationRecord
   end
 
   def self.guess_algolia(type, query)
-    Algolia.init application_id: ENV['ALGOLIA_APP_ID'], api_key: ENV['ALGOLIA_SEARCH_KEY']
-    AlgoliaMediaIndex.search(query, type.constantize).first
+    AlgoliaMediaIndex.search(query, type).first
   end
 
   def self.guess(type, info)

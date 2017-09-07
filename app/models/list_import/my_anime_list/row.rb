@@ -21,7 +21,7 @@ class ListImport
 
       def media
         key = "myanimelist/#{type}"
-        Mapping.lookup(key, media_key(:id)) || Mapping.guess(klass, media_info)
+        Mapping.lookup(key, media_key(:id)) || Mapping.guess_algolia(klass, media_info[:title])
       end
 
       def media_info

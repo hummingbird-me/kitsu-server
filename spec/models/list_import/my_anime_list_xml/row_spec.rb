@@ -60,9 +60,9 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
           <series_type>#{anime.subtype}</series_type>
           <series_episodes>#{anime.episode_count}</series_episodes>
         EOF
-        it 'should guess the Anime instance using Mapping.guess' do
+        it 'should guess the Anime instance using Mapping.guess_algolia' do
           row = described_class.new(xml)
-          expect(Mapping).to receive(:guess).and_return(anime)
+          expect(Mapping).to receive(:guess_algolia).and_return(anime)
           expect(row.media).to eq(anime)
         end
       end
@@ -342,9 +342,9 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
           <manga_title>#{manga.canonical_title}</manga_title>
           <manga_chapters>#{manga.chapter_count}</manga_chapters>
         EOF
-        it 'should guess the Manga instance using Mapping.guess' do
+        it 'should guess the Manga instance using Mapping.guess_algolia' do
           row = described_class.new(xml)
-          expect(Mapping).to receive(:guess).and_return(manga)
+          expect(Mapping).to receive(:guess_algolia).and_return(manga)
           expect(row.media).to eq(manga)
         end
       end

@@ -20,15 +20,10 @@ RSpec.describe ListImport::AnimePlanet::Row do
         subject.media
       end
 
-      it 'should work for guess' do
+      it 'should work for guess_algolia' do
         allow(Mapping).to receive(:lookup).and_return(nil)
 
-        expect(Mapping).to receive(:guess).with(Anime, {
-          id: 2353,
-          title: '07-Ghost',
-          subtype: 'TV',
-          episode_count: 25
-        }).and_return('hello')
+        expect(Mapping).to receive(:guess_algolia).with(Anime, '07-Ghost').and_return('hello')
 
         subject.media
       end
@@ -174,14 +169,10 @@ RSpec.describe ListImport::AnimePlanet::Row do
         subject.media
       end
 
-      it 'should work for guess' do
+      it 'should work for guess_algolia' do
         allow(Mapping).to receive(:lookup).and_return(nil)
 
-        expect(Mapping).to receive(:guess).with(Manga, {
-          id: 1854,
-          title: '1/2 Prince',
-          chapter_count: 76
-        }).and_return('hello')
+        expect(Mapping).to receive(:guess_algolia).with(Manga, '1/2 Prince').and_return('hello')
 
         subject.media
       end
