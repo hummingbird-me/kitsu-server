@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170902160628) do
+ActiveRecord::Schema.define(version: 20170909082819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1321,13 +1321,14 @@ ActiveRecord::Schema.define(version: 20170902160628) do
   add_index "stories", ["user_id"], name: "index_stories_on_user_id", using: :btree
 
   create_table "streamers", force: :cascade do |t|
-    t.string   "site_name",         limit: 255, null: false
+    t.string   "site_name",             limit: 255,             null: false
     t.string   "logo_file_name"
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "streaming_links_count",             default: 0, null: false
   end
 
   create_table "streaming_links", force: :cascade do |t|

@@ -16,6 +16,7 @@
 
 class Streamer < ApplicationRecord
   has_attached_file :logo
+  has_many :streaming_links
 
   validates :site_name, presence: true
   validates_attachment :logo, content_type: {

@@ -35,6 +35,10 @@ module CounterCacheResets
       counter_cache_column: 'child_count')
   end
 
+  def streamer_counts
+    execute sql_for(Streamer, :streaming_links)
+  end
+
   def users
     execute sql_for(User, :library_entries,
       counter_cache_column: 'ratings_count',
