@@ -2,6 +2,6 @@ class TheTvdbWeeklyWorker
   include Sidekiq::Worker
 
   def perform
-    TheTvdbService.new.import!('weekly')
+    TheTvdbService.new('missing_thumbnails').import!
   end
 end

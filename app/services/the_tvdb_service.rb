@@ -1,95 +1,59 @@
 class TheTvdbService
+  class NotFound < StandardError; end
+
   BASE_URL = 'https://api.thetvdb.com'.freeze
   API_KEY = ENV['THE_TVDB_API_KEY'].freeze
 
+  def initialize(set_name)
+    @set_name = set_name
+  end
+
   # daily or weekly
-  def import!(worker_type)
-    data = query_data(worker_type)
+  def import!
+    data = query_data
     return if data.blank?
 
-    data['Anime'].each do |media_ids|
-      # set the media_id (this is for our database)
-      media_id = media_ids[0]
-      series_id, season_id = media_ids[1]['thetvdb'].split('/')
+    data['Anime'].each do |(anime_id, mappings)|
+      series_id, season_id = mappings['thetvdb'].split('/')
 
       response = get(build_episode_path(series_id, season_id))
-
-      next if response.code == 404
-      raise 'TVDB Error' unless response.success?
-
-      response = JSON.parse(response.body)
+      next unless response
 
       # update the episode count if it does not exist.
       tvdb_episodes_count = response['data'].count
-      anime = update_anime_episode_count(media_id, tvdb_episodes_count)
+      anime = update_anime_episode_count(anime_id, tvdb_episodes_count)
 
       # we don't want to add their data if the episode counts don't match up
       # TODO: we should log this because it would be good to double check.
-      next unless anime.episode_count == tvdb_episodes_count \
-        || anime.episode_count_guess == tvdb_episodes_count
+      next unless [anime.episode_count, anime.episode_count_guess].include?(tvdb_episodes_count)
 
       # creating/updating the episode
-      process_episode_data(response, media_id, series_id)
+      process_episode_data(response, anime_id, series_id)
     end
   end
 
-  # This will create new mappings that combine series/season together.
-  def create_tvdb_mapping!
-    return if mapping_data.blank?
+  def missing_thumbnails
+    return @mtd if @mtd
 
-    mapping_data['Anime'].each do |media_ids|
-      # set the media_id (this is for our database)
-      media_id = media_ids[0]
-      series_id = media_ids[1]['thetvdb/series']
-      season_id = media_ids[1]['thetvdb/season']
+    data = Mapping.where(external_site: 'thetvdb')
+                  .joins(<<-SQL)
+                    LEFT OUTER JOIN episodes
+                    ON mappings.item_id = episodes.media_id
+                    AND mappings.item_type = episodes.media_type
+                  SQL
+                  .where(episodes: { thumbnail_file_name: nil }).distinct
 
-      response = get(build_episode_path(series_id, season_id))
-
-      next if response.code == 404
-      raise 'TVDB Error' unless response.success?
-
-      response = JSON.parse(response.body)
-
-      # Filters depending on if a airedSeasonID is present
-      response['data'] = season_filter(response['data'], season_id)
-
-      season_number = find_season_number(response['data'])
-      create_mapping(media_id, series_id, season_number)
-    end
+    @mtd = format_data(data)
   end
 
-  # grabs all Mappings
-  def mapping_data
-    @md ||= Mapping.where(external_site: %w[thetvdb/series thetvdb/season])
-                   .pluck(:item_type, :item_id, :external_site, :external_id)
-                   .each_with_object({}) do |(item_type, item_id, external_site, external_id), acc|
-                     acc[item_type] ||= {}
-                     acc[item_type][item_id] ||= {}
-                     acc[item_type][item_id][external_site] = external_id
-                   end
-  end
+  def currently_airing
+    return @cad if @cad
 
-  def missing_thumbnail_data
-    @mtd ||= Mapping.where(external_site: 'thetvdb')
-                    .joins('LEFT OUTER JOIN episodes ON mappings.item_id = episodes.media_id AND mappings.item_type = episodes.media_type')
-                    .where(episodes: { thumbnail_file_name: nil })
-                    .distinct.pluck(:item_type, :item_id, :external_site, :external_id)
-                    .each_with_object({}) do |(item_type, item_id, external_site, external_id), acc|
-                      acc[item_type] ||= {}
-                      acc[item_type][item_id] ||= {}
-                      acc[item_type][item_id][external_site] = external_id
-                    end
-  end
+    data = Mapping.where(external_site: %w[thetvdb/series thetvdb/season])
+                  .joins('LEFT OUTER JOIN anime ON mappings.item_id = anime.id')
+                  .merge(Anime.current)
 
-  def currently_airing_data
-    @cad ||= Mapping.where(external_site: %w[thetvdb/series thetvdb/season])
-                    .joins('LEFT OUTER JOIN anime ON mappings.item_id = anime.id').merge(Anime.current)
-                    .pluck(:item_type, :item_id, :external_site, :external_id)
-                    .each_with_object({}) do |(item_type, item_id, external_site, external_id), acc|
-                      acc[item_type] ||= {}
-                      acc[item_type][item_id] ||= {}
-                      acc[item_type][item_id][external_site] = external_id
-                    end
+    @cad = format_data(data)
   end
 
   def api_token
@@ -115,20 +79,35 @@ class TheTvdbService
   end
 
   def get(url)
-    Typhoeus::Request.get(
+    response = Typhoeus::Request.get(
       build_url(url),
       headers: {
         'Accept' => 'application/json',
         'Authorization' => "Bearer #{api_token}"
       }
     )
+    raise NotFound if response.code == 404
+    raise 'TVDB Error' unless response.success?
+
+    JSON.parse(response.body)
+  rescue NotFound
+    false
   end
 
-  def query_data(worker_type)
-    case worker_type
-    when 'daily' then return currently_airing_data
-    when 'weekly' then return missing_thumbnail_data
-    end
+  def format_data(data)
+    return if data.blank?
+
+    data.pluck(:item_type, :item_id, :external_site, :external_id)
+        .each_with_object({}) do |(item_type, item_id, external_site, external_id), acc|
+          acc[item_type] ||= {}
+          acc[item_type][item_id] ||= {}
+          acc[item_type][item_id][external_site] = external_id
+        end
+  end
+
+  def query_data
+    return unless %w[currently_airing missing_thumbnails].include?(@set_name)
+    send(@set_name)
   end
 
   def build_url(url)
@@ -143,27 +122,6 @@ class TheTvdbService
     # and we will catch any errors when we send the response.
     path += "/query?airedSeason=#{season_number}" if season_number.to_i < 25
     path
-  end
-
-  def season_filter(episodes, season_id)
-    return episodes.select { |ep| ep['airedSeason'].present? } if season_id.blank?
-
-    episodes.select { |ep| ep['airedSeasonID'] == season_id.to_i && ep['airedSeason'].present? }
-  end
-
-  def find_season_number(episodes)
-    episodes.count.zero? ? 1 : episodes.first['airedSeason']
-  end
-
-  def create_mapping(media_id, series_id, season_number)
-    mapping = Mapping.where(
-      external_site: 'thetvdb',
-      item_id: media_id,
-      item_type: 'Anime'
-    ).first_or_initialize
-
-    mapping.external_id = "#{series_id}/#{season_number}"
-    mapping.save!
   end
 
   def process_episode_data(response, media_id, tvdb_series_id)
