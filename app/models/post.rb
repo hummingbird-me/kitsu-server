@@ -63,9 +63,11 @@ class Post < ApplicationRecord
   has_one :ama, foreign_key: 'original_post_id'
   has_many :reposts, dependent: :delete_all
 
-  scope :sfw, (-> { where(nsfw: false) })
-  scope :in_group, (->(group) { where(target_group: group) })
-  scope :visible_for, (->(user) { where(target_group_id: Group.visible_for(user)) })
+  scope :sfw, -> { where(nsfw: false) }
+  scope :in_group, ->(group) { where(target_group: group) }
+  scope :visible_for, ->(user) {
+    where(target_group_id: Group.visible_for(user)).or(where(target_group_id: nil))
+  }
 
   validates :content, :content_formatted, presence: true, unless: :uploads
   validates :uploads, presence: true, unless: :content
