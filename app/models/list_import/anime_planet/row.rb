@@ -13,7 +13,7 @@ class ListImport
         key = "#{type}/#{media_info[:id]}"
 
         @media = Mapping.lookup('animeplanet', key) ||
-                 Mapping.guess_algolia(type.classify.safe_constantize, media_info[:title])
+                 Mapping.guess(type.classify.safe_constantize, media_info)
       end
 
       def media_info

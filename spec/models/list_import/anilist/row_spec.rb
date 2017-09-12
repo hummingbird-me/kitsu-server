@@ -14,17 +14,22 @@ RSpec.describe ListImport::Anilist::Row do
 
     describe '#media' do
       it 'should work for lookup' do
-        expect(Mapping).to receive(:lookup).with('anilist', 'anime/1')
+        expect(Mapping).to receive(:lookup)
+          .with('anilist', 'anime/1')
           .and_return('hello')
 
         subject.media
       end
 
-      it 'should work for guess_algolia' do
+      it 'should work for guess' do
         allow(Mapping).to receive(:lookup).and_return(nil)
-
-        expect(Mapping).to receive(:guess_algolia).with(Anime, 'COWBOY BEBOP').and_return('hello')
-
+        expect(Mapping).to receive(:guess)
+          .with(Anime,
+            id: 1,
+            title: 'COWBOY BEBOP',
+            subtype: 'TV',
+            episode_count: 26)
+          .and_return('hello')
         subject.media
       end
     end
@@ -263,16 +268,20 @@ RSpec.describe ListImport::Anilist::Row do
 
     describe '#media' do
       it 'should work for lookup' do
-        expect(Mapping).to receive(:lookup).with('anilist', 'manga/30933')
+        expect(Mapping).to receive(:lookup)
+          .with('anilist', 'manga/30933')
           .and_return('hello')
 
         subject.media
       end
 
-      it 'should work for guess_algolia' do
+      it 'should work for guess' do
         allow(Mapping).to receive(:lookup).and_return(nil)
-
-        expect(Mapping).to receive(:guess_algolia).with(Manga, 'Elfen Lied').and_return('hello')
+        expect(Mapping).to receive(:guess).with(Manga,
+          id: 30_933,
+          title: 'Elfen Lied',
+          subtype: 'Manga',
+          chapter_count: 113).and_return('hello')
 
         subject.media
       end

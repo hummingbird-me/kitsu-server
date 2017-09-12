@@ -42,9 +42,9 @@ RSpec.describe Mapping, type: :model do
     end
   end
 
-  describe '.guess_algolia' do
+  describe '.guess' do
     it 'should respond with nil when it cannot find a reasonable match' do
-      expect(Mapping.guess_algolia(Anime, 'Such Ass Ohmy')).to be_nil
+      expect(Mapping.guess(Anime, title: 'Such Ass Ohmy')).to be_nil
     end
   end
 end
