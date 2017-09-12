@@ -350,7 +350,6 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
       end
     end
 
-
     describe '#media_info' do
       let(:xml) { wrap_row <<~EOF }
         <manga_mediadb_id>#{manga.id}</manga_mediadb_id>
