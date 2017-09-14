@@ -8,7 +8,6 @@ class TheTvdbService
     @set_name = set_name
   end
 
-  # daily or weekly
   def import!
     data = query_data
     return if data.blank?
@@ -133,16 +132,7 @@ class TheTvdbService
 
   def update_anime_episode_count(media_id, tvdb_episodes_count)
     anime = Anime.find(media_id)
-
-    if anime.episode_count.blank?
-      if anime.episode_count_guess.blank?
-        anime.episode_count_guess = tvdb_episodes_count
-      elsif anime.episode_count_guess < tvdb_episodes_count
-        anime.episode_count_guess = tvdb_episodes_count
-      end
-      anime.save! if anime.changed?
-    end
-
+    anime.update_unit_count_guess(tvdb_episodes_count)
     anime
   end
 end

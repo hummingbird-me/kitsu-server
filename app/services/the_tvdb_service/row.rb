@@ -13,19 +13,10 @@ class TheTvdbService
     def update_episode
       return unless episode_number.present?
 
-      episode.season_number ||= data['airedSeason']
-      episode.relative_number ||= data['airedEpisodeNumber']
-      # was returning an empty string and storing that in database.
-      episode.synopsis = data['overview'].presence || nil if episode.synopsis.blank?
-      episode.thumbnail ||= thumbnail_path
-      episode.airdate ||= data['firstAired']
-      # HACK: in the edge case where there is no episodeName returned by Tvdb
-      # and our database titles has {"en_jp" => nil}, I need to make sure en_jp title
-      # exists, otherwise it will cause a validation error.
-      episode.titles['en_jp'] ||= episode_name
-      # only set en_us if the tvdb has it.
-      episode.titles['en_us'] ||= data['episodeName'] if data['episodeName'].present?
-      episode.canonical_title = 'en_us' if episode.titles.key?('en_us')
+      %i[
+        season_number relative_number synopsis
+        thumbnail airdate titles canonical_title
+      ].each { |k| public_send(k) }
 
       # to get the imdbId we would have to call the /episodes/{episode_number} endpoint
       # instead of the series/episdoes.
@@ -36,6 +27,40 @@ class TheTvdbService
 
     def update_episode!
       update_episode.save!
+    end
+
+    def season_number
+      episode.season_number ||= data['airedSeason']
+    end
+
+    def relative_number
+      episode.relative_number ||= data['airedEpisodeNumber']
+    end
+
+    def synopsis
+      # was returning an empty string and storing that in database.
+      episode.synopsis = data['overview'].presence || nil if episode.synopsis.blank?
+    end
+
+    def thumbnail
+      episode.thumbnail ||= thumbnail_path
+    end
+
+    def airdate
+      episode.airdate ||= data['firstAired']
+    end
+
+    def titles
+      # HACK: in the edge case where there is no episodeName returned by Tvdb
+      # and our database titles has {"en_jp" => nil}, I need to make sure en_jp title
+      # exists, otherwise it will cause a validation error.
+      episode.titles['en_jp'] ||= episode_name
+      # only set en_us if the tvdb has it.
+      episode.titles['en_us'] ||= data['episodeName'] if data['episodeName'].present?
+    end
+
+    def canonical_title
+      episode.canonical_title = 'en_us' if episode.titles.key?('en_us')
     end
 
     def episode
