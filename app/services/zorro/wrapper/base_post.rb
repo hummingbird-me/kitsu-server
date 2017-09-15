@@ -53,6 +53,7 @@ module Zorro
       # @return [Hash] the attributes to save to our database
       def to_h
         {
+          ao_id: id,
           content: content,
           edited_at: edited_at,
           updated_at: updated_at,
@@ -61,9 +62,14 @@ module Zorro
         }
       end
 
+      # @return [Boolean] whether to save to our database
+      def save?
+        true
+      end
+
       # Create the post in our database
       def save!
-        Post.create!(to_h)
+        Post.create!(to_h) if save?
       end
 
       private
