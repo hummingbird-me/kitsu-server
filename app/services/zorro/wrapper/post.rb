@@ -1,67 +1,23 @@
 module Zorro
   class Wrapper
-    class Post < Wrapper
-      # Figure out which subclass to delegate to
+    class Post < BasePost
+      # Wrap a Post in whichever delegate knows how to handle it properly
+      #
+      # @return [PostPost,PostComment,PostReply] the object wrapping the data
       def self.wrap(data)
-        case data['parentClass']
-        when 'Anime' then Zorro::Wrapper::MediaPost.new(data)
-        when 'Episode' then Zorro::Wrapper::EpisodePost.new(data)
-        when 'Recommendation' then nil
-        else
-          if data['parentPost'].nil?
-            Zorro::Wrapper::PostPost.new(data)
-          else
-            Zorro::Wrapper::CommentPost.new(data)
-          end
+        # Ignore posts involving Recommendations
+        return if data['parentClass'] == 'Recommendation'
+        # Normally replyLevel maps straight 0->Post, 1->Comment, but Anime threads have 0->Comment,
+        # 1->Subcomment, so we push them down one, identifying them by lack of a parentClass.  This
+        # makes the mappings now 0->Post, 1->Comment, 2->Subcomment
+        reply_level = data['replyLevel']
+        reply_level += 1 unless data['parentClass'].present?
+        # Delegate based on reply level
+        case reply_level
+        when 0 then PostPost.new(data)
+        when 1 then PostComment.new(data)
+        when 2 then PostSubcomment.new(data)
         end
-      end
-
-      def initialize(data)
-        @data = data
-      end
-
-      def content
-        content = ''
-        content << "**#{thread['title']}:**\n\n" if @thread['title']
-        content << @data['content']
-        content
-      end
-
-      def edited_at
-        updated_at if @data['edited']
-      end
-
-      def thread
-        @thread ||= assoc(@data['_p_thread']) || {}
-      end
-
-      def target_group
-        Zorro::Groups.by_name(thread['subType']) if thread['subType'].present?
-      end
-
-      def spoiler
-        @data['hasSpoilers']
-      end
-
-      def user
-        User.find_by(ao_id: @data['_p_postedBy'])
-      end
-
-      def to_h
-        {
-          content: content,
-          edited_at: edited_at,
-          updated_at: updated_at,
-          created_at: created_at,
-          spoiler: spoiler,
-          target_group: target_group,
-          target_user: target_user,
-          user: user
-        }
-      end
-
-      def save!
-        Post.create!(to_h)
       end
     end
   end
