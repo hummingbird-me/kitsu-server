@@ -3,65 +3,92 @@ require_dependency 'zorro/wrapper'
 module Zorro
   class Wrapper
     class User < Wrapper
+      # @return [Hash] the associated details document
       def details
         @details ||= assoc(@data['_p_details'])
       end
 
+      # Aozora wasn't always strictly checking these, so about 15,000 users have non-ASCII chars in
+      # their names.
+      # @return [String] the username
       def name
         @data['aozoraUsername']
       end
 
+      # About 43,000 Aozora users are missing this
+      # @return [String,nil] the email address
       def email
         @data['email']
       end
 
+      # About 87,000 Aozora users are missing this
+      # @return [String,nil] the password hash
       def password_digest
         @data['_hashed_password']
       end
 
+      # @return [Number] the number of users following this one
       def followers_count
         details['followersCount']
       end
 
+      # @return [Number] the number of users this user follows
       def following_count
         details['followingCount']
       end
 
+      # @return [String] the user's about text
       def about
         details['about']
       end
 
+      # @return [String] the URL to the user's avatar
       def avatar
         file(details['avatarRegular'])
       end
 
+      # @return [String] the URL to the user's banner image
       def cover_image
         file(@data['banner'])
       end
 
+      # @return [Boolean] whether the user has bought Aozora PRO
       def pro?
         @data['badges']&.include?('PRO') || false
       end
 
+      # @return [Boolean] whether the user has bought Aozora PRO+
       def pro_plus?
         @data['badges']&.include?('PRO+') || false
       end
 
+      # @return [:pro,:pro_plus,nil] the tier of Aozora PRO that this user has
       def pro_tier
         return :pro if pro?
         return :pro_plus if pro_plus?
         nil
       end
 
+      # NOTE: Facebook issues separate IDs to each application, so these can't be matched directly
+      # against Kitsu Facebook IDs, and need to be matched using the ids_for_business edge in the
+      # FB Graph API.
+      #
+      # @return [String,nil] the Aozora Facebook ID
       def facebook_id
         @data.dig('_auth_data_facebook', 'id')
       end
 
+      # About 317,000 users have no badges whatsoever
+      # @return [Boolean] whether the user is an Aozora admin or not
       def admin?
-        @data['badges'].include?('Admin')
+        @data['badges']&.include?('Admin')
       end
 
-      # Some stuff is *always* merged
+      # Merge authentication data and Aozora-specific attributes onto a user model. These attributes
+      # can be merged without asking the user first, since they're nondestructive.
+      #
+      # @param user [User] the user to assign attributes onto
+      # @return [void]
       def initial_merge_onto(user)
         password_key = user.password_digest? ? :ao_password : :password_digest
         user.assign_attributes(
@@ -74,13 +101,17 @@ module Zorro
         )
       end
 
-      # Other things are only *sometimes* merged
+      # Merge all data onto a user model.  This is a destructive operation, so we need to ask the
+      # user first.
+      #
+      # @param user [User] the user to assign attributes onto
+      # @return [void]
       def full_merge_onto(user)
         user.assign_attributes(
           name: name,
           about: about,
-          followers_count: followers_count,
-          following_count: following_count,
+          followers_count: user.followers_count + followers_count,
+          following_count: user.following_count + following_count,
           avatar: avatar,
           cover_image: cover_image,
           email: email
