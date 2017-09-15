@@ -56,6 +56,7 @@ class Post < ApplicationRecord
   belongs_to :target_group, class_name: 'Group'
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
+  belongs_to :community_recommendation
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -149,6 +150,9 @@ class Post < ApplicationRecord
   after_create do
     media.trending_vote(user, 2.0) if media.present?
     GroupUnreadFanoutWorker.perform_async(target_group_id, user_id) if target_group.present?
+    if community_recommendation.present?
+      CommunityRecommendationReasonWorker.perform_async(self, community_recommendation)
+    end
   end
 
   before_destroy do

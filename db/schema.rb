@@ -298,6 +298,43 @@ ActiveRecord::Schema.define(version: 20170909082819) do
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["post_id"], name: "index_comments_on_post_id", using: :btree
 
+  create_table "community_recommendation_follows", force: :cascade do |t|
+    t.integer  "user_id",                             null: false
+    t.integer  "community_recommendation_request_id"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "community_recommendation_follows", ["user_id", "community_recommendation_request_id"], name: "index_community_recommendation_follows_on_user_and_request", unique: true, using: :btree
+  add_index "community_recommendation_follows", ["user_id"], name: "index_community_recommendation_follows_on_user_id", using: :btree
+
+  create_table "community_recommendation_requests", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.string   "title"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "community_recommendation_requests", ["user_id"], name: "index_community_recommendation_requests_on_user_id", using: :btree
+
+  create_table "community_recommendations", force: :cascade do |t|
+    t.integer  "media_id"
+    t.string   "media_type"
+    t.integer  "anime_id"
+    t.integer  "drama_id"
+    t.integer  "manga_id"
+    t.integer  "community_recommendation_request_id"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "community_recommendations", ["anime_id"], name: "index_community_recommendations_on_anime_id", using: :btree
+  add_index "community_recommendations", ["drama_id"], name: "index_community_recommendations_on_drama_id", using: :btree
+  add_index "community_recommendations", ["manga_id"], name: "index_community_recommendations_on_manga_id", using: :btree
+  add_index "community_recommendations", ["media_id", "media_type"], name: "index_community_recommendations_on_media_id_and_media_type", unique: true, using: :btree
+  add_index "community_recommendations", ["media_type", "media_id"], name: "index_community_recommendations_on_media_type_and_media_id", using: :btree
+
   create_table "drama_castings", force: :cascade do |t|
     t.integer  "drama_character_id", null: false
     t.integer  "person_id",          null: false
@@ -1137,8 +1174,10 @@ ActiveRecord::Schema.define(version: 20170909082819) do
     t.datetime "edited_at"
     t.string   "target_interest"
     t.jsonb    "embed"
+    t.integer  "community_recommendation_id"
   end
 
+  add_index "posts", ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id", using: :btree
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
   add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
 
@@ -1542,6 +1581,13 @@ ActiveRecord::Schema.define(version: 20170909082819) do
   add_foreign_key "comment_likes", "comments"
   add_foreign_key "comment_likes", "users"
   add_foreign_key "comments", "comments", column: "parent_id"
+  add_foreign_key "community_recommendation_follows", "community_recommendation_requests"
+  add_foreign_key "community_recommendation_follows", "users"
+  add_foreign_key "community_recommendation_requests", "users"
+  add_foreign_key "community_recommendations", "anime"
+  add_foreign_key "community_recommendations", "community_recommendation_requests"
+  add_foreign_key "community_recommendations", "dramas"
+  add_foreign_key "community_recommendations", "manga"
   add_foreign_key "drama_castings", "drama_characters"
   add_foreign_key "drama_castings", "people"
   add_foreign_key "drama_castings", "producers", column: "licensor_id"
@@ -1599,6 +1645,7 @@ ActiveRecord::Schema.define(version: 20170909082819) do
   add_foreign_key "one_signal_players", "users"
   add_foreign_key "post_follows", "posts"
   add_foreign_key "post_follows", "users"
+  add_foreign_key "posts", "community_recommendations"
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "profile_links", "profile_link_sites"
