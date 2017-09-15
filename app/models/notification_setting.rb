@@ -24,7 +24,7 @@
 # rubocop:enable Metrics/LineLength
 
 class NotificationSetting < ApplicationRecord
-  NOTIFICATION_TYPES = %i[mentions replies likes reaction_votes follows posts].freeze
+  NOTIFICATION_TYPES = %i[mentions replies likes follows posts reaction_votes].freeze
   enum setting_type: NOTIFICATION_TYPES
   belongs_to :user
 
