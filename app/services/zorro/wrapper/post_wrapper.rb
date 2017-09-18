@@ -30,11 +30,6 @@ module Zorro
         Mapping.lookup('aozora/episode', @data['parentID']) if @data['parentClass'] == 'Episode'
       end
 
-      # @return [String] the id of this object
-      def id
-        "Post$#{super}"
-      end
-
       def to_h
         super.merge(media: media, unit: unit).compact
       end
