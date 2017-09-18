@@ -68,6 +68,7 @@ module Zorro
       end
 
       # Create the post in our database
+      # @return [Post,nil] the post that was created
       def save!
         Post.create!(to_h) if save?
       end

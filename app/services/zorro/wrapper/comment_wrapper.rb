@@ -9,6 +9,12 @@ module Zorro
       def to_h
         super.merge(post: post).compact
       end
+
+      # Create the comment in our database
+      # @return [Comment,nil] the comment that was created
+      def save!
+        Comment.create!(to_h) if save?
+      end
     end
   end
 end
