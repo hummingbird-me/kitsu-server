@@ -31,7 +31,7 @@ module Zorro
     end
 
     def by_name(name)
-      return ao_meme if name == 'aoGur'
+      return ao_meme if name.casecmp?('aoGur')
       public_send(name.underscore)
     end
 
