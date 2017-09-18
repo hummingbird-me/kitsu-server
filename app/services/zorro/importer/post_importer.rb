@@ -1,9 +1,6 @@
-require_dependency 'zorro'
-require_dependency 'zorro/wrapper/post'
-
 module Zorro
   module Importer
-    class Post
+    class PostImporter
       def self.run!
         Zorro::DB::Post.find.each do |post|
           new(post).run!
@@ -12,7 +9,7 @@ module Zorro
       end
 
       def initialize(post)
-        @post = Zorro::Wrapper::Post.new(post)
+        @post = Zorro::Wrapper::PostWrapper.wrap(post)
       end
 
       def run!

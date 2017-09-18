@@ -16,7 +16,9 @@ module Zorro
         # Import the profile data
         user_id = import_profile(force: force).id
         # Import the library if they don't have an existing library
-        import_library_to(user) if force || LibraryEntry.where(user_id: user_id).blank?
+        import_library_to(user_id) if force || LibraryEntry.where(user_id: user_id).blank?
+        # Join the Aozora groups, giving mod rank to any Aozora admins
+        join_groups(user_id, rank: (@user.admin? ? :mod : :pleb))
       end
 
       # Import the profile
@@ -33,6 +35,14 @@ module Zorro
       # @return [ListImport::Zorro] the list import task generated for this user
       def import_library_to(user_id)
         ListImport::Zorro.create!(user_id: user_id, strategy: :obliterate, input_text: @user.id)
+      end
+
+      # Join the Aozora groups
+      #
+      # @param user_id [Integer] the Kitsu User ID to have join the Aozora groups
+      # @param rank [:pleb,:mod,:admin] the rank to give the user within the group
+      def join_groups(user_id, rank: :pleb)
+        Groups.all.each { |g| GroupMember.create!(group: g, user_id: user_id, rank: rank) }
       end
 
       private
