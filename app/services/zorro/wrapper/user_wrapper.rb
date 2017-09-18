@@ -1,8 +1,6 @@
-require_dependency 'zorro/wrapper'
-
 module Zorro
   class Wrapper
-    class User < Wrapper
+    class UserWrapper < Wrapper
       # @return [Hash] the associated details document
       def details
         @details ||= assoc(@data['_p_details'])
