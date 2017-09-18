@@ -3,13 +3,18 @@ module Zorro
     FILE_PREFIX = 'https://aozora-assets.s3.amazonaws.com/'.freeze
 
     # @param [String] data The Data to wrap up
-    def initialize(data)
+    def initialize(data, collection: nil)
       @data = data
+      @collection = collection
     end
 
+    # The Parse ID is 10 characters of base62, which means there's a 50% chance of collision after
+    # just 3 million rows.  Because some Kitsu models map to multiple Aozora collections, we cannot
+    # guarantee uniqueness without a collection prefix.
+    #
     # @return [String] the MongoDB ID from Aozora
     def id
-      @data['_id']
+      [@collection, @data['_id']].compact.join('$')
     end
 
     # @return [Time] the creation time
