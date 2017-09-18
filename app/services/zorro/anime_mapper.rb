@@ -1,4 +1,6 @@
 module Zorro
+  # Sets up Mapping data for Aozora, imports hashtags, and potentially creates new anime where we
+  # don't already have them.
   class AnimeMapper
     SELECTED_FIELDS = %w[myAnimeListID traktID anilistID tvdbID hashtags].map { |k|
       [k, true]
@@ -22,23 +24,34 @@ module Zorro
 
     private
 
+    # Runs a block for each anime in the Aozora database, ignoring items without a myAnimeListID,
+    # picking only the necessary columns, matching them to Kitsu, and then logging them.
+    #
+    # Probably does too much, frankly, but that's okay.  This code is gonna get deleted once it's
+    # been run once.
     def each_anime
+      # Set up a hash to track our actions for logging purposes
       results = { imported: 0, mapped: 0 }
 
+      # Find all the anime with MAL IDs, pick the fields with the projection param, and iterate
       Zorro::DB::Anime.find({
         myAnimeListID: { '$exists' => true }
       }, projection: SELECTED_FIELDS).each do |anime|
+        # Find the kitsu_id using the MAL ID from Aozora
         kitsu_id = Mapping.lookup('myanimelist/anime', anime['myAnimeListID'])&.id
 
-        # Log the issue
+        # If we don't have a match, import it and note that in the results hash
         unless kitsu_id
-          results[:imported] += 1
           kitsu_id = import_anime(anime['_id']).id
+          results[:imported] += 1
         end
 
-        # Log the mapping
+        # Log the mappings that Aozora has and log that we successfully mapped it
+        # First, grab all the keys and strip them of the "ID" suffix
         imported_sites = anime.keys.select { |k| k.end_with?('ID') }.map { |k| k.sub(/ID\z/, '') }
+        # Then log the Aozora ID, the Kitsu ID, and the names of other sites we're getting IDs for
         puts "#{anime['_id']} => #{kitsu_id} (+ #{imported_sites.join(', ')})"
+        # Yes, we increment this too, it's technically a superset of imported items.
         results[:mapped] += 1
 
         yield kitsu_id, anime
@@ -47,6 +60,11 @@ module Zorro
       puts "Imported to Kitsu: #{results[:imported]} | Mapped to Aozora: #{results[:mapped]}"
     end
 
+    # Creates a mapping if it doesn't already exist in the database
+    #
+    # @param site [String] the external_site key for the Mapping table
+    # @param id [String] the external_id value for the Mapping table
+    # @param anime_id [Integer] the Kitsu ID of the Anime
     def create_mapping(site, id, anime_id)
       Mapping.where(
         external_site: site,
@@ -55,8 +73,11 @@ module Zorro
       ).first_or_create(external_id: id)
     end
 
+    # Imports an anime from Aozora
+    #
+    # @param aozora_id [String] the Anime ID in the Aozora database
     def import_anime(aozora_id)
-      Zorro::AnimeImporter.new(aozora_id).run!
+      Zorro::Importer::AnimeImporter.new(aozora_id).run!
     end
   end
 end
