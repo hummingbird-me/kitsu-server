@@ -33,7 +33,7 @@ class ListImport
     end
 
     def each
-      Zorro::DB::AnimeProgresss.find(for_user).each do |entry|
+      Zorro::DB::AnimeProgress.find(for_user).each do |entry|
         row = Row.new(entry)
         yield row.media, row.data
       end
@@ -41,6 +41,7 @@ class ListImport
 
     private
 
+    # @return [Hash] the MongoDB query object for the user's AnimeProgress documents
     def for_user
       { _p_user: "_User$#{input_text}" }
     end
