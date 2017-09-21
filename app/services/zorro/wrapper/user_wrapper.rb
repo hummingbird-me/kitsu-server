@@ -27,17 +27,21 @@ module Zorro
 
       # @return [Number] the number of users following this one
       def followers_count
-        details['followersCount']
+        details['followersCount'] || 0
       end
 
       # @return [Number] the number of users this user follows
       def following_count
-        details['followingCount']
+        details['followingCount'] || 0
       end
 
       # @return [String] the user's about text
       def about
-        details['about'][0..499] if details['about']
+        if details['about']
+          details['about'][0..499]
+        else
+          ''
+        end
       end
 
       # @return [String] the URL to the user's avatar
