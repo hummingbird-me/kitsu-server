@@ -5,8 +5,6 @@ module Zorro
     # Imports a user from the Aozora database into Kitsu, importing the profile and (if there's no
     # existing library entries) the library.
     class UserImporter
-      include WithProgressBar
-
       # @param user [Hash] the user document from the Aozora database
       def initialize(user)
         @user_doc = user
@@ -28,12 +26,12 @@ module Zorro
 
       # Import all users
       def self.run!
-        bar = progress_bar('Users', Zorro::DB::User.count)
-        Zorro::DB::User.find.each do |user|
+        # Autoloading constants has issues in a multi-threaded environment, so we need this
+        Rails.application.eager_load!
+        MongoProcessor.new(Zorro::DB::User.find).each do |user|
+          Chewy.strategy(:bypass)
           new(user).run!
-          bar.increment
         end
-        bar.finish
       end
 
       # Import the profile
