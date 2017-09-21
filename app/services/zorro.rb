@@ -8,6 +8,8 @@ module Zorro
       # Profiles
       User = Client['_User'] # Parse prefixes the User collection with an underscore
       UserDetails = Client['UserDetails']
+      # Follows (which have a strange collection name in Mongo cause of Parse)
+      Follow = Client['_Join:following:_User']
       # Media
       Anime = Client['Anime']
       # Community
