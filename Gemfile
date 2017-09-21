@@ -7,6 +7,7 @@ gem 'rails', '4.2.8'
 gem 'rails-api'
 
 # Database Stuff
+gem 'activerecord-import' # Run bulk imports quicker
 gem 'algoliasearch-rails' # Future Search
 gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
