@@ -37,7 +37,7 @@ module Zorro
 
       # @return [String] the user's about text
       def about
-        details['about']
+        details['about'][0..499] if details['about']
       end
 
       # @return [String] the URL to the user's avatar
