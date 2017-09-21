@@ -17,7 +17,7 @@ module Zorro
         # Import the profile data
         user_id = import_profile(force: force).id
         # Import the library if they don't have an existing library
-        import_library_to(user_id) if force || LibraryEntry.where(user_id: user_id).blank?
+        import_library_to(user_id) if force || LibraryEntry.where(user_id: user_id).limit(1).blank?
         # Join the Aozora groups, giving mod rank to any Aozora admins
         join_groups(user_id, rank: (@user.admin? ? :mod : :pleb))
       end
