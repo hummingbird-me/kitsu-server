@@ -57,7 +57,14 @@ module Zorro
       # @param user_id [Integer] the Kitsu User ID to have join the Aozora groups
       # @param rank [:pleb,:mod,:admin] the rank to give the user within the group
       def join_groups(user_id, rank: :pleb)
-        Groups.all.each { |g| GroupMember.create!(group: g, user_id: user_id, rank: rank) }
+        existing_groups = GroupMember.where(user_id: user_id).pluck(:group_id)
+        new_groups = (Groups.all_ids - existing_groups)
+        rank = GroupMember.ranks[rank]
+        members = new_groups.map do |group_id|
+          [group_id, user_id, rank]
+        end
+        GroupMember.import(%i[group_id user_id rank], members, validate: false)
+        TimelineFeed.new(user_id).follow_many(new_groups.map { |g| "group:#{g}" })
       end
 
       private
