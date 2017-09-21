@@ -49,6 +49,11 @@ module Zorro
       Group.where(name: GROUP_NAMES)
     end
 
+    # @return [Array<Integer>] IDs of all Aozora groups
+    def all_ids
+      @all_ids ||= all.ids
+    end
+
     # @return [User] the user who should own the groups when they're created
     def owner
       @owner ||= User.find(2) # Josh
