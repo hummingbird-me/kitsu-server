@@ -9,7 +9,8 @@ module Zorro
 
       # @param user [Hash] the user document from the Aozora database
       def initialize(user)
-        @user = Zorro::Wrapper::User.new(user)
+        @user_doc = user
+        @user = Zorro::Wrapper::UserWrapper.new(user)
       end
 
       # Execute the import, optionally forcing an overwrite
@@ -40,7 +41,7 @@ module Zorro
       # @param force [Boolean] whether to forcibly overwrite existing Kitsu data with Aozora data
       # @return [User] the Kitsu user affected by this import
       def import_profile(force: false)
-        @profile ||= Zorro::Importer::ProfileImporter.new(@user).run!(force: force)
+        @profile ||= Zorro::Importer::ProfileImporter.new(@user_doc).run!(force: force)
       end
 
       # Import the library data
