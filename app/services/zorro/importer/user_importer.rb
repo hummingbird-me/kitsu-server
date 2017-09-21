@@ -1,8 +1,12 @@
+require_dependency 'with_progress_bar'
+
 module Zorro
   module Importer
     # Imports a user from the Aozora database into Kitsu, importing the profile and (if there's no
     # existing library entries) the library.
     class UserImporter
+      include WithProgressBar
+
       # @param user [Hash] the user document from the Aozora database
       def initialize(user)
         @user = Zorro::Wrapper::User.new(user)
@@ -19,6 +23,16 @@ module Zorro
         import_library_to(user_id) if force || LibraryEntry.where(user_id: user_id).blank?
         # Join the Aozora groups, giving mod rank to any Aozora admins
         join_groups(user_id, rank: (@user.admin? ? :mod : :pleb))
+      end
+
+      # Import all users
+      def self.run!
+        bar = progress_bar('Users', Zorro::DB::User.count)
+        Zorro::DB::User.find.each do |user|
+          new(user).run!
+          bar.increment
+        end
+        bar.finish
       end
 
       # Import the profile
