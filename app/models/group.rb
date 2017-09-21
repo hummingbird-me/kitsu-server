@@ -108,6 +108,11 @@ class Group < ApplicationRecord
     GroupFeed.new(id)
   end
 
+  # @return [Group,nil] the Kitsu group, if one exists
+  def self.kitsu
+    @kitsu ||= find_by(id: 1830)
+  end
+
   before_validation do
     self.nsfw = category_id == 9 if category_id_changed?
     true

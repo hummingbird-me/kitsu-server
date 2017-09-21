@@ -351,7 +351,7 @@ class User < ApplicationRecord
     DramaTimelineFeed.new(id).setup!
 
     # Automatically join "Kitsu" group
-    GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
+    GroupMember.create!(user: self, group_id: kitsu) if Group.kitsu
   end
 
   after_save do
