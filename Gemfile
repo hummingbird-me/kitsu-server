@@ -13,11 +13,11 @@ gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
+gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
 gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
 gem 'where-or' # RAILS-5: Remove this, it just backports AR#where
-gem 'mongo'
 
 # Auth{entication,orization}
 gem 'bcrypt'
