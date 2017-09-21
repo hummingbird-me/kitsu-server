@@ -1,5 +1,3 @@
-require_dependency 'with_progress_bar'
-
 module Zorro
   module Importer
     # Imports a user from the Aozora database into Kitsu, importing the profile and (if there's no
