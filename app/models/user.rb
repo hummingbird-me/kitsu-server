@@ -356,8 +356,6 @@ class User < ApplicationRecord
   end
 
   after_commit on: :create do
-    # Send Confirmation Email
-    UserMailer.confirmation(self).deliver_later
 
     # Set up feeds
     profile_feed.setup!
@@ -392,12 +390,14 @@ class User < ApplicationRecord
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
     end
     self.previous_email = nil if confirmed_at_changed?
-    if email_changed? && !Rails.env.staging?
-      self.previous_email = email_was
-      self.confirmed_at = nil
-      UserMailer.confirmation(self).deliver_later
-    end
+    self.previous_email = email_was if email_changed?
     update_profile_completed
     update_feed_completed
+  end
+
+  after_commit if: ->(u) { u.email_changed? && !Rails.env.staging? } do
+    self.confirmed_at = nil
+    # Send Confirmation Email
+    UserMailer.confirmation(self).deliver_later
   end
 end
