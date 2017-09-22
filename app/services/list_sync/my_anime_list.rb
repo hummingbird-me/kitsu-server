@@ -28,7 +28,7 @@ module ListSync
         import = ListImport::MyAnimeListXML.new(
           input_file: their_xml_for(kind),
           user: linked_account.user,
-          strategy: :greater,
+          strategy: :merge,
           status: :running
         )
         import.save!

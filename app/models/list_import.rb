@@ -28,7 +28,7 @@ class ListImport < ApplicationRecord
 
   belongs_to :user, required: true, touch: true
 
-  enum strategy: %i[greater obliterate]
+  enum strategy: %i[greater obliterate merge]
   enum status: %i[queued running failed completed]
   has_attached_file :input_file, s3_permissions: :private
   alias_attribute :kind, :type
@@ -43,9 +43,7 @@ class ListImport < ApplicationRecord
   def type_is_subclass
     in_namespace = type.start_with?('ListImport')
     is_descendant = type.safe_constantize <= ListImport
-    unless in_namespace && is_descendant
-      errors.add(:type, 'must be a ListImport class')
-    end
+    errors.add(:type, 'must be a ListImport class') unless in_namespace && is_descendant
   end
 
   # Apply the ListImport
@@ -71,7 +69,9 @@ class ListImport < ApplicationRecord
           limit = media.progress_limit || media.default_progress_limit
           data[:progress] = [data[:progress], limit].compact.min
           # Merge the library entries
-          le = LibraryEntry.where(user: user, media: media).first_or_initialize
+          query = LibraryEntry.where(user: user, media: media)
+          le = merge? ? query.first : query.first_or_initialize
+          next if le.blank?
           le.imported = true
           le = merged_entry(le, data)
           le.save! unless le.status.nil?
@@ -112,6 +112,8 @@ class ListImport < ApplicationRecord
       entry.assign_attributes(data) unless (theirs <=> ours).negative?
     when :obliterate
       entry.assign_attributes(data)
+    when :merge
+      entry.assign_attributes(data.merge(entry.attributes))
     end
     entry
   end
