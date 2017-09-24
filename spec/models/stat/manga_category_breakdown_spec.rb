@@ -36,7 +36,7 @@ RSpec.describe Stat::MangaCategoryBreakdown do
   describe '#recalculate!' do
     it 'should create Stat' do
       stat = Stat.find_by(user: user, type: 'Stat::MangaCategoryBreakdown')
-      
+
       expect(stat.stats_data).to_not be_nil
     end
   end
