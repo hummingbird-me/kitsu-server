@@ -26,7 +26,7 @@ require 'rails_helper'
 RSpec.describe Stat::AnimeCategoryBreakdown do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, :categories) }
-  let(:le) { create(:library_entry, user: user, anime: anime) }
+  let(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
 
   before do
     Stat::AnimeCategoryBreakdown.increment(user, le)

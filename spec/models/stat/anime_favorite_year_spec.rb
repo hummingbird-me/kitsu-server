@@ -27,8 +27,8 @@ RSpec.describe Stat::AnimeFavoriteYear do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, start_date: 'Tue, 19 Apr 2016') }
   let(:anime1) { create(:anime, start_date: 'Tue, 19 Apr 2014') }
-  let(:le) { create(:library_entry, user: user, anime: anime) }
-  let(:le1) { create(:library_entry, user: user, anime: anime1) }
+  let(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
+  let(:le1) { create(:library_entry, user: user, anime: anime1, progress: 1) }
 
   before do
     Stat::AnimeFavoriteYear.increment(user, le)
