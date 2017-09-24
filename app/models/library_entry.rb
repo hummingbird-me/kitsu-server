@@ -239,15 +239,15 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_create do
-    Stat::AddWorker.perform_async(kind, user, id)
+    Stat::LibraryCreateWorker.perform_async(kind, user, id)
   end
 
   after_update do
-    Stat::UpdateWorker.perform_async(kind, user, id)
+    Stat::LibraryUpdateWorker.perform_async(kind, user, id, progress_was, progress)
   end
 
   after_destroy do
-    Stat::DestroyWorker.perform_async(kind, user, self)
+    Stat::LibraryDestroyWorker.perform_async(kind, user, self)
   end
 
   after_commit(on: :create, if: :sync_to_mal?) do

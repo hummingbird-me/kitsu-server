@@ -1,5 +1,5 @@
 class Stat
-  class AddWorker
+  class LibraryCreateWorker
     include Sidekiq::Worker
 
     def perform(kind, user, library_entry_id)

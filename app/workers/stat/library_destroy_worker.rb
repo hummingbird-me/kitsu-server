@@ -1,5 +1,5 @@
 class Stat
-  class DestroyWorker
+  class LibraryDestroyWorker
     include Sidekiq::Worker
 
     def perform(kind, user, library_entry)

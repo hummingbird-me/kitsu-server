@@ -1,8 +1,8 @@
 class Stat
-  class UpdateWorker
+  class LibraryUpdateWorker
     include Sidekiq::Worker
 
-    def perform(kind, user, library_entry_id)
+    def perform(kind, user, library_entry_id, progress_was, progress)
       library_entry = LibraryEntry.find(library_entry_id)
       library_event = LibraryEvent.create_for(:updated, library_entry)
 
