@@ -86,6 +86,14 @@ module Zorro
         @data['badges']&.include?('Admin')
       end
 
+      def status
+        if password_digest.blank? || email.blank?
+          :incomplete
+        else
+          :registered
+        end
+      end
+
       # Merge authentication data and Aozora-specific attributes onto a user model. These attributes
       # can be merged without asking the user first, since they're nondestructive.
       #
@@ -99,7 +107,8 @@ module Zorro
           # Facebook Auth
           ao_facebook_id: facebook_id,
           ao_id: id,
-          ao_pro: pro_tier
+          ao_pro: pro_tier,
+          status: status
         )
       end
 
