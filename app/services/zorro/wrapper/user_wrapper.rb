@@ -3,7 +3,7 @@ module Zorro
     class UserWrapper < Wrapper
       # @return [Hash] the associated details document
       def details
-        @details ||= @data['details'].present || {}
+        @details ||= @data['details'].presence || {}
       end
 
       # Aozora wasn't always strictly checking these, so about 15,000 users have non-ASCII chars in

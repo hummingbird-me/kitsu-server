@@ -3,12 +3,12 @@ require_dependency 'with_progress_bar'
 class MongoProcessor
   include WithProgressBar
 
-  def initialize(view, batch_size: 5000, in_threads: 10)
+  def initialize(view, batch_size: 5000, in_threads: 20)
     @view = view
     @threads = in_threads
     @batch_size = batch_size
     @min_queue_size = @batch_size * 0.05
-    @enum = @view.respond_to?(:batch_size) ? @view.batch_size(5000).to_enum : @view.to_enum
+    @enum = @view.respond_to?(:batch_size) ? @view.batch_size(batch_size).to_enum : @view.to_enum
     @queue = Queue.new
   end
 
@@ -39,7 +39,8 @@ class MongoProcessor
   end
 
   def each(&block)
-    bar = progress_bar(@view.collection.name, @view.count)
+    view = @view.respond_to?(:view) ? @view.view : @view
+    bar = progress_bar(view.collection.name, view.count)
     refill_queue
     Parallel.each(
       method(:next),
@@ -61,7 +62,6 @@ class MongoProcessor
     Parallel.each(
       method(:next_batch),
       in_threads: @threads,
-      finish: ->(*) { bar.increment },
       &block
     )
   end
