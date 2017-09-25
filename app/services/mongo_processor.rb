@@ -3,12 +3,12 @@ require_dependency 'with_progress_bar'
 class MongoProcessor
   include WithProgressBar
 
-  def initialize(view, batch_size: 5000, in_threads: 10)
+  def initialize(view, queue_size: 5000, in_threads: 10)
     @view = view
     @threads = in_threads
-    @batch_size = batch_size
-    @min_queue_size = @batch_size * 0.05
-    @enum = @view.batch_size(@batch_size).to_enum
+    @queue_size = queue_size
+    @min_queue_size = @queue_size * 0.05
+    @enum = @view.to_enum
     @queue = Queue.new
   end
 
@@ -17,7 +17,7 @@ class MongoProcessor
     @grabber ||= Thread.new do
       loop do
         begin
-          @batch_size.times { @queue.push(@enum.next) }
+          @queue_size.times { @queue.push(@enum.next) }
           Thread.stop
         rescue StopIteration
           @queue.close
@@ -51,7 +51,7 @@ class MongoProcessor
   end
 
   def next_batch(*)
-    Array.new(@batch_size) { @queue.pop }.tap { refill_queue }
+    Array.new(@queue_size) { @queue.pop }.tap { refill_queue }
   rescue ClosedQueueError
     Parallel::Stop
   end
