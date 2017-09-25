@@ -26,7 +26,7 @@ module Zorro
       def self.run!
         # Autoloading constants has issues in a multi-threaded environment, so we need this
         Rails.application.eager_load!
-        MongoProcessor.new(Zorro::DB::User.find).each do |user|
+        MongoProcessor.new(detailed_users).each do |user|
           Chewy.strategy(:bypass)
           new(user).run!
         end
@@ -68,6 +68,38 @@ module Zorro
       # @return [User, nil] any existing Kitsu user with the same email
       def email_user
         @email_user ||= ::User.by_email(@user.email).first
+      end
+
+      def self.detailed_users
+        Zorro::DB::User.aggregate([
+          {
+            '$addFields': {
+              detailsId: {
+                '$substrBytes': ['$_p_details', 12, 10]
+              }
+            }
+          },
+          {
+            '$lookup': {
+              from: 'UserDetails',
+              localField: 'detailsId',
+              foreignField: '_id',
+              as: 'details'
+            }
+          },
+          {
+            '$addFields': {
+              details: {
+                '$arrayElemAt': ['$details', 0]
+              }
+            }
+          },
+          {
+            '$project': {
+              detailsId: false
+            }
+          }
+        ])
       end
     end
   end
