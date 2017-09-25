@@ -99,7 +99,7 @@ module Zorro
               detailsId: false
             }
           }
-        ])
+        ], cursor: { batchSize: 5000 })
       end
     end
   end
