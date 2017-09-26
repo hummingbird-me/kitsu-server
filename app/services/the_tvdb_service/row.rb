@@ -13,6 +13,7 @@ class TheTvdbService
     def update_episode
       return unless episode_number.present?
 
+      # All these methods will be modifying the episode object in-place
       %i[
         season_number relative_number synopsis
         thumbnail airdate titles canonical_title
@@ -20,7 +21,8 @@ class TheTvdbService
 
       # to get the imdbId we would have to call the /episodes/{episode_number} endpoint
       # instead of the series/episdoes.
-      # TODO: implement getting imdbId once we can store it.
+      # TODO: implement getting imdbId (which is an episode id)
+      # once we can store mappings for an episode.
 
       episode
     end

@@ -11,7 +11,6 @@ class TheTvdbService
   def import!
     data = query_data
     return if data.blank?
-
     data['Anime'].each do |(anime_id, mappings)|
       series_id, season_id = mappings['thetvdb'].split('/')
 
@@ -20,8 +19,8 @@ class TheTvdbService
 
       # update the episode count if it does not exist.
       tvdb_episodes_count = response['data'].count
-      anime = update_anime_episode_count(anime_id, tvdb_episodes_count)
-
+      anime = Anime.find(anime_id)
+      anime.update_unit_count_guess(tvdb_episodes_count)
       # we don't want to add their data if the episode counts don't match up
       # TODO: we should log this because it would be good to double check.
       next unless [anime.episode_count, anime.episode_count_guess].include?(tvdb_episodes_count)
@@ -32,7 +31,7 @@ class TheTvdbService
   end
 
   def missing_thumbnails
-    return @mtd if @mtd
+    return @missing_thumbnails if @missing_thumbnails
 
     data = Mapping.where(external_site: 'thetvdb')
                   .joins(<<-SQL)
@@ -42,17 +41,17 @@ class TheTvdbService
                   SQL
                   .where(episodes: { thumbnail_file_name: nil }).distinct
 
-    @mtd = format_data(data)
+    @missing_thumbnails = format_data(data)
   end
 
   def currently_airing
-    return @cad if @cad
+    return @currently_airing if @currently_airing
 
     data = Mapping.where(external_site: %w[thetvdb/series thetvdb/season])
                   .joins('LEFT OUTER JOIN anime ON mappings.item_id = anime.id')
                   .merge(Anime.current)
 
-    @cad = format_data(data)
+    @currently_airing = format_data(data)
   end
 
   def api_token
@@ -105,7 +104,7 @@ class TheTvdbService
   end
 
   def query_data
-    return unless %w[currently_airing missing_thumbnails].include?(@set_name)
+    return unless %i[currently_airing missing_thumbnails].include?(@set_name)
     send(@set_name)
   end
 
@@ -128,11 +127,5 @@ class TheTvdbService
       row = Row.new(media_id, tvdb_episode, tvdb_series_id)
       row.update_episode!
     end
-  end
-
-  def update_anime_episode_count(media_id, tvdb_episodes_count)
-    anime = Anime.find(media_id)
-    anime.update_unit_count_guess(tvdb_episodes_count)
-    anime
   end
 end
