@@ -159,7 +159,7 @@ class User < ApplicationRecord
   has_many :one_signal_players, dependent: :destroy
   has_many :reposts, dependent: :destroy
   has_many :ip_addresses, dependent: :destroy, class_name: 'UserIpAddress'
-  validates :email, :name, :password, absence: true, if: :unregistered?
+  validates :email, :name, :password, :slug, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
                     if: ->(user) { user.registered? && user.email_changed? }
