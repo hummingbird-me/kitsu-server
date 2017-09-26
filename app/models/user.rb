@@ -193,6 +193,9 @@ class User < ApplicationRecord
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
+  scope :by_email, ->(*emails) {
+    where('lower(users.email) IN (?)', emails.flatten.map(&:downcase))
+  }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :followed_first, ->(user) {
     user_id = sanitize(user.id)
@@ -203,10 +206,8 @@ class User < ApplicationRecord
     SQL
   }
 
-  # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
-    identification = [identification.downcase]
-    where('lower(email)=? OR lower(name)=?', *(identification * 2)).first
+    by_email(identification).first
   end
 
   def not_reserved_slug
