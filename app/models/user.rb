@@ -179,6 +179,7 @@ class User < ApplicationRecord
     without: /\A[0-9]*\z/,
     message: 'cannot be entirely numbers'
   }, if: :slug_changed?
+  validates :slug, length: 3..20, allow_nil: true, if: :slug_changed?
   validate :not_reserved_slug, if: :registered?
   validates :name, presence: true,
                    length: { minimum: 3, maximum: 20 },
