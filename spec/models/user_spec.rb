@@ -108,7 +108,7 @@ RSpec.describe User, type: :model do
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }
-  it { should validate_uniqueness_of(:slug).case_insensitive }
+  it { should validate_uniqueness_of(:slug).case_insensitive.allow_nil }
   it { should validate_uniqueness_of(:email).case_insensitive }
   it { should have_many(:library_events).dependent(:destroy) }
   it { should have_many(:notification_settings).dependent(:destroy) }

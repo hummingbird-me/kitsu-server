@@ -105,7 +105,7 @@ class User < ApplicationRecord
     feature featured features feed follow followers following hummingbird index
     javascript json kitsu sysadmin sysadministrator system unfollow user users
     wiki you staff mod
-  ].freeze
+  ].to_set.freeze
 
   enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
