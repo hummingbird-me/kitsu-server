@@ -163,24 +163,23 @@ class User < ApplicationRecord
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
                     if: ->(user) { user.registered? && user.email_changed? }
-  validates :slug, uniqueness: { case_sensitive: false },
-                   format: {
-                     with: /\A[_A-Za-z0-9]+\z/,
-                     message: <<-EOF.squish
-                       can only contain letters, numbers, and underscores.
-                     EOF
-                   },
-                   if: :slug_changed?
-  validates :slug, format: {
-    with: /\A[A-Za-z0-9]/,
-    message: 'must begin with a letter or number'
-  }, if: :slug_changed?
-  validates :slug, format: {
-    without: /\A[0-9]*\z/,
-    message: 'cannot be entirely numbers'
-  }, if: :slug_changed?
-  validates :slug, length: 3..20, allow_nil: true, if: :slug_changed?
-  validate :not_reserved_slug, if: :registered?
+  with_options if: :slug_changed?, allow_nil: true do
+    validates :slug, uniqueness: { case_sensitive: false }
+    validates :slug, format: {
+      with: /\A[_A-Za-z0-9]+\z/,
+      message: 'can only contain letters, numbers, and underscores'
+    }
+    validates :slug, format: {
+      with: /\A[A-Za-z0-9]/,
+      message: 'must begin with a letter or number'
+    }
+    validates :slug, format: {
+      without: /\A[0-9]*\z/,
+      message: 'cannot be entirely numbers'
+    }
+    validates :slug, length: 3..20
+  end
+  validate :not_reserved_slug, if: ->(user) { user.slug.present? && user.slug_changed? }
   validates :name, presence: true,
                    length: { minimum: 3, maximum: 20 },
                    if: ->(user) { user.registered? && user.name_changed? }
