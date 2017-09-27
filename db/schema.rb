@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20170919034156) do
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "citext"
 
   create_table "ama_subscribers", force: :cascade do |t|
     t.integer  "ama_id",     null: false
@@ -1504,10 +1505,12 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.datetime "deleted_at"
     t.integer  "media_reactions_count",                   default: 0,           null: false
     t.integer  "status",                                  default: 1,           null: false
+    t.citext   "slug"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["facebook_id"], name: "index_users_on_facebook_id", unique: true, using: :btree
+  add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree
   add_index "users", ["to_follow"], name: "index_users_on_to_follow", using: :btree
   add_index "users", ["waifu_id"], name: "index_users_on_waifu_id", using: :btree
 

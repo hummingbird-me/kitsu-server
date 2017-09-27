@@ -62,6 +62,7 @@
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
+#  slug                        :citext           indexed
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
@@ -83,6 +84,7 @@
 #
 #  index_users_on_email        (email) UNIQUE
 #  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_slug         (slug) UNIQUE
 #  index_users_on_to_follow    (to_follow)
 #  index_users_on_waifu_id     (waifu_id)
 #
@@ -103,7 +105,7 @@ class User < ApplicationRecord
     feature featured features feed follow followers following hummingbird index
     javascript json kitsu sysadmin sysadministrator system unfollow user users
     wiki you staff mod
-  ].freeze
+  ].to_set.freeze
 
   enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
@@ -157,28 +159,30 @@ class User < ApplicationRecord
   has_many :one_signal_players, dependent: :destroy
   has_many :reposts, dependent: :destroy
   has_many :ip_addresses, dependent: :destroy, class_name: 'UserIpAddress'
-  validates :email, :name, :password, absence: true, if: :unregistered?
+  validates :email, :name, :password, :slug, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
                     if: ->(user) { user.registered? && user.email_changed? }
-  validates :name, uniqueness: { case_sensitive: false },
+  with_options if: :slug_changed?, allow_nil: true do
+    validates :slug, uniqueness: { case_sensitive: false }
+    validates :slug, format: {
+      with: /\A[_A-Za-z0-9]+\z/,
+      message: 'can only contain letters, numbers, and underscores'
+    }
+    validates :slug, format: {
+      with: /\A[A-Za-z0-9]/,
+      message: 'must begin with a letter or number'
+    }
+    validates :slug, format: {
+      without: /\A[0-9]*\z/,
+      message: 'cannot be entirely numbers'
+    }
+    validates :slug, length: 3..20
+  end
+  validate :not_reserved_slug, if: ->(user) { user.slug.present? && user.slug_changed? }
+  validates :name, presence: true,
                    length: { minimum: 3, maximum: 20 },
-                   if: ->(user) { user.registered? && user.name_changed? },
-                   format: {
-                     with: /\A[_A-Za-z0-9]+\z/,
-                     message: <<-EOF.squish
-                       can only contain letters, numbers, and underscores.
-                     EOF
-                   }
-  validates :name, format: {
-    with: /\A[A-Za-z0-9]/,
-    message: 'must begin with a letter or number'
-  }, if: :registered?
-  validates :name, format: {
-    without: /\A[0-9]*\z/,
-    message: 'cannot be entirely numbers'
-  }, if: :registered?
-  validate :not_reserved_username, if: :registered?
+                   if: ->(user) { user.registered? && user.name_changed? }
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
   validates :password, length: { maximum: 72 }, if: :registered?
@@ -187,6 +191,9 @@ class User < ApplicationRecord
   scope :active, ->() { where(deleted_at: nil) }
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
+  }
+  scope :by_email, ->(*emails) {
+    where('lower(users.email) IN (?)', emails.flatten.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :followed_first, ->(user) {
@@ -198,14 +205,12 @@ class User < ApplicationRecord
     SQL
   }
 
-  # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
-    identification = [identification.downcase]
-    where('lower(email)=? OR lower(name)=?', *(identification * 2)).first
+    by_email(identification).first
   end
 
-  def not_reserved_username
-    errors.add(:name, 'is reserved') if RESERVED_NAMES.include?(name&.downcase)
+  def not_reserved_slug
+    errors.add(:slug, 'is reserved') if RESERVED_NAMES.include?(slug&.downcase)
   end
 
   def pro?
@@ -308,6 +313,12 @@ class User < ApplicationRecord
 
   def update_profile_completed!
     update_profile_completed.save!
+  end
+
+  # TODO: remove once slugs are live on frontend
+  before_validation(if: :name_changed?) do
+    # Don't override slug if the slug has already been changed
+    self.slug = name unless slug_changed?
   end
 
   before_destroy do
