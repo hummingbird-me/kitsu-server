@@ -65,11 +65,6 @@ module Zorro
 
       private
 
-      # @return [User, nil] any existing Kitsu user with the same email
-      def email_user
-        @email_user ||= ::User.by_email(@user.email).first
-      end
-
       def self.detailed_users
         Zorro::DB::User.aggregate([
           {

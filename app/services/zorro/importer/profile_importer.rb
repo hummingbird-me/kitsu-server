@@ -23,7 +23,7 @@ module Zorro
       # @return [User] the user which was affected by this import
       def run!(force: false)
         @user.initial_merge_onto(target_user)
-        @user.full_merge_onto(target_user) if force || email_user.nil?
+        @user.full_merge_onto(target_user) if force || existing_user.nil?
         target_user.save! && target_user
       end
 
@@ -31,12 +31,12 @@ module Zorro
 
       # @return [User] the user to import onto, either existing or new
       def target_user
-        @target_user ||= (email_user || ::User.new)
+        @target_user ||= (existing_user || ::User.new)
       end
 
-      # @return [User, nil] any existing Kitsu user with the same email
-      def email_user
-        @email_user ||= ::User.by_email(@user.email).first
+      # @return [User, nil] any existing Kitsu user with the same email or ao_id
+      def existing_user
+        @existing_user ||= User.by_email(@user.email).or(User.where(ao_id: @user.id)).first
       end
     end
   end
