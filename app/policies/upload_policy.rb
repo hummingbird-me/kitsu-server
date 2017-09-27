@@ -7,8 +7,13 @@ class UploadPolicy < ApplicationPolicy
     user ? true : false
   end
 
-  alias_method :update?, :is_owner?
-  alias_method :destroy?, :is_owner?
+  def update?
+    is_owner?
+  end
+
+  def destroy?
+    is_owner? || is_admin?
+  end
 
   class Scope < Scope
     def resolve

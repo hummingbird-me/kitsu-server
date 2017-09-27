@@ -44,7 +44,7 @@ class Upload < ApplicationRecord
     )
   }
 
-  validates :upload_order, absence: true, if: :owner_id?
+  validates :upload_order, presence: true, if: :owner_id?
   validates_attachment_content_type :content, content_type: [
     'image/jpg', 'image/jpeg', 'image/png', 'image/gif'
   ]
