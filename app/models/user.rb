@@ -316,7 +316,10 @@ class User < ApplicationRecord
   end
 
   # TODO: remove once slugs are live on frontend
-  before_validation(if: :name_changed?) { self.slug = name }
+  before_validation(if: :name_changed?) do
+    # Don't override slug if the slug has already been changed
+    self.slug = name unless slug_changed?
+  end
 
   before_destroy do
     # Destroy personal posts
