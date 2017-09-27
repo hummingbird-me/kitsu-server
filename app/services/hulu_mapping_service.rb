@@ -10,7 +10,7 @@ class HuluMappingService
   end
 
   # Grabs all available series from hulu
-  def get_series_for_episodes(limit)
+  def get_series(limit)
     offset = 0
     series_res = Typhoeus.get(
       "#{HULU_URL}/series?guid=#{guid}&primary_category=animation&offset=#{offset}&limit=#{limit}"
@@ -22,25 +22,23 @@ class HuluMappingService
   # Start of syncing series and episodes on hulu with kitsu anime
   def sync_series_and_episodes
     limit = 10_000
-    hulu_anime = get_series_for_episodes(limit)
+    hulu_anime = get_series(limit)
     return if hulu_anime.nil?
     hulu_anime.each do |item|
       item = item.deep_symbolize_keys
       series_id = item[:id]
       title = item[:name].titleize
-      mapping_object = {
-        title: title
-      }
-      kitsu_anime = Mapping.guess('Anime', mapping_object)
+      kitsu_anime = Mapping.lookup('hulu', series_id)
+      kitsu_anime ||= Mapping.guess('Anime', title: title)
       next unless kitsu_anime
-      create_kitsu_hulu_series_mapping(kitsu_anime, series_id)
-      hulu_episodes = get_hulu_episodes_for_series(series_id, limit)
+      create_mapping(kitsu_anime, series_id)
+      hulu_episodes = get_episodes(series_id, limit)
       next unless hulu_episodes
       sync_episodes_for_anime(hulu_episodes, kitsu_anime)
     end
   end
 
-  def create_kitsu_hulu_series_mapping(kitsu_anime, series_id)
+  def create_mapping(kitsu_anime, series_id)
     # creating mapping with series to kitsu anime
     kitsu_anime.mappings.where(
       external_site: 'hulu',
@@ -48,7 +46,7 @@ class HuluMappingService
     ).first_or_create
   end
 
-  def get_hulu_episodes_for_series(series_id, limit)
+  def get_episodes(series_id, limit)
     # grab available episodes from hulu with anime
     since_param = (since - 24.hours).strftime('%F') if since
     ep_url = "#{HULU_URL}/assets?guid=#{guid}&series_id=#{series_id}&type=episode&limit=#{limit}"
