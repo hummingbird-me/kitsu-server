@@ -1,5 +1,5 @@
 class TheTvdbService
-  class Row
+  class Row < TheTvdbService
     attr_reader :media_id, :media_type, :data, :episode_id, :tvdb_series_id
 
     def initialize(media_id, data, tvdb_series_id)
@@ -19,10 +19,8 @@ class TheTvdbService
         thumbnail airdate titles canonical_title
       ].each { |k| public_send(k) }
 
-      # to get the imdbId we would have to call the /episodes/{episode_number} endpoint
-      # instead of the series/episdoes.
-      # TODO: implement getting imdbId (which is an episode id)
-      # once we can store mappings for an episode.
+      # This will create the mapping for an episode related to an imdbId.
+      create_episode_mapping
 
       episode
     end
@@ -84,6 +82,17 @@ class TheTvdbService
 
     def episode_name
       data['episodeName'].presence || "Episode #{episode.number}"
+    end
+
+    def create_episode_mapping
+      response_body = get("/episodes/#{episode_id}")
+      return if response_body['data']['imdbId'].blank?
+
+      Mapping.create(
+        item: episode,
+        external_site: 'imdb/episodes',
+        external_id: response_body['data']['imdbId']
+      )
     end
   end
 end
