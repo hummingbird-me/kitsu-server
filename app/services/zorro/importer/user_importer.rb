@@ -66,7 +66,7 @@ module Zorro
       private
 
       def self.detailed_users
-        Zorro::DB::User.aggregate([
+        Zorro::DB::User.find.batch_size(2000).aggregate([
           {
             '$addFields': {
               detailsId: {
@@ -94,7 +94,7 @@ module Zorro
               detailsId: false
             }
           }
-        ], cursor: { batchSize: 5000 })
+        ])
       end
     end
   end
