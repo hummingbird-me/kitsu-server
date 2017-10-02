@@ -49,6 +49,12 @@ class LibraryEvent < ApplicationRecord
     where(scope)
   end
 
+  def progress
+    return if changed_data['progress'].nil?
+
+    changed_data['progress'][1] - changed_data['progress'][0]
+  end
+
   def self.create_for(event, library_entry)
     LibraryEvent.create!(
       # instead of polymorphic media
