@@ -15,7 +15,7 @@ namespace :kitsu do
     klass.manga_favorite_year
 
     # Activity History
-    klass.anime_activity_history
-    klass.manga_activity_history
+    # klass.anime_activity_history
+    # klass.manga_activity_history
   end
 end

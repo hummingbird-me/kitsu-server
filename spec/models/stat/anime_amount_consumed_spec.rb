@@ -30,10 +30,25 @@ RSpec.describe Stat::AnimeAmountConsumed do
   let(:anime1) { create(:anime) }
   let(:le) { create(:library_entry, user: user, anime: anime, progress: 10) }
   let(:le1) { create(:library_entry, user: user, anime: anime1, progress: 5) }
+  let(:options) do
+    {
+      progress: le.progress,
+      progress_was: le.progress_was,
+      progress_changed: le.progress_changed?
+    }
+  end
+
+  let(:options1) do
+    {
+      progress: le1.progress,
+      progress_was: le1.progress_was,
+      progress_changed: le1.progress_changed?
+    }
+  end
 
   before do
-    Stat::AnimeAmountConsumed.increment(user, le)
-    Stat::AnimeAmountConsumed.increment(user, le1)
+    Stat::AnimeAmountConsumed.increment(user, le, options)
+    Stat::AnimeAmountConsumed.increment(user, le1, options1)
     user.stats.find_or_initialize_by(type: 'Stat::AnimeActivityHistory').recalculate!
   end
 
@@ -59,7 +74,7 @@ RSpec.describe Stat::AnimeAmountConsumed do
 
   describe '#decrement' do
     before do
-      Stat::AnimeAmountConsumed.decrement(user, le)
+      Stat::AnimeAmountConsumed.decrement(user, le, options)
     end
     it 'should remove le from stats_data' do
       record = Stat.find_by(user: user, type: 'Stat::AnimeAmountConsumed')

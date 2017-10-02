@@ -26,7 +26,7 @@ class Stat < ApplicationRecord
     end
 
     class_methods do
-      def increment(user, library_entry, updated = false)
+      def increment(user, library_entry, options, updated = false)
         record = user.stats.find_or_initialize_by(
           type: "Stat::#{media_type}AmountConsumed"
         )
@@ -39,38 +39,38 @@ class Stat < ApplicationRecord
 
         record.stats_data['all_time']['total_media'] += 1 unless updated
         record.stats_data['all_time']['total_progress'] +=
-          progress_difference(library_entry)
+          progress_difference(options)
         # No way to track time for Manga
         unless media_type == 'Manga'
           record.stats_data['all_time']['total_time'] +=
-            progress_to_time(library_entry, progress_difference(library_entry))
+            progress_to_time(library_entry, progress_difference(options))
         end
 
         record.save!
       end
 
-      def decrement(user, library_entry, updated = false)
+      def decrement(user, library_entry, options, updated = false)
         record = user.stats.find_by(type: "Stat::#{media_type}AmountConsumed")
         return unless record
 
         record.stats_data['all_time']['total_media'] -= 1 unless updated
         record.stats_data['all_time']['total_progress'] -=
-          progress_difference(library_entry)
+          progress_difference(options)
         # No way to track time for Manga
         unless media_type == 'Manga'
           record.stats_data['all_time']['total_time'] -=
-            progress_to_time(library_entry, progress_difference(library_entry))
+            progress_to_time(library_entry, progress_difference(options))
         end
 
         record.save!
       end
 
-      def progress_difference(le)
-        le.progress_changed? ? (le.progress - le.progress_was) : le.progress
+      def progress_difference(options)
+        options[:progress_changed] ? (options[:progress] - options[:progress_was]) : options[:progress]
       end
 
       def progress_to_time(le, progress)
-        return 0 if le.anime.episode_length.nil?
+        return 0 if le.anime.episode_length.blank?
 
         progress * le.anime.episode_length
       end

@@ -20,7 +20,7 @@
 #  fk_rails_9e94901167  (user_id => users.id)
 #
 # rubocop:enable Metrics/LineLength
-
+#
 require 'rails_helper'
 
 RSpec.describe Stat::MangaAmountConsumed do
@@ -30,10 +30,25 @@ RSpec.describe Stat::MangaAmountConsumed do
   let(:manga1) { create(:manga) }
   let(:le) { create(:library_entry, user: user, manga: manga, progress: 10, time_spent: 0) }
   let(:le1) { create(:library_entry, user: user, manga: manga1, progress: 5, time_spent: 0) }
+  let(:options) do
+    {
+      progress: le.progress,
+      progress_was: le.progress_was,
+      progress_changed: le.progress_changed?
+    }
+  end
+
+  let(:options1) do
+    {
+      progress: le1.progress,
+      progress_was: le1.progress_was,
+      progress_changed: le1.progress_changed?
+    }
+  end
 
   before do
-    Stat::MangaAmountConsumed.increment(user, le)
-    Stat::MangaAmountConsumed.increment(user, le1)
+    Stat::MangaAmountConsumed.increment(user, le, options)
+    Stat::MangaAmountConsumed.increment(user, le1, options1)
     user.stats.find_or_initialize_by(type: 'Stat::MangaAmountConsumed').recalculate!
   end
 
@@ -59,7 +74,7 @@ RSpec.describe Stat::MangaAmountConsumed do
 
   describe '#decrement' do
     before do
-      Stat::MangaAmountConsumed.decrement(user, le)
+      Stat::MangaAmountConsumed.decrement(user, le, options)
     end
     it 'should remove le from stats_data' do
       record = Stat.find_by(user: user, type: 'Stat::MangaAmountConsumed')

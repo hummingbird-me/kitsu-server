@@ -239,15 +239,36 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_create do
-    Stat::LibraryCreateWorker.perform_async(kind, user, id)
+    Stat::LibraryCreateWorker.perform_async(
+      kind, user, id,
+      options: {
+        progress: progress,
+        progress_was: progress_was,
+        progress_changed: progress_changed?
+      }
+    )
   end
 
   after_update do
-    Stat::LibraryUpdateWorker.perform_async(kind, user, id, progress_was, progress)
+    Stat::LibraryUpdateWorker.perform_async(
+      kind, user, id,
+      options: {
+        progress: progress,
+        progress_was: progress_was,
+        progress_changed: progress_changed?
+      }
+    )
   end
 
   after_destroy do
-    Stat::LibraryDestroyWorker.perform_async(kind, user, self)
+    Stat::LibraryDestroyWorker.perform_async(
+      kind, user, self,
+      options: {
+        progress: progress,
+        progress_was: progress_was,
+        progress_changed: progress_changed?
+      }
+    )
   end
 
   after_commit(on: :create, if: :sync_to_mal?) do
