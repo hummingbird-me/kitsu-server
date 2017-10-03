@@ -76,28 +76,34 @@ RSpec.shared_examples 'media' do
 
   describe '#decrement_rating_frequency' do
     it 'should decrement the rating frequency' do
-      subject.rating_frequencies['3'] = 5
-      subject.save!
-      subject.decrement_rating_frequency('3')
-      subject.reload
-      expect(subject.rating_frequencies['3']).to eq('4')
+      Sidekiq::Testing.inline! do
+        subject.rating_frequencies['3'] = 5
+        subject.save!
+        subject.decrement_rating_frequency('3')
+        subject.reload
+        expect(subject.rating_frequencies['3']).to eq('4')
+      end
     end
   end
 
   describe '#increment_rating_frequency' do
     it 'should increment the rating frequency' do
-      subject.rating_frequencies['3'] = 5
-      subject.save!
-      subject.increment_rating_frequency('3')
-      subject.reload
-      expect(subject.rating_frequencies['3']).to eq('6')
-    end
-    context 'without a pre-existing value' do
-      it 'should assume zero' do
+      Sidekiq::Testing.inline! do
+        subject.rating_frequencies['3'] = 5
         subject.save!
         subject.increment_rating_frequency('3')
         subject.reload
-        expect(subject.rating_frequencies['3']).to eq('1')
+        expect(subject.rating_frequencies['3']).to eq('6')
+      end
+    end
+    context 'without a pre-existing value' do
+      it 'should assume zero' do
+        Sidekiq::Testing.inline! do
+          subject.save!
+          subject.increment_rating_frequency('3')
+          subject.reload
+          expect(subject.rating_frequencies['3']).to eq('1')
+        end
       end
     end
   end

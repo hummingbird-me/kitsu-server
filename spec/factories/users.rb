@@ -37,7 +37,6 @@
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
-#  ip_addresses                :inet             default([]), is an Array
 #  language                    :string
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
@@ -65,6 +64,7 @@
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
+#  slug                        :citext           indexed
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
@@ -86,6 +86,7 @@
 #
 #  index_users_on_email        (email) UNIQUE
 #  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_slug         (slug) UNIQUE
 #  index_users_on_to_follow    (to_follow)
 #  index_users_on_waifu_id     (waifu_id)
 #

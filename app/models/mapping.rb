@@ -28,52 +28,12 @@ class Mapping < ApplicationRecord
     find_by(external_site: site, external_id: id).try(:item)
   end
 
-  def self.guess(type, info)
-    results = "MediaIndex::#{type}".constantize.query(
-      function_score: {
-        script_score: {
-          lang: 'expression',
-          script: "max(log10(doc['user_count'].value), 1) * _score",
-        },
-        query: {
-          bool: {
-            should: [
-              { multi_match: {
-                fields: %w[titles.* abbreviated_titles],
-                query: info[:title],
-                fuzziness: 3,
-                max_expansions: 15,
-                prefix_length: 2
-              } },
-              { multi_match: {
-                fields: %w[titles.* abbreviated_titles],
-                query: info[:title],
-                boost: 1.2,
-              } },
-              ({ match: {
-                subtype: info[:subtype]
-              } } if info[:subtype].present?),
-              ({ fuzzy: {
-                episode_count: {
-                  value: info[:episode_count],
-                  fuzziness: 2
-                }
-              } } if info[:episode_count].present?),
-              ({ fuzzy: {
-                episode_count: {
-                  value: info[:chapter_count],
-                  fuzziness: 2
-                }
-              } } if info[:chapter_count].present?)
-            ].compact
-          }
-        }
-      }
-    )
-    score = results.first&._score
-    top_result = results.load.first
-    # If we only get one result, or the top result has a good score, pick it
-    top_result if top_result && score > 5 || results.count == 1
-    # Otherwise nil
+  def self.guess(type, query)
+    query = query[:title] if query.is_a?(Hash) # Backwards compat
+    opts = { klass: type }
+    AlgoliaMediaIndex.search(
+      query,
+      opts
+    ).first
   end
 end

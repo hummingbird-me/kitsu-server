@@ -38,13 +38,14 @@ class Upload < ApplicationRecord
 
   scope :orphan, -> {
     where(
-      post: nil,
-      comment: nil
+      owner_type: nil,
+      owner_id: nil
     ).where(
       ['created_at > ?', 11.hours.ago]
     )
   }
 
+  validates :upload_order, presence: true, if: :owner_id?
   validates_attachment_content_type :content, content_type: [
     'image/jpg', 'image/jpeg', 'image/png', 'image/gif'
   ]

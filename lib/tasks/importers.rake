@@ -88,15 +88,15 @@ namespace :importers do
     puts '=> Loading Data'
     Chewy.strategy(:atomic) do
       bcmoe.each do |show|
-        result = Anime.fuzzy_find(show[:name])
+        result = Mapping.guess(Anime, show[:name])
 
         # Shit results?  Let humans handle it!
-        if result.nil? || result._score <= 2
+        if result.nil?
           next puts("      #{show[:name]} => #{show[:sites]}")
         end
 
-        anime = result._object
-        confidence = [result._score, 5].min.floor
+        anime = result
+        confidence = 5
         # Handle Spanish Hulu bullshit
         spanish = show[:name].include?('(Espa')
         dubs = spanish ? %w[es] : %w[ja]

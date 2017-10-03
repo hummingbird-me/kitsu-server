@@ -15,7 +15,7 @@ module ListSync
         def to_h
           return unless mapping
           [
-            media_id, progress, started_at, finished_at, rating, status,
+            media_id, progress, notes, volumes_owned, started_at, finished_at, rating, status,
             reconsume_count, update_on_import
           ].reduce(&:merge).compact
         end
@@ -54,6 +54,17 @@ module ListSync
           when :anime then { my_watched_episodes: entry.progress }
           when :manga then { my_read_chapters: entry.progress }
           end
+        end
+
+        def notes
+          return {} unless entry.notes
+          notes = entry.notes.split("\n=== MAL Tags ===\n")
+          return { my_comments: notes[0], my_tags: notes[1] } if notes.length > 1
+          { my_comments: notes[0], my_tags: notes[0] }
+        end
+
+        def volumes_owned
+          { my_read_volumes: entry.volumes_owned }
         end
 
         def started_at

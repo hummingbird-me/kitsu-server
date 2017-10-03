@@ -44,6 +44,20 @@ class BaseIndex
       self._index = value
     end
 
+    def search(search_query, opts = {})
+      return unless opts.key?(:klass)
+      klass = opts[:klass]
+      res = index.search(search_query).deep_symbolize_keys
+      res_ids = res[:hits].each_with_object({}) do |value, acc|
+        if acc.key?(value[:kind])
+          acc[value[:kind]] << value[:id]
+        else
+          acc[value[:kind]] = [value[:id]]
+        end
+      end
+      klass.where(id: res_ids[klass.name.downcase])
+    end
+
     def index
       @_index ||= Algolia::Index.new(index_name)
     end
@@ -183,16 +197,19 @@ class BaseIndex
     {
       kind: _model.class.name.underscore.dasherize,
       id: _model.id,
-      objectID: algolia_id
+      objectID: algolia_id,
+      _tags: [algolia_id]
     }
   end
 
   def as_json(*)
-    res = _attributes.each_with_object(base_attributes) do |attr, acc|
+    res = _attributes.each_with_object({}) do |attr, acc|
       value = respond_to?(attr[:name]) ? send(attr[:name]) : _model.send(attr[:name])
       acc[attr[:name]] = attr[:format] ? attr[:format].format(value) : value
     end
     res.merge!(_associated) if _associated
-    res.transform_keys { |k| k.to_s.camelize(:lower) }
+    res.transform_keys! { |k| k.to_s.camelize(:lower) }
+    res.merge!(base_attributes)
+    res
   end
 end

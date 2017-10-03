@@ -207,8 +207,8 @@ class LibraryEntry < ApplicationRecord
     unless imported || private?
       activity.rating(rating)&.create if rating_changed? && rating.present?
       activity.status(status)&.create if status_changed?
-      # If the progress has changed, make an activity unless the status is also changing
-      activity.progress(progress)&.create if progress_changed? && !status_changed?
+      # If the progress has changed, make an activity unless status is changing to completed
+      activity.progress(progress)&.create if progress_changed? && !(status_changed? && completed?)
       media.trending_vote(user, 0.5) if progress_changed?
       media.trending_vote(user, 1.0) if status_changed?
     end
@@ -249,12 +249,10 @@ class LibraryEntry < ApplicationRecord
       Stat::AnimeCategoryBreakdown.increment(user, self)
       Stat::AnimeAmountConsumed.increment(user, self)
       Stat::AnimeFavoriteYear.increment(user, self)
-      Stat::AnimeActivityHistory.increment(user, library_event)
     when :manga
       Stat::MangaCategoryBreakdown.increment(user, self)
       Stat::MangaAmountConsumed.increment(user, self)
       Stat::MangaFavoriteYear.increment(user, self)
-      Stat::MangaActivityHistory.increment(user, library_event)
     end
   end
 
@@ -263,7 +261,6 @@ class LibraryEntry < ApplicationRecord
     library_event = LibraryEvent.create_for(:updated, self)
     case kind
     when :anime
-      Stat::AnimeActivityHistory.increment(user, library_event)
       # special case checking if progress was increased or decreased
       if progress > progress_was
         Stat::AnimeAmountConsumed.increment(user, self, true)
@@ -271,7 +268,6 @@ class LibraryEntry < ApplicationRecord
         Stat::AnimeAmountConsumed.decrement(user, self, true)
       end
     when :manga
-      Stat::MangaActivityHistory.increment(user, library_event)
       # special case checking if progress was increased or decreased
       if progress > progress_was
         Stat::MangaAmountConsumed.increment(user, self, true)
@@ -288,12 +284,10 @@ class LibraryEntry < ApplicationRecord
       Stat::AnimeCategoryBreakdown.decrement(user, self)
       Stat::AnimeAmountConsumed.decrement(user, self)
       Stat::AnimeFavoriteYear.decrement(user, self)
-      Stat::AnimeActivityHistory.decrement(user, self)
     when :manga
       Stat::MangaCategoryBreakdown.decrement(user, self)
       Stat::MangaAmountConsumed.decrement(user, self)
       Stat::MangaFavoriteYear.decrement(user, self)
-      Stat::MangaActivityHistory.decrement(user, self)
     end
   end
 

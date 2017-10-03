@@ -24,6 +24,9 @@
 
 class ListImport
   class MyAnimeList < ListImport
+    class ResponseError < StandardError; end
+    class RateLimitedError < ResponseError; end
+
     MAL_HOST = 'https://myanimelist.net'.freeze
 
     # Only accept usernames, not XML exports
@@ -84,8 +87,10 @@ class ListImport
     end
 
     def get(list, page)
-      request = Typhoeus::Request.get(build_url(list, page))
-      JSON.parse(request.body)
+      res = Typhoeus::Request.get(build_url(list, page))
+      raise RateLimitedError.new(res.status_message) if res.code == 429
+      raise ResponseError.new(res.status_message) unless res.success?
+      JSON.parse(res.body)
     end
 
     def build_url(list, page)

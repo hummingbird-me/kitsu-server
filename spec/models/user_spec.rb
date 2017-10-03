@@ -37,7 +37,6 @@
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
-#  ip_addresses                :inet             default([]), is an Array
 #  language                    :string
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
@@ -65,6 +64,7 @@
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
+#  slug                        :citext           indexed
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
@@ -86,6 +86,7 @@
 #
 #  index_users_on_email        (email) UNIQUE
 #  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_slug         (slug) UNIQUE
 #  index_users_on_to_follow    (to_follow)
 #  index_users_on_waifu_id     (waifu_id)
 #
@@ -109,7 +110,7 @@ RSpec.describe User, type: :model do
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }
-  it { should validate_uniqueness_of(:name).case_insensitive }
+  it { should validate_uniqueness_of(:slug).case_insensitive.allow_nil }
   it { should validate_uniqueness_of(:email).case_insensitive }
   it { should have_many(:library_events).dependent(:destroy) }
   it { should have_many(:notification_settings).dependent(:destroy) }
@@ -138,17 +139,13 @@ RSpec.describe User, type: :model do
     end
   end
 
-  it 'should reserve certain names case-insensitively' do
-    user = User.new(name: 'admin')
+  it 'should reserve certain slugs case-insensitively' do
+    user = User.new(slug: 'admin')
     expect(user).to be_invalid
-    expect(user.errors[:name]).not_to be_empty
+    expect(user.errors[:slug]).not_to be_empty
   end
 
   describe 'find_for_auth' do
-    it 'should be able to query by username' do
-      u = User.find_for_auth(persisted_user.name)
-      expect(u).to eq(persisted_user)
-    end
     it 'should be able to query by email' do
       u = User.find_for_auth(persisted_user.email)
       expect(u).to eq(persisted_user)

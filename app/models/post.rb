@@ -6,12 +6,12 @@
 #  id                          :integer          not null, primary key
 #  blocked                     :boolean          default(FALSE), not null
 #  comments_count              :integer          default(0), not null
-#  content                     :text             not null
-#  content_formatted           :text             not null
+#  content                     :text
+#  content_formatted           :text
 #  deleted_at                  :datetime         indexed
 #  edited_at                   :datetime
 #  embed                       :jsonb
-#  media_type                  :string
+#  media_type                  :string           indexed => [media_id]
 #  nsfw                        :boolean          default(FALSE), not null
 #  post_likes_count            :integer          default(0), not null
 #  spoiled_unit_type           :string
@@ -21,7 +21,7 @@
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  community_recommendation_id :integer          indexed
-#  media_id                    :integer
+#  media_id                    :integer          indexed => [media_type]
 #  spoiled_unit_id             :integer
 #  target_group_id             :integer
 #  target_user_id              :integer
@@ -31,12 +31,12 @@
 #
 #  index_posts_on_community_recommendation_id  (community_recommendation_id)
 #  index_posts_on_deleted_at                   (deleted_at)
+#  posts_media_type_media_id_idx               (media_type,media_id)
 #
 # Foreign Keys
 #
 #  fk_rails_5b5ddfd518  (user_id => users.id)
 #  fk_rails_6fac2de613  (target_user_id => users.id)
-#  fk_rails_f82460b586  (community_recommendation_id => community_recommendations.id)
 #
 # rubocop:enable Metrics/LineLength
 
@@ -58,6 +58,7 @@ class Post < ApplicationRecord
   belongs_to :target_group, class_name: 'Group'
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
+  belongs_to :community_recommendation
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -65,14 +66,14 @@ class Post < ApplicationRecord
   has_one :ama, foreign_key: 'original_post_id'
   has_many :reposts, dependent: :delete_all
 
+  scope :sfw, -> { where(nsfw: false) }
   scope :in_group, ->(group) { where(target_group: group) }
   scope :visible_for, ->(user) {
-    joins(:target_group).merge(Group.visible_for(user))
-                        .or(joins(:target_group)
-                        .where(target_group_id: nil))
+    where(target_group_id: Group.visible_for(user)).or(where(target_group_id: nil))
   }
 
-  validates :content, :content_formatted, presence: true
+  validates :content, :content_formatted, presence: true, unless: :uploads
+  validates :uploads, presence: true, unless: :content
   validates :media, presence: true, if: :spoiled_unit
   validates :content, length: { maximum: 9_000 }
   validates :media, polymorphism: { type: Media }, allow_blank: true
@@ -150,6 +151,9 @@ class Post < ApplicationRecord
   after_create do
     media.trending_vote(user, 2.0) if media.present?
     GroupUnreadFanoutWorker.perform_async(target_group_id, user_id) if target_group.present?
+    if community_recommendation.present?
+      CommunityRecommendationReasonWorker.perform_async(self, community_recommendation)
+    end
   end
 
   before_destroy do

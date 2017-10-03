@@ -7,4 +7,10 @@ class MediaReactionPolicy < ApplicationPolicy
   def destroy?
     record.try(:user) == user || is_admin?
   end
+
+  class Scope < Scope
+    def resolve
+      scope.where.not(user_id: blocked_users)
+    end
+  end
 end

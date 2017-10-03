@@ -10,8 +10,8 @@
 #  content_formatted        :text             not null
 #  deleted_at               :datetime         indexed
 #  edited_at                :datetime
-#  embed                    :jsonb
 #  media_type               :string           indexed => [media_id]
+#  embed                    :jsonb
 #  nsfw                     :boolean          default(FALSE), not null
 #  post_likes_count         :integer          default(0), not null
 #  spoiled_unit_type        :string
@@ -20,6 +20,7 @@
 #  top_level_comments_count :integer          default(0), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  community_recommendation_id :integer          indexed
 #  media_id                 :integer          indexed => [media_type]
 #  spoiled_unit_id          :integer
 #  target_group_id          :integer
@@ -28,6 +29,7 @@
 #
 # Indexes
 #
+#  index_posts_on_community_recommendation_id  (community_recommendation_id)
 #  index_posts_on_deleted_at      (deleted_at)
 #  posts_media_type_media_id_idx  (media_type,media_id)
 #
@@ -35,6 +37,7 @@
 #
 #  fk_rails_5b5ddfd518  (user_id => users.id)
 #  fk_rails_6fac2de613  (target_user_id => users.id)
+#  fk_rails_f82460b586  (community_recommendation_id => community_recommendations.id)
 #
 # rubocop:enable Metrics/LineLength
 
@@ -46,13 +49,29 @@ RSpec.describe Post, type: :model do
   it { should belong_to(:user) }
   it { should validate_presence_of(:user) }
   it { should belong_to(:target_user).class_name('User') }
-  it { should validate_presence_of(:content) }
   it { should belong_to(:media) }
   it { should belong_to(:spoiled_unit) }
   it { should have_many(:post_likes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
   it { should validate_length_of(:content).is_at_most(9_000) }
   it { should have_many(:reposts).dependent(:delete_all) }
+
+  subject { build(:post, content: nil) }
+
+  context 'with content' do
+    before { subject.content = 'some content' }
+
+    it { should_not validate_presence_of(:uploads) }
+  end
+
+  context 'with uploads' do
+    before do
+      subject.uploads = [build(:upload)]
+      subject.content = nil
+    end
+
+    it { should_not validate_presence_of(:content) }
+  end
 
   context 'with a spoiled unit' do
     subject { build(:post, spoiled_unit: build(:episode)) }
