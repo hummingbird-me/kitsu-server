@@ -22,6 +22,6 @@
 
 class Volume < ApplicationRecord
   has_many :chapters
-  has_many :mappings, as: 'media', dependent: :destroy
+  has_many :mappings, as: 'item', dependent: :destroy
   belongs_to :manga
 end
