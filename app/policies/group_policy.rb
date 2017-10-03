@@ -29,7 +29,7 @@ class GroupPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope if is_admin?
+      return scope if user&.has_role?(:admin, Group)
       return scope.visible_for(user) if see_nsfw?
       scope.sfw.visible_for(user)
     end
