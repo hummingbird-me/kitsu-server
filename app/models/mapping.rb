@@ -35,4 +35,5 @@ class Mapping < ApplicationRecord
       query,
       opts
     ).first
+  end
 end
