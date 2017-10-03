@@ -66,7 +66,11 @@ class Stat < ApplicationRecord
       end
 
       def progress_difference(options)
-        options[:progress_changed] ? (options[:progress] - options[:progress_was]) : options[:progress]
+        if options[:progress_changed]
+          options[:progress] - options[:progress_was]
+        else
+          options[:progress]
+        end
       end
 
       def progress_to_time(le, progress)
