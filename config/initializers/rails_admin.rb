@@ -1,3 +1,5 @@
+require Rails.root.join('lib/rails_admin/config/fields/types/citext')
+
 RailsAdmin::ApplicationHelper.module_exec do
   def edit_user_link
     link_to "/users/#{_current_user.name}" do
