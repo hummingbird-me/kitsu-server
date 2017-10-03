@@ -189,6 +189,7 @@ class User < ApplicationRecord
   validates :facebook_id, uniqueness: true, allow_nil: true
 
   scope :active, ->() { where(deleted_at: nil) }
+  scope :by_slug, ->(*slugs) { where(slug: slugs.flatten) }
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
   }
@@ -206,7 +207,7 @@ class User < ApplicationRecord
   }
 
   def self.find_for_auth(identification)
-    by_email(identification).first
+    by_email(identification).or(by_slug(identification)).first
   end
 
   def not_reserved_slug
