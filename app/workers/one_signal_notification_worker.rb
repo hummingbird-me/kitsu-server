@@ -1,6 +1,6 @@
 class OneSignalNotificationWorker
   include Sidekiq::Worker
-  sidekiq_options queue: 'notifications'
+  sidekiq_options queue: 'soon'
 
   def perform(notification)
     service = GetstreamWebhookService.new(notification)

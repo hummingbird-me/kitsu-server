@@ -1,6 +1,6 @@
 class MediaFollowUpdateWorker
   include Sidekiq::Worker
-  sidekiq_options retry: 6
+  sidekiq_options retry: 6, queue: 'soon'
 
   def perform(user_id, media_type, media_id, action, progress_was = nil, progress = nil) # rubocop:disable Metrics/ParameterLists
     user = User.find(user_id)
