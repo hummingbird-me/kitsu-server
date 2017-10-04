@@ -24,36 +24,15 @@ en:
     mention:
       post: "%{actor} mentioned you in a post."
       comment: "%{actor} mentioned you in a comment."
-    follow:
-      zero: "%{actor} followed you."
-      one: "%{actor} and %{actor_two} followed you."
-      other: "%{actor} and %{count} others followed you."
-    post_like:
-      zero: "%{actor} liked your post."
-      one: "%{actor} and {actor_two} liked your post."
-      other: "%{actor} and %{count} others liked your post."
-    comment_like:
-      zero: "%{actor} liked your comment."
-      one: "%{actor} and {actor_two} liked your comment."
-      other: "%{actor} and %{count} others liked your comment."
+    follow: "%{actor} followed you."
+    post_like: "%{actor} liked your post."
+    comment_like: "%{actor} liked your comment."
     reply:
       post:
-        you:
-          zero: "%{actor} replied to your post."
-          one: "%{actor} and %{actor_two} replied to your post."
-          other: "%{actor} and %{count} others replied to your post."
+        you: "%{actor} replied to your post."
         themself: "%{actor} replied to their post."
-        author:
-          zero: "%{actor} replied to %{author}'s post"
-          one: "%{actor} and %{actor_two} replied to %{author}'s post"
-          other: "%{actor} and %{count} others replied to %{author}'s post"
-        unknown:
-          zero: "%{actor} replied to a post."
-          one: "%{actor} and %{actor_two} replied to a post."
-          other: "%{actor} and %{count} others replied to a post."
+        author: "%{actor} replied to %{author}'s post."
+        unknown: "%{actor} replied to a post."
       comment:
-        you:
-          zero: "%{actor} replied to your comment."
-          one: "%{actor} and %{actor_two} replied to your comment."
-          other: "%{actor} and %{count} others replied to your comment."
+        you: "%{actor} replied to your comment."
     invited: "%{actor} invited you to a group."
