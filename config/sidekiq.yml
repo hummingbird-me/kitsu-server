@@ -3,11 +3,10 @@
 production:
   :concurrency: 40
 :queues:
-  - [default, 3]
-  - [mailers, 2]
-  - [paperclip, 2]
-  - [notifications, 3]
-  - [chewy, 1]
+  - [now, 5]
+  - [soon, 4]
+  - [later, 2]
+  - [eventually, 1]
 :schedule:
   CounterCacheResetWorker:
     every: 12h
