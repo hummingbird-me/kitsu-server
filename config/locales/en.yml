@@ -52,7 +52,8 @@ en:
           one: "%{actor} and %{actor_two} replied to a post."
           other: "%{actor} and %{count} others replied to a post."
       comment:
-        zero: "%{actor} replied to your comment."
-        one: "%{actor} and %{actor_two} replied to your comment."
-        other: "%{actor} and %{count} others replied to your comment."
+        you:
+          zero: "%{actor} replied to your comment."
+          one: "%{actor} and %{actor_two} replied to your comment."
+          other: "%{actor} and %{count} others replied to your comment."
     invited: "%{actor} invited you to a group."
