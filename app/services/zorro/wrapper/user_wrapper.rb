@@ -10,7 +10,7 @@ module Zorro
       # their names.
       # @return [String] the username
       def name
-        @data['aozoraUsername']
+        @data['aozoraUsername'][0..20]
       end
 
       # About 43,000 Aozora users are missing this
