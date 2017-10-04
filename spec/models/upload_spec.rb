@@ -7,6 +7,7 @@
 #  content_content_type :string
 #  content_file_name    :string
 #  content_file_size    :integer
+#  content_meta         :text
 #  content_updated_at   :datetime
 #  owner_type           :string           indexed => [owner_id]
 #  upload_order         :integer

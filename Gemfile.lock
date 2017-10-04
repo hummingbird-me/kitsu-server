@@ -327,6 +327,8 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (~> 0.3.0)
+    paperclip-meta (3.0.0)
+      paperclip (~> 5.0)
     paperclip-optimizer (2.0.0)
       image_optim (~> 0.19)
       paperclip (>= 3.4)
@@ -599,6 +601,7 @@ DEPENDENCIES
   oj_mimic_json
   onebox
   paperclip (~> 5.0)
+  paperclip-meta
   paperclip-optimizer
   paranoia (~> 2.0)
   pg

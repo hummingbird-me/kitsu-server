@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.boolean  "cover_image_processing"
     t.string   "tba"
     t.integer  "episode_count_guess"
+    t.text     "poster_image_meta"
+    t.text     "cover_image_meta"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -246,6 +248,7 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.string   "thumbnail_content_type", limit: 255
     t.integer  "thumbnail_file_size"
     t.datetime "thumbnail_updated_at"
+    t.text     "thumbnail_meta"
   end
 
   add_index "chapters", ["manga_id"], name: "index_chapters_on_manga_id", using: :btree
@@ -408,6 +411,8 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.integer  "favorites_count",                                   default: 0,       null: false
     t.boolean  "cover_image_processing"
     t.string   "tba"
+    t.text     "poster_image_meta"
+    t.text     "cover_image_meta"
   end
 
   add_index "dramas", ["slug"], name: "index_dramas_on_slug", using: :btree
@@ -448,6 +453,7 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.string   "canonical_title",                    default: "en_jp", null: false
     t.string   "media_type",                                           null: false
     t.integer  "relative_number"
+    t.text     "thumbnail_meta"
   end
 
   add_index "episodes", ["media_type", "media_id"], name: "index_episodes_on_media_type_and_media_id", using: :btree
@@ -695,6 +701,8 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.string   "tagline",                  limit: 60
     t.datetime "last_activity_at"
     t.integer  "pinned_post_id"
+    t.text     "avatar_meta"
+    t.text     "cover_image_meta"
   end
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
@@ -866,6 +874,8 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.boolean  "cover_image_processing"
     t.string   "tba"
     t.integer  "chapter_count_guess"
+    t.text     "poster_image_meta"
+    t.text     "cover_image_meta"
   end
 
   create_table "manga_characters", force: :cascade do |t|
@@ -1414,6 +1424,7 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.integer  "upload_order"
+    t.text     "content_meta"
   end
 
   add_index "uploads", ["owner_type", "owner_id"], name: "index_uploads_on_owner_type_and_owner_id", using: :btree
@@ -1505,6 +1516,8 @@ ActiveRecord::Schema.define(version: 20170919034156) do
     t.datetime "deleted_at"
     t.integer  "media_reactions_count",                   default: 0,           null: false
     t.integer  "status",                                  default: 1,           null: false
+    t.text     "avatar_meta"
+    t.text     "cover_image_meta"
     t.citext   "slug"
   end
 

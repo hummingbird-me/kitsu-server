@@ -10,6 +10,7 @@
 #  avatar_content_type         :string(255)
 #  avatar_file_name            :string(255)
 #  avatar_file_size            :integer
+#  avatar_meta                 :text
 #  avatar_processing           :boolean
 #  avatar_updated_at           :datetime
 #  bio                         :string(140)      default(""), not null
@@ -20,13 +21,14 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_meta            :text
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
-#  email                       :string(255)      default(""), not null, indexed
+#  email                       :string(255)      default(""), indexed
 #  favorites_count             :integer          default(0), not null
 #  feed_completed              :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
@@ -47,7 +49,7 @@
 #  media_reactions_count       :integer          default(0), not null
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
-#  password_digest             :string(255)      default(""), not null
+#  password_digest             :string(255)      default("")
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
