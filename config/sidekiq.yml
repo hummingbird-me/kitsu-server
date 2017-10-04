@@ -10,11 +10,16 @@ production:
 :schedule:
   CounterCacheResetWorker:
     every: 12h
+    queue: later
   AverageRatingUpdateWorker:
     every: 6h
+    queue: soon
   RankingUpdateWorker:
     every: 12h
+    queue: later
   LibraryEntryLogRemovalWorker:
-    every: 12h
+    every: 24h
+    queue: eventually
   UploadRemovalWorker:
     every: 12h
+    queue: later
