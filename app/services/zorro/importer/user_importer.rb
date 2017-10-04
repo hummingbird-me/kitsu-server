@@ -63,8 +63,8 @@ module Zorro
         TimelineFeed.new(user_id).follow_many(new_groups.map { |g| "group:#{g}" })
       end
 
-      private
-
+      # Generates an aggregation which joins UserDetails data into the User collection
+      # @private
       def self.detailed_users
         Zorro::DB::User.find.batch_size(2000).aggregate([
           {
