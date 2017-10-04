@@ -25,6 +25,16 @@
 
 class NotificationSetting < ApplicationRecord
   NOTIFICATION_TYPES = %i[mentions replies likes follows posts reaction_votes].freeze
+  DEFAULT_SETTINGS = {
+    #                FB,   Mobile, Email, Web
+    mentions:       [false, false, false, true],
+    replies:        [false, false, false, true],
+    likes:          [false, false, false, true],
+    follows:        [false, false, false, true],
+    posts:          [false, false, false, true],
+    reaction_votes: [false, false, false, true]
+  }.freeze
+
   enum setting_type: NOTIFICATION_TYPES
   belongs_to :user
 
@@ -38,15 +48,17 @@ class NotificationSetting < ApplicationRecord
     end
   end
 
-  def self.setup_notification_settings(user)
-    NOTIFICATION_TYPES.each do |st|
-      NotificationSetting.where(
-        setting_type: st,
-        user: user,
-        fb_messenger_enabled: false,
-        mobile_enabled: false,
-        email_enabled: false
-      ).first_or_create
-    end
+  def self.setup!(user)
+    # Get the list of existing settings
+    existing_settings = setting_types.values_at(*where(user: user).pluck(:setting_type))
+    # Figure out which ones to create
+    settings_to_create = (NOTIFICATION_TYPES - existing_settings)
+    # Build a list of values to insert
+    settings = DEFAULT_SETTINGS.select { |k, _| settings_to_create.include?(k) }
+                               .map { |key, values| [user.id, setting_types[key], *values] }
+    # Import 'em
+    NotificationSetting.import(%i[
+      user_id setting_type fb_messenger_enabled mobile_enabled email_enabled web_enabled
+    ], settings)
   end
 end
