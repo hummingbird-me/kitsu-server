@@ -19,15 +19,17 @@ module Zorro
       def self.run_for!(collection)
         bar = progress_bar(collection.name, collection.count)
         collection.find.each do |post|
-          new(post).run!
+          new(collection.name, post).run!
           bar.increment
         end
         bar.finish
       end
 
+      # @param kind ['Post','TimelinePost','Thread'] the name of the post's collection
       # @param post [Hash] the document representing the post in Aozora
-      def initialize(post)
-        @post = Zorro::Wrapper::PostWrapper.wrap(post)
+      def initialize(kind, post)
+        klass = "Zorro::Wrapper::#{kind}Wrapper".safe_constantize
+        @post = klass.wrap(post)
       end
 
       # Saves the post into the Kitsu database
