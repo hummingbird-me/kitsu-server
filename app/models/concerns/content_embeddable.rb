@@ -8,14 +8,6 @@ module ContentEmbeddable
 
       attr_accessor url_attr
 
-      validate do
-        processed = send(processed_attr)
-        embed_url = send(url_attr)
-        if embed_url && !processed[:embeddable_links].include?(embed_url)
-          errors.add(to, 'must exist in content')
-        end
-      end
-
       before_validation do
         processed = send(processed_attr)
         embed_url = send(url_attr)

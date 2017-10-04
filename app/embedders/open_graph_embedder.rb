@@ -47,6 +47,7 @@ class OpenGraphEmbedder < Embedder
   def to_h
     {
       kind: kind,
+      url: url,
       title: title,
       description: description,
       site_name: site_name,
@@ -57,6 +58,6 @@ class OpenGraphEmbedder < Embedder
   end
 
   def match?
-    kind.present?
+    og_media.length > 0
   end
 end
