@@ -31,8 +31,7 @@ module Zorro
     # @param name [String] the name of the file
     # @return [String] the complete URL to the file
     def self.file(name)
-      return nil unless name.present?
-      "#{FILE_PREFIX}#{name}".tap { |x| puts x }
+      "#{FILE_PREFIX}#{name}" if name.present?
     end
 
     # Shortcuts to {Wrapper.file} and {Zorro::DB.assoc} for subclasses to use
