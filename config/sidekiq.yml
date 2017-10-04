@@ -3,10 +3,10 @@
 production:
   :concurrency: 40
 :queues:
-  - [now, 5]
-  - [soon, 4]
-  - [later, 2]
-  - [eventually, 1]
+  - [now, 5] # Within a few seconds
+  - [soon, 4] # Within a few minutes
+  - [later, 2] # Within an hour
+  - [eventually, 1] # Within a few hours
 :schedule:
   # Cron is *pattern matching times*, with the following format:
   #  - fields: seconds minutes hours date month weekday

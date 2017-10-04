@@ -1,5 +1,6 @@
 class DataImportWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'eventually'
 
   def perform(type, klass, id, opts = {})
     importer = klass.new(opts)
