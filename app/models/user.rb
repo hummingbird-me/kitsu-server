@@ -366,7 +366,7 @@ class User < ApplicationRecord
 
   after_create do
     # Set up Notification Settings for User
-    NotificationSetting.setup_notification_settings(self)
+    NotificationSetting.setup!(self)
   end
 
   before_update do

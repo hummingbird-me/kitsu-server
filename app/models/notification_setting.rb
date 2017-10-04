@@ -48,7 +48,7 @@ class NotificationSetting < ApplicationRecord
     end
   end
 
-  def self.setup_notification_settings(user)
+  def self.setup!(user)
     # Get the list of existing settings
     existing_settings = setting_types.values_at(*where(user: user).pluck(:setting_type))
     # Figure out which ones to create
