@@ -1,5 +1,6 @@
 class Feed
   class StreamFeed
+    class_attribute :client
     attr_reader :group, :id, :client_feed, :owner_feed
 
     delegate :readonly_token, to: :client_feed
@@ -53,7 +54,7 @@ class Feed
         end
       end
       instrument('follow_many', follows: follows, scrollback: scrollback) do
-        StreamRails.client.follow_many(follows, scrollback)
+        client.follow_many(follows, scrollback)
       end
     end
 
@@ -62,7 +63,7 @@ class Feed
     end
 
     def self.client
-      StreamRails.client
+      @client ||= StreamRails.client
     end
 
     def self.instrument(key, extra = {}, &block)
@@ -70,10 +71,6 @@ class Feed
     end
 
     private
-
-    def client
-      StreamRails.client
-    end
 
     def group_name_for(group)
       if group.respond_to?(:to_h)
