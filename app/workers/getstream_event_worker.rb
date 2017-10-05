@@ -1,5 +1,5 @@
 class GetstreamEventWorker
-  extend Sidekiq::Worker
+  include Sidekiq::Worker
 
   def perform(feed, event, activity)
     group, id = feed.split(':')
