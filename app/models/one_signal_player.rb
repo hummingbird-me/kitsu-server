@@ -25,22 +25,7 @@ class OneSignalPlayer < ApplicationRecord
 
   enum platform: %i[web mobile]
 
-  def self.filter_player_ids(player_ids, notif_type)
-    player_objects = includes(
-      user: :notification_settings
-    ).where(
-      player_id: player_ids
-    )
-
-    player_objects.each_with_object([]) do |player, acc|
-      user_setting = player.user.notification_settings.select { |setting|
-        setting.setting_type == notif_type
-      }.first
-      acc << if player.web? && user_setting&.web_enabled
-               player.player_id
-             elsif player.mobile? && user_setting&.mobile_enabled
-               player.player_id
-             end
-    end
+  scope :enabled_for_setting, ->(setting) do
+    where(platform: platforms & setting.enabled_platforms)
   end
 end

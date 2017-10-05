@@ -38,13 +38,9 @@ class NotificationSetting < ApplicationRecord
   enum setting_type: NOTIFICATION_TYPES
   belongs_to :user
 
-  def self.type_for_activity(type, stream_mentions, feed_id)
-    case type
-    when :follow then :follows
-    when :post then :posts
-    when :post_like, :comment_like then :likes
-    when :media_reaction_vote then :reaction_votes
-    when :comment then stream_mentions.include?(feed_id.to_i) ? :mentions : :posts
+  def enabled_platforms
+    %i[email fb_messenger mobile web].select do |platform|
+      send("#{platform}_enabled?")
     end
   end
 

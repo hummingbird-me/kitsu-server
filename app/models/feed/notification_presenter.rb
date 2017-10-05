@@ -49,6 +49,17 @@ class Feed
       end
     end
 
+    # @return [Symbol] the setting that applies to this notification
+    def setting
+      verb = verb.to_s
+      case verb
+      when /_like\z/ then :likes
+      when 'invited' then :invites
+      when 'media_reaction_vote' then :reaction_votes
+      else verb.pluralize.to_sym
+      end
+    end
+
     private
 
     # @return [String] the path to view the notification in the web app
