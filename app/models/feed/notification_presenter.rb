@@ -60,6 +60,12 @@ class Feed
       end
     end
 
+    # @param user [User] the user to get the setting for
+    # @return [NotificationSetting] the user's setting for this notifications
+    def setting_for(user)
+      NotificationSetting.where(user_id: user, setting_type: setting).first
+    end
+
     private
 
     # @return [String] the path to view the notification in the web app
