@@ -9,3 +9,5 @@
 ## Environment normalization:
 /.bundle
 /vendor/bundle
+
+.byebug_history

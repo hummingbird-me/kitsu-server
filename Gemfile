@@ -99,6 +99,9 @@ group :development, :test do
 
   # Useful for benchmarking!
   gem 'benchmark-ips'
+
+  # Debugging tests and scripts
+  gem 'byebug'
 end
 
 group :test do

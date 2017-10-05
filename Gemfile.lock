@@ -90,6 +90,7 @@ GEM
     benchmark-ips (2.7.2)
     buftok (0.2.0)
     builder (3.2.3)
+    byebug (9.1.0)
     celluloid (0.17.3)
       celluloid-essentials
       celluloid-extras
@@ -573,6 +574,7 @@ DEPENDENCIES
   aws-sdk
   bcrypt
   benchmark-ips
+  byebug
   chewy
   codeclimate-test-reporter
   connection_pool
