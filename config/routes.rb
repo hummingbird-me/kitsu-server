@@ -168,11 +168,13 @@ Rails.application.routes.draw do
     get '/pghero', to: 'sessions#redirect'
     resources :sessions, only: %i[new create]
 
-    ### WebHooks
-    get '/hooks/youtube', to: 'webhooks#youtube_verify'
-    post '/hooks/youtube', to: 'webhooks#youtube_notify'
-    get '/hooks/getstream', to: 'webhooks#getstream_verify'
-    post '/hooks/getstream', to: 'webhooks#getstream_firehose'
+    ### Webhooks
+    namespace :hooks, module: 'webhooks' do
+      get :youtube, to: 'youtube#verify'
+      post :youtube, to: 'youtube#notify'
+      get :getstream, to: 'getstream#verify'
+      post :getstream, to: 'getstream#notify'
+    end
 
     ### Staging Sync
     post '/user/_prodsync', to: 'users#prod_sync'
