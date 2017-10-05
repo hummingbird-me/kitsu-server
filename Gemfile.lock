@@ -347,6 +347,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.5.0)
+      byebug (~> 9.1)
+      pry (~> 0.10)
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     public_suffix (2.0.5)
@@ -574,7 +577,6 @@ DEPENDENCIES
   aws-sdk
   bcrypt
   benchmark-ips
-  byebug
   chewy
   codeclimate-test-reporter
   connection_pool
@@ -612,6 +614,7 @@ DEPENDENCIES
   pg
   pg_query
   pghero
+  pry-byebug
   pry-rails
   puma
   puma_worker_killer

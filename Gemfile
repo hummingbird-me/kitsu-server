@@ -101,7 +101,7 @@ group :development, :test do
   gem 'benchmark-ips'
 
   # Debugging tests and scripts
-  gem 'byebug'
+  gem 'pry-byebug'
 end
 
 group :test do
