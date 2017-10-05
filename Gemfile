@@ -55,6 +55,7 @@ gem 'jsonapi-resources', '0.9.0'
 gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
+gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'rack-timeout', github: 'nuckchorris/rack-timeout'
 gem 'ranked-model' # Sortables!
