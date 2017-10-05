@@ -20,6 +20,8 @@ production:
   UploadRemovalWorker:
     every: 12h
   TheTvdbDailyWorker:
-    every: 1d
+    # Once a day
+    cron: '0 0 0 * * *'
   TheTvdbWeeklyWorker:
-    every: 7d
+    # Once a week
+    every: '0 0 0 * * SUN'
