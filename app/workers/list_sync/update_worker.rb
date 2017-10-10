@@ -2,7 +2,7 @@ module ListSync
   class UpdateWorker
     include Sidekiq::Worker
     include ListSync::ErrorHandling
-    sidekiq_options retry: 3, queue: 'sync'
+    sidekiq_options retry: 3, queue: 'soon'
 
     def perform(linked_account_id, library_entry_id)
       linked_account = LinkedAccount.find(linked_account_id)

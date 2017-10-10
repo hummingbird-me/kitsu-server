@@ -84,6 +84,7 @@ module Kitsu
 
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
+    config.active_job.default_queue_name = :later
 
     # Configure Scaffold Generators
     config.generators do |g|

@@ -3,19 +3,40 @@
 production:
   :concurrency: 40
 :queues:
-  - [default, 3]
-  - [mailers, 2]
-  - [paperclip, 2]
-  - [notifications, 3]
-  - [chewy, 1]
+  - [now, 5] # Within a few seconds
+  - [soon, 4] # Within a few minutes
+  - [later, 2] # Within an hour
+  - [eventually, 1] # Within a few hours
 :schedule:
+  # Cron is *pattern matching times*, with the following format:
+  #  - fields: seconds minutes hours date month weekday
+  #  - a,b,c means "whenever this field equals a or b or c"
+  #  - */15 means "whenever it's divisible by 15"
+  #  - hour is 0..23
+  #  - weekday is 0..6
+  #  - date is 1..31
+  #  - month is 1..12
+  #
+  # Alternatively you can use "every: 6h" but that apparently runs it once on each worker server
+  anime_rating_update:
+    class: AverageRatingUpdateWorker
+    args: Anime
+    # Every 6 hours
+    cron: '0 0 */6 * * *'
+  manga_rating_update:
+    class: AverageRatingUpdateWorker
+    args: Manga
+    # Every 6 hours
+    cron: '0 0 */6 * * *'
   CounterCacheResetWorker:
-    every: 12h
-  AverageRatingUpdateWorker:
-    every: 6h
+    # Once a day
+    cron: '0 0 0 * * *'
   RankingUpdateWorker:
-    every: 12h
+    # Every 6 hours, 5 minutes into the hour (so ratings get updated first)
+    cron: '0 5 */6 * * *'
   LibraryEntryLogRemovalWorker:
-    every: 12h
+    # Once a day
+    cron: '0 0 0 * * *'
   UploadRemovalWorker:
-    every: 12h
+    # Twice a day
+    cron: '0 0 */12 * * *'
