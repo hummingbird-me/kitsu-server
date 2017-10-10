@@ -79,7 +79,7 @@ class Post < ApplicationRecord
   validates :media, polymorphism: { type: Media }, allow_blank: true
   # posting to a group, posting to a profile, and posting to an interest are mutually exclusive.
   validates_with ExclusivityValidator, over: %i[target_user target_group target_interest]
-  validates_with ExclusivityValidator, over: %i[uploads embed] if: :uploads || :embed
+  validates_with ExclusivityValidator, over: %i[uploads embed], if: :uploads || :embed
   validates :target_user, absence: true, if: :target_group
 
   def feed

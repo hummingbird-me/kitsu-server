@@ -58,6 +58,6 @@ class OpenGraphEmbedder < Embedder
   end
 
   def match?
-    og_media.length > 0
+    title.present?
   end
 end

@@ -2,7 +2,11 @@ class EmbedService
   EXPIRY = 12.hours
   EMBEDDERS ||= [
     NicoVideoEmbedder,
-    OpenGraphEmbedder
+    TwitterEmbedder,
+    OembedEmbedder,
+    OpenGraphEmbedder,
+    MetaContentEmbedder,
+    GeneralUrlEmbedder
   ].freeze
 
   def initialize(url)
