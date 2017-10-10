@@ -66,6 +66,10 @@ module Kitsu
     config.paperclip_defaults = {
       url: '/system/:class/:attachment/:id/:style.:content_type_extension'
     }
+    config.delayed_paperclip_defaults = {
+      queue: 'soon',
+    }
+
 
     # Email Server
     config.action_mailer.delivery_method = :smtp
