@@ -1,5 +1,6 @@
 class GetstreamEventWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'soon'
 
   def perform(feed, event, activity)
     group, id = feed.split(':')
