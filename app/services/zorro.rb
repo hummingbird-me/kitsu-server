@@ -1,6 +1,8 @@
 module Zorro
   # Connect to MongoDB if configured
-  Client = Mongo::Client.new(ENV['AOZORA_MONGO_URL']) if ENV['AOZORA_MONGO_URL'].present?
+  if ENV['AOZORA_MONGO_URL'].present?
+    Client = Mongo::Client.new(ENV['AOZORA_MONGO_URL'], max_pool_size: 24)
+  end
 
   module DB
     # Create shortcuts to various useful collections if we're connected
