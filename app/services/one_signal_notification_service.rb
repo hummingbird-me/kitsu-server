@@ -10,6 +10,7 @@ class OneSignalNotificationService
 
   def run!
     players = OneSignalPlayer.where(platform: notification.setting.enabled_platforms, user: @user)
+    return unless players.exists?
     OneSignal::Notification.create(params: {
       app_id: app_id,
       include_player_ids: players.pluck(:player_id),
