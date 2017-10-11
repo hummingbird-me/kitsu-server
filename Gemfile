@@ -59,6 +59,7 @@ gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'rack-timeout', github: 'nuckchorris/rack-timeout'
 gem 'ranked-model' # Sortables!
+gem 'rbtrace' # Attach to running ruby processes
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'stream-ruby', '~> 2.5.4' # Feeds
