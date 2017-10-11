@@ -6,13 +6,17 @@ class AttachmentValueFormatter < JSONAPI::ValueFormatter
     urls = value.styles.keys.map { |style| [style, value.url(style)] }
 
     styles_dims = value.styles.keys.map do |style|
-      [
-        style,
-        {
-          width: value.width(style),
-          height: value.height(style)
-        }
-      ]
+      begin
+        [
+          style,
+          {
+            width: value.width(style),
+            height: value.height(style)
+          }
+        ]
+      rescue ArgumentError
+        [style, {}]
+      end
     end
     styles_dims = Hash[styles_dims]
 
