@@ -7,10 +7,10 @@ class Feed
     attr_reader :activity, :user
     delegate :group, to: :activity
 
-    # @param activity [Feed::Activity] the activity object to generate a notification for
+    # @param activity [Hash] the activity to generate a notification for
     # @param user [User] the user from whose perspective we are viewing this notification
     def initialize(activity, user)
-      @activity = activity
+      @activity = OpenStruct.new(activity)
       @user = user
     end
 
