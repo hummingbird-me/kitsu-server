@@ -1,7 +1,7 @@
 class OneSignalNotificationService
   def initialize(user, activity)
     @user = user
-    @activity = Feed::Activity.new(activity)
+    @activity = activity
   end
 
   def notification
@@ -9,7 +9,7 @@ class OneSignalNotificationService
   end
 
   def run!
-    players = OneSignalPlayer.where(platform: notification.setting.enabled_platforms, user: user)
+    players = OneSignalPlayer.where(platform: notification.setting.enabled_platforms, user: @user)
     OneSignal::Notification.create(params: {
       app_id: app_id,
       include_player_ids: players.pluck(:player_id),

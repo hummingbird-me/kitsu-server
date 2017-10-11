@@ -7,10 +7,10 @@ class Feed
     attr_reader :activity, :user
     delegate :group, to: :activity
 
-    # @param activity [Hash] the activity to generate a notification for
+    # @param activity [Feed::Activity] the activity object to generate a notification for
     # @param user [User] the user from whose perspective we are viewing this notification
     def initialize(activity, user)
-      @activity = OpenStruct.new(activity)
+      @activity = activity
       @user = user
     end
 
@@ -21,17 +21,17 @@ class Feed
 
     # @return [String] the human-readable textual representation of the notification
     def message
-      actor = actor.name
+      actor_name = actor.name
 
       case verb
       when :follow, :post_like, :comment_like, :invited
-        translate(verb, actor: actor)
+        translate(verb, actor: actor_name)
       when :post
-        translate('mention.post', actor: actor)
+        translate('mention.post', actor: actor_name)
       when :mention
-        translate('mention.comment', actor: actor)
+        translate('mention.comment', actor: actor_name)
       when :reply
-        translate("reply.#{reply_type.join('.')}", actor: actor)
+        translate("reply.#{reply_type.join('.')}", actor: actor_name)
       end
     end
 
