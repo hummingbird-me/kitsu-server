@@ -54,6 +54,7 @@ class Feed
       case verb.to_s
       when /_like\z/ then :likes
       when 'invited' then :invites
+      when 'comment' then :replies
       when 'media_reaction_vote' then :reaction_votes
       else verb.to_s.pluralize.to_sym
       end
