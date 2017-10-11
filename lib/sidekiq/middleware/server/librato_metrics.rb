@@ -1,7 +1,7 @@
 module Sidekiq
   module Middleware
     module Server
-      class Librato
+      class LibratoMetrics
         def call(_worker, job, queue)
           librato_opts = { tags: { queue: queue, worker: job['class'] }, inherit_tags: true }
 

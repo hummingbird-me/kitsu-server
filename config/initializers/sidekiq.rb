@@ -1,5 +1,5 @@
 require 'sidekiq/middleware/server/chewy'
-require 'sidekiq/middleware/server/librato'
+require 'sidekiq/middleware/server/librato_metrics'
 
 Sidekiq.default_worker_options = { queue: 'later' }
 
@@ -7,7 +7,7 @@ Sidekiq.configure_server do |config|
   config.redis = { url: ENV['REDIS_URL'] }
   config.server_middleware do |chain|
     chain.add Sidekiq::Middleware::Server::Chewy
-    chain.add Sidekiq::Middleware::Server::Librato
+    chain.add Sidekiq::Middleware::Server::LibratoMetrics if const_defined?(:Librato)
   end
 end
 
