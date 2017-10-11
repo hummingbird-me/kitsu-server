@@ -7,7 +7,7 @@ class GetstreamEventWorker
 
     case event
     when 'new'
-      if group == 'notification'
+      if group == 'notifications'
         user = User.find(id)
         OneSignalNotificationService.new(user, activity).run!
       end
