@@ -13,6 +13,7 @@ class OneSignalNotificationService
   private
 
   def notify!
+    return unless notification.setting
     platforms = OneSignalPlayer.platforms.values_at(*notification.setting.enabled_platforms)
     players = OneSignalPlayer.where(platform: platforms, user: @user)
     return unless players.exists?
