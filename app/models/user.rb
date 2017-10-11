@@ -191,12 +191,12 @@ class User < ApplicationRecord
   validates :facebook_id, uniqueness: true, allow_nil: true
 
   scope :active, ->() { where(deleted_at: nil) }
-  scope :by_slug, ->(*slugs) { where(slug: slugs.flatten) }
+  scope :by_slug, ->(*slugs) { where(slug: slugs&.flatten) }
   scope :by_name, ->(*names) {
-    where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
+    where('lower(users.name) IN (?)', names&.flatten&.map(&:downcase))
   }
   scope :by_email, ->(*emails) {
-    where('lower(users.email) IN (?)', emails.flatten.map(&:downcase))
+    where('lower(users.email) IN (?)', emails&.flatten&.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :followed_first, ->(user) {
