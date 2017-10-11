@@ -31,14 +31,15 @@ class Feed
       when :mention
         translate('mention.comment', actor: actor_name)
       when :reply
-        translate("reply.#{reply_type.join('.')}", actor: actor_name)
+        author_name = target.user.name
+        translate("reply.#{reply_type.join('.')}", actor: actor_name, author: author_name)
       end
     end
 
     # @return [Symbol] the verb of the activity
     def verb
       case activity.verb
-      when :comment
+      when 'comment'
         if activity.mentioned_users.include?(user.id)
           :mention
         else
