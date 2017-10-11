@@ -289,7 +289,7 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
     mini_portile2 (2.3.0)
-    minitest (5.10.2)
+    minitest (5.10.3)
     moneta (1.0.0)
     msgpack (1.1.0)
     multi_json (1.12.1)
@@ -342,7 +342,7 @@ GEM
     pg (0.18.4)
     pg_query (0.11.4)
       json (>= 1.8, < 3)
-    pghero (1.7.0)
+    pghero (2.0.6)
       activerecord
     progress (3.3.1)
     pry (0.10.4)
