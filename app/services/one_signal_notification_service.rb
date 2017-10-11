@@ -5,7 +5,7 @@ class OneSignalNotificationService
   end
 
   def notification
-    @notification ||= Feed::NotificationPresenter.new(@activity)
+    @notification ||= Feed::NotificationPresenter.new(@activity, @user)
   end
 
   def run!
