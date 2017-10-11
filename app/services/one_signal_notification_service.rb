@@ -6,7 +6,7 @@ class OneSignalNotificationService
 
   def run!
     notification = notify!
-    invalid_players = notification.dig('errors', 'invalid_player_ids')
+    invalid_players = notification&.dig('errors', 'invalid_player_ids')
     OneSignalPlayer.where(player_id: invalid_players).delete_all if invalid_players
   end
 
