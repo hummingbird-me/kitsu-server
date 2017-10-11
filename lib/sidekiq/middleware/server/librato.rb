@@ -3,7 +3,7 @@ module Sidekiq
     module Server
       class Librato
         def call(_worker, job, queue)
-          librato_opts = { tags: { queue: queue, worker: item['class'] }, inherit_tags: true }
+          librato_opts = { tags: { queue: queue, worker: job['class'] }, inherit_tags: true }
 
           Librato.group 'sidekiq' do
             Librato.timing 'queue.delay', (Time.now.to_f - job['enqueued_at']), librato_opts
