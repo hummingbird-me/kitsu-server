@@ -9,8 +9,7 @@ class OneSignalNotificationService
   end
 
   def run!
-    setting = notification.setting_for(@user)
-    players = OneSignalPlayer.where(platform: setting.enabled_platforms, user: user)
+    players = OneSignalPlayer.where(platform: notification.setting.enabled_platforms, user: user)
     OneSignal::Notification.create(params: {
       app_id: app_id,
       include_player_ids: players.pluck(:player_id),
