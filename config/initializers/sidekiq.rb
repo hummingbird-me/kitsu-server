@@ -7,7 +7,7 @@ Sidekiq.configure_server do |config|
   config.redis = { url: ENV['REDIS_URL'] }
   config.server_middleware do |chain|
     chain.add Sidekiq::Middleware::Server::Chewy
-    chain.add Sidekiq::Middleware::Server::LibratoMetrics if const_defined?(:Librato)
+    chain.add Sidekiq::Middleware::Server::LibratoMetrics if defined? Librato
   end
 end
 
