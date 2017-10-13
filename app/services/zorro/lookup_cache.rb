@@ -5,9 +5,10 @@ class Zorro
     end
 
     def lookup(klass, *ids)
+      ids = [ids].flatten
       # { 'abcdefjasfasdf' => 'User_abcdefjasfasdf'}
       klass_name = klass.name
-      cache_keys = [ids].flatten.map { |id| [id, key_for(klass_name, id)] }.to_h
+      cache_keys = ids.map { |id| [id, key_for(klass_name, id)] }.to_h
       # Attempt to load all the keys from the cache
       found = @cache.read_multi(*cache_keys.values)
       # Find the cache misses
@@ -18,9 +19,8 @@ class Zorro
         found[cache_key] = id
         @cache.write(cache_key, id)
       end
-      # Convert the { 'User_abcdefjasfasdf' => 123 } keys back to the original Aozora ID form
-      aozora_ids = cache_keys.invert
-      found.transform_keys! { |key| aozora_ids[key] }
+      # Return the IDs
+      ids.length == 1 ? cache_keys.values.first : cache_keys.values
     end
 
     private

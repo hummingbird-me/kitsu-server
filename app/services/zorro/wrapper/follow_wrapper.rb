@@ -10,12 +10,12 @@ module Zorro
 
       # @return [User] the user who is doing the follow
       def follower
-        @follower ||= User.find_by(ao_id: @source)
+        @follower ||= Zorro::Cache.lookup(User, @source)
       end
 
       # @return [ActiveRecord::Relation<User>] the users who have been followed
       def followed
-        @followed ||= User.where(ao_id: @targets)
+        @followed ||= Zorro::Cache.lookup(User, @targets)
       end
 
       private
@@ -28,9 +28,9 @@ module Zorro
       # Add all the nonexistent follows to the database
       # @return [ActiveRecord::Import::Result] the results of the import
       def save!
-        missing = followed.pluck(:id) - existing.pluck(:followed_id)
+        missing = followed - existing.pluck(:followed_id)
         columns = %i[follower_id followed_id]
-        values = missing.map { |followed_id| [follower.id, followed_id] }
+        values = missing.map { |followed_id| [follower, followed_id] }
         Follow.import(columns, values, validate: false)
       end
     end
