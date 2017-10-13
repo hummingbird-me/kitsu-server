@@ -4,6 +4,8 @@ module Zorro
     Client = Mongo::Client.new(ENV['AOZORA_MONGO_URL'], max_pool_size: 24)
   end
 
+  Cache = LookupCache.new
+
   module DB
     # Create shortcuts to various useful collections if we're connected
     if ENV['AOZORA_MONGO_URL'].present?
