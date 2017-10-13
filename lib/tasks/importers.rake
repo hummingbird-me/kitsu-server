@@ -21,6 +21,14 @@ namespace :importers do
       MediaImporter.new.run!
     end
   end
+  namespace :viz do
+    require 'viz_import/volume_chapter_importer'
+    desc 'Import Viz Volumes and Chapters'
+    task volume_assoc: :environment do |_t|
+      puts 'Importing Viz Volumes and Chapters'
+      VolumeChapterImporter.new.run!
+    end
+  end
   namespace :kitsu do
     desc 'Download only anime posters'
     task :posters, [:quantity] => [:environment] do |_t, args|

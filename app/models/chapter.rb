@@ -19,10 +19,16 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  manga_id               :integer          indexed
+#  volume_id              :integer          indexed
 #
 # Indexes
 #
 #  index_chapters_on_manga_id   (manga_id)
+#  index_chapters_on_volume_id  (volume_id)
+#
+# Foreign Keys
+#
+#  fk_rails_9eb9ab7f62  (volume_id => volumes.id)
 #
 # rubocop:enable Metrics/LineLength
 
@@ -30,6 +36,7 @@ class Chapter < ApplicationRecord
   include Titleable
 
   belongs_to :manga
+  belongs_to :volume
 
   has_attached_file :thumbnail
 

@@ -75,6 +75,7 @@ Rails.application.routes.draw do
       jsonapi_resources :anime_productions
       jsonapi_resources :episodes
       jsonapi_resources :chapters
+      jsonapi_resources :volumes
       jsonapi_resources :stats
       # DEPRECATED: Legacy systems
       jsonapi_resources :castings
@@ -190,6 +191,12 @@ end
 #
 # I, [2017-09-04T01:58:22.243760 #19588]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
+#                                                    volumes GET       /volumes(.:format)                                                                                         volumes#index
+#                                                            POST      /volumes(.:format)                                                                                         volumes#create
+#                                                     volume GET       /volumes/:id(.:format)                                                                                     volumes#show
+#                                                            PATCH     /volumes/:id(.:format)                                                                                     volumes#update
+#                                                            PUT       /volumes/:id(.:format)                                                                                     volumes#update
+#                                                            DELETE    /volumes/:id(.:format)                                                                                     volumes#destroy
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
 #                                                            DELETE    /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#destroy_relationship {:relationship=>"waifu"}
