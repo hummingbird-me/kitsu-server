@@ -301,6 +301,7 @@ ActiveRecord::Schema.define(version: 20180114070606) do
     t.string   "ao_id"
   end
 
+  add_index "comments", ["ao_id"], name: "index_comments_on_ao_id", unique: true, using: :btree
   add_index "comments", ["deleted_at"], name: "index_comments_on_deleted_at", using: :btree
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["post_id"], name: "index_comments_on_post_id", using: :btree
@@ -1205,6 +1206,7 @@ ActiveRecord::Schema.define(version: 20180114070606) do
     t.string   "ao_id"
   end
 
+  add_index "posts", ["ao_id"], name: "index_posts_on_ao_id", unique: true, using: :btree
   add_index "posts", ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id", using: :btree
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
   add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
@@ -1542,6 +1544,7 @@ ActiveRecord::Schema.define(version: 20180114070606) do
     t.integer  "ao_pro"
   end
 
+  add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["facebook_id"], name: "index_users_on_facebook_id", unique: true, using: :btree
   add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree
