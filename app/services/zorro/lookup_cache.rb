@@ -1,4 +1,4 @@
-class Zorro
+module Zorro
   class LookupCache
     def initialize(cache = ActiveSupport::Cache::MemoryStore.new)
       @cache = cache
