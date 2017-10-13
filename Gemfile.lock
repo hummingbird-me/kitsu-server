@@ -248,7 +248,7 @@ GEM
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    kramdown (1.13.2)
+    kramdown (1.15.0)
     librato-metrics (2.1.2)
       aggregate (~> 0.2.2)
       faraday
