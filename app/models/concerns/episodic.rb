@@ -21,11 +21,7 @@ module Episodic
 
   def default_progress_limit
     # Weekly with a margin
-    if run_length
-      (run_length.to_i / 7) + 5
-    else
-      100
-    end
+    run_length ? (run_length.to_i / 7) + 5 : 100
   end
 
   included do

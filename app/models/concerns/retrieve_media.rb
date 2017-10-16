@@ -8,12 +8,6 @@ module RetrieveMedia
   end
 
   def retrieve_media
-    if anime.present?
-      anime
-    elsif manga.present?
-      manga
-    elsif drama.present?
-      drama
-    end
+    anime.presence || manga.presence || drama.presence || nil
   end
 end
