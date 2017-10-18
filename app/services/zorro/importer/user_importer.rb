@@ -12,14 +12,21 @@ module Zorro
       # Execute the import, optionally forcing an overwrite
       #
       # @param force [Boolean] whether to forcibly overwrite existing Kitsu data with Aozora data
-      # @return [void]
-      def run!(force: false)
+      # @param rush [Boolean] whether to put a rush on the related background tasks
+      # @return [User] the user created by this
+      def run!(force: false, rush: false)
         # Import the profile data
-        user_id = import_profile(force: force).id
+        user = import_profile(force: force)
+        user_id = user.id
         # Import the library if they don't have an existing library
-        import_library_to(user_id) if force || LibraryEntry.where(user_id: user_id).limit(1).blank?
+        if force || LibraryEntry.where(user_id: user_id).empty?
+          import = import_library_to(user_id)
+          import.apply_async!(queue: 'now') if rush
+        end
         # Join the Aozora groups, giving mod rank to any Aozora admins
         join_groups(user_id, rank: (@user.admin? ? :mod : :pleb))
+        # Return the user
+        user
       end
 
       # Import all users
