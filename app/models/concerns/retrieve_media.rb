@@ -8,6 +8,6 @@ module RetrieveMedia
   end
 
   def retrieve_media
-    anime.presence || manga.presence || drama.presence || nil
+    anime.presence || manga.presence || drama.presence
   end
 end
