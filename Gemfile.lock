@@ -108,9 +108,10 @@ GEM
       timers (>= 4.1.1)
     celluloid-supervision (0.20.6)
       timers (>= 4.1.1)
-    chewy (0.9.0)
-      activesupport (>= 3.2)
-      elasticsearch (>= 1.0.0)
+    chewy (0.10.1)
+      activesupport (>= 4.0)
+      elasticsearch (>= 2.0.0)
+      elasticsearch-dsl
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.8)
@@ -153,6 +154,7 @@ GEM
       elasticsearch-transport (= 5.0.4)
     elasticsearch-api (5.0.4)
       multi_json
+    elasticsearch-dsl (0.1.5)
     elasticsearch-transport (5.0.4)
       faraday
       multi_json
