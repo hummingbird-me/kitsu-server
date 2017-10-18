@@ -7,7 +7,7 @@ AllCops:
   DisplayStyleGuide: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
@@ -27,7 +27,7 @@ Style/CommentAnnotation:
   - HACK
   - REVIEW
   - DEPRECATED
-Style/DotPosition:
+Layout/DotPosition:
   EnforcedStyle: leading
 Style/FileName:
   Enabled: true
@@ -46,9 +46,9 @@ Style/GuardClause:
 Style/IfUnlessModifier:
   Enabled: true
   MaxLineLength: 100
-Style/IndentArray:
+Layout/IndentArray:
   EnforcedStyle: consistent
-Style/IndentHash:
+Layout/IndentHash:
   EnforcedStyle: consistent
 Style/LambdaCall:
   Enabled: true
@@ -86,24 +86,24 @@ Style/SingleLineMethods:
   AllowIfMethodIsEmpty: true
 Style/StringLiterals:
   EnforcedStyle: single_quotes
-Style/SpaceAroundEqualsInParameterDefault:
+Layout/SpaceAroundEqualsInParameterDefault:
   Enabled: true
   EnforcedStyle: space
-Style/SpaceBeforeBlockBraces:
+Layout/SpaceBeforeBlockBraces:
   Enabled: true
   EnforcedStyle: space
-Style/SpaceInsideBlockBraces:
+Layout/SpaceInsideBlockBraces:
   Enabled: true
   EnforcedStyle: space
   EnforcedStyleForEmptyBraces: no_space
   SpaceBeforeBlockParameters: true
-Style/SpaceInsideHashLiteralBraces:
+Layout/SpaceInsideHashLiteralBraces:
   Enabled: true
   EnforcedStyle: space
   EnforcedStyleForEmptyBraces: no_space
 Style/SymbolProc:
   Enabled: true
-Style/TrailingBlankLines:
+Layout/TrailingBlankLines:
   Enabled: true
   EnforcedStyle: final_newline
 Style/TrailingCommaInArguments:
@@ -198,7 +198,7 @@ Style/Lambda:
   EnforcedStyle: literal
   # HACK: Until Rubocop is released with EnforcedStyle
   Enabled: true
-Style/LeadingCommentSpace:
+Layout/LeadingCommentSpace:
   Enabled: true
 Style/MultilineBlockChain:
   Enabled: true
@@ -224,39 +224,39 @@ Style/RescueModifier:
   Enabled: true
 Style/SelfAssignment:
   Enabled: true
-Style/SpaceBeforeFirstArg:
+Layout/SpaceBeforeFirstArg:
   Enabled: true
-Style/SpaceAfterColon:
+Layout/SpaceAfterColon:
   Enabled: true
-Style/SpaceAfterComma:
+Layout/SpaceAfterComma:
   Enabled: true
-Style/SpaceAroundKeyword:
+Layout/SpaceAroundKeyword:
   Enabled: true
-Style/SpaceAfterMethodName:
+Layout/SpaceAfterMethodName:
   Enabled: true
-Style/SpaceAfterNot:
+Layout/SpaceAfterNot:
   Enabled: true
-Style/SpaceAfterSemicolon:
+Layout/SpaceAfterSemicolon:
   Enabled: true
-Style/SpaceBeforeComma:
+Layout/SpaceBeforeComma:
   Enabled: true
-Style/SpaceBeforeComment:
+Layout/SpaceBeforeComment:
   Enabled: true
-Style/SpaceBeforeSemicolon:
+Layout/SpaceBeforeSemicolon:
   Enabled: true
-Style/SpaceAroundOperators:
+Layout/SpaceAroundOperators:
   Enabled: true
-Style/SpaceAroundKeyword:
+Layout/SpaceAroundKeyword:
   Enabled: true
-Style/SpaceInsideBrackets:
+Layout/SpaceInsideBrackets:
   Enabled: true
-Style/SpaceInsideParens:
+Layout/SpaceInsideParens:
   Enabled: true
-Style/SpaceInsideRangeLiteral:
+Layout/SpaceInsideRangeLiteral:
   Enabled: true
 Style/SpecialGlobalVars:
   Enabled: true
-Style/TrailingWhitespace:
+Layout/TrailingWhitespace:
   Enabled: true
 Style/UnlessElse:
   Enabled: true
@@ -268,7 +268,7 @@ Lint/Debugger:
   Enabled: true
 Lint/DeprecatedClassMethods:
   Enabled: true
-Lint/Eval:
+Security/Eval:
   Enabled: true
 Lint/HandleExceptions:
   Enabled: true
