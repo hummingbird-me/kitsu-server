@@ -5,7 +5,7 @@ class UsersController < ApplicationController
                                password: ENV['STAGING_SYNC_SECRET'],
                                only: :prod_sync
   skip_before_action :validate_token!, only: :prod_sync
-  skip_after_action :enforce_policy_use, only: %i[prod_sync recover]
+  skip_after_action :enforce_policy_use, only: %i[prod_sync recover conflicts]
 
   def recover
     query = params[:username]
@@ -20,6 +20,11 @@ class UsersController < ApplicationController
     end
     UserMailer.password_reset(user).deliver_later
     render json: { username: query }
+  end
+
+  def conflicts
+    conflict_detector = UserConflictDetector.new(user: current_user&.resource_owner)
+    render json: conflict_detector.accounts
   end
 
   def prod_sync
