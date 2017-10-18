@@ -1,44 +1,111 @@
 module Authorization
   module Assertion
     class Facebook
-      FACEBOOK_URL = 'https://graph.facebook.com/v2.5/'.freeze
-      FACEBOOK_USER_FIELDS = 'id,name,email,first_name,' \
-        'last_name,gender,friends'.freeze
+      # The Aozora Facebook App ID
+      AOZORA_FACEBOOK_APP_ID = '1467094533604194'.freeze
+      # Facebook URL stuff
+      API_VERSION = 'v2.5'.freeze
+      URL_PREFIX = "https://graph.facebook.com/#{API_VERSION}".freeze
+      URL_TEMPLATE = Addressable::Template.new("#{URL_PREFIX}/{+path*}{?query*}").freeze
+      # The data to load from Facebook
+      USER_FIELDS = {
+        # User ID
+        id: true,
+        # Profile Info
+        name: true,
+        email: true,
+        # If they have an Aozora account, this will let us find it
+        ids_for_business: {
+          id: true,
+          app: %w[name]
+        }
+      }.deep_freeze
 
-      def initialize(auth_code)
-        @auth_code = auth_code
-        @user_data = user_data
+      # @param access_token [String] the access token to assert login with
+      def initialize(access_token)
+        @access_token = access_token
       end
 
-      def user_data
-        uri = URI.parse("#{FACEBOOK_URL}me?access_token=#{@auth_code}"\
-          "&fields=#{FACEBOOK_USER_FIELDS}")
-        response = Net::HTTP.get_response(uri)
-        JSON.parse(response.body)
+      # @return [User] the user to log into, given the facebook assertion
+      def user
+        @user ||= conflict.user!
       end
 
+      # @return [Array<Follow>] the list of follows created based on your facebook friends list
+      # @todo enable permissions for this
+      def auto_follows
+        return unless user
+
+        follows = friends.map do |friend|
+          friend_user = User.where(facebook_id: friend).first
+          Follow.where(follower: user, followed: friend_user).first_or_create if friend_user
+        end
+        follows.compact
+      end
+
+      private
+
+      # The UserConflictDetector instance
+      def conflict
+        @conflict ||= Zorro::UserConflictDetector.new(facebook_id: facebook_id,
+                                                      ao_facebook_id: ao_facebook_id)
+      end
+
+      # @return [String] the Facebook ID for Kitsu
+      def facebook_id
+        data[:id] if data
+      end
+
+      # @return [String] the Facebook ID for Aozora
+      def ao_facebook_id
+        return unless data
+        data.dig(:ids_for_business, :data).select { |obj|
+          obj.dig(:app, :id) == AOZORA_FACEBOOK_APP_ID
+        }.first
+      end
+
+      # @return [Array<String>] the list of friends from this user's facebook
+      def friends
+        get('/me/friends', fields: { id: true })[:data].map { |friend| friend[:id] }
+      end
+
+      # @return [Hash] the raw data retrieved from the Facebook Graph API
+      def data
+        @data ||= get('/me', fields: USER_FIELDS)
+      end
+
+      # @return [Hash]
       def image
-        img = URI.parse("#{FACEBOOK_URL}me/picture?"\
-          "access_token=#{@auth_code}&width=180&height=180&redirect=false")
-        response = Net::HTTP.get_response(img)
-        JSON.parse(response.body)
+        @image ||= get('/me/picture', width: 180, height: 180, redirect: false)
       end
 
-      def user!
-        return if @user_data.blank? || @user_data['id'].blank?
-        User.where(facebook_id: @user_data['id']).first
+      def build_fields_param(obj)
+        fields = obj.map do |key, value|
+          case value
+          when true then key
+          when Hash then "#{key}{#{build_fields_param(value)}}"
+          when Array then "#{key}{#{value.join(',')}}"
+          end
+        end
+        fields.join(',')
       end
 
-      def import_friends
-        user = user!
-        return unless user.present?
-        @user_data['friends']['data'].map do |friend|
-          followed = User.where(facebook_id: friend['id']).first
-          Follow.find_or_create_by(
-            follower: user,
-            followed: followed
-          ) if followed.present?
-        end.compact
+      # Build a URL to make a request to Facebook's Graph API
+      # @param path [String] the path of the API request to make
+      def build_url(path, params = {})
+        path = path.sub(%r{\A/}, '')
+        params = params.merge(access_token: @access_token)
+        URL_TEMPLATE.expand(path: path, query: params)
+      end
+
+      # Hit the Facebook Graph API
+      # @param path [String] the path of the API request to make
+      # @param params [Hash] the hash of parameters
+      def get(path, params = {})
+        params[:fields] = build_fields_param(params[:fields]) if params[:fields]
+        url = build_url(path, params)
+        response = Net::HTTP.get_response(url)
+        JSON.parse(response.body).deep_symbolize_keys
       end
     end
   end
