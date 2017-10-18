@@ -26,7 +26,7 @@ module Zorro
         # Merge the Aozora data onto this profile
         Zorro::Importer::UserImporter.new(aozora_user).run!(force: true, queue: 'now')
       when :kitsu
-        # Just do nothing, pretty much.  Their UGC will get imported In Due Time™
+        # Just do nothing, pretty much.  Their UGC will get imported by the bulk stuff
         @user.update!(status: :registered)
         @user
       end
@@ -34,6 +34,8 @@ module Zorro
 
     private
 
+    # During bulk import, we can't match Aozora Facebook ID to Kitsu Facebook ID, so we may end up
+    # with two Users tied to the same Facebook account from both Kitsu and Aozora.
     def merge_imported_aozora_user(chosen)
       # Always reparent their existing UGC
       # TODO: how to handle this in Stream????
