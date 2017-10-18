@@ -13,7 +13,9 @@ module Zorro
       end
 
       # @param user [Hash] the user document from Aozora's MongoDB server
-      def initialize(user)
+      # @param target_user [User] the User instance to apply the merge onto
+      def initialize(user, target_user: nil)
+        @target_user = target_user
         @user = Zorro::Wrapper::UserWrapper.new(user)
       end
 
