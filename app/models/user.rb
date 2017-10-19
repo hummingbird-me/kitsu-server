@@ -227,6 +227,14 @@ class User < ApplicationRecord
 
   alias_method :flipper_id, :id
 
+  # Override the version provided by has_secure_password to accept the aozora password too
+  # @param unencrypted_password [String] the unencrypted password to test
+  def authenticate(unencrypted_password)
+    [password_digest, ao_password].compact.any? do |password|
+      BCrypt::Password.new(password).is_password?(unencrypted_password)
+    end && self
+  end
+
   def self.find_for_auth(identification)
     by_email(identification).or(by_slug(identification)).first
   end
