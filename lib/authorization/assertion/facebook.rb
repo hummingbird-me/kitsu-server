@@ -19,7 +19,7 @@ module Authorization
           id: true,
           app: %w[name]
         }
-      }.deep_freeze
+      }.freeze
 
       # @param access_token [String] the access token to assert login with
       def initialize(access_token)
