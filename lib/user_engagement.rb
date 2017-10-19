@@ -4,7 +4,7 @@ module UserEngagement
   def send_inactive_notification
     inactive_users = User.includes(:notification_settings).where(
       last_sign_in_at: nil,
-      never_signed_in_email_sent: true
+      never_signed_in_email_sent: false
     )
     inactive_users.each do |user|
       UserMailer.reengagement(user, 0).deliver_later
@@ -14,9 +14,10 @@ module UserEngagement
     end
 
     inactive_users = User.includes(:notification_settings).where(
-      last_sign_in_at: 28.days.ago..18.days.ago,
-      third_inactive_email_sent: false
-    )
+      third_inactive_email_sent: false,
+      second_inactive_email_sent: true,
+      first_inactive_email_sent: true
+    ).where.not(last_sign_in_at: 28.days.ago..18.days.ago)
     inactive_users.each do |user|
       UserMailer.reengagement(user, 28).deliver_later
       user.third_inactive_email_sent = true
@@ -24,9 +25,9 @@ module UserEngagement
     end
 
     inactive_users = User.includes(:notification_settings).where(
-      last_sign_in_at: 18.days.ago..9.days.ago,
-      second_inactive_email_sent: false
-    )
+      second_inactive_email_sent: false,
+      first_inactive_email_sent: true
+    ).where.not(last_sign_in_at: 18.days.ago..9.days.ago)
     inactive_users.each do |user|
       UserMailer.reengagement(user, 18).deliver_later
       user.second_inactive_email_sent = true
@@ -34,9 +35,8 @@ module UserEngagement
     end
 
     inactive_users = User.includes(:notification_settings).where(
-      last_sign_in_at: 9.days.ago..Time.now,
       first_inactive_email_sent: false
-    )
+    ).where.not(last_sign_in_at: 9.days.ago..Time.now)
     inactive_users.each do |user|
       UserMailer.reengagement(user, 9).deliver_later
       user.first_inactive_email_sent = true
@@ -48,24 +48,56 @@ module UserEngagement
     now_time = Time.now
     prev_time = 6.hours.ago
     inactive_users = User.includes(:notification_settings).where(
-      last_sign_in_at: prev_time..now_time,
       notification_settings: {
         setting_type: 2,
         email_enabled: true
       }
-    )
+    ).where.not(last_sign_in_at: prev_time..now_time)
     inactive_users.each do |user|
-      related_post_likes_users = PostLike.where(
+      meta_data = {
+        "related_post_likes": []
+      }
+      meta_data["related_post_likes"] = PostLike.includes(:post).where(
         post: {
           user: user
         },
         created_at: prev_time..now_time
-      ).select(:user)
-      next if related_post_likes_users.empty?
+      )
+      next if meta_data["related_post_likes"].empty?
       UserMailer.notification(
         user,
         2,
-        related_post_likes_users
+        meta_data["related_post_likes"].map(&:user),
+        meta_data
+      ).deliver_later
+    end
+  end
+
+  def send_reaction_upvotes_notification
+    now_time = Time.now
+    prev_time = 6.hours.ago
+    inactive_users = User.includes(:notification_settings).where(
+      notification_settings: {
+        setting_type: 2,
+        email_enabled: true
+      }
+    ).where.not(last_sign_in_at: prev_time..now_time)
+    inactive_users.each do |user|
+      meta_data = {
+        "related_reaction_votes": []
+      }
+       meta_data["related_reaction_votes"] = MediaReactionVote.includes(media_reaction: [:media]).where(
+        media_reaction: {
+          user: user
+        },
+        created_at: prev_time..now_time
+      )
+      next if meta_data["related_reaction_votes"].empty?
+      UserMailer.notification(
+        user,
+        7,
+        meta_data["related_reaction_votes"].map(&:user),
+        meta_data
       ).deliver_later
     end
   end
@@ -74,24 +106,27 @@ module UserEngagement
     now_time = Time.now
     prev_time = 1.hour.ago
     inactive_users = User.includes(:notification_settings).where(
-      last_sign_in_at: prev_time..now_time,
       notification_settings: {
         setting_type: 1,
         email_enabled: true
       }
-    )
+    ).where.not(last_sign_in_at: prev_time..now_time)
     inactive_users.each do |user|
-      related_post_replies_users = Comment.where(
+      meta_data = {
+        "related_post_replies": []
+      }
+      meta_data["related_post_replies"] = Comment.where(
         post: {
           user: user
         },
         created_at: prev_time..now_time
-      ).select(:user)
+      )
       next if related_post_replies_users.empty?
       UserMailer.notification(
         user,
         3,
-        related_post_replies_users
+        meta_data["related_post_replies_users"].map(&:user),
+        meta_data
       ).deliver_later
     end
   end
@@ -100,35 +135,39 @@ module UserEngagement
     now_time = Time.now
     prev_time = 15.minutes.ago
     inactive_users = User.includes(:notification_settings).where(
-      last_sign_in_at: prev_time..now_time,
       notification_settings: {
         setting_type: 0,
         email_enabled: true
       }
-    )
-    recent_profile_posts = Post.where(
+    ).where.not(last_sign_in_at: prev_time..now_time)
+    recent_profile_posts = Post.includes(:mentioned_users).where(
       created_at: prev_time..now_time
     )
-    recent_comments = Comment.where(
+    recent_comments = Comment.includes(:mentioned_users).where(
       created_at: prev_time..now_time
     )
     inactive_users.each do |user|
-      mentionees = []
+      meta_data = {
+        "mention_posts": [],
+        "mentioned_comments": []
+      }
       recent_profile_posts.each do |rp|
-        user_found = rp.mentioned_users.pluck(:id).include? user.id
+        user_found = rp.mentioned_users.map(:id).include? user.id
         next unless user_found
-        mentionees << rp.user
+        meta_data["mention_posts"] << rp
       end
+      filtered_recent_comments = []
       recent_comments.each do |rc|
-        user_found = rc.mentioned_users.pluck(:id).include? user.id
+        user_found = rc.mentioned_users.map(:id).include? user.id
         next unless user_found
-        mentionees << rc.user
+        meta_data["mentioned_comments"] << rc
       end
-      next if mentionees.empty?
+      next if meta_data["mention_posts"].empty? and meta_data["mentioned_comments"].empty?
       UserMailer.notification(
         user,
         4,
-        mentionees
+        meta_data["mention_posts"].map(&:user) + meta_data["mentioned_comments"].map(&:user),
+        meta_data
       ).deliver_later
     end
   end
@@ -137,22 +176,25 @@ module UserEngagement
     now_time = Time.now
     prev_time = 15.minutes.ago
     inactive_users = User.includes(:notification_settings).where(
-      last_sign_in_at: prev_time..now_time,
       notification_settings: {
         setting_type: 4,
         email_enabled: true
       }
-    )
+    ).where.not(last_sign_in_at: prev_time..now_time)
     inactive_users.each do |user|
-      related_profile_posts_users = Post.where(
+      meta_data = {
+        "related_profile_posts": []
+      }
+      meta_data["related_profile_posts"] = Post.where(
         target_user: user,
         created_at: prev_time..now_time
-      ).select(:user)
-      next if related_profile_posts_users.empty?
+      )
+      next if meta_data["related_profile_posts"].empty?
       UserMailer.notification(
         user,
         6,
-        related_profile_posts_users
+        meta_data["related_profile_posts"].map(&:user),
+        meta_data
       ).deliver_later
     end
   end

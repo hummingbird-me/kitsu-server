@@ -393,12 +393,17 @@ class User < ApplicationRecord
 
     if likes_received_count_changed? && likes_received_count_was.zero?
       # send notification email for first like
-      related_post_likes_users = PostLikes.where(
+      related_post_likes = PostLikes.where(
         post: {
           user: self
         }
-      ).select(:user)
-      UserMailer.notification(self, 1, related_post_likes_users).deliver_later
+      )
+      UserMailer.notification(
+        self,
+        1,
+        related_post_likes.map(&:user),
+        { "related_post_likes": related_post_likes }
+      ).deliver_later
     end
 
     update_profile_completed
