@@ -10,7 +10,9 @@ Rails.application.routes.draw do
       post '/users/_recover', to: 'users#recover'
       get '/users/:id/_strength', to: 'users#profile_strength'
       get '/_flags', to: 'users#flags'
-      get '/users/_conflicts', to: 'users#conflicts'
+      # Display and resolve conflicts
+      get '/users/_conflicts', to: 'users#conflicts_index'
+      post '/users/_conflicts', to: 'users#conflicts_update'
       # Profile data
       jsonapi_resources :profile_links
       jsonapi_resources :profile_link_sites

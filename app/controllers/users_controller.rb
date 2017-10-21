@@ -22,9 +22,16 @@ class UsersController < ApplicationController
     render json: { username: query }
   end
 
-  def conflicts
-    conflict_detector = UserConflictDetector.new(user: current_user&.resource_owner)
+  def conflicts_index
+    conflict_detector = Zorro::UserConflictDetector.new(user: user)
     render json: conflict_detector.accounts
+  end
+
+  def conflicts_update
+    chosen = params[:chosen].to_sym
+    conflict_resolver = Zorro::UserConflictResolver.new(user)
+    user = conflict_resolver.merge_onto(chosen)
+    render_jsonapi serialize_model(user)
   end
 
   def prod_sync
