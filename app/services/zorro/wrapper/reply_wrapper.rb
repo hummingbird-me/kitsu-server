@@ -8,7 +8,7 @@ module Zorro
 
       # @return [Comment] the comment that this is replying to
       def comment
-        Comment.find_by(ao_id: @data['_p_parentPost'])
+        Zorro::Cache.lookup(Comment, @data['_p_parentPost'])
       end
 
       def to_h

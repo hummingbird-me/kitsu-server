@@ -15,7 +15,7 @@ module Zorro
 
       # @return [Anime,nil] the anime that this post is discussing
       def target_user
-        User.find_by(ao_id: data['_p_userTimeline']) if data['type'] == 'publicPost'
+        Zorro::Cache.lookup(User, data['_p_userTimeline']) if data['type'] == 'publicPost'
       end
 
       def to_h
