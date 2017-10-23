@@ -10,7 +10,7 @@ module Zorro
 
     # @return [Boolean] whether there's a conflict on the supplied credentials
     def conflict?
-      !accounts.empty?
+      accounts.count == 2
     end
 
     # @return [Hash] a hash of account information matching the supplied credentials
