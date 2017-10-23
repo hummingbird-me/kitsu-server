@@ -5,25 +5,61 @@
   <%= link_to(@highligted_object_link_text, @highligted_object_link) %>
 </p>
 <p>
-	<%= if [1,2].includes? @notification_kind %>
-		<%= @highligted_object.post.user %>
-		<%= @highligted_object.post.created_at %>
-		<%= @highligted_object.post.user.avatar %>
-		<%= @highligted_object.post.content %>
-	<%= elsif [3,4,6].includes? @notification_kind %>
-		<%= @highligted_object.user %>
-		<%= @highligted_object.created_at %>
-		<%= @highligted_object.user.avatar %>
-		<%= @highligted_object.content %>
-	<%= elsif [5].includes? @notification_kind %>
-		<%= @highligted_object.name %>
-		<%= @highligted_object.avatar %>
-		<%= @highligted_object.bio %>
-	<%= elsif [7].includes? @notification_kind %>
-		<%= @highligted_object.media_reaction.user %>
-		<%= @highligted_object.media_reaction.media.title %>
-		<%= @highligted_object.media_reaction.media.synopsis %>
-	<%= end %>
+	<% if [1,2].include? @notification_kind %>
+		<p>
+			<%= @highligted_object.post.user.name %>
+		</p>
+		<p>
+			<%= @highligted_object.post.created_at %>
+		</p>
+		<p>
+			https://kitsu.io<%= @highligted_object.post.user.avatar %>
+		</p>
+		<p>
+			<%= @highligted_object.post.content %>
+		</p>
+	<% elsif [3,4,6].include? @notification_kind %>
+		<p>
+			<%= @highligted_object.user.name %>
+		</p>
+		<p>
+			<%= @highligted_object.created_at %>
+		</p>
+		<p>
+			https://kitsu.io<%= @highligted_object.user.avatar %>
+		</p>
+		<p>
+			<%= @highligted_object.content %>
+		</p>
+	<% elsif [5].include? @notification_kind %>
+		<p>
+			<%= @highligted_object.name %>
+		</p>
+		<p>
+			https://kitsu.io<%= @highligted_object.avatar %>
+		</p>
+		<p>
+			<%= @highligted_object.bio %>
+		</p>
+	<% elsif [7].include? @notification_kind %></p>
+		<p>
+			<%= @highligted_object.media_reaction.user.name %>
+		</p>
+		<p>
+			https://kitsu.io<%= @highligted_object.media_reaction.user.avatar %>
+		</p>
+		<p>
+			<%= @highligted_object.media_reaction.media.canonical_title %>
+		</p>
+		<% if @highligted_object.media_reaction.media.poster_image.present? %>
+			<p>
+				https://kitsu.io<%= @highligted_object.media_reaction.media.poster_image %>
+			</p>
+		<% end %>
+		<p>
+			<%= @highligted_object.media_reaction.reaction %>
+		</p>
+	<% end %>
 </p>
 
 <p>

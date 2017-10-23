@@ -66,7 +66,8 @@ class Follow < ApplicationRecord
       UserMailer.notification(
         followed,
         5,
-        [follower]
+        [follower],
+        'related_follower': [follower]
       ).deliver_later
     end
   end

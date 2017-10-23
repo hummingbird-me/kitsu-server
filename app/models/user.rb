@@ -402,7 +402,7 @@ class User < ApplicationRecord
         self,
         1,
         related_post_likes.map(&:user),
-        { "related_post_likes": related_post_likes }
+        'related_post_likes': related_post_likes
       ).deliver_later
     end
 

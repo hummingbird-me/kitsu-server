@@ -55,19 +55,19 @@ module UserEngagement
     ).where.not(last_sign_in_at: prev_time..now_time)
     inactive_users.each do |user|
       meta_data = {
-        "related_post_likes": []
+        'related_post_likes': []
       }
-      meta_data["related_post_likes"] = PostLike.includes(:post).where(
+      meta_data['related_post_likes'] = PostLike.includes(:post).where(
         post: {
           user: user
         },
         created_at: prev_time..now_time
       )
-      next if meta_data["related_post_likes"].empty?
+      next if meta_data['related_post_likes'].empty?
       UserMailer.notification(
         user,
         2,
-        meta_data["related_post_likes"].map(&:user),
+        meta_data['related_post_likes'].map(&:user),
         meta_data
       ).deliver_later
     end
@@ -84,19 +84,21 @@ module UserEngagement
     ).where.not(last_sign_in_at: prev_time..now_time)
     inactive_users.each do |user|
       meta_data = {
-        "related_reaction_votes": []
+        'related_reaction_votes': []
       }
-       meta_data["related_reaction_votes"] = MediaReactionVote.includes(media_reaction: [:media]).where(
+      meta_data['related_reaction_votes'] = MediaReactionVote.includes(
+        media_reaction: [:media]
+      ).where(
         media_reaction: {
           user: user
         },
         created_at: prev_time..now_time
       )
-      next if meta_data["related_reaction_votes"].empty?
+      next if meta_data['related_reaction_votes'].empty?
       UserMailer.notification(
         user,
         7,
-        meta_data["related_reaction_votes"].map(&:user),
+        meta_data['related_reaction_votes'].map(&:user),
         meta_data
       ).deliver_later
     end
@@ -113,9 +115,9 @@ module UserEngagement
     ).where.not(last_sign_in_at: prev_time..now_time)
     inactive_users.each do |user|
       meta_data = {
-        "related_post_replies": []
+        'related_post_replies': []
       }
-      meta_data["related_post_replies"] = Comment.where(
+      meta_data['related_post_replies'] = Comment.where(
         post: {
           user: user
         },
@@ -125,7 +127,7 @@ module UserEngagement
       UserMailer.notification(
         user,
         3,
-        meta_data["related_post_replies_users"].map(&:user),
+        meta_data['related_post_replies'].map(&:user),
         meta_data
       ).deliver_later
     end
@@ -148,25 +150,27 @@ module UserEngagement
     )
     inactive_users.each do |user|
       meta_data = {
-        "mention_posts": [],
-        "mentioned_comments": []
+        'mention_posts': [],
+        'mentioned_comments': []
       }
       recent_profile_posts.each do |rp|
         user_found = rp.mentioned_users.map(:id).include? user.id
         next unless user_found
-        meta_data["mention_posts"] << rp
+        meta_data['mention_posts'] << rp
       end
-      filtered_recent_comments = []
       recent_comments.each do |rc|
         user_found = rc.mentioned_users.map(:id).include? user.id
         next unless user_found
-        meta_data["mentioned_comments"] << rc
+        meta_data['mentioned_comments'] << rc
       end
-      next if meta_data["mention_posts"].empty? and meta_data["mentioned_comments"].empty?
+      next if meta_data['mention_posts'].empty? && meta_data['mentioned_comments'].empty?
       UserMailer.notification(
         user,
         4,
-        meta_data["mention_posts"].map(&:user) + meta_data["mentioned_comments"].map(&:user),
+        [
+          meta_data['mention_posts'].map(&:user),
+          meta_data['mentioned_comments'].map(&:user)
+        ].flatten,
         meta_data
       ).deliver_later
     end
@@ -183,17 +187,17 @@ module UserEngagement
     ).where.not(last_sign_in_at: prev_time..now_time)
     inactive_users.each do |user|
       meta_data = {
-        "related_profile_posts": []
+        'related_profile_posts': []
       }
-      meta_data["related_profile_posts"] = Post.where(
+      meta_data['related_profile_posts'] = Post.where(
         target_user: user,
         created_at: prev_time..now_time
       )
-      next if meta_data["related_profile_posts"].empty?
+      next if meta_data['related_profile_posts'].empty?
       UserMailer.notification(
         user,
         6,
-        meta_data["related_profile_posts"].map(&:user),
+        meta_data['related_profile_posts'].map(&:user),
         meta_data
       ).deliver_later
     end

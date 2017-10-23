@@ -104,11 +104,13 @@ group :development, :test do
 
   # Debugging tests and scripts
   gem 'pry-byebug'
+
+  # Fake data
+  gem 'faker'
 end
 
 group :test do
   gem 'codeclimate-test-reporter' # CodeClimate coverage
-  gem 'faker' # Fake data
   gem 'json_expressions' # Test outputted JSON
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
