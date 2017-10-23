@@ -36,21 +36,15 @@ class MediaAttributeVote < ApplicationRecord
 
   counter_culture :anime_media_attributes,
     column_name: proc { |mav|
-      if mav.vote != 'unvoted' && mav.anime_media_attributes
-        "#{mav.vote}_vote_count"
-      end
+      "#{mav.vote}_vote_count" if mav.vote != 'unvoted' && mav.anime_media_attributes
     }
   counter_culture :manga_media_attributes,
     column_name: proc { |mav|
-      if mav.vote != 'unvoted' && mav.manga_media_attributes
-        "#{mav.vote}_vote_count"
-      end
+      "#{mav.vote}_vote_count" if mav.vote != 'unvoted' && mav.manga_media_attributes
     }
   counter_culture :dramas_media_attributes,
     column_name: proc { |mav|
-      if mav.vote != 'unvoted' && mav.dramas_media_attributes
-        "#{mav.vote}_vote_count"
-      end
+      "#{mav.vote}_vote_count" if mav.vote != 'unvoted' && mav.dramas_media_attributes
     }
 
   before_validation do

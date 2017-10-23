@@ -8,11 +8,13 @@
 #  avatar_content_type      :string(255)
 #  avatar_file_name         :string(255)
 #  avatar_file_size         :integer
+#  avatar_meta              :text
 #  avatar_processing        :boolean          default(FALSE), not null
 #  avatar_updated_at        :datetime
 #  cover_image_content_type :string(255)
 #  cover_image_file_name    :string(255)
 #  cover_image_file_size    :integer
+#  cover_image_meta         :text
 #  cover_image_updated_at   :datetime
 #  featured                 :boolean          default(FALSE), not null
 #  last_activity_at         :datetime
@@ -104,6 +106,11 @@ class Group < ApplicationRecord
 
   def feed
     GroupFeed.new(id)
+  end
+
+  # @return [Group,nil] the Kitsu group, if one exists
+  def self.kitsu
+    @kitsu ||= find_by(id: 1830)
   end
 
   before_validation do

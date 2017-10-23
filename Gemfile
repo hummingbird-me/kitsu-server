@@ -7,6 +7,7 @@ gem 'rails', '4.2.8'
 gem 'rails-api'
 
 # Database Stuff
+gem 'activerecord-import' # Run bulk imports quicker
 gem 'algoliasearch-rails' # Future Search
 gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
@@ -32,6 +33,7 @@ gem 'delayed_paperclip'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
 gem 'paperclip', '~> 5.0'
+gem 'paperclip-meta'
 gem 'paperclip-optimizer'
 
 # Background tasks
@@ -52,10 +54,12 @@ gem 'friendly_id' # slug-urls-are-cool
 gem 'jsonapi-resources', '0.9.0'
 gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites
-gem 'nokogiri', '~> 1.7.1' # Parse MAL XML shit
+gem 'nokogiri', '~> 1.8.1' # Parse MAL XML shit
+gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.0' # Faux deletion
 gem 'rack-timeout', github: 'nuckchorris/rack-timeout'
 gem 'ranked-model' # Sortables!
+gem 'rbtrace' # Attach to running ruby processes
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'stream-ruby', '~> 2.5.4' # Feeds
@@ -75,10 +79,10 @@ gem 'oj_mimic_json' # Hook it in place of JSON gem
 gem 'sentry-raven' # Send error data to Sentry
 
 # Admin Panel
+gem 'pg_query' # pghero indexes
+gem 'pghero'
 gem 'rails_admin'
 gem 'sinatra' # used by sidekiq/web
-gem 'pghero'
-gem 'pg_query' # pghero indexes
 
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
@@ -97,6 +101,9 @@ group :development, :test do
 
   # Useful for benchmarking!
   gem 'benchmark-ips'
+
+  # Debugging tests and scripts
+  gem 'pry-byebug'
 end
 
 group :test do
@@ -115,8 +122,8 @@ group :test do
 end
 
 group :production, :staging do
+  gem 'librato-rails' # Metrics
   gem 'puma_worker_killer'
   gem 'rails_12factor' # Log to stdout, serve assets
   gem 'skylight' # Performance Monitoring
-  gem 'librato-rails' # Metrics
 end

@@ -2,7 +2,7 @@ module ListSync
   class DestroyWorker
     include Sidekiq::Worker
     include ListSync::ErrorHandling
-    sidekiq_options retry: 3, queue: 'sync'
+    sidekiq_options retry: 3, queue: 'soon'
 
     def perform(linked_account_id, media_type, media_id)
       linked_account = LinkedAccount.find(linked_account_id)

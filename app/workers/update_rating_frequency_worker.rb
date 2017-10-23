@@ -1,5 +1,6 @@
 class UpdateRatingFrequencyWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'soon'
 
   def perform(klass_name, klass_id, rating, diff)
     update_query = <<-EOF

@@ -135,6 +135,11 @@ class Feed
       Feed::Activity.new(feed, enriched_activity)
     end
 
+    def find_group(id)
+      group = stream_feed.get(id_lte: id, limit: 1)['results'].first
+      Feed::ActivityGroup.new(feed, group)
+    end
+
     def add(activity)
       # Add to the Feed directly, converting the activity to JSON
       res = feed.add_activity(activity.as_json)

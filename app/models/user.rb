@@ -10,6 +10,7 @@
 #  avatar_content_type         :string(255)
 #  avatar_file_name            :string(255)
 #  avatar_file_size            :integer
+#  avatar_meta                 :text
 #  avatar_processing           :boolean
 #  avatar_updated_at           :datetime
 #  bio                         :string(140)      default(""), not null
@@ -20,13 +21,14 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_meta            :text
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
-#  email                       :string(255)      default(""), not null, indexed
+#  email                       :string(255)      default(""), indexed
 #  favorites_count             :integer          default(0), not null
 #  feed_completed              :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
@@ -47,7 +49,7 @@
 #  media_reactions_count       :integer          default(0), not null
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
-#  password_digest             :string(255)      default(""), not null
+#  password_digest             :string(255)      default("")
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
@@ -189,11 +191,12 @@ class User < ApplicationRecord
   validates :facebook_id, uniqueness: true, allow_nil: true
 
   scope :active, ->() { where(deleted_at: nil) }
+  scope :by_slug, ->(*slugs) { where(slug: slugs&.flatten) }
   scope :by_name, ->(*names) {
-    where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
+    where('lower(users.name) IN (?)', names&.flatten&.map(&:downcase))
   }
   scope :by_email, ->(*emails) {
-    where('lower(users.email) IN (?)', emails.flatten.map(&:downcase))
+    where('lower(users.email) IN (?)', emails&.flatten&.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :followed_first, ->(user) {
@@ -206,7 +209,7 @@ class User < ApplicationRecord
   }
 
   def self.find_for_auth(identification)
-    by_email(identification).first
+    by_email(identification).or(by_slug(identification)).first
   end
 
   def not_reserved_slug
@@ -315,12 +318,6 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
-  # TODO: remove once slugs are live on frontend
-  before_validation(if: :name_changed?) do
-    # Don't override slug if the slug has already been changed
-    self.slug = name unless slug_changed?
-  end
-
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
@@ -348,7 +345,7 @@ class User < ApplicationRecord
     DramaTimelineFeed.new(id).setup!
 
     # Automatically join "Kitsu" group
-    GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
+    GroupMember.create!(user: self, group: Group.kitsu) if Group.kitsu
   end
 
   after_save do
@@ -363,7 +360,7 @@ class User < ApplicationRecord
 
   after_create do
     # Set up Notification Settings for User
-    NotificationSetting.setup_notification_settings(self)
+    NotificationSetting.setup!(self)
   end
 
   before_update do

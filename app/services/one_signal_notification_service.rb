@@ -1,56 +1,32 @@
-# Service to make OneSignal API
 class OneSignalNotificationService
-  ONE_SIGNAL_URL = 'https://onesignal.com/api'.freeze
-
-  attr_reader :content, :player_ids, :opts
-
-  # Initialize services with GetStream webhook request
-  def initialize(content, player_ids, opts = {})
-    @content = content
-    @player_ids = player_ids
-    @opts = opts
+  def initialize(user, activity)
+    @user = user
+    @activity = activity
   end
 
-  # Pack JSON request from preconfigured attr
-  def request_json
-    opts.merge(
-      app_id: app_id,
-      content: content,
-      include_player_ids: player_ids
-    )
-  end
-
-  # Send notification to OneSignal
-  def notify_players!
-    # POST request to one signal server
-    res = Typhoeus.post("#{ONE_SIGNAL_URL}/v1/notifications",
-      headers: {
-        'Content-Type'  => 'application/json;charset=utf-8',
-        'Authorization' => "Basic #{api_key}"
-      },
-      body: request_json)
-
-    unless res.success?
-      raise "Bad OneSignal push
-        timeout: #{res.timed_out?}, code: #{res.code}, response: #{res.body}
-        request: #{res.request.original_options[:body]}"
-    end
-    check_and_process_invalids(JSON.parse(res.body))
+  def run!
+    notification = notify!
+    invalid_players = notification&.dig('errors', 'invalid_player_ids')
+    OneSignalPlayer.where(player_id: invalid_players).delete_all if invalid_players
   end
 
   private
 
-  def check_and_process_invalids(res)
-    return unless res.key?(:errors)
-    errors = res[:errors]
+  def notify!
+    return unless notification.setting
+    platforms = OneSignalPlayer.platforms.values_at(*notification.setting.enabled_platforms)
+    players = OneSignalPlayer.where(platform: platforms, user: @user)
+    return unless players.exists?
+    res = OneSignal::Notification.create(params: {
+      app_id: app_id,
+      include_player_ids: players.pluck(:player_id),
+      contents: { en: notification.message }
+    })
+    JSON.parse(res.body)
+  end
 
-    invalid_ids = if errors.is_a?(Hash) && errors.key?(:invalid_player_ids)
-                    # Some one signal player ids are invalid
-                    errors[:invalid_player_ids]
-                  else
-                    player_ids
-                  end
-    OneSignalPlayer.where('player_id IN (?)', invalid_ids).destroy_all
+  def notification
+    @notification ||= Feed::NotificationPresenter.new(@activity, @user)
   end
 
   def app_id

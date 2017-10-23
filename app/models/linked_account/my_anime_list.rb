@@ -32,9 +32,7 @@ class LinkedAccount
     validate :verify_mal_credentials, if: :token_changed?
 
     def verify_mal_credentials
-      unless list_sync.logged_in?
-        errors.add(:token, 'Username or password was incorrect.')
-      end
+      errors.add(:token, 'Username or password was incorrect.') unless list_sync.logged_in?
     end
 
     def list_sync

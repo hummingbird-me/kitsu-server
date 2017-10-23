@@ -21,7 +21,7 @@ class ApplicationRecord < ActiveRecord::Base
       edit do
         exclude_fields do |field|
           name = field.name.to_s
-          suffixed = %w[_count _processing _rank _formatted].any? do |suffix|
+          suffixed = %w[_count _processing _rank _formatted _meta].any? do |suffix|
             name.end_with?(suffix)
           end
           suffixed && !WHITELISTED_ADMIN_FIELDS.include?(name)

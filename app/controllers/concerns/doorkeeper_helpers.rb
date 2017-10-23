@@ -16,7 +16,7 @@ module DoorkeeperHelpers
     if doorkeeper_token && !doorkeeper_token.accessible?
       render json: {
         errors: [
-          { title: 'Invalid token', status: "403"}
+          { title: 'Invalid token', status: '403' }
         ]
       }, status: 403
     end

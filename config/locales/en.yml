@@ -21,36 +21,18 @@
 
 en:
   notifications:
+    mention:
+      post: "%{actor} mentioned you in a post."
+      comment: "%{actor} mentioned you in a comment."
     follow: "%{actor} followed you."
-    post: "%{actor} mentioned you in a post."
     post_like: "%{actor} liked your post."
     comment_like: "%{actor} liked your comment."
-    comment_mentioned: "%{actor} mentioned you in a comment."
-    post_replied: "%{actor} replied to your post."
-    comment_replied: "%{actor} replied to your comment."
-    invited: "%{actor} invited you to a group."
-    followed_post:
-      third_person: "%{actor} replied to their post."
-      first_person: "%{actor} replied to your post."
-      someone: "%{actor} replied to %{author}'s post."
-      other: "%{actor} replied to a post."
-    summary:
-      sentence: "You got %{summary} while you were away."
-      follow:
-        one: "1 follow"
-        other: "%{count} follows"
+    reply:
       post:
-        one: "1 post mention"
-        other: "%{count} post mentions"
-      post_like:
-        one: "1 post like"
-        other: "%{count} post likes"
-      comment_like:
-        one: "1 comment like"
-        other: "%{count} comment likes"
+        you: "%{actor} replied to your post."
+        themself: "%{actor} replied to their post."
+        author: "%{actor} replied to %{author}'s post."
+        unknown: "%{actor} replied to a post."
       comment:
-        one: "1 comment"
-        other: "%{count} comments"
-      invited:
-        one: "1 invite"
-        other: "%{count} invites"
+        you: "%{actor} replied to your comment."
+    invited: "%{actor} invited you to a group."

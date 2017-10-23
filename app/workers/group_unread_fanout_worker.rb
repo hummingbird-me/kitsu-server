@@ -1,5 +1,6 @@
 class GroupUnreadFanoutWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'soon'
 
   def perform(group_id, source_user_id = nil)
     group = Group.find(group_id)
