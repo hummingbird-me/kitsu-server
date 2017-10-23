@@ -27,7 +27,7 @@ module Authorization
       end
 
       # @return [User] the user to log into, given the facebook assertion
-      def user
+      def user!
         @user ||= conflict.user!
       end
 
