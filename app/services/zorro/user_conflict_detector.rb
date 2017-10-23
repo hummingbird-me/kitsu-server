@@ -80,6 +80,8 @@ module Zorro
 
     # @return [Hash] the user on Aozora
     def aozora_user
+      # If the Kitsu user has an ao_imported, then we can't have a conflict
+      return if kitsu_user&.ao_imported
       @aozora_user ||= if @ao_facebook_id
                          Zorro::DB::User.find('_auth_data_facebook.id' => @ao_facebook_id).first
                        elsif @user then Zorro::DB::User.find(_id: @user.ao_id)

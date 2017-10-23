@@ -108,7 +108,7 @@ module Zorro
           ao_facebook_id: facebook_id,
           ao_id: id,
           ao_pro: pro_tier,
-          status: status
+          status: :aozora
         )
       end
 
@@ -125,7 +125,10 @@ module Zorro
           following_count: user.following_count + following_count,
           avatar: avatar,
           cover_image: cover_image,
-          email: email
+          email: email,
+          # This column marks this account as imported from Aozora, so we can ignore it when it
+          # conflicts with the original Aozora user
+          ao_imported: id
         )
       end
     end
