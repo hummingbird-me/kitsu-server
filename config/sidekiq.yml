@@ -47,3 +47,6 @@ production:
   UploadRemovalWorker:
     # Twice a day
     cron: '0 0 */12 * * *'
+  HuluMappingWorker:
+    # Once a day
+    cron: '0 0 0 * * *'
