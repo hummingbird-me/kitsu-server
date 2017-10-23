@@ -122,7 +122,7 @@ class User < ApplicationRecord
   enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password validations: false
-  enum status: %i[unregistered registered incomplete aozora]
+  enum status: %i[unregistered registered aozora]
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
   enum theme: %i[light dark]
