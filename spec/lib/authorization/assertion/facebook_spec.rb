@@ -48,11 +48,11 @@ RSpec.describe Authorization::Assertion::Facebook do
     end
   end
 
-  describe '#import_friends' do
+  describe '#auto_follows' do
     let!(:user) { create :user, facebook_id: '1659565134412042' }
     let!(:friend) { create :user, facebook_id: '10204220238175291' }
 
-    before { facebook_auth.import_friends }
+    before { facebook_auth.auto_follows }
 
     subject { Follow.where(follower: user, followed: friend) }
 
