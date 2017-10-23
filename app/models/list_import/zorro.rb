@@ -39,6 +39,11 @@ class ListImport
       end
     end
 
+    # Just override the default value for queue
+    def apply_async!(queue: 'eventually')
+      super
+    end
+
     private
 
     # @return [Hash] the MongoDB query object for the user's AnimeProgress documents

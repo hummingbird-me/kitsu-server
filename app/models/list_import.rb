@@ -90,6 +90,8 @@ class ListImport < ApplicationRecord
 
   # Apply the ListImport while updating the model db every [frequency] times
   def apply!(frequency: 20)
+    return unless queued?
+
     apply do |info|
       # Apply every [frequency] updates unless the status is not :running
       if info[:status] != :running || (info[:progress] % frequency).zero?
@@ -97,6 +99,10 @@ class ListImport < ApplicationRecord
         yield info if block_given?
       end
     end
+  end
+
+  def apply_async!(queue: 'now')
+    ListImportWorker.perform_async(id, queue: queue) unless running?
   end
 
   def merged_entry(entry, data)
@@ -128,6 +134,6 @@ class ListImport < ApplicationRecord
   end
 
   after_commit(on: :create) do
-    ListImportWorker.perform_async(id) unless running?
+    apply_async!
   end
 end
