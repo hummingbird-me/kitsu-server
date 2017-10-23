@@ -20,6 +20,7 @@ module Zorro
       Post = Client['Post']
       TimelinePost = Client['TimelinePost']
       Thread = Client['Thread']
+      POST_COLLECTIONS = [TimelinePost, Thread, Post].freeze
       # Library
       AnimeProgress = Client['AnimeProgress']
     end

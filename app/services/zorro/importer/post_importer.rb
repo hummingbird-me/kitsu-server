@@ -6,12 +6,9 @@ module Zorro
     class PostImporter
       include WithProgressBar
 
-      # The collections we need to import posts from
-      COLLECTIONS = [Zorro::DB::TimelinePost, Zorro::DB::Thread, Zorro::DB::Post].freeze
-
       # Import all posts from Aozora to Kitsu
       def self.run!
-        COLLECTIONS.each { |coll| run_for! coll }
+        Zorro::DB::POST_COLLECTIONS.each { |coll| run_for! coll }
       end
 
       # Import all posts from a collection into Kitsu
