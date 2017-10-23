@@ -1542,6 +1542,7 @@ ActiveRecord::Schema.define(version: 20180114070606) do
     t.string   "ao_password"
     t.string   "ao_facebook_id"
     t.integer  "ao_pro"
+    t.string   "ao_imported"
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
