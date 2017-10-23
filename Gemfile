@@ -56,7 +56,7 @@ gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.8.1' # Parse MAL XML shit
 gem 'one_signal' # Send push notifications
-gem 'paranoia', '~> 2.0' # Faux deletion
+gem 'paranoia', '~> 2.3' # Faux deletion
 gem 'rack-timeout', github: 'nuckchorris/rack-timeout'
 gem 'ranked-model' # Sortables!
 gem 'rbtrace' # Attach to running ruby processes
