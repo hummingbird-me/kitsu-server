@@ -219,7 +219,8 @@ GEM
     http_parser.rb (0.6.0)
     http_signatures (0.2.2)
     httpclient (2.8.3)
-    i18n (0.8.6)
+    i18n (0.9.0)
+      concurrent-ruby (~> 1.0)
     image_optim (0.25.0)
       exifr (~> 1.2, >= 1.2.2)
       fspath (~> 3.0)
@@ -339,8 +340,8 @@ GEM
     paperclip-optimizer (2.0.0)
       image_optim (~> 0.19)
       paperclip (>= 3.4)
-    paranoia (2.2.1)
-      activerecord (>= 4.0, < 5.1)
+    paranoia (2.3.1)
+      activerecord (>= 4.0, < 5.2)
     pg (0.21.0)
     pg_query (0.13.4)
       json (>= 1.8, < 3)
@@ -621,7 +622,7 @@ DEPENDENCIES
   paperclip (~> 5.0)
   paperclip-meta
   paperclip-optimizer
-  paranoia (~> 2.0)
+  paranoia (~> 2.3)
   pg
   pg_query
   pghero
