@@ -34,5 +34,13 @@ FactoryGirl.define do
     association :user, strategy: :build
 
     event :updated
+
+    trait :with_anime do
+      anime_id 1
+    end
+
+    trait :with_manga do
+      manga_id 1
+    end
   end
 end
