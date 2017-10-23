@@ -5,7 +5,7 @@ class UsersIndex < Chewy::Index
     end
 
     def self.active
-      filter { deleted_at == nil }
+      filter { deleted_at.nil? }
     end
 
     field :name

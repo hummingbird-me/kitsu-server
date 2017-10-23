@@ -43,9 +43,7 @@ class LinkedAccount < ApplicationRecord
 
     in_namespace = type.start_with?('LinkedAccount')
     is_descendant = type.safe_constantize <= LinkedAccount
-    unless in_namespace && is_descendant
-      errors.add(:type, 'must be a LinkedAccount class')
-    end
+    errors.add(:type, 'must be a LinkedAccount class') unless in_namespace && is_descendant
   end
 
   def self.without_syncing(reason = nil)

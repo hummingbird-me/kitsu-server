@@ -43,9 +43,7 @@ class ListImport < ApplicationRecord
   def type_is_subclass
     in_namespace = type.start_with?('ListImport')
     is_descendant = type.safe_constantize <= ListImport
-    unless in_namespace && is_descendant
-      errors.add(:type, 'must be a ListImport class')
-    end
+    errors.add(:type, 'must be a ListImport class') unless in_namespace && is_descendant
   end
 
   # Apply the ListImport

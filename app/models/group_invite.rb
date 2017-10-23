@@ -107,15 +107,11 @@ class GroupInvite < ApplicationRecord
   end
 
   def not_banned
-    if GroupBan.where(group: group, user: user).exists?
-      errors.add(:user, 'is banned')
-    end
+    errors.add(:user, 'is banned') if GroupBan.where(group: group, user: user).exists?
   end
 
   def not_already_member
-    if GroupMember.where(group: group, user: user).exists?
-      errors.add(:user, 'is already a member')
-    end
+    errors.add(:user, 'is already a member') if GroupMember.where(group: group, user: user).exists?
   end
 
   def invitee_following_sender

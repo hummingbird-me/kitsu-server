@@ -22,19 +22,14 @@ class GroupInvitesController < ApplicationController
   private
 
   def authenticate!
-    unless invite
-      return render_jsonapi serialize_error(404, 'Not Found'), status: 404
-    end
+    return render_jsonapi serialize_error(404, 'Not Found'), status: 404 unless invite
+
     user = current_user&.resource_owner
-    unless user == invite.user
-      render_jsonapi serialize_error(403, 'Not Authorized'), status: 403
-    end
+    render_jsonapi serialize_error(403, 'Not Authorized'), status: 403 unless user == invite.user
   end
 
   def acceptable?
-    if invite.unacceptable?
-      render_jsonapi serialize_error(403, 'Already Responded'), status: 403
-    end
+    render_jsonapi serialize_error(403, 'Already Responded'), status: 403 if invite.unacceptable?
   end
 
   def invite
