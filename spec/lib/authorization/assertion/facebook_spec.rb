@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'authorization/assertion/facebook'
 
 RSpec.describe Authorization::Assertion::Facebook do
-  let(:facebook_responce) do
+  let(:facebook_response) do
     '{
       "id": "1659565134412042",
       "name": "Che Guevara",
@@ -24,17 +24,8 @@ RSpec.describe Authorization::Assertion::Facebook do
     }'
   end
   let(:facebook_auth) do
-    stub_request(:get, 'https://graph.facebook.com/v2.5/me?access_token'\
-      '=any%20token&fields=id,name,email,first_name,last_name,gender,friends')
-      .with(
-        headers: {
-          'Accept': '*/*',
-          'Accept-Encoding': 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Host': 'graph.facebook.com',
-          'User-Agent': 'Ruby'
-        }
-      )
-      .to_return(status: 200, body: facebook_responce, headers: {})
+    stub_request(:get, %r{https://graph.facebook.com/v2.5/me.*})
+      .to_return(status: 200, body: facebook_response, headers: {})
     Authorization::Assertion::Facebook.new('any token')
   end
 

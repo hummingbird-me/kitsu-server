@@ -34,11 +34,11 @@ module Authorization
       # @return [Array<Follow>] the list of follows created based on your facebook friends list
       # @todo enable permissions for this
       def auto_follows
-        return unless user
+        return unless user!
 
         follows = friends.map do |friend|
           friend_user = User.where(facebook_id: friend).first
-          Follow.where(follower: user, followed: friend_user).first_or_create if friend_user
+          Follow.where(follower: user!, followed: friend_user).first_or_create if friend_user
         end
         follows.compact
       end
