@@ -32,7 +32,6 @@ module Authorization
       end
 
       # @return [Array<Follow>] the list of follows created based on your facebook friends list
-      # @todo enable permissions for this
       def auto_follows
         return unless user!
 
