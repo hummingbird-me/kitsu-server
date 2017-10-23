@@ -5,7 +5,7 @@ class UsersController < ApplicationController
                                password: ENV['STAGING_SYNC_SECRET'],
                                only: :prod_sync
   skip_before_action :validate_token!, only: :prod_sync
-  skip_after_action :enforce_policy_use, only: %i[prod_sync recover conflicts]
+  skip_after_action :enforce_policy_use, only: %i[prod_sync recover conflicts_index conflicts_update]
 
   def recover
     query = params[:username]
