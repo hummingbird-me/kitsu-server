@@ -36,11 +36,14 @@ class ListImport
         score.zero? ? nil : score
       end
 
+      def volumes_owned
+        0
+      end
+
       def data
-        %i[status progress rating started_at finished_at]
-          .map { |k|
-            [k, send(k)]
-          }.to_h
+        %i[status progress rating started_at finished_at volumes_owned].map { |k|
+          [k, send(k)]
+        }.to_h
       end
     end
   end
