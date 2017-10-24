@@ -12,7 +12,7 @@ class ListImport
       end
 
       def status
-        case entry['status']
+        case entry['list']
         when 'Watching' then :current
         when 'Dropped' then :dropped
         when 'Planning', 'Plan to Watch' then :planned
