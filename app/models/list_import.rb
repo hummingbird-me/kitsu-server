@@ -57,10 +57,12 @@ class ListImport < ApplicationRecord
       input_file: input_file.to_s
     )
 
+    total = count
+
     # Last-ditch check for validity
     raise 'Import is invalid' unless valid?(:create)
 
-    yield({ status: :running, total: count, progress: 0 })
+    yield({ status: :running, total: total, progress: 0 })
     LibraryEntry.transaction do
       Chewy.strategy(:atomic) do
         each_with_index do |(media, data), index|
@@ -73,11 +75,11 @@ class ListImport < ApplicationRecord
           le.imported = true
           le = merged_entry(le, data)
           le.save! unless le.status.nil?
-          yield({ status: :running, total: count, progress: index + 1 })
+          yield({ status: :running, total: total, progress: index + 1 })
         end
       end
     end
-    yield({ status: :completed, total: count, progress: count })
+    yield({ status: :completed, total: total, progress: total })
   rescue StandardError => e
     Raven.capture_exception(e)
     yield({
