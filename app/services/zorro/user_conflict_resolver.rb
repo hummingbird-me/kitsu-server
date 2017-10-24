@@ -24,7 +24,7 @@ module Zorro
       case chosen
       when :aozora
         # Merge the Aozora data onto this profile
-        Zorro::Importer::UserImporter.new(aozora_user).run!(force: true, queue: 'now')
+        Zorro::Importer::UserImporter.new(aozora_user).run!(force: true, rush: true)
       when :kitsu
         # Just do nothing, pretty much.  Their UGC will get imported by the bulk stuff
         @user.update!(status: :registered)
@@ -42,7 +42,7 @@ module Zorro
       UserContentReparentWorker.perform_async(imported_aozora_user.id, @user.id)
       # Merge their profile data in if they have chosen aozora
       if chosen == :aozora
-        Zorro::Importer::UserImporter.new(aozora_user).run!(force: true, queue: 'now')
+        Zorro::Importer::UserImporter.new(aozora_user).run!(force: true, rush: true)
       end
       # Delete the imported profile
       # TODO: make sure this runs after UserContentReparentWorker
