@@ -22,7 +22,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-require 'zorro'
+require_dependency './app/services/zorro'
 
 class ListImport
   class Zorro < ListImport
