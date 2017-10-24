@@ -3,7 +3,7 @@ module Zorro
     class UserWrapper < Wrapper
       # @return [Hash] the associated details document
       def details
-        @details ||= @data['details'].presence || {}
+        @details ||= @data['details'].presence || assoc(@data['_p_details']) || {}
       end
 
       # Aozora wasn't always strictly checking these, so about 15,000 users have non-ASCII chars in
@@ -108,6 +108,8 @@ module Zorro
           ao_facebook_id: facebook_id,
           ao_id: id,
           ao_pro: pro_tier,
+          followers_count: user.followers_count + followers_count,
+          following_count: user.following_count + following_count,
           status: :aozora
         )
       end
@@ -121,8 +123,6 @@ module Zorro
         user.assign_attributes(
           name: name,
           about: about,
-          followers_count: user.followers_count + followers_count,
-          following_count: user.following_count + following_count,
           avatar: avatar,
           cover_image: cover_image,
           email: email,
