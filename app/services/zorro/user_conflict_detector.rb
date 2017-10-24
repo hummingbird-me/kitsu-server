@@ -84,7 +84,7 @@ module Zorro
       return if kitsu_user&.ao_imported
       @aozora_user ||= if @ao_facebook_id
                          Zorro::DB::User.find('_auth_data_facebook.id' => @ao_facebook_id).first
-                       elsif @user then Zorro::DB::User.find(_id: @user.ao_id)
+                       elsif @user then Zorro::DB::User.find(_id: @user.ao_id).first
                        elsif @email then Zorro::DB::User.find(email: @email).first
                        end
     end
