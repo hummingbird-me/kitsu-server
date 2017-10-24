@@ -26,7 +26,8 @@ module Zorro
       def run!(force: false)
         @user.initial_merge_onto(target_user)
         @user.full_merge_onto(target_user) if force || existing_user.nil?
-        target_user.save(validate: false) && target_user
+        target_user.save(validate: false)
+        target_user
       end
 
       private

@@ -14,9 +14,9 @@ module Zorro
       # @param force [Boolean] whether to forcibly overwrite existing Kitsu data with Aozora data
       # @param rush [Boolean] whether to put a rush on the related background tasks
       # @return [User] the user created by this
-      def run!(force: false, rush: false)
+      def run!(force: false, rush: false, target_user: nil)
         # Import the profile data
-        user = import_profile(force: force)
+        user = import_profile(force: force, target_user: target_user)
         user_id = user.id
         # Import the library if they don't have an existing library
         if force || LibraryEntry.where(user_id: user_id).empty?
@@ -43,8 +43,11 @@ module Zorro
       #
       # @param force [Boolean] whether to forcibly overwrite existing Kitsu data with Aozora data
       # @return [User] the Kitsu user affected by this import
-      def import_profile(force: false)
-        @profile ||= Zorro::Importer::ProfileImporter.new(@user_doc).run!(force: force)
+      def import_profile(force: false, target_user: nil)
+        @profile ||= Zorro::Importer::ProfileImporter.new(
+          @user_doc,
+          target_user: target_user
+        ).run!(force: force)
       end
 
       # Import the library data
