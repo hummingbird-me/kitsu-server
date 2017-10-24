@@ -1,6 +1,8 @@
 class ListImport
   class Zorro
     class Row
+      attr_reader :entry
+
       def initialize(entry)
         @entry = entry
       end
