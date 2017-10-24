@@ -15,7 +15,7 @@ module Zorro
     end
 
     def merge_onto(chosen)
-      return unless conflict?
+      return @user unless conflict?
 
       # Merging an already-imported Aozora User is more complicated, so we delegate that.
       return merge_imported_aozora_user(chosen) if imported_aozora_user
