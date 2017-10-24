@@ -26,7 +26,7 @@ class HuluMappingService
       series_id = item[:id]
       title = item[:name].titleize
       kitsu_anime = Mapping.lookup('hulu', series_id)
-      kitsu_anime ||= Mapping.guess('Anime', title: title)
+      kitsu_anime ||= Mapping.guess(Anime, title: title)
       next unless kitsu_anime
       create_mapping(kitsu_anime, series_id)
       hulu_episodes = get_episodes(series_id)
