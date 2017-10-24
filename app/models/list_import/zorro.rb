@@ -22,18 +22,16 @@
 #
 # rubocop:enable Metrics/LineLength
 
-require_dependency './app/services/zorro'
-
 class ListImport
   class Zorro < ListImport
     validates :input_text, presence: true
 
     def count
-      Zorro::DB::AnimeProgress.count(for_user)
+      ::Zorro::DB::AnimeProgress.count(for_user)
     end
 
     def each
-      Zorro::DB::AnimeProgress.find(for_user).each do |entry|
+      ::Zorro::DB::AnimeProgress.find(for_user).each do |entry|
         row = Row.new(entry)
         yield row.media, row.data
       end
