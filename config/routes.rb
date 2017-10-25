@@ -64,8 +64,6 @@ Rails.application.routes.draw do
       # Other Info
       jsonapi_resources :mappings
       jsonapi_resources :genres
-      jsonapi_resources :streaming_links
-      jsonapi_resources :streamers
       jsonapi_resources :media_relationships
       jsonapi_resources :media_attributes
       jsonapi_resources :media_attribute_votes
@@ -76,6 +74,10 @@ Rails.application.routes.draw do
       jsonapi_resources :episodes
       jsonapi_resources :chapters
       jsonapi_resources :stats
+      # Streaming
+      jsonapi_resources :streaming_links
+      jsonapi_resources :streamers
+      jsonapi_resources :videos
       # DEPRECATED: Legacy systems
       jsonapi_resources :castings
       get '/anime/:anime_id/_languages', to: 'anime#languages'
