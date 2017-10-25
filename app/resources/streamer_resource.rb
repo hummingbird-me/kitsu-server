@@ -5,6 +5,7 @@ class StreamerResource < BaseResource
   attributes :logo, format: :attachment
 
   has_many :streaming_links
+  has_many :videos
 
   paginator :unlimited
 end
