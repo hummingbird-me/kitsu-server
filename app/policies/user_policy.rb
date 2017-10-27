@@ -4,7 +4,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    user == record || is_admin?
+    user.id == record.id || is_admin?
   end
   alias_method :destroy?, :update?
 
@@ -23,11 +23,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def visible_attributes(all)
-    if record == user
+    if record.id == user.id
       all
     else
-      all - %i[email password confirmed previous_email language time_zone
-               country share_to_global title_language_preference sfw_filter]
+      all - %i[email password confirmed previous_email language time_zone country share_to_global
+               title_language_preference sfw_filter rating_system theme facebook_id has_password]
     end
   end
 

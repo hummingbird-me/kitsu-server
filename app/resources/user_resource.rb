@@ -1,7 +1,7 @@
 class UserResource < BaseResource
   PRIVATE_FIELDS = %i[email password confirmed previous_email language time_zone country
                       share_to_global title_language_preference sfw_filter rating_system
-                      theme facebook_id status].freeze
+                      theme facebook_id has_password status].freeze
 
   attributes :name, :past_names, :slug, :about, :location, :waifu_or_husbando, :followers_count,
     :following_count, :life_spent_on_anime, :birthday, :gender, :comments_count, :favorites_count,
@@ -32,6 +32,10 @@ class UserResource < BaseResource
 
   def website=(value)
     _model.profile_links.where(profile_link_site_id: 29).update(url: value)
+  end
+
+  def has_password # rubocop:disable Style/PredicateName
+    _model.password_digest.present?
   end
 
   def self.attribute_caching_context(context)
