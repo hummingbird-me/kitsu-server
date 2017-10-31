@@ -28,6 +28,7 @@ class UsersController < ApplicationController
   end
 
   def conflicts_update
+    render_jsonapi_error 400, 'You must choose' unless params[:chosen].present?
     chosen = params[:chosen].to_sym
     conflict_resolver = Zorro::UserConflictResolver.new(user)
     user = conflict_resolver.merge_onto(chosen)

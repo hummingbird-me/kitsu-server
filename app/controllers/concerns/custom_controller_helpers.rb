@@ -36,6 +36,10 @@ module CustomControllerHelpers
     scope_for(scope).exists?
   end
 
+  def render_jsonapi_error(status, message)
+    render_jsonapi(serialize_error(status, message), status: status)
+  end
+
   def render_jsonapi(data, opts = {})
     render opts.merge(json: data, content_type: JSONAPI::MEDIA_TYPE)
   end
