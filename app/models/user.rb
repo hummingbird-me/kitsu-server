@@ -110,12 +110,24 @@ class User < ApplicationRecord
   ].to_set.freeze
 
   enum rating_system: %i[simple advanced regular]
+  enum status: %i[unregistered registered]
+  enum theme: %i[light dark]
+  enum onboarding_status: {
+    # Pick your favorite categories
+    favorite_categories: 0,
+    # Pick your rating system
+    rating_system: 20,
+    # Import your list
+    import_list: 40,
+    # Rate your anime/manga
+    rate_content: 60,
+    # Done!
+    completed: 100
+  }
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password validations: false
-  enum status: %i[unregistered registered]
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
-  enum theme: %i[light dark]
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'

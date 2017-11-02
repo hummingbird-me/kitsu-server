@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017003438) do
+ActiveRecord::Schema.define(version: 20171102023621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "citext"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
-  enable_extension "citext"
 
   create_table "ama_subscribers", force: :cascade do |t|
     t.integer  "ama_id",     null: false
@@ -1519,6 +1519,7 @@ ActiveRecord::Schema.define(version: 20171017003438) do
     t.text     "avatar_meta"
     t.text     "cover_image_meta"
     t.citext   "slug"
+    t.integer  "onboarding_status",                                             null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
