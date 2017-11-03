@@ -80,8 +80,14 @@ class ListImport
 
     def list(list)
       loop.with_index.reduce([]) do |data, (_, index)|
-        page = get(list, index)
+        begin
+          page = get(list, index)
+        rescue RateLimitedError
+          sleep 10
+          redo
+        end
         break data if page.blank?
+        sleep 2
         data + page
       end
     end
