@@ -341,7 +341,7 @@ GEM
     paperclip-optimizer (2.0.0)
       image_optim (~> 0.19)
       paperclip (>= 3.4)
-    paranoia (2.3.1)
+    paranoia (2.4.0)
       activerecord (>= 4.0, < 5.2)
     pg (0.21.0)
     pg_query (0.13.4)
@@ -622,7 +622,7 @@ DEPENDENCIES
   paperclip (~> 5.0)
   paperclip-meta
   paperclip-optimizer
-  paranoia (~> 2.3)
+  paranoia (~> 2.4)
   pg
   pg_query
   pghero
