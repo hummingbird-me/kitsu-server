@@ -6,5 +6,5 @@ class VideoResource < BaseResource
   has_one :episode
   has_one :streamer
 
-  filters :sub_lang, :dub_lang
+  filters :sub_lang, :dub_lang, :episode_id
 end
