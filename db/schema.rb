@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017003438) do
+ActiveRecord::Schema.define(version: 20171026012230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1553,17 +1553,21 @@ ActiveRecord::Schema.define(version: 20171017003438) do
 
   create_table "videos", force: :cascade do |t|
     t.string   "url",               limit: 255,                  null: false
-    t.string   "embed_data",        limit: 255,                  null: false
+    t.jsonb    "embed_data",                    default: {},     null: false
     t.string   "available_regions", limit: 255, default: ["US"],              array: true
-    t.integer  "episode_id"
-    t.integer  "streamer_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "episode_id",                                     null: false
+    t.integer  "streamer_id",                                    null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.string   "sub_lang",          limit: 255
     t.string   "dub_lang",          limit: 255
   end
 
+  add_index "videos", ["available_regions"], name: "index_videos_on_available_regions", using: :gin
+  add_index "videos", ["dub_lang"], name: "index_videos_on_dub_lang", using: :btree
   add_index "videos", ["episode_id"], name: "index_videos_on_episode_id", using: :btree
+  add_index "videos", ["streamer_id"], name: "index_videos_on_streamer_id", using: :btree
+  add_index "videos", ["sub_lang"], name: "index_videos_on_sub_lang", using: :btree
 
   create_table "votes", force: :cascade do |t|
     t.integer  "target_id",                              null: false
