@@ -44,19 +44,16 @@ class BaseIndex
       self._index = value
     end
 
-    def search(search_query, opts = {})
-      return unless opts.key?(:klass)
-      klass = opts[:klass]
-      klass = klass.safe_constantize if klass.is_a?(String)
-      res = index.search(search_query).deep_symbolize_keys
-      res_ids = res[:hits].each_with_object({}) do |value, acc|
-        if acc.key?(value[:kind])
-          acc[value[:kind]] << value[:id]
-        else
-          acc[value[:kind]] = [value[:id]]
-        end
+    def search(query, opts = {})
+      hits = index.search(query, opts)['hits']
+      result_ids = hits.each_with_object({}) do |value, acc|
+        acc[value['kind']] ||= []
+        acc[value['kind']] << value['id']
       end
-      klass.where(id: res_ids[klass.name.downcase])
+      results = result_ids.map { |kind, ids|
+        [kind, kind.classify.safe_constantize.find(ids).index_by(&:id)]
+      }.to_h
+      hits.map { |hit| results.dig(hit['kind'], hit['id']) }
     end
 
     def index
