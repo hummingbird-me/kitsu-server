@@ -29,11 +29,15 @@ class Mapping < ApplicationRecord
   end
 
   def self.guess(type, query)
-    query = query[:title] if query.is_a?(Hash) # Backwards compat
-    opts = { klass: type }
+    filters = []
+    filters << "kind:#{type.underscore.dasherize}"
+    if query[:episode_count]
+      filters << "episodeCount:#{query[:episode_count] - 2} TO #{query[:episode_count] + 2}"
+    end
+
     AlgoliaMediaIndex.search(
-      query,
-      opts
+      query[:title],
+      filters: filters.join(' AND ')
     ).first
   end
 end
