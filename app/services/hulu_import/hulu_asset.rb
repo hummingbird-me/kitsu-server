@@ -93,7 +93,7 @@ module HuluImport
         thumbnail: thumbnail,
         season_number: season_number,
         length: length,
-        title: title,
+        titles: { en_jp: title },
         synopsis: synopsis
       )
     end
