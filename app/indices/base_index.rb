@@ -47,6 +47,7 @@ class BaseIndex
     def search(search_query, opts = {})
       return unless opts.key?(:klass)
       klass = opts[:klass]
+      klass = klass.safe_constantize if klass.is_a?(String)
       res = index.search(search_query).deep_symbolize_keys
       res_ids = res[:hits].each_with_object({}) do |value, acc|
         if acc.key?(value[:kind])
