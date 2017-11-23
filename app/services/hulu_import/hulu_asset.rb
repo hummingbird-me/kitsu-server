@@ -88,7 +88,7 @@ module HuluImport
       @episode ||= Episode.where(
         media: media,
         number: number
-      ).first_or_create(
+      ).first_or_create!(
         airdate: airdate,
         thumbnail: thumbnail,
         season_number: season_number,
@@ -104,7 +104,7 @@ module HuluImport
         episode: episode!,
         streamer: HuluImport.streamer,
         url: @asset['link']
-      ).first_or_create(
+      ).first_or_create!(
         available_regions: %w[US],
         embed_data: { eid: eid },
         sub_lang: sub_language,

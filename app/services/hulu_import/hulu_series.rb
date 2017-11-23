@@ -25,8 +25,9 @@ module HuluImport
     # @return [Anime] the anime which represents this series
     def media
       @media ||= Mapping.lookup('hulu', id) ||
-                 Mapping.guess('Anime', title: title).tap do |media|
+                 Mapping.guess('Anime', title: title, episode_count: episodes.count).tap do |media|
                    break unless media
+                   break if media.OVA? || media.ONA?
                    mapping = Mapping.where(external_site: 'hulu', item: media).first_or_initialize
                    mapping.external_id = id
                    mapping.save!
@@ -45,7 +46,7 @@ module HuluImport
 
     # @return [Enumerator<Episode>] an enumerator of all the episodes in the series
     def episodes(params = {})
-      HuluAsset.each(series_id: id, type: 'episode', **params)
+      @episodes ||= HuluAsset.each(series: self, series_id: id, type: 'episode', **params)
     end
 
     # Import all the episode & video data from Hulu
