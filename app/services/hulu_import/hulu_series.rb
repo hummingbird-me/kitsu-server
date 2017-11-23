@@ -27,7 +27,9 @@ module HuluImport
       @media ||= Mapping.lookup('hulu', id) ||
                  Mapping.guess('Anime', title: title).tap do |media|
                    break unless media
-                   Mapping.create!(external_site: 'hulu', external_id: id, item: media)
+                   mapping = Mapping.where(external_site: 'hulu', item: media).first_or_initialize
+                   mapping.external_id = id
+                   mapping.save!
                  end
     end
 
