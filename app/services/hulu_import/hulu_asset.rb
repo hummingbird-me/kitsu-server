@@ -8,8 +8,8 @@ module HuluImport
     # @yield [HuluAsset] the asset found on Hulu
     # @return [Enumerator] if no block is given, returns an Enumerator over the assets list
     def self.each(series: nil, **params)
-      return to_enum(:each) unless block_given?
-      params = { limit: PAGE_SIZE, **params }
+      return to_enum(:each, series: series, **params) unless block_given?
+      params = { fvod: 'available', limit: PAGE_SIZE, **params }
       offset = 0
       loop do
         page = HuluImport.get('/assets', offset: offset, **params)
@@ -60,7 +60,7 @@ module HuluImport
 
     # @return [String] the title of the episode
     def title
-      @asset['title']
+      @asset['title'].sub(/\(sub\)/i, '').strip
     end
 
     # @return [String] the synopsis of the episode
