@@ -3,7 +3,7 @@ class Stat
     include Sidekiq::Worker
 
     def perform(kind, user_id, library_entry_id, options)
-      return unless user_id.is_a? Number
+      return unless user_id.is_a? Integer
       user = User.find(user_id)
       library_entry = LibraryEntry.find(library_entry_id)
       # library_event = LibraryEvent.create_for(:added, library_entry)
