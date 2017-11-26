@@ -240,7 +240,7 @@ class LibraryEntry < ApplicationRecord
 
   after_create do
     Stat::LibraryCreateWorker.perform_async(
-      kind, user, id,
+      kind, user_id, id,
       options: {
         progress: progress,
         progress_was: progress_was,
@@ -251,7 +251,7 @@ class LibraryEntry < ApplicationRecord
 
   after_update do
     Stat::LibraryUpdateWorker.perform_async(
-      kind, user, id,
+      kind, user_id, id,
       options: {
         progress: progress,
         progress_was: progress_was,

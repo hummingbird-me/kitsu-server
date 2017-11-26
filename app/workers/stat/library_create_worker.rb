@@ -2,7 +2,9 @@ class Stat
   class LibraryCreateWorker
     include Sidekiq::Worker
 
-    def perform(kind, user, library_entry_id, options)
+    def perform(kind, user_id, library_entry_id, options)
+      return unless user_id.is_a? Number
+      user = User.find(user_id)
       library_entry = LibraryEntry.find(library_entry_id)
       # library_event = LibraryEvent.create_for(:added, library_entry)
 
@@ -20,6 +22,7 @@ class Stat
         # TODO: Change this before merging PR 201
         # Stat::MangaActivityHistory.increment(user, library_event)
       end
+    rescue ActiveRecord::RecordNotFound # rubocop:disable Lint/HandleExceptions
     end
   end
 end

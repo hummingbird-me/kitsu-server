@@ -2,7 +2,9 @@ class Stat
   class LibraryUpdateWorker
     include Sidekiq::Worker
 
-    def perform(kind, user, library_entry_id, options)
+    def perform(kind, user_id, library_entry_id, options)
+      return unless user_id.is_a? Number
+      user = User.find(user_id)
       library_entry = LibraryEntry.find(library_entry_id)
       # library_event = LibraryEvent.create_for(:updated, library_entry)
 
@@ -26,6 +28,7 @@ class Stat
           Stat::MangaAmountConsumed.decrement(user, library_entry, options, true)
         end
       end
+    rescue ActiveRecord::RecordNotFound # rubocop:disable Lint/HandleExceptions
     end
   end
 end
