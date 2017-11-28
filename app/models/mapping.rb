@@ -29,6 +29,7 @@ class Mapping < ApplicationRecord
   end
 
   def self.guess(type, query)
+    type = type.name if type.is_a?(String)
     filters = []
     filters << "kind:#{type.underscore.dasherize}"
     if query[:episode_count]
