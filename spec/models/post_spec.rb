@@ -95,8 +95,8 @@ RSpec.describe Post, type: :model do
   end
 
   context 'with an @mention' do
-    let!(:user) { create(:user) }
-    subject { build(:post, content: "@#{user.name}") }
+    let!(:user) { create(:user, slug: 'thisisatest') }
+    subject { build(:post, content: '@thisisatest') }
     let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
 
     describe '#stream_activity' do
