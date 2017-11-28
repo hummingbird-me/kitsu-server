@@ -20,7 +20,11 @@ class OneSignalNotificationService
     res = OneSignal::Notification.create(params: {
       app_id: app_id,
       include_player_ids: players.pluck(:player_id),
-      contents: { en: notification.message }
+      headings: { en: notification.message },
+      contents: { en: notification.message },
+      ios_badgeType: 'Increase',
+      ios_badgeCount: 1,
+      url: notification.url
     })
     JSON.parse(res.body)
   end
