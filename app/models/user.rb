@@ -108,6 +108,12 @@ class User < ApplicationRecord
     javascript json kitsu sysadmin sysadministrator system unfollow user users
     wiki you staff mod
   ].to_set.freeze
+  CONTROL_CHARACTERS = /\p{Line_Separator}|\p{Paragraph_Separator}|\p{Other}/u
+  BANNED_CHARACTERS = [
+    # Swastikas
+    "\u534D",
+    "\u5350"
+  ].join.freeze
 
   enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
@@ -185,6 +191,11 @@ class User < ApplicationRecord
   validates :name, presence: true,
                    length: { minimum: 3, maximum: 20 },
                    if: ->(user) { user.registered? && user.name_changed? }
+  validates :name, format: {
+    without: CONTROL_CHARACTERS,
+    message: 'cannot contain control characters, you silly haxx0r'
+  }, if: ->(user) { user.registered? && user.name_changed? }
+  validate :not_banned_characters
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
   validates :password, length: { maximum: 72 }, if: :registered?
@@ -214,6 +225,10 @@ class User < ApplicationRecord
 
   def not_reserved_slug
     errors.add(:slug, 'is reserved') if RESERVED_NAMES.include?(slug&.downcase)
+  end
+
+  def not_banned_characters
+    errors.add(:name, 'contains banned characters') if name&.count(BANNED_CHARACTERS) != 0
   end
 
   def pro?

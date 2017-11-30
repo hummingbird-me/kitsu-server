@@ -1,3 +1,4 @@
+# coding: UTF-8
 # rubocop:disable Metrics/LineLength
 # == Schema Information
 #
@@ -143,6 +144,24 @@ RSpec.describe User, type: :model do
     user = User.new(slug: 'admin')
     expect(user).to be_invalid
     expect(user.errors[:slug]).not_to be_empty
+  end
+
+  it 'should not allow a swastika in a username' do
+    user = User.new(name: '卐 Nazi Scum 卐')
+    expect(user).to be_invalid
+    expect(user.errors[:name]).not_to be_empty
+  end
+
+  it 'should not allow a newline in a username' do
+    user = User.new(name: "Foo\nBar")
+    expect(user).to be_invalid
+    expect(user.errors[:name]).not_to be_empty
+  end
+
+  it 'should not allow control characters in a username' do
+    user = User.new(name: "Foo\0Bar")
+    expect(user).to be_invalid
+    expect(user.errors[:name]).not_to be_empty
   end
 
   describe 'find_for_auth' do
