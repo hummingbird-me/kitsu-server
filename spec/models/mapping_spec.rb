@@ -44,6 +44,7 @@ RSpec.describe Mapping, type: :model do
 
   describe '.guess' do
     it 'should respond with nil when it cannot find a reasonable match' do
+      allow(AlgoliaMediaIndex).to receive(:search).and_return([])
       expect(Mapping.guess(Anime, title: 'Such Ass Ohmy')).to be_nil
     end
   end
