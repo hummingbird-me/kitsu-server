@@ -84,6 +84,8 @@ RSpec.describe ListImport::Anilist do
 
     describe '#each' do
       it 'should yield twice' do
+        anime = build(:anime)
+        allow(Mapping).to receive(:guess).and_return(anime)
         subject = ListImport::Anilist.create(
           input_text: 'nuck',
           user: build(:user)
