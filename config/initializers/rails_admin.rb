@@ -140,7 +140,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
 
   # Users
   config.model 'User' do
-    fields :id, :name, :email, :about, :avatar, :cover_image
+    fields :id, :name, :slug, :email, :about, :avatar, :cover_image
     include_all_fields
     exclude_fields :password_digest, :remember_created_at, :current_sign_in_at,
       :last_sign_in_at, :recommendations_up_to_date, :facebook_id, :twitter_id,
