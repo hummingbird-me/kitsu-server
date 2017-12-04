@@ -133,7 +133,7 @@ class Post < ApplicationRecord
   end
 
   def mentioned_users
-    User.by_name(processed_content[:mentioned_usernames])
+    User.by_slug(processed_content[:mentioned_usernames])
   end
 
   before_save do
