@@ -1,7 +1,14 @@
-# Hummingbird Server
+# Kitsu Server
 [![Build Status](https://travis-ci.org/hummingbird-me/hummingbird-server.svg?branch=the-future)](https://travis-ci.org/hummingbird-me/hummingbird-server) [![Code Climate](https://codeclimate.com/github/hummingbird-me/hummingbird-server/badges/gpa.svg)](https://codeclimate.com/github/hummingbird-me/hummingbird-server) [![Test Coverage](https://codeclimate.com/github/hummingbird-me/hummingbird-server/badges/coverage.svg)](https://codeclimate.com/github/hummingbird-me/hummingbird-server/coverage)
 
-Rails application for Hummingbird. Check out the primary repo [here](https://github.com/hummingbird-me/hummingbird)!
+---
+**<p align="center">This is our server repository. It contains the rails application for Kitsu.<br />Check out the [meta], [client] and [api docs] repositories.</p>**
+
+[meta]:https://github.com/hummingbird-me/hummingbird
+[client]:https://github.com/hummingbird-me/hummingbird-client
+[api docs]:https://github.com/hummingbird-me/hummingbird-client
+
+---
 
 This README outlines the details of collaborating on this application.
 
