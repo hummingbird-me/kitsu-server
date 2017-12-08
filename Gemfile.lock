@@ -510,6 +510,8 @@ GEM
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
+    sidekiq-debounce (1.1.0)
+      sidekiq (>= 2.17)
     sidekiq-scheduler (2.1.10)
       redis (>= 3, < 5)
       rufus-scheduler (~> 3.2)
@@ -652,6 +654,7 @@ DEPENDENCIES
   sentry-raven
   shoulda-matchers
   sidekiq (~> 3.5.1)
+  sidekiq-debounce
   sidekiq-scheduler
   simplecov
   sinatra
