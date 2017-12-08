@@ -2,7 +2,7 @@ module ListSync
   class SyncWorker
     include Sidekiq::Worker
     include ListSync::ErrorHandling
-    sidekiq_options retry: false, queue: 'soon'
+    sidekiq_options retry: false, queue: 'soon', debounce: true
 
     def perform(linked_account_id, user_id)
       user = User.find(user_id)

@@ -40,7 +40,7 @@ class LinkedAccount
     end
 
     after_commit(on: :create) do
-      ListSync::SyncWorker.perform_async(id, user_id) if sync_to?
+      ListSync::SyncWorker.perform_in(3.minutes, id, user_id) if sync_to?
     end
   end
 end
