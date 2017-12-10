@@ -3,7 +3,7 @@ ruby '2.3.1'
 
 # Core Stuff
 gem 'puma'
-gem 'rails', '4.2.8'
+gem 'rails', '4.2.10'
 gem 'rails-api'
 
 # Database Stuff
