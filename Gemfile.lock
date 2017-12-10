@@ -247,7 +247,7 @@ GEM
       activerecord (>= 4.1)
       concurrent-ruby
       railties (>= 4.1)
-    jwt (1.5.2)
+    jwt (1.5.6)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.1.1)
@@ -555,10 +555,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stream-ruby (2.5.4)
-      faraday (~> 0.10.0)
+    stream-ruby (2.5.10)
+      faraday (>= 0.10.0, < 1.0)
       http_signatures (~> 0)
-      jwt (= 1.5.2)
+      jwt (~> 1.5.2)
     temple (0.8.0)
     test_after_commit (1.1.0)
       activerecord (>= 3.2)
@@ -676,7 +676,7 @@ DEPENDENCIES
   sitemap_generator
   skylight
   spring
-  stream-ruby (~> 2.5.4)
+  stream-ruby (~> 2.5.10)
   stream_rails!
   test_after_commit
   timecop
