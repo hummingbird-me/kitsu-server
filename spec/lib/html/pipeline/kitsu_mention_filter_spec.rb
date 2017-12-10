@@ -11,8 +11,8 @@ RSpec.describe HTML::Pipeline::KitsuMentionFilter do
   end
 
   context 'with existent user' do
-    let!(:user) { create(:user) }
-    let(:filter) { described_class.new("@#{user.name}") }
+    let!(:user) { create(:user, slug: 'thisisatest') }
+    let(:filter) { described_class.new('@thisisatest') }
 
     it 'should linkify mentions' do
       expect(filter.call.to_s).to include('<a')
@@ -20,7 +20,7 @@ RSpec.describe HTML::Pipeline::KitsuMentionFilter do
 
     it 'should add username to mentioned_usernames list' do
       filter.call
-      expect(filter.result[:mentioned_usernames]).to include(user.name)
+      expect(filter.result[:mentioned_usernames]).to include('thisisatest')
     end
   end
 

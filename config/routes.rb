@@ -64,8 +64,6 @@ Rails.application.routes.draw do
       # Other Info
       jsonapi_resources :mappings
       jsonapi_resources :genres
-      jsonapi_resources :streaming_links
-      jsonapi_resources :streamers
       jsonapi_resources :media_relationships
       jsonapi_resources :media_attributes
       jsonapi_resources :media_attribute_votes
@@ -76,6 +74,10 @@ Rails.application.routes.draw do
       jsonapi_resources :episodes
       jsonapi_resources :chapters
       jsonapi_resources :stats
+      # Streaming
+      jsonapi_resources :streaming_links
+      jsonapi_resources :streamers
+      jsonapi_resources :videos
       # DEPRECATED: Legacy systems
       jsonapi_resources :castings
       get '/anime/:anime_id/_languages', to: 'anime#languages'
@@ -94,6 +96,11 @@ Rails.application.routes.draw do
 
       get '/category_recommendations/:namespace', to: 'category_recommendations#index'
       get '/category_recommendations/:namespace/realtime', to: 'category_recommendations#realtime'
+
+      # Community recommendations
+      jsonapi_resources :community_recommendation_follows
+      jsonapi_resources :community_recommendations
+      jsonapi_resources :community_recommendation_requests
 
       ### People/Characters/Companies
       jsonapi_resources :characters
@@ -163,11 +170,13 @@ Rails.application.routes.draw do
     get '/pghero', to: 'sessions#redirect'
     resources :sessions, only: %i[new create]
 
-    ### WebHooks
-    get '/hooks/youtube', to: 'webhooks#youtube_verify'
-    post '/hooks/youtube', to: 'webhooks#youtube_notify'
-    get '/hooks/getstream', to: 'webhooks#getstream_verify'
-    post '/hooks/getstream', to: 'webhooks#getstream_firehose'
+    ### Webhooks
+    namespace :hooks, module: 'webhooks' do
+      get :youtube, to: 'youtube#verify'
+      post :youtube, to: 'youtube#notify'
+      get :getstream, to: 'getstream#verify'
+      post :getstream, to: 'getstream#notify'
+    end
 
     ### Staging Sync
     post '/user/_prodsync', to: 'users#prod_sync'
@@ -181,7 +190,7 @@ end
 
 # == Route Map
 #
-# I, [2017-08-28T04:14:16.484700 #88577]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
+# I, [2017-09-04T01:58:22.243760 #19588]  INFO -- : Raven 2.4.0 configured not to capture errors: DSN not set
 #                                                     Prefix Verb      URI Pattern                                                                                                Controller#Action
 #                                   user_relationships_waifu GET       /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#show_relationship {:relationship=>"waifu"}
 #                                                            PUT|PATCH /api/edge/users/:user_id/relationships/waifu(.:format)                                                     users#update_relationship {:relationship=>"waifu"}
@@ -1156,6 +1165,24 @@ end
 #                                                            GET       /api/edge/recommendations/:namespace/realtime(.:format)                                                    recommendations#realtime
 #                                                            GET       /api/edge/category_recommendations/:namespace(.:format)                                                    category_recommendations#index
 #                                                            GET       /api/edge/category_recommendations/:namespace/realtime(.:format)                                           category_recommendations#realtime
+#                           community_recommendation_follows GET       /api/edge/community-recommendation-follows(.:format)                                                       community_recommendation_follows#index
+#                                                            POST      /api/edge/community-recommendation-follows(.:format)                                                       community_recommendation_follows#create
+#                            community_recommendation_follow GET       /api/edge/community-recommendation-follows/:id(.:format)                                                   community_recommendation_follows#show
+#                                                            PATCH     /api/edge/community-recommendation-follows/:id(.:format)                                                   community_recommendation_follows#update
+#                                                            PUT       /api/edge/community-recommendation-follows/:id(.:format)                                                   community_recommendation_follows#update
+#                                                            DELETE    /api/edge/community-recommendation-follows/:id(.:format)                                                   community_recommendation_follows#destroy
+#                                  community_recommendations GET       /api/edge/community-recommendations(.:format)                                                              community_recommendations#index
+#                                                            POST      /api/edge/community-recommendations(.:format)                                                              community_recommendations#create
+#                                   community_recommendation GET       /api/edge/community-recommendations/:id(.:format)                                                          community_recommendations#show
+#                                                            PATCH     /api/edge/community-recommendations/:id(.:format)                                                          community_recommendations#update
+#                                                            PUT       /api/edge/community-recommendations/:id(.:format)                                                          community_recommendations#update
+#                                                            DELETE    /api/edge/community-recommendations/:id(.:format)                                                          community_recommendations#destroy
+#                          community_recommendation_requests GET       /api/edge/community-recommendation-requests(.:format)                                                      community_recommendation_requests#index
+#                                                            POST      /api/edge/community-recommendation-requests(.:format)                                                      community_recommendation_requests#create
+#                           community_recommendation_request GET       /api/edge/community-recommendation-requests/:id(.:format)                                                  community_recommendation_requests#show
+#                                                            PATCH     /api/edge/community-recommendation-requests/:id(.:format)                                                  community_recommendation_requests#update
+#                                                            PUT       /api/edge/community-recommendation-requests/:id(.:format)                                                  community_recommendation_requests#update
+#                                                            DELETE    /api/edge/community-recommendation-requests/:id(.:format)                                                  community_recommendation_requests#destroy
 #                      character_relationships_primary_media GET       /api/edge/characters/:character_id/relationships/primary-media(.:format)                                   characters#show_relationship {:relationship=>"primary_media"}
 #                                                            PUT|PATCH /api/edge/characters/:character_id/relationships/primary-media(.:format)                                   characters#update_relationship {:relationship=>"primary_media"}
 #                                                            DELETE    /api/edge/characters/:character_id/relationships/primary-media(.:format)                                   characters#destroy_relationship {:relationship=>"primary_media"}

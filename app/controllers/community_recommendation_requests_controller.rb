@@ -1,0 +1,2 @@
+class CommunityRecommendationRequestsController < ApplicationController
+end

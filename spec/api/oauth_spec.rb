@@ -20,12 +20,6 @@ RSpec.describe 'OAuth2', type: :request do
       }.not_to raise_error
     end
 
-    it 'should work if given the username and right password' do
-      expect {
-        client.password.get_token(user.name, user.password)
-      }.not_to raise_error
-    end
-
     it 'should not work if given the wrong password' do
       expect {
         client.password.get_token(user.email, '123')

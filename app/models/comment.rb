@@ -5,8 +5,8 @@
 #
 #  id                :integer          not null, primary key
 #  blocked           :boolean          default(FALSE), not null
-#  content           :text             not null
-#  content_formatted :text             not null
+#  content           :text
+#  content_formatted :text
 #  deleted_at        :datetime         indexed
 #  edited_at         :datetime
 #  embed             :jsonb
@@ -54,8 +54,9 @@ class Comment < ApplicationRecord
 
   scope :in_group, ->(group) { joins(:post).merge(Post.in_group(group)) }
 
-  validates :content, :content_formatted, presence: true
   validate :no_grandparents
+  validates :content, :content_formatted, presence: true, unless: :uploads
+  validates :uploads, presence: true, unless: :content
   validates :content, length: { maximum: 9_000 }
   validates :post, active_ama: {
     message: 'cannot make any more comments on this AMA',

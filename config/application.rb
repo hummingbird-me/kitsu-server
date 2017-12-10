@@ -66,6 +66,9 @@ module Kitsu
     config.paperclip_defaults = {
       url: '/system/:class/:attachment/:id/:style.:content_type_extension'
     }
+    config.delayed_paperclip_defaults = {
+      queue: 'soon'
+    }
 
     # Email Server
     config.action_mailer.delivery_method = :smtp
@@ -84,6 +87,7 @@ module Kitsu
 
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
+    config.active_job.default_queue_name = :later
 
     # Configure Scaffold Generators
     config.generators do |g|

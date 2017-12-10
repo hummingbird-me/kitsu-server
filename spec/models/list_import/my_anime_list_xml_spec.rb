@@ -54,6 +54,8 @@ RSpec.describe ListImport::MyAnimeListXML do
 
     describe '#each' do
       it 'should yield at least 100 times' do
+        anime = build(:anime)
+        allow(Mapping).to receive(:guess).and_return(anime)
         expect { |b|
           subject.each(&b)
         }.to yield_control.at_least(100)

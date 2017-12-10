@@ -69,6 +69,8 @@ RSpec.describe ListImport::AnimePlanet do
 
     describe '#each' do
       it 'should yield exactly 47 times' do
+        anime = build(:anime)
+        allow(Mapping).to receive(:guess).and_return(anime)
         subject = ListImport::AnimePlanet.create(
           input_text: 'sierrawithas',
           user: build(:user)

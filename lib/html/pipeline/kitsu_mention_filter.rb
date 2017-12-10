@@ -10,7 +10,7 @@ module HTML
 
       # Check if user exists before we linkify it
       def link_to_mentioned_user(login)
-        super if User.by_name(login).exists?
+        super if User.by_slug(login).exists?
       end
 
       def username_pattern

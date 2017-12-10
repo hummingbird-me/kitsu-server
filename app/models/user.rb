@@ -10,6 +10,7 @@
 #  avatar_content_type         :string(255)
 #  avatar_file_name            :string(255)
 #  avatar_file_size            :integer
+#  avatar_meta                 :text
 #  avatar_processing           :boolean
 #  avatar_updated_at           :datetime
 #  bio                         :string(140)      default(""), not null
@@ -20,13 +21,14 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_meta            :text
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
-#  email                       :string(255)      default(""), not null, indexed
+#  email                       :string(255)      default(""), indexed
 #  favorites_count             :integer          default(0), not null
 #  feed_completed              :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
@@ -35,7 +37,6 @@
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
-#  ip_addresses                :inet             default([]), is an Array
 #  language                    :string
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
@@ -48,7 +49,7 @@
 #  media_reactions_count       :integer          default(0), not null
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
-#  password_digest             :string(255)      default(""), not null
+#  password_digest             :string(255)      default("")
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
@@ -63,6 +64,7 @@
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
+#  slug                        :citext           indexed
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
@@ -84,6 +86,7 @@
 #
 #  index_users_on_email        (email) UNIQUE
 #  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_slug         (slug) UNIQUE
 #  index_users_on_to_follow    (to_follow)
 #  index_users_on_waifu_id     (waifu_id)
 #
@@ -104,7 +107,13 @@ class User < ApplicationRecord
     feature featured features feed follow followers following hummingbird index
     javascript json kitsu sysadmin sysadministrator system unfollow user users
     wiki you staff mod
-  ].freeze
+  ].to_set.freeze
+  CONTROL_CHARACTERS = /\p{Line_Separator}|\p{Paragraph_Separator}|\p{Other}/u
+  BANNED_CHARACTERS = [
+    # Swastikas
+    "\u534D",
+    "\u5350"
+  ].join.freeze
 
   enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
@@ -157,42 +166,50 @@ class User < ApplicationRecord
   has_many :notification_settings, dependent: :destroy
   has_many :one_signal_players, dependent: :destroy
   has_many :reposts, dependent: :destroy
-
-  validates :email, :name, :password, absence: true, if: :unregistered?
+  has_many :ip_addresses, dependent: :destroy, class_name: 'UserIpAddress'
+  validates :email, :name, :password, :slug, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false },
                     if: ->(user) { user.registered? && user.email_changed? }
-  validates :name, uniqueness: { case_sensitive: false },
+  with_options if: :slug_changed?, allow_nil: true do
+    validates :slug, uniqueness: { case_sensitive: false }
+    validates :slug, format: {
+      with: /\A[_A-Za-z0-9]+\z/,
+      message: 'can only contain letters, numbers, and underscores'
+    }
+    validates :slug, format: {
+      with: /\A[A-Za-z0-9]/,
+      message: 'must begin with a letter or number'
+    }
+    validates :slug, format: {
+      without: /\A[0-9]*\z/,
+      message: 'cannot be entirely numbers'
+    }
+    validates :slug, length: 3..20
+  end
+  validate :not_reserved_slug, if: ->(user) { user.slug.present? && user.slug_changed? }
+  validates :name, presence: true,
                    length: { minimum: 3, maximum: 20 },
-                   if: ->(user) { user.registered? && user.name_changed? },
-                   format: {
-                     with: /\A[_A-Za-z0-9]+\z/,
-                     message: <<-EOF.squish
-                       can only contain letters, numbers, and underscores.
-                     EOF
-                   }
+                   if: ->(user) { user.registered? && user.name_changed? }
   validates :name, format: {
-    with: /\A[A-Za-z0-9]/,
-    message: 'must begin with a letter or number'
-  }, if: :registered?
-  validates :name, format: {
-    without: /\A[0-9]*\z/,
-    message: 'cannot be entirely numbers'
-  }, if: :registered?
-  validate :not_reserved_username, if: :registered?
+    without: CONTROL_CHARACTERS,
+    message: 'cannot contain control characters, you silly haxx0r'
+  }, if: ->(user) { user.registered? && user.name_changed? }
+  validate :not_banned_characters
   validates :about, length: { maximum: 500 }
   validates :gender, length: { maximum: 20 }
   validates :password, length: { maximum: 72 }, if: :registered?
   validates :facebook_id, uniqueness: true, allow_nil: true
 
   scope :active, ->() { where(deleted_at: nil) }
+  scope :by_slug, ->(*slugs) { where(slug: slugs&.flatten) }
   scope :by_name, ->(*names) {
-    where('lower(users.name) IN (?)', names.flatten.map(&:downcase))
+    where('lower(users.name) IN (?)', names&.flatten&.map(&:downcase))
+  }
+  scope :by_email, ->(*emails) {
+    where('lower(users.email) IN (?)', emails&.flatten&.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
-  scope :alts_of, ->(user) do
-    where('ip_addresses && ARRAY[?]::inet[]', user.ip_addresses.map(&:to_s))
-  end
   scope :followed_first, ->(user) {
     user_id = sanitize(user.id)
     joins(<<-SQL.squish).order('(f.id IS NULL) ASC')
@@ -202,14 +219,16 @@ class User < ApplicationRecord
     SQL
   }
 
-  # TODO: I think Devise can handle this for us
   def self.find_for_auth(identification)
-    identification = [identification.downcase]
-    where('lower(email)=? OR lower(name)=?', *(identification * 2)).first
+    by_email(identification).or(by_slug(identification)).first
   end
 
-  def not_reserved_username
-    errors.add(:name, 'is reserved') if RESERVED_NAMES.include?(name&.downcase)
+  def not_reserved_slug
+    errors.add(:slug, 'is reserved') if RESERVED_NAMES.include?(slug&.downcase)
+  end
+
+  def not_banned_characters
+    errors.add(:name, 'contains banned characters') if name&.count(BANNED_CHARACTERS) != 0
   end
 
   def pro?
@@ -239,15 +258,13 @@ class User < ApplicationRecord
   end
 
   def add_ip(new_ip)
-    unless ip_addresses.include?(new_ip)
-      ips = [new_ip, *ip_addresses].compact.first(PAST_IPS_LIMIT)
-      update_attribute(:ip_addresses, ips)
-    end
-    ip_addresses
+    ip_addresses.where(ip_address: new_ip).first_or_create
+  rescue ActiveRecord::RecordNotUnique # This can happen if two requests run at the same time
+    ip_addresses.where(ip_address: new_ip).first
   end
 
   def alts
-    User.alts_of(self)
+    UserIpAddress.where(ip_address: ip_addresses.select(:ip_address)).includes(:user).map(&:user)
   end
 
   def update_title(_role)
@@ -343,7 +360,7 @@ class User < ApplicationRecord
     DramaTimelineFeed.new(id).setup!
 
     # Automatically join "Kitsu" group
-    GroupMember.create!(user: self, group_id: 1830) if Group.exists?(1830)
+    GroupMember.create!(user: self, group: Group.kitsu) if Group.kitsu
   end
 
   after_save do
@@ -358,7 +375,7 @@ class User < ApplicationRecord
 
   after_create do
     # Set up Notification Settings for User
-    NotificationSetting.setup_notification_settings(self)
+    NotificationSetting.setup!(self)
   end
 
   before_update do

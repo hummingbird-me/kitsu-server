@@ -57,7 +57,7 @@ class GroupMember < ApplicationRecord
   scope :sfw, ->() { joins(:group).merge(Group.sfw) }
 
   def has_permission?(perm)
-    permissions.for_permission(perm).exists?
+    permissions.for_permission(perm).exists? || permissions.for_permission(:owner).exists?
   end
 
   def leader?

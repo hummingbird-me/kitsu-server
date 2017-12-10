@@ -27,12 +27,13 @@ RSpec.describe Stat::AnimeFavoriteYear do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, start_date: 'Tue, 19 Apr 2016') }
   let(:anime1) { create(:anime, start_date: 'Tue, 19 Apr 2014') }
-  let!(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
-  let!(:le1) { create(:library_entry, user: user, anime: anime1, progress: 1) }
+  let(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
+  let(:le1) { create(:library_entry, user: user, anime: anime1, progress: 1) }
 
-  before(:each) do
-    subject = Stat.find_by(user: user, type: 'Stat::AnimeFavoriteYear')
-    subject.recalculate!
+  before do
+    Stat::AnimeFavoriteYear.increment(user, le)
+    Stat::AnimeFavoriteYear.increment(user, le1)
+    user.stats.find_or_initialize_by(type: 'Stat::AnimeFavoriteYear').recalculate!
   end
 
   describe '#recalculate!' do
@@ -49,7 +50,8 @@ RSpec.describe Stat::AnimeFavoriteYear do
   describe '#increment' do
     before do
       anime2 = create(:anime, start_date: 'Tue, 19 Apr 2012')
-      create(:library_entry, user: user, anime: anime2)
+      le2 = create(:library_entry, user: user, anime: anime2)
+      Stat::AnimeFavoriteYear.increment(user, le2)
     end
 
     it 'should add LibraryEntry anime start_date into stats_data' do

@@ -28,12 +28,15 @@ RSpec.describe Stat::MangaCategoryBreakdown do
   let(:manga) { create(:manga, :categories) }
   let!(:le) { create(:library_entry, user: user, manga: manga, progress: 1) }
 
+  before do
+    Stat::MangaCategoryBreakdown.increment(user, le)
+    user.stats.find_or_initialize_by(type: 'Stat::MangaCategoryBreakdown').recalculate!
+  end
+
   describe '#recalculate!' do
     it 'should create Stat' do
-      subject = Stat.find_by(user: user, type: 'Stat::MangaCategoryBreakdown')
-      subject.recalculate!
-
       stat = Stat.find_by(user: user, type: 'Stat::MangaCategoryBreakdown')
+
       expect(stat.stats_data).to_not be_nil
     end
   end

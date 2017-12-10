@@ -15,6 +15,7 @@
 #  thumbnail_content_type :string(255)
 #  thumbnail_file_name    :string(255)
 #  thumbnail_file_size    :integer
+#  thumbnail_meta         :text
 #  thumbnail_updated_at   :datetime
 #  titles                 :hstore           default({}), not null
 #  created_at             :datetime         not null
@@ -31,6 +32,7 @@ class Episode < ApplicationRecord
   include Titleable
 
   belongs_to :media, polymorphic: true, touch: true
+  has_many :videos
 
   has_attached_file :thumbnail
 

@@ -1,3 +1,4 @@
+# coding: UTF-8
 # rubocop:disable Metrics/LineLength
 # == Schema Information
 #
@@ -10,6 +11,7 @@
 #  avatar_content_type         :string(255)
 #  avatar_file_name            :string(255)
 #  avatar_file_size            :integer
+#  avatar_meta                 :text
 #  avatar_processing           :boolean
 #  avatar_updated_at           :datetime
 #  bio                         :string(140)      default(""), not null
@@ -20,13 +22,14 @@
 #  cover_image_content_type    :string(255)
 #  cover_image_file_name       :string(255)
 #  cover_image_file_size       :integer
+#  cover_image_meta            :text
 #  cover_image_processing      :boolean
 #  cover_image_updated_at      :datetime
 #  current_sign_in_at          :datetime
 #  deleted_at                  :datetime
 #  dropbox_secret              :string(255)
 #  dropbox_token               :string(255)
-#  email                       :string(255)      default(""), not null, indexed
+#  email                       :string(255)      default(""), indexed
 #  favorites_count             :integer          default(0), not null
 #  feed_completed              :boolean          default(FALSE), not null
 #  followers_count             :integer          default(0)
@@ -35,7 +38,6 @@
 #  import_error                :string(255)
 #  import_from                 :string(255)
 #  import_status               :integer
-#  ip_addresses                :inet             default([]), is an Array
 #  language                    :string
 #  last_backup                 :datetime
 #  last_recommendations_update :datetime
@@ -48,7 +50,7 @@
 #  media_reactions_count       :integer          default(0), not null
 #  name                        :string(255)
 #  ninja_banned                :boolean          default(FALSE)
-#  password_digest             :string(255)      default(""), not null
+#  password_digest             :string(255)      default("")
 #  past_names                  :string           default([]), not null, is an Array
 #  posts_count                 :integer          default(0), not null
 #  previous_email              :string
@@ -63,6 +65,7 @@
 #  sfw_filter                  :boolean          default(TRUE)
 #  share_to_global             :boolean          default(TRUE), not null
 #  sign_in_count               :integer          default(0)
+#  slug                        :citext           indexed
 #  stripe_token                :string(255)
 #  subscribed_to_newsletter    :boolean          default(TRUE)
 #  theme                       :integer          default(0), not null
@@ -84,6 +87,7 @@
 #
 #  index_users_on_email        (email) UNIQUE
 #  index_users_on_facebook_id  (facebook_id) UNIQUE
+#  index_users_on_slug         (slug) UNIQUE
 #  index_users_on_to_follow    (to_follow)
 #  index_users_on_waifu_id     (waifu_id)
 #
@@ -107,7 +111,7 @@ RSpec.describe User, type: :model do
   it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers).dependent(:destroy) }
   it { should have_many(:following).dependent(:destroy) }
-  it { should validate_uniqueness_of(:name).case_insensitive }
+  it { should validate_uniqueness_of(:slug).case_insensitive.allow_nil }
   it { should validate_uniqueness_of(:email).case_insensitive }
   it { should have_many(:library_events).dependent(:destroy) }
   it { should have_many(:notification_settings).dependent(:destroy) }
@@ -136,17 +140,31 @@ RSpec.describe User, type: :model do
     end
   end
 
-  it 'should reserve certain names case-insensitively' do
-    user = User.new(name: 'admin')
+  it 'should reserve certain slugs case-insensitively' do
+    user = User.new(slug: 'admin')
+    expect(user).to be_invalid
+    expect(user.errors[:slug]).not_to be_empty
+  end
+
+  it 'should not allow a swastika in a username' do
+    user = User.new(name: '卐 Nazi Scum 卐')
+    expect(user).to be_invalid
+    expect(user.errors[:name]).not_to be_empty
+  end
+
+  it 'should not allow a newline in a username' do
+    user = User.new(name: "Foo\nBar")
+    expect(user).to be_invalid
+    expect(user.errors[:name]).not_to be_empty
+  end
+
+  it 'should not allow control characters in a username' do
+    user = User.new(name: "Foo\0Bar")
     expect(user).to be_invalid
     expect(user.errors[:name]).not_to be_empty
   end
 
   describe 'find_for_auth' do
-    it 'should be able to query by username' do
-      u = User.find_for_auth(persisted_user.name)
-      expect(u).to eq(persisted_user)
-    end
     it 'should be able to query by email' do
       u = User.find_for_auth(persisted_user.email)
       expect(u).to eq(persisted_user)

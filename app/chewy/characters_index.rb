@@ -24,7 +24,7 @@ class CharactersIndex < Chewy::Index
                 max_expansions: 15,
                 prefix_length: 2,
                 boost: 2
-              },
+              }
             },
             {
               multi_match: {

@@ -17,8 +17,6 @@ module Titleable
   end
 
   def has_english_title
-    unless has_english_title?
-      errors.add(:titles, 'must have at least one english title')
-    end
+    errors.add(:titles, 'must have at least one english title') unless has_english_title?
   end
 end

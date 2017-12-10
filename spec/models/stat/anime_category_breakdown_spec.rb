@@ -26,14 +26,17 @@ require 'rails_helper'
 RSpec.describe Stat::AnimeCategoryBreakdown do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, :categories) }
-  let!(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
+  let(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
+
+  before do
+    Stat::AnimeCategoryBreakdown.increment(user, le)
+    user.stats.find_or_initialize_by(type: 'Stat::AnimeCategoryBreakdown').recalculate!
+  end
 
   describe '#recalculate!' do
     it 'should create Stat' do
-      subject = Stat.find_by(user: user, type: 'Stat::AnimeCategoryBreakdown')
-      subject.recalculate!
-
       stat = Stat.find_by(user: user, type: 'Stat::AnimeCategoryBreakdown')
+
       expect(stat.stats_data).to_not be_nil
     end
   end

@@ -1,0 +1,2 @@
+class CommunityRecommendationPolicy < ApplicationPolicy
+end

@@ -1,3 +1,5 @@
+require Rails.root.join('lib/rails_admin/config/fields/types/citext')
+
 RailsAdmin::ApplicationHelper.module_exec do
   def edit_user_link
     link_to "/users/#{_current_user.name}" do
@@ -138,7 +140,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
 
   # Users
   config.model 'User' do
-    fields :id, :name, :email, :about, :avatar, :cover_image
+    fields :id, :name, :slug, :email, :about, :avatar, :cover_image
     include_all_fields
     exclude_fields :password_digest, :remember_created_at, :current_sign_in_at,
       :last_sign_in_at, :recommendations_up_to_date, :facebook_id, :twitter_id,
@@ -147,7 +149,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       :stripe_customer_id, :import_status, :import_from, :import_error,
       :profile_completed, :feed_completed, :followers, :following, :comments,
       :posts, :blocks, :last_recommendations_update, :title,
-      :library_entries
+      :library_entries, :slug
     navigation_label 'Users'
     weight(-10)
   end

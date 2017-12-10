@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe WebhooksController, type: :controller do
+RSpec.describe Webhooks::YoutubeController, type: :controller do
   let(:linked_account) do
     create(:linked_account,
       type: 'LinkedAccount::YoutubeChannel',
@@ -10,10 +10,10 @@ RSpec.describe WebhooksController, type: :controller do
   end
   let(:challenge) { 'CHALLENGE' }
 
-  describe '#youtube_verify' do
+  describe '#verify' do
     context 'for an unsubscribe' do
       it 'should reply with the challenge' do
-        get :youtube_verify,
+        get :verify,
           'linked_account' => '0',
           'hub.mode' => 'unsubscribe',
           'hub.topic' => linked_account.topic_url,
@@ -26,7 +26,7 @@ RSpec.describe WebhooksController, type: :controller do
     describe 'for a subscribe' do
       context 'with the correct topic' do
         it 'should reply with the challenge' do
-          get :youtube_verify,
+          get :verify,
             'linked_account' => linked_account.id,
             'hub.mode' => 'subscribe',
             'hub.topic' => linked_account.topic_url,
@@ -38,7 +38,7 @@ RSpec.describe WebhooksController, type: :controller do
 
       context 'with an incorrect topic' do
         it 'should reply with a 404' do
-          get :youtube_verify,
+          get :verify,
             'linked_account' => linked_account.id,
             'hub.mode' => 'subscribe',
             'hub.topic' => 'FAKE TOPIC',
@@ -49,7 +49,7 @@ RSpec.describe WebhooksController, type: :controller do
     end
   end
 
-  describe '#youtube_notify' do
+  describe '#notify' do
     context 'with a valid HMAC in X-Hub-Signature' do
       let(:secret) { 'SECRET' }
       let(:body) { fixture('youtube_service/notification.xml') }
@@ -65,7 +65,7 @@ RSpec.describe WebhooksController, type: :controller do
       end
 
       it 'should return a status of OK' do
-        post :youtube_notify, linked_account: linked_account.id
+        post :notify, linked_account: linked_account.id
         expect(response).to have_http_status(:ok)
       end
 
@@ -75,7 +75,7 @@ RSpec.describe WebhooksController, type: :controller do
         expect(notif_class).to receive(:new).and_return(notif)
         expect(notif).to receive(:post!).with(linked_account.user)
         stub_const('YoutubeService::Notification', notif_class)
-        post :youtube_notify, linked_account: linked_account.id
+        post :notify, linked_account: linked_account.id
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe WebhooksController, type: :controller do
       end
 
       it 'should return a status of OK' do
-        post :youtube_notify, linked_account: linked_account.id
+        post :notify, linked_account: linked_account.id
         expect(response).to have_http_status(:ok)
       end
 
@@ -101,41 +101,7 @@ RSpec.describe WebhooksController, type: :controller do
         notif_class = double('YoutubeService::Notification')
         expect(notif_class).not_to receive(:new)
         stub_const('YoutubeService::Notification', notif_class)
-        post :youtube_notify, linked_account: linked_account.id
-      end
-    end
-  end
-
-  describe '#getstream_firehose' do
-    context 'receiving feed removed notifications' do
-      let(:body) { fixture('getstream_webhook/feed_remove_request.json') }
-
-      it 'should not dispatch notification worker' do
-        worker = double(OneSignalNotificationWorker)
-        expect(worker).not_to receive(:perform_async)
-        stub_const('OneSignalNotificationWorker', worker)
-        post :getstream_firehose, body
-      end
-
-      it 'should return a status of OK' do
-        post :getstream_firehose, body
-        expect(response).to have_http_status(:ok)
-      end
-    end
-
-    context 'receiving some new notification to push' do
-      let(:body) { fixture('getstream_webhook/new_feed_request.json') }
-
-      it 'should dispatch multiple notification workers' do
-        worker = double(OneSignalNotificationWorker)
-        expect(worker).to receive(:perform_async).exactly(7).times
-        stub_const('OneSignalNotificationWorker', worker)
-        post :getstream_firehose, body
-      end
-
-      it 'should return a status of OK' do
-        post :getstream_firehose, body
-        expect(response).to have_http_status(:ok)
+        post :notify, linked_account: linked_account.id
       end
     end
   end

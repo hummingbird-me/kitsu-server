@@ -23,5 +23,6 @@ class UserMailer < ApplicationMailer
     # TODO: stop hardcoding this and fix root_url
     # Also, this gsub collapses runs of more than one forward-slash (except in
     # the protocol)
-    "https://kitsu.io/#{path}".gsub(%r{([^:])/+}, '\1/')  end
+    "https://kitsu.io/#{path}".gsub(%r{([^:])/+}, '\1/')
+  end
 end
