@@ -42,6 +42,12 @@ production:
   UploadRemovalWorker:
     # Twice a day
     cron: '0 0 */12 * * *'
+  TheTvdbDailyWorker:
+    # Once a day
+    cron: '0 0 0 * * *'
+  TheTvdbWeeklyWorker:
+    # Once a week
+    every: '0 0 0 * * SUN'
   HuluMappingWorker:
     # Once a day
     cron: '0 0 0 * * *'
