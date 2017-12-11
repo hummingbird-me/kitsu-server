@@ -28,7 +28,7 @@ gem 'rolify'
 gem 'twitter'
 
 # Attachments
-gem 'aws-sdk'
+gem 'aws-sdk-s3'
 gem 'delayed_paperclip'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
