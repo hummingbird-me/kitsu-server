@@ -48,6 +48,10 @@ gem 'onebox'
 gem 'rinku'
 gem 'sanitize'
 
+# Feature Flagging
+gem 'flipper'
+gem 'flipper-redis'
+
 # Miscellaneous Utilities
 gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches

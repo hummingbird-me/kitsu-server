@@ -183,6 +183,10 @@ GEM
       multipart-post (>= 1.2, < 3)
     fast_blank (1.0.0)
     ffi (1.9.18)
+    flipper (0.11.0)
+    flipper-redis (0.11.0)
+      flipper (~> 0.11.0)
+      redis (>= 2.2, < 4.0.0)
     font-awesome-rails (4.7.0.2)
       railties (>= 3.2, < 5.2)
     formatador (0.2.5)
@@ -625,6 +629,8 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fast_blank
+  flipper
+  flipper-redis
   friendly_id
   guard
   guard-rspec
