@@ -7,3 +7,15 @@ Flipper.configure do |config|
     Flipper.new(adapter)
   end
 end
+
+Flipper.register(:staff) do |user|
+  user.try(:has_role?, :admin)
+end
+
+Flipper.register(:pro) do |user|
+  user.try(:pro?)
+end
+
+Flipper.register(:mod) do |user|
+  user.try(:has_role?, :mod) || user.try(:has_role?, :admin, Anime)
+end
