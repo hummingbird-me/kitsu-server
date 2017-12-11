@@ -164,10 +164,12 @@ Rails.application.routes.draw do
       mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
       mount Sidekiq::Web => '/sidekiq'
       mount PgHero::Engine => '/pghero'
+      mount Flipper::UI.app(Flipper) => '/flipper'
     end
     get '/admin', to: 'sessions#redirect'
     get '/sidekiq', to: 'sessions#redirect'
     get '/pghero', to: 'sessions#redirect'
+    get '/flipper', to: 'sessions#redirect'
     resources :sessions, only: %i[new create]
 
     ### Webhooks

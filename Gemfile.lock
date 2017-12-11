@@ -187,6 +187,11 @@ GEM
     flipper-redis (0.11.0)
       flipper (~> 0.11.0)
       redis (>= 2.2, < 4.0.0)
+    flipper-ui (0.11.0)
+      erubis (~> 2.7.0)
+      flipper (~> 0.11.0)
+      rack (>= 1.4, < 3)
+      rack-protection (>= 1.5.3, < 2.1.0)
     font-awesome-rails (4.7.0.2)
       railties (>= 3.2, < 5.2)
     formatador (0.2.5)
@@ -631,6 +636,7 @@ DEPENDENCIES
   fast_blank
   flipper
   flipper-redis
+  flipper-ui
   friendly_id
   guard
   guard-rspec
