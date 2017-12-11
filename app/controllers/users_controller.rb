@@ -44,4 +44,12 @@ class UsersController < ApplicationController
     strength = RecommendationsService::Media.new(user).strength
     render json: strength, status: 200
   end
+
+  def flags
+    user = current_user&.resource_owner
+    features = Flipper.preload_all
+    flags = features.map { |f| [f.name, f.enabled?(user)] }.to_h
+    enabled_flags = flags.select { |_, enabled| enabled }
+    render json: enabled_flags, status: 200
+  end
 end

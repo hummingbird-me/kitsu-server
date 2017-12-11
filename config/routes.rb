@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       jsonapi_resources :users
       post '/users/_recover', to: 'users#recover'
       get '/users/:id/_strength', to: 'users#profile_strength'
+      get '/_flags', to: 'users#flags'
       # Profile data
       jsonapi_resources :profile_links
       jsonapi_resources :profile_link_sites
