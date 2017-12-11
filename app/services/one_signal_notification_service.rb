@@ -17,9 +17,10 @@ class OneSignalNotificationService
     platforms = OneSignalPlayer.platforms.values_at(*notification.setting.enabled_platforms)
     players = OneSignalPlayer.where(platform: platforms, user: @user)
     return unless players.exists?
+    player_ids = players.pluck(:player_id).uniq.compact
     res = OneSignal::Notification.create(params: {
       app_id: app_id,
-      include_player_ids: players.pluck(:player_id),
+      include_player_ids: player_ids,
       headings: { en: notification.message },
       contents: { en: notification.message },
       ios_badgeType: 'Increase',
