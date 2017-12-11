@@ -47,7 +47,7 @@ production:
     cron: '0 0 0 * * *'
   TheTvdbWeeklyWorker:
     # Once a week
-    every: '0 0 0 * * SUN'
+    cron: '0 0 0 * * SUN'
   HuluMappingWorker:
     # Once a day
     cron: '0 0 0 * * *'
