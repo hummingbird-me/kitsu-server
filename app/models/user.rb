@@ -219,6 +219,8 @@ class User < ApplicationRecord
     SQL
   }
 
+  alias_method :flipper_id, :id
+
   def self.find_for_auth(identification)
     by_email(identification).or(by_slug(identification)).first
   end
