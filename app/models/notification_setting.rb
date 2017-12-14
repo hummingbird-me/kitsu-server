@@ -27,11 +27,11 @@ class NotificationSetting < ApplicationRecord
   NOTIFICATION_TYPES = %i[mentions replies likes follows posts reaction_votes].freeze
   DEFAULT_SETTINGS = {
     #                FB,   Mobile, Email, Web
-    mentions:       [false, false, false, true],
-    replies:        [false, false, false, true],
+    mentions:       [false, true, false, true],
+    replies:        [false, true, false, true],
     likes:          [false, false, false, false],
-    follows:        [false, false, false, true],
-    posts:          [false, false, false, true],
+    follows:        [false, true, false, true],
+    posts:          [false, true, false, true],
     reaction_votes: [false, false, false, false]
   }.freeze
 
