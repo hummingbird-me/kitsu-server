@@ -29,10 +29,10 @@ class NotificationSetting < ApplicationRecord
     #                FB,   Mobile, Email, Web
     mentions:       [false, false, false, true],
     replies:        [false, false, false, true],
-    likes:          [false, false, false, true],
+    likes:          [false, false, false, false],
     follows:        [false, false, false, true],
     posts:          [false, false, false, true],
-    reaction_votes: [false, false, false, true]
+    reaction_votes: [false, false, false, false]
   }.freeze
 
   enum setting_type: NOTIFICATION_TYPES
