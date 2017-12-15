@@ -14,6 +14,15 @@ class Feed
       @user = user
     end
 
+    # @return [Hash] the reference to the notification for the mobile app
+    def reference
+      case subject
+      when Post, Comment, GroupInvite then reference_for(subject)
+      when PostLike, CommentLike then reference_for(subject)
+      when Follow then reference_for(subject)
+      end
+    end
+
     # @return [String] the full URL for the notification in the web app
     def url
       "#{CLIENT_URL}#{path}?notification=#{activity.id}"
@@ -72,19 +81,21 @@ class Feed
 
     # @return [String] the path to view the notification in the web app
     def path
-      case subject.class
-      when Post, Comment, GroupInvite then path_for(subject)
-      when PostLike, CommentLike then path_for(target)
-      when Follow then path_for(actor)
-      end
+      path_for(reference)
     end
 
-    # @param obj [ActiveRecord::Base] the object to generate a path for
+    # @param obj [Hash] the reference to generate a path for
     # @return [String] the path to view this in the web app
-    def path_for(obj)
+    def path_for(ref)
+      "#{ref.type}/#{ref.id}"
+    end
+
+    # @param obj [ActiveRecord::Base] the object to generate a reference for
+    # @return [Hash] the reference to this object
+    def reference_for(obj)
       type = obj.class.name.underscore.pluralize.dasherize
       id = obj.id
-      "#{type}/#{id}"
+      { type: type, id: id }
     end
 
     # For a reply, figure out what *kind* of reply it is.  This code sucks, but we don't have a
@@ -121,7 +132,7 @@ class Feed
 
     # @return [ActiveRecord::Base] the subject of the activity
     def subject
-      @subject ||= load_ref(activity.foreign_id)
+      @subject ||= load_ref(activity.object)
     end
 
     # @return [User] the actor of the activity
