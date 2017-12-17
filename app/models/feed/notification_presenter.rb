@@ -87,7 +87,7 @@ class Feed
     # @param obj [Hash] the reference to generate a path for
     # @return [String] the path to view this in the web app
     def path_for(ref)
-      "#{ref.type}/#{ref.id}"
+      "#{ref[:type]}/#{ref[:id]}"
     end
 
     # @param obj [ActiveRecord::Base] the object to generate a reference for
