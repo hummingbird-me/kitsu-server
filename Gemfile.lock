@@ -17,9 +17,9 @@ GIT
 
 GIT
   remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
-  revision: e16965b0438c6022668224883f682fd5a5a7b5cd
+  revision: 8ca697f2deab7f99c72b2f9ed09f96c7dcf1b40f
   specs:
-    doorkeeper-grants_assertion (0.0.1)
+    doorkeeper-grants_assertion (0.1.0)
       doorkeeper (>= 4.0)
       railties (>= 3.1)
 
