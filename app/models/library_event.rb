@@ -35,7 +35,7 @@ class LibraryEvent < ApplicationRecord
   belongs_to :manga
   belongs_to :drama
 
-  enum event: %i[added updated]
+  enum event: %i[progressed updated reacted rated]
   # remove validation of changed_data
   validates :event, presence: true
 
