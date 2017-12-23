@@ -34,5 +34,9 @@ class Stat < ApplicationRecord
     def self.media_type
       'Anime'
     end
+
+    def self.media_length(le)
+      le.anime.episode_length
+    end
   end
 end
