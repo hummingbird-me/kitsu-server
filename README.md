@@ -1,5 +1,6 @@
 # Kitsu Server
 [![Build Status](https://travis-ci.org/hummingbird-me/hummingbird-server.svg?branch=the-future)](https://travis-ci.org/hummingbird-me/hummingbird-server) [![Code Climate](https://codeclimate.com/github/hummingbird-me/hummingbird-server/badges/gpa.svg)](https://codeclimate.com/github/hummingbird-me/hummingbird-server) [![Test Coverage](https://codeclimate.com/github/hummingbird-me/hummingbird-server/badges/coverage.svg)](https://codeclimate.com/github/hummingbird-me/hummingbird-server/coverage)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fhummingbird-me%2Fhummingbird-server.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fhummingbird-me%2Fhummingbird-server?ref=badge_shield)
 
 ---
 **<p align="center">This is our server repository. It contains the rails application for Kitsu.<br />Check out the [meta], [client] and [api docs] repositories.</p>**
@@ -60,3 +61,7 @@ you, and we have a `.rubocop.yml` which we develop with.
      # ... and finally the rest of the methods!
    end
    ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fhummingbird-me%2Fhummingbird-server.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fhummingbird-me%2Fhummingbird-server?ref=badge_large)
