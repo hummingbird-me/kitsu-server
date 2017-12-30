@@ -54,6 +54,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.excluded_models += %w[
     LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink ReviewLike UserRole Role
     GroupTicket Casting Report CommentLike LinkedAccount::MyAnimeList MediaAttributeVote
+    LinkedAccount::YoutubeChannel UserIpAddress
   ]
 
   # Franchise
@@ -159,9 +160,32 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('Follow') { parent User }
   config.model('LibraryEntry') { parent User }
   config.model('LibraryEntryLog') { visible false }
+  config.model('LibraryEvent') { parent User }
+  config.model('MediaIgnore') { parent User }
+  config.model('PostFollow') { parent User }
+  config.model('NotificationSetting') { parent User }
+  config.model('OneSignalPlayer') { parent NotificationSetting }
+  config.model('CategoryFavorite') { parent User }
 
   # Feed
   config.model('Comment') { parent Post }
+  config.model('Repost') { parent Post }
+  config.model('Upload') { parent Post }
+
+  config.model('MediaReactionVote') { parent MediaReaction }
+
+  config.model('StreamingLink') { parent Streamer }
+
+  config.model('Video') { parent Episode }
+
+  config.model('AnimeMediaAttribute') { parent MediaAttribute }
+  config.model('MangaMediaAttribute') { parent MediaAttribute }
+  config.model('DramaMediaAttribute') { parent MediaAttribute }
+
+  config.model('CommunityRecommendationFollow') { parent CommunityRecommendation }
+  config.model('CommunityRecommendationRequest') { parent CommunityRecommendation }
+
+  config.model('AMASubscriber') { parent AMA }
 
   config.model 'Mapping' do
     fields :id, :item
@@ -171,8 +195,11 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
         {
           'MyAnimeList Anime' => 'myanimelist/anime',
           'MyAnimeList Manga' => 'myanimelist/manga',
-          'AnimeNewsNetwork' => 'animenewsnetwork',
           'AniDB' => 'anidb',
+          'AnimeNewsNetwork' => 'animenewsnetwork',
+          'MangaUpdates' => 'mangaupdates',
+          'Hulu' => 'hulu',
+          'IMDB Episodes' => 'imdb/episodes',
           'TheTVDB Series' => 'thetvdb/series',
           'TheTVDB Season' => 'thetvdb/season',
           'MyDramaList' => 'mydramalist'
