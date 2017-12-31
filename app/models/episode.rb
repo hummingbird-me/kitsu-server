@@ -46,6 +46,9 @@ class Episode < ApplicationRecord
   scope :for_progress, ->(progress) do
     order(:season_number, :number).limit(progress)
   end
+  scope :for_range, ->(range) do
+    where(number: range)
+  end
 
   def self.length_mode
     mode, count = order(count: :desc).group(:length).count.first
