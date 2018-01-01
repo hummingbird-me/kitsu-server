@@ -25,30 +25,34 @@ class Stat < ApplicationRecord
 
     # @param [Media] a media to increment the categories of
     # @return [void]
-    def increment(media)
+    def on_create(media)
       stats_data['total'] += 1
 
       media.categories.each do |category|
         stats_data['categories'][category.id] ||= 0
         stats_data['categories'][category.id] += 1
       end
+
+      save!
     end
 
     # @param [Media] a media to decrement the categories of
     # @return [void]
-    def decrement(media)
+    def on_destroy(media)
       stats_data['total'] -= 1
 
       media.includes(:categories).categories.each do |category|
         stats_data['categories'][category.id] ||= 0
         stats_data['categories'][category.id] -= 1
       end
+
+      save!
     end
 
     # Override to load category titles at runtime so that they can be edited without a bulk rebuild
     # @return [#to_json] a JSON-serializable stats object
     def stats_data
-      stats_data = super
+      stats_data = default_data.merge(super)
       categories = Category.find(stats_data['categories'].keys).index_by(&:id)
       stats_data['categories'].transform_keys! { |id| categories[id].title }
       stats_data
