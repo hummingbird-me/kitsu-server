@@ -1,83 +1,47 @@
 class Stat < ApplicationRecord
+  # A common base for both the anime and manga amount-consumed stats.  In future, as we add more
+  # media types, this is gonna be handy.
   module AmountConsumed
     extend ActiveSupport::Concern
 
-    DEFAULT_STATS = {
-      'total_media' => 0,
-      'total_progress' => 0,
-      'total_time' => 0
-    }.freeze
+    # The default stats_data values, automatically handled by the Stat superclass
+    def default_stats
+      { 'media' => 0, 'units' => 0, 'time' => 0 }
+    end
 
-    # Fully regenerate data
+    # Recalculate this entire statistic from scratch
+    # @return [self]
     def recalculate!
-      entries = user.library_entries.by_kind(media_column).where('progress > 0')
-                    .eager_load(media_column)
-                    .where.not(media_length => nil)
+      entries = user.library_entries.by_kind(media_kind)
 
-      # clear stats_data
+      reconsume_units = entries.joins(media_kind).sum('episode_count * reconsume_count')
+
       self.stats_data = {}
-      stats_data['all_time'] = {
-        total_media: entries.count, # all anime or manga
-        total_progress: entries.sum(:progress), # all episodes or chapters
-        total_time: entries.sum(:time_spent) # time spent (anime only)
-      }
+      stats_data['media'] = entries.count
+      stats_data['units'] = reconsume_units + entries.sum(:progress)
+      stats_data['time'] = entries.sum(:time_spent)
 
       save!
     end
 
-    class_methods do
-      def increment(user, library_entry, options, updated = false)
-        record = user.stats.find_or_initialize_by(
-          type: "Stat::#{media_type}AmountConsumed"
-        )
+    # @param [entry]
+    def on_create(entry)
+      lock!
+      stats_data['media'] += 1
+      on_update(entry)
+    end
 
-        record.stats_data['all_time'] = DEFAULT_STATS.deep_dup if record.new_record?
-        # In case recalculate has not been run this will prevent any errors
-        record.stats_data['all_time']['total_media'] ||= 0
-        record.stats_data['all_time']['total_progress'] ||= 0
-        record.stats_data['all_time']['total_time'] ||= 0
+    def on_destroy(entry)
+      stats_data['media'] -= 1
+      on_update(entry)
+    end
 
-        record.stats_data['all_time']['total_media'] += 1 unless updated
-        record.stats_data['all_time']['total_progress'] +=
-          progress_difference(options)
-        # No way to track time for Manga
-        unless media_type == 'Manga'
-          record.stats_data['all_time']['total_time'] +=
-            progress_to_time(library_entry, progress_difference(options))
-        end
-
-        record.save!
-      end
-
-      def decrement(user, library_entry, options, updated = false)
-        record = user.stats.find_by(type: "Stat::#{media_type}AmountConsumed")
-        return unless record
-
-        record.stats_data['all_time']['total_media'] -= 1 unless updated
-        record.stats_data['all_time']['total_progress'] -=
-          progress_difference(options)
-        # No way to track time for Manga
-        unless media_type == 'Manga'
-          record.stats_data['all_time']['total_time'] -=
-            progress_to_time(library_entry, progress_difference(options))
-        end
-
-        record.save!
-      end
-
-      def progress_difference(options)
-        if options[:progress_changed]
-          options[:progress] - options[:progress_was]
-        else
-          options[:progress]
-        end
-      end
-
-      def progress_to_time(le, progress)
-        return 0 if le.anime.episode_length.blank?
-
-        progress * le.anime.episode_length
-      end
+    def on_update(entry)
+      diff = LibraryEntryDiff.new(entry)
+      stats_data['units'] += diff.progress_diff
+      stats_data['units'] += diff.reconsume_diff * entry.media.episode_count
+      stats_data['time'] += diff.time_diff
+      save!
     end
   end
 end
