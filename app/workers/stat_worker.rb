@@ -21,4 +21,11 @@ class StatWorker
     # Call down to the stat to run the action
     stat.public_send("on_#{action}", wrapper)
   end
+
+  # @see #perform
+  def self.perform_async(stat, user, action, model)
+    attributes = model.attributes
+    changes = model.changes
+    super(stat, user.id, action, { class: model.class.name, attributes: attributes }, changes)
+  end
 end
