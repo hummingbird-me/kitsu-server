@@ -26,39 +26,78 @@ require 'rails_helper'
 RSpec.describe Stat::AnimeCategoryBreakdown do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, :categories) }
-  let(:le) { create(:library_entry, user: user, anime: anime, progress: 1) }
+  let(:entry) { create(:library_entry, user: user, anime: anime, status: :completed) }
+  let!(:stat) { Stat::AnimeCategoryBreakdown.for_user(user) }
 
-  before do
-    Stat::AnimeCategoryBreakdown.increment(user, le)
-    user.stats.find_or_initialize_by(type: 'Stat::AnimeCategoryBreakdown').recalculate!
+  describe '#default_data' do
+    it 'should have a total key' do
+      expect(stat.default_data).to have_key('total')
+    end
+
+    it 'should have a categories key' do
+      expect(stat.default_data).to have_key('categories')
+    end
   end
 
   describe '#recalculate!' do
-    it 'should create Stat' do
-      stat = Stat.find_by(user: user, type: 'Stat::AnimeCategoryBreakdown')
-
-      expect(stat.stats_data).to_not be_nil
-    end
-  end
-
-  describe '#self.increment' do
-    it 'should have 5 total' do
-      record = Stat.find_by(user: user, type: 'Stat::AnimeCategoryBreakdown')
-
-      expect(record.stats_data['total']).to eq(5)
-      expect(record.stats_data['total_media']).to eq(1)
-    end
-  end
-
-  describe '#self.decrement' do
     before do
-      Stat::AnimeCategoryBreakdown.decrement(user, le)
+      # Set up the library
+      anime_list = create_list(:anime, 3, :categories)
+      anime_list.each { |a| create(:library_entry, user: user, anime: a, status: :completed) }
     end
-    it 'should have 0 total' do
-      record = Stat.find_by(user: user, type: 'Stat::AnimeCategoryBreakdown')
 
-      expect(record.stats_data['total']).to eq(0)
-      expect(record.stats_data['total_media']).to eq(0)
+    before do
+      stat.recalculate!
+    end
+
+    it 'should return a list of categories with counts' do
+      expect(stat.stats_data).to have_key('categories')
+      expect(stat.stats_data['categories'].keys).to all(be_a(Integer))
+      expect(stat.stats_data['categories'].values).to all(be_a(Integer))
+    end
+
+    it 'should return the count of all applicable entries' do
+      expect(stat.stats_data['total']).to eq(3)
+    end
+  end
+
+  describe '#on_create' do
+    it 'should increase the total' do
+      expect {
+        stat.on_create(entry)
+      }.to change { stat.stats_data['total'] }.by(1)
+    end
+
+    it 'should increment each category for the media' do
+      category_count = anime.categories.count
+      expect {
+        stat.on_create(entry)
+      }.to change { stat.stats_data['categories'].values.sum }.by(category_count)
+    end
+  end
+
+  describe '#on_destroy' do
+    it 'should decrease the total' do
+      expect {
+        stat.on_destroy(entry)
+      }.to change { stat.stats_data['total'] }.by(-1)
+    end
+
+    it 'should decrement each category for the media' do
+      category_count = anime.categories.count
+      anime.categories.each do |category|
+        stat.stats_data['categories'][category.id] = 10
+      end
+
+      expect {
+        stat.on_destroy(entry)
+      }.to change { stat.stats_data['categories'].values.sum }.by(-category_count)
+    end
+  end
+
+  describe '#enriched_stats_data' do
+    it 'should replace the keys in the categories hash with their titles' do
+      expect(stat.enriched_stats_data['categories'].keys).to all(be_a(String))
     end
   end
 end
