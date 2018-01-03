@@ -25,14 +25,8 @@ class Stat < ApplicationRecord
   class MangaCategoryBreakdown < Stat
     include Stat::CategoryBreakdown
 
-    # for recalculate!
-    def media_column
+    def media_kind
       :manga
-    end
-
-    # for class methods
-    def self.media_type
-      'Manga'
     end
   end
 end
