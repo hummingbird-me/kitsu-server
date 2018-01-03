@@ -23,7 +23,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Stat::AnimeCategoryBreakdown do
+RSpec.describe Stat::CategoryBreakdown do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, :categories) }
   let(:entry) { create(:library_entry, user: user, anime: anime, status: :completed) }
