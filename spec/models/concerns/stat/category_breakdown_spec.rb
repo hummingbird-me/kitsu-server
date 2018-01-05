@@ -44,9 +44,6 @@ RSpec.describe Stat::CategoryBreakdown do
       # Set up the library
       anime_list = create_list(:anime, 3, :categories)
       anime_list.each { |a| create(:library_entry, user: user, anime: a, status: :completed) }
-    end
-
-    before do
       stat.recalculate!
     end
 
