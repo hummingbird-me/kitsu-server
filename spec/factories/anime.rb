@@ -72,5 +72,11 @@ FactoryGirl.define do
         anime.categories = create_list(:category, evaluator.amount)
       end
     end
+
+    trait :with_episodes do
+      after(:create) do |anime|
+        anime.episodes = create_list(:episode, anime.episode_count)
+      end
+    end
   end
 end
