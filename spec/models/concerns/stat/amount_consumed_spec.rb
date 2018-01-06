@@ -63,7 +63,7 @@ RSpec.describe Stat::AmountConsumed do
   end
 
   describe '#on_create' do
-    let(:entry) { build(:library_entry, user: user, anime: anime, progress: 3) }
+    let(:entry) { build(:library_entry, user: user, media: anime, progress: 3) }
 
     it 'should increase the media count' do
       expect {
