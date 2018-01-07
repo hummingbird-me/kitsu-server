@@ -22,7 +22,7 @@ RSpec.describe Callbacks do
       test = Class.new(Callbacks) do
         def before_save; end
       end
-      expect_any_instance_of(test).to receive(:before_save).with(:foo)
+      expect_any_instance_of(test).to receive(:before_save)
       test.before_save(:foo)
     end
   end
