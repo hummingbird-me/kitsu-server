@@ -15,7 +15,7 @@ class Callbacks
   # @return [Class] a class with the options set on itself
   def self.with_options(options)
     Class.new(self) do
-      define_method(:options) { super.merge(options) }
+      define_method(:options) { super().merge(options) }
     end
   end
 
