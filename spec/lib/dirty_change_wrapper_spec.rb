@@ -28,6 +28,18 @@ RSpec.describe DirtyChangeWrapper do
     end
   end
 
+  context 'for missing properties' do
+    it 'should provide a _changed? method which returns false' do
+      expect(subject).to respond_to(:nope_changed?)
+      expect(subject.nope_changed?).to be_falsey
+    end
+
+    it 'should provide a _changes method which returns nil' do
+      expect(subject).to respond_to(:nope_changes)
+      expect(subject.nope_changes).to be_nil
+    end
+  end
+
   context 'for the base' do
     it 'should delegate any methods it does not know' do
       expect(subject).to respond_to(:foo)

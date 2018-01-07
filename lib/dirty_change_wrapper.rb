@@ -13,15 +13,15 @@ class DirtyChangeWrapper < SimpleDelegator
 
   def method_missing(method_name, *args)
     case method_name
-    when /_changed?\z/ then false
-    when /_changes\z/ then []
+    when /_changed\?\z/ then false
+    when /_changes\z/ then nil
     else super
     end
   end
 
   def respond_to_missing?(method_name, _include_all)
     case method_name
-    when /_changed?\z/, /_changes\z/ then true
+    when /_changed\?\z/, /_changes\z/ then true
     else super
     end
   end
