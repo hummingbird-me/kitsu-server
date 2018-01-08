@@ -335,7 +335,7 @@ GEM
     oj (3.3.10)
     oj_mimic_json (1.0.1)
     one_signal (1.2.0)
-    onebox (1.8.33)
+    onebox (1.8.34)
       fast_blank (>= 1.0.0)
       htmlentities (~> 4.3)
       moneta (~> 1.0)
