@@ -222,4 +222,10 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       filterable true
     end
   end
+
+  config.model 'Streamer' do
+    fields :id, :site_name
+    include_all_fields
+    exclude_fields :videos
+  end
 end
