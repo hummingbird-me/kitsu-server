@@ -51,6 +51,8 @@ module Kitsu
     # Normally we wanna be API-only, but we mount some admin panels in, so... :(
     config.api_only = false
 
+    # Set up Flipper's Memoizer middleware
+    config.middleware.insert_before 0, 'Flipper::Middleware::Memoizer'
     # Enable CORS
     config.middleware.insert_before 0, 'Rack::Cors' do
       allow do
