@@ -37,7 +37,7 @@ gem 'paperclip-meta'
 gem 'paperclip-optimizer'
 
 # Background tasks
-gem 'sidekiq', '~> 4'
+gem 'sidekiq', '~> 5'
 gem 'sidekiq-debounce'
 gem 'sidekiq-scheduler'
 
