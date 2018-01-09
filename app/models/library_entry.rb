@@ -162,6 +162,7 @@ class LibraryEntry < ApplicationRecord
 
   LibraryTimeSpentCallbacks.hook(self)
   LibraryStatCallbacks.hook(self)
+  LibraryEventCallbacks.hook(self)
 
   before_validation do
     # TEMPORARY: If media is set, copy it to kind_id, otherwise if kind_id is

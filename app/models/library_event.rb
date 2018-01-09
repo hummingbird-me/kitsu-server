@@ -53,20 +53,4 @@ class LibraryEvent < ApplicationRecord
 
     changed_data['progress'][1] - changed_data['progress'][0]
   end
-
-  def self.create_for(kind, library_entry)
-    LibraryEvent.create!(
-      # instead of polymorphic media
-      anime_id: library_entry&.anime_id,
-      manga_id: library_entry&.manga_id,
-      drama_id: library_entry&.drama_id,
-      # event is either added or updated
-      kind: kind,
-      # capture what was changed, json format
-      changed_data: library_entry.changes,
-      library_entry_id: library_entry.id,
-      # for filtering resource
-      user_id: library_entry.user_id
-    )
-  end
 end
