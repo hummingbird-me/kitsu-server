@@ -160,6 +160,10 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  LibraryTimeSpentCallbacks.hook(self)
+  LibraryStatCallbacks.hook(self)
+  LibraryEventCallbacks.hook(self)
+
   before_validation do
     # TEMPORARY: If media is set, copy it to kind_id, otherwise if kind_id is
     # set, copy it to media!
@@ -236,52 +240,6 @@ class LibraryEntry < ApplicationRecord
 
   after_commit on: :create do
     MediaFollowUpdateWorker.perform_for_entry(self, :create, progress)
-  end
-
-  after_create do
-    Stat::LibraryCreateWorker.perform_async(
-      kind, user_id, id,
-      options: {
-        progress: progress,
-        progress_was: progress_was,
-        progress_changed: progress_changed?
-      }
-    )
-  end
-
-  after_update do
-    Stat::LibraryUpdateWorker.perform_async(
-      kind, user_id, id,
-      options: {
-        progress: progress,
-        progress_was: progress_was,
-        progress_changed: progress_changed?
-      }
-    )
-  end
-
-  after_destroy do
-    # HACK: because we object association we have to decrement before we lose access
-    # We should think about some type of absraction to handle all the stats though.
-    options = {
-      progress: progress,
-      progress_was: progress_was,
-      progress_changed: progress_changed?
-    }
-    case kind
-    when :anime
-      Stat::AnimeCategoryBreakdown.decrement(user, self)
-      Stat::AnimeAmountConsumed.decrement(user, self, options)
-      Stat::AnimeFavoriteYear.decrement(user, self)
-      # TODO: Change this before merging PR 201
-      # Stat::AnimeActivityHistory.decrement(user, library_entry)
-    when :manga
-      Stat::MangaCategoryBreakdown.decrement(user, self)
-      Stat::MangaAmountConsumed.decrement(user, self, options)
-      Stat::MangaFavoriteYear.decrement(user, self)
-      # TODO: Change this before merging PR 201
-      # Stat::MangaActivityHistory.decrement(user, library_entry)
-    end
   end
 
   after_commit(on: :create, if: :sync_to_mal?) do

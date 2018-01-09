@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026012230) do
+ActiveRecord::Schema.define(version: 20171231032518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "citext"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
-  enable_extension "citext"
 
   create_table "ama_subscribers", force: :cascade do |t|
     t.integer  "ama_id",     null: false
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20171026012230) do
     t.integer  "episode_count_guess"
     t.text     "poster_image_meta"
     t.text     "cover_image_meta"
+    t.integer  "total_length"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -794,7 +795,7 @@ ActiveRecord::Schema.define(version: 20171026012230) do
     t.integer  "anime_id"
     t.integer  "manga_id"
     t.integer  "drama_id"
-    t.integer  "event",                         null: false
+    t.integer  "kind",                          null: false
     t.jsonb    "changed_data",     default: {}, null: false
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false

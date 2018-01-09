@@ -35,9 +35,8 @@ class LibraryEvent < ApplicationRecord
   belongs_to :manga
   belongs_to :drama
 
-  enum event: %i[added updated]
-  # remove validation of changed_data
-  validates :event, presence: true
+  enum kind: %i[progressed updated reacted rated]
+  validates :kind, presence: true
 
   scope :by_kind, ->(*kinds) do
     t = arel_table
@@ -49,19 +48,9 @@ class LibraryEvent < ApplicationRecord
     where(scope)
   end
 
-  def self.create_for(event, library_entry)
-    LibraryEvent.create!(
-      # instead of polymorphic media
-      anime_id: library_entry&.anime_id,
-      manga_id: library_entry&.manga_id,
-      drama_id: library_entry&.drama_id,
-      # event is either added or updated
-      event: event,
-      # capture what was changed, json format
-      changed_data: library_entry.changes,
-      library_entry_id: library_entry.id,
-      # for filtering resource
-      user_id: library_entry.user_id
-    )
+  def progress
+    return if changed_data['progress'].nil?
+
+    changed_data['progress'][1] - changed_data['progress'][0]
   end
 end

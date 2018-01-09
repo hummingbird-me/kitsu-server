@@ -1,75 +1,66 @@
 class Stat < ApplicationRecord
+  # Provides a base for both the anime and manga category breakdowns, so that most of the code can
+  # be shared.  In future, as we move towards a larger set of media types, this will be helpful.
   module CategoryBreakdown
     extend ActiveSupport::Concern
 
-    DEFAULT_STATS = {
-      'total' => 0,
-      'total_media' => 0,
-      'all_categories' => {}
-    }.freeze
+    # The default stats_data values, automatically handled by the Stat superclass
+    def default_data
+      { 'total' => 0, 'categories' => {} }
+    end
 
-    # Fully regenrate data
+    # Recalculate this entire statistic from scratch
+    # @return [self]
     def recalculate!
-      categories = library_entries.eager_load(media_column => :categories)
-                                  .where.not(categories: { slug: nil })
-                                  .group(:'categories.slug').count
+      library_entries = user.library_entries.completed.by_kind(media_kind)
+      categories = library_entries.joins(media_kind => :categories)
+                                  .group(:category_id).count
 
-      # clear stats_data
       self.stats_data = {}
-      stats_data['all_categories'] = categories
-      stats_data['total'] = categories.values.reduce(:+)
-      stats_data['total_media'] = library_entries.count
+      stats_data['categories'] = categories
+      stats_data['total'] = library_entries.count
 
       save!
     end
 
-    def library_entries
-      @le ||= user.library_entries.by_kind(media_column).where('progress > 0')
-    end
+    # @param [LibraryEntry] a media to increment the categories of
+    # @return [void]
+    def on_create(entry)
+      stats_data['total'] += 1
 
-    class_methods do
-      def increment(user, library_entry)
-        record = user.stats.find_or_initialize_by(
-          type: "Stat::#{media_type}CategoryBreakdown"
-        )
-        # set default stats if it doesn't exist
-        record.stats_data = DEFAULT_STATS.deep_dup if record.new_record?
-
-        library_entry.media.categories.each do |category|
-          # In case recalculate has not been run this will prevent any errors
-          record.stats_data['all_categories'][category.slug] ||= 0
-          record.stats_data['total'] ||= 0
-          record.stats_data['total_media'] ||= 0
-
-          record.stats_data['all_categories'][category.slug] += 1
-          record.stats_data['total'] += 1
-        end
-
-        # remove total_media outside of loop
-        record.stats_data['total_media'] += 1
-
-        record.save!
+      entry.media.categories.each do |category|
+        stats_data['categories'][category.id] ||= 0
+        stats_data['categories'][category.id] += 1
       end
 
-      def decrement(user, library_entry)
-        record = user.stats.find_by(
-          type: "Stat::#{media_type}CategoryBreakdown"
-        )
+      save!
+    end
 
-        return unless record
-        return if record.stats_data['total_media'].nil?
+    # @param [LibraryEntry] a media to decrement the categories of
+    # @return [void]
+    def on_destroy(entry)
+      stats_data['total'] -= 1
 
-        library_entry.media.categories.each do |category|
-          next unless record.stats_data['all_categories'][category.slug]
+      entry.media.categories.each do |category|
+        stats_data['categories'][category.id] ||= 0
+        stats_data['categories'][category.id] -= 1
+      end
 
-          record.stats_data['all_categories'][category.slug] -= 1
-          record.stats_data['total'] -= 1
-        end
+      save!
+    end
 
-        # remove total_media outside of loop
-        record.stats_data['total_media'] -= 1
+    # Override to load category titles at runtime so that they can be edited without a bulk rebuild
+    # @return [#to_json] a JSON-serializable stats object
+    def enriched_stats_data
+      stats_data = default_data.merge(stats_data || {})
+      categories = Category.find(stats_data['categories'].keys).index_by(&:id)
+      stats_data['categories'].transform_keys! { |id| categories[id].title }
+      stats_data
+    end
 
-        record.save!
+    included do
+      before_validation do
+        stats_data['categories'].transform_values! { |count| [count, 0].max }
       end
     end
   end

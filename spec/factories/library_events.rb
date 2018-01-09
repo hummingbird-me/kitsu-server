@@ -33,7 +33,7 @@ FactoryGirl.define do
     association :library_entry, strategy: :build
     association :user, strategy: :build
 
-    event :updated
+    kind :updated
 
     trait :with_anime do
       anime_id 1
