@@ -25,18 +25,8 @@ class Stat < ApplicationRecord
   class MangaActivityHistory < Stat
     include Stat::ActivityHistory
 
-    # recalculate
-    def media_column
+    def media_kind
       :manga
-    end
-
-    # increment & decrement
-    def self.media_type
-      'Manga'
-    end
-
-    def self.media_length(_le)
-      0
     end
   end
 end

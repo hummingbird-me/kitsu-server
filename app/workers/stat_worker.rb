@@ -19,7 +19,7 @@ class StatWorker
     # Wrap the model in a DirtyChangeWrapper to make it appear dirty
     wrapper = DirtyChangeWrapper.new(model, changes)
     # Call down to the stat to run the action
-    stat.public_send("on_#{action}", wrapper)
+    stat.public_send("on_#{action}", wrapper) if stat.respond_to?("on_#{action}")
   end
 
   # @see #perform

@@ -26,9 +26,11 @@ class LibraryStatCallbacks < Callbacks
     when :anime
       perform 'Stat::AnimeCategoryBreakdown', action
       perform 'Stat::AnimeAmountConsumed', action
+      perform 'Stat::AnimeActivityHistory', action
     when :manga
       perform 'Stat::MangaCategoryBreakdown', action
       perform 'Stat::MangaAmountConsumed', action
+      perform 'Stat::MangaActivityHistory', action
     end
   end
 
