@@ -35,7 +35,7 @@ class LibraryEvent < ApplicationRecord
   belongs_to :manga
   belongs_to :drama
 
-  enum kind: %i[progressed updated reacted rated]
+  enum kind: %i[progressed updated reacted rated annotated]
   validates :kind, presence: true
 
   scope :by_kind, ->(*kinds) do

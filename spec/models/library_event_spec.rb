@@ -40,5 +40,5 @@ RSpec.describe LibraryEvent, type: :model do
   it { should validate_presence_of(:user) }
   it { should validate_presence_of(:kind) }
 
-  it { should define_enum_for(:kind).with(%i[progressed updated reacted rated]) }
+  it { should define_enum_for(:kind).with(%i[progressed updated reacted rated annotated]) }
 end
