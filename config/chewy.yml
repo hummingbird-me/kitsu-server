@@ -1,6 +1,8 @@
 default: &default
   host: <%= ENV['ELASTICSEARCH_HOST'] %>
   request_timeout: 7
+  sidekiq:
+    queue: 'later'
 
 development:
   <<: *default
