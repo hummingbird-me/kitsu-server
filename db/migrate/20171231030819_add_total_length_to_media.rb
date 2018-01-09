@@ -11,7 +11,7 @@ class AddTotalLengthToMedia < ActiveRecord::Migration
           SELECT sum(length)
           FROM episodes
           WHERE media_id = anime.id
-            AND episode.number <= anime.episode_count
+            AND episodes.number <= anime.episode_count
         )
       SQL
     end
