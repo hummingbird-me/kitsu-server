@@ -4,7 +4,8 @@ class TrendingFanoutWorker
   sidekiq_options queue: 'eventually'
 
   def perform(namespace, half_life, user, id, weight)
-    user = User.find(user)
+    user = User.find_by(id: user)
+    return unless user
     namespace = namespace.safe_constantize
     service = TrendingService.new(namespace, half_life: half_life, user: user)
     service.fanout_vote(id, weight)
