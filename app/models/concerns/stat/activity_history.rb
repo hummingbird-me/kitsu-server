@@ -31,8 +31,8 @@ class Stat < ApplicationRecord
       end
 
       stats_data['days'] = activity_data
-      stats_data['first'] = activity_dates.first[0].strftime('%F')
-      stats_data['last'] = activity_dates.last[0].strftime('%F')
+      stats_data['first'] = activity_groups.first[0].strftime('%F')
+      stats_data['last'] = activity_groups.last[0].strftime('%F')
 
       save!
     end
