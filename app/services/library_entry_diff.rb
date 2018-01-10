@@ -25,7 +25,7 @@ class LibraryEntryDiff
 
   # @return [Integer] the time difference caused by the progress change
   def progress_time_diff
-    return 0 if progress_diff.zero?
+    return 0 if progress_diff.zero? || !@entry.media.respond_to?(:episodes)
     progress_was = @entry.progress_was || 0
     action, range = if progress_diff.positive?
                       [:+, (progress_was...@entry.progress)]
@@ -38,7 +38,7 @@ class LibraryEntryDiff
 
   # @return [Integer] the time difference caused by the reconsume_count change
   def reconsume_time_diff
-    return 0 if reconsume_diff.zero?
+    return 0 if reconsume_diff.zero? || !@entry.media.respond_to?(:episodes)
     reconsume_diff * @entry.media.total_length
   end
 end
