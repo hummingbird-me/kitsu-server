@@ -5,9 +5,6 @@ class FillTimeSpentOnLibraryEntries < ActiveRecord::Migration
   using UpdateInBatches
 
   def change
-    say_with_time 'Resetting time_spent to 0' do
-      LibraryEntry.all.update_in_batches(time_spent: 0)
-    end
     execute <<-SQL.squish
       CREATE TEMPORARY TABLE library_spents AS (
         SELECT le.id, (
@@ -27,7 +24,7 @@ class FillTimeSpentOnLibraryEntries < ActiveRecord::Migration
     execute 'VACUUM ANALYZE library_spents'
     say_with_time 'Inserting generated time_spent data' do
       LibraryEntry.all.update_in_batches <<-SQL.squish
-        time_spent = time_spent + COALESCE((
+        time_spent = COALESCE((
           SELECT time_spent
           FROM library_spents s
           WHERE s.id = library_entries.id
