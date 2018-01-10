@@ -99,6 +99,8 @@ class LibraryEntry < ApplicationRecord
   validates :anime_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :manga_id, uniqueness: { scope: :user_id }, allow_nil: true
   validates :drama_id, uniqueness: { scope: :user_id }, allow_nil: true
+  validates :progress, numericality: { greater_than_or_equal_to: 0 }
+  validates :reconsume_count, numericality: { greater_than_or_equal_to: 0 }
   validates :rating, numericality: {
     greater_than_or_equal_to: 2,
     less_than_or_equal_to: 20
