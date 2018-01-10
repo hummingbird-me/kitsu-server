@@ -44,5 +44,12 @@ class Stat < ApplicationRecord
     self.stats_data = default_data
   end
 
+  # Are all the default_data keys present in the current data?
+  # @return [Boolean] whether the default keys are present
+  def has_default_keys?
+    (default_data.keys - stats_data.keys).empty?
+  end
+
   before_validation :reset_data, unless: :stats_data
+  after_find :recalculate!, unless: :has_default_keys?
 end
