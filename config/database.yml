@@ -2,12 +2,17 @@ default: &default
   adapter: postgresql
   encoding: unicode
 <% unless $0.include?('sidekiq') %>
-  pool: 40 # Concurrency from sidekiq.yml
+  reaping_frequency: 10
+  checkout_timeout: 5
+  pool: 45 # Concurrency from sidekiq.yml
+  variables:
+    lock_timeout: 20s
 <% else %>
-  pool: <%= ENV['DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 40 %>
+  pool: <%= (ENV['DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 40) * 1.2 %>
 <% end %>
 <% unless $0.include?('rake') || $0.include?('sidekiq') %>
   connect_timeout: 5
+  reaping_frequency: 30
   checkout_timeout: 2
   variables:
     lock_timeout: 6s
