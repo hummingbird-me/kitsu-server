@@ -72,12 +72,12 @@ namespace :importers do
   desc 'Import the bcmoe.json file from disk or (by default) off because.moe'
   task :bcmoe, [:filename] => [:environment] do |_t, args|
     # Load the JSON
-    json_file = open(args[:filename] || 'http://because.moe/bcmoe.json').read
+    json_file = open(args[:filename] || 'http://because.moe/json/us').read
     bcmoe = JSON.parse(json_file).map(&:deep_symbolize_keys)
 
     # Create the streamers
     puts '=> Creating Streamers'
-    sites = bcmoe.map { |x| x[:sites].keys }.flatten.uniq
+    sites = bcmoe['shows'].map { |x| x[:sites].keys }.flatten.uniq
     sites = sites.map do |site|
       puts site
       [site, Streamer.where(site_name: site.to_s.titleize).first_or_create]
@@ -87,7 +87,7 @@ namespace :importers do
     # Load the data
     puts '=> Loading Data'
     Chewy.strategy(:atomic) do
-      bcmoe.each do |show|
+      bcmoe['shows'].each do |show|
         result = Mapping.guess(Anime, show[:name])
 
         # Shit results?  Let humans handle it!
