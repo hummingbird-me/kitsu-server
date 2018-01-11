@@ -1,7 +1,5 @@
 require 'typhoeus'
-require 'typhoeus/adapters/faraday'
 
-Faraday.default_adapter = :typhoeus
 Ethon.logger = Logger.new(nil)
 
 module Typhoeus
