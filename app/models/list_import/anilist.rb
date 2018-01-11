@@ -39,9 +39,9 @@ class ListImport
       return if input_text.blank?
 
       @auth_token ||= get_auth_token
-      request = Typhoeus::Request.get(build_url(input_text))
+      request = Faraday.get(build_url(input_text))
 
-      case request.code
+      case request.status
       when 404
         errors.add(:input_text, 'Anilist user not found.')
       end
@@ -79,7 +79,7 @@ class ListImport
 
     def get_auth_token
       url = "#{ANILIST_API}auth/access_token"
-      request = Typhoeus::Request.new(url,
+      response = Faraday.post(url,
         method: :post,
         body: {
           grant_type: 'client_credentials',
@@ -88,9 +88,7 @@ class ListImport
         },
         headers: { Accept: 'application/json' })
 
-      request.run
-
-      json = JSON.parse(request.response.body)['access_token']
+      json = JSON.parse(response.body)['access_token']
       json
     end
 
@@ -98,9 +96,9 @@ class ListImport
       @auth_token ||= get_auth_token
       url = build_url(url)
 
-      request = Typhoeus::Request.get(url)
+      response = Faraday.get(url)
 
-      json = JSON.parse(request.body)
+      json = JSON.parse(response.body)
       json
     end
 

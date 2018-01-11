@@ -40,11 +40,10 @@ class ListImport
 
     def ensure_list_is_public
       %w[anime manga].each do |kind|
-        request = Typhoeus::Request.get("#{MAL_HOST}/#{kind}list/#{input_text}")
-        case request.code
+        request = Faraday.get("#{MAL_HOST}/#{kind}list/#{input_text}")
+        case request.status
         when 403
-          errors.add(:input_text,
-            "Your MyAnimeList #{kind} list must be public to import")
+          errors.add(:input_text, "Your MyAnimeList #{kind} list must be public to import")
         when 404
           errors.add(:input_text, 'MyAnimeList user not found')
         end
@@ -93,9 +92,9 @@ class ListImport
     end
 
     def get(list, page)
-      res = Typhoeus::Request.get(build_url(list, page))
-      raise RateLimitedError.new(res.status_message) if res.code == 429
-      raise ResponseError.new(res.status_message) unless res.success?
+      res = Faraday.get(build_url(list, page))
+      raise RateLimitedError, res.status if res.status == 429
+      raise ResponseError, res.status unless res.success?
       JSON.parse(res.body)
     end
 

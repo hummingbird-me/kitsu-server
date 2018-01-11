@@ -77,14 +77,14 @@ class TheTvdbService
   end
 
   def get(url)
-    response = Typhoeus::Request.get(
+    response = Faraday.get(
       build_url(url),
       headers: {
         'Accept' => 'application/json',
         'Authorization' => "Bearer #{api_token}"
       }
     )
-    raise NotFound if response.code == 404
+    raise NotFound if response.status == 404
     raise 'TVDB Error' unless response.success?
 
     JSON.parse(response.body)

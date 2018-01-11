@@ -37,8 +37,8 @@ class ListImport
 
     def ensure_user_exists
       return if input_text.blank?
-      request = Typhoeus::Request.get(build_url("#{input_text}/anime", 1))
-      case request.code
+      request = Faraday.get(build_url("#{input_text}/anime", 1))
+      case request.status
       when 404
         errors.add(:input_text, 'Anime-Planet user not found')
       end
