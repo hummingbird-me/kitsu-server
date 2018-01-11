@@ -1,6 +1,7 @@
 default: &default
   host: <%= ENV['ELASTICSEARCH_HOST'] %>
   request_timeout: 7
+  adapter: :net_http
   sidekiq:
     queue: 'later'
 
