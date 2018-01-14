@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180110055601) do
+ActiveRecord::Schema.define(version: 20180114070606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -271,6 +271,7 @@ ActiveRecord::Schema.define(version: 20180110055601) do
 
   add_index "characters", ["mal_id"], name: "character_mal_id", unique: true, using: :btree
   add_index "characters", ["mal_id"], name: "index_characters_on_mal_id", unique: true, using: :btree
+  add_index "characters", ["slug"], name: "index_characters_on_slug", using: :btree
 
   create_table "comment_likes", force: :cascade do |t|
     t.integer  "comment_id"
@@ -302,6 +303,7 @@ ActiveRecord::Schema.define(version: 20180110055601) do
   add_index "comments", ["deleted_at"], name: "index_comments_on_deleted_at", using: :btree
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["post_id"], name: "index_comments_on_post_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "community_recommendation_follows", force: :cascade do |t|
     t.integer  "user_id",                             null: false
@@ -803,6 +805,7 @@ ActiveRecord::Schema.define(version: 20180110055601) do
 
   add_index "library_events", ["anime_id"], name: "index_library_events_on_anime_id", using: :btree
   add_index "library_events", ["drama_id"], name: "index_library_events_on_drama_id", using: :btree
+  add_index "library_events", ["library_entry_id"], name: "index_library_events_on_library_entry_id", using: :btree
   add_index "library_events", ["manga_id"], name: "index_library_events_on_manga_id", using: :btree
   add_index "library_events", ["user_id"], name: "index_library_events_on_user_id", using: :btree
 
@@ -878,6 +881,8 @@ ActiveRecord::Schema.define(version: 20180110055601) do
     t.text     "poster_image_meta"
     t.text     "cover_image_meta"
   end
+
+  add_index "manga", ["slug"], name: "index_manga_on_slug", using: :btree
 
   create_table "manga_characters", force: :cascade do |t|
     t.integer  "manga_id",                 null: false
