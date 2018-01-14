@@ -107,6 +107,7 @@ group :development, :test do
 
   # Useful for benchmarking!
   gem 'benchmark-ips'
+  gem 'derailed_benchmarks'
 
   # Debugging tests and scripts
   gem 'pry-byebug'
