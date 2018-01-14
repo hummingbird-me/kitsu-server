@@ -5,8 +5,12 @@ module ListSync
     sidekiq_options retry: 3, queue: 'soon'
 
     def perform(linked_account_id, library_entry_id)
-      linked_account = LinkedAccount.find(linked_account_id)
-      library_entry = LibraryEntry.find(library_entry_id)
+      begin
+        linked_account = LinkedAccount.find(linked_account_id)
+        library_entry = LibraryEntry.find(library_entry_id)
+      rescue ActiveRecord::RecordNotFound
+        return
+      end
       logs = LibraryEntryLog.for_entry(library_entry).pending
 
       capture_sync_errors(linked_account, logs) do
