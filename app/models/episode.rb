@@ -31,7 +31,7 @@
 class Episode < ApplicationRecord
   include Titleable
 
-  belongs_to :media, polymorphic: true, touch: true
+  belongs_to :media, polymorphic: true
   has_many :videos
 
   has_attached_file :thumbnail

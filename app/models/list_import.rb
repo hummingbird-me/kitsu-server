@@ -26,7 +26,7 @@ class ListImport < ApplicationRecord
   include Enumerable
   include WithActivity
 
-  belongs_to :user, required: true, touch: true
+  belongs_to :user, required: true
 
   enum strategy: %i[greater obliterate]
   enum status: %i[queued running failed completed]

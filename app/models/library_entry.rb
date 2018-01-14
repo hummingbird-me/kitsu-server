@@ -49,7 +49,7 @@ class LibraryEntry < ApplicationRecord
   VALID_RATINGS = (2..20).to_a.freeze
   MEDIA_ASSOCIATIONS = %i[anime manga drama].freeze
 
-  belongs_to :user, touch: true
+  belongs_to :user
   belongs_to :media, polymorphic: true
   belongs_to :anime
   belongs_to :manga
