@@ -45,7 +45,7 @@ RSpec.describe ListImport do
   subject { build(:list_import) }
 
   it { should define_enum_for(:status) }
-  it { should belong_to(:user).touch }
+  it { should belong_to(:user) }
   it { should validate_presence_of(:user) }
   it { should define_enum_for(:strategy) }
   it { should validate_presence_of(:strategy) }
