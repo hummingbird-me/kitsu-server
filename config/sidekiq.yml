@@ -7,8 +7,6 @@ production:
   - [soon, 4] # Within a few minutes
   - [later, 2] # Within an hour
   - [eventually, 1] # Within a few hours
-  # TODO: remove these when they're empty
-  - [chewy, 1]
 :schedule:
   # Cron is *pattern matching times*, with the following format:
   #  - fields: seconds minutes hours date month weekday
