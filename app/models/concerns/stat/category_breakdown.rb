@@ -52,10 +52,10 @@ class Stat < ApplicationRecord
     # Override to load category titles at runtime so that they can be edited without a bulk rebuild
     # @return [#to_json] a JSON-serializable stats object
     def enriched_stats_data
-      stats_data = default_data.merge(stats_data || {})
-      categories = Category.find(stats_data['categories'].keys).index_by(&:id)
-      stats_data['categories'].transform_keys! { |id| categories[id].title }
-      stats_data
+      data = stats_data.deep_dup
+      categories = Category.find(data['categories'].keys).index_by(&:id)
+      data['categories'].transform_keys! { |id| categories[id.to_i].title }
+      data
     end
 
     included do
