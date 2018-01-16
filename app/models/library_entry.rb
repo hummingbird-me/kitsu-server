@@ -162,6 +162,12 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
+  def recalculate_time_spent!
+    progress_time = media.episodes.for_progress(progress).sum(:length)
+    reconsume_time = media.total_length * reconsume_count
+    update(time_spent: progress_time + reconsume_time)
+  end
+
   LibraryTimeSpentCallbacks.hook(self)
   LibraryStatCallbacks.hook(self)
   LibraryEventCallbacks.hook(self)
