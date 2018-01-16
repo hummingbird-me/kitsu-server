@@ -54,10 +54,10 @@ class Stat < ApplicationRecord
     def enriched_stats_data
       data = stats_data.deep_dup
       categories = Category.find(data['categories'].keys).index_by(&:id)
-      data['categories'].map { |id, count|
-        category = categories[id.to_i]
-        [category.title, count] if category.parent_id == 228
-      }.compact.to_h
+      data['categories'].transform_keys! { |id| categories[id.to_i] }
+      data['categories'].select! { |category, _| category.parent_id == 228 }
+      data['categories'].transform_keys!(&:title)
+      data
     end
 
     included do
