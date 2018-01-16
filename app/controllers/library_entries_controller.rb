@@ -2,6 +2,11 @@ class LibraryEntriesController < ApplicationController
   include CustomControllerHelpers
   before_action :authenticate_user!, only: %i[issues]
 
+  def index
+    return render_jsonapi_error(400, 'No filter provided') unless params.include?(:filter)
+    super
+  end
+
   def authorize_operation(operation)
     has_permission = operation_scope.find_each.all? do |entry|
       LibraryEntryPolicy.new(current_user, entry).public_send(operation)
