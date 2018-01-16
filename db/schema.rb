@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180114070606) do
+ActiveRecord::Schema.define(version: 20180116051449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -416,6 +416,7 @@ ActiveRecord::Schema.define(version: 20180114070606) do
     t.string   "tba"
     t.text     "poster_image_meta"
     t.text     "cover_image_meta"
+    t.integer  "total_length",                                      default: 0,       null: false
   end
 
   add_index "dramas", ["slug"], name: "index_dramas_on_slug", using: :btree
