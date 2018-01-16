@@ -71,6 +71,8 @@ class Episode < ApplicationRecord
     EpisodeFeed.new(id)
   end
 
+  MediaTotalLengthCallbacks.hook(self)
+
   before_save do
     self.synopsis = Sanitize.fragment(synopsis, Sanitize::Config::RESTRICTED)
   end
