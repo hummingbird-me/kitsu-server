@@ -28,7 +28,11 @@ module Authorization
 
       # @return [User] the user to log into, given the facebook assertion
       def user!
-        @user ||= conflict.user!
+        @user ||= if Flipper.enabled?(:aozora)
+                    conflict.user!
+                  else
+                    User.where(facebook_id: facebook_id).first
+                  end
       end
 
       # @return [Array<Follow>] the list of follows created based on your facebook friends list

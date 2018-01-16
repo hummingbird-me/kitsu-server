@@ -23,11 +23,13 @@ class UsersController < ApplicationController
   end
 
   def conflicts_index
+    return render_jsonapi_error(403, 'Feature disabled') unless Flipper.enabled?(:aozora)
     conflict_detector = Zorro::UserConflictDetector.new(user: user)
     render json: conflict_detector.accounts
   end
 
   def conflicts_update
+    return render_jsonapi_error(403, 'Feature disabled') unless Flipper.enabled?(:aozora)
     render_jsonapi_error 400, 'You must choose' unless params[:chosen].present?
     chosen = params[:chosen].to_sym
     conflict_resolver = Zorro::UserConflictResolver.new(user)

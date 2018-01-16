@@ -11,7 +11,11 @@ module Authorization
     end
 
     def user
-      conflict.user!
+      if Flipper.enabled?(:aozora)
+        conflict.user!
+      else
+        kitsu_user
+      end
     end
 
     private
