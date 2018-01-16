@@ -15,6 +15,10 @@ module Episodic
     update(episode_length: length)
   end
 
+  def recalculate_total_length!
+    update(total_length: episodes.sum(:length))
+  end
+
   def unit(number)
     episodes.where(number: number).first
   end
