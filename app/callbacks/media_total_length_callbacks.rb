@@ -9,6 +9,7 @@ class MediaTotalLengthCallbacks < Callbacks
 
   def after_create
     media.with_lock do
+      media.total_length ||= 0
       media.total_length += record.length
       media.save!
     end
@@ -16,6 +17,7 @@ class MediaTotalLengthCallbacks < Callbacks
 
   def after_destroy
     media.with_lock do
+      media.total_length ||= 0
       media.total_length -= record.length
       media.save!
     end
@@ -23,6 +25,7 @@ class MediaTotalLengthCallbacks < Callbacks
 
   def after_update
     media.with_lock do
+      media.total_length ||= 0
       media.total_length += (record.length - record.length_was)
       media.save!
     end
