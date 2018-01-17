@@ -5,6 +5,7 @@ RSpec.describe StatWorker do
     it 'should send to the stat class with a wrapper around the model and changes' do
       stub_const('Stat::Test', double)
       allow(Stat::Test).to receive_message_chain(:for_user, :lock!) { Stat::Test }
+      allow(User).to receive(:exists?).and_return(true)
       stub_const('TestModel', OpenStruct)
 
       expect(Stat::Test).to receive(:on_update) do |wrapper|
