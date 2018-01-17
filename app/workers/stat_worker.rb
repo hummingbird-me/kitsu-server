@@ -11,6 +11,8 @@ class StatWorker
   #   @option model [Hash] 'attributes' the attributes to rehydrate into the model
   # @param changes [Hash<String,Array<Object>>] a list of change state to apply on top of the model
   def perform(stat, user_id, action, model, changes)
+    # Bail if the User has stopped existing (deletion)
+    return unless User.exists?(user_id)
     # Lock the User's stat row so no other workers can update it
     stat = stat.constantize.for_user(user_id).lock!
     # Rehydrate the model
