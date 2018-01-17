@@ -1,0 +1,23 @@
+{
+  "id": "1659565134412042",
+  "name": "Miyamizu Mitsuha",
+  "email": "mitsuha@miyamizu.moe",
+  "ids_for_business": {
+    "data": [
+      {
+        "id": "1659565134412042",
+        "app": {
+          "name": "Kitsu",
+          "id": "325314560922421"
+        }
+      },
+      {
+        "id": "10213915177779942",
+        "app": {
+          "name": "Aozora",
+          "id": "1467094533604194"
+        }
+      }
+    ]
+  }
+}

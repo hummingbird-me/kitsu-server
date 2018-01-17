@@ -5,7 +5,7 @@ class UsersController < ApplicationController
                                password: ENV['STAGING_SYNC_SECRET'],
                                only: :prod_sync
   skip_before_action :validate_token!, only: :prod_sync
-  skip_after_action :enforce_policy_use, only: %i[prod_sync recover]
+  skip_after_action :enforce_policy_use, only: %i[prod_sync recover conflicts_index conflicts_update]
 
   def recover
     query = params[:username]
@@ -20,6 +20,21 @@ class UsersController < ApplicationController
     end
     UserMailer.password_reset(user).deliver_later
     render json: { username: query }
+  end
+
+  def conflicts_index
+    return render_jsonapi_error(403, 'Feature disabled') unless Flipper.enabled?(:aozora)
+    conflict_detector = Zorro::UserConflictDetector.new(user: user)
+    render json: conflict_detector.accounts
+  end
+
+  def conflicts_update
+    return render_jsonapi_error(403, 'Feature disabled') unless Flipper.enabled?(:aozora)
+    render_jsonapi_error 400, 'You must choose' unless params[:chosen].present?
+    chosen = params[:chosen].to_sym
+    conflict_resolver = Zorro::UserConflictResolver.new(user)
+    user = conflict_resolver.merge_onto(chosen)
+    render_jsonapi serialize_model(user)
   end
 
   def prod_sync

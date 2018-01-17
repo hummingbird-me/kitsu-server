@@ -26,8 +26,8 @@ class UserPolicy < ApplicationPolicy
     if record == user
       all
     else
-      all - %i[email password confirmed previous_email language time_zone
-               country share_to_global title_language_preference sfw_filter]
+      all - %i[email password confirmed previous_email language time_zone country share_to_global
+               title_language_preference sfw_filter rating_system theme facebook_id has_password]
     end
   end
 

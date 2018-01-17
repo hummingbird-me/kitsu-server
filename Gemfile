@@ -13,6 +13,7 @@ gem 'attr_encrypted', '~>3.0.0' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
+gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
 gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
@@ -81,6 +82,7 @@ gem 'rack-cors'
 gem 'fast_blank' # Faster String#blank?
 gem 'oj' # Blazing-fast JSON parsing
 gem 'oj_mimic_json' # Hook it in place of JSON gem
+gem 'parallel' # Process shit in parallel
 
 gem 'sentry-raven' # Send error data to Sentry
 

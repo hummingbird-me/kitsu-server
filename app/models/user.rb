@@ -6,6 +6,8 @@
 #  id                          :integer          not null, primary key
 #  about                       :string(500)      default(""), not null
 #  about_formatted             :text
+#  ao_password                 :string
+#  ao_pro                      :integer
 #  approved_edit_count         :integer          default(0)
 #  avatar_content_type         :string(255)
 #  avatar_file_name            :string(255)
@@ -75,6 +77,8 @@
 #  waifu_or_husbando           :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
+#  ao_facebook_id              :string
+#  ao_id                       :string
 #  facebook_id                 :string(255)      indexed
 #  pinned_post_id              :integer
 #  pro_membership_plan_id      :integer
@@ -118,10 +122,11 @@ class User < ApplicationRecord
   enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password validations: false
-  enum status: %i[unregistered registered]
+  enum status: %i[unregistered registered aozora]
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
   enum theme: %i[light dark]
+  enum ao_pro: %i[pro pro_plus]
 
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
@@ -205,10 +210,10 @@ class User < ApplicationRecord
   scope :active, ->() { where(deleted_at: nil) }
   scope :by_slug, ->(*slugs) { where(slug: slugs&.flatten) }
   scope :by_name, ->(*names) {
-    where('lower(users.name) IN (?)', names&.flatten&.map(&:downcase))
+    where('lower(users.name) IN (?)', names&.flatten&.compact&.map(&:downcase))
   }
   scope :by_email, ->(*emails) {
-    where('lower(users.email) IN (?)', emails&.flatten&.map(&:downcase))
+    where('lower(users.email) IN (?)', emails&.flatten&.compact&.map(&:downcase))
   }
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :followed_first, ->(user) {
@@ -221,6 +226,14 @@ class User < ApplicationRecord
   }
 
   alias_method :flipper_id, :id
+
+  # Override the version provided by has_secure_password to accept the aozora password too
+  # @param unencrypted_password [String] the unencrypted password to test
+  def authenticate(unencrypted_password)
+    [password_digest, ao_password].compact.any? do |password|
+      BCrypt::Password.new(password).is_password?(unencrypted_password)
+    end && self
+  end
 
   def self.find_for_auth(identification)
     by_email(identification).or(by_slug(identification)).first
@@ -351,9 +364,6 @@ class User < ApplicationRecord
   end
 
   after_commit on: :create do
-    # Send Confirmation Email
-    UserMailer.confirmation(self).deliver_later
-
     # Set up feeds
     profile_feed.setup!
     timeline.setup!
@@ -387,12 +397,14 @@ class User < ApplicationRecord
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
     end
     self.previous_email = nil if confirmed_at_changed?
-    if email_changed? && !Rails.env.staging?
-      self.previous_email = email_was
-      self.confirmed_at = nil
-      UserMailer.confirmation(self).deliver_later
-    end
+    self.previous_email = email_was if email_changed?
     update_profile_completed
     update_feed_completed
+  end
+
+  after_commit if: ->(u) { u.email_changed? && !Rails.env.staging? } do
+    self.confirmed_at = nil
+    # Send Confirmation Email
+    UserMailer.confirmation(self).deliver_later
   end
 end

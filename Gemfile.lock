@@ -90,6 +90,7 @@ GEM
     aws-sigv4 (1.0.2)
     bcrypt (3.1.11)
     benchmark-ips (2.7.2)
+    bson (4.2.2)
     buftok (0.2.0)
     builder (3.2.3)
     byebug (9.1.0)
@@ -310,6 +311,8 @@ GEM
     minitest (5.11.1)
     moneta (1.0.0)
     msgpack (1.2.0)
+    mongo (2.4.3)
+      bson (>= 4.2.1, < 5.0.0)
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -355,6 +358,7 @@ GEM
     paperclip-optimizer (2.0.0)
       image_optim (~> 0.19)
       paperclip (>= 3.4)
+    parallel (1.12.0)
     paranoia (2.4.0)
       activerecord (>= 4.0, < 5.2)
     pg (0.21.0)
@@ -632,6 +636,7 @@ DEPENDENCIES
   librato-rails
   lograge
   mechanize
+  mongo
   nokogiri (~> 1.8.1)
   oauth2
   oj
@@ -641,6 +646,7 @@ DEPENDENCIES
   paperclip (~> 5.0)
   paperclip-meta
   paperclip-optimizer
+  parallel
   paranoia (~> 2.4)
   pg
   pg_query

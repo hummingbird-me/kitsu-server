@@ -298,8 +298,10 @@ ActiveRecord::Schema.define(version: 20180116051449) do
     t.integer  "replies_count",     default: 0,     null: false
     t.datetime "edited_at"
     t.jsonb    "embed"
+    t.string   "ao_id"
   end
 
+  add_index "comments", ["ao_id"], name: "index_comments_on_ao_id", unique: true, using: :btree
   add_index "comments", ["deleted_at"], name: "index_comments_on_deleted_at", using: :btree
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["post_id"], name: "index_comments_on_post_id", using: :btree
@@ -711,6 +713,15 @@ ActiveRecord::Schema.define(version: 20180116051449) do
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
   add_index "groups", ["slug"], name: "index_groups_on_slug", unique: true, using: :btree
+
+  create_table "hashtags", force: :cascade do |t|
+    t.string   "name",                   null: false
+    t.integer  "kind",       default: 0, null: false
+    t.integer  "item_id"
+    t.string   "item_type"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "installments", force: :cascade do |t|
     t.integer  "media_id"
@@ -1193,8 +1204,10 @@ ActiveRecord::Schema.define(version: 20180116051449) do
     t.string   "target_interest"
     t.jsonb    "embed"
     t.integer  "community_recommendation_id"
+    t.string   "ao_id"
   end
 
+  add_index "posts", ["ao_id"], name: "index_posts_on_ao_id", unique: true, using: :btree
   add_index "posts", ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id", using: :btree
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
   add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
@@ -1526,8 +1539,14 @@ ActiveRecord::Schema.define(version: 20180116051449) do
     t.text     "avatar_meta"
     t.text     "cover_image_meta"
     t.citext   "slug"
+    t.string   "ao_id"
+    t.string   "ao_password"
+    t.string   "ao_facebook_id"
+    t.integer  "ao_pro"
+    t.string   "ao_imported"
   end
 
+  add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["facebook_id"], name: "index_users_on_facebook_id", unique: true, using: :btree
   add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree

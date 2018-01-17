@@ -4,7 +4,7 @@ class FollowsController < ApplicationController
 
   def import_from_facebook
     facebook = Authorization::Assertion::Facebook.new(params[:assertion])
-    render json: serialize_follows(facebook.import_friends)
+    render json: serialize_follows(facebook.auto_follows)
   end
 
   def import_from_twitter
