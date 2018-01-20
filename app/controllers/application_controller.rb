@@ -8,6 +8,8 @@ class ApplicationController < JSONAPI::ResourceController
   end
 
   before_action :validate_token!
+  around_action :store_user_on_thread
+  before_action :tag_sentry_context
 
   force_ssl if Rails.env.production?
 
@@ -25,8 +27,6 @@ class ApplicationController < JSONAPI::ResourceController
         Raven.capture_exception(error, extra)
       end
     end
-
-    before_action :tag_sentry_context
 
     def tag_sentry_context
       user = current_user&.resource_owner

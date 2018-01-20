@@ -1,10 +1,6 @@
 module DoorkeeperHelpers
   extend ActiveSupport::Concern
 
-  included do
-    around_action :store_user_on_thread
-  end
-
   def store_user_on_thread
     Thread.current[:current_user] = doorkeeper_token&.resource_owner
     begin
