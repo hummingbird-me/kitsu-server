@@ -229,7 +229,7 @@ class User < ApplicationRecord
 
   # @return [User,nil] the current user as stored in the Thread-local variable
   def current
-    Thread.current[:doorkeeper_token]&.resource_owner
+    Thread.current[:current_user]
   end
 
   # Override the version provided by has_secure_password to accept the aozora password too

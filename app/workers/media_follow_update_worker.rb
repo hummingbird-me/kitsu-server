@@ -4,6 +4,7 @@ class MediaFollowUpdateWorker
 
   def perform(user_id, media_type, media_id, action, progress_was = nil, progress = nil) # rubocop:disable Metrics/ParameterLists
     user = User.find(user_id)
+    Thread.current[:current_user] = user
     media_class = media_type.safe_constantize
     media = media_class.find(media_id)
     media_follow = MediaFollowService.new(user, media)
