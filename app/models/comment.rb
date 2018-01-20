@@ -87,7 +87,7 @@ class Comment < ApplicationRecord
   end
 
   def mentioned_users
-    User.by_name(processed_content[:mentioned_usernames])
+    User.where(id: processed_content[:mentioned_users])
   end
 
   def no_grandparents
