@@ -1,5 +1,7 @@
 require 'sidekiq/middleware/server/chewy'
 require 'sidekiq/middleware/server/librato_metrics'
+require 'sidekiq/middleware/server/current_user'
+require 'sidekiq/middleware/client/current_user'
 
 Sidekiq.default_worker_options = { queue: 'later' }
 
