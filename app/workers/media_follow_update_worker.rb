@@ -4,15 +4,12 @@ class MediaFollowUpdateWorker
 
   def perform(user_id, media_type, media_id, action, progress_was = nil, progress = nil) # rubocop:disable Metrics/ParameterLists
     user = User.find(user_id)
-    Thread.current[:current_user] = user
     media_class = media_type.safe_constantize
     media = media_class.find(media_id)
     media_follow = MediaFollowService.new(user, media)
     media_follow.public_send(action, *[progress_was, progress].compact)
   rescue ActiveRecord::RecordNotFound => ex
     Raven.capture_exception(ex)
-  ensure
-    Thread.current[:current_user] = nil
   end
 
   def self.perform_for_entry(entry, action, progress_was = nil, progress = nil)
