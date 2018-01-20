@@ -228,7 +228,7 @@ class User < ApplicationRecord
   alias_method :flipper_id, :id
 
   # @return [User,nil] the current user as stored in the Thread-local variable
-  def current
+  def self.current
     Thread.current[:current_user]
   end
 
