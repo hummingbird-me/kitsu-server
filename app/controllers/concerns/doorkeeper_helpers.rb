@@ -1,6 +1,19 @@
 module DoorkeeperHelpers
   extend ActiveSupport::Concern
 
+  included do
+    around_action :store_token_on_thread
+  end
+
+  def store_token_on_thread
+    Thread.current[:doorkeeper_token] = doorkeeper_token
+    begin
+      yield
+    ensure
+      Thread.current[:doorkeeper_token] = nil
+    end
+  end
+
   def current_user
     doorkeeper_token
   end
