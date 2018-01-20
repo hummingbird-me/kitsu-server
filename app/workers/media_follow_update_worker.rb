@@ -11,6 +11,8 @@ class MediaFollowUpdateWorker
     media_follow.public_send(action, *[progress_was, progress].compact)
   rescue ActiveRecord::RecordNotFound => ex
     Raven.capture_exception(ex)
+  ensure
+    Thread.current[:current_user] = nil
   end
 
   def self.perform_for_entry(entry, action, progress_was = nil, progress = nil)
