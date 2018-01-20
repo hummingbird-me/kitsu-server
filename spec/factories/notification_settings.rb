@@ -23,7 +23,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :notification_setting do
     user
     setting_type { rand(0..4) }

@@ -24,7 +24,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :character do
     name { Faker::Name.name }
     description { Faker::Lorem.paragraph }

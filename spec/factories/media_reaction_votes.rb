@@ -22,7 +22,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :media_reaction_vote do
     user
     media_reaction

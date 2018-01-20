@@ -239,8 +239,8 @@ RSpec.describe User, type: :model do
     end
 
     it 'should return array of user one signal player ids' do
-      FactoryGirl.create(:one_signal_player, user: persisted_user)
-      FactoryGirl.create(:one_signal_player,
+      FactoryBot.create(:one_signal_player, user: persisted_user)
+      FactoryBot.create(:one_signal_player,
         platform: :mobile,
         user: persisted_user)
       expect(persisted_user.one_signal_player_ids.length).to eq(2)

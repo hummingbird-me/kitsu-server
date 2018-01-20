@@ -26,7 +26,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :drama_casting do
     locale 'en'
     association :drama_character, factory: :drama_character, strategy: :build

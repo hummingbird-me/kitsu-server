@@ -20,7 +20,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :community_recommendation_request do
     user
     description { Faker::Lorem.sentence }

@@ -32,7 +32,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :review do
     content { Faker::Lorem.paragraphs(2) }
     association :library_entry, factory: :library_entry, rating: 3.0,

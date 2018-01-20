@@ -24,7 +24,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :streaming_link do
     association :media, factory: :anime, strategy: :build
     streamer

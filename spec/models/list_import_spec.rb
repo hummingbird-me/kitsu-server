@@ -27,7 +27,7 @@ require 'rails_helper'
 RSpec.describe ListImport do
   class FakeImport < ListImport
     def each
-      media = FactoryGirl.create_list(:anime, 10)
+      media = FactoryBot.create_list(:anime, 10)
       100.times do |i|
         yield media[i], status: :current, progress: 1
       end

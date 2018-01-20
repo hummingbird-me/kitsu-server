@@ -25,7 +25,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :ama do
     start_date { Time.now }
     description { Faker::Lorem.sentence }

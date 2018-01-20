@@ -17,7 +17,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :mapping do
     association :item, factory: :anime, strategy: :build
     external_site 'myanimelist'

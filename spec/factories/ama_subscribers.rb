@@ -22,7 +22,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :ama_subscriber do
     ama
     user

@@ -100,7 +100,7 @@ group :development, :test do
 
   # Development+Testing
   gem 'database_cleaner' # Clean the database fully before doing anything
-  gem 'factory_girl_rails' # Factories > Fixtures
+  gem 'factory_bot_rails' # Factories > Fixtures
   gem 'rspec-rails' # Specs > Tests
 
   # Guard notices filesystem changes and *does things*

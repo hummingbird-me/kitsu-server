@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :video do
     url { Faker::Internet.url }
     association :episode, factory: :episode, strategy: :build

@@ -23,7 +23,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :manga_staff do
     association :manga, factory: :manga, strategy: :build
     association :person, factory: :person, strategy: :build

@@ -19,7 +19,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :installment do
     association :media, factory: :anime, strategy: :build
     franchise

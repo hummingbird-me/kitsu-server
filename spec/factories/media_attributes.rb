@@ -19,7 +19,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :media_attribute do
     title { Faker::Name.name }
     high_title { Faker::Name.name }

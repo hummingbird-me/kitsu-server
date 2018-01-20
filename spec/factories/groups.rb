@@ -47,7 +47,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :group do
     name { Faker::University.name }
     association :category, factory: :group_category, strategy: :build

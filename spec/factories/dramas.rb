@@ -46,7 +46,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :drama do
     titles { { en_jp: Faker::Name.name } }
     canonical_title 'en_jp'

@@ -18,7 +18,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :site_announcement do
     association :user, strategy: :build
     title { Faker::Lorem.sentence }

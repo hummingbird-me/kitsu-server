@@ -21,7 +21,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :group_ticket_message do
     association :ticket, strategy: :build, factory: :group_ticket
     association :user, strategy: :build

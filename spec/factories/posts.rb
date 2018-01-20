@@ -42,7 +42,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :post do
     user
     content { Faker::Lorem.sentence }

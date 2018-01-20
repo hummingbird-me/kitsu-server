@@ -21,7 +21,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :media_ignore do
     association :media, factory: :anime, strategy: :build
     association :user, factory: :user, strategy: :build

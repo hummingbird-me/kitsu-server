@@ -28,7 +28,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :episode do
     association :media, factory: :anime, strategy: :build
     titles { { en_jp: Faker::Name.name } }

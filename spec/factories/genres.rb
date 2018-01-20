@@ -12,7 +12,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :genre do
     # TODO: switch to Faker::Book.genre when they make a new release
     name { Faker::Book.genre }

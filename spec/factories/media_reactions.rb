@@ -38,7 +38,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :media_reaction do
     reaction { Faker::Lorem.characters(140) }
     association :anime, factory: :anime, strategy: :build

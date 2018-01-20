@@ -29,7 +29,7 @@
 
 include ActionDispatch::TestProcess
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :upload do
     user
     content { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'image.png'), 'image/png') }

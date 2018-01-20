@@ -18,7 +18,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :group_member_note do
     association :user, strategy: :build
     association :group_member, strategy: :build

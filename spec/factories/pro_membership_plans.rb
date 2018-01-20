@@ -13,7 +13,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :pro_membership_plan do
     recurring { [true, false].sample }
     duration { 1 + rand(35) }
