@@ -14,6 +14,14 @@ class Feed
       @owner_feed = owner_feed
     end
 
+    def client
+      if Flipper[:stream_batching].enabled?(User.current)
+        @buffered_client ||= BufferedStreamClient.new(super)
+      else
+        self.class.client
+      end
+    end
+
     def activities(*)
       ActivityList.new(self).with_type(aggregated? ? :aggregated : :flat)
     end

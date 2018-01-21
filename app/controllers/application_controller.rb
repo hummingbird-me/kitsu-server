@@ -8,6 +8,7 @@ class ApplicationController < JSONAPI::ResourceController
   end
 
   before_action :validate_token!
+  around_action :store_user_on_thread
 
   force_ssl if Rails.env.production?
 
