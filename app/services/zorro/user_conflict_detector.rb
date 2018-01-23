@@ -87,7 +87,8 @@ module Zorro
       @aozora_user ||= if @ao_facebook_id
                          Zorro::DB::User.find('_auth_data_facebook.id' => @ao_facebook_id).first
                        elsif @user then Zorro::DB::User.find(_id: @user.ao_id).first
-                       elsif @email then Zorro::DB::User.find(email: @email).first
+                       # TODO: fallback to shitty regex-based case-insensitive search or something?
+                       elsif @email then Zorro::DB::User.find(email: @email.to_s).first
                        end
     end
   end
