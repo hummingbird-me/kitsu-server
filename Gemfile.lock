@@ -170,7 +170,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     fast_blank (1.0.0)
     ffi (1.9.18)
-    flipper (0.12.1)
+    flipper (0.12.2)
     flipper-redis (0.12.1)
       flipper (~> 0.12.1)
       redis (>= 2.2, < 4.1.0)
