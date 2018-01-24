@@ -23,6 +23,16 @@ class UserMailer < ApplicationMailer
     # TODO: stop hardcoding this and fix root_url
     # Also, this gsub collapses runs of more than one forward-slash (except in
     # the protocol)
-    "https://kitsu.io/#{path}".gsub(%r{([^:])/+}, '\1/')
+    "#{client_url_base}/#{path}".gsub(%r{([^:])/+}, '\1/')
+  end
+
+  def client_url_base
+    if Rails.env.production?
+      'https://kitsu.io'
+    elsif Rails.env.staging?
+      'https://staging.kitsu.io'
+    else
+      'https://localhost'
+    end
   end
 end
