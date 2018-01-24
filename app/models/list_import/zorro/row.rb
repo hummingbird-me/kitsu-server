@@ -8,7 +8,7 @@ class ListImport
       end
 
       def media
-        Mapping.lookup('aozora', entry['_p_anime'])
+        Mapping.lookup('aozora', entry['_p_anime'].split('$').last)
       end
 
       def status
