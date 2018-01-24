@@ -19,7 +19,7 @@ module Zorro
           create_mapping('myanimelist/anime', mal_id, kitsu_id) if mal_id
           create_mapping('trakt', anime['traktID'], kitsu_id) if anime['traktID']
           create_mapping('anilist', "anime/#{anime['anilistID']}", kitsu_id) if anime['anilistID']
-          create_mapping('thetvdb/series', anime['tvdbID'], kitsu_id) if anime['tvdbID']
+          create_mapping('thetvdb', anime['tvdbID'], kitsu_id) if anime['tvdbID']
           # Import Hashtags
           anime['hashtags'].each do |tag|
             Hashtag.find_or_create(tag, item_type: 'Anime', item_id: kitsu_id)
