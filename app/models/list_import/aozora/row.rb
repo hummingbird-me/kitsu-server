@@ -1,5 +1,5 @@
 class ListImport
-  class Zorro
+  class Aozora
     class Row
       attr_reader :entry
 

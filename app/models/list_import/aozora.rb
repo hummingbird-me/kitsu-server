@@ -23,7 +23,7 @@
 # rubocop:enable Metrics/LineLength
 
 class ListImport
-  class Zorro < ListImport
+  class Aozora < ListImport
     validates :input_text, presence: true
 
     def count

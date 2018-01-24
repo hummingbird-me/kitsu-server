@@ -53,9 +53,9 @@ module Zorro
       # Import the library data
       #
       # @param user_id [Integer] the Kitsu User ID to apply the import to
-      # @return [ListImport::Zorro] the list import task generated for this user
+      # @return [ListImport::Aozora] the list import task generated for this user
       def import_library_to(user_id)
-        ListImport::Zorro.create!(user_id: user_id, strategy: :obliterate, input_text: @user.id)
+        ListImport::Aozora.create!(user_id: user_id, strategy: :obliterate, input_text: @user.id)
       end
 
       # Join the Aozora groups
