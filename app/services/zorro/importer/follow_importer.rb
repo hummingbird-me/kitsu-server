@@ -16,12 +16,29 @@ module Zorro
         bar.finish
       end
 
-      # Import a single user's follows into Kitsu
+      # Import both following and followers for a user into Kitsu
       # @param [User] the user whose follows to import
       def self.run_for(user)
+        run_following_for(user)
+        run_followers_for(user)
+      end
+
+      # Import a single user's following list into Kitsu
+      # @param [User] the user whose follows to import
+      def self.run_following_for(user)
         ao_id = user.ao_id
         targets = Zorro::DB::Follow.find(owningId: ao_id).distinct('relatedId')
-        new('_id' => source, 'following' => targets).run!
+        new('_id' => ao_id, 'following' => targets).run!
+      end
+
+      # Import a single user's followers list into Kitsu
+      # @param [User] the user whose follows to import
+      def self.run_followers_for(user)
+        ao_id = user.ao_id
+        sources = Zorro::DB::Follow.find(relatedId: ao_id).distinct('owningId')
+        sources.map do |follower_id|
+          new('_id' => follower_id, 'following' => [ao_id]).run!
+        end
       end
 
       # @param follow [Hash<String,String>] the row from the follows aggregation

@@ -25,6 +25,8 @@ module Zorro
         end
         # Join the Aozora groups, giving mod rank to any Aozora admins
         join_groups(user_id, rank: (@user.admin? ? :mod : :pleb))
+        # Import their follows
+        Zorro::FollowImportWorker.perform_async(user_id)
         # Return the user
         user
       end
