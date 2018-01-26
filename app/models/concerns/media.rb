@@ -97,6 +97,7 @@ module Media
 
   # How long the series ran for, or nil if the start date is unknown
   def run_length
+    return if start_date > Date.today
     (end_date || Date.today) - start_date if start_date
   end
 

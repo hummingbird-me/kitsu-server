@@ -50,6 +50,13 @@ RSpec.shared_examples 'media' do
         expect(subject.run_length).to be_within(5).of(60) # 60 days = 2 months
       end
     end
+    context 'starting in the future' do
+      it 'should return nil' do
+        subject.start_date = 2.months.from_now.to_date
+        subject.end_date = nil
+        expect(subject.run_length).to be_nil
+      end
+    end
   end
 
   describe '#calculate_rating_frequencies' do
