@@ -27,7 +27,12 @@ module Zorro
     def user!
       if conflict? # Aozora & Kitsu
         # Update the User's ao_id and status to mark them as needing reonboarding
-        kitsu_user.update!(ao_id: aozora_user['_id'], status: :aozora)
+        kitsu_user.update!(
+          ao_id: aozora_user['_id'],
+          ao_password: aozora_user['_hashed_password'],
+          ao_facebook_id: aozora_user.dig('_auth_data_facebook', 'id'),
+          status: :aozora
+        )
         kitsu_user
       elsif aozora_user.present? # Aozora-only
         imported_aozora_user || import_aozora_user!
