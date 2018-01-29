@@ -62,9 +62,10 @@ module Authorization
       # @return [String] the Facebook ID for Aozora
       def ao_facebook_id
         return unless data
-        data.dig(:ids_for_business, :data).select { |obj|
+        user = data.dig(:ids_for_business, :data).find do |obj|
           obj.dig(:app, :id) == AOZORA_FACEBOOK_APP_ID
-        }.first
+        end
+        user[:id] if user
       end
 
       # @return [Array<String>] the list of friends from this user's facebook
