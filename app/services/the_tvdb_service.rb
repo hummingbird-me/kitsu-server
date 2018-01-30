@@ -4,128 +4,98 @@ class TheTvdbService
   BASE_URL = 'https://api.thetvdb.com'.freeze
   API_KEY = ENV['THE_TVDB_API_KEY'].freeze
 
-  def initialize(set_name)
-    @set_name = set_name
+  # @return [ActiveRecord::Relation<Mapping>] a scope of Mappings to shows with missing thumbnails
+  def self.missing_thumbnails
+    Mapping.where(external_site: 'thetvdb')
+           .joins(<<-SQL)
+             LEFT OUTER JOIN episodes
+             ON mappings.item_id = episodes.media_id
+             AND mappings.item_type = episodes.media_type
+           SQL
+           .where(episodes: { thumbnail_file_name: nil }).distinct
   end
 
+  # @return [ActiveRecord::Relation<Mapping>] a scope of Mappings to shows which are airing
+  def self.currently_airing
+    Mapping.where(external_site: 'thetvdb')
+           .joins('LEFT OUTER JOIN anime ON mappings.item_id = anime.id')
+           .merge(Anime.current)
+  end
+
+  def initialize(mappings)
+    @mappings = mappings
+  end
+
+  # Import data from TVDB for the Mappings which were passed into the initializer
   def import!
-    data = query_data
-    return if data.blank?
-    data['Anime'].each do |(anime_id, mappings)|
-      series_id, season_id = mappings['thetvdb'].split('/')
-
-      response = get(build_episode_path(series_id, season_id))
-      next unless response
-
-      # update the episode count if it does not exist.
-      tvdb_episodes_count = response['data'].count
+    pluck_mappings(@mappings)['Anime'].each do |(anime_id, tvdb_id)|
       anime = Anime.find(anime_id)
-      anime.update_unit_count_guess(tvdb_episodes_count)
-      # we don't want to add their data if the episode counts don't match up
-      # TODO: we should log this because it would be good to double check.
-      next unless [anime.episode_count, anime.episode_count_guess].include?(tvdb_episodes_count)
+      series_id, season_number = tvdb_id.split('/')
+      episodes = get_episodes(series_id, season_number)
+
+      next unless episodes
+
+      next if anime.episode_count && (anime.episode_count - episodes.count).abs < 2
+      anime.update_unit_count_guess(episodes.count)
 
       # creating/updating the episode
-      process_episode_data(response, anime_id, series_id)
+      process_episode_data(episodes, anime, series_id)
     end
   end
 
-  def missing_thumbnails
-    return @missing_thumbnails if @missing_thumbnails
-
-    data = Mapping.where(external_site: 'thetvdb')
-                  .joins(<<-SQL)
-                    LEFT OUTER JOIN episodes
-                    ON mappings.item_id = episodes.media_id
-                    AND mappings.item_type = episodes.media_type
-                  SQL
-                  .where(episodes: { thumbnail_file_name: nil }).distinct
-
-    @missing_thumbnails = format_data(data)
-  end
-
-  def currently_airing
-    return @currently_airing if @currently_airing
-
-    data = Mapping.where(external_site: %w[thetvdb/series thetvdb/season])
-                  .joins('LEFT OUTER JOIN anime ON mappings.item_id = anime.id')
-                  .merge(Anime.current)
-
-    @currently_airing = format_data(data)
-  end
-
+  # Uses the TVDB API to trade our API Key for an API Token and then memoizes it
+  # @return [String] the TVDB API token
   def api_token
-    return @token if @token
+    return @api_token if @api_token
 
-    body = { apikey: API_KEY }.to_json
-
-    response = Typhoeus::Request.post(
-      build_url('/login'),
-      body: body,
-      headers: {
-        'Content-Type' => 'application/json',
-        'Accept' => 'application/json'
-      }
-    )
-
-    if response.success?
-      @token = JSON.parse(response.body)['token']
-      return @token
+    response = http.post('/login') do |req|
+      req.body = { apikey: API_KEY }.to_json
+      req.headers['Content-Type'] = 'application/json'
+      req.headers['Accept'] = 'application/json'
     end
 
-    raise "#{response.code}: apikey/api token is invalid."
+    raise "#{response.status}: API Key is invalid." unless response.success?
+
+    @api_token = JSON.parse(response.body)['token']
   end
 
-  def get(url)
-    response = Typhoeus::Request.get(
-      build_url(url),
-      headers: {
-        'Accept' => 'application/json',
-        'Authorization' => "Bearer #{api_token}"
-      }
-    )
-    raise NotFound if response.code == 404
+  # Makes a GET request to the TVDB API
+  def get(path)
+    response = http.get(path) do |req|
+      req.headers['Accept'] = 'application/json'
+      req.headers['Authorization'] = "Bearer #{api_token}"
+    end
+
+    raise NotFound if response.status == 404
     raise 'TVDB Error' unless response.success?
 
     JSON.parse(response.body)
-  rescue NotFound
-    false
   end
 
-  def format_data(data)
+  def pluck_mappings(data)
     return if data.blank?
 
-    data.pluck(:item_type, :item_id, :external_site, :external_id)
-        .each_with_object({}) do |(item_type, item_id, external_site, external_id), acc|
+    data.pluck(:item_type, :item_id, :external_id)
+        .each_with_object({}) do |(item_type, item_id, external_id), acc|
           acc[item_type] ||= {}
-          acc[item_type][item_id] ||= {}
-          acc[item_type][item_id][external_site] = external_id
+          acc[item_type][item_id] ||= external_id
         end
   end
 
-  def query_data
-    return unless %i[currently_airing missing_thumbnails].include?(@set_name)
-    send(@set_name)
+  def get_episodes(series_id, season_number)
+    get("/series/#{series_id}/episodes/query?airedSeason=#{season_number || 1}")['data']
   end
 
-  def build_url(url)
-    "#{BASE_URL}#{url}"
-  end
-
-  def build_episode_path(series_id, season_number)
-    season_number ||= 1
-    path = "/series/#{series_id}/episodes"
-    # I am assuming that no show has more than 25 seasons
-    # and that the airedSeasonID is going to always be greater than that.
-    # and we will catch any errors when we send the response.
-    path += "/query?airedSeason=#{season_number}" if season_number.to_i < 25
-    path
-  end
-
-  def process_episode_data(response, media_id, tvdb_series_id)
-    response['data'].each do |tvdb_episode|
-      row = Row.new(media_id, tvdb_episode, tvdb_series_id)
-      row.update_episode!
+  def process_episode_data(episodes, media, tvdb_series_id)
+    episodes.each do |tvdb_episode|
+      row = Row.new(media, tvdb_episode, tvdb_series_id)
+      row.update_episode
     end
+  end
+
+  private
+
+  def http
+    @http ||= Faraday.new(url: BASE_URL)
   end
 end
