@@ -35,7 +35,7 @@ class TheTvdbService
 
       next unless episodes
 
-      next if anime.episode_count && (anime.episode_count - episodes.count).abs < 2
+      next if anime.episode_count && (anime.episode_count - episodes.count).abs > 2
       anime.update_unit_count_guess(episodes.count)
 
       # creating/updating the episode
