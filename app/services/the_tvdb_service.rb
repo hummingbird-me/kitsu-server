@@ -31,7 +31,12 @@ class TheTvdbService
     pluck_mappings(@mappings)['Anime'].each do |(anime_id, tvdb_id)|
       anime = Anime.find(anime_id)
       series_id, season_number = tvdb_id.split('/')
-      episodes = get_episodes(series_id, season_number)
+      begin
+        episodes = get_episodes(series_id, season_number)
+      rescue NotFound
+        anime.mappings.where(external_id: tvdb_id).destroy!
+        next
+      end
 
       next unless episodes
 
