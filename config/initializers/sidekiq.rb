@@ -1,6 +1,7 @@
 require 'sidekiq/middleware/server/chewy'
 require 'sidekiq/middleware/server/librato_metrics'
 require 'sidekiq/middleware/server/current_user'
+require 'sidekiq/middleware/server/stream_buffer_flusher'
 require 'sidekiq/middleware/client/current_user'
 
 Sidekiq.default_worker_options = { queue: 'later' }
@@ -11,6 +12,7 @@ Sidekiq.configure_server do |config|
     chain.add Sidekiq::Debounce
     chain.add Sidekiq::Middleware::Server::CurrentUser
     chain.add Sidekiq::Middleware::Server::Chewy
+    chain.add Sidekiq::Middleware::Server::StreamBufferFlusher
     chain.add Sidekiq::Middleware::Server::LibratoMetrics if defined? Librato
   end
   config.client_middleware do |chain|
