@@ -72,7 +72,7 @@ namespace :importers do
   desc 'Import the bcmoe.json file from disk or (by default) off because.moe'
   task :bcmoe, [:filename] => [:environment] do |_t, args|
     # Load the JSON
-    json_file = open(args[:filename] || 'http://because.moe/json/us').read
+    json_file = open(args[:filename] || 'https://bcmoe.blob.core.windows.net/assets/us.json').read
     bcmoe = JSON.parse(json_file).map(&:deep_symbolize_keys)
 
     # Create the streamers
