@@ -27,6 +27,7 @@ class Callbacks
     before_update around_update after_update
     before_destroy around_destroy after_destroy
     after_commit after_rollback
+    after_find after_initialize
   ].each do |callback|
     define_singleton_method(callback) { |record| new(record).send(callback) }
   end
