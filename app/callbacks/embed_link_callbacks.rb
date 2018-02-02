@@ -7,12 +7,12 @@ class EmbedLinkCallbacks < Callbacks
 
   # Update the embed if the URL is present or if the content changed
   def after_validation
-    record.public_send("#{options.to}=", embed) if embed_url.present? || content_changed?
+    record.public_send("#{to}=", embed) if embed_url.present? || content_changed?
   end
 
   # Try to fill in the embed if there's not already one
   def after_find
-    update(options.to => embed) if record.public_send(options.to).blank?
+    update(to => embed) if record.public_send(to).blank?
   end
 
   private
@@ -24,14 +24,22 @@ class EmbedLinkCallbacks < Callbacks
   end
 
   def embed_url
-    record.public_send(options.url_attr) || processed[:embeddable_links]&.first
+    record.public_send("#{to}_url") || processed[:embeddable_links]&.first
   end
 
   def processed
-    record.public_send("processed_#{options.content_attr}")
+    record.public_send("processed_#{content_attr}")
   end
 
   def content_changed?
-    record.public_send("#{options.content_attr}_changed?")
+    record.public_send("#{content_attr}_changed?")
+  end
+
+  def to
+    options[:to]
+  end
+
+  def content_attr
+    options[:content_attr]
   end
 end
