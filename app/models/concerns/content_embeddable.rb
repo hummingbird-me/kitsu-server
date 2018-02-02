@@ -9,7 +9,7 @@ module ContentEmbeddable
       attr_accessor url_attr
 
       before_validation if: -> {
-        send("#{url_attr}_changed?") || send("#{content_attr}_changed?")
+        send(url_attr) || send("#{content_attr}_changed?")
       } do
         processed = send(processed_attr)
         embed_url = send(url_attr) || processed[:embeddable_links].first
