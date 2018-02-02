@@ -35,6 +35,9 @@ class EmbedService
     Rails.cache.fetch(cache_id, expires_in: EXPIRY) do
       embedder.as_json(*args)
     end
+  rescue StandardError => e
+    Raven.capture_exception(e)
+    {}
   end
 
   # @return [String] the JSON string for the embedded URL, using cache
