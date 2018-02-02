@@ -169,6 +169,7 @@ GEM
     faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
     fast_blank (1.0.0)
+    fastimage (2.1.1)
     ffi (1.9.18)
     flipper (0.12.2)
     flipper-redis (0.12.2)
@@ -620,6 +621,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   fast_blank
+  fastimage
   flipper
   flipper-redis
   flipper-ui

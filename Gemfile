@@ -57,6 +57,7 @@ gem 'flipper-ui'
 # Miscellaneous Utilities
 gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches
+gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'jsonapi-resources', '0.9.0'
 gem 'lograge' # Non-shitty logging
