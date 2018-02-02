@@ -1,6 +1,6 @@
-class TwitterEmbedder < OpenGraphEmbedder
+class TwitterCardEmbedder < Embedder
   def twitter(key)
-    page.at_css("meta[name='twitter:#{key}']")&.[]('content')
+    html.at_css("meta[name='twitter:#{key}']")&.[]('content')
   end
 
   def player_info

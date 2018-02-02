@@ -1,25 +1,26 @@
 class OembedEmbedder < Embedder
-  def page
-    @page ||= Nokogiri::HTML(get(url))
-  end
+  # Get providers from the ProvidersList class
+  delegate :providers, to: :ProvidersList
 
+  # @return [String] the URL to get the oEmbed data
   def oembed_url
-    page.css('link').collect(&:href).select { |e| e.include? 'oembed' }.first
-  end
-
-  def json_oembed_url
-    match? ? "#{oembed_url}&format=json" : nil
+    # First try for json+oembed
+    html.at_css('link[rel=alternate][type$="json+oembed"]')&.href ||
+      # Look for anything ending with oembed
+      html.at_css('link[rel=alternate][type$=oembed]')&.href ||
+      # Check the global providers list
+      providers.for_url(url)
   end
 
   def oembed_data
-    JSON.parse(get(json_oembed_url))
+    JSON.parse(get(oembed_url))
   end
 
   def to_h
-    oembed_data.merge(oembed_url: json_oembed_url, url: url).reject { |_k, v| v.blank? }
+    oembed_data.merge(url: url).reject { |_k, v| v.blank? }
   end
 
   def match?
-    !oembed_url.nil?
+    oembed_url.present?
   end
 end

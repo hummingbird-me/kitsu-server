@@ -1,20 +1,22 @@
 class OpenGraphEmbedder < Embedder
-  def page
-    @page ||= Nokogiri::HTML(get(url))
-  end
-
-  def og(key)
-    page.at_css("meta[property='og:#{key}']")&.[]('content')
-  end
-
-  def og_media(key)
+  def to_h
     {
-      url: og("#{key}:secure_url") || og("#{key}:url") || og(key),
-      width: og("#{key}:width"),
-      height: og("#{key}:height"),
-      type: og("#{key}:type")
-    }.compact
+      kind: kind,
+      url: url,
+      title: title,
+      description: description,
+      site_name: site_name,
+      image: image,
+      video: video,
+      audio: audio
+    }.reject { |_k, v| v.blank? }
   end
+
+  def match?
+    title.present?
+  end
+
+  private
 
   def kind
     og :type
@@ -44,20 +46,20 @@ class OpenGraphEmbedder < Embedder
     og_media :audio
   end
 
-  def to_h
-    {
-      kind: kind,
-      url: url,
-      title: title,
-      description: description,
-      site_name: site_name,
-      image: image,
-      video: video,
-      audio: audio
-    }.reject { |_k, v| v.blank? }
+  # Retrieve the value of an OpenGraph key from the meta tags
+  # @param key [String] the key to retrieve from meta tags
+  # @return [String] the value of the opengraph key
+  def og(key)
+    html.at_css("meta[property='og:#{key}']")&.[]('content')
   end
 
-  def match?
-    title.present?
+  # Retrieve an OpenGraph media from the meta tags on the page
+  def og_media(key)
+    {
+      url: og("#{key}:secure_url") || og("#{key}:url") || og(key),
+      width: og("#{key}:width"),
+      height: og("#{key}:height"),
+      type: og("#{key}:type")
+    }.compact
   end
 end
