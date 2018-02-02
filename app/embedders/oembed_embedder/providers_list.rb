@@ -13,9 +13,6 @@ class OembedEmbedder
       @providers ||= @list.each_with_object({}) do |provider, out|
         provider['endpoints'].each do |endpoint|
           next unless endpoint['schemes']
-          # Ignore discoverable endpoints
-          next if endpoint['discovery']
-
           endpoint_url = endpoint['url'].sub('{format}', 'json')
           endpoint['schemes'].each do |scheme|
             out[scheme_to_regex(scheme)] = endpoint_url

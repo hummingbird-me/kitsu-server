@@ -50,18 +50,20 @@ class EmbedService
   # @return [String] the body of the link's target
   def self.get(url)
     Timeout.timeout(EMBED_TIMEOUT) do
-      Typhoeus.get(url, headers: { 'User-Agent' => USER_AGENT }, followlocation: true).body
+      req = Typhoeus.get(url, headers: { 'User-Agent' => USER_AGENT }, followlocation: true)
+      req.body if req.success?
     end
   end
   delegate :get, to: :class
 
-  private
-
   # @return [String] a caching ID generated from the list of Embedders
-  private_class_method def self.cache_id
+  # @private
+  def self.cache_id
     # Join all the embedders' cache IDs and digest it
     @cache_id ||= Digest::MD5.hexdigest(EMBEDDERS.map(&:cache_id).join(','))
   end
+
+  private
 
   # @return [Embedder] the embedder to handle this URL
   def embedder
