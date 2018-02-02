@@ -1,6 +1,10 @@
 class GeneralUrlEmbedder < Embedder
   def to_h
-    { url: url }
+    {
+      kind: 'link',
+      url: url,
+      title: url
+    }
   end
 
   def match?
