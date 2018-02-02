@@ -14,7 +14,7 @@ class TwitterCardEmbedder < Embedder
   end
 
   def match?
-    card.present?
+    kind.present?
   end
 
   private
