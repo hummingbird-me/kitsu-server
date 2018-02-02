@@ -21,6 +21,7 @@ class EmbedService
     TwitterCardEmbedder, # Twitter Card data (https://dev.twitter.com/cards)
     # Generic Fallback Embeds
     MetaContentEmbedder, # Shitty keyword-stuffed meta tags
+    ImageEmbedder,       # Embed direct image links
     GeneralUrlEmbedder   # Just stuff the URL in there
   ].freeze
 
