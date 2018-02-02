@@ -13,7 +13,8 @@ class EmbedService
   # List of Embedders to try (matched from top to bottom)
   EMBEDDERS = [
     # Site-specific Solutions
-    NicoVideoEmbedder, # nicovideo.jp
+    NicoVideoEmbedder,  # nicovideo.jp
+    GiphyMediaEmbedder, # media.giphy.com
     # Embed Standards
     OpenGraphEmbedder,   # Facebook OpenGraph data (http://ogp.me/)
     OembedEmbedder,      # oEmbed Data (http://oembed.com/)
