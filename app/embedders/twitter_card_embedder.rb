@@ -3,10 +3,10 @@ class TwitterCardEmbedder < Embedder
     {
       kind: kind,
       url: url,
-      title: card['title'],
+      title: card('title'),
       description: card['description'],
       site: {
-        name: card['site']
+        name: card('site')
       },
       image: image,
       video: video
@@ -40,7 +40,7 @@ class TwitterCardEmbedder < Embedder
   end
 
   def kind
-    case card['card']
+    case card('card')
     when /\Asummary/ then 'link'
     when 'player' then 'video'
     when 'app' then nil
