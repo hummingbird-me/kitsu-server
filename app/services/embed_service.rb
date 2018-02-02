@@ -31,14 +31,14 @@ class EmbedService
   # @see #to_json for a cached string of the JSON
   # @return [#to_json] the object output of the embed
   def as_json(*args)
-    embedder.as_json(*args)
+    Rails.cache.fetch(cache_id, expires_in: EXPIRY) do
+      embedder.as_json(*args)
+    end
   end
 
   # @return [String] the JSON string for the embedded URL, using cache
   def to_json
-    Rails.cache.fetch(cache_id, expires_in: EXPIRY) do
-      embedder.to_json
-    end
+    as_json.to_json
   end
 
   # @return [Boolean] whether or not we found an embedder for the URL
