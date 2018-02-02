@@ -2,7 +2,6 @@ class EmbedLinkCallbacks < Callbacks
   # @param klass [Class] the class to hook the callbacks for
   def self.hook(klass)
     klass.after_validation(self)
-    klass.after_find(self)
   end
 
   # Update the embed if the URL is present or if the content changed
