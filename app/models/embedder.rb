@@ -22,6 +22,35 @@ class Embedder
   end
 
   # @return [#to_json] the JSON-serializable embed data
+  #
+  # {
+  #   kind: 'image|video|audio|link',       <-- Required; can also be kind.something (subscope)
+  #   title: String,                        <-- Required
+  #   description: String,                  <-- Optional
+  #   url: String,                          <-- Required; the URL for the link
+  #   site: {                               <-- Site Information; Required
+  #     name: String,                         <-- Required
+  #     url: String                           <-- Optional
+  #   },
+  #   image: {                              <-- Image or Thumbnail; Optional
+  #     url: String,                          <-- Required
+  #     width: Number,                        <-- Optional
+  #     height: Number,                       <-- Optional
+  #     alt: String                           <-- Optional
+  #   },
+  #   video: {                              <-- Video Embed; Optional
+  #     url: String,                          <-- Required
+  #     type: String,                         <-- Required; text/html for iframe, video/* for video
+  #     width: Number,                        <-- Optional; Required for iframe
+  #     height: Number                        <-- Optional; Required for iframe
+  #   },
+  #   audio: {                              <-- Audio Embed; Optional
+  #     url: String,                          <-- Required
+  #     type: String,                         <-- Required; text/html for iframe, audio/* for audio
+  #     width: Number,                        <-- Optional; Required for iframe
+  #     height: Number                        <-- Optional; Required for iframe
+  #   }
+  # }
   def as_json(*args)
     to_h.as_json(*args)
   end

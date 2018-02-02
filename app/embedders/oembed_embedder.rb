@@ -7,7 +7,7 @@ class OembedEmbedder < Embedder
       title: oembed_data['title'],
       image: image || thumbnail,
       video: video
-    }.compact
+    }.reject { |_k, v| v.blank? }
   end
 
   def match?
