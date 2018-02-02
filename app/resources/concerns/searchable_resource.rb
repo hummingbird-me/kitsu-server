@@ -62,7 +62,7 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
 
     def find_serialized_with_caching(filters, serializer, opts = {})
       return super(filters, serializer, opts) unless should_query?(filters)
-      records = find_records(filters, opts)
+      records = find_records(filters, opts).reject(&:nil?)
       cached_resources_for(records, serializer, opts)
     end
 
