@@ -12,7 +12,7 @@ class EmbedLinkCallbacks < Callbacks
 
   # Try to fill in the embed if there's not already one
   def after_find
-    update(to => embed) if record.public_send(to).blank?
+    record.update(to => embed) if record.public_send(to).blank?
   end
 
   private
@@ -21,6 +21,7 @@ class EmbedLinkCallbacks < Callbacks
     EmbedService.new(embed_url).as_json if embed_url
   rescue StandardError => e
     Raven.capture_exception(e)
+    nil
   end
 
   def embed_url
