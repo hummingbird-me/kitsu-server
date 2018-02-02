@@ -6,5 +6,6 @@ WebMock.disable_net_connect!(allow: [
   %r{pigment.github.io/fake-logos},
   'lorempixel.com',
   'localhost',
-  'elasticsearch:9200'
+  'elasticsearch:9200',
+  'oembed.com'
 ])
