@@ -27,7 +27,8 @@ class OembedEmbedder
     # @param url [String] the URL to find a provider for
     # @return [String] the oEmbed URL for this URL
     def for_url(url)
-      oembed_url = providers.find { |schema, _| schema =~ url }[1]
+      oembed_url = providers.find { |schema, _| schema =~ url }&.last
+      return nil unless oembed_url
       oembed_url = Addressable::URI.parse(oembed_url)
       oembed_url.query_values = (oembed_url.query_values || {}).merge(url: url)
       oembed_url.to_s
