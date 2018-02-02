@@ -6,7 +6,7 @@ class Embedder
   def self.version
     self::VERSION
   rescue NameError
-    1
+    2
   end
 
   # @return [String] the identifier of the Embedder class in our cache

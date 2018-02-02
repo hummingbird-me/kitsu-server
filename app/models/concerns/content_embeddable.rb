@@ -13,13 +13,21 @@ module ContentEmbeddable
       } do
         processed = send(processed_attr)
         embed_url = send(url_attr) || processed[:embeddable_links].first
-        self.embed = EmbedService.new(embed_url).as_json
+        begin
+          self.embed = EmbedService.new(embed_url).as_json
+        rescue e
+          Raven.capture_exception(e)
+        end
       end
 
       after_find unless: :embed? do
         processed = send(processed_attr)
         embed_url = send(url_attr) || processed[:embeddable_links].first
-        update(embed: EmbedService.new(embed_url).as_json)
+        begin
+          update(embed: EmbedService.new(embed_url).as_json)
+        rescue e
+          Raven.capture_exception(e)
+        end
       end
     end
   end
