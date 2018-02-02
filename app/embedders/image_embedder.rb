@@ -7,8 +7,8 @@ class ImageEmbedder < Embedder
       image: {
         url: url,
         type: content_type,
-        height: image.height,
-        width: image.width
+        width: image.size[0],
+        height: image.size[1]
       }
     }
   end

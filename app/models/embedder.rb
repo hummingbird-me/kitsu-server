@@ -56,6 +56,10 @@ class Embedder
     to_h.as_json(*args)
   end
 
+  def to_json
+    as_json.to_json
+  end
+
   # @return [Boolean] whether the Embedder matches the given URL
   def match?
     false
