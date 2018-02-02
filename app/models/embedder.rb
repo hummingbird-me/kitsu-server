@@ -34,6 +34,7 @@ class Embedder
   #   },
   #   image: {                              <-- Image or Thumbnail; Optional
   #     url: String,                          <-- Required
+  #     type: String,                         <-- Optional
   #     width: Number,                        <-- Optional
   #     height: Number,                       <-- Optional
   #     alt: String                           <-- Optional
