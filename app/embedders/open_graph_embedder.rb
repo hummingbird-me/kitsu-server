@@ -5,7 +5,7 @@ class OpenGraphEmbedder < Embedder
       url: url,
       title: title,
       description: description,
-      site_name: site_name,
+      site: { name: site_name },
       image: image,
       video: video,
       audio: audio
