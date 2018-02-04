@@ -33,7 +33,7 @@ gem 'aws-sdk', '< 3.0'
 gem 'delayed_paperclip'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
-gem 'paperclip', '~> 5.0'
+gem 'paperclip', '~> 5.2'
 gem 'paperclip-meta'
 gem 'paperclip-optimizer'
 
