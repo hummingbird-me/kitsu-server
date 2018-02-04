@@ -228,4 +228,19 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     include_all_fields
     exclude_fields :videos
   end
+
+  config.model 'StreamingLink' do
+    fields :id, :media, :streamer, :url
+    field(:subs, :serialized) { html_attributes rows: '6', cols: '10' }
+    field(:dubs, :serialized) { html_attributes rows: '6', cols: '10' }
+    include_all_fields
+  end
+
+  config.model 'Video' do
+    fields :id, :url
+    field(:available_regions, :serialized) { html_attributes rows: '6', cols: '10' }
+    field(:embed_data, :serialized) { html_attributes rows: '6', cols: '70' }
+    fields :episode, :streamer, :sub_lang, :dub_lang
+    include_all_fields
+  end
 end
