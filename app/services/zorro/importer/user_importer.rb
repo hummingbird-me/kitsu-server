@@ -72,7 +72,7 @@ module Zorro
           [group_id, user_id, rank]
         end
         GroupMember.import(%i[group_id user_id rank], members, validate: false)
-        TimelineFeed.new(user_id).follow_many(new_groups.map(&:feed))
+        TimelineFeed.new(user_id).follow_many(Group.where(id: new_groups).map(&:feed))
       end
 
       # Generates an aggregation which joins UserDetails data into the User collection
