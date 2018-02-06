@@ -638,7 +638,7 @@ DEPENDENCIES
   lograge
   mechanize
   mongo
-  nokogiri (~> 1.8.1)
+  nokogiri (~> 1.8.2)
   oauth2
   oj
   oj_mimic_json
