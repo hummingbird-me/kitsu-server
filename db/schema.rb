@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180116051449) do
+ActiveRecord::Schema.define(version: 20180206225558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,8 +257,8 @@ ActiveRecord::Schema.define(version: 20180116051449) do
   create_table "characters", force: :cascade do |t|
     t.string   "name",               limit: 255
     t.text     "description"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.integer  "mal_id"
     t.string   "image_file_name",    limit: 255
     t.string   "image_content_type", limit: 255
@@ -267,6 +267,9 @@ ActiveRecord::Schema.define(version: 20180116051449) do
     t.string   "slug",               limit: 255
     t.integer  "primary_media_id"
     t.string   "primary_media_type"
+    t.jsonb    "names",                          default: {}, null: false
+    t.string   "canonical_name",                              null: false
+    t.string   "other_names",                    default: [], null: false, array: true
   end
 
   add_index "characters", ["mal_id"], name: "character_mal_id", unique: true, using: :btree
