@@ -1,3 +1,5 @@
+Dir['lib/buffered_stream_client/*.rb'].each { |f| require f }
+
 # This class is wrapper for {Stream::Client} which provides buffering of actions to be executed en
 # masse using Stream's bulk APIs.  For example, if a single request makes multiple follow requests,
 # we can bundle those up into a single hit to the Stream API and thus make execution more efficient.
