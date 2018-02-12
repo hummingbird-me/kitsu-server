@@ -18,7 +18,7 @@ class MediaFollowService
   end
 
   def destroy(progress_was)
-    timeline.unfollow(media_posts_feed)
+    timeline.unfollow(media_posts_feed, keep_history: true)
     timeline.update_unit_follows(media, progress_was, nil)
   end
 
