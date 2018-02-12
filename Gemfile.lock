@@ -78,7 +78,7 @@ GEM
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
     arel (6.0.4)
-    attr_encrypted (3.0.3)
+    attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
     aws-sdk (2.10.100)
       aws-sdk-resources (= 2.10.100)
@@ -603,7 +603,7 @@ DEPENDENCIES
   addressable
   algoliasearch-rails
   annotate
-  attr_encrypted (~> 3.0.0)
+  attr_encrypted (~> 3.1.0)
   aws-sdk (< 3.0)
   bcrypt
   benchmark-ips
