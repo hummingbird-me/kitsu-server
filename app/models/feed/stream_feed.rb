@@ -16,7 +16,7 @@ class Feed
 
     def client
       if Flipper[:stream_batching].enabled?(User.current)
-        @buffered_client ||= BufferedStreamClient.new(super)
+        @buffered_client ||= BufferedStreamClient.new(self.class.client)
       else
         self.class.client
       end
