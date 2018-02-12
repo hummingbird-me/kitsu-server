@@ -1,4 +1,4 @@
-class StreamJournal
+class BufferedStreamClient
   class BufferedFeed
     # @private
     delegate :duration, to: BufferedStreamClient
