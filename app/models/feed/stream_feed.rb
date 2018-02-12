@@ -1,3 +1,5 @@
+require_dependency 'buffered_stream_client'
+
 class Feed
   class StreamFeed
     class_attribute :client
