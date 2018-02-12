@@ -18,13 +18,6 @@ module Zorro
         @followed ||= Zorro::Cache.lookup(User, @targets)
       end
 
-      private
-
-      # @return [ActiveRecord::Relation<Follow>] any existing follows from the list
-      def existing
-        @existing ||= Follow.where(follower: follower, followed: followed)
-      end
-
       # Add all the nonexistent follows to the database
       # @return [ActiveRecord::Import::Result] the results of the import
       def save!
@@ -32,6 +25,13 @@ module Zorro
         columns = %i[follower_id followed_id]
         values = missing.map { |followed_id| [follower, followed_id] }
         Follow.import(columns, values, validate: false)
+      end
+
+      private
+
+      # @return [ActiveRecord::Relation<Follow>] any existing follows from the list
+      def existing
+        @existing ||= Follow.where(follower: follower, followed: followed)
       end
     end
   end
