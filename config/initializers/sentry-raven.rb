@@ -16,7 +16,7 @@ module RavenBreadcrumbs
       duration = Benchmark.realtime do
         response = super
       end
-      record_breadcrumb(request, response, duration)
+      raven_record_breadcrumb(request, response, duration)
       response
     end
 
