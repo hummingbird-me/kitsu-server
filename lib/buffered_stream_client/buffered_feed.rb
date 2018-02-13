@@ -35,7 +35,7 @@ class BufferedStreamClient
     # @api getstream-compat
     # @return [Hash] a hash with the execution duration
     def remove_activity(*args)
-      perform_action :unfollow, *args
+      perform_action :remove_activity, *args
     end
 
     # @api getstream-compat
