@@ -13,11 +13,11 @@ class BufferedStreamClient
               group, id = follow['source'].split(':')
               feed = client.feed(group, id)
               target_group, target_id = follow['target'].split(':')
-              feed.follow(target_group, target_id, activity_copy_limit: scrollback)
+              feed.follow(target_group, target_id, scrollback)
             end
           else
             increment_metrics(follows, bulk: true, scrollback: scrollback)
-            client.follow_many(follows, activity_copy_limit: scrollback)
+            client.follow_many(follows, scrollback)
           end
         end
       end
