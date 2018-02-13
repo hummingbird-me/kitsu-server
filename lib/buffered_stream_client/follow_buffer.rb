@@ -16,7 +16,7 @@ class BufferedStreamClient
             end
           else
             increment_metrics(follows, bulk: true, scrollback: scrollback)
-            client.follow_many(*follows, activity_copy_limit: scrollback)
+            client.follow_many(follows, activity_copy_limit: scrollback)
           end
         end
       end
