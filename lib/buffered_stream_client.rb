@@ -26,7 +26,14 @@ class BufferedStreamClient
   end
 
   # @api getstream-compat
-  delegate :update_activities, to: :@feed
+  def update_activities(*args)
+    perform_action :update_activities, *args
+  end
+
+  # @api getstream-compat
+  def update_activity(*args)
+    perform_action :update_activity, *args
+  end
 
   # @api getstream-compat
   # @param follows [Array<Hash>] list of {source:, target:} follows
@@ -72,5 +79,11 @@ class BufferedStreamClient
 
   def activity_buffer_key
     :"_#{object_id}_activities"
+  end
+
+  def perform_action(action, *args)
+    duration do
+      BufferActionWorker.perform_async(nil, nil, action, *args)
+    end
   end
 end
