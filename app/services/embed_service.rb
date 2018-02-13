@@ -13,6 +13,7 @@ class EmbedService
   # List of Embedders to try (matched from top to bottom)
   EMBEDDERS = [
     # Site-specific Solutions
+    KitsuEmbedder,      # kitsu.io
     NicoVideoEmbedder,  # nicovideo.jp
     GiphyMediaEmbedder, # media.giphy.com
     # Embed Standards
