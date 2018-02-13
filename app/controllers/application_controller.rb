@@ -9,8 +9,13 @@ class ApplicationController < JSONAPI::ResourceController
 
   before_action :validate_token!
   around_action :store_user_on_thread
+  after_action :flush_buffered_feeds
 
   force_ssl if Rails.env.production?
+
+  def flush_buffered_feeds
+    Feed::StreamFeed.client.try(:flush_async)
+  end
 
   if Raven.configuration.capture_allowed?
     on_server_error do |error|
