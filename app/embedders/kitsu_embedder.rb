@@ -7,13 +7,14 @@ class KitsuEmbedder < Embedder
 
   def to_h
     {
-      kind: 'link.kitsu',
+      kind: "link.kitsu.#{type.singularize}",
       url: url,
       title: title,
       description: description,
       image: image,
       site: { name: 'Kitsu' },
       kitsu: {
+        type: type.singularize,
         id: subject&.id
       }.compact
     }
