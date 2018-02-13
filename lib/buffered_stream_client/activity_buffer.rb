@@ -2,6 +2,11 @@ class BufferedStreamClient
   class ActivityBuffer < ActionBuffer
     BULK_THRESHOLD = 2
 
+    def push(key, *items)
+      key = key.stream_id if key.respond_to?(:stream_id)
+      super(key, *items)
+    end
+
     def flush(client)
       reset.tap do |queue|
         # Iterate over each feed and submit the activities for it
