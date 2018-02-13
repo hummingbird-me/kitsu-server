@@ -26,7 +26,8 @@ class BufferedStreamClient
     def add_activity(*activities)
       duration do
         activities = Array.wrap(activities).as_json
-        @buffer.activity_buffer.push(@feed, *activities)
+        feed = "#{@group}:#{@id}"
+        @buffer.activity_buffer.push(feed, *activities)
       end
     end
     alias_method :add_activities, :add_activity
