@@ -17,11 +17,7 @@ class Feed
     end
 
     def client
-      if Flipper[:stream_batching].enabled?(User.current)
-        @buffered_client ||= BufferedStreamClient.new(self.class.client)
-      else
-        self.class.client
-      end
+      self.class.client
     end
 
     def activities(*)
@@ -73,7 +69,11 @@ class Feed
     end
 
     def self.client
-      @client ||= StreamRails.client
+      if true || Flipper[:stream_batching].enabled?(User.current)
+        @buffered_client ||= BufferedStreamClient.new(StreamRails.client)
+      else
+        @client ||= StreamRails.client
+      end
     end
 
     def self.instrument(key, extra = {}, &block)
