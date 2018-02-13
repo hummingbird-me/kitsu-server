@@ -12,7 +12,8 @@ class BufferedStreamClient
             follows.each do |follow|
               group, id = follow['source'].split(':')
               feed = client.feed(group, id)
-              feed.follow(follow['target'], activity_copy_limit: scrollback)
+              target_group, target_id = follow['target'].split(':')
+              feed.follow(target_group, target_id, activity_copy_limit: scrollback)
             end
           else
             increment_metrics(follows, bulk: true, scrollback: scrollback)
