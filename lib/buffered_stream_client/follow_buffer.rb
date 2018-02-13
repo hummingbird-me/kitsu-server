@@ -6,6 +6,7 @@ class BufferedStreamClient
       reset.tap do |queue|
         # Iterate over the scrollback sizes
         queue.each do |scrollback, follows|
+          scrollback = scrollback.to_i
           # If there's not many, send them individually to avoid triggering rate limits
           if follows.count <= BULK_THRESHOLD
             increment_metrics(follows, bulk: false, scrollback: scrollback)
