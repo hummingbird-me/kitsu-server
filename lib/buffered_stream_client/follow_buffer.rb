@@ -10,9 +10,9 @@ class BufferedStreamClient
           if follows.count <= BULK_THRESHOLD
             increment_metrics(follows, bulk: false, scrollback: scrollback)
             follows.each do |follow|
-              group, id = follow[:source].split(':')
+              group, id = follow['source'].split(':')
               feed = client.feed(group, id)
-              feed.follow(follow[:target], activity_copy_limit: scrollback)
+              feed.follow(follow['target'], activity_copy_limit: scrollback)
             end
           else
             increment_metrics(follows, bulk: true, scrollback: scrollback)
@@ -28,8 +28,8 @@ class BufferedStreamClient
       Librato.increment('getstream.follow.sync', tags)
       follows.each do |follow|
         Librato.increment('getstream.follow.total', tags: {
-          source_group: follow[:source]&.split(':')&.first,
-          target_group: follow[:target]&.split(':')&.first
+          source_group: follow['source']&.split(':')&.first,
+          target_group: follow['target']&.split(':')&.first
         }.merge(tags))
       end
     end
