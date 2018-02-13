@@ -1,5 +1,5 @@
 class KitsuEmbedder < Embedder
-  KITSU_URL = %r{\Ahttps?://(?:www\.)?kitsu.io/(?<type>[^/]+)/(?<id>[^/]+).*}
+  KITSU_URL = %r{\Ahttps?://(?:www\.|staging\.)?kitsu.io/(?<type>[^/]+)/(?<id>[^/]+).*}
 
   def match?
     KITSU_URL.match(url).present? && subject
@@ -31,10 +31,10 @@ class KitsuEmbedder < Embedder
 
   def subject
     case type
-    when 'users' then User.by_slug(id) || User.find_by(id: id)
-    when 'anime' then Anime.by_slug(id) || Anime.find_by(id: id)
-    when 'manga' then Manga.by_slug(id) || Manga.find_by(id: id)
-    when 'drama' then Drama.by_slug(id) || Drama.find_by(id: id)
+    when 'users' then User.by_slug(id).first || User.find_by(id: id)
+    when 'anime' then Anime.by_slug(id).first || Anime.find_by(id: id)
+    when 'manga' then Manga.by_slug(id).first || Manga.find_by(id: id)
+    when 'drama' then Drama.by_slug(id).first || Drama.find_by(id: id)
     when 'posts' then Post.find_by(id: id)
     when 'comments' then Comment.find_by(id: id)
     end
@@ -60,7 +60,7 @@ class KitsuEmbedder < Embedder
   def image
     case subject
     when User then subject.avatar.url(:medium)
-    when Media then subject.poster.url(:medium)
+    when Media then subject.poster_image.url(:medium)
     when Post, Comment then subject.user.avatar.url(:medium)
     end
   end
