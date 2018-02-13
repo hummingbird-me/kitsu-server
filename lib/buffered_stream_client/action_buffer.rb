@@ -34,7 +34,7 @@ class BufferedStreamClient
     #
     # @return [void]
     def flush_async
-      BufferFlushWorker.perform_async(self.class.name, @queue) unless empty?
+      BufferFlushWorker.perform_async(self.class.name, reset) unless empty?
     end
 
     # Determins if the queue is empty
