@@ -12,7 +12,7 @@ class BufferedStreamClient
     # @param items [Array<Hash>] the items to push into the queue
     # @return [void]
     def push(key, *items)
-      @queue[key] += Array.wrap(items)
+      @queue[key] += Array.wrap(items).flatten
     end
 
     # Return the queued data and then eset the queue to its default (empty) state

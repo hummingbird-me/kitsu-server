@@ -40,7 +40,7 @@ class BufferedStreamClient
   # @param scrollback [Integer] number of past posts to get from each feed
   # @return [Hash] a hash with the execution duration
   def follow_many(follows, scrollback)
-    duration { follow_buffer.push(scrollback, follows) }
+    duration { follow_buffer.push(scrollback, *follows) }
   end
 
   # Asynchronously flush the queues to Sidekiq
