@@ -38,7 +38,8 @@ module Zorro
       # @return [String] the user's about text
       def about
         if details['about']
-          details['about'][0..499]
+          # This insane regex removes all unicode control characters except for \n
+          details['about'][0..499].gsub(/[\p{Cc}&&[^\n]]/u, '')
         else
           ''
         end
