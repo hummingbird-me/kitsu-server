@@ -1,12 +1,12 @@
 # Takes a dirtied LibraryEntry and generates a list of LibraryEvents for the changes
 class LibraryEventService
   # The change values to store in the event
-  CHANGES_FOR_EVENT ||= {
-    rated: %i[rating],
-    progressed: %i[progress reconsume_count volumes_owned time_spent],
-    updated: %i[status reconsume_count],
-    reacted: %i[media_reaction_id],
-    annotated: %i[notes]
+  CHANGES_FOR_EVENT = {
+    rated: %w[rating],
+    progressed: %w[progress reconsume_count volumes_owned time_spent],
+    updated: %w[status reconsume_count],
+    reacted: %w[media_reaction_id],
+    annotated: %w[notes]
   }.freeze
 
   # @param library_entry [LibraryEntry] the dirty LibraryEntry to figure out events for
@@ -51,7 +51,7 @@ class LibraryEventService
   def event_for(kind)
     LibraryEvent.new(
       kind: kind,
-      changed_data: @entry.changes.slice(CHANGES_FOR_EVENT[kind]),
+      changed_data: @entry.changes.slice(*CHANGES_FOR_EVENT[kind]),
       library_entry_id: @entry.id,
       anime_id: @entry.anime_id,
       manga_id: @entry.manga_id,

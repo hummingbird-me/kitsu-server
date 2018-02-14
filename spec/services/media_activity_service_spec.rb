@@ -19,13 +19,6 @@ RSpec.describe MediaActivityService do
     end
   end
 
-  describe '#progress' do
-    it 'returns an activity for the user\'s media feed' do
-      expect(subject.progress(1).feed)
-        .to eq(library_entry.user.profile_feed)
-    end
-  end
-
   describe '#reviewed' do
     let(:review) { build(:review, library_entry: library_entry) }
 
