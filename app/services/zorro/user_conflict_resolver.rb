@@ -11,7 +11,7 @@ module Zorro
     end
 
     def conflict?
-      ao_id.present? && status == :aozora
+      ao_id.present?
     end
 
     def merge_onto(chosen)
