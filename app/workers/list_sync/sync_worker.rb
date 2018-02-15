@@ -5,6 +5,7 @@ module ListSync
     sidekiq_options retry: false, queue: 'soon', debounce: true
 
     def perform(linked_account_id, user_id)
+      return if Rails.env.staging?
       user = User.find(user_id)
       linked_account = LinkedAccount.find(linked_account_id)
       entries = user.library_entries

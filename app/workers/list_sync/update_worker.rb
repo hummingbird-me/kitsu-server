@@ -5,6 +5,7 @@ module ListSync
     sidekiq_options retry: 3, queue: 'soon'
 
     def perform(linked_account_id, library_entry_id)
+      return if Rails.env.staging?
       begin
         linked_account = LinkedAccount.find(linked_account_id)
         library_entry = LibraryEntry.find(library_entry_id)
