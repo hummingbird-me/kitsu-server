@@ -47,6 +47,11 @@ class Character < ApplicationRecord
     names[self[:canonical_name]]
   end
 
+  def name=(value)
+    names['en'] = value
+    self.canonical_name = 'en'
+  end
+
   def slug_candidates
     [
       -> { canonical_name },
