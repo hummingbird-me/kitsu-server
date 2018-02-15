@@ -8,7 +8,7 @@ class MediaFollowService
 
   def create(progress)
     return if ignored?
-    timeline.follow(media_posts_feed)
+    timeline.follow(media_posts_feed, scrollback: 50)
     timeline.update_unit_follows(media, nil, progress)
   end
 
