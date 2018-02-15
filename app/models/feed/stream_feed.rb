@@ -69,11 +69,7 @@ class Feed
     end
 
     def self.client
-      if Flipper[:stream_batching].enabled?(User.current)
-        @buffered_client ||= BufferedStreamClient.new(StreamRails.client)
-      else
-        @client ||= StreamRails.client
-      end
+      @buffered_client ||= BufferedStreamClient.new(StreamRails.client)
     end
 
     def self.instrument(key, extra = {}, &block)
