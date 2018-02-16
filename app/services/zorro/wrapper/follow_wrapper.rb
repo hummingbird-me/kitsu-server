@@ -1,37 +1,33 @@
 module Zorro
   class Wrapper
     class FollowWrapper < Wrapper
-      # @param source [String] Aozora ID of the source user
-      # @param targets [Array<String>] Aozora IDs of the users to follow
-      def initialize(source, targets)
-        @source = source
-        @targets = targets
-      end
-
-      # @return [User] the user who is doing the follow
-      def follower
-        @follower ||= Zorro::Cache.lookup(User, @source)
-      end
-
-      # @return [ActiveRecord::Relation<User>] the users who have been followed
-      def followed
-        @followed ||= Zorro::Cache.lookup(User, @targets)
+      # @param sources [Array<String>] Aozora IDs of the users to follow from
+      # @param targets [Array<String>] Aozora IDs of the users to follow to
+      def initialize(sources, targets)
+        sources = Zorro::Cache.lookup(User, sources)
+        targets = Zorro::Cache.lookup(User, targets)
+        @follows = sources.product(targets)
       end
 
       # Add all the nonexistent follows to the database
       # @return [ActiveRecord::Import::Result] the results of the import
       def save!
-        missing = followed - existing.pluck(:followed_id)
-        columns = %i[follower_id followed_id]
-        values = missing.map { |followed_id| [follower, followed_id] }
-        Follow.import(columns, values, validate: false)
-      end
+        follows = []
+        # Group the follows by source and build up a list of follows based on it
+        @follows.group_by(&:first).each do |source, targets|
+          targets = targets.map { |(_, target)| target }
+          existing = Follow.where(follower: source, followed: targets).pluck(:followed_id)
+          missing = targets - existing
+          follows += missing.map { |target| [source, target] }
+        end
 
-      private
-
-      # @return [ActiveRecord::Relation<Follow>] any existing follows from the list
-      def existing
-        @existing ||= Follow.where(follower: follower, followed: followed)
+        Follow.import(%i[follower_id followed_id], follows, validate: false)
+        follows.each do |(follower_id, followed_id)|
+          Feed::StreamFeed.follow_many([{
+            source: "timeline:#{follower_id}",
+            target: "user:#{followed_id}"
+          }], 50)
+        end
       end
     end
   end
