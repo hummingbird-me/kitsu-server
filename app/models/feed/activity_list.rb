@@ -51,8 +51,9 @@ class Feed
     end
 
     def sfw
-      select do |act|
+      select including: %i[target] do |act|
         throw :remove_group if act[:nsfw]
+        throw :remove_group if act['target'].is_a?(Post) && act['target'].nsfw?
         act[:nsfw] != true
       end
       self
