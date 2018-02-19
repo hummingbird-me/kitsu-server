@@ -3,7 +3,6 @@ class AlgoliaKeyService
     @model = model
     @index = model.algolia_index.safe_constantize
     @token = token
-    @user = token&.resource_owner
   end
 
   def key
@@ -16,8 +15,8 @@ class AlgoliaKeyService
 
   def scope
     return @scope if @scope
-    policy = PolicyFinder.new(@model).policy
-    @scope = policy::AlgoliaScope.new(@user).resolve
+    policy = Pundit::PolicyFinder.new(@model).policy
+    @scope = policy::AlgoliaScope.new(@token).resolve
   rescue NameError
     nil
   end
