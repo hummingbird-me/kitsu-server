@@ -33,6 +33,11 @@ class Block < ApplicationRecord
     errors.add(:blocked, 'You cannot block moderators.') if blocked.title == 'Mod'
   end
 
+  validate :not_blocking_self
+  def not_blocking_self
+    errors.add(:blocked, 'You cannot block yourself.') if blocked == user
+  end
+
   def self.hidden_for(user)
     return [] if user.nil?
     user = user.id if user.respond_to?(:id)
