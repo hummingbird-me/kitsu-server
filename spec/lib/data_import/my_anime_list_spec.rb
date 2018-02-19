@@ -93,7 +93,7 @@ RSpec.describe DataImport::MyAnimeList do
       end
       it 'should have assigned attributes onto the yielded object' do
         subject.get_character('422') do |media|
-          expect(media.name).to eq('Guts')
+          expect(media.names['en']).to eq('Guts')
         end
         subject.run
       end

@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'rails_helper'
 require 'data_import/my_anime_list/extractor/character'
 
@@ -10,14 +11,13 @@ RSpec.describe DataImport::MyAnimeList::Extractor::Character do
   # don't need to pass in 422/Guts
   subject { described_class.new(guts_character) }
 
-  describe '#name' do
+  describe '#names' do
     it 'should get english character name' do
-      expect(subject.name).to eq('Guts')
+      expect(subject.names['en']).to eq('Guts')
     end
 
     it 'should get japanese character name' do
-      # 'Nuck needs to change character name from string to hstore'
-      # expect(subject.name).to eq('ガッツ')
+      expect(subject.names['ja_jp']).to eq('ガッツ')
     end
   end
 
