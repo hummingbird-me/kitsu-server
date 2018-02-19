@@ -20,6 +20,10 @@ module DataImport
           { 'en' => english, 'ja_jp' => japanese }
         end
 
+        def canonical_name
+          'en'
+        end
+
         def image
           # line 319 in guts-character.html
           dom.at_css('#content > table > tr > td:first-child div a img')
@@ -79,7 +83,7 @@ module DataImport
         end
 
         def to_h
-          %i[names image description]
+          %i[names canonical_name image description]
             .map { |k|
               [k, send(k)]
             }.to_h
