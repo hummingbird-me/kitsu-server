@@ -25,6 +25,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Character < ApplicationRecord
+  include LocalizableModel
   extend FriendlyId
   friendly_id :slug_candidates, use: %i[slugged finders history]
 
@@ -33,7 +34,7 @@ class Character < ApplicationRecord
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]
   }
-  validates :name, presence: true
+  validates :canonical_name, presence: true
   validates :primary_media, polymorphism: { type: Media }, allow_blank: true
 
   belongs_to :primary_media, polymorphic: true
@@ -42,10 +43,19 @@ class Character < ApplicationRecord
   has_many :manga_characters, dependent: :destroy
   has_many :drama_characters, dependent: :destroy
 
+  def canonical_name
+    names[self[:canonical_name]]
+  end
+
+  def name=(value)
+    names['en'] = value
+    self.canonical_name = 'en'
+  end
+
   def slug_candidates
     [
-      -> { name },
-      (-> { [primary_media.canonical_title, name] } if primary_media)
+      -> { canonical_name },
+      (-> { [primary_media.canonical_title, canonical_name] } if primary_media)
     ].compact
   end
 end

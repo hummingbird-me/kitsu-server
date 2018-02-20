@@ -32,5 +32,4 @@ RSpec.describe Character, type: :model do
   it { should have_many(:anime_characters).dependent(:destroy) }
   it { should have_many(:manga_characters).dependent(:destroy) }
   it { should have_many(:drama_characters).dependent(:destroy) }
-  it { should validate_presence_of(:name) }
 end

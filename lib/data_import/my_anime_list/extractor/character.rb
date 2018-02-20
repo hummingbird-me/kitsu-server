@@ -10,12 +10,18 @@ module DataImport
           @dom = Nokogiri::HTML(html)
         end
 
-        def name
+        def names
           # line 473 in guts-character.html
           result = dom.css('#horiznav_nav ~ .normal_header').first.children
 
           english = result.first.content.strip
-          # japanese = result.at_css('small').content.strip
+          japanese = result.at_css('small').content.strip[1..-2]
+
+          { 'en' => english, 'ja_jp' => japanese }
+        end
+
+        def canonical_name
+          'en'
         end
 
         def image
@@ -77,7 +83,7 @@ module DataImport
         end
 
         def to_h
-          %i[name image description]
+          %i[names canonical_name image description]
             .map { |k|
               [k, send(k)]
             }.to_h
