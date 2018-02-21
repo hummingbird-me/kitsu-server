@@ -1,5 +1,4 @@
 class TimelineFeed < Feed
-  include MediaUpdatesFilterable
   include UnsuffixedAggregatedFeed
 
   def setup!
