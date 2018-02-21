@@ -32,6 +32,7 @@ module Zorro
       when :kitsu
         # Just do nothing, pretty much.  Their UGC will get imported by the bulk stuff
         @user.update!(status: :registered)
+        Zorro::FollowImportWorker.perform_async(user_id)
         @user
       end
     end
