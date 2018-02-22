@@ -17,7 +17,7 @@ class Feed
   # @param scrollback [Integer] the number of historical activities to import
   def follow(target, scrollback: 100)
     target = target.write_target if target.respond_to?(:write_target)
-    client.feed(*read_target).follow(target, scrollback)
+    read_feed.follow(*target, activity_copy_limit: scrollback)
   end
 
   # Follow multiple Feeds, optionally with a scrollback.
@@ -32,7 +32,7 @@ class Feed
   # @param keep_history [Boolean] whether to keep the history from the follow
   def unfollow(target, keep_history: false)
     target = target.write_target if target.respond_to?(:write_target)
-    client.feed(*read_target).unfollow(target, keep_history: keep_history)
+    read_feed.unfollow(*target, keep_history: keep_history)
   end
 
   # @param target [Array<Feed|String|#write_target>] the target feed to follow
@@ -59,7 +59,7 @@ class Feed
   end
 
   def setup!
-    follow_many(auto_follows, 100)
+    follow_many(auto_follows, scrollback: 100)
   end
 
   def self.client
