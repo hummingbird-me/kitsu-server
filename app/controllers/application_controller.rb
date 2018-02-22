@@ -16,7 +16,7 @@ class ApplicationController < JSONAPI::ResourceController
   def flush_buffered_feeds
     yield
   ensure
-    Feed::StreamFeed.client.try(:flush_async)
+    Feed.client.try(:flush_async)
   end
 
   if Raven.configuration.capture_allowed?
