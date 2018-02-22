@@ -83,10 +83,6 @@ class Feed
     client.feed(*read_target)
   end
 
-  def self.stream_id_for(obj)
-    "#{obj.class.name}:#{obj.id}"
-  end
-
   private
 
   def auto_follows
