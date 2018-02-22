@@ -1,8 +1,7 @@
 class Feed
   class ActivityList
     class Fetcher
-      attr_reader :stream_options, :fetcher_options, :unread_count,
-        :unseen_count
+      attr_reader :stream_options, :fetcher_options, :unread_count, :unseen_count
 
       def initialize(stream_options: {}, fetcher_options: {})
         @stream_options = stream_options.deep_symbolize_keys
@@ -36,7 +35,7 @@ class Feed
             # Generate the options
             opts = opts.merge(next_page)
             # Grab the page
-            page = feed.stream_feed.get(opts)['results']
+            page = feed.get(opts)['results']
             # Record the next page info
             next_page = get_next_page(page)
             # If we got less than we asked for, we've hit the final page
@@ -92,7 +91,7 @@ class Feed
         opts = stream_options.merge(@next_page)
         opts = opts.merge(limit: page_size)
         # Grab the page
-        res = feed.stream_feed.get(opts)
+        res = feed.get(opts)
         page = res['results']
         # Store the counts
         @unread_count = res['unread']

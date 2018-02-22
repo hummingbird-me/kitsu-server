@@ -68,7 +68,7 @@ class Feed
       # Run it through the StreamRails::Enrich process
       def enrich(activities, includes)
         enricher = StreamRails::Enrich.new(includes)
-        if opts[:aggregated]
+        if activities.first.key?('activities')
           enricher.enrich_aggregated_activities(activities)
         else
           enricher.enrich_activities(activities)

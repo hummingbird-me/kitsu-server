@@ -5,7 +5,6 @@ class FeedsController < ApplicationController
 
   def show
     response_json = stringify_activities(query.list)
-    response.headers['X-Feed-Reason'] = query.list.termination_reason
     render_jsonapi response_json
   end
 
@@ -38,7 +37,7 @@ class FeedsController < ApplicationController
     @serializer ||= FeedSerializerService.new(
       list,
       including: params[:include]&.split(','),
-      stream_feed: underlying_split_feed,
+      feed: feed,
       # fields: params[:fields]&.split(','),
       context: context,
       base_url: request.url
@@ -54,11 +53,6 @@ class FeedsController < ApplicationController
   end
 
   delegate :feed, to: :query
-
-  def underlying_split_feed
-    filter = params.dig(:filter, :kind)
-    query.split_feed.stream_feed_for(filter: filter)
-  end
 
   def authorize_feed!
     unless feed_visible?
@@ -91,8 +85,7 @@ class FeedsController < ApplicationController
       group = Group.find_by(id: params[:id])
       group && show?(group)
     when 'site_announcements', 'notifications', 'timeline', 'group_timeline'
-      user = User.find_by(id: params[:id])
-      user == current_user&.resource_owner
+      params[:id].to_i == current_user&.resource_owner_id
     when 'global' then true
     when 'reports'
       user = current_user&.resource_owner

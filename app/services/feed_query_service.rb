@@ -11,47 +11,24 @@ class FeedQueryService
 
   def list
     return @list if @list
-    list = if split_feeds?
-             feed.activities
-           else
-             feed.activities(filter: kind_filter)
-           end
+    list = feed.activities
     list = list.page(id_lt: cursor) if cursor
     list = list.per(limit) if limit
     list = list.where_id(*id_query) if id_query
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
     list = list.blocking(blocked)
-    if kind_select && !split_feeds?
-      list = list.select(kind_select[:ratio], &kind_select[:proc])
-    end
+    list = list.select(kind_select[:ratio], &kind_select[:proc]) if kind_select
     @list = list
   end
 
   def feed
-    if split_feeds?
-      return @feed if @feed
-      feed_name = params[:group].sub(/_aggr\z/, '')
-      @feed = Feed.class_for(feed_name).new(params[:id])
-    else
-      # Just use the basic SreamFeed class for the old system
-      @feed ||= Feed::StreamFeed.new(params[:group], params[:id])
-    end
-  end
-
-  def split_feed
-    return @split_feed if @split_feed
-    feed_name = params[:group].sub(/_aggr\z/, '')
-    @split_feed = Feed.class_for(feed_name).new(params[:id])
+    @feed ||= FeedRouter.route(params[:group], params[:id])
   end
 
   private
 
   delegate :sfw_filter?, to: :user, allow_nil: true
-
-  def split_feeds?
-    params.key?(:_split_feeds)
-  end
 
   def cursor
     params.dig(:page, :cursor)
