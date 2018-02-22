@@ -122,7 +122,7 @@ RSpec.describe Feed::ActivityList, type: :model do
     subject { list.limit(50) }
 
     it 'should get the activities using the query and read the results' do
-      expect(feed).to receive(:get).at_least(:once).and_return('results' => [{}])
+      expect(feed).to receive(:get).at_least(:once).and_return('results' => [])
       expect(subject.to_a).to eq([])
     end
 
