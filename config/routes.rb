@@ -41,7 +41,7 @@ Rails.application.routes.draw do
       patch '/library-entries/_bulk', to: 'library_entries#bulk_update'
       put '/library-entries/_bulk', to: 'library_entries#bulk_update'
       jsonapi_resources :library_entries
-
+      jsonapi_resources :library_events
       jsonapi_resources :favorites
 
       ### AMA
