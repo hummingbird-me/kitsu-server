@@ -14,7 +14,7 @@ class Feed
       json = to_h.transform_values { |val| val.try(:stream_id) || val }
       json.symbolize_keys!
       json[:time] = json[:time]&.strftime('%Y-%m-%dT%H:%M:%S%:z')
-      json[:to] = json[:to]&.map { |val| val.try(:write_target) || val }
+      json[:to] = json[:to]&.map { |val| val.try(:write_target).join(':') || val }
       json.compact
     end
 

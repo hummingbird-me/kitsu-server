@@ -17,7 +17,7 @@ RSpec.describe AnimeTimelineFeed do
 
   describe '.global' do
     it 'should return the global feed for Anime' do
-      expect(described_class.global.stream_id).to eq('interest_global:Anime')
+      expect(described_class.global.read_target).to eq(%w[interest_global Anime])
     end
   end
 end

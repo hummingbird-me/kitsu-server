@@ -4,7 +4,7 @@ class GetstreamEventWorker
 
   def perform(feed, event, activity)
     group, id = feed.split(':')
-    feed = Feed::StreamFeed.new(group, id)
+    feed = Feed.new(group, id)
 
     case event
     when 'new'

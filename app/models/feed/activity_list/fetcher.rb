@@ -92,16 +92,16 @@ class Feed
         opts = opts.merge(limit: page_size)
         # Grab the page
         res = feed.get(opts)
-        page = res['results']
+        results = res['results']
         # Store the counts
         @unread_count = res['unread']
         @unseen_count = res['unseen']
         # Record the next page info
-        @next_page = get_next_page(page)
+        @next_page = get_next_page(results)
         # If we got less than we asked for, we've hit the final page
-        @next_page = nil if page.count < page_size
+        @next_page = nil if results.count < page_size
         # Filter the page and tack it onto the list
-        @data += Page.new(page, fetcher_options).to_a
+        @data += Page.new(results, fetcher_options).to_a
       end
 
       # Gets the id_lt/id_gt of the next page, for a given page of data

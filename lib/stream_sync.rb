@@ -195,7 +195,7 @@ module StreamSync
     follows.in_groups_of(800, false).each do |group|
       print '.'
       sleep 0.1
-      Feed::StreamFeed.follow_many(group, scrollback)
+      Feed.client.follow_many(group, scrollback)
     end
     print "\n"
   end

@@ -54,8 +54,14 @@ class Feed
 
   # Remove an activity from the feed
   # @param activity [#as_json] the JSON of the activity to remove from the feed
-  def remove_activity(activity)
-    write_feed.remove_activity(activity.as_json)
+  def remove_activity(activity_or_id, foreign_id: false)
+    if foreign_id
+      write_feed.remove_activity(activity_or_id, foreign_id: true)
+    elsif activity.respond_to(:id)
+      write_feed.remove_activity(activity_or_id.id)
+    else
+      write_feed.remove_activity(activity_or_id)
+    end
   end
 
   def setup!
@@ -67,6 +73,8 @@ class Feed
   end
   delegate :client, to: :class
   delegate :readonly_token, to: :read_feed
+
+  delegate :get, to: :read_feed
 
   # @return [Array<String,String>] the default feed target
   def default_target
@@ -81,6 +89,10 @@ class Feed
 
   def read_feed
     client.feed(*read_target)
+  end
+
+  def ==(other)
+    other.class == self.class && other.id == id
   end
 
   private

@@ -23,7 +23,7 @@ module Zorro
 
         Follow.import(%i[follower_id followed_id], follows, validate: false)
         follows.each do |(follower_id, followed_id)|
-          Feed::StreamFeed.follow_many([{
+          Feed.client.follow_many([{
             source: "timeline:#{follower_id}",
             target: "user:#{followed_id}"
           }], 50)

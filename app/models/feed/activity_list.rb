@@ -1,6 +1,8 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_size, :including, :limit_ratio
+    attr_accessor :data, :feed, :including, :limit_ratio
+
+    delegate :client, to: :feed
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
@@ -101,8 +103,7 @@ class Feed
     end
 
     def find(id)
-      # Read from the stream_feed instead of the feed, to apply filters
-      act = read_feed.get(id_lte: id, limit: 1)['results'].first
+      act = feed.get(id_lte: id, limit: 1)['results'].first
       # If we got an ActivityGroup, get the first Activity in it
       act = act['activities'].first if act.key?('activities')
 
@@ -118,7 +119,7 @@ class Feed
 
     def add(activity)
       # Add to the Feed directly, converting the activity to JSON
-      res = write_feed.add_activity(activity.as_json)
+      res = feed.add_activity(activity.as_json)
       # Symbolize the response
       res = res.symbolize_keys.except(:duration)
       # Turn it into an Activity object
@@ -130,7 +131,7 @@ class Feed
     #
     # @attr [Feed::Activity,#as_json] activity The activity to add to the feed
     def update(activity)
-      write_feed.update_activity(activity.as_json)
+      client.update_activity(activity.as_json)
     end
 
     # Destroy an activity by foreign_id, uuid, or Activity instance
@@ -140,10 +141,10 @@ class Feed
     # @attr [String] uuid The uuid of an activity to remove
     def destroy(activity = nil, foreign_id: nil, uuid: nil)
       if uuid
-        write_feed.remove_activity(activity)
+        feed.remove_activity(activity)
       else
         foreign_id ||= activity.foreign_id
-        write_feed.remove_activity(foreign_id, foreign_id: true)
+        feed.remove_activity(foreign_id, foreign_id: true)
       end
     end
 
@@ -198,7 +199,7 @@ class Feed
         maps: @maps,
         limit_ratio: @limit_ratio,
         includes: @including,
-        feed: read_feed
+        feed: feed
       }
     end
   end
