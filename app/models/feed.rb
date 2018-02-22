@@ -4,10 +4,6 @@ require 'buffered_stream_client'
 # what underlying feeds there are (some "feeds" are actually a group of 6+
 # feeds!)
 class Feed
-  # Feed::DSL provides us with simple, declarative means of building a Feed
-  # subclass.
-  include DSL
-
   attr_reader :id
 
   # Create a new instance of this feed for a given ID.  If given multiple
