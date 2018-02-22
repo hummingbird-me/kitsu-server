@@ -1,7 +1,8 @@
 class Feed
   class ActivityList
-    attr_accessor :data, :feed, :page_number, :page_size, :including,
-      :limit_ratio, :termination_reason, :filter, :feed_type
+    attr_accessor :data, :feed, :including, :limit_ratio
+
+    delegate :client, to: :feed
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
       define_method(key) do |value|
@@ -13,35 +14,19 @@ class Feed
     def initialize(feed, data = {})
       @feed = feed
       @data = data.with_indifferent_access
-      # TODO: :target, :actor and :object are getting forced in by
-      # the subreference-enrichment branch of stream-rails.
-      # We need a PR for stream-rails to make it optional as it is
-      # in their master branch. Better yet, get subreference enrichment
-      # in master.
       @including = %w[target actor object]
       @maps = []
       @slow_selects = []
       @fast_selects = []
       @limit_ratio = 1.0
-      @page_size = @data[:limit] ||= 25
-      @page_number = 1
     end
 
-    def page(page_number = nil, id_lt: nil)
-      if page_number
-        @page_number = page_number
-        update_pagination!
-        self
-      elsif id_lt
-        where_id(:lt, id_lt)
-      else
-        raise ArgumentError, 'Must provide an offset or id_lt'
-      end
+    def page(id_lt:)
+      where_id(:lt, id_lt)
     end
 
     def per(page_size)
-      @page_size = page_size
-      update_pagination!
+      data[:limit] = page_size
       self
     end
 
@@ -51,17 +36,20 @@ class Feed
     end
 
     def sfw
-      select including: %i[target] do |act|
+      select do |act|
         throw :remove_group if act['nsfw']
+        !act['nsfw']
+      end
+      # Handle NSFW posts when the post activity isn't in the group
+      select including: %i[target] do |act|
         throw :remove_group if act['target'].is_a?(Post) && act['target'].nsfw?
-        act[:nsfw] != true
+        !act['nsfw']
       end
       self
     end
 
-    def blocking(users)
-      blocked = Set.new(users)
-      # TODO: merge these
+    def blocking(user_ids)
+      blocked = Set.new(user_ids)
       select do |act|
         user_id = act['actor'].split(':')[1].to_i
         will_block = blocked.include?(user_id)
@@ -104,12 +92,6 @@ class Feed
       self
     end
 
-    def update_pagination!
-      return unless page_size && page_number
-      data[:limit] = page_size
-      data[:offset] = (page_number - 1) * page_size
-    end
-
     def where_id(operator, id)
       data["id_#{operator}"] = id
       self
@@ -121,8 +103,7 @@ class Feed
     end
 
     def find(id)
-      # Read from the stream_feed instead of the feed, to apply filters
-      act = stream_feed.get(id_lte: id, limit: 1)['results'].first
+      act = feed.get(id_lte: id, limit: 1)['results'].first
       # If we got an ActivityGroup, get the first Activity in it
       act = act['activities'].first if act.key?('activities')
 
@@ -134,11 +115,6 @@ class Feed
       enriched_activity = enricher.enrich_activities([act]).first
       # Wrap it
       Feed::Activity.new(feed, enriched_activity)
-    end
-
-    def find_group(id)
-      group = stream_feed.get(id_lte: id, limit: 1)['results'].first
-      Feed::ActivityGroup.new(feed, group)
     end
 
     def add(activity)
@@ -155,7 +131,7 @@ class Feed
     #
     # @attr [Feed::Activity,#as_json] activity The activity to add to the feed
     def update(activity)
-      Feed::StreamFeed.client.update_activity(activity.as_json)
+      client.update_activity(activity.as_json)
     end
 
     # Destroy an activity by foreign_id, uuid, or Activity instance
@@ -167,29 +143,18 @@ class Feed
       if uuid
         feed.remove_activity(activity)
       else
-        foreign_id = Feed.get_stream_id(foreign_id || activity.foreign_id)
+        foreign_id ||= activity.foreign_id
         feed.remove_activity(foreign_id, foreign_id: true)
       end
     end
 
-    # @attr [Symbol] filter_name The name of the filter to apply when reading
-    #                            the feed.
-    def filter(filter_name)
-      @filter = filter_name
-      self
-    end
-
-    # @attr [Symbol] feed_type The type of underlying feed to use when reading
-    #                          the feed.
-    def with_type(feed_type)
-      @feed_type = feed_type
-      self
-    end
-
-    # @attr [Float] ratio The expected percentage of posts that will be matched
-    #                     by this selector
-    # @attr [Array<String>] including The attributes which will need to be
-    #                                 enriched for this select to work
+    # Adds a filter step to the ActivityList instance.  If you pass an `including:` value, this will
+    # be applied after enrichment, but if you leave it out the execution occurs pre-enrichment,
+    # which should be significantly faster, as we skip enrichment entirely for activities which
+    # don't match this select.
+    # @param ratio [Float] The expected percentage of posts that will be matched by this selector
+    # @param including [Array<String>] The attributes which will need to be enriched for this select
+    # @return self
     def select(ratio = 1.0, including: nil, &block)
       @limit_ratio *= ratio
       if including
@@ -201,6 +166,8 @@ class Feed
       self
     end
 
+    # Adds a transformation to be applied over each Activity returned by the ActivityList
+    # @return self
     def map(&block)
       @maps << block
       self
@@ -213,11 +180,10 @@ class Feed
     delegate :unread_count, to: :fetcher
     delegate :unseen_count, to: :fetcher
 
-    private
+    delegate :read_feed, to: :feed
+    delegate :write_feed, to: :feed
 
-    def stream_feed
-      @stream_feed ||= feed.stream_feed_for(filter: @filter, type: @feed_type)
-    end
+    private
 
     def fetcher
       @fetcher ||= Fetcher.new(
@@ -233,8 +199,7 @@ class Feed
         maps: @maps,
         limit_ratio: @limit_ratio,
         includes: @including,
-        feed: stream_feed,
-        aggregated: (feed_type == :aggregated)
+        feed: feed
       }
     end
   end

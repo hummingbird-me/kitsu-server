@@ -5,7 +5,7 @@ module Sidekiq
         def call(*)
           yield
         ensure
-          Feed::StreamFeed.client.try(:flush_async)
+          Feed.client.try(:flush_async)
         end
       end
     end

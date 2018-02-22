@@ -1,5 +1,11 @@
 class ProfileFeed < Feed
-  include MediaUpdatesFilterable
   include FanoutOptional
-  feed_name 'user'
+
+  def write_target
+    ['user', id]
+  end
+
+  def read_target
+    ['user_aggr', id]
+  end
 end

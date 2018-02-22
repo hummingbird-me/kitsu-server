@@ -374,7 +374,6 @@ class User < ApplicationRecord
     site_announcements_feed.setup!
     AnimeTimelineFeed.new(id).setup!
     MangaTimelineFeed.new(id).setup!
-    DramaTimelineFeed.new(id).setup!
 
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group: Group.kitsu) if Group.kitsu

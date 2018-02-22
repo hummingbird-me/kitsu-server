@@ -16,6 +16,7 @@ class Feed
       # Collapse the waveform, apply the processing to the data
       def to_a
         res = data
+        return [] unless data
         res = apply_selects(res, opts[:fast_selects] || [])
         res = strip_unused(res)
         unless opts[:includes].blank?
@@ -68,7 +69,7 @@ class Feed
       # Run it through the StreamRails::Enrich process
       def enrich(activities, includes)
         enricher = StreamRails::Enrich.new(includes)
-        if opts[:aggregated]
+        if activities.first&.key?('activities')
           enricher.enrich_aggregated_activities(activities)
         else
           enricher.enrich_activities(activities)

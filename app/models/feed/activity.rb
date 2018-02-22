@@ -11,22 +11,10 @@ class Feed
     end
 
     def as_json(_options = {})
-      json = to_h.transform_values { |val| Feed.get_stream_id(val) }
+      json = to_h.transform_values { |val| val.try(:stream_id) || val }
       json.symbolize_keys!
       json[:time] = json[:time]&.strftime('%Y-%m-%dT%H:%M:%S%:z')
-      json[:to] = json[:to]&.compact&.flat_map do |val|
-        res = []
-        # Base Feed
-        res << val.stream_activity_target if val.respond_to?(:stream_activity_target)
-        # Sub-Feeds
-        if val.respond_to?(:stream_activity_targets_for)
-          res += val.stream_activity_targets_for(self)
-        end
-        # Fallback for non-Feed values passed in
-        res << val if res.empty?
-        res
-      end
-      json[:to] = json[:to]&.map { |val| Feed.get_stream_id(val) }
+      json[:to] = json[:to]&.map { |val| val.try(:write_target).join(':') || val }
       json.compact
     end
 
@@ -53,10 +41,6 @@ class Feed
       else
         feed
       end
-    end
-
-    def group
-      @group ||= feed.activities.find_group_for(id)
     end
 
     def create

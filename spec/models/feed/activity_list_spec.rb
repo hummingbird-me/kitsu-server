@@ -1,18 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Feed::ActivityList, type: :model do
-  let(:feed_class) { Class.new(Feed) { feed_name 'timeline' } }
-  let(:feed) { feed_class.new('1') }
+  class TestFeed < Feed; end
+  let(:feed) { TestFeed.new('1') }
   let(:list) { Feed::ActivityList.new(feed) }
   subject { list }
 
   describe '#page' do
-    context 'with a page number' do
-      subject { list.page(1) }
-      it 'should set the page_number' do
-        expect(subject.page_number).to eq(1)
-      end
-    end
     context 'with an id_lt' do
       subject { list.page(id_lt: '12345') }
       it 'should set the id_lt on the query' do
@@ -23,16 +17,6 @@ RSpec.describe Feed::ActivityList, type: :model do
 
   describe '#per' do
     subject { list.per(10) }
-    it 'should set the page_size attribute' do
-      expect(subject.page_size).to eq(10)
-    end
-  end
-
-  describe 'combining #per and #page' do
-    subject { list.per(10).page(5) }
-    it 'should set the offset in the query' do
-      expect(subject.data[:offset]).to eq(40)
-    end
     it 'should set the limit in the query' do
       expect(subject.data[:limit]).to eq(10)
     end
@@ -68,9 +52,8 @@ RSpec.describe Feed::ActivityList, type: :model do
   describe '#add' do
     let(:activity) { Feed::Activity.new(subject) }
     it 'should tell Stream to add the activity by JSON' do
-      expect(subject.feed).to receive(:add_activity)
-        .with(Hash).once.and_return({})
-      subject.add(activity)
+      expect(feed).to receive(:add_activity).with(Hash).once.and_return({})
+      list.add(activity)
     end
   end
 
@@ -79,7 +62,7 @@ RSpec.describe Feed::ActivityList, type: :model do
     before { activity }
     it 'should tell Stream to update the activity by JSON' do
       client = double('Stream::Client')
-      allow(Feed::StreamFeed).to receive(:client).and_return(client)
+      allow(Feed).to receive(:client).and_return(client)
       expect(client).to receive(:update_activity).with(Hash).once
       subject.update(activity)
     end
@@ -89,18 +72,15 @@ RSpec.describe Feed::ActivityList, type: :model do
     context 'with string foreign_id' do
       let(:activity) { Feed::Activity.new(subject, foreign_id: 'id') }
       it 'should tell Stream to remove the activity by ID' do
-        expect(subject.feed.stream_feed).to receive(:remove_activity)
-          .with('id', foreign_id: true).once
+        expect(feed).to receive(:remove_activity).with('id', foreign_id: true).once
         subject.destroy(activity)
       end
     end
 
     context 'with object foreign_id' do
-      let(:object) { OpenStruct.new(stream_id: 'id') }
-      let(:activity) { Feed::Activity.new(subject, foreign_id: object) }
-      it 'should tell Stream to remove the activity by the #stream_id' do
-        expect(subject.feed.stream_feed).to receive(:remove_activity)
-          .with('id', foreign_id: true).once
+      let(:activity) { Feed::Activity.new(subject, foreign_id: 'Anime:17') }
+      it 'should tell Stream to remove the activity' do
+        expect(feed).to receive(:remove_activity).with('Anime:17', foreign_id: true).once
         subject.destroy(activity)
       end
     end
@@ -112,8 +92,7 @@ RSpec.describe Feed::ActivityList, type: :model do
           object: 'Post:1',
           verb: 'test'
         ).create
-        expect(subject.feed.stream_feed).to receive(:remove_activity)
-          .with(activity.id)
+        expect(feed).to receive(:remove_activity).with(activity.id)
         subject.destroy(activity.id, uuid: true)
       end
     end
@@ -129,7 +108,7 @@ RSpec.describe Feed::ActivityList, type: :model do
     let(:act) { subject.new(attrs) }
 
     before do
-      expect(subject.send(:stream_feed)).to receive(:get)
+      expect(feed).to receive(:get)
         .with(include(id_lte: attrs['id'], limit: 1))
         .and_return('results' => [attrs])
     end
@@ -143,22 +122,13 @@ RSpec.describe Feed::ActivityList, type: :model do
     subject { list.limit(50) }
 
     it 'should get the activities using the query and read the results' do
-      expect(subject.send(:stream_feed)).to receive(:get).at_least(:once)
-        .and_return('results' => [])
+      expect(feed).to receive(:get).at_least(:once).and_return('results' => [])
       expect(subject.to_a).to eq([])
     end
 
     context 'for an aggregated feed' do
-      let(:feed_class) do
-        Class.new(Feed) do
-          feed_name 'timeline'
-          feed_type :aggregated
-        end
-      end
-      subject { Feed::ActivityList.new(feed_class.new('1')) }
-
       it 'should return an Array of ActivityGroup instances' do
-        expect(subject.send(:stream_feed)).to receive(:get).at_least(:once)
+        expect(feed).to receive(:get).at_least(:once)
           .and_return(
             'results' => [
               {
@@ -191,7 +161,7 @@ RSpec.describe Feed::ActivityList, type: :model do
         end
 
         it 'should return the first activity of each group' do
-          allow(subject.send(:stream_feed)).to receive(:get)
+          allow(feed).to receive(:get)
             .and_return(
               'results' => [
                 {
@@ -213,9 +183,7 @@ RSpec.describe Feed::ActivityList, type: :model do
               ]
             )
           expect(subject.to_a)
-            .to all(have_attributes(
-                      activities: [an_instance_of(Feed::Activity)]
-            ))
+            .to all(have_attributes(activities: [an_instance_of(Feed::Activity)]))
         end
       end
 
@@ -239,7 +207,7 @@ RSpec.describe Feed::ActivityList, type: :model do
         end
 
         it 'should return all the activities of each group' do
-          allow(subject.send(:stream_feed)).to receive(:get)
+          allow(feed).to receive(:get)
             .and_return(
               'results' => [
                 {
@@ -266,17 +234,8 @@ RSpec.describe Feed::ActivityList, type: :model do
     end
 
     context 'for a flat feed' do
-      let(:feed_class) do
-        Class.new(Feed) do
-          feed_name 'timeline'
-          feed_type :flat
-        end
-      end
-      subject { Feed::ActivityList.new(feed_class.new('1')) }
-
       it 'should return an Array of Activity instances' do
-        expect(subject.send(:stream_feed)).to receive(:get).at_least(:once)
-          .and_return('results' => [{}, {}])
+        expect(feed).to receive(:get).at_least(:once).and_return('results' => [{}, {}])
         expect(subject.to_a).to all(be_a(Feed::Activity))
       end
     end

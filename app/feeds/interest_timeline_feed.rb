@@ -5,8 +5,6 @@
 #   2. Posts discussing things in your library (via MediaFollow)
 #   3. Posts discussing units you've completed (via Episode/ChapterFeed)
 class InterestTimelineFeed < Feed
-  include UnsuffixedAggregatedFeed
-
   def self.for_interest(interest)
     "#{interest.classify}TimelineFeed".safe_constantize if interest
   end
@@ -20,8 +18,14 @@ class InterestTimelineFeed < Feed
     global_for(media)
   end
 
-  def default_auto_follows
-    global_follow = { source: stream_feed, target: self.class.global }
+  def default_target
+    ['interest_timeline', id]
+  end
+  alias_method :write_target, :default_target
+  alias_method :read_target, :default_target
+
+  def auto_follows
+    global_follow = { source: read_feed, target: self.class.global.write_feed }
     [global_follow, *super]
   end
 

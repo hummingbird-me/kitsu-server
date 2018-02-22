@@ -39,13 +39,12 @@ class FeedSerializerService
   attr_reader :activity_list, :including, :fields, :context, :stream_feed,
     :base_url
 
-  def initialize(list, including: nil, fields: nil, context: nil, stream_feed:,
-    base_url:)
+  def initialize(list, including: nil, fields: nil, context: nil, feed:, base_url:)
     @including = including || []
     @fields = fields || {}
     @context = context || {}
     @base_url = base_url
-    @stream_feed = stream_feed
+    @feed = feed
     @activity_list = list.includes(stream_enrichment_fields)
   end
 
@@ -62,7 +61,7 @@ class FeedSerializerService
   end
 
   def including
-    if feed.aggregated?
+    if activities.first['activities']
       @including.map { |inc| "activities.#{inc}" } + ['activities']
     else
       @including
@@ -72,9 +71,9 @@ class FeedSerializerService
   def meta
     {
       feed: {
-        group: stream_feed.group,
-        id: stream_feed.id,
-        token: stream_feed.readonly_token
+        group: feed.read_target[0],
+        id: feed.read_target[1],
+        token: feed.readonly_token
       },
       readonlyToken: activity_list.feed.readonly_token,
       unseenCount: activity_list.unseen_count,
@@ -103,12 +102,11 @@ class FeedSerializerService
   end
 
   def serializer
-    @serializer ||= FeedSerializer.new(resource_class, include: including,
-                                                       fields: fields)
+    @serializer ||= FeedSerializer.new(resource_class, include: including, fields: fields)
   end
 
   def resource_class
-    if feed.aggregated?
+    if activities.first['activities']
       ActivityGroupResource
     else
       ActivityResource
