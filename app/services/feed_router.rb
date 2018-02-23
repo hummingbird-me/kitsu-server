@@ -9,8 +9,8 @@ class FeedRouter
       when /Manga-(\d+)/ then MangaFeed.new($1)
       end
     # Media Unit Pages
-    when 'episode' then EpisodeFeed.new(id)
-    when 'chapter' then ChapterFeed.new(id)
+    when 'episode', 'episode_aggr' then EpisodeFeed.new(id)
+    when 'chapter', 'chapter_aggr' then ChapterFeed.new(id)
 
     # Timelines
     when 'global' then GlobalFeed.new
