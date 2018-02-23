@@ -1,11 +1,11 @@
 class MediaFeed < Feed
   include FanoutOptional
 
-  def read_feed
+  def read_target
     ['media_aggr', id]
   end
 
-  def write_feed
+  def write_target
     ['media', id]
   end
 end
