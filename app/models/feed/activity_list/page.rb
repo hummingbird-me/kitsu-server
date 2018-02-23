@@ -32,21 +32,24 @@ class Feed
       private
 
       # Apply a list of selects to the list of activities
-      def apply_selects(activities, selects)
+      def apply_selects(activities, selects, grouped = false)
         return activities if selects.empty?
         # We use map+reject(blank) so that we can modify the activities in the
         # groups
         activities = activities.lazy.map do |act|
           if act['activities'] # recurse into activity groups
             catch(:remove_group) do
-              act['activities'] = apply_selects(act['activities'], selects)
+              act['activities'] = apply_selects(act['activities'], selects, true)
               act
             end
-          else # Activity
+          elsif grouped # Activity inside an ActivityGroup
+            next unless selects.all? { |proc| proc.call(act) }
+            act
+          else # Top-level activities
             catch(:remove_group) do
               next unless selects.all? { |proc| proc.call(act) }
+              act
             end
-            act
           end
         end
         activities = activities.reject do |act|
