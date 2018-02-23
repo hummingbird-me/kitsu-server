@@ -3,7 +3,11 @@ class GlobalFeed < Feed
     super('global')
   end
 
-  def stream_feed_for(*)
+  def read_target
     %w[global global]
+  end
+
+  def write_target
+    nil
   end
 end
