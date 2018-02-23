@@ -71,7 +71,7 @@ class Feed
   def self.client
     @client ||= BufferedStreamClient.new(StreamRails.client)
   end
-  delegate :client, to: :class
+  delegate :client, to: Feed
   delegate :readonly_token, to: :read_feed
 
   delegate :get, to: :read_feed
