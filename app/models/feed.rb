@@ -99,6 +99,6 @@ class Feed
 
   def auto_follows
     return [] if write_target == read_target
-    [write_feed]
+    [write_target]
   end
 end
