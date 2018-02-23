@@ -120,7 +120,7 @@ class FeedSerializerService
   private
 
   def aggregated?
-    activities.first&.key?('activities')
+    activities.first&.[]('activities')
   end
 
   def url_for_params(params)
