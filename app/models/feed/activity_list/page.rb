@@ -43,7 +43,9 @@ class Feed
               act
             end
           else # Activity
-            next unless selects.all? { |proc| proc.call(act) }
+            catch(:remove_group) do
+              next unless selects.all? { |proc| proc.call(act) }
+            end
             act
           end
         end
