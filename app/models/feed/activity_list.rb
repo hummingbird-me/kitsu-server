@@ -1,7 +1,6 @@
 class Feed
   class ActivityList
     attr_accessor :data, :feed, :including, :limit_ratio
-
     delegate :client, to: :feed
 
     %i[limit offset ranking mark_read mark_seen].each do |key|
@@ -118,12 +117,9 @@ class Feed
     end
 
     def add(activity)
-      # Add to the Feed directly, converting the activity to JSON
-      res = feed.add_activity(activity.as_json)
-      # Symbolize the response
-      res = res.symbolize_keys.except(:duration)
-      # Turn it into an Activity object
-      Feed::Activity.new(feed, res)
+      act = activity.as_json
+      feed.add_activity(act)
+      act
     end
     alias_method :<<, :add
 
