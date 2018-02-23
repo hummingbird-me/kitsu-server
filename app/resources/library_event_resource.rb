@@ -1,7 +1,7 @@
 class LibraryEventResource < BaseResource
   immutable
 
-  attributes :changed_data, :event, :created_at
+  attributes :changed_data, :kind, :created_at
 
   has_one :library_entry
   has_one :user
@@ -10,4 +10,5 @@ class LibraryEventResource < BaseResource
   has_one :drama
 
   filter :user_id
+  filter :kind
 end
