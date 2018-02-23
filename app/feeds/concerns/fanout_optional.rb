@@ -4,7 +4,7 @@ module FanoutOptional
     self
   end
 
-  def write_feed
-    @no_fanout ? read_feed : super
+  def write_target
+    @no_fanout ? read_target : super
   end
 end
