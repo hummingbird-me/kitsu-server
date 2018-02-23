@@ -117,9 +117,8 @@ class Feed
     end
 
     def add(activity)
-      act = activity.as_json
-      feed.add_activity(act)
-      act
+      feed.add_activity(activity.as_json)
+      activity
     end
     alias_method :<<, :add
 
