@@ -106,7 +106,7 @@ class FeedSerializerService
   end
 
   def resource_class
-    if activities.first['activities']
+    if activities.first&.[]('activities')
       ActivityGroupResource
     else
       ActivityResource
