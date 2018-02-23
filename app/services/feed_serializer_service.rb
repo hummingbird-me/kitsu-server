@@ -61,7 +61,7 @@ class FeedSerializerService
   end
 
   def including
-    if activities.first['activities']
+    if aggregated?
       @including.map { |inc| "activities.#{inc}" } + ['activities']
     else
       @including
@@ -106,7 +106,7 @@ class FeedSerializerService
   end
 
   def resource_class
-    if activities.first&.[]('activities')
+    if aggregated?
       ActivityGroupResource
     else
       ActivityResource
@@ -118,6 +118,10 @@ class FeedSerializerService
   end
 
   private
+
+  def aggregated?
+    activities.first&.key?('activities')
+  end
 
   def url_for_params(params)
     uri = URI.parse(base_url)
