@@ -25,7 +25,7 @@ class InterestTimelineFeed < Feed
   alias_method :read_target, :default_target
 
   def auto_follows
-    global_follow = { source: read_feed, target: self.class.global.write_feed }
+    global_follow = { source: read_target, target: self.class.global.write_target }
     [global_follow, *super]
   end
 
