@@ -4,11 +4,7 @@ module FanoutOptional
     self
   end
 
-  def stream_activity_target(opts = {})
-    if @no_fanout
-      super({ type: :aggregated }.merge(opts))
-    else
-      super(opts)
-    end
+  def write_feed
+    @no_fanout ? read_feed : super
   end
 end
