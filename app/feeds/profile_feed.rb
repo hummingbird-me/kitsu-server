@@ -1,5 +1,5 @@
 class ProfileFeed < Feed
-  include FanoutOptional
+  prepend FanoutOptional
 
   def write_target
     ['user', id]

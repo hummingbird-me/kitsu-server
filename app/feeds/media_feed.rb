@@ -1,5 +1,5 @@
 class MediaFeed < Feed
-  include FanoutOptional
+  prepend FanoutOptional
 
   def read_target
     ['media_aggr', id]
