@@ -85,7 +85,7 @@ RSpec.describe Post, type: :model do
     subject { build(:post, media: media) }
     let(:activity) { subject.stream_activity.as_json.with_indifferent_access }
 
-    it 'should have an activity with media\'s aggregated feed in "to" list' do
+    it 'should have an activity with media feed in "to" list' do
       expect(activity[:to]).to include("media:Anime-#{media.id}")
     end
   end
