@@ -19,3 +19,7 @@ end
 Flipper.register(:mod) do |user|
   user.try(:has_role?, :mod) || user.try(:has_role?, :admin, Anime)
 end
+
+Flipper.register(:aozora) do |user|
+  user.try(:ao_id)
+end
