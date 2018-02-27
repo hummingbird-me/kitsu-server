@@ -5,10 +5,10 @@ class BufferedStreamClient
       reset.tap do |queue|
         queue.each do |scrollback, follows|
           follows = follows.select do |follow|
-            /\A\w+:\w+\z/ =~ follow[:source] && /\A\w+:\w+\z/ =~ follow[:target]
+            /\A\w+:\w+\z/ =~ follow['source'] && /\A\w+:\w+\z/ =~ follow['target']
           end
           increment_metrics(follows, scrollback: scrollback)
-          RedisFollowBuffer.push(scrollback, *follows)
+          RedisFollowBuffer.push(scrollback, *follows) unless follows.empty?
         end
       end
     end
