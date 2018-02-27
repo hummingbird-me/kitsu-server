@@ -7,7 +7,7 @@ class BufferedStreamClient
       items = items.map(&:to_json)
       transaction do |conn|
         # Add the follow to the queue
-        conn.lpush(key, *items)
+        conn.lpush(key, items)
         # Increment our queue length in the list
         conn.zincrby('stream_buffer:queues', items.count, key)
       end
