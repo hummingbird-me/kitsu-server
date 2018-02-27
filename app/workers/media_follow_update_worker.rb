@@ -3,6 +3,7 @@ class MediaFollowUpdateWorker
   sidekiq_options retry: 6, queue: 'soon'
 
   def perform(user_id, media_type, media_id, action, progress_was = nil, progress = nil) # rubocop:disable Metrics/ParameterLists
+    return if Flipper.enabled?(:breaker_media_follows)
     user = User.find(user_id)
     media_class = media_type.safe_constantize
     media = media_class.find(media_id)
