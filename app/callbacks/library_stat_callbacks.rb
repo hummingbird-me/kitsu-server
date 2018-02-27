@@ -22,6 +22,7 @@ class LibraryStatCallbacks < Callbacks
   private
 
   def perform_for(action)
+    return if record.imported
     case record.kind
     when :anime
       perform 'Stat::AnimeCategoryBreakdown', action

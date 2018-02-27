@@ -101,6 +101,13 @@ class ListImport < ApplicationRecord
         yield info if block_given?
       end
     end
+
+    Stat::AnimeCategoryBreakdown.for_user(user).recalculate!
+    Stat::AnimeAmountConsumed.for_user(user).recalculate!
+    Stat::AnimeActivityHistory.for_user(user).recalculate!
+    Stat::MangaCategoryBreakdown.for_user(user).recalculate!
+    Stat::MangaAmountConsumed.for_user(user).recalculate!
+    Stat::MangaActivityHistory.for_user(user).recalculate!
   end
 
   def apply_async!(queue: 'now')
