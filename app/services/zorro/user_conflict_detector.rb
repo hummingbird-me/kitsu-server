@@ -92,8 +92,9 @@ module Zorro
       @aozora_user ||= if @ao_facebook_id
                          Zorro::DB::User.find('_auth_data_facebook.id' => @ao_facebook_id).first
                        elsif @user then Zorro::DB::User.find(_id: @user.ao_id).first
-                       elsif @email then Zorro::DB::User.find(email: @email.downcase).first ||
-                         Zorro::DB::User.find(email: /\A\s*#{@email}\s*\z/i).first
+                       elsif @email
+                         Zorro::DB::User.find(email: /\A\s*#{@email}\s*\z/i).sort(_updated_at: -1)
+                                        .first
                        end
     end
   end
