@@ -31,12 +31,24 @@ class BufferedStreamClient
       end
     end
 
+    def return_batch(key, follows)
+      transaction do |conn|
+        conn.rpush(key, *follows)
+        conn.zincrby('stream_buffer:queues', follows.count, key)
+      end
+    end
+
     def flush_batch(count = 2)
-      next_queues(count).each do |queue|
+      next_queues(count).each do |key|
         scrollback = /\Astream_buffer:follow_queue:(\d+)\z/.match(queue)[1].to_i
-        follows = next_batch_for(queue)
+        follows = next_batch_for(key)
         next if follows.empty?
-        StreamRails.client.follow_many(follows, scrollback)
+        begin
+          StreamRails.client.follow_many(follows, scrollback)
+        rescue
+          return_batch(key, follows)
+          raise
+        end
       end
     end
 
