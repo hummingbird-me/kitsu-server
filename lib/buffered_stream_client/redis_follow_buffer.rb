@@ -40,7 +40,7 @@ class BufferedStreamClient
 
     def flush_batch(count = 2)
       next_queues(count).each do |key|
-        scrollback = /\Astream_buffer:follow_queue:(\d+)\z/.match(queue)[1].to_i
+        scrollback = /\Astream_buffer:follow_queue:(\d+)\z/.match(key)[1].to_i
         follows = next_batch_for(key)
         next if follows.empty?
         begin
