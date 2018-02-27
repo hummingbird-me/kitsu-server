@@ -1,6 +1,6 @@
 class BufferedStreamClient
   class FollowBuffer < ActionBuffer
-    BULK_THRESHOLD = 2
+    BULK_THRESHOLD = 5
 
     def flush(client)
       reset.tap do |queue|
