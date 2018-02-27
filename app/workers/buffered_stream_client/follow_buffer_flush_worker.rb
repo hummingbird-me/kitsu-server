@@ -1,3 +1,4 @@
+require 'buffered_stream_client/redis_follow_buffer'
 class BufferedStreamClient
   class FollowBufferFlushWorker
     include Sidekiq::Worker
