@@ -245,7 +245,11 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_commit on: :create do
-    MediaFollowUpdateWorker.perform_for_entry(self, :create, progress)
+    if imported
+      MediaFollowUpdateWorker.perform_for_entry(self, :create, nil)
+    else
+      MediaFollowUpdateWorker.perform_for_entry(self, :create, progress)
+    end
   end
 
   after_commit(on: :create, if: :sync_to_mal?) do
