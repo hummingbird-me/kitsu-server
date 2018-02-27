@@ -2,10 +2,10 @@ module Zorro
   # Service for detecting user conflicts, logging a user in, and displaying conflicts
   class UserConflictDetector
     def initialize(email: nil, facebook_id: nil, ao_facebook_id: nil, user: nil)
-      @email = email
+      @email = email&.strip
       @facebook_id = facebook_id
       @ao_facebook_id = ao_facebook_id
-      @user = user.strip
+      @user = user
     end
 
     # @return [Boolean] whether there's a conflict on the supplied credentials
