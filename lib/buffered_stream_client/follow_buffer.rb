@@ -1,25 +1,14 @@
 class BufferedStreamClient
   class FollowBuffer < ActionBuffer
-    BULK_THRESHOLD = 7
-
-    def flush(client)
+    # Flush things to the RedisFollowBuffer instead of our own approach
+    def flush(_client)
       reset.tap do |queue|
-        # Iterate over the scrollback sizes
         queue.each do |scrollback, follows|
-          scrollback = scrollback.to_i
-          # If there's not many, send them individually to avoid triggering rate limits
-          if follows.count <= BULK_THRESHOLD
-            increment_metrics(follows, bulk: false, scrollback: scrollback)
-            follows.each do |follow|
-              group, id = follow['source'].split(':')
-              feed = client.feed(group, id)
-              target_group, target_id = follow['target'].split(':')
-              feed.follow(target_group, target_id, scrollback)
-            end
-          else
-            increment_metrics(follows, bulk: true, scrollback: scrollback)
-            client.follow_many(follows, scrollback)
+          follows = follows.select do |follow|
+            /\A\w+:\w+\z/ =~ follow[:source] && /\A\w+:\w+\z/ =~ follow[:target]
           end
+          increment_metrics(follows, scrollback: scrollback)
+          RedisFollowBuffer.push(scrollback, *follows)
         end
       end
     end

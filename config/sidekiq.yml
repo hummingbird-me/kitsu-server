@@ -52,3 +52,6 @@ production:
   PostgresSequenceWorker:
     # Once a day
     cron: '0 0 0 * * *'
+  'BufferedStreamClient::FollowBufferFlushWorker':
+    # Every 2 seconds
+    cron: '*/2 * * * * *'
