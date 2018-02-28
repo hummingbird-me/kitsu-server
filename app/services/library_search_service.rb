@@ -83,6 +83,7 @@ class LibrarySearchService < SearchService
         out << "#{type}_#{type_id}"
       end
     end
+    return '' if id_filters.empty?
     "(#{id_filters.join(' OR ')})"
   end
 
