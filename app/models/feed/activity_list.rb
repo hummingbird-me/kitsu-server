@@ -139,6 +139,7 @@ class Feed
         feed.remove_activity(activity)
       else
         foreign_id ||= activity.foreign_id
+        foreign_id = foreign_id.stream_id if foreign_id.respond_to?(:stream_id)
         feed.remove_activity(foreign_id, foreign_id: true)
       end
     end
