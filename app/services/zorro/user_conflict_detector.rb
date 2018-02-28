@@ -1,6 +1,8 @@
 module Zorro
   # Service for detecting user conflicts, logging a user in, and displaying conflicts
   class UserConflictDetector
+    AO_EPOCH = Date.new(2018, 2, 26)
+
     def initialize(email: nil, facebook_id: nil, ao_facebook_id: nil, user: nil)
       @email = email&.strip
       @facebook_id = facebook_id
@@ -89,6 +91,8 @@ module Zorro
       return if kitsu_user&.ao_imported
       # If the Kitsu user has an Aozora ID and isn't marked with status=aozora, then they're done
       return if kitsu_user&.ao_id && kitsu_user&.registered?
+      # If the Kitsu user is new and unconfirmed, it's probably somebody trying to hijack an aozoran
+      return if kitsu_user && (!kitsu_user&.confirmed || AO_EPOCH < kitsu_user&.created_at)
       @aozora_user ||= if @ao_facebook_id
                          Zorro::DB::User.find('_auth_data_facebook.id' => @ao_facebook_id).first
                        elsif @user then Zorro::DB::User.find(_id: @user.ao_id).first
