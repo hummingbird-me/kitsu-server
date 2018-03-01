@@ -70,7 +70,7 @@ class ListImport < ApplicationRecord
         limit = media.progress_limit || media.default_progress_limit
         data[:progress] = [data[:progress], limit].compact.min
         # Merge the library entries
-        le = LibraryEntry.where(user: user, media: media).first_or_initialize
+        le = LibraryEntry.where(user_id: user.id, media: media).first_or_initialize
         le.imported = true
         le = merged_entry(le, data)
         le.save! unless le.status.nil?
