@@ -79,27 +79,38 @@ module Zorro
 
     # @return [User] the user on Kitsu
     def kitsu_user
-      @kitsu_user ||= if @facebook_id then User.where(facebook_id: @facebook_id).first
-                      elsif @user then @user
-                      elsif @email then User.by_email(@email).first
-                      end
+      return @user if @user
+      return @kitsu_user if @kitsu_user
+
+      @kitsu_user = User.where(facebook_id: @facebook_id).first if @facebook_id
+      @kitsu_user ||= User.by_email(@email).first
+      @kitsu_user
     end
 
     # @return [Hash] the user on Aozora
     def aozora_user
+      return unless ao_importable?
+
+      return @aozora_user if @aozora_user
+      return Zorro::DB::User.find(_id: @user.ao_id).first if @user
+
+      options = []
+      options << { '_auth_data_facebook.id' => @ao_facebook_id } if @ao_facebook_id
+      options << { email: /\A\s*#{@email}\s*\z/i } if @email
+      return nil if options.empty?
+
+      @aozora_user = Zorro::DB::User.find('$or' => options).sort(_updated_at: -1).first
+    end
+
+    def ao_importable?
       # If the Kitsu user is imported from Aozora, then we can't have a conflict with Aozora
-      return if kitsu_user&.ao_imported
+      return false if kitsu_user&.ao_imported
       # If the Kitsu user has an Aozora ID and isn't marked with status=aozora, then they're done
-      return if kitsu_user&.ao_id && kitsu_user&.registered?
+      return false if kitsu_user&.ao_id && kitsu_user&.registered?
       # If the Kitsu user is new and unconfirmed, it's probably somebody trying to hijack an aozoran
-      return if kitsu_user && (!kitsu_user&.confirmed || AO_EPOCH < kitsu_user&.created_at)
-      @aozora_user ||= if @ao_facebook_id
-                         Zorro::DB::User.find('_auth_data_facebook.id' => @ao_facebook_id).first
-                       elsif @user then Zorro::DB::User.find(_id: @user.ao_id).first
-                       elsif @email
-                         Zorro::DB::User.find(email: /\A\s*#{@email}\s*\z/i).sort(_updated_at: -1)
-                                        .first
-                       end
+      return false if kitsu_user && (!kitsu_user&.confirmed || AO_EPOCH < kitsu_user&.created_at)
+      # Otherwise we good
+      true
     end
   end
 end

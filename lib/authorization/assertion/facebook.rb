@@ -51,7 +51,8 @@ module Authorization
       # The UserConflictDetector instance
       def conflict
         @conflict ||= Zorro::UserConflictDetector.new(facebook_id: facebook_id,
-                                                      ao_facebook_id: ao_facebook_id)
+                                                      ao_facebook_id: ao_facebook_id,
+                                                      email: email)
       end
 
       # @return [String] the Facebook ID for Kitsu
@@ -66,6 +67,11 @@ module Authorization
           obj.dig(:app, :id) == AOZORA_FACEBOOK_APP_ID
         end
         user[:id] if user
+      end
+
+      # @return [String] the email address on their Facebook
+      def email
+        data.dig(:email)
       end
 
       # @return [Array<String>] the list of friends from this user's facebook
