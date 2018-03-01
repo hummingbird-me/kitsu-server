@@ -84,6 +84,17 @@ module Media
     after_commit :setup_feed, on: :create
   end
 
+  class_methods do
+    def by_mapping(site, id)
+      joins("LEFT OUTER JOIN mappings m ON m.item_type = '#{name}' AND m.item_id = anime.id")
+        .where('m.external_site = ? AND m.external_id = ?', site, id)
+    end
+
+    def find_by_mapping(site, id)
+      by_mapping(site, id).first
+    end
+  end
+
   def slug_candidates
     [
       -> { canonical_title },
