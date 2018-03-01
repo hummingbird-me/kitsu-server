@@ -112,6 +112,11 @@ class ListImport < ApplicationRecord
     ListImportWorker.perform_async(id, queue: queue) unless running?
   end
 
+  def retry_async!(queue: 'eventually')
+    update!(status: :queued)
+    ListImportWorker.perform_async(id, queue: queue)
+  end
+
   def merged_entry(entry, data)
     case strategy.to_sym
     when :greater
