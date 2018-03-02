@@ -64,7 +64,7 @@ module Zorro
       {
         name: aozora_user['aozoraUsername'],
         avatar: "https://aozora-assets.s3.amazonaws.com/#{aozora_user['avatarThumb']}",
-        library_entries: Zorro::DB::AnimeProgress.count(_p_user: "_User$#{aozora_user['_id']}")
+        library_entries: library_count_for_ao(aozora_user['_id'])
       }
     end
 
@@ -100,6 +100,12 @@ module Zorro
       return nil if options.empty?
 
       @aozora_user = Zorro::DB::User.find('$or' => options).sort(_updated_at: -1).first
+      @aozora_user = nil if library_count_for_ao(@aozora_user['_id']) < 1
+      @aozora_user
+    end
+
+    def library_count_for_ao(id)
+      Zorro::DB::AnimeProgress.count(_p_user: "_User$#{id}")
     end
 
     def ao_importable?
