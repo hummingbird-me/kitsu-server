@@ -38,12 +38,12 @@ class Feed
             page = feed.get(opts)['results']
             # Record the next page info
             next_page = get_next_page(page)
-            # If we got less than we asked for, we've hit the final page
-            raise StopIteration if page.count < 100
             # Filter the page and tack it onto the list
             page = Page.new(page, fetcher_options).to_a
             # Iterate over the page and yield it
             page.each { |act| yielder << act }
+            # If we got less than we asked for, we've hit the final page
+            raise StopIteration if page.count < 100
           end
         }.lazy
       end
