@@ -22,5 +22,9 @@ module WithCoverImage
         interpolator = cover.options[:interpolator]
         interpolator.interpolate(cover.options[:url], cover, :small)
       }
+
+    after_commit if: :cover_image_updated_at_changed? do
+      ImgixPurgeService.purge(cover_image.url(:original))
+    end
   end
 end
