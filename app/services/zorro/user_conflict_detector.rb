@@ -100,7 +100,7 @@ module Zorro
       return nil if options.empty?
 
       @aozora_user = Zorro::DB::User.find('$or' => options).sort(_updated_at: -1).first
-      @aozora_user = nil if library_count_for_ao(@aozora_user['_id']) < 1
+      @aozora_user = nil if @aozora_user && library_count_for_ao(@aozora_user['_id']) < 1
       @aozora_user
     end
 
