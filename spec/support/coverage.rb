@@ -1,5 +1,6 @@
 require 'simplecov'
 require 'simplecov-lcov'
+require 'codeclimate-test-reporter' if ENV['CODECLIMATE_REPO_TOKEN']
 
 module SimpleCov
   module Formatter
@@ -7,10 +8,7 @@ module SimpleCov
       def format(result)
         SimpleCov::Formatter::HTMLFormatter.new.format(result)
         SimpleCov::Formatter::LcovFormatter.new.format(result)
-        if ENV['CODECLIMATE_REPO_TOKEN']
-          require 'codeclimate-test-reporter'
-          CodeClimate::TestReporter::Formatter.new.format(result)
-        end
+        CodeClimate::TestReporter::Formatter.new.format(result) if ENV['CODECLIMATE_REPO_TOKEN']
       end
     end
   end
