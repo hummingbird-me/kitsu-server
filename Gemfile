@@ -117,15 +117,18 @@ group :development, :test do
 end
 
 group :test do
-  gem 'codeclimate-test-reporter' # CodeClimate coverage
   gem 'faker' # Fake data
   gem 'json_expressions' # Test outputted JSON
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
-  gem 'simplecov' # Local coverage
   gem 'test_after_commit' # Rails 4 doesn't run commit callbacks on transactions
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
+
+  # Coverage
+  gem 'codeclimate-test-reporter' # CodeClimate coverage
+  gem 'simplecov' # Local coverage
+  gem 'simplecov-lcov' # Report in LCOV format
 
   # Libraries used to test our API itself
   gem 'oauth2'
