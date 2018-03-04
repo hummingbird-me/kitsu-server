@@ -1,6 +1,6 @@
 class GlobalFeed < Feed
-  def initialize(*)
-    super('global')
+  def initialize(future: false)
+    super(future ? 'future' : 'global')
   end
 
   def read_target
