@@ -4,10 +4,10 @@ class GlobalFeed < Feed
   end
 
   def read_target
-    %w[global global]
+    ['global', id]
   end
 
   def write_target
-    nil
+    ['global', id]
   end
 end
