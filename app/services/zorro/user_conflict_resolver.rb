@@ -26,7 +26,6 @@ module Zorro
         # Merge the Aozora data onto this profile
         Zorro::Importer::UserImporter.new(aozora_user).run!(
           force: true,
-          rush: true,
           target_user: @user
         )
       when :kitsu
@@ -49,7 +48,6 @@ module Zorro
       if chosen == :aozora
         Zorro::Importer::UserImporter.new(aozora_user).run!(
           force: true,
-          rush: true,
           target_user: @user
         )
       end

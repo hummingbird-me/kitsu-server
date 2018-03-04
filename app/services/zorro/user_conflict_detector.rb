@@ -47,7 +47,7 @@ module Zorro
 
     # Imports the Aozora User
     def import_aozora_user!
-      Zorro::Importer::UserImporter.new(aozora_user).run!(force: true, rush: true)
+      Zorro::Importer::UserImporter.new(aozora_user).run!(force: true)
     end
 
     # @return [Hash] some basic info about the user on Kitsu
