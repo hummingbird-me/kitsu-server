@@ -340,7 +340,7 @@ GEM
     oj (3.4.0)
     oj_mimic_json (1.0.1)
     one_signal (1.2.0)
-    onebox (1.8.41)
+    onebox (1.8.42)
       htmlentities (~> 4.3)
       moneta (~> 1.0)
       multi_json (~> 1.11)
