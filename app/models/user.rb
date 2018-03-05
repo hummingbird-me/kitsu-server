@@ -256,7 +256,7 @@ class User < ApplicationRecord
   end
 
   def not_taken_on_aozora
-    if Zorro::DB::User.find(email: /\A\s*#{email}\s*\z/i).present? && ao_id.blank?
+    if Zorro::DB::User.find(email: /\A\s*#{email}\s*\z/i).count.nonzero? && ao_id.blank?
       errors.add(:email, 'is already taken by an Aozora user')
     end
   end
