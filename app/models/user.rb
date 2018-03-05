@@ -194,6 +194,7 @@ class User < ApplicationRecord
     validates :slug, length: 3..20
   end
   validate :not_reserved_slug, if: ->(user) { user.slug.present? && user.slug_changed? }
+  validate :not_taken_on_aozora, on: :create
   validates :name, presence: true,
                    length: { minimum: 3, maximum: 20 },
                    if: ->(user) { user.registered? && user.name_changed? }
@@ -250,6 +251,12 @@ class User < ApplicationRecord
 
   def not_banned_characters
     errors.add(:name, 'contains banned characters') if name&.count(BANNED_CHARACTERS) != 0
+  end
+
+  def not_taken_on_aozora
+    if Zorro::DB::User.find(email: /\A\s*#{email}\s*\z/i).present? && ao_id.blank?
+      errors.add(:email, 'is already taken by an Aozora user')
+    end
   end
 
   def pro?
