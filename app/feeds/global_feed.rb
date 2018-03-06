@@ -4,7 +4,11 @@ class GlobalFeed < Feed
   end
 
   def read_target
-    ['global', id]
+    if Flipper.enabled?(:new_global)
+      %w[global future]
+    else
+      %w[global global]
+    end
   end
 
   def write_target
