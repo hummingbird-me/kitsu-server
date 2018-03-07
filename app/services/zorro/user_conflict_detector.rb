@@ -109,12 +109,14 @@ module Zorro
     end
 
     def ao_importable?
-      # If the Kitsu user is imported from Aozora, then we can't have a conflict with Aozora
-      return false if kitsu_user&.ao_imported
-      # If the Kitsu user has an Aozora ID and isn't marked with status=aozora, then they're done
-      return false if kitsu_user&.ao_id && kitsu_user&.registered?
-      # If the Kitsu user is new and unconfirmed, it's probably somebody trying to hijack an aozoran
-      return false if kitsu_user && (!kitsu_user&.confirmed || AO_EPOCH < kitsu_user&.created_at)
+      # No Conflict
+      return true if kitsu_user.blank?
+      # Post-conflict (chose Aozora)
+      return false if kitsu_user.ao_imported
+      # Post-conflict (chose Kitsu)
+      return false if kitsu_user.ao_id && kitsu_user.registered?
+      # If the Kitsu user isn't confirmed or predating Aozora, it's probably a thief!
+      return false unless kitsu_user.confirmed || kitsu_user.created_at < AO_EPOCH
       # Otherwise we good
       true
     end
