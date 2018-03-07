@@ -4,7 +4,7 @@ class GlobalFeed < Feed
   end
 
   def read_target
-    if Flipper.enabled?(:new_global)
+    if Flipper[:new_global].enabled?(User.current)
       %w[global future]
     else
       %w[global global]
