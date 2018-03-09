@@ -94,7 +94,9 @@ class LibraryEntryResource < BaseResource
 
   def self.sortable_fields(context)
     fields = super + %i[anime.subtype manga.subtype drama.subtype
-                        anime.episode_count manga.chapter_count]
+                        anime.episode_count manga.chapter_count
+                        anime.user_count manga.user_count
+                        anime.average_rating manga.average_rating]
     TitleSortableFields.new(fields)
   end
 
@@ -138,7 +140,7 @@ class LibraryEntryResource < BaseResource
         records = records.order(<<~EOF.squish)
           COALESCE(
             NULLIF(#{media}_sort.titles->'#{title}', ''),
-            NULLIF(#{media}_sort.titles->canonical_title, ''),
+            NULLIF(#{media}_sort.titles->#{media}_sort.canonical_title, ''),
             NULLIF(#{media}_sort.titles->'en_jp', '')
           ) #{direction}
         EOF
