@@ -134,7 +134,7 @@ class LibraryEntryResource < BaseResource
 
       if title == 'canonical'
         records = records.order(<<~EOF)
-          #{media}_sort.titles->canonical_title #{direction}
+          #{media}_sort.titles->#{media}_sort.canonical_title #{direction}
         EOF
       elsif /[a-z]{2}(_[a-z]{2})?/i =~ title
         records = records.order(<<~EOF.squish)
