@@ -2,6 +2,9 @@ class HuluMappingWorker
   include Sidekiq::Worker
 
   def perform
-    HuluMappingService.new(Time.now - 24.hours).sync_series_and_episodes
+    since = (Time.now - 24.hours).strftime('%F')
+    HuluImport::HuluSeries.each do |series|
+      series.episodes(since: since).each(&:video!) if series.media
+    end
   end
 end
