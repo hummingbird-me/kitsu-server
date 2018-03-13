@@ -123,6 +123,10 @@ module Media
     @feed ||= MediaFeed.new(self.class.name, id)
   end
 
+  def airing_feed
+    @airing_feed ||= MediaAiringFeed.new(self.class.name, id)
+  end
+
   def setup_feed
     feed.setup!
   end
