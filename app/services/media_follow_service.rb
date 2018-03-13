@@ -1,34 +1,53 @@
 class MediaFollowService
   attr_reader :user, :media
+  delegate :follows_for_progress, to: :@unit_feed_class
 
   def initialize(user, media)
     @user = user
     @media = media
+    @klass = media.class
+    @unit_feed_class = "#{@klass.unit_class.name}Feed".safe_constantize
   end
 
   def create(progress = nil)
     return if ignored?
-    timeline.follow(media.feed, scrollback: 50)
-    timeline.update_unit_follows(media, nil, progress) if progress
-  end
-
-  def update(progress_was, progress)
-    return if ignored?
-    timeline.update_unit_follows(media, progress_was, progress)
+    follow_many([@media.feed], scrollback: 20)
+    update(nil, progress)
   end
 
   def destroy(progress_was)
-    timeline.unfollow(media.feed, keep_history: true)
-    timeline.update_unit_follows(media, progress_was, nil)
+    unfollow_many([@media.feed], keep_history: false)
+    update(progress_was, nil)
+  end
+
+  def update(progress_was = nil, progress = nil)
+    follows_were = unit_follows_for(media, progress_was, limit: 4) if progress_was
+    follows = ignored? ? [] : follows_for_progress(media, progress)
+
+    # Don't unfollow just to refollow
+    follows_were -= follows
+    unfollow_many(follows_were, keep_history: true) unless follows_were.empty?
+    follow_many(follows, scrollback: 10) unless follows.empty?
   end
 
   private
 
-  def timeline
-    user.interest_timeline_for(media.class.name)
-  end
-
   def ignored?
     MediaIgnore.where(user: user, media: media).exists?
+  end
+
+  def unfollow_many(*args)
+    timelines.each { |timeline| timeline.unfollow_many(*args) }
+  end
+
+  def follow_many(*args)
+    timelines.each { |timeline| timeline.follow_many(*args) }
+  end
+
+  def timelines
+    [
+      user.interest_timeline_for(@klass.name),
+      user.timeline
+    ]
   end
 end
