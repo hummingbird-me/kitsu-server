@@ -11,11 +11,13 @@ class MediaFollowService
 
   def create(progress = nil)
     return if ignored?
+    user.notifications.follow(media.airing_feed, scrollback: 0)
     follow_many([@media.feed], scrollback: 20)
     update(nil, progress)
   end
 
   def destroy(progress_was)
+    user.notifications.unfollow(media.airing_feed, keep_history: true)
     unfollow_many([@media.feed], keep_history: false)
     update(progress_was, nil)
   end
