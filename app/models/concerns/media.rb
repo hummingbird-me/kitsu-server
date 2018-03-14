@@ -57,6 +57,7 @@ module Media
       class_name: 'MediaAttributeVote',
       dependent: :destroy
     delegate :year, to: :start_date, allow_nil: true
+    serialize :release_schedule, IceCube::Schedule
 
     # finished: end date has passed
     # current: currently between start and end date
