@@ -32,6 +32,7 @@ class TheTvdbService
       anime = Anime.find(anime_id)
       series_id, season_number = tvdb_id.split('/')
       begin
+        series = get_series(series_id)
         episodes = get_episodes(series_id, season_number)
       rescue NotFound
         anime.mappings.where(external_id: tvdb_id).destroy!
@@ -44,6 +45,7 @@ class TheTvdbService
       anime.update_unit_count_guess(episodes.count)
 
       # creating/updating the episode
+      process_series_data(series, anime)
       process_episode_data(episodes, anime, series_id)
     end
   end
@@ -91,11 +93,34 @@ class TheTvdbService
     get("/series/#{series_id}/episodes/query?airedSeason=#{season_number || 1}")['data']
   end
 
+  def get_series(series_id)
+    get("/series/#{series_id}")['data']
+  end
+
   def process_episode_data(episodes, media, tvdb_series_id)
     episodes.each do |tvdb_episode|
       row = Row.new(media, tvdb_episode, tvdb_series_id)
       row.update_episode
     end
+  end
+
+  def process_series_data(series, media)
+    return if media.release_schedule.present?
+    return if series['airsTime'].blank? || series['airsDayOfWeek'].blank?
+
+    # Go back a day from the supposed start time since it can be wrong
+    start_date = media.start_date.in_time_zone('Japan') - 23.hours
+    schedule = IceCube::Schedule.new(start_date, duration: media.episode_length.minutes) do |s|
+      time = Time.parse(series['airsTime'])
+      s.add_recurrence_rule(
+        IceCube::Rule.weekly
+          .day(series['airsDayOfWeek'].downcase.to_sym)
+          .hour_of_day(time.hour)
+          .minute_of_hour(time.min)
+          .count(media.episode_count)
+      )
+    end
+    media.update!(release_schedule: schedule)
   end
 
   private
