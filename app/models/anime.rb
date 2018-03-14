@@ -117,6 +117,10 @@ class Anime < ApplicationRecord
     update(episode_count_guess: guess)
   end
 
+  def self.unit_class
+    Episode
+  end
+
   def self.fuzzy_find(title)
     MediaIndex::Anime.query(multi_match: {
       fields: %w[titles.* abbreviated_titles synopsis actors characters],

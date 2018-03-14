@@ -82,6 +82,10 @@ class Manga < ApplicationRecord
     update(chapter_count_guess: guess)
   end
 
+  def self.unit_class
+    Chapter
+  end
+
   before_save do
     self.chapter_count_guess = nil if chapter_count
 
