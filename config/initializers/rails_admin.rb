@@ -200,8 +200,12 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
           'MangaUpdates' => 'mangaupdates',
           'Hulu' => 'hulu',
           'IMDB Episodes' => 'imdb/episodes',
+          'TheTVDB' => 'thetvdb',
           'TheTVDB Series' => 'thetvdb/series',
           'TheTVDB Season' => 'thetvdb/season',
+          'Aozora' => 'aozora',
+          'AniList' => 'anilist',
+          'Trakt' => 'trakt',
           'MyDramaList' => 'mydramalist'
         }
       end
