@@ -21,7 +21,7 @@ class MediaFollowService
   end
 
   def update(progress_was = nil, progress = nil)
-    follows_were = unit_follows_for(media, progress_was, limit: 4) if progress_was
+    follows_were = progress_was ? follows_for_progress(media, progress_was, limit: 4) : []
     follows = ignored? ? [] : follows_for_progress(media, progress)
 
     # Don't unfollow just to refollow
