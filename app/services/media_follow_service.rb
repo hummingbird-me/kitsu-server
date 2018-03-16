@@ -47,7 +47,7 @@ class MediaFollowService
   def timelines
     [
       user.interest_timeline_for(@klass.name),
-      user.timeline
-    ]
+      (user.timeline if Flipper[:merged_timelines].enabled?(User.current))
+    ].compact
   end
 end
