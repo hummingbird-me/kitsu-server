@@ -364,6 +364,11 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
+  before_validation do
+    # Strip the email and downcase it just for good measure
+    self.email = email.strip.downcase
+  end
+
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
