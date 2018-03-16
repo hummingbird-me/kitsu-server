@@ -11,13 +11,17 @@ class MediaFollowService
 
   def create(progress = nil)
     return if ignored?
-    user.notifications.follow(media.airing_feed, scrollback: 0)
+    if Flipper[:airing_notifs].enabled?(User.current)
+      user.notifications.follow(media.airing_feed, scrollback: 0)
+    end
     follow_many([@media.feed], scrollback: 20)
     update(nil, progress)
   end
 
   def destroy(progress_was)
-    user.notifications.unfollow(media.airing_feed, keep_history: true)
+    if Flipper[:airing_notifs].enabled?(User.current)
+      user.notifications.unfollow(media.airing_feed, keep_history: true)
+    end
     unfollow_many([@media.feed], keep_history: false)
     update(progress_was, nil)
   end
