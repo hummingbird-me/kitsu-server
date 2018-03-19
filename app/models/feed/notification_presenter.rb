@@ -33,6 +33,9 @@ class Feed
       actor_name = actor.name
 
       case verb
+      when :aired
+        translation_key = "aired.#{actor.class.name.underscore}"
+        translate(translation_key, number: subject.number, title: actor.canonical_title)
       when :follow, :post_like, :comment_like, :invited
         translate(verb, actor: actor_name)
       when :post
@@ -66,6 +69,7 @@ class Feed
       when 'invited' then :invites
       when 'comment' then :replies
       when 'media_reaction_vote' then :reaction_votes
+      when 'aired' then :airing
       else verb.to_s.pluralize.to_sym
       end
     end

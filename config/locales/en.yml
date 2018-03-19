@@ -36,3 +36,6 @@ en:
       comment:
         you: "%{actor} replied to your comment."
     invited: "%{actor} invited you to a group."
+    aired:
+      anime: "Episode %{number} of %{title} aired!"
+      manga: "Chapter %{number} of %{title} was released!"
