@@ -364,9 +364,9 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
-  before_validation do
+  before_validation if: :email_changed? do
     # Strip the email and downcase it just for good measure
-    self.email = email.strip.downcase
+    self.email = email&.strip&.downcase
   end
 
   before_destroy do
