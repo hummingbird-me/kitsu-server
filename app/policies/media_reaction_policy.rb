@@ -1,5 +1,6 @@
 class MediaReactionPolicy < ApplicationPolicy
   def create?
+    return false if user.has_role?(:banned)
     record.user == user
   end
   alias_method :update?, :create?
