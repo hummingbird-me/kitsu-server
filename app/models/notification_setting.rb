@@ -24,15 +24,16 @@
 # rubocop:enable Metrics/LineLength
 
 class NotificationSetting < ApplicationRecord
-  NOTIFICATION_TYPES = %i[mentions replies likes follows posts reaction_votes].freeze
+  NOTIFICATION_TYPES = %i[mentions replies likes follows posts reaction_votes airing].freeze
   DEFAULT_SETTINGS = {
     #                FB,   Mobile, Email, Web
-    mentions:       [false, true, false, true],
-    replies:        [false, true, false, true],
+    mentions:       [false, true,  false, true],
+    replies:        [false, true,  false, true],
     likes:          [false, false, false, false],
-    follows:        [false, true, false, true],
-    posts:          [false, true, false, true],
-    reaction_votes: [false, false, false, false]
+    follows:        [false, true,  false, true],
+    posts:          [false, true,  false, true],
+    reaction_votes: [false, false, false, false],
+    airing:         [false, true,  true,  true]
   }.freeze
 
   enum setting_type: NOTIFICATION_TYPES
