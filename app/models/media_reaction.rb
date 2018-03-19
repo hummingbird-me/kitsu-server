@@ -71,7 +71,7 @@ class MediaReaction < ApplicationRecord
       progress: progress,
       updated_at: updated_at,
       up_votes_count: up_votes_count,
-      to: [media.feed]
+      to: [media.feed, GlobalFeed.new(future: true)]
     )
   end
 
