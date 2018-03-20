@@ -281,41 +281,4 @@ RSpec.describe User, type: :model do
       subject.save!
     end
   end
-
-  describe 'after updating' do
-    let(:global) { instance_double(GlobalFeed) }
-
-    before do
-      feed = OpenStruct.new(new: global)
-      stub_const('GlobalFeed', feed)
-    end
-
-    context 'when global sharing changes to true' do
-      before do
-        allow(global).to receive(:unfollow).with(subject.profile_feed)
-        subject.share_to_global = false
-        subject.save!
-        subject.share_to_global = true
-      end
-
-      it 'should have the global feed follow the profile feed' do
-        expect(global).to receive(:follow).with(subject.profile_feed)
-        subject.save!
-      end
-    end
-
-    context 'when global sharing changes to false' do
-      before do
-        allow(global).to receive(:follow).with(subject.profile_feed)
-        subject.share_to_global = true
-        subject.save!
-        subject.share_to_global = false
-      end
-
-      it 'should have the global feed unfollow the profile feed' do
-        expect(global).to receive(:unfollow).with(subject.profile_feed)
-        subject.save!
-      end
-    end
-  end
 end
