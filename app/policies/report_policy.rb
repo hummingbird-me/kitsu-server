@@ -27,7 +27,7 @@ class ReportPolicy < ApplicationPolicy
     end
 
     def is_global_admin?
-      user&.has_role?(:admin)
+      user&.has_role?(:admin) || user&.has_role?(:mod)
     end
   end
 end
