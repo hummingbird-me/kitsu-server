@@ -395,16 +395,6 @@ class User < ApplicationRecord
     GroupMember.create!(user: self, group: Group.kitsu) if Group.kitsu
   end
 
-  after_save do
-    if share_to_global_changed?
-      if share_to_global
-        GlobalFeed.new.follow(profile_feed)
-      else
-        GlobalFeed.new.unfollow(profile_feed)
-      end
-    end
-  end
-
   after_create do
     # Set up Notification Settings for User
     NotificationSetting.setup!(self)
