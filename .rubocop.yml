@@ -29,7 +29,7 @@ Style/CommentAnnotation:
   - DEPRECATED
 Layout/DotPosition:
   EnforcedStyle: leading
-Style/FileName:
+Naming/FileName:
   Enabled: true
   Exclude: ['**/jsonapi-resources.rb']
 Style/FormatString:
@@ -45,7 +45,6 @@ Style/GuardClause:
   MinBodyLength: 3
 Style/IfUnlessModifier:
   Enabled: true
-  MaxLineLength: 100
 Layout/IndentArray:
   EnforcedStyle: consistent
 Layout/IndentHash:
@@ -70,7 +69,7 @@ Style/PercentLiteralDelimiters:
     "%w": "[]"
     "%W": "[]"
     "%x": "[]"
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: true
   NamePrefix:
   - is_
@@ -109,13 +108,16 @@ Layout/TrailingBlankLines:
 Style/TrailingCommaInArguments:
   Enabled: true
   EnforcedStyleForMultiline: no_comma
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: no_comma
+Style/TrailingCommaInHashLiteral:
   Enabled: true
   EnforcedStyleForMultiline: no_comma
 Style/TrivialAccessors:
   Enabled: true
   AllowDSLWriters: true
-Style/VariableName:
+Naming/VariableName:
   Enabled: true
   EnforcedStyle: snake_case
 Style/WordArray:
@@ -167,7 +169,7 @@ Style/MethodCalledOnDoEndBlock:
   Enabled: true
 Style/SymbolArray:
   Enabled: true
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: true
 Style/Alias:
   Enabled: true
@@ -175,8 +177,8 @@ Style/Alias:
 Style/ArrayJoin:
   Enabled: true
 Style/AsciiComments:
-  Enabled: true
-Style/AsciiIdentifiers:
+  Enabled: false
+Naming/AsciiIdentifiers:
   Enabled: true
 Style/Attr:
   Enabled: true
@@ -248,8 +250,6 @@ Layout/SpaceAroundOperators:
   Enabled: true
 Layout/SpaceAroundKeyword:
   Enabled: true
-Layout/SpaceInsideBrackets:
-  Enabled: true
 Layout/SpaceInsideParens:
   Enabled: true
 Layout/SpaceInsideRangeLiteral:
@@ -279,8 +279,6 @@ Lint/Loop:
 Lint/ParenthesesAsGroupedExpression:
   Enabled: true
 Lint/RequireParentheses:
-  Enabled: false
-Lint/UnneededDisable:
   Enabled: false
 Lint/UnderscorePrefixedVariableName:
   Enabled: true
