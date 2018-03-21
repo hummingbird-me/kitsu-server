@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       # These have to be first since they have precedence
       get '/users/_conflicts', to: 'users#conflicts_index'
       post '/users/_conflicts', to: 'users#conflicts_update'
+      post '/users/_unsubscribe', to: 'users#unsubscribe'
       jsonapi_resources :users
       post '/users/_recover', to: 'users#recover'
       get '/users/:id/_strength', to: 'users#profile_strength'

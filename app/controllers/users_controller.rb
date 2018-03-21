@@ -18,6 +18,13 @@ class UsersController < ApplicationController
     render_jsonapi_error(400, 'No user found')
   end
 
+  def unsubscribe
+    query = params[:email]
+    user = User.by_email(query)
+    user.update!(subscribed_to_newsletter: false)
+    render json: { email: query }
+  end
+
   def conflicts_index
     return render_jsonapi_error(403, 'Feature disabled') unless Flipper.enabled?(:aozora)
     conflict_detector = Zorro::UserConflictDetector.new(user: user)
