@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 
   def unsubscribe
     query = params[:email]
-    user = User.by_email(query)
+    user = User.by_email(query).first
     user.update!(subscribed_to_newsletter: false)
     render json: { email: query }
   end
