@@ -46,7 +46,7 @@ class MediaResource < BaseResource
     # Ratings
     :average_rating, :rating_frequencies, :user_count, :favorites_count,
     # Dates
-    :start_date, :end_date,
+    :start_date, :end_date, :next_release,
     # Rankings
     :popularity_rank, :rating_rank,
     # Age Ratings

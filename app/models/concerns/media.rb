@@ -120,6 +120,10 @@ module Media
     return :unreleased if start_date&.future?
   end
 
+  def next_release
+    release_schedule&.next_occurrence
+  end
+
   def feed
     @feed ||= MediaFeed.new(self.class.name, id)
   end
