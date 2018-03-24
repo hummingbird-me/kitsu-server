@@ -28,21 +28,23 @@ class TheTvdbService
 
   # Import data from TVDB for the Mappings which were passed into the initializer
   def import!
-    pluck_mappings(@mappings)['Anime'].each do |(anime_id, tvdb_id)|
-      anime = Anime.find(anime_id)
-      series_id, season_number = tvdb_id.split('/')
+    each_mapping do |anime, series_id, season_number|
       begin
         series = get_series(series_id)
         episodes = get_episodes(series_id, season_number)
       rescue NotFound
-        anime.mappings.where(external_id: tvdb_id).destroy!
+        anime.mappings.where(external_id: tvdb_id).first.destroy!
         next
       end
 
       next unless episodes
 
       next if anime.episode_count && (anime.episode_count - episodes.count).abs > 2
-      anime.update_unit_count_guess(episodes.count)
+      if anime.episode_count
+        episodes = episodes[0..anime.episode_count - 1] if anime.episode_count
+      else
+        anime.update_unit_count_guess(episodes.count)
+      end
 
       # creating/updating the episode
       process_series_data(series, anime)
@@ -79,6 +81,15 @@ class TheTvdbService
     JSON.parse(response.body)
   end
 
+  def each_mapping
+    pluck_mappings(@mappings)['Anime'].each do |(anime_id, tvdb_id)|
+      anime = Anime.find(anime_id)
+      series_id, season_number = tvdb_id.split('/')
+
+      yield anime, series_id, season_number
+    end
+  end
+
   def pluck_mappings(data)
     return if data.blank?
 
@@ -108,22 +119,28 @@ class TheTvdbService
     return if media.release_schedule.present?
     return if series['airsTime'].blank? || series['airsDayOfWeek'].blank?
 
+    schedule = parse_schedule(media, series['airsDayOfWeek'], series['airsTime'])
+    media.update!(release_schedule: schedule)
+  end
+
+  private
+
+  def parse_schedule(media, day_of_week, time)
     # Go back a day from the supposed start time since it can be wrong
     start_date = media.start_date.in_time_zone('Japan') - 23.hours
-    schedule = IceCube::Schedule.new(start_date, duration: media.episode_length.minutes) do |s|
-      time = Time.parse(series['airsTime'])
+    duration = media.episode_length&.minutes || 23
+
+    IceCube::Schedule.new(start_date, duration: duration) do |s|
+      time = Time.parse(time)
       s.add_recurrence_rule(
         IceCube::Rule.weekly
-          .day(series['airsDayOfWeek'].downcase.to_sym)
+          .day(day_of_week.downcase.to_sym)
           .hour_of_day(time.hour)
           .minute_of_hour(time.min)
           .count(media.episode_count)
       )
     end
-    media.update!(release_schedule: schedule)
   end
-
-  private
 
   def http
     @http ||= Faraday.new(url: BASE_URL)
