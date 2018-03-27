@@ -57,6 +57,8 @@ gem 'flipper-ui'
 # Miscellaneous Utilities
 gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches
+gem 'faraday'
+gem 'faraday_middleware'
 gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'ice_cube' # Episode release schedules

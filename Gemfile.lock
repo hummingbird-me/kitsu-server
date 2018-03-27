@@ -168,6 +168,8 @@ GEM
       i18n (>= 0.7)
     faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.12.2)
+      faraday (>= 0.7.4, < 1.0)
     fast_blank (1.0.0)
     fastimage (2.1.1)
     ffi (1.9.21)
@@ -618,6 +620,8 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  faraday
+  faraday_middleware
   fast_blank
   fastimage
   flipper
