@@ -28,15 +28,15 @@ class PostLike < ApplicationRecord
   }
 
   counter_culture :user, execute_after_commit: true,
-                         column_name: proc do |model|
+                         column_name: proc { |model|
                            model.user.likes_given_count < 20 ? 'likes_given_count' : nil
-                         end
+                         }
   counter_culture %i[post user], execute_after_commit: true,
-                                 column_name: proc do |model|
+                                 column_name: proc { |model|
                                    if model.post.user.likes_received_count < 20
                                      'likes_received_count'
                                    end
-                                 end
+                                 }
 
   scope :followed_first, ->(u) { joins(:user).merge(User.followed_first(u)) }
 
