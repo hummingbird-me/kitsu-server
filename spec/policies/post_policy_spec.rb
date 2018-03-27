@@ -8,21 +8,10 @@ RSpec.describe PostPolicy do
   subject { described_class }
 
   permissions :update? do
-    context 'old post' do
-      let(:post) do
-        build(:post, user: owner.resource_owner, created_at: 1.hour.ago)
-      end
-      it('should not allow owner') { should_not permit(owner, post) }
-      it('should allow admin') { should permit(admin, post) }
-      it('should not allow others') { should_not permit(other, post) }
-      it('should not allow anons') { should_not permit(nil, post) }
-    end
-    context 'recent post' do
-      it('should allow owner') { should permit(owner, post) }
-      it('should allow admin') { should permit(admin, post) }
-      it('should not allow other users') { should_not permit(other, post) }
-      it('should not allow anons') { should_not permit(nil, post) }
-    end
+    it('should allow owner') { should permit(owner, post) }
+    it('should allow admin') { should permit(admin, post) }
+    it('should not allow other users') { should_not permit(other, post) }
+    it('should not allow anons') { should_not permit(nil, post) }
   end
 
   permissions :create? do

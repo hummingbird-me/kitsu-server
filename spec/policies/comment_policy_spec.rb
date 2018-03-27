@@ -8,21 +8,10 @@ RSpec.describe CommentPolicy do
   subject { described_class }
 
   permissions :update? do
-    context 'with old comment' do
-      let(:comment) do
-        build(:comment, user: owner.resource_owner, created_at: 1.hour.ago)
-      end
-      it('should not allow owner') { should_not permit(owner, comment) }
-      it('should allow admin') { should permit(admin, comment) }
-      it('should not allow others') { should_not permit(other, comment) }
-      it('should not allow anons') { should_not permit(nil, comment) }
-    end
-    context 'with recent comment' do
-      it('should allow owner') { should permit(owner, comment) }
-      it('should allow admin') { should permit(admin, comment) }
-      it('should not allow other users') { should_not permit(other, comment) }
-      it('should not allow anons') { should_not permit(nil, comment) }
-    end
+    it('should allow owner') { should permit(owner, comment) }
+    it('should allow admin') { should permit(admin, comment) }
+    it('should not allow other users') { should_not permit(other, comment) }
+    it('should not allow anons') { should_not permit(nil, comment) }
   end
 
   permissions :create? do
