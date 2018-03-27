@@ -4,7 +4,6 @@ class CommentPolicy < ApplicationPolicy
   def update?
     return true if is_admin?
     return true if group && has_group_permission?(:content)
-    return false if record.created_at&.<(30.minutes.ago)
     is_owner?
   end
 
