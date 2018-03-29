@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20180319230733) do
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
+  add_index "anime", ["average_rating"], name: "anime_average_rating_idx", using: :btree
   add_index "anime", ["average_rating"], name: "index_anime_on_wilson_ci", order: {"average_rating"=>:desc}, using: :btree
   add_index "anime", ["slug"], name: "index_anime_on_slug", unique: true, using: :btree
   add_index "anime", ["user_count"], name: "index_anime_on_user_count", using: :btree
@@ -108,6 +109,8 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.integer "anime_id",    null: false
     t.integer "category_id", null: false
   end
+
+  add_index "anime_categories", ["anime_id"], name: "anime_categories_anime_id_idx", using: :btree
 
   create_table "anime_characters", force: :cascade do |t|
     t.integer  "anime_id",                 null: false
@@ -224,6 +227,8 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.integer "category_id", null: false
     t.integer "manga_id",    null: false
   end
+
+  add_index "categories_manga", ["manga_id"], name: "categories_manga_manga_id_idx", using: :btree
 
   create_table "category_favorites", force: :cascade do |t|
     t.integer  "user_id",     null: false
@@ -781,9 +786,8 @@ ActiveRecord::Schema.define(version: 20180319230733) do
   end
 
   add_index "library_entries", ["anime_id"], name: "index_library_entries_on_anime_id", using: :btree
-  add_index "library_entries", ["drama_id"], name: "index_library_entries_on_drama_id", using: :btree
   add_index "library_entries", ["manga_id"], name: "index_library_entries_on_manga_id", using: :btree
-  add_index "library_entries", ["private"], name: "index_library_entries_on_private", using: :btree
+  add_index "library_entries", ["user_id", "anime_id"], name: "library_entries_user_id_anime_id_idx", using: :btree
   add_index "library_entries", ["user_id", "media_type", "media_id"], name: "index_library_entries_on_user_id_and_media_type_and_media_id", unique: true, using: :btree
   add_index "library_entries", ["user_id", "media_type"], name: "index_library_entries_on_user_id_and_media_type", using: :btree
   add_index "library_entries", ["user_id", "status"], name: "index_library_entries_on_user_id_and_status", using: :btree
@@ -900,7 +904,9 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.text     "release_schedule"
   end
 
+  add_index "manga", ["average_rating"], name: "manga_average_rating_idx", using: :btree
   add_index "manga", ["slug"], name: "index_manga_on_slug", using: :btree
+  add_index "manga", ["user_count"], name: "manga_user_count_idx", using: :btree
 
   create_table "manga_characters", force: :cascade do |t|
     t.integer  "manga_id",                 null: false
@@ -1186,26 +1192,27 @@ ActiveRecord::Schema.define(version: 20180319230733) do
   end
 
   add_index "post_likes", ["post_id"], name: "index_post_likes_on_post_id", using: :btree
+  add_index "post_likes", ["user_id"], name: "index_post_likes_on_user_id", using: :btree
 
   create_table "posts", force: :cascade do |t|
-    t.integer  "user_id",                                  null: false
+    t.integer  "user_id",                                     null: false
     t.integer  "target_user_id"
     t.text     "content"
     t.text     "content_formatted"
     t.integer  "media_id"
     t.string   "media_type"
-    t.boolean  "spoiler",                  default: false, null: false
-    t.boolean  "nsfw",                     default: false, null: false
-    t.boolean  "blocked",                  default: false, null: false
+    t.boolean  "spoiler",                     default: false, null: false
+    t.boolean  "nsfw",                        default: false, null: false
+    t.boolean  "blocked",                     default: false, null: false
     t.integer  "spoiled_unit_id"
     t.string   "spoiled_unit_type"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.datetime "deleted_at"
     t.integer  "target_group_id"
-    t.integer  "post_likes_count",         default: 0,     null: false
-    t.integer  "comments_count",           default: 0,     null: false
-    t.integer  "top_level_comments_count", default: 0,     null: false
+    t.integer  "post_likes_count",            default: 0,     null: false
+    t.integer  "comments_count",              default: 0,     null: false
+    t.integer  "top_level_comments_count",    default: 0,     null: false
     t.datetime "edited_at"
     t.string   "target_interest"
     t.jsonb    "embed"
@@ -1527,6 +1534,7 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.integer  "posts_count",                             default: 0,           null: false
     t.integer  "ratings_count",                           default: 0,           null: false
     t.integer  "reviews_count",                           default: 0,           null: false
+    t.inet     "ip_addresses",                            default: [],                       array: true
     t.string   "previous_email"
     t.integer  "pinned_post_id"
     t.string   "time_zone"
@@ -1542,9 +1550,9 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.datetime "deleted_at"
     t.integer  "media_reactions_count",                   default: 0,           null: false
     t.integer  "status",                                  default: 1,           null: false
+    t.citext   "slug"
     t.text     "avatar_meta"
     t.text     "cover_image_meta"
-    t.citext   "slug"
     t.string   "ao_id"
     t.string   "ao_password"
     t.string   "ao_facebook_id"
