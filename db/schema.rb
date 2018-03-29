@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180319230733) do
+ActiveRecord::Schema.define(version: 20180329211224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -256,6 +256,7 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.integer  "thumbnail_file_size"
     t.datetime "thumbnail_updated_at"
     t.text     "thumbnail_meta"
+    t.boolean  "filler"
   end
 
   add_index "chapters", ["manga_id"], name: "index_chapters_on_manga_id", using: :btree
@@ -470,6 +471,7 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.string   "media_type",                                           null: false
     t.integer  "relative_number"
     t.text     "thumbnail_meta"
+    t.boolean  "filler"
   end
 
   add_index "episodes", ["media_type", "media_id"], name: "index_episodes_on_media_type_and_media_id", using: :btree
