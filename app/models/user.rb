@@ -196,6 +196,7 @@ class User < ApplicationRecord
     validates :slug, length: 3..20
   end
   validate :not_reserved_slug, if: ->(user) { user.slug.present? && user.slug_changed? }
+  validate :not_reserved_name, if: :name_changed?
   validate :not_taken_on_aozora, on: :create
   validates :name, presence: true,
                    length: { minimum: 3, maximum: 20 },
@@ -210,7 +211,7 @@ class User < ApplicationRecord
   validates :password, length: { maximum: 72 }, if: :registered?
   validates :facebook_id, uniqueness: true, allow_nil: true
 
-  scope :active, ->() { where(deleted_at: nil) }
+  scope :active, -> { where(deleted_at: nil) }
   scope :by_slug, ->(*slugs) { where(slug: slugs&.flatten) }
   scope :by_name, ->(*names) {
     where('lower(users.name) IN (?)', names&.flatten&.compact&.map(&:downcase))
@@ -249,6 +250,10 @@ class User < ApplicationRecord
 
   def not_reserved_slug
     errors.add(:slug, 'is reserved') if RESERVED_NAMES.include?(slug&.downcase)
+  end
+
+  def not_reserved_name
+    errors.add(:name, 'is reserved') if RESERVED_NAMES.include?(name.downcase)
   end
 
   def not_banned_characters
