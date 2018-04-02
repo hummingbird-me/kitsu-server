@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
-  revision: 8ca697f2deab7f99c72b2f9ed09f96c7dcf1b40f
+  revision: 592fcb22e324d596c53aadb6e762e4d66fae9a3e
   specs:
     doorkeeper-grants_assertion (0.1.0)
       doorkeeper (>= 4.0)
@@ -136,7 +136,7 @@ GEM
     docile (1.3.0)
     domain_name (0.5.20170223)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (4.2.6)
+    doorkeeper (4.3.2)
       railties (>= 4.2)
     dotenv (2.2.1)
     dotenv-rails (2.2.1)
@@ -287,7 +287,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.2.1)
+    loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.12)
@@ -420,8 +420,8 @@ GEM
       activesupport (>= 4.2.0, < 5.0)
       nokogiri (~> 1.6)
       rails-deprecated_sanitizer (>= 1.0.1)
-    rails-html-sanitizer (1.0.3)
-      loofah (~> 2.0)
+    rails-html-sanitizer (1.0.4)
+      loofah (~> 2.2, >= 2.2.2)
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
