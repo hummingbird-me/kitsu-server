@@ -1,5 +1,3 @@
-require 'dirty_change_wrapper'
-
 class StatWorker
   include Sidekiq::Worker
 

@@ -1,5 +1,3 @@
-require_dependency 'with_progress_bar'
-
 module Zorro
   module Importer
     # Imports a follow from Aozora to Kitsu, and provides a way to import all follows at once.

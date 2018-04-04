@@ -40,8 +40,6 @@
 #
 # rubocop:enable Metrics/LineLength
 
-require_dependency 'html/pipeline/onebox_filter'
-
 class Post < ApplicationRecord
   include WithActivity
   include ContentProcessable

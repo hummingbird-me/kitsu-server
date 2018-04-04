@@ -1,5 +1,3 @@
-require 'update_in_batches'
-
 class InvertDefaultOnHiddenColumn < ActiveRecord::Migration
   using UpdateInBatches
 

@@ -1,7 +1,3 @@
-Dir['lib/stream_dump/*'].each do |file|
-  require_dependency(File.expand_path(file))
-end
-
 module StreamDump
   module_function
 

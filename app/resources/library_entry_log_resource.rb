@@ -1,5 +1,3 @@
-require 'unlimited_paginator'
-
 class LibraryEntryLogResource < BaseResource
   immutable
   paginator :unlimited

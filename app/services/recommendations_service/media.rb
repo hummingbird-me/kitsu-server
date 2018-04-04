@@ -1,5 +1,3 @@
-require_dependency 'stream/custom_endpoint_client'
-
 class RecommendationsService
   class Media
     attr_reader :client, :user

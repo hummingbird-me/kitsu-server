@@ -1,6 +1,5 @@
 # rubocop:disable Metrics/BlockLength
 require 'sidekiq/web'
-require 'admin_constraint'
 
 Rails.application.routes.draw do
   scope '/api' do

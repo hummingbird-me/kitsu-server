@@ -1,5 +1,3 @@
-require_dependency 'html/pipeline/kramdown_filter'
-
 RulesPipeline = HTML::Pipeline.new [
   HTML::Pipeline::KramdownFilter,
   HTML::Pipeline::SanitizationFilter,

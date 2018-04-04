@@ -1,5 +1,3 @@
-require_dependency 'with_progress_bar'
-
 module Zorro
   module Importer
     # Imports favorites from Aozora to Kitsu

@@ -1,5 +1,3 @@
-require_dependency 'update_in_batches'
-
 class GroupUnreadFanoutService
   using UpdateInBatches
 

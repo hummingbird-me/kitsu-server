@@ -1,5 +1,3 @@
-require_dependency 'with_progress_bar'
-
 module Zorro
   module Importer
     # Imports a post from Aozora to Kitsu, and provides a way to import all posts in one fell swoop.

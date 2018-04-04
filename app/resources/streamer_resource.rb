@@ -1,5 +1,3 @@
-require 'unlimited_paginator'
-
 class StreamerResource < BaseResource
   attributes :site_name, :streaming_links_count
   attributes :logo, format: :attachment
