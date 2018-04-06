@@ -12,7 +12,7 @@ module ListSync
       rescue ActiveRecord::RecordNotFound
         return
       end
-      logs = LibraryEntryLog.for_entry(library_entry).pending
+      logs = LibraryEntryLog.where(linked_account: linked_account).for_entry(library_entry).pending
 
       capture_sync_errors(linked_account, logs) do
         linked_account.list_sync.update!(library_entry)
