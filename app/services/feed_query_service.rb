@@ -17,6 +17,7 @@ class FeedQueryService
     list = list.where_id(*id_query) if id_query
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
+    list = list.only_following(user.id) if only_following?
     list = list.blocking(blocked)
     list = list.select(kind_select[:ratio], &kind_select[:proc]) if kind_select
     @list = list
@@ -78,6 +79,10 @@ class FeedQueryService
           end
         }
       end
+  end
+
+  def following_only?
+    params.dig(:filter, :following)
   end
 
   def blocked
