@@ -17,8 +17,14 @@ class FeedQueryService
     list = list.where_id(*id_query) if id_query
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
+    if Flipper[:feed_following_filter].enabled?(User.current)
+      list = list.only_following(user.id) if only_following?
+    end
     list = list.blocking(blocked)
     list = list.select(kind_select[:ratio], &kind_select[:proc]) if kind_select
+    if Flipper[:feed_reasons].enabled?(User.current)
+      list = list.map(&method(:annotate_with_reason)) if feed.is_a?(TimelineFeed)
+    end
     @list = list
   end
 
@@ -78,6 +84,22 @@ class FeedQueryService
           end
         }
       end
+  end
+
+  def only_following?
+    params.dig(:filter, :following)
+  end
+
+  def followed
+    @followed ||= Set.new(Follow.where(follower_id: user_id).pluck(:followed_id))
+  end
+
+  def annotate_with_reason(act)
+    if act['target'].is_a?(Post)
+      user_id = act['target'].user_id
+      act['reason'] = followed.include?(user_id) ? 'follow' : 'media'
+    end
+    act
   end
 
   def blocked

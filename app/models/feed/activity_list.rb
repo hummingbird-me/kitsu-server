@@ -66,6 +66,25 @@ class Feed
       self
     end
 
+    def only_following(user_id)
+      followed = Set.new(Follow.where(follower_id: user_id).pluck(:followed_id))
+      select(0.5) do |act|
+        user_id = act['actor'].split(':')[1].to_i
+        is_followed = followed.include?(user_id)
+        throw :remove_group if !is_followed && act['verb'] == 'post'
+        is_followed
+      end
+      # Handle blocked posts when the post activity isn't in the group
+      select including: %i[target] do |act|
+        if act['target'].is_a?(Post)
+          user_id = act['target'].user_id
+          throw :remove_group unless followed.include?(user_id)
+        end
+        true
+      end
+      self
+    end
+
     def includes(*relationships)
       including = [relationships].flatten.map(&:to_s)
       # Hardwire subject->object
