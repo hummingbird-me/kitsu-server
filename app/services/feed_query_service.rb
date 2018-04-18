@@ -86,7 +86,7 @@ class FeedQueryService
       end
   end
 
-  def following_only?
+  def only_following?
     params.dig(:filter, :following)
   end
 
@@ -97,7 +97,7 @@ class FeedQueryService
   def annotate_with_reason(act)
     if act['target'].is_a?(Post)
       user_id = act['target'].user_id
-      act['reason'] = followed.include?(user_id) ? 'follow_user' : 'follow_media'
+      act['reason'] = followed.include?(user_id) ? 'follow' : 'media'
     end
     act
   end
