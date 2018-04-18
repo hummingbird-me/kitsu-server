@@ -20,6 +20,7 @@ class FeedQueryService
     list = list.only_following(user.id) if only_following?
     list = list.blocking(blocked)
     list = list.select(kind_select[:ratio], &kind_select[:proc]) if kind_select
+    list = list.map(&method(:annotate_with_reason)) if feed.is_a?(TimelineFeed)
     @list = list
   end
 
@@ -83,6 +84,18 @@ class FeedQueryService
 
   def following_only?
     params.dig(:filter, :following)
+  end
+
+  def followed
+    @followed ||= Set.new(Follow.where(follower_id: user_id).pluck(:followed_id))
+  end
+
+  def annotate_with_reason(act)
+    if act['target'].is_a?(Post)
+      user_id = act['target'].user_id
+      act['reason'] = followed.include?(user_id) ? 'follow_user' : 'follow_media'
+    end
+    act
   end
 
   def blocked
