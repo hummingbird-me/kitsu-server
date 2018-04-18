@@ -365,7 +365,7 @@ GEM
     paranoia (2.4.0)
       activerecord (>= 4.0, < 5.2)
     pg (0.21.0)
-    pg_query (1.0.1)
+    pg_query (1.0.2)
     pghero (2.1.0)
       activerecord
     progress (3.4.0)
