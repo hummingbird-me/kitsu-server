@@ -91,7 +91,7 @@ class FeedQueryService
   end
 
   def followed
-    @followed ||= Set.new(Follow.where(follower_id: user_id).pluck(:followed_id))
+    @followed ||= Set.new(Follow.where(follower_id: user.id).pluck(:followed_id))
   end
 
   def annotate_with_reason(act)
