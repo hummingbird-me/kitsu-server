@@ -560,7 +560,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stream-ruby (2.5.10)
+    stream-ruby (2.6.0)
       faraday (>= 0.10.0, < 1.0)
       http_signatures (~> 0)
       jwt (~> 1.5.2)
@@ -689,7 +689,7 @@ DEPENDENCIES
   sinatra
   sitemap_generator
   spring
-  stream-ruby (~> 2.5.10)
+  stream-ruby (~> 2.6.0)
   stream_rails!
   test_after_commit
   timecop
