@@ -1,5 +1,3 @@
-require 'unlimited_paginator'
-
 class MediaAttributeResource < BaseResource
   attributes :title, :high_title, :neutral_title, :low_title
 

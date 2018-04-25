@@ -1,5 +1,3 @@
-require 'buffered_stream_client'
-
 # This class is an abstraction on top of Stream Feeds, hiding the details of
 # what underlying feeds there are (some "feeds" are actually a group of 6+
 # feeds!)

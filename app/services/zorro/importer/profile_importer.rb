@@ -1,5 +1,3 @@
-require_dependency 'zorro'
-
 module Zorro
   module Importer
     # Imports a profile from Aozora to Kitsu

@@ -1,5 +1,3 @@
-require_dependency 'with_progress_bar'
-
 module Zorro
   # Sets up Mapping data for Aozora, imports hashtags, and potentially creates new anime where we
   # don't already have them.

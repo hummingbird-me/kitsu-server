@@ -1,5 +1,3 @@
-require 'library_paginator'
-
 class LibraryEntryResource < BaseResource
   TITLE_SORT = /\A([^\.]+)\.titles\.([^\.]+)\z/
 

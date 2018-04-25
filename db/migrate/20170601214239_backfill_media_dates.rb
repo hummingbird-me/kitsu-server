@@ -1,5 +1,3 @@
-require 'update_in_batches'
-
 class BackfillMediaDates < ActiveRecord::Migration
   using UpdateInBatches
   self.disable_ddl_transaction!

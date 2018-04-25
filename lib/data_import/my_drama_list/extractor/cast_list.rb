@@ -1,5 +1,3 @@
-require_dependency 'data_import/my_drama_list/extractor/helpers'
-
 module DataImport
   class MyDramaList
     module Extractor

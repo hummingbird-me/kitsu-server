@@ -1,5 +1,3 @@
-require_dependency 'with_progress_bar'
-
 class MongoProcessor
   include WithProgressBar
 

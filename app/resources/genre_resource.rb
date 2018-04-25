@@ -1,5 +1,3 @@
-require 'unlimited_paginator'
-
 class GenreResource < BaseResource
   caching
 

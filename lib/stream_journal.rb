@@ -49,5 +49,3 @@ class StreamJournal
   end
   delegate :duration, to: :class
 end
-
-require_dependency 'stream_journal/journaled_feed'

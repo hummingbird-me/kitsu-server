@@ -1,5 +1,3 @@
-require_dependency 'kramdown/parser/inline_markdown'
-
 module HTML
   class Pipeline
     class InlineMarkdownFilter < TextFilter
