@@ -25,7 +25,12 @@ class Mapping < ApplicationRecord
   validates :item_id, uniqueness: { scope: %i[item_type external_site] }
 
   def self.lookup(site, id)
-    find_by(external_site: site, external_id: id).try(:item)
+    item = find_by(external_site: site, external_id: id).try(:item)
+    if !item && block_given?
+      item = yield
+      create!(external_site: site, external_id: id, item: item)
+    end
+    item
   end
 
   def self.guess(type, query)
