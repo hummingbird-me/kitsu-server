@@ -1,6 +1,72 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::MediaPage do
+  describe '#poster_image' do
+    before do
+      stub_request(:get, %r{https://myanimelist.net/anime/.*})
+        .to_return(fixture('scrapers/my_anime_list_scraper/anime_detail_movie.html'))
+    end
+    subject { described_class.new('https://myanimelist.net/anime/306/Your_Name') }
+
+    it 'should return a URI' do
+      expect(subject.poster_image).to be_a(URI)
+    end
+
+    it 'should return the large image' do
+      expect(subject.poster_image.to_s).to include('l.')
+    end
+  end
+
+  describe '#subtype' do
+    context 'for a movie' do
+      before do
+        stub_request(:get, %r{https://myanimelist.net/anime/.*})
+          .to_return(fixture('scrapers/my_anime_list_scraper/anime_detail_movie.html'))
+      end
+      subject { described_class.new('https://myanimelist.net/anime/306/Your_Name') }
+
+      it 'should return :movie' do
+        expect(subject.subtype).to eq(:movie)
+      end
+    end
+
+    context 'for a TV series' do
+      before do
+        stub_request(:get, %r{https://myanimelist.net/anime/.*})
+          .to_return(fixture('scrapers/my_anime_list_scraper/anime_detail_tv.html'))
+      end
+      subject { described_class.new('https://myanimelist.net/anime/306/Abenobashi') }
+
+      it 'should return :tv' do
+        expect(subject.subtype).to eq(:tv)
+      end
+    end
+
+    context 'for a hentai novel' do
+      before do
+        stub_request(:get, %r{https://myanimelist.net/manga/.*})
+          .to_return(fixture('scrapers/my_anime_list_scraper/manga_detail_empty.html'))
+      end
+      subject { described_class.new('https://myanimelist.net/manga/109855/Mamono_Friends') }
+
+      it 'should return :novel' do
+        expect(subject.subtype).to eq(:novel)
+      end
+    end
+
+    context 'for a manga' do
+      before do
+        stub_request(:get, %r{https://myanimelist.net/manga/.*})
+          .to_return(fixture('scrapers/my_anime_list_scraper/manga_detail_ongoing.html'))
+      end
+      subject { described_class.new('https://myanimelist.net/manga/13/One_Piece') }
+
+      it 'should return :manga' do
+        expect(subject.subtype).to eq(:manga)
+      end
+    end
+  end
+
   describe '#synopsis' do
     before do
       stub_request(:get, %r{https://myanimelist.net/anime/.*})
