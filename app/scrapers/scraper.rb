@@ -44,6 +44,10 @@ class Scraper
     ScraperWorker.perform_async(self.class.name, @url)
   end
 
+  def inspect
+    "#<#{self.class.name} url: \"#{@url}\">"
+  end
+
   private
 
   # Queue a scraper to run asynchronously
