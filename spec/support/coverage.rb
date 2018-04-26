@@ -14,6 +14,10 @@ module SimpleCov
   end
 end
 
+SimpleCov::Formatter::LcovFormatter.config do |c|
+  c.single_report_path = 'coverage/lcov.info'
+  c.report_with_single_file = true
+end
 CodeClimate::TestReporter.start if ENV['CODECLIMATE_REPO_TOKEN']
 
 SimpleCov.start do
