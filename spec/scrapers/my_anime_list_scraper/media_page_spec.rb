@@ -143,4 +143,17 @@ RSpec.describe MyAnimeListScraper::MediaPage do
       expect(subject.genres).to all(be_a(Genre))
     end
   end
+
+  describe '#abbreviated_titles' do
+    before do
+      stub_request(:get, %r{https://myanimelist.net/anime/.*})
+        .to_return(fixture('scrapers/my_anime_list_scraper/anime_detail_tv.html'))
+    end
+    subject { described_class.new('https://myanimelist.net/anime/306/Abenobashi') }
+
+    it 'should return a list of synonymous titles' do
+      expect(subject.abbreviated_titles).to be_an(Array)
+      expect(subject.abbreviated_titles).to include('Magical Shopping Arcade Abenobashi')
+    end
+  end
 end

@@ -11,10 +11,16 @@ class MyAnimeListScraper
     end
 
     def import
+      media.abbreviated_titles = [*media.abbreviated_titles, *abbreviated_titles].uniq
       media.synopsis ||= "#{synopsis}\n\n#{background}"
       media.genres += genres
       media.subtype ||= subtype
       media.poster_image ||= poster_image
+    end
+
+    # TODO: rename abbreviated_titles to alternate_titles
+    def abbreviated_titles
+      hash_for_sidebar_section('Alternative Titles')['Synonyms']&.content&.split(',')&.map(&:strip)
     end
 
     def poster_image
