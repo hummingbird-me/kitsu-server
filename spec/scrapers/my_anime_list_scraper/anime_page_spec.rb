@@ -8,25 +8,6 @@ RSpec.describe MyAnimeListScraper::AnimePage do
     end
     subject { described_class.new('https://myanimelist.net/anime/306/Your_Name') }
 
-    describe '#titles' do
-      it 'should return a hash with string keys' do
-        expect(subject.titles).to be_a(Hash)
-        expect(subject.titles.keys).to all(be_a(String))
-      end
-
-      it 'should return the romaji title as en_jp' do
-        expect(subject.titles['en_jp']).to eq('Kimi no Na wa.')
-      end
-
-      it 'should return the english title as en_us' do
-        expect(subject.titles['en_us']).to eq('Your Name.')
-      end
-
-      it 'should return the original kanji title as ja_jp' do
-        expect(subject.titles['ja_jp']).to eq('君の名は。')
-      end
-    end
-
     describe '#age_rating' do
       it 'should return :PG' do
         expect(subject.age_rating).to eq(:PG)

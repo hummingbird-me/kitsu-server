@@ -14,23 +14,12 @@ class MyAnimeListScraper
 
     def import
       super
-      media.titles = media.titles.merge(titles)
-      media.canonical_title ||= 'en_jp'
       media.age_rating ||= age_rating
       media.age_rating_guide ||= age_rating_guide
       media.episode_count ||= episode_count
       media.episode_length ||= episode_length
       media.anime_productions += productions
       media
-    end
-
-    def titles
-      titles = hash_for_sidebar_section('Alternative Titles')
-      {
-        en_us: titles['English']&.content&.strip,
-        en_jp: header,
-        ja_jp: titles['Japanese']&.content&.strip
-      }.compact.stringify_keys
     end
 
     def age_rating

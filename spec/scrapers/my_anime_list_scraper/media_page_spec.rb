@@ -1,6 +1,31 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::MediaPage do
+  describe '#titles' do
+    before do
+      stub_request(:get, %r{https://myanimelist.net/anime/.*})
+        .to_return(fixture('scrapers/my_anime_list_scraper/anime_detail_movie.html'))
+    end
+    subject { described_class.new('https://myanimelist.net/anime/306/Your_Name') }
+
+    it 'should return a hash with string keys' do
+      expect(subject.titles).to be_a(Hash)
+      expect(subject.titles.keys).to all(be_a(String))
+    end
+
+    it 'should return the romaji title as en_jp' do
+      expect(subject.titles['en_jp']).to eq('Kimi no Na wa.')
+    end
+
+    it 'should return the english title as en_us' do
+      expect(subject.titles['en_us']).to eq('Your Name.')
+    end
+
+    it 'should return the original kanji title as ja_jp' do
+      expect(subject.titles['ja_jp']).to eq('君の名は。')
+    end
+  end
+
   describe '#poster_image' do
     before do
       stub_request(:get, %r{https://myanimelist.net/anime/.*})
