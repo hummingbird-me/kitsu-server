@@ -1,7 +1,7 @@
 class MyAnimeListScraper
   class AnimePage < MediaPage
     using NodeSetContentMethod
-    ANIME_URL = %r{https://myanimelist.net/anime/(?<id>\d+)/.*}
+    ANIME_URL = %r{\Ahttps://myanimelist.net/anime/(?<id>\d+)/[^/]+\z}
 
     def match?
       ANIME_URL =~ @url
