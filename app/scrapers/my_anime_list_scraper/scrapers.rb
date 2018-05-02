@@ -2,7 +2,7 @@ class MyAnimeListScraper
   SCRAPERS = [
     AnimePage,
     # MangaPage,
-    # EpisodeList,
+    EpisodeList,
     # EpisodePage,
     # CastList,
     # CharacterPage,
