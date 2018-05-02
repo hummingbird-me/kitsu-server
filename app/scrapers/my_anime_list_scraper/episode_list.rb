@@ -1,6 +1,5 @@
 class MyAnimeListScraper
   class EpisodeList < MyAnimeListScraper
-    using NodeSetContentMethod
     EPISODES_URL = %r{\Ahttps://myanimelist.net/anime/(?<id>\d+)/[^/]+/episode(?:\?.*)?\z}
 
     def match?
