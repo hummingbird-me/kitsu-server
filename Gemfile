@@ -73,7 +73,7 @@ gem 'ranked-model' # Sortables!
 gem 'rbtrace' # Attach to running ruby processes
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'stream-ruby', '~> 2.5.10' # Feeds
+gem 'stream-ruby', '~> 2.6.1' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'typhoeus' # Parallelize scraping tasks
