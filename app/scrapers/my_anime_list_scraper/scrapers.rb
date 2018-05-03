@@ -3,7 +3,7 @@ class MyAnimeListScraper
     AnimePage,
     # MangaPage,
     EpisodeList,
-    # EpisodePage,
+    EpisodePage,
     # CastList,
     # CharacterPage,
     # PersonPage
