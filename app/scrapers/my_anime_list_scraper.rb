@@ -71,6 +71,10 @@ class MyAnimeListScraper < Scraper
     lines.join.strip.delete("\r")
   end
 
+  def clean_html(html)
+    HtmlCleaner.new(html).to_s
+  end
+
   def base_url
     BASE_URL
   end
