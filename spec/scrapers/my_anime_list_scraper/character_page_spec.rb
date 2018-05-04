@@ -20,9 +20,9 @@ RSpec.describe MyAnimeListScraper::CharacterPage do
       end
     end
 
-    describe '#synopsis' do
+    describe '#description' do
       it 'should replace spoiler tags with <spoiler>' do
-        expect(subject.synopsis).to match(/<spoiler>Later on, due/)
+        expect(subject.description).to match(/<spoiler>Later on, due/)
       end
     end
 
