@@ -23,7 +23,8 @@ class MyAnimeListScraper < Scraper
 
   # @return [Nokogiri::XML::Node] The sidebar of a standard MAL page
   def sidebar
-    content.at_css('td:first-child .js-scrollfix-bottom')
+    content.at_css('td:first-child .js-scrollfix-bottom') ||
+      main.previous_element
   end
 
   # @return [Hash<String,Nokogiri::XML::NodeSet] the sections in the MAL sidebar
@@ -33,7 +34,8 @@ class MyAnimeListScraper < Scraper
 
   # @return [Nokogiri::XML::Node] The main container of a standard MAL page
   def main
-    content.at_css('td:last-child .js-scrollfix-bottom-rel')
+    content.at_css('td:last-child .js-scrollfix-bottom-rel') ||
+      content.at_css('#horiznav_nav').parent
   end
 
   # @return [Hash<String,Nokogiri::XML::NodeSet] the sections in the MAL sidebar
@@ -54,7 +56,7 @@ class MyAnimeListScraper < Scraper
       node.css('script, style, iframe').each(&:remove)
 
       # Process the node
-      if node.name == 'h2'
+      if node.name == 'h2' || node['class'] == 'normal_header'
         section = node.xpath('./text()').map(&:content).join.strip
       else
         out[section] << node
