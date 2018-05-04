@@ -29,7 +29,7 @@ class MyAnimeListScraper < Scraper
 
   # @return [Hash<String,Nokogiri::XML::NodeSet] the sections in the MAL sidebar
   def sidebar_sections
-    @sidebar_sections ||= parse_sections(sidebar.at_css('h2').parent.children)
+    @sidebar_sections ||= parse_sections(sidebar.at_css('h2, .spaceit_pad').parent.children)
   end
 
   # @return [Nokogiri::XML::Node] The main container of a standard MAL page

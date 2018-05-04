@@ -4,7 +4,7 @@ class MyAnimeListScraper
 
     def hash_for_sidebar_section(section_name)
       # For each top-level <div> tag in the section
-      sidebar_sections[section_name].css('div').each_with_object({}) do |row, out|
+      sidebar_sections[section_name].css('div.spaceit_pad').each_with_object({}) do |row, out|
         # Extract the key
         key = row.at_css('.dark_text').content.delete(':').strip
 
