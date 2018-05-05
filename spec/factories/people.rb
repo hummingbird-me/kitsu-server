@@ -23,5 +23,7 @@
 FactoryBot.define do
   factory :person do
     name { Faker::Name.name }
+    names { { en: Faker::Name.name } }
+    canonical_name 'en'
   end
 end
