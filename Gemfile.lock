@@ -314,7 +314,7 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     moneta (1.0.0)
-    mongo (2.5.1)
+    mongo (2.5.3)
       bson (>= 4.3.0, < 5.0.0)
     msgpack (1.2.2)
     multi_json (1.13.1)
