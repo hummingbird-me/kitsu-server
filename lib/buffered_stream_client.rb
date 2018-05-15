@@ -65,6 +65,11 @@ class BufferedStreamClient
     Thread.current[follow_buffer_key] ||= FollowBuffer.new
   end
 
+  # @private
+  def unfollow_buffer
+    @unfollow_buffer ||= UnfollowBuffer.new
+  end
+
   private
 
   def follow_buffer_key

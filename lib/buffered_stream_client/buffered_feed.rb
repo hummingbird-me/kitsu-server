@@ -40,8 +40,12 @@ class BufferedStreamClient
 
     # @api getstream-compat
     # @return [Hash] a hash with the execution duration
-    def unfollow(*args)
-      perform_action :unfollow, *args
+    def unfollow(group, id, keep_history = true)
+      @buffer.unfollow_buffer.push(
+        source: [@group, @id],
+        target: [group, id],
+        keep_history: keep_history
+      )
     end
 
     # @api getstream-compat
