@@ -43,7 +43,6 @@ class BufferedStreamClient
   # @return [void]
   def flush_async
     activity_buffer.flush_async
-    follow_buffer.flush_async
   end
 
   # Generate a realistic timing response hash in case anything depends on that
