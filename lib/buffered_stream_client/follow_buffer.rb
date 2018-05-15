@@ -34,12 +34,14 @@ class BufferedStreamClient
           return_batch(follows, group: group)
           raise
         end
+        increment_metrics(follows)
       end
     end
 
     private
 
     def valid_follow?(follow)
+      follow = follow.stringify_keys
       valid_feed?(follow['source']) && valid_feed?(follow['target'])
     end
 
