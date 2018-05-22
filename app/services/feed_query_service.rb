@@ -94,10 +94,18 @@ class FeedQueryService
     @followed ||= Set.new(Follow.where(follower_id: user.id).pluck(:followed_id))
   end
 
+  def groups
+    @groups ||= Set.new(GroupMember.where(user_id: user.id).pluck(:group_id))
+  end
+
   def annotate_with_reason(act)
     if act['target'].is_a?(Post)
       user_id = act['target'].user_id
-      act['reason'] = followed.include?(user_id) ? 'follow' : 'media'
+      group_id = act['target'].target_group_id
+      act['reason'] = 'media'
+      act['reason'] = 'follow' if followed.include?(user_id)
+      act['reason'] = 'follow' if user.id == user_id
+      act['reason'] = 'group' if groups.include?(group_id)
     end
     act
   end
