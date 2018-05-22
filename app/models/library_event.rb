@@ -85,4 +85,8 @@ class LibraryEvent < ApplicationRecord
 
     changed_data['progress'][1] - changed_data['progress'][0]
   end
+
+  after_create do
+    EventFollowService.new(self).follow
+  end
 end
