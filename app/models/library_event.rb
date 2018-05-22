@@ -29,6 +29,8 @@
 # rubocop:enable Metrics/LineLength
 
 class LibraryEvent < ApplicationRecord
+  FOLLOW_PERIOD = 1.week
+
   belongs_to :library_entry, required: true
   belongs_to :user, required: true
   belongs_to :anime
@@ -46,6 +48,36 @@ class LibraryEvent < ApplicationRecord
       scope = scope.or(col.not_eq(nil))
     end
     where(scope)
+  end
+
+  scope :not_ignored, -> do
+    joins(<<-SQL.squish).where('media_ignores.id IS NULL')
+      LEFT OUTER JOIN media_ignores ON
+      library_events.user_id = media_ignores.user_id AND
+      (
+        (library_events.anime_id = media_ignores.media_id AND media_ignores.media_type = 'Anime') OR
+        (library_events.manga_id = media_ignores.media_id AND media_ignores.media_type = 'Manga') OR
+        (library_events.drama_id = media_ignores.media_id AND media_ignores.media_type = 'Drama')
+      )
+    SQL
+  end
+
+  scope :for_media, ->(media) do
+    foreign_key = "#{media.model_name.element}_id"
+    where(foreign_key => media.id)
+  end
+
+  scope :followed, -> { where('created_at > ?', FOLLOW_PERIOD.ago) }
+  scope :unfollowed, -> { where('created_at <= ?', FOLLOW_PERIOD.ago) }
+
+  def media
+    anime || manga || drama
+  end
+
+  def units
+    return unless progressed?
+
+    media.units(Range.new(*changed_data['progress']))
   end
 
   def progress
