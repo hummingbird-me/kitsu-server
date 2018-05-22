@@ -64,6 +64,10 @@ class Manga < ApplicationRecord
     chapters.where(number: number).first
   end
 
+  def units(range)
+    chapters.where(number: range)
+  end
+
   def default_progress_limit
     # TODO: Actually provide good logic for this
     5000
