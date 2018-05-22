@@ -78,6 +78,8 @@ GEM
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
     arel (6.0.4)
+    arel-helpers (2.7.0)
+      activerecord (>= 3.1.0, < 6)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
     aws-sdk (2.10.100)
@@ -184,6 +186,15 @@ GEM
       rack-protection (>= 1.5.3, < 2.1.0)
     font-awesome-rails (4.7.0.3)
       railties (>= 3.2, < 5.2)
+    forest_liana (2.5.4)
+      arel-helpers
+      bcrypt
+      groupdate
+      jsonapi-serializers (>= 0.14.0)
+      jwt
+      rack-cors
+      rails (>= 4.0)
+      useragent
     formatador (0.2.5)
     friendly_id (5.2.3)
       activerecord (>= 4.0.0)
@@ -191,6 +202,8 @@ GEM
     get_process_mem (0.2.1)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    groupdate (4.0.1)
+      activesupport (>= 4.2)
     guard (2.14.2)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -254,6 +267,8 @@ GEM
       activerecord (>= 4.1)
       concurrent-ruby
       railties (>= 4.1)
+    jsonapi-serializers (1.0.0)
+      activesupport
     jwt (1.5.6)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
@@ -589,6 +604,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    useragent (0.16.10)
     webmock (3.4.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -627,6 +643,7 @@ DEPENDENCIES
   flipper
   flipper-redis
   flipper-ui
+  forest_liana
   friendly_id
   guard
   guard-rspec
