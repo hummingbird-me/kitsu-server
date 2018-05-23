@@ -8,12 +8,15 @@ class PasswordResetService
   end
 
   def send!
-    raise UserNotFoundError unless user!
-    UserMailer.password_reset(user!).deliver_later
+    raise UserNotFoundError unless user
+    UserMailer.password_reset(user).deliver_later
   end
 
   def conflict_detector
     @conflict_detector ||= Zorro::UserConflictDetector.new(email: @email)
   end
-  delegate :user!, to: :conflict_detector
+
+  def user
+    @user ||= conflict_detector.user!
+  end
 end
