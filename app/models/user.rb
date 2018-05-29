@@ -377,6 +377,7 @@ class User < ApplicationRecord
   before_destroy do
     # Destroy personal posts
     posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
+    posts.where(target_user: self).destroy_all
     Post.only_deleted.where(user_id: id).delete_all
     # Reparent relationships to the "Deleted" user
     posts.update_all(user_id: -10)
