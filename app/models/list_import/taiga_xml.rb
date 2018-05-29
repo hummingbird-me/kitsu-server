@@ -6,11 +6,11 @@ class ListImport
     }, presence: true
 
     def count
-      xml.css('anime').count
+      xml.css('library anime').count
     end
 
     def each
-      xml.css('anime').each do |anime|
+      xml.css('library anime').each do |anime|
         row = Row.new(anime)
         yield row.media, row.data
       end
@@ -19,7 +19,7 @@ class ListImport
     private
 
     def xml
-      @xml ||= Nokogiri::XML.fragment(open(input_file.url))
+      @xml ||= Nokogiri::XML.fragment(open(input_file.url).read)
     end
   end
 end
