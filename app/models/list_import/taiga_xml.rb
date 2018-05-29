@@ -19,7 +19,7 @@ class ListImport
     private
 
     def xml
-      @xml ||= Nokogiri::XML(open(input_file.url).read)
+      @xml ||= Nokogiri::XML.fragment(open(input_file.url))
     end
   end
 end
