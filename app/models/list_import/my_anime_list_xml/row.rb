@@ -19,7 +19,7 @@ class ListImport
 
       def media_info
         @media_info ||= {
-          id: node.at_css('manga_mediadb_id, series_animedb_id').content.to_i,
+          id: node.at_css('manga_mediadb_id, manga_mangadb_id, series_animedb_id').content.to_i,
           title: node.at_css('manga_title, series_title').content,
           subtype: node.at_css('series_type')&.content,
           episode_count: node.at_css('series_episodes')&.content&.to_i,
@@ -75,7 +75,7 @@ class ListImport
 
       def data
         %i[status progress rating reconsume_count notes volumes_owned
-           started_at finished_at].map { |k| [k, send(k)] }.to_h
+           started_at finished_at].map { |k| [k, send(k)] }.to_h.compact
       end
     end
   end
