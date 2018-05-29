@@ -73,6 +73,7 @@ class ListImport < ApplicationRecord
         le = LibraryEntry.where(user_id: user.id, media: media).first_or_initialize
         le.imported = true
         le = merged_entry(le, data)
+        le.progress = [le.progress, media.progress_limit].min
         le.save! unless le.status.nil?
         yield({ status: :running, total: total, progress: index + 1 })
       end
