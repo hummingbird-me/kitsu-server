@@ -50,12 +50,13 @@ class ListImport
       end
 
       def reconsume_count
-        node.at_css('my_times_read, my_times_watched').content.to_i
+        node.at_css('my_times_read, my_times_watched')&.content&.to_i
       end
 
       def notes
-        comments = node.at_css('my_comments').content
-        tags = node.at_css('my_tags').content
+        comments = node.at_css('my_comments')&.content
+        tags = node.at_css('my_tags')&.content
+        return unless comments || tags
         tags.present? ? [comments, tags].join("\n=== MAL Tags ===\n") : comments
       end
 
