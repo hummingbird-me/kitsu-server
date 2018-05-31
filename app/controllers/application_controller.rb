@@ -9,6 +9,7 @@ class ApplicationController < JSONAPI::ResourceController
 
   before_action :validate_token!
   around_action :store_user_on_thread
+  around_action :store_region_on_thread
   around_action :flush_buffered_feeds
 
   force_ssl if Rails.env.production?
@@ -17,6 +18,15 @@ class ApplicationController < JSONAPI::ResourceController
     yield
   ensure
     Feed.client.try(:flush_async)
+  end
+
+  def store_region_on_thread
+    Thread.current[:region] = request.headers['CF-IPCountry']
+    begin
+      yield
+    ensure
+      Thread.current[:region] = nil
+    end
   end
 
   if Raven.configuration.capture_allowed?
