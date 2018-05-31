@@ -21,7 +21,7 @@ class ListImport
         when '2' then :completed
         when '3' then :on_hold
         when '4' then :dropped
-        when '6' then :planned
+        when '5' then :planned
         end
       end
 
