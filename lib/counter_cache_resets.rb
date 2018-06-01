@@ -25,6 +25,11 @@ module CounterCacheResets
     execute sql_for(Manga, :favorites, counter_cache_column: 'favorites_count')
   end
 
+  def follow_counts
+    execute sql_for(User, :followers)
+    execute sql_for(User, :following)
+  end
+
   def category_counts
     execute sql_for_habtm_media(
       Category,

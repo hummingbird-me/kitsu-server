@@ -132,9 +132,9 @@ class User < ApplicationRecord
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false
   has_many :followers, class_name: 'Follow', foreign_key: 'followed_id',
-                       dependent: :destroy
+                       dependent: :destroy, inverse_of: :followed
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
-                       dependent: :destroy
+                       dependent: :destroy, inverse_of: :followed
   has_many :comments
   has_many :posts
   has_many :blocks, dependent: :destroy
