@@ -2,7 +2,7 @@ class BufferedStreamClient
   class UnfollowBuffer < RedisBuffer
     # The numbers below are slightly below the max rate limit just for safety
     # We can send 250 unfollow requests per 60 seconds
-    RATE_LIMIT = 60.seconds / 240 * GROUPS_PER_BATCH
+    RATE_LIMIT = 60.seconds / 240
     # Match a valid feed name
     VALID_FEED = /\A[\w-]+:[\w-]+\z/i
 
