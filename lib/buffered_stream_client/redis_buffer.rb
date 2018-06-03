@@ -71,7 +71,7 @@ class BufferedStreamClient
     #
     # @param count [Integer] the number of groups to return
     def longest_groups(count = 2)
-      keys = $redis.with { |conn| conn.zrevrange('stream_buffer:groups', 0, count - 1) }
+      keys = $redis.with { |conn| conn.zrevrange(groups_key, 0, count - 1) }
       keys.map(&method(:group_for))
     end
 
