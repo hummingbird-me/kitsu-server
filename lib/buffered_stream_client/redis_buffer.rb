@@ -45,8 +45,10 @@ class BufferedStreamClient
     def next_batch_for(group: 'default', size: 2000)
       key = key_for(group)
       out = multi do |conn|
-        conn.lrange(key, -(size - 1), -1)
-        conn.ltrim(key, 0, -size)
+        # Get the rightmost N items in the queue
+        conn.lrange(key, -(size + 1), -1)
+        # Trim off the rightmost N items in the queue
+        conn.ltrim(key, 0, -(size + 1))
         conn.zincrby(groups_key, -size, key)
         conn.zremrangebyscore(groups_key, '-inf', 0)
       end

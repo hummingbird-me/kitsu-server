@@ -20,6 +20,7 @@ class BufferedStreamClient
     def flush_batch
       # TODO: switch to unfollow-many
       unfollow = next_batch_for(size: 1).first
+      return unless unfollow
       begin
         source = unfollow['source'].split(':')
         target = unfollow['target'].split(':')
