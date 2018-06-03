@@ -6,7 +6,17 @@ module STIResource
   end
 
   def kind=(val)
-    _model.type = "#{self.class._model_name}::#{val.underscore.classify}"
+    _model.type = type_for_kind(val)
+  end
+
+  def _replace_fields(field_data)
+    type = type_for_kind(field_data['kind']).safe_constantize
+    @model = @model.becomes(type) if type
+    super
+  end
+
+  def type_for_kind(kind)
+    "#{self.class._model_name}::#{kind.underscore.classify}"
   end
 
   included do
