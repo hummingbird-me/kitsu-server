@@ -25,6 +25,8 @@ module ListSync
         raise ListSync::NotFoundError unless mal_id
         url = "https://myanimelist.net/ownlist/#{media_kind}/#{mal_id}/edit"
         @edit_page = @agent.get(url)
+      rescue Mechanize::UnauthorizedError
+        raise ListSync::AuthenticationError
       end
 
       def csrf_token
