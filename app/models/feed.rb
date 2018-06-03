@@ -63,7 +63,7 @@ class Feed
   end
 
   def setup!
-    follow_many(auto_follows, scrollback: 100)
+    client.follow_many(auto_follows, scrollback: 10)
   end
 
   def self.client
