@@ -58,7 +58,7 @@ RSpec.describe Feed, type: :model do
       allow(feed).to receive(:read_feed).and_return(read_feed)
       allow(target_feed).to receive(:write_target).and_return(write_target)
 
-      expect(read_feed).to receive(:unfollow).with(*write_target, keep_history: false)
+      expect(read_feed).to receive(:unfollow).with(*write_target, false)
       feed.unfollow(target_feed, keep_history: false)
     end
   end
