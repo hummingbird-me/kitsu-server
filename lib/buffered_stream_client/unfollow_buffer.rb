@@ -10,11 +10,11 @@ class BufferedStreamClient
       super('unfollows')
     end
 
-    def push(unfollow)
-      unless valid_follow?(unfollow)
-        return Raven.capture_message('Invalid Unfollow', level: 'error', extra: unfollow)
+    def push(*unfollows)
+      unless unfollows.all? { |f| valid_follow?(f) }
+        return Raven.capture_message('Invalid Unfollow', level: 'error', extra: f)
       end
-      super(unfollow)
+      super(*unfollows, group: 'default')
     end
 
     def flush_batch
