@@ -10,7 +10,7 @@ module STIResource
   end
 
   def _replace_fields(field_data)
-    type = type_for_kind(field_data['kind']).safe_constantize
+    type = type_for_kind(field_data[:attributes]['kind']).safe_constantize
     @model = @model.becomes(type) if type
     super
   end
