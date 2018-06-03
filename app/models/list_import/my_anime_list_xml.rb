@@ -28,7 +28,7 @@ class ListImport
     validates :input_text, absence: true
     # Accept .gz or .xml.gz
     validates_attachment :input_file, content_type: {
-      content_type: %w[application/gzip application/xml]
+      content_type: %w[application/x-gzip application/gzip application/xml text/xml]
     }, presence: true
 
     def count

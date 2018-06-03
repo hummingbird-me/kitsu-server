@@ -30,7 +30,7 @@ class ListImport < ApplicationRecord
 
   enum strategy: %i[greater obliterate]
   enum status: %i[queued running failed completed]
-  has_attached_file :input_file, s3_permissions: :private
+  has_attached_file :input_file
   alias_attribute :kind, :type
 
   validates :strategy, presence: true
