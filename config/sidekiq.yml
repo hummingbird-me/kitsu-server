@@ -55,6 +55,9 @@ production:
   'BufferedStreamClient::FollowBufferFlushWorker':
     # Every 2 seconds
     cron: '*/2 * * * * *'
+  'BufferedStreamClient::UnfollowBufferFlushWorker':
+    # Every second
+    cron: '*/1 * * * * *'
   AiringNotificationScheduleWorker:
     # Once a week
     cron: '0 0 0 * * SUN'
