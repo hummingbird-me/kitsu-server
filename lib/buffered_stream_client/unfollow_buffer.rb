@@ -21,10 +21,12 @@ class BufferedStreamClient
       # TODO: switch to unfollow-many
       unfollow = next_batch_for(size: 1).first
       begin
-        feed = StreamRails.client.feed(*unfollow['source'])
-        feed.unfollow(*unfollow['target'], unfollow['keep_history'])
+        source = unfollow['source'].split(':')
+        target = unfollow['target'].split(':')
+        feed = StreamRails.client.feed(*source)
+        feed.unfollow(*target, unfollow['keep_history'])
       rescue StandardError
-        return_batch([unfollow])
+        return_batch_to([unfollow], group: 'default')
         raise
       end
       increment_metrics([unfollow])

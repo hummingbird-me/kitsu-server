@@ -30,7 +30,7 @@ class Feed
   # @param keep_history [Boolean] whether to keep the history from the follow
   def unfollow(target, keep_history: false)
     target = target.write_target if target.respond_to?(:write_target)
-    read_feed.unfollow(*target, keep_history: keep_history)
+    read_feed.unfollow(*target, keep_history)
   end
 
   # @param target [Array<Feed|String|#write_target>] the target feed to follow
