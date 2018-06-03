@@ -42,8 +42,8 @@ class BufferedStreamClient
     # @return [Hash] a hash with the execution duration
     def unfollow(group, id, keep_history = true)
       @buffer.unfollow_buffer.push(
-        source: [@group, @id],
-        target: [group, id],
+        source: "#{@group}:#{@id}",
+        target: "#{group}:#{id}",
         keep_history: keep_history
       )
     end
