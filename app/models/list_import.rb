@@ -82,7 +82,6 @@ class ListImport < ApplicationRecord
     Raven.capture_exception(e)
     yield({
       status: :failed,
-      total: count,
       error_message: e.message,
       error_trace: e.backtrace.join("\n")
     })
