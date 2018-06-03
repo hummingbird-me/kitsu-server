@@ -77,7 +77,7 @@ RSpec.describe Feed, type: :model do
     context 'with a feed tuple target' do
       it 'should remove a follow from self.read_feed to the target' do
         allow(feed).to receive(:read_feed).and_return(read_feed)
-        expect(read_feed).to receive(:unfollow).with('foo', 1, keep_history: false)
+        expect(read_feed).to receive(:unfollow).with('foo', 1, false)
         feed.unfollow(['foo', 1], keep_history: false)
       end
     end
