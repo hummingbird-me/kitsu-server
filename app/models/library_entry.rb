@@ -237,7 +237,7 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_commit on: :update, if: :progress_changed? do
-    MediaFollowUpdateWorker.perform_for_entry(self, :update, progress_was, progress)
+    MediaFollowUpdateWorker.perform_for_entry(self, :update, progress_was, progress) unless imported
   end
 
   after_commit on: :destroy do
@@ -245,11 +245,7 @@ class LibraryEntry < ApplicationRecord
   end
 
   after_commit on: :create do
-    if imported
-      MediaFollowUpdateWorker.perform_for_entry(self, :create, nil)
-    else
-      MediaFollowUpdateWorker.perform_for_entry(self, :create, progress)
-    end
+    MediaFollowUpdateWorker.perform_for_entry(self, :create, progress) unless imported
   end
 
   after_commit(on: :create, if: :sync_to_mal?) do
