@@ -63,7 +63,10 @@ class Feed
   end
 
   def setup!
-    client.follow_many(auto_follows, scrollback: 10)
+    follows = auto_follows.map do |follow|
+      follow.transform_values { |val| val.is_a?(Array) ? val.join(':') : val }
+    end
+    client.follow_many(follows, 10)
   end
 
   def self.client
@@ -97,6 +100,6 @@ class Feed
 
   def auto_follows
     return [] if write_target == read_target
-    [write_target]
+    [{ source: write_target, target: read_target }]
   end
 end
