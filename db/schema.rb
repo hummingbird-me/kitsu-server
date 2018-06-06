@@ -1626,6 +1626,7 @@ ActiveRecord::Schema.define(version: 20180724022853) do
     t.integer  "ao_pro"
     t.string   "ao_imported"
     t.datetime "pro_started_at"
+    t.integer  "max_pro_streak"
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
