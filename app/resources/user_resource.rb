@@ -24,6 +24,7 @@ class UserResource < BaseResource
   has_many :stats
   has_many :notification_settings
   has_many :one_signal_players
+  has_many :category_favorites
 
   # DEPRECATED: this method just hides the fact that website has moved
   def website
