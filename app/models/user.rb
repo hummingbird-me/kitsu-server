@@ -134,7 +134,7 @@ class User < ApplicationRecord
   has_many :followers, class_name: 'Follow', foreign_key: 'followed_id',
                        dependent: :destroy, inverse_of: :followed
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
-                       dependent: :destroy, inverse_of: :followed
+                       dependent: :destroy, inverse_of: :follower
   has_many :comments
   has_many :posts
   has_many :blocks, dependent: :destroy
