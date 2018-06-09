@@ -128,9 +128,9 @@ class User < ApplicationRecord
   enum theme: %i[light dark]
   enum ao_pro: %i[pro pro_plus]
 
-  belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false
+  has_one :pro_subscription, dependent: :destroy, required: false
   has_many :followers, class_name: 'Follow', foreign_key: 'followed_id', inverse_of: :followed
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id', inverse_of: :follower
   has_many :comments, dependent: :destroy

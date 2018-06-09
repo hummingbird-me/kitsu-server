@@ -1289,6 +1289,16 @@ ActiveRecord::Schema.define(version: 20180724022853) do
     t.datetime "updated_at",                 null: false
   end
 
+  create_table "pro_subscriptions", force: :cascade do |t|
+    t.integer  "user_id",         null: false
+    t.integer  "billing_service", null: false
+    t.string   "customer_id",     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "pro_subscriptions", ["user_id"], name: "index_pro_subscriptions_on_user_id", using: :btree
+
   create_table "producers", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.string   "slug",       limit: 255
