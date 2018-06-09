@@ -1583,9 +1583,6 @@ ActiveRecord::Schema.define(version: 20180724022853) do
     t.integer  "approved_edit_count",                     default: 0
     t.integer  "rejected_edit_count",                     default: 0
     t.datetime "pro_expires_at"
-    t.string   "stripe_token",                limit: 255
-    t.integer  "pro_membership_plan_id"
-    t.string   "stripe_customer_id",          limit: 255
     t.text     "about_formatted"
     t.integer  "import_status"
     t.string   "import_from",                 limit: 255
