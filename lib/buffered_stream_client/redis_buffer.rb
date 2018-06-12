@@ -62,7 +62,7 @@ class BufferedStreamClient
     def return_batch_to(items, group: 'default')
       key = key_for(group)
       multi do |conn|
-        conn.rpush(key, *items)
+        conn.rpush(key, items)
         conn.zincrby(groups_key, items.count, key)
       end
     end
