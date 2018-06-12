@@ -269,6 +269,12 @@ class User < ApplicationRecord
     pro_expires_at >= Time.now
   end
 
+  def pro_streak
+    return unless pro_started_at
+    streak_end = [Time.now, pro_expires_at].compact.min
+    streak_end - pro_started_at
+  end
+
   def blocked?(user)
     blocks.where(user: [self, user], blocked: [self, user]).exists?
   end
@@ -393,6 +399,7 @@ class User < ApplicationRecord
   end
 
   before_update do
+    self.max_pro_streak = [max_pro_streak, pro_streak].compact.max
     if name_changed?
       # Push it onto the front and limit
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
