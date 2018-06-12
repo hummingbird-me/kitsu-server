@@ -31,7 +31,7 @@ class BufferedStreamClient
         begin
           StreamRails.client.follow_many(follows, group.to_i)
         rescue StandardError
-          return_batch(follows, group: group)
+          return_batch_to(follows, group: group)
           raise
         end
         increment_metrics(follows)
