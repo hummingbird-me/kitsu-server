@@ -34,6 +34,11 @@ Rails.application.routes.draw do
       jsonapi_resources :notification_settings
       # One Signal Players
       jsonapi_resources :one_signal_players
+      # Pro Subscriptions
+      post '/pro-subscription/stripe', to: 'pro_subscription#stripe'
+      post '/pro-subscription/ios', to: 'pro_subscription#ios'
+      delete '/pro-subscription', to: 'pro_subscription#destroy'
+      get '/pro-subscription', to: 'pro_subscription#show'
 
       ### Library
       get '/library-entries/_issues', to: 'library_entries#issues'
