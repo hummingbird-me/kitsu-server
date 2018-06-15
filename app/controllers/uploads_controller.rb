@@ -4,7 +4,7 @@ class UploadsController < ApplicationController
 
   def bulk_create
     files_to_upload = params[:files].map { |file| { user: user, content: file } }
-    uploads = Upload.create(files_to_upload)
+    uploads = Upload.create!(files_to_upload)
     render json: serialize_entries(uploads)
   end
 
