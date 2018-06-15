@@ -61,6 +61,7 @@ class BufferedStreamClient
     #   the queue
     def return_batch_to(items, group: 'default')
       key = key_for(group)
+      items = items.map(&:to_json)
       multi do |conn|
         conn.rpush(key, items)
         conn.zincrby(groups_key, items.count, key)
