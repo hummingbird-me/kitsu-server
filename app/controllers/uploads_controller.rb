@@ -1,6 +1,6 @@
 class UploadsController < ApplicationController
   include CustomControllerHelpers
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: :bulk_create
 
   def bulk_create
     files_to_upload = params[:files].map { |file| { user: user, content: file } }
