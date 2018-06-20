@@ -1292,7 +1292,7 @@ ActiveRecord::Schema.define(version: 20180724022853) do
   create_table "pro_subscriptions", force: :cascade do |t|
     t.integer  "user_id",         null: false
     t.integer  "billing_service", null: false
-    t.string   "customer_id",     null: false
+    t.string   "billing_id",      null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
@@ -1634,6 +1634,7 @@ ActiveRecord::Schema.define(version: 20180724022853) do
     t.string   "ao_imported"
     t.datetime "pro_started_at"
     t.integer  "max_pro_streak"
+    t.string   "stripe_customer_id"
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
