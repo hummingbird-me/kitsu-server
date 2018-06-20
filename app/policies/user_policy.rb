@@ -14,11 +14,10 @@ class UserPolicy < ApplicationPolicy
     elsif has_scope?(:email_confirm, accept_all: false)
       [:confirmed]
     else
-      all - %i[confirmed title pro_expires_at about_formatted comments_count
-               favorites_count followers_count following_count import_from
-               import_error import_status ip_addresses last_backup ratings_count
-               rejected_edit_count reviews_count sign_in_count stripe_token
-               stripe_customer_id life_spent_on_anime]
+      all - %i[confirmed title pro_expires_at about_formatted comments_count favorites_count
+               followers_count following_count import_from import_error import_status ip_addresses
+               last_backup ratings_count rejected_edit_count reviews_count sign_in_count
+               stripe_customer_id life_spent_on_anime ao_pro]
     end
   end
 
@@ -27,7 +26,8 @@ class UserPolicy < ApplicationPolicy
       all
     else
       all - %i[email password confirmed previous_email language time_zone country share_to_global
-               title_language_preference sfw_filter rating_system theme facebook_id has_password]
+               title_language_preference sfw_filter rating_system theme facebook_id has_password
+               ao_pro]
     end
   end
 
