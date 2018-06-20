@@ -21,7 +21,14 @@ class ProSubscriptionController < ApplicationController
   end
 
   def show
-    # TODO: return the pro subscription
+    if user.pro_subscription.present?
+      render json: {
+        service: user.pro_subscription.billing_service,
+        plan: 'yearly'
+      }
+    else
+      render status: 404
+    end
   end
 
   private
