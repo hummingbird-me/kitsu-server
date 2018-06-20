@@ -4,16 +4,27 @@ class ProSubscriptionController < ApplicationController
   before_action :authenticate_user!
 
   def stripe
-    token = params[:token]
     customer = user.stripe_customer
-    customer.source = token
+    customer.source = params[:token]
     customer.save
     ProSubscription::StripeSubscription.create!(user: user)
     render status: 200
   end
 
   def ios
-    # TODO: read iOS receipt and store enough data to verify with App Store servers
+    receipt = AppleReceiptService.new(params[:receipt])
+    ProSubscription::AppleSubscription.create!(user: user, billing_id: receipt.billing_id)
+    render status: 200
+  rescue AppleReceiptService::Error::ServerUnavailable, AppleReceiptService::Error::InternalError
+    render status: 502
+  rescue AppleReceiptService::Error::MalformedReceipt,
+         AppleReceiptService::Error::TestReceiptOnProduction,
+         AppleReceiptService::Error::ProductionReceiptOnTest
+    render status: 400
+  rescue AppleReceiptService::Error::InvalidSecret, AppleReceiptService::Error::InvalidJSON
+    render status: 500
+  rescue AppleReceiptService::Error
+    render status: 402
   end
 
   def destroy
