@@ -5,14 +5,11 @@ class ProSubscriptionController < ApplicationController
 
   def stripe
     token = params[:token]
-    customer = Stripe::Customer.create(source: token, email: user.email)
-    subscription = Stripe::Subscription.create(
-      customer: customer.id,
-      items: [
-        { plan: 'pro-yearly' }
-      ]
-    )
-    # TODO: add a response
+    customer = user.stripe_customer
+    customer.source = token
+    customer.save
+    ProSubscription::StripeSubscription.create!(user: user)
+    render status: 200
   end
 
   def ios

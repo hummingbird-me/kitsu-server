@@ -6,7 +6,7 @@ class StripeRenewalService
   end
 
   def subscription
-    ProSubscription.where(customer_id: @invoice.customer, billing_service: :stripe).first
+    ProSubscription::StripeSubscription.find_by(billing_id: @invoice.subscription)
   end
 
   def call
