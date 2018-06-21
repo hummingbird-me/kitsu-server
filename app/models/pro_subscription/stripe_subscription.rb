@@ -8,7 +8,7 @@ class ProSubscription
       subscription.delete
     end
 
-    after_create do
+    before_validation on: :create do
       self.billing_id = Stripe::Subscription.create(
         customer: user.stripe_customer.id,
         items: [{ plan: 'pro-yearly' }]
