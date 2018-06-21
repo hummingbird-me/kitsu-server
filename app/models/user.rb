@@ -420,12 +420,14 @@ class User < ApplicationRecord
     update_feed_completed
   end
 
-  after_commit if: ->(u) { u.email_changed? && !Rails.env.staging? } do
+  after_commit on: :update do
+    # Update email on Stripe
+    stripe_customer.save(email: email) if previous_changes['email']
+  end
+
+  after_commit if: ->(u) { u.previous_changes['email'] && !Rails.env.staging? } do
     self.confirmed_at = nil
     # Send Confirmation Email
     UserMailer.confirmation(self).deliver_later
-    # Update email on Stripe
-    stripe_customer.email = email
-    stripe_customer.save
   end
 end
