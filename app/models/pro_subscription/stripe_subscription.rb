@@ -1,5 +1,9 @@
 class ProSubscription
   class StripeSubscription < ProSubscription
+    def billing_service
+      :stripe
+    end
+
     def subscription
       @subscription ||= Stripe::Subscription.retrieve(billing_id)
     end
