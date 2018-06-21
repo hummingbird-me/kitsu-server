@@ -14,6 +14,8 @@ module Onebox
         return album_html(og) if album?
         return image_html(og) unless Onebox::Helpers.blank?(og[:image])
         nil
+      rescue StandardError
+        nil
       end
 
       private
