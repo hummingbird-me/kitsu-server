@@ -10,7 +10,7 @@ class AppleReceiptService
     class UnauthorizedReceipt < Error; end
     class InternalError < Error; end
 
-    def for_code(code)
+    def self.for_code(code)
       # rubocop:disable Style/NumericLiterals
       case code
       when 21000 then InvalidJSON
