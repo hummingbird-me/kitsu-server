@@ -20,7 +20,7 @@ module Episodic
   end
 
   def unit(number)
-    episodes.order(number: :asc).offset(number - 1).first
+    episodes.order(number: :asc).offset(number - 1).first if unit >= 1
   end
 
   def default_progress_limit
