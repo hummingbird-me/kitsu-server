@@ -18,9 +18,9 @@ module RankedResource
         when :up, :down then nil
         when Integer then position + 1
         else
-          ranker = _model_class.ranker(column_name)
+          ranker = _model.class.ranker(column_name)
           fields = _model.attributes.slice(*ranker.with_same.map(&:to_s))
-          siblings = _model_class.where(fields)
+          siblings = _model.class.where(fields)
           siblings.where("#{column_name} < ?", _model.public_send(column_name))
         end
       end
