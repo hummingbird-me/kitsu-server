@@ -29,7 +29,7 @@ class ListImport < ApplicationRecord
   belongs_to :user, required: true
 
   enum strategy: %i[greater obliterate]
-  enum status: %i[queued running failed completed]
+  enum status: %i[queued running failed completed partially_failed]
   has_attached_file :input_file
   alias_attribute :kind, :type
 
@@ -65,13 +65,22 @@ class ListImport < ApplicationRecord
     yield({ status: :running, total: total, progress: 0 })
     Chewy.strategy(:atomic) do
       each_with_index do |(media, data), index|
-        next unless media.present?
-        # Merge the library entries
-        le = LibraryEntry.where(user_id: user.id, media: media).first_or_initialize
-        le.imported = true
-        le = merged_entry(le, data)
-        le.save! unless le.status.nil?
-        yield({ status: :running, total: total, progress: index + 1 })
+        begin
+          next unless media.present?
+          # Merge the library entries
+          le = LibraryEntry.where(user_id: user.id, media: media).first_or_initialize
+          le.imported = true
+          le = merged_entry(le, data)
+          le.save! unless le.status.nil?
+          yield({ status: :running, total: total, progress: index + 1 })
+        rescue StandardError => e
+          Raven.capture_exception(e)
+          yield({
+            status: :partially_failed,
+            error_message: e.message,
+            error_trace: e.backtrace.join("\n")
+          })
+        end
       end
     end
     yield({ status: :completed, total: total, progress: total })
@@ -90,7 +99,7 @@ class ListImport < ApplicationRecord
 
     apply do |info|
       # Apply every [frequency] updates unless the status is not :running
-      if info[:status] != :running || (info[:progress] % frequency).zero?
+      if %[running partially_failed].include?(info[:status]) || (info[:progress] % frequency).zero?
         update info
         yield info if block_given?
       end
