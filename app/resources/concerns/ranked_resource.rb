@@ -38,7 +38,7 @@ module RankedResource
           (row_number() OVER (
             PARTITION BY #{partition}
             ORDER BY #{column_name} ASC
-          ) - 1) AS #{column_name}
+          ) - 1) AS #{column_name}_position
         SQL
       end
       attrs = attrs.join(', ')
