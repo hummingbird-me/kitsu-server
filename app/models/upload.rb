@@ -53,6 +53,6 @@ class Upload < ApplicationRecord
   def upload_order_position
     attributes['fav_rank_position'] ||
       Upload.where(owner_type: owner_type, owner_id: owner_id)
-            .where('upload_order < ?', upload_order).count
+            .where('upload_order < ?', attributes['upload_order']).count
   end
 end
