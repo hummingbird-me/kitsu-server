@@ -49,10 +49,4 @@ class Upload < ApplicationRecord
   validates_attachment_content_type :content, content_type: [
     'image/jpg', 'image/jpeg', 'image/png', 'image/gif'
   ]
-
-  def upload_order_position
-    attributes['fav_rank_position'] ||
-      Upload.where(owner_type: owner_type, owner_id: owner_id)
-            .where('upload_order < ?', attributes['upload_order']).count
-  end
 end

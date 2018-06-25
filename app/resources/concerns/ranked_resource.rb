@@ -15,10 +15,13 @@ module RankedResource
       define_method(column_name) do
         case position = _model.public_send(position_name)
         when :first then 1
-        when :last then 9_999_999
         when :up, :down then nil
         when Integer then position + 1
-        else _model.public_send(column_name)
+        else
+          ranker = _model_class.ranker(column_name)
+          fields = _model.attributes.slice(*ranker.with_same.map(&:to_s))
+          siblings = _model_class.where(fields)
+          siblings.where("#{column_name} < ?", _model.public_send(column_name))
         end
       end
 
