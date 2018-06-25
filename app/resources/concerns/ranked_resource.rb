@@ -21,7 +21,7 @@ module RankedResource
           ranker = _model.class.ranker(column_name)
           fields = _model.attributes.slice(*ranker.with_same.map(&:to_s))
           siblings = _model.class.where(fields)
-          siblings.where("#{column_name} < ?", _model.public_send(column_name))
+          siblings.where("#{column_name} < ?", _model.public_send(column_name)).count
         end
       end
 
