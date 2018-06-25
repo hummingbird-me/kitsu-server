@@ -48,8 +48,6 @@ class ListImport < ApplicationRecord
 
   # Apply the ListImport
   def apply
-    raise 'No each method defined' unless respond_to? :each
-
     # Send info to Sentry
     Raven.user_context(id: user.id, email: user.email, username: user.name)
     Raven.extra_context(
