@@ -97,7 +97,7 @@ class ListImport < ApplicationRecord
 
     apply do |info|
       # Apply every [frequency] updates unless the status is not :running
-      if %[running partially_failed].include?(info[:status]) || (info[:progress] % frequency).zero?
+      if %i[running partially_failed].include?(info[:status]) || (info[:progress] % frequency).zero?
         update info
         yield info if block_given?
       end
