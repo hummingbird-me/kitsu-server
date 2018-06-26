@@ -47,6 +47,7 @@ class MediaFollowService
   end
 
   def follow_many(*args)
+    return unless Flipper[:media_feeds_old].enabled?(User.current)
     timelines.each { |timeline| timeline.follow_many(*args) }
   end
 
