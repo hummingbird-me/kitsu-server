@@ -37,6 +37,6 @@ class MediaIgnore < ApplicationRecord
     MediaFollowService.new(user, media)
   end
 
-  after_commit(on: :create) { media_follow_service.destroy(library_entry&.progress) }
-  after_commit(on: :destroy) { media_follow_service.create(library_entry&.progress) }
+  after_commit(on: :create) { media_follow_service.unfollow }
+  after_commit(on: :destroy) { media_follow_service.follow }
 end
