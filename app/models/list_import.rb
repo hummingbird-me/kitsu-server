@@ -134,7 +134,7 @@ class ListImport < ApplicationRecord
       entry.assign_attributes(data)
     end
 
-    progress_limit = media.progress_limit || media.default_progress_limit
+    progress_limit = entry.media.progress_limit || entry.media.default_progress_limit
     entry.progress = [entry.progress, progress_limit].min
 
     entry
