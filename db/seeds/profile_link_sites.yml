@@ -96,8 +96,8 @@ patreon:
 deviantart:
   id: 20
   name: DeviantArt
-  validate_find: '\A(https?://)?(?<username>[a-zA-z0-9]+)(.deviantart.com)?\z'
-  validate_replace: 'https://\k<username>.deviantart.com'
+  validate_find: '\A(https?://)?((www.)?deviantart.com/?)?(?:(?<username>[a-zA-z0-9-]+)(.deviantart.com/?)?)\z'
+  validate_replace: 'https://deviantart.com/\k<username>/'
 dribbble:
   id: 21
   name: Dribbble
