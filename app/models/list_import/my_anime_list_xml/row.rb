@@ -22,7 +22,7 @@ class ListImport
           id: node.at_css(<<-ID_NODES.squish).content.to_i,
             manga_mediadb_id, manga_mangadb_id, series_animedb_id, series_mangadb_id
           ID_NODES
-          title: node.at_css('manga_title, series_title').content,
+          title: node.at_css('manga_title, series_title')&.content,
           subtype: node.at_css('series_type')&.content,
           episode_count: node.at_css('series_episodes')&.content&.to_i,
           chapter_count: node.at_css('manga_chapters')&.content&.to_i

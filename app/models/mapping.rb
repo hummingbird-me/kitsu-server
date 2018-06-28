@@ -34,6 +34,7 @@ class Mapping < ApplicationRecord
   end
 
   def self.guess(type, query)
+    return nil unless query[:title]
     type = type.name unless type.is_a?(String)
     filters = []
     filters << "kind:#{type.underscore.dasherize}"
