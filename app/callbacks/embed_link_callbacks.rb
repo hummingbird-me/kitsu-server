@@ -24,7 +24,7 @@ class EmbedLinkCallbacks < Callbacks
   end
 
   def embed_url
-    record.public_send("#{to}_url") || processed[:embeddable_links]&.first
+    record.public_send("#{to}_url")
   end
 
   def processed
