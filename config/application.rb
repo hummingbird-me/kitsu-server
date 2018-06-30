@@ -35,7 +35,7 @@ module Kitsu
     # Include all concern directories in app/*/concerns
     concern_dirs = Dir['app/*/concerns'].map { |d| File.expand_path(d) }
     config.eager_load_paths += concern_dirs
-    config.eager_load_paths += "#{Rails.root}/lib"
+    config.eager_load_paths += %W[#{Rails.root}/lib]
     # Rip out any non-unique entries
     config.eager_load_paths.uniq!
 
