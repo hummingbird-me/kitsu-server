@@ -45,8 +45,8 @@ class ListImport
 
       def rating
         # 10-point scale to 20-point scale
-        value = node.at_css('my_score').content
-        value.to_i * 2 unless value == '0' || value.empty?
+        value = node.at_css('my_score')&.content
+        value.to_i * 2 unless value.blank? || value == '0'
       end
 
       def reconsume_count
@@ -65,13 +65,15 @@ class ListImport
       end
 
       def started_at
-        DateTime.strptime(node.at_css('my_start_date'), '%F')
+        return unless node.at_css('my_start_date')
+        DateTime.strptime(node.at_css('my_start_date')&.content, '%F')
       rescue ArgumentError
         nil
       end
 
       def finished_at
-        DateTime.strptime(node.at_css('my_finish_date'), '%F')
+        return unless node.at_css('my_finish_date')
+        DateTime.strptime(node.at_css('my_finish_date')&.content, '%F')
       rescue ArgumentError
         nil
       end
