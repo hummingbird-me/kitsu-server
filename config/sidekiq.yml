@@ -53,8 +53,8 @@ production:
     # Once a day
     cron: '0 0 0 * * *'
   'BufferedStreamClient::FollowBufferFlushWorker':
-    # Every 2 seconds
-    cron: '*/2 * * * * *'
+    # Every 3 seconds
+    cron: '*/3 * * * * *'
   'BufferedStreamClient::UnfollowBufferFlushWorker':
     # Every second
     cron: '*/1 * * * * *'
