@@ -29,7 +29,8 @@ class MediaActivityService
     fill_defaults user.profile_feed.activities.new(
       foreign_id: review,
       verb: 'reviewed',
-      review: review
+      review: review,
+      to: [media&.feed&.no_fanout]
     )
   end
 
@@ -38,7 +39,6 @@ class MediaActivityService
       act.actor ||= user
       act.object ||= library_entry
       act.to ||= []
-      act.to << media&.feed&.no_fanout
       act.to << user.library_feed
       act.media ||= media
       act.nsfw ||= media.try(:nsfw?)
