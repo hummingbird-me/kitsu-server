@@ -12,7 +12,8 @@ class MediaFollowService
   def create(progress = nil)
     return if ignored?
     if Flipper[:airing_notifs].enabled?(User.current)
-      user.notifications.follow(media.airing_feed, scrollback: 0)
+      # Follow the airing feed if the show hasn't finished yet
+      user.notifications.follow(media.airing_feed, scrollback: 0) unless media.finished?
     end
     follow_many([@media.feed], scrollback: 20)
     update(nil, progress)
