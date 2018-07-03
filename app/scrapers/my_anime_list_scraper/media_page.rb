@@ -14,7 +14,7 @@ class MyAnimeListScraper
       media.titles = media.titles.merge(titles)
       media.canonical_title ||= 'en_jp'
       media.abbreviated_titles = [*media.abbreviated_titles, *abbreviated_titles].uniq
-      media.synopsis ||= "#{synopsis}\n\n#{background}"
+      media.synopsis ||= merged_synopsis
       media.genres += genres
       media.subtype ||= subtype
       media.poster_image ||= poster_image
@@ -40,6 +40,10 @@ class MyAnimeListScraper
 
     def subtype
       information['Type'].content.strip.underscore.to_sym
+    end
+
+    def merged_synopsis
+      "#{synopsis}\n\n#{background}"
     end
 
     def synopsis
