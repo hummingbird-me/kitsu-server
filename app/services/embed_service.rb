@@ -28,7 +28,7 @@ class EmbedService
 
   # @param url [String] the URL to generate an embed for
   def initialize(url)
-    @url = url&.downcase
+    @url = url
   end
 
   # @see #to_json for a cached string of the JSON
