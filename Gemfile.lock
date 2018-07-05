@@ -341,7 +341,7 @@ GEM
     nested_form (0.3.2)
     net-http-digest_auth (1.4.1)
     net-http-persistent (2.9.4)
-    nokogiri (1.8.2)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     nokogumbo (1.5.0)
       nokogiri
@@ -659,7 +659,7 @@ DEPENDENCIES
   lograge
   mechanize
   mongo
-  nokogiri (~> 1.8.2)
+  nokogiri (~> 1.8.4)
   oauth2
   oj
   oj_mimic_json
