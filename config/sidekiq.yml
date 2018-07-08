@@ -61,3 +61,4 @@ production:
   AiringNotificationScheduleWorker:
     # Once a week
     cron: '0 0 0 * * SUN'
+    args: Anime
