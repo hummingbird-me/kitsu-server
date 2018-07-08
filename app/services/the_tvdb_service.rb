@@ -121,6 +121,8 @@ class TheTvdbService
 
     schedule = parse_schedule(media, series['airsDayOfWeek'], series['airsTime'])
     media.update!(release_schedule: schedule)
+  rescue StandardError => e
+    Raven.capture_exception(e)
   end
 
   private
