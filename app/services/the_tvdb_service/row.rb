@@ -14,7 +14,7 @@ class TheTvdbService
 
       attributes = %i[
         titles canonical_title number season_number relative_number synopsis thumbnail airdate
-      ].map { |k| [k, public_send(k)] }.to_h.reject(&:blank?)
+      ].map { |k| [k, public_send(k)] }.to_h.reject { |k, v| v.blank? }
 
       episode.update(attributes)
     end
