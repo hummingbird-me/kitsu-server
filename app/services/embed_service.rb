@@ -55,8 +55,12 @@ class EmbedService
   # @param url [String] the URL to load
   # @return [String] the body of the link's target
   def self.get(url)
-    Timeout.timeout(EMBED_TIMEOUT) do
-      req = Typhoeus.get(url, headers: { 'User-Agent' => USER_AGENT }, followlocation: true)
+    Timeout.timeout(EMBED_TIMEOUT * 1.2) do
+      req = Typhoeus.get(url,
+        headers: { 'User-Agent' => USER_AGENT },
+        followlocation: true,
+        timeout: EMBED_TIMEOUT,
+        connecttimeout: EMBED_TIMEOUT)
       req.body if req.success?
     end
   end
