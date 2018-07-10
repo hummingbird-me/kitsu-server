@@ -30,7 +30,8 @@ class TheTvdbService
     end
 
     def number
-      data['absoluteNumber'].presence || data['airedEpisodeNumber'].presence
+      return data['absoluteNumber'].presence unless data['absoluteNumber']&.zero?
+      data['airedEpisodeNumber'].presence
     end
 
     def season_number
