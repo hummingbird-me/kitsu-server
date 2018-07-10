@@ -9,4 +9,8 @@ module EpisodicResource
 
     has_many :episodes
   end
+
+  def length
+    _model.length / 60
+  end
 end

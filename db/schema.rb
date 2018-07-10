@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180319230733) do
+ActiveRecord::Schema.define(version: 20180524205232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -256,6 +256,7 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.integer  "thumbnail_file_size"
     t.datetime "thumbnail_updated_at"
     t.text     "thumbnail_meta"
+    t.boolean  "filler"
   end
 
   add_index "chapters", ["manga_id"], name: "index_chapters_on_manga_id", using: :btree
@@ -470,6 +471,7 @@ ActiveRecord::Schema.define(version: 20180319230733) do
     t.string   "media_type",                                           null: false
     t.integer  "relative_number"
     t.text     "thumbnail_meta"
+    t.boolean  "filler"
   end
 
   add_index "episodes", ["media_type", "media_id"], name: "index_episodes_on_media_type_and_media_id", using: :btree
@@ -1162,13 +1164,18 @@ ActiveRecord::Schema.define(version: 20180319230733) do
 
   create_table "people", force: :cascade do |t|
     t.string   "name",               limit: 255
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.integer  "mal_id"
     t.string   "image_file_name",    limit: 255
     t.string   "image_content_type", limit: 255
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.jsonb    "names",                          default: {}, null: false
+    t.string   "canonical_name",                              null: false
+    t.string   "other_names",                    default: [], null: false, array: true
+    t.text     "description"
+    t.date     "birthday"
   end
 
   add_index "people", ["mal_id"], name: "index_people_on_mal_id", unique: true, using: :btree
@@ -1361,6 +1368,17 @@ ActiveRecord::Schema.define(version: 20180319230733) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
+  create_table "scrapes", force: :cascade do |t|
+    t.text     "target_url",               null: false
+    t.string   "scraper_name"
+    t.integer  "depth",        default: 0, null: false
+    t.integer  "max_depth",    default: 0, null: false
+    t.integer  "parent_id"
+    t.integer  "status",       default: 0, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
 
   create_table "site_announcements", force: :cascade do |t|
     t.integer  "user_id",     null: false
