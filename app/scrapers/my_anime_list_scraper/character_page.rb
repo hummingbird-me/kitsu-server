@@ -1,6 +1,7 @@
 class MyAnimeListScraper
   class CharacterPage < MyAnimeListScraper
     using NodeSetContentMethod
+
     CHARACTER_URL = %r{\Ahttps://myanimelist.net/character/(?<id>\d+)/[^/]+\z}
 
     def match?
@@ -17,6 +18,8 @@ class MyAnimeListScraper
       character.canonical_name ||= 'en'
       character.description ||= description
       character.image ||= image
+      character.anime_characters += anime_characters
+      character.manga_characters += manga_characters
     end
 
     def names
@@ -44,6 +47,36 @@ class MyAnimeListScraper
       URI(sidebar.at_css('img')['src'].sub(/(\.[a-z]+)\z/i, 'l\1'))
     end
 
+    def anime_characters
+      ography_roles_for('Anime').map { |r| AnimeCharacter.where(r).first_or_initialize }
+    end
+
+    def manga_characters
+      ography_roles_for('Manga').map { |r| MangaCharacter.where(r).first_or_initialize }
+    end
+
+    def ography_roles_for(type)
+      rows = sidebar.css(".normal_header:contains('#{type}ography') + table tr > td:last-child")
+      return [] if rows.blank?
+      out = rows.map do |row|
+        # Extract
+        url = row.at_css("a[href*='/#{type.downcase}/']")['href']
+        id = %r{/#{type.downcase}/(\d+)/}.match(url)[1]
+        role = row.at_css('small').content.strip.downcase.to_sym
+
+        # Transform
+        media = Mapping.lookup("myanimelist/#{type.downcase}", id)
+        if media.blank?
+          scrape_async(url)
+          next
+        end
+
+        # Load
+        { type.downcase => media, role: role }
+      end
+      out.compact
+    end
+
     private
 
     def external_id
@@ -51,9 +84,9 @@ class MyAnimeListScraper
     end
 
     def character
-      @character ||= Mapping.lookup('myanimelist/character', external_id) ||
-                     Character.where(mal_id: external_id) ||
-                     Character.new(mal_id: external_id)
+      @character ||= Mapping.lookup('myanimelist/character', external_id) do
+        Character.where(mal_id: external_id) || Character.new(mal_id: external_id)
+      end
     end
   end
 end
