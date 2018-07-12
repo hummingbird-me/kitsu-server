@@ -30,7 +30,7 @@ class TheTvdbService
     end
 
     def number
-      return data['absoluteNumber'].presence unless data['absoluteNumber']&.zero?
+      return absolute_number unless absolute_number.blank? || absolute_number&.zero?
       data['airedEpisodeNumber'].presence
     end
 
@@ -61,6 +61,10 @@ class TheTvdbService
         media: media,
         number: number
       ).first_or_initialize
+    end
+
+    def absolute_number
+      data['absoluteNumber']
     end
   end
 end
