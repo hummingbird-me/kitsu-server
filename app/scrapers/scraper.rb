@@ -51,8 +51,8 @@ class Scraper
   private
 
   # Queue a scraper to run asynchronously
-  def scrape_async(url)
-    Scraper.for_url(url).call_async
+  def scrape_async(*urls)
+    urls.map { |url| Scraper.for_url(url).call_async }
   end
 
   # A Faraday Connection for requests to be made against

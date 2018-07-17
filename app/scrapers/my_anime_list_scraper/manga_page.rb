@@ -10,6 +10,7 @@ class MyAnimeListScraper
 
     def call
       super
+      scrape_async(*staff_urls)
     end
 
     def import
@@ -33,8 +34,6 @@ class MyAnimeListScraper
           # Find the person and add them to our accumulator
           person = Mapping.lookup('myanimelist/person', person_id)
           acc << [person, '']
-          # If we didn't find the person, start a scraper
-          scrape_async(node['href']) if person.blank?
         end
       end
       # Strip out staff we couldn't find in our own database
@@ -56,6 +55,10 @@ class MyAnimeListScraper
     end
 
     private
+
+    def staff_urls
+      information['Authors'].css("a[href*='/people/']").map { |a| a['href'] }.uniq
+    end
 
     def external_id
       MANGA_URL.match(@url)['id']

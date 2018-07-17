@@ -5,8 +5,8 @@ class MyAnimeListScraper
 
     def call
       super
-      character_urls.each { |url| scrape_async(url) }
-      people_urls.each { |url| scrape_async(url) }
+      scrape_async(*character_urls)
+      scrape_async(*people_urls)
     end
 
     def match?
