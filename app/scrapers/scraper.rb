@@ -7,7 +7,11 @@ require 'faraday/parse_html'
 # subclass to handle a given URL.
 class Scraper
   # No Scraper was found to match the URL provided
-  class NoMatchError < StandardError; end
+  class NoMatchError < StandardError
+    def initialize(url)
+      super("No matching scraper found registered to handle '#{url}'")
+    end
+  end
 
   # @param url [String] the URL to scrape
   def initialize(url)
@@ -24,7 +28,7 @@ class Scraper
       scraper = klass.new(url)
       return scraper if scraper.match?
     end
-    raise NoMatchError
+    raise NoMatchError, url
   end
 
   # @abstract Override this method to return whether the class can scrape from the provided URL
