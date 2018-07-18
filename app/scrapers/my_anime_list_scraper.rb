@@ -73,6 +73,23 @@ class MyAnimeListScraper < Scraper
     lines.join.strip.delete("\r")
   end
 
+  # @overload id_for_url(url)
+  #   Extracts the Type and ID from a MAL URL
+  #   @param url [String] the URL from MyAnimeList
+  #   @return [Array<String>] a two-item array containing the Type and ID as strings
+  # @overload id_for_url(url, type)
+  #   Extract the ID from a MAL URL
+  #   @param url [String] the URL from MyAnimeList
+  #   @param type [String] the type of URL expected
+  #   @return [String] the ID that was extracted
+  def id_for_url(url, type = nil)
+    if type
+      %r{/#{type}/(\d+)/}.match(url)[1]
+    else
+      %r{myanimelist.net/([^/]+)/(\d+)/}.match(url).captures
+    end
+  end
+
   def clean_html(html)
     HtmlCleaner.new(html).to_s
   end
