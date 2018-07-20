@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180524205232) do
+ActiveRecord::Schema.define(version: 20180720231815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -260,6 +260,18 @@ ActiveRecord::Schema.define(version: 20180524205232) do
   end
 
   add_index "chapters", ["manga_id"], name: "index_chapters_on_manga_id", using: :btree
+
+  create_table "character_voices", force: :cascade do |t|
+    t.integer  "media_character_id", null: false
+    t.integer  "person_id",          null: false
+    t.string   "locale",             null: false
+    t.integer  "licensor_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "character_voices", ["media_character_id"], name: "index_character_voices_on_media_character_id", using: :btree
+  add_index "character_voices", ["person_id"], name: "index_character_voices_on_person_id", using: :btree
 
   create_table "characters", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -987,6 +999,18 @@ ActiveRecord::Schema.define(version: 20180524205232) do
   add_index "media_attributes", ["slug"], name: "index_media_attributes_on_slug", using: :btree
   add_index "media_attributes", ["title"], name: "index_media_attributes_on_title", using: :btree
 
+  create_table "media_characters", force: :cascade do |t|
+    t.integer  "media_id",                 null: false
+    t.string   "media_type",               null: false
+    t.integer  "character_id",             null: false
+    t.integer  "role",         default: 0, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "media_characters", ["character_id"], name: "index_media_characters_on_character_id", using: :btree
+  add_index "media_characters", ["media_type", "media_id"], name: "index_media_characters_on_media_type_and_media_id", using: :btree
+
   create_table "media_ignores", force: :cascade do |t|
     t.integer  "media_id"
     t.string   "media_type"
@@ -997,6 +1021,18 @@ ActiveRecord::Schema.define(version: 20180524205232) do
 
   add_index "media_ignores", ["media_type", "media_id"], name: "index_media_ignores_on_media_type_and_media_id", using: :btree
   add_index "media_ignores", ["user_id"], name: "index_media_ignores_on_user_id", using: :btree
+
+  create_table "media_productions", force: :cascade do |t|
+    t.integer  "media_id",               null: false
+    t.string   "media_type",             null: false
+    t.integer  "company_id",             null: false
+    t.integer  "role",       default: 0, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "media_productions", ["company_id"], name: "index_media_productions_on_company_id", using: :btree
+  add_index "media_productions", ["media_type", "media_id"], name: "index_media_productions_on_media_type_and_media_id", using: :btree
 
   create_table "media_reaction_votes", force: :cascade do |t|
     t.integer  "user_id"
@@ -1044,6 +1080,18 @@ ActiveRecord::Schema.define(version: 20180524205232) do
   end
 
   add_index "media_relationships", ["source_type", "source_id"], name: "index_media_relationships_on_source_type_and_source_id", using: :btree
+
+  create_table "media_staff", force: :cascade do |t|
+    t.integer  "media_id",   null: false
+    t.string   "media_type", null: false
+    t.integer  "person_id",  null: false
+    t.string   "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "media_staff", ["media_type", "media_id"], name: "index_media_staff_on_media_type_and_media_id", using: :btree
+  add_index "media_staff", ["person_id"], name: "index_media_staff_on_person_id", using: :btree
 
   create_table "not_interesteds", force: :cascade do |t|
     t.integer  "user_id"
