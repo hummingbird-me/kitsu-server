@@ -58,6 +58,14 @@ RSpec.describe MyAnimeListScraper::MangaPage do
         external_id: '27379'
       )
     end
+    let(:media) { create(:manga) }
+    let!(:media_mapping) do
+      Mapping.create!(
+        item: media,
+        external_site: 'myanimelist/manga',
+        external_id: '109855'
+      )
+    end
 
     describe '#staff' do
       it 'should include each person and their role' do
@@ -67,8 +75,13 @@ RSpec.describe MyAnimeListScraper::MangaPage do
         expect(staff).to include(['Tetsu Habara', 'Story'])
       end
 
-      it 'should return a list of MangaStaff objects' do
-        expect(subject.staff).to all(be_a(MangaStaff))
+      it 'should return a list of MediaStaff objects' do
+        expect(subject.staff).to all(be_a(MediaStaff))
+      end
+
+      it 'should not recreate MediaStaff rows when they already exist' do
+        existing_staff = MediaStaff.create!(media: media, person: artist, role: 'Art')
+        expect(subject.staff).to include(existing_staff)
       end
     end
   end

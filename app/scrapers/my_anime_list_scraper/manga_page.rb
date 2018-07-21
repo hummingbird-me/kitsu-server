@@ -17,6 +17,7 @@ class MyAnimeListScraper
       super
       media.volume_count ||= volume_count
       media.chapter_count ||= chapter_count
+      media.staff = staff
       media
     end
 
@@ -39,7 +40,9 @@ class MyAnimeListScraper
       # Strip out staff we couldn't find in our own database
       staff = staff.select { |(person, _)| person.present? }
       # Build the MangaStaff instances
-      staff.map { |(person, role)| MangaStaff.new(person: person, role: role) }
+      staff.map do |(person, role)|
+        MediaStaff.where(person: person, media: media).first_or_create(role: role)
+      end
     end
 
     def chapter_count
