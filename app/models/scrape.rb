@@ -4,7 +4,7 @@ class Scrape < ApplicationRecord
   has_many :children, class_name: 'Scrape', foreign_key: 'parent_id', dependent: :destroy
 
   def scraper
-    @scraper ||= Scraper.for_url(target_url, depth)
+    @scraper ||= Scraper.new(self)
   end
 
   def run

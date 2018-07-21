@@ -13,19 +13,26 @@ class Scraper
     end
   end
 
-  # @param url [String] the URL to scrape
-  def initialize(url)
-    @url = url
+  # @param scrape [Scrape,String] the Scrape or URL to run
+  def initialize(scrape)
+    if scrape.respond_to?(:target_url)
+      @scrape = scrape
+      @url = scrape.target_url
+    else
+      @scrape = nil
+      @url = scrape
+    end
   end
 
   # Find a Scraper matching the URL provided and return an instance.
   #
-  # @param url [String] the URL to scrape
+  # @param scrape [Scrape,#target_url] the Scrape to run
   # @raise [NoMatchError] if no Scrapers matched the provided URL
   # @return [Scraper] an instance of a Scraper subclass for the URL
-  def self.for_url(url)
+  def self.new(scrape)
+    return super if self != Scraper
     SCRAPERS.each do |klass|
-      scraper = klass.new(url)
+      scraper = klass.new(scrape)
       return scraper if scraper.match?
     end
     raise NoMatchError, url
@@ -56,7 +63,7 @@ class Scraper
 
   # Queue a scraper to run asynchronously
   def scrape_async(*urls)
-    urls.map { |url| Scraper.for_url(url).call_async }
+    urls.map { |url| Scrape.create!(target_url: url, parent: @scrape) }
   end
 
   # A Faraday Connection for requests to be made against
