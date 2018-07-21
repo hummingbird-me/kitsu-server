@@ -28,18 +28,29 @@ module Media
     update_index("media##{name.underscore}") { self }
     update_algolia('AlgoliaMediaIndex')
 
+    # Genre/Categories/Tags
     has_and_belongs_to_many :genres
     has_and_belongs_to_many :categories,
       before_add: :inc_total_media_count,
       before_remove: :dec_total_media_count
+    has_many :media_attributes, class_name: 'MediaAttribute', dependent: :destroy
+    has_many :media_attribute_votes, class_name: 'MediaAttributeVote', dependent: :destroy
+    # Cast Info
     has_many :castings, as: 'media'
-    has_many :installments, as: 'media'
+    has_many :characters, class_name: 'MediaCharacter', as: 'media', dependent: :destroy
+    has_many :staff, class_name: 'MediaStaff', as: 'media', dependent: :destroy
+    has_many :productions, class_name: 'MediaProduction', as: 'media', dependent: :destroy
+    # Franchise Info
+    has_many :installments, as: 'media', dependent: :destroy
     has_many :franchises, through: :installments
-    has_many :library_entries, as: 'media', dependent: :destroy,
-                               inverse_of: :media
+    # User-generated content
+    has_many :library_entries, as: 'media', dependent: :destroy, inverse_of: :media
     has_many :media_reactions, dependent: :destroy
-    has_many :mappings, as: 'item', dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
+    has_many :posts, as: 'media', dependent: :nullify
+    has_many :favorites, as: 'item', dependent: :destroy, inverse_of: :item
+    # Other Media Data
+    has_many :mappings, as: 'item', dependent: :destroy
     has_many :media_relationships,
       class_name: 'MediaRelationship',
       as: 'source',
@@ -48,14 +59,7 @@ module Media
       class_name: 'MediaRelationship',
       as: 'destination',
       dependent: :destroy
-    has_many :favorites, as: 'item', dependent: :destroy,
-                         inverse_of: :item
-    has_many :media_attributes,
-      class_name: 'MediaAttribute',
-      dependent: :destroy
-    has_many :media_attribute_votes,
-      class_name: 'MediaAttributeVote',
-      dependent: :destroy
+
     delegate :year, to: :start_date, allow_nil: true
     serialize :release_schedule, IceCube::Schedule
 
