@@ -36,35 +36,28 @@ RSpec.describe MyAnimeListScraper::CharacterPage do
       end
     end
 
-    describe '#anime_characters' do
+    describe '#media_characters' do
       let(:anime) { create(:anime) }
-      let!(:mapping) do
+      let!(:anime_mapping) do
         Mapping.create!(item: anime, external_site: 'myanimelist/anime', external_id: '1689')
       end
-
-      it 'should return a list of AnimeCharacter instances' do
-        expect(subject.anime_characters).to all(be_an(AnimeCharacter))
-      end
-
-      it 'should include the mapped anime' do
-        anime_ids = subject.anime_characters.map(&:anime_id)
-        expect(anime_ids).to include(anime.id)
-      end
-    end
-
-    describe '#manga_characters' do
       let(:manga) { create(:manga) }
-      let!(:mapping) do
+      let!(:manga_mapping) do
         Mapping.create!(item: manga, external_site: 'myanimelist/manga', external_id: '23419')
       end
 
-      it 'should return a list of MangaCharacter instances' do
-        expect(subject.manga_characters).to all(be_an(MangaCharacter))
+      it 'should return a list of MediaCharacter instances' do
+        expect(subject.media_characters).to all(be_an(MediaCharacter))
+      end
+
+      it 'should include the mapped anime' do
+        media = subject.media_characters.map(&:media)
+        expect(media).to include(anime)
       end
 
       it 'should include the mapped manga' do
-        manga_ids = subject.manga_characters.map(&:manga_id)
-        expect(manga_ids).to include(manga.id)
+        media = subject.media_characters.map(&:media)
+        expect(media).to include(manga)
       end
     end
   end

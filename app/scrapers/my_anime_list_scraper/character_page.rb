@@ -18,8 +18,8 @@ class MyAnimeListScraper
       character.canonical_name ||= 'en'
       character.description ||= description
       character.image ||= image
-      character.anime_characters += anime_characters
-      character.manga_characters += manga_characters
+      character.media_characters += media_characters
+      character.media_characters.uniq!
     end
 
     def names
@@ -47,12 +47,8 @@ class MyAnimeListScraper
       URI(sidebar.at_css('img')['src'].sub(/(\.[a-z]+)\z/i, 'l\1'))
     end
 
-    def anime_characters
-      ography_roles_for('Anime').map { |r| AnimeCharacter.where(r).first_or_initialize }
-    end
-
-    def manga_characters
-      ography_roles_for('Manga').map { |r| MangaCharacter.where(r).first_or_initialize }
+    def media_characters
+      ography_roles_for('Manga') + ography_roles_for('Anime')
     end
 
     def ography_roles_for(type)
@@ -72,7 +68,9 @@ class MyAnimeListScraper
         end
 
         # Load
-        { type.downcase => media, role: role }
+        char = MediaCharacter.where(media: media).first_or_initialize
+        char.role = role
+        char
       end
       out.compact
     end
@@ -86,7 +84,6 @@ class MyAnimeListScraper
     def character
       @character ||= Mapping.lookup('myanimelist/character', external_id) ||
                      Character.where(mal_id: external_id).first_or_initialize
-      end
     end
   end
 end
