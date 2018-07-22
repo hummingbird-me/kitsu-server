@@ -10,19 +10,15 @@ RSpec.describe MyAnimeListScraper::CastList do
 
     describe '#call' do
       it 'should queue all the characters for scraping' do
-        allow(subject).to receive(:scrape_async)
-        expect(subject).to receive(:scrape_async)
-          .with(%r{https://myanimelist.net/character/.*})
-          .exactly(15).times
+        subject.extend(ScraperMock)
         subject.call
+        expect(subject.scraped_urls).to include(match(%r{https://myanimelist.net/character/.*}))
       end
 
       it 'should queue all the people for scraping' do
-        allow(subject).to receive(:scrape_async)
-        expect(subject).to receive(:scrape_async)
-          .with(%r{https://myanimelist.net/people/.*})
-          .exactly(122).times
+        subject.extend(ScraperMock)
         subject.call
+        expect(subject.scraped_urls).to include(match(%r{https://myanimelist.net/people/.*}))
       end
     end
   end
