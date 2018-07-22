@@ -84,8 +84,8 @@ class MyAnimeListScraper
     end
 
     def character
-      @character ||= Mapping.lookup('myanimelist/character', external_id) do
-        Character.where(mal_id: external_id) || Character.new(mal_id: external_id)
+      @character ||= Mapping.lookup('myanimelist/character', external_id) ||
+                     Character.where(mal_id: external_id).first_or_initialize
       end
     end
   end

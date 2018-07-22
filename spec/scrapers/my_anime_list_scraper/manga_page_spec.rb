@@ -106,5 +106,11 @@ RSpec.describe MyAnimeListScraper::MangaPage do
         expect(subject.staff).to include(existing_staff)
       end
     end
+
+    describe '#volume_count' do
+      it 'should return 1' do
+        expect(subject.volume_count).to eq(1)
+      end
+    end
   end
 end
