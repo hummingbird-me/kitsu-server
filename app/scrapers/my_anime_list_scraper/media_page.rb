@@ -2,6 +2,7 @@ class MyAnimeListScraper
   class MediaPage < MyAnimeListScraper
     using NodeSetContentMethod
     include SidebarKeyValueParser
+    include DateRangeParser
 
     def call
       super

@@ -17,6 +17,8 @@ class MyAnimeListScraper
       super
       media.volume_count ||= volume_count
       media.chapter_count ||= chapter_count
+      media.start_date ||= start_date
+      media.end_date ||= end_date
       media.staff = staff
       media
     end
@@ -57,6 +59,14 @@ class MyAnimeListScraper
       count&.to_i
     end
 
+    def start_date
+      published[0]
+    end
+
+    def end_date
+      published[1]
+    end
+
     private
 
     def staff_urls
@@ -65,6 +75,10 @@ class MyAnimeListScraper
 
     def external_id
       MANGA_URL.match(@url)['id']
+    end
+
+    def published
+      @published ||= parse_date_range(information['Published']&.content)
     end
 
     def media

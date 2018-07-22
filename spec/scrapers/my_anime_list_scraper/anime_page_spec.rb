@@ -52,6 +52,16 @@ RSpec.describe MyAnimeListScraper::AnimePage do
       end
     end
 
+    describe '#start_date' do
+      it 'should be the same as #end_date' do
+        expect(subject.start_date).to eq(subject.end_date)
+      end
+
+      it 'should return August 26th, 2016' do
+        expect(subject.start_date).to eq(Date.new(2016, 8, 26))
+      end
+    end
+
     describe '#import' do
       it 'should return a changed Anime instance' do
         expect(subject.import).to be_changed
@@ -82,11 +92,23 @@ RSpec.describe MyAnimeListScraper::AnimePage do
     end
     subject { described_class.new('https://myanimelist.net/anime/306/Abenobashi') }
 
+    describe '#start_date' do
+      it 'should return April 4th, 2002' do
+        expect(subject.start_date).to eq(Date.new(2002, 4, 4))
+      end
+    end
+
+    describe '#end_date' do
+      it 'should return June 27th, 2002' do
+        expect(subject.end_date).to eq(Date.new(2002, 6, 27))
+      end
+    end
+
     describe '#call' do
       it 'should queue a scraper for the episode list' do
         allow(subject).to receive(:scrape_async)
-        expect(subject).not_to receive(:scrape_async)
-          .with('https://myanimelist.net/anime/306/Your_Name/episode')
+        expect(subject).to receive(:scrape_async)
+          .with('https://myanimelist.net/anime/306/Abenobashi/episode')
         subject.call
       end
     end

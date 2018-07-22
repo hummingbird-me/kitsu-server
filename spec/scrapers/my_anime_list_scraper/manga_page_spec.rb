@@ -8,6 +8,18 @@ RSpec.describe MyAnimeListScraper::MangaPage do
     end
     subject { described_class.new('https://myanimelist.net/manga/13/One_Piece') }
 
+    describe '#start_date' do
+      it 'should return the correct day' do
+        expect(subject.start_date).to eq(Date.new(1997, 7, 22))
+      end
+    end
+
+    describe '#end_date' do
+      it 'should return nil' do
+        expect(subject.end_date).to be_nil
+      end
+    end
+
     describe '#chapter_count' do
       it 'should return nil' do
         expect(subject.chapter_count).to be_nil
@@ -65,6 +77,16 @@ RSpec.describe MyAnimeListScraper::MangaPage do
         external_site: 'myanimelist/manga',
         external_id: '109855'
       )
+    end
+
+    describe '#start_date' do
+      it 'should be the same as the end_date' do
+        expect(subject.start_date).to eq(subject.end_date)
+      end
+
+      it 'should be October 18th, 2017' do
+        expect(subject.start_date).to eq(Date.new(2017, 10, 18))
+      end
     end
 
     describe '#staff' do

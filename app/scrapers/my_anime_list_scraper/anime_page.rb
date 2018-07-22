@@ -18,6 +18,8 @@ class MyAnimeListScraper
       media.age_rating_guide ||= age_rating_guide
       media.episode_count ||= episode_count
       media.episode_length ||= episode_length
+      media.start_date ||= start_date
+      media.end_date ||= end_date
       media.anime_productions += productions
       media
     end
@@ -58,10 +60,22 @@ class MyAnimeListScraper
       information['Episodes']&.content&.to_i
     end
 
+    def start_date
+      aired[0]
+    end
+
+    def end_date
+      aired[1]
+    end
+
     private
 
     def rating_info
       information['Rating']&.content&.split(' - ')&.map(&:strip)
+    end
+
+    def aired
+      @aired ||= parse_date_range(information['Aired']&.content)
     end
 
     def production_for(link, role)
