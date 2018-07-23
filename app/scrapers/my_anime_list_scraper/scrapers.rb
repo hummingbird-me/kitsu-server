@@ -1,11 +1,11 @@
 class MyAnimeListScraper
   SCRAPERS = [
     AnimePage,
-    # MangaPage,
+    MangaPage,
     EpisodeList,
     EpisodePage,
-    # CastList,
-    # CharacterPage,
+    CastList,
+    CharacterPage,
     # PersonPage
   ].freeze
 end

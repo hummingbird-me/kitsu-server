@@ -4,6 +4,18 @@ class MyAnimeListScraper < Scraper
   BASE_URL = 'https://myanimelist.net/'.freeze
   SOURCE_LINE = /^[\[\(](Written by .*|Source:.*)[\]\)]$/i
   EMPTY_TEXT = /No .* has been added to this .*/i
+  LANGUAGES = {
+    'Brazilian' => 'pt_br',
+    'English' => 'en',
+    'French' => 'fr',
+    'German' => 'de',
+    'Hebrew' => 'he',
+    'Hungarian' => 'hu',
+    'Italian' => 'it',
+    'Japanese' => 'ja_jp',
+    'Korean' => 'ko',
+    'Spanish' => 'es'
+  }.freeze
 
   private
 
@@ -87,6 +99,23 @@ class MyAnimeListScraper < Scraper
       %r{/#{type}/(\d+)/}.match(url)[1]
     else
       %r{myanimelist.net/([^/]+)/(\d+)/}.match(url).captures
+    end
+  end
+
+  # @overload object_for_link(url)
+  #   Loads the Kitsu object for a MAL URL
+  #   @param url [String] the URL from MyAnimeList
+  #   @return [ApplicationRecord,nil] the record in our database which corresponds to this
+  # @overload object_for_link(link)
+  #   Loads the Kitsu object for a MAL link
+  #   @param link [Nokogiri::XML::Node] the link node
+  #   @return [ApplicationRecord,nil] the record in our database which corresponds to this
+  def object_for_link(link)
+    if link.is_a?(Nokogiri::XML::Node)
+      object_for_link(link['href'])
+    elsif link.is_a?(String)
+      kind, id = id_for_url(link)
+      Mapping.lookup("myanimelist/#{kind}", id)
     end
   end
 

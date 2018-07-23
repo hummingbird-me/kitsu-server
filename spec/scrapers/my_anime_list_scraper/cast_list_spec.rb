@@ -21,5 +21,42 @@ RSpec.describe MyAnimeListScraper::CastList do
         expect(subject.scraped_urls).to include(match(%r{https://myanimelist.net/people/.*}))
       end
     end
+
+    describe '#characters' do
+      let(:media) { create(:anime) }
+      before do
+        Mapping.create!(item: media, external_site: 'myanimelist/anime', external_id: '32281')
+        [137_467, 136_805].each do |mal_id|
+          character = create(:character)
+          Mapping.create!(
+            item: character,
+            external_site: 'myanimelist/character',
+            external_id: mal_id
+          )
+        end
+      end
+
+      it 'should return a list of MediaCharacter objects for characters already in our DB' do
+        characters = subject.characters
+        expect(characters.count).to eq(2)
+        expect(characters).to all(be_a(MediaCharacter))
+      end
+    end
+
+    describe '#staff' do
+      let(:media) { create(:anime) }
+      let(:person) { create(:person) }
+      before do
+        Mapping.create!(item: media, external_site: 'myanimelist/anime', external_id: '32281')
+        Mapping.create!(item: person, external_site: 'myanimelist/people', external_id: '32577')
+      end
+
+      it 'should return a list of MediaStaff objects for people already in our DB' do
+        staff = subject.staff
+        people = staff.map(&:person)
+        expect(people).to include(person)
+        expect(staff).to all(be_a(MediaStaff))
+      end
+    end
   end
 end
