@@ -71,7 +71,7 @@ class Scraper
     urls.map do |url|
       url = url.encode('ascii', undef: :replace, replace: '_')
       Scrape.where(
-        original_ancestor_id: @scrape.original_ancestor_id,
+        original_ancestor_id: @scrape&.original_ancestor_id,
         target_url: url
       ).first_or_create(parent: @scrape)
     end
