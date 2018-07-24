@@ -9,6 +9,7 @@ class MyAnimeListScraper
     end
 
     def call
+      return if /Invalid ID/i =~ page.at_css('.badresult')&.content
       super
       import.save!
     end
