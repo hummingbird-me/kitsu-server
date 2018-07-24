@@ -13,6 +13,9 @@ class Scrape < ApplicationRecord
     update(status: :completed)
   rescue Scraper::NoMatchError
     update(scraper_name: 'None', status: :failed)
+  rescue StandardError
+    update(status: :failed)
+    raise
   end
 
   def run_async
@@ -20,4 +23,11 @@ class Scrape < ApplicationRecord
   end
 
   after_commit :run_async, on: :create
+
+  before_create do
+    if parent
+      self.depth ||= parent.depth + 1
+      self.max_depth ||= parent.max_depth
+    end
+  end
 end

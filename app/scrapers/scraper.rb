@@ -35,7 +35,7 @@ class Scraper
       scraper = klass.new(scrape)
       return scraper if scraper.match?
     end
-    raise NoMatchError, url
+    raise NoMatchError, scrape
   end
 
   # @abstract Override this method to return whether the class can scrape from the provided URL
@@ -63,7 +63,11 @@ class Scraper
 
   # Queue a scraper to run asynchronously
   def scrape_async(*urls)
-    urls.map { |url| Scrape.create!(target_url: url, parent: @scrape) }
+    return if @scrape.max_depth == @scrape.depth
+    urls.map do |url|
+      url = url.encode('ascii', undef: :replace, replace: '_')
+      Scrape.create!(target_url: url, parent: @scrape)
+    end
   end
 
   # A Faraday Connection for requests to be made against
