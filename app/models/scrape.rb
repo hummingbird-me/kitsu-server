@@ -28,8 +28,8 @@ class Scrape < ApplicationRecord
   before_create do
     if parent
       self.original_ancestor_id = parent.original_ancestor_id || parent_id
-      self.depth ||= parent.depth + 1
-      self.max_depth ||= parent.max_depth
+      self.depth = parent.depth + 1
+      self.max_depth = parent.max_depth
     end
   end
 end
