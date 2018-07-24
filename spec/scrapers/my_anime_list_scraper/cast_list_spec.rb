@@ -59,4 +59,39 @@ RSpec.describe MyAnimeListScraper::CastList do
       end
     end
   end
+
+  context 'for the character list of Monster' do
+    before do
+      stub_request(:get, %r{https://myanimelist.net/manga/.*/characters})
+        .to_return(fixture('scrapers/my_anime_list_scraper/manga_characters.html'))
+    end
+    subject { described_class.new('https://myanimelist.net/manga/1/Monster/characters') }
+
+    describe '#staff' do
+      it 'should return nil' do
+        expect(subject.staff).to be_nil
+      end
+    end
+
+    describe '#characters' do
+      let(:media) { create(:manga) }
+      before do
+        Mapping.create!(item: media, external_site: 'myanimelist/manga', external_id: '1')
+        [720, 719, 718, 8612].each do |mal_id|
+          character = create(:character)
+          Mapping.create!(
+            item: character,
+            external_site: 'myanimelist/character',
+            external_id: mal_id
+          )
+        end
+      end
+
+      it 'should return a list of MediaCharacter objects for characters already in our DB' do
+        characters = subject.characters
+        expect(characters.count).to eq(4)
+        expect(characters).to all(be_a(MediaCharacter))
+      end
+    end
+  end
 end
