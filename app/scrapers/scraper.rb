@@ -66,7 +66,10 @@ class Scraper
     return if @scrape.max_depth == @scrape.depth
     urls.map do |url|
       url = url.encode('ascii', undef: :replace, replace: '_')
-      Scrape.create!(target_url: url, parent: @scrape)
+      Scrape.where(
+        original_ancestor_id: @scrape.original_ancestor_id,
+        target_url: url
+      ).first_or_create(parent: @scrape)
     end
   end
 
