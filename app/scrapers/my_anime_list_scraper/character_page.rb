@@ -20,6 +20,7 @@ class MyAnimeListScraper
       character.image ||= image
       character.media_characters += media_characters
       character.media_characters.uniq!
+      character
     end
 
     def names

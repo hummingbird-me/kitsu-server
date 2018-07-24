@@ -52,7 +52,7 @@ class MyAnimeListScraper < Scraper
 
   # @return [Hash<String,Nokogiri::XML::NodeSet] the sections in the MAL sidebar
   def main_sections
-    @main_sections ||= parse_sections(main.at_css('h2').parent.children)
+    @main_sections ||= parse_sections(main.at_css('h2, .normal_header').parent.children)
   end
 
   # Parse a NodeSet where MAL has separate sections punctuated by <h2> headers

@@ -14,11 +14,14 @@ class MyAnimeListScraper
     end
 
     def import
-      person.names = person.names.merge(names)
+      person.name = english_name
+      person.names = person.names.merge(names).compact
       person.canonical_name ||= 'en'
       person.description ||= description
-      person.image ||= image
+      person.image = image unless person.image.present?
       person.staff ||= staff
+      person.birthday ||= birthday
+      person
     end
 
     def names
@@ -72,7 +75,7 @@ class MyAnimeListScraper
     end
 
     def external_id
-      CHARACTER_URL.match(@url)['id']
+      PERSON_URL.match(@url)['id']
     end
 
     def person
