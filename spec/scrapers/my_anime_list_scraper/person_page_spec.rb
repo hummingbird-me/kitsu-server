@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::PersonPage do
+  include_context 'MAL CDN'
   context 'for voice actress Tara Platt' do
     before do
       stub_request(:get, %r{https://myanimelist.net/people/.*})

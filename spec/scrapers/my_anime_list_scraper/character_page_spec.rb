@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::CharacterPage do
+  include_context 'MAL CDN'
   context 'for Akari Shinohara' do
     before do
       stub_request(:get, %r{https://myanimelist.net/character/.*})

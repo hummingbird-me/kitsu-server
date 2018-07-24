@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::MangaPage do
+  include_context 'MAL CDN'
   context 'for an ongoing manga' do
     before do
       stub_request(:get, %r{https://myanimelist.net/manga/.*})

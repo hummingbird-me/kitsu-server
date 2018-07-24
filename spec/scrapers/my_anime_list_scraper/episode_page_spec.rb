@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::EpisodePage do
+  include_context 'MAL CDN'
   context 'for an episode of a poorly-written shounen anime' do
     before do
       stub_request(:get, %r{https://myanimelist.net/anime/.*/episode/1})

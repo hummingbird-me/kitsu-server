@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::MediaPage do
+  include_context 'MAL CDN'
   describe '#titles' do
     before do
       stub_request(:get, %r{https://myanimelist.net/anime/.*})
