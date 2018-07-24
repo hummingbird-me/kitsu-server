@@ -27,7 +27,7 @@ class Person < ApplicationRecord
   has_many :anime_castings, dependent: :destroy
   has_many :drama_castings, dependent: :destroy
   has_many :staff, class_name: 'MediaStaff', dependent: :destroy
-  has_many :voices, class_name: 'CharacterVoice', dependnet: :destroy
+  has_many :voices, class_name: 'CharacterVoice', dependent: :destroy
 
   validates_attachment :image, content_type: {
     content_type: %w[image/jpg image/jpeg image/png]
