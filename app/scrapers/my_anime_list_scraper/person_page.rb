@@ -18,6 +18,7 @@ class MyAnimeListScraper
       person.canonical_name ||= 'en'
       person.description ||= description
       person.image ||= image
+      person.staff ||= staff
     end
 
     def names
@@ -50,6 +51,18 @@ class MyAnimeListScraper
     def image
       return nil if sidebar.at_css('.btn-detail-add-picture').present?
       URI(sidebar.at_css('img')['src'].sub(/(\.[a-z]+)\z/i, 'l\1'))
+    end
+
+    def staff
+      rows = main_sections['Anime Staff Positions'].css('tr > td:last-child')
+      roles = rows.each_with_object({}) do |row, acc|
+        anime = object_for_link(row.at_css("a[href*='/anime/']"))
+        role = row.at_css('small')
+        acc[anime] ||= MediaStaff.where(media: anime, person: person).first_or_initialize
+        # TODO: switch to an array for the roles
+        acc[anime].roles += ", #{role}"
+      end
+      roles.values
     end
 
     private

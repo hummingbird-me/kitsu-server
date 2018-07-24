@@ -6,6 +6,6 @@ class MyAnimeListScraper
     EpisodePage,
     CastList,
     CharacterPage,
-    # PersonPage
+    PersonPage
   ].freeze
 end

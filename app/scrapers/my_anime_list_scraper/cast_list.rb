@@ -7,6 +7,7 @@ class MyAnimeListScraper
       super
       if media
         media.characters += characters
+        media.staff += staff
         media.save!
       end
       scrape_async(*character_urls)
