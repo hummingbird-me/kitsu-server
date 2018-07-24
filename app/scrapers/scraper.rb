@@ -67,7 +67,7 @@ class Scraper
 
   # Queue a scraper to run asynchronously
   def scrape_async(*urls)
-    return if @scrape.max_depth == @scrape.depth
+    return if @scrape && @scrape&.max_depth == @scrape&.depth
     urls.map do |url|
       url = url.encode('ascii', undef: :replace, replace: '_')
       Scrape.where(
