@@ -67,7 +67,7 @@ class MyAnimeListScraper
         role = row.at_css('small')
         acc[anime] ||= MediaStaff.where(media: anime, person: person).first_or_initialize
         # TODO: switch to an array for the roles
-        acc[anime].roles += ", #{role}"
+        acc[anime].role += ", #{role}"
       end
       roles.values
     end
