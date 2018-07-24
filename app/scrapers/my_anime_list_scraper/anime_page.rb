@@ -39,9 +39,9 @@ class MyAnimeListScraper
 
     def productions
       [
-        *information['Producers'].css('a').map { |link| production_for(link, :producer) },
-        *information['Licensors'].css('a').map { |link| production_for(link, :licensor) },
-        *information['Studios'].css('a').map { |link| production_for(link, :studio) }
+        *productions_in(information['Producers'], :producer),
+        *productions_in(information['Licensors'], :licensor),
+        *productions_in(information['Studios'], :studio)
       ].compact
     end
 
@@ -76,6 +76,11 @@ class MyAnimeListScraper
 
     def aired
       @aired ||= parse_date_range(information['Aired']&.content)
+    end
+
+    def productions_in(fragment, role)
+      return [] if /None found/i =~ fragment.content
+      fragment.css('a').map { |link| production_for(link, role) }
     end
 
     def production_for(link, role)
