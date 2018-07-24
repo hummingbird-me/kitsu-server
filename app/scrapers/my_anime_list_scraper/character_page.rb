@@ -12,6 +12,7 @@ class MyAnimeListScraper
       return if /Invalid ID/i =~ page.at_css('.badresult')&.content
       super
       import.save!
+      create_mapping('myanimelist/character', external_id, character)
     end
 
     def import

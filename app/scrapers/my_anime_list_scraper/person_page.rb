@@ -11,6 +11,7 @@ class MyAnimeListScraper
     def call
       super
       import.save!
+      create_mapping('myanimelist/person', external_id, person)
     end
 
     def import

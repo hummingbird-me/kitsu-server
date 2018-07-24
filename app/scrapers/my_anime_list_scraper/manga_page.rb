@@ -10,6 +10,7 @@ class MyAnimeListScraper
 
     def call
       super
+      create_mapping('myanimelist/manga', external_id, media)
       scrape_async(*staff_urls)
     end
 

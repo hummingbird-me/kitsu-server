@@ -9,6 +9,7 @@ class MyAnimeListScraper
 
     def call
       super
+      create_mapping('myanimelist/anime', external_id, media)
       scrape_async "#{@url}/episode" if subtype != :movie
     end
 

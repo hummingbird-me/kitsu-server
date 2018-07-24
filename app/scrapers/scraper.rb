@@ -55,6 +55,10 @@ class Scraper
     ScraperWorker.perform_async(self.class.name, @url)
   end
 
+  def create_mapping(site, id, item)
+    Mapping.where(external_site: site, external_id: id, item: item).first_or_create
+  end
+
   def inspect
     "#<#{self.class.name} url: \"#{@url}\">"
   end
