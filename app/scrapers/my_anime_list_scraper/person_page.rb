@@ -48,7 +48,10 @@ class MyAnimeListScraper
 
     def birthday
       date = sidebar_data['Birthday']&.content&.strip
+      return if /Unknown/i =~ date
       Date.strptime(date, '%b %e, %Y') if date
+    rescue ArgumentError
+      nil
     end
 
     def image
