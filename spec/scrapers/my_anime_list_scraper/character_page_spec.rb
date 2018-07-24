@@ -31,10 +31,6 @@ RSpec.describe MyAnimeListScraper::CharacterPage do
       it 'should return a URI' do
         expect(subject.image).to be_a(URI)
       end
-
-      it 'should return the large image' do
-        expect(subject.image.to_s).to include('l.')
-      end
     end
 
     describe '#media_characters' do
