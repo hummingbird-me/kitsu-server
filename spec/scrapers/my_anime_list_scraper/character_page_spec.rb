@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::CharacterPage do
+  include_context 'MAL CDN'
   context 'for Akari Shinohara' do
     before do
       stub_request(:get, %r{https://myanimelist.net/character/.*})
@@ -30,9 +31,30 @@ RSpec.describe MyAnimeListScraper::CharacterPage do
       it 'should return a URI' do
         expect(subject.image).to be_a(URI)
       end
+    end
 
-      it 'should return the large image' do
-        expect(subject.image.to_s).to include('l.')
+    describe '#media_characters' do
+      let(:anime) { create(:anime) }
+      let!(:anime_mapping) do
+        Mapping.create!(item: anime, external_site: 'myanimelist/anime', external_id: '1689')
+      end
+      let(:manga) { create(:manga) }
+      let!(:manga_mapping) do
+        Mapping.create!(item: manga, external_site: 'myanimelist/manga', external_id: '23419')
+      end
+
+      it 'should return a list of MediaCharacter instances' do
+        expect(subject.media_characters).to all(be_an(MediaCharacter))
+      end
+
+      it 'should include the mapped anime' do
+        media = subject.media_characters.map(&:media)
+        expect(media).to include(anime)
+      end
+
+      it 'should include the mapped manga' do
+        media = subject.media_characters.map(&:media)
+        expect(media).to include(manga)
       end
     end
   end

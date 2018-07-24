@@ -9,6 +9,7 @@ class MyAnimeListScraper
 
     def call
       super
+      create_mapping('myanimelist/anime', external_id, media)
       scrape_async "#{@url}/episode" if subtype != :movie
     end
 
@@ -18,6 +19,8 @@ class MyAnimeListScraper
       media.age_rating_guide ||= age_rating_guide
       media.episode_count ||= episode_count
       media.episode_length ||= episode_length
+      media.start_date ||= start_date
+      media.end_date ||= end_date
       media.anime_productions += productions
       media
     end
@@ -37,9 +40,9 @@ class MyAnimeListScraper
 
     def productions
       [
-        *information['Producers'].css('a').map { |link| production_for(link, :producer) },
-        *information['Licensors'].css('a').map { |link| production_for(link, :licensor) },
-        *information['Studios'].css('a').map { |link| production_for(link, :studio) }
+        *productions_in(information['Producers'], :producer),
+        *productions_in(information['Licensors'], :licensor),
+        *productions_in(information['Studios'], :studio)
       ].compact
     end
 
@@ -58,10 +61,27 @@ class MyAnimeListScraper
       information['Episodes']&.content&.to_i
     end
 
+    def start_date
+      aired[0]
+    end
+
+    def end_date
+      aired[1]
+    end
+
     private
 
     def rating_info
       information['Rating']&.content&.split(' - ')&.map(&:strip)
+    end
+
+    def aired
+      @aired ||= parse_date_range(information['Aired']&.content)
+    end
+
+    def productions_in(fragment, role)
+      return [] if /None found/i =~ fragment.content
+      fragment.css('a').map { |link| production_for(link, role) }
     end
 
     def production_for(link, role)

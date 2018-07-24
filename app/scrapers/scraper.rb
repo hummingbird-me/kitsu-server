@@ -7,24 +7,35 @@ require 'faraday/parse_html'
 # subclass to handle a given URL.
 class Scraper
   # No Scraper was found to match the URL provided
-  class NoMatchError < StandardError; end
+  class NoMatchError < StandardError
+    def initialize(url)
+      super("No matching scraper found registered to handle '#{url}'")
+    end
+  end
 
-  # @param url [String] the URL to scrape
-  def initialize(url)
-    @url = url
+  # @param scrape [Scrape,String] the Scrape or URL to run
+  def initialize(scrape)
+    if scrape.respond_to?(:target_url)
+      @scrape = scrape
+      @url = scrape.target_url
+    else
+      @scrape = nil
+      @url = scrape
+    end
   end
 
   # Find a Scraper matching the URL provided and return an instance.
   #
-  # @param url [String] the URL to scrape
+  # @param scrape [Scrape,#target_url] the Scrape to run
   # @raise [NoMatchError] if no Scrapers matched the provided URL
   # @return [Scraper] an instance of a Scraper subclass for the URL
-  def self.for_url(url)
+  def self.new(scrape)
+    return super if self != Scraper
     SCRAPERS.each do |klass|
-      scraper = klass.new(url)
+      scraper = klass.new(scrape)
       return scraper if scraper.match?
     end
-    raise NoMatchError
+    raise NoMatchError, scrape
   end
 
   # @abstract Override this method to return whether the class can scrape from the provided URL
@@ -44,6 +55,10 @@ class Scraper
     ScraperWorker.perform_async(self.class.name, @url)
   end
 
+  def create_mapping(site, id, item)
+    Mapping.where(external_site: site, external_id: id, item: item).first_or_create
+  end
+
   def inspect
     "#<#{self.class.name} url: \"#{@url}\">"
   end
@@ -51,8 +66,15 @@ class Scraper
   private
 
   # Queue a scraper to run asynchronously
-  def scrape_async(url)
-    Scraper.for_url(url).call_async
+  def scrape_async(*urls)
+    return if @scrape && @scrape&.max_depth == @scrape&.depth
+    urls.map do |url|
+      url = url.encode('ascii', undef: :replace, replace: '_')
+      Scrape.where(
+        original_ancestor_id: @scrape&.original_ancestor_id,
+        target_url: url
+      ).first_or_create(parent: @scrape)
+    end
   end
 
   # A Faraday Connection for requests to be made against

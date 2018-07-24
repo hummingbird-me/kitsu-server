@@ -32,6 +32,7 @@ class MyAnimeListScraper
       info = extract_info(doc)
       # Generate the HTML for it
       fragment = build_info_dictionary(info)
+      return doc unless fragment
 
       # Inject it into the document
       if doc.first_element_child
@@ -76,6 +77,7 @@ class MyAnimeListScraper
         value_node.inner_html = value
         list.add_child(value_node)
       end
+      return if list.children.empty?
       fragment
     end
 

@@ -11,13 +11,18 @@ class MyAnimeListScraper
     def call
       super
       import.save!
+      create_mapping('myanimelist/person', external_id, person)
     end
 
     def import
-      person.names = person.names.merge(names)
+      person.name = english_name
+      person.names = person.names.merge(names).compact
       person.canonical_name ||= 'en'
       person.description ||= description
-      person.image ||= image
+      person.image = image unless person.image.present?
+      person.staff ||= staff
+      person.birthday ||= birthday
+      person
     end
 
     def names
@@ -44,12 +49,28 @@ class MyAnimeListScraper
 
     def birthday
       date = sidebar_data['Birthday']&.content&.strip
+      return if /Unknown/i =~ date
       Date.strptime(date, '%b %e, %Y') if date
+    rescue ArgumentError
+      nil
     end
 
     def image
       return nil if sidebar.at_css('.btn-detail-add-picture').present?
       URI(sidebar.at_css('img')['src'].sub(/(\.[a-z]+)\z/i, 'l\1'))
+    end
+
+    def staff
+      rows = main_sections['Anime Staff Positions'].css('tr > td:last-child')
+      roles = rows.each_with_object({}) do |row, acc|
+        anime = object_for_link(row.at_css("a[href*='/anime/']"))
+        role = row.at_css('small')
+        acc[anime] ||= MediaStaff.where(media: anime, person: person).first_or_initialize
+        # TODO: switch to an array for the roles
+        acc[anime].role ||= ''
+        acc[anime].role += ", #{role}"
+      end
+      roles.values
     end
 
     private
@@ -59,7 +80,7 @@ class MyAnimeListScraper
     end
 
     def external_id
-      CHARACTER_URL.match(@url)['id']
+      PERSON_URL.match(@url)['id']
     end
 
     def person

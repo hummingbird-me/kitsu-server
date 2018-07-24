@@ -2,6 +2,7 @@ class MyAnimeListScraper
   class MediaPage < MyAnimeListScraper
     using NodeSetContentMethod
     include SidebarKeyValueParser
+    include DateRangeParser
 
     def call
       super
@@ -17,7 +18,8 @@ class MyAnimeListScraper
       media.synopsis ||= merged_synopsis
       media.genres += genres
       media.subtype ||= subtype
-      media.poster_image ||= poster_image
+      media.poster_image = poster_image unless media.poster_image.present?
+      media
     end
 
     def titles

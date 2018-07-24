@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MyAnimeListScraper::PersonPage do
+  include_context 'MAL CDN'
   context 'for voice actress Tara Platt' do
     before do
       stub_request(:get, %r{https://myanimelist.net/people/.*})
@@ -41,6 +42,12 @@ RSpec.describe MyAnimeListScraper::PersonPage do
         expect(subject.image.to_s).to include('l.')
       end
     end
+
+    describe '#staff' do
+      it 'should return an empty array' do
+        expect(subject.staff).to eq([])
+      end
+    end
   end
 
   context 'for esteemed director Makoto Shinkai' do
@@ -59,6 +66,31 @@ RSpec.describe MyAnimeListScraper::PersonPage do
     describe '#english_name' do
       it 'should return "Makoto Shinkai"' do
         expect(subject.english_name).to eq('Makoto Shinkai')
+      end
+    end
+
+    describe '#staff' do
+      let(:anime) { create(:anime) }
+      before do
+        anime.mappings.create(external_site: 'myanimelist/anime', external_id: '1689')
+      end
+
+      it 'should return a list of MediaStaff' do
+        expect(subject.staff).to all(be_a(MediaStaff))
+      end
+
+      it 'should return staff rows only for media already in our DB' do
+        media = subject.staff.map(&:media)
+        expect(media).to include(anime)
+      end
+
+      it 'should merge multiple rows of the same series into a single MediaStaff' do
+        cms = subject.staff.select { |staff| staff.media == anime }
+        expect(cms.count).to eq(1)
+        expect(cms.first.role).to include('Editing')
+        expect(cms.first.role).to include('Director')
+        expect(cms.first.role).to include('Storyboard')
+        expect(cms.first.role).to include('Script')
       end
     end
   end
