@@ -17,7 +17,7 @@ class MyAnimeListScraper
       character.names = character.names.merge(names)
       character.canonical_name ||= 'en'
       character.description ||= description
-      character.image ||= image
+      character.image = image unless character.image.present?
       character.media_characters += media_characters
       character.media_characters.uniq!
       character
