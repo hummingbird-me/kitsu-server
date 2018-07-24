@@ -48,7 +48,7 @@ class MyAnimeListScraper
 
     def image
       return nil if sidebar.at_css('.btn-detail-add-picture').present?
-      URI(sidebar.at_css('img')['src'].sub(/(\.[a-z]+)\z/i, 'l\1'))
+      URI(sidebar.at_css('img')['src'])
     end
 
     def media_characters
