@@ -41,6 +41,7 @@ class MyAnimeListScraper
     end
 
     def description
+      return if /No biography/i =~ main_sections[english_name].content
       clean_html(main_sections[english_name].to_html)
     end
 
