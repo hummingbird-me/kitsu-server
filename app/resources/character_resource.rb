@@ -14,6 +14,12 @@ class CharacterResource < BaseResource
       CharactersIndex::Character.query_for(values.join(' '))
     }
 
+  def description
+    html = Nokogiri::HTML.fragment(_model.description)
+    html.css('data, source').delete
+    html.to_html
+  end
+
   def name
     _model.canonical_name
   end
