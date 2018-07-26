@@ -16,7 +16,7 @@ class CharacterResource < BaseResource
 
   def description
     html = Nokogiri::HTML.fragment(_model.description)
-    html.css('data, source').delete
+    html.css('data, source').remove
     html.to_html
   end
 
