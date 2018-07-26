@@ -11,6 +11,6 @@ module EpisodicResource
   end
 
   def length
-    _model.length / 60
+    _model.length / 60 if _model.length
   end
 end

@@ -12,6 +12,6 @@ class EpisodeResource < BaseResource
   filter :number, verify: ->(values, _context) { values.map(&:to_i) }
 
   def length
-    _model.length / 60
+    _model.length / 60 if _model.length
   end
 end
