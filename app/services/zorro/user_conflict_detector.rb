@@ -99,8 +99,9 @@ module Zorro
       options << { email: /\A\s*#{@email}\s*\z/i } if @email
       return nil if options.empty?
 
-      @aozora_user = Zorro::DB::User.find('$or' => options).sort(_updated_at: -1).first
-      @aozora_user
+      Rails.cache.fetch([@email.downcase, @ao_facebook_id], expires_in: 48.hours) do
+        @aozora_user = Zorro::DB::User.find('$or' => options).sort(_updated_at: -1).first
+      end
     end
 
     def library_count_for_ao(id)
