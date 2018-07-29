@@ -30,7 +30,7 @@ class Feed
 
     # @return [String] the human-readable textual representation of the notification
     def message
-      actor_name = actor.name
+      actor_name = actor.name if actor.respond_to?(:name)
 
       case verb
       when :aired
