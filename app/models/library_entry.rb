@@ -236,8 +236,14 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
-  after_commit on: :update, if: :progress_changed? do
-    MediaFollowUpdateWorker.perform_for_entry(self, :update, progress_was, progress) unless imported
+  after_commit on: :update do
+    unless imported
+      if dropped? || on_hold?
+        MediaFollowUpdateWorker.perform_for_entry(self, :destroy, progress_was)
+      else
+        MediaFollowUpdateWorker.perform_for_entry(self, :update, progress_was, progress)
+      end
+    end
   end
 
   after_commit on: :destroy do
