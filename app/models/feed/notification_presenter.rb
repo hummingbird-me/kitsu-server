@@ -20,6 +20,7 @@ class Feed
       when Post, Comment, GroupInvite then reference_for(subject)
       when PostLike, CommentLike then reference_for(subject)
       when Follow then reference_for(subject)
+      when Episode, Chapter then reference_for(actor)
       end
     end
 
