@@ -89,7 +89,8 @@ class MyAnimeListScraper
       out = Nokogiri::HTML.fragment('<p></p>')
       doc.children.each do |node|
         next out.add_child('<p></p>') if node.name == 'br'
-        out.last_element_child.add_child(node)
+        parent = out.last_element_child || out.children.select(&:element?).last
+        parent.add_child(node)
       end
       out.css('p').each do |node|
         node.remove if node.content.blank?
