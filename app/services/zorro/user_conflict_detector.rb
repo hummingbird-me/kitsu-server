@@ -99,7 +99,7 @@ module Zorro
       options << { email: /\A\s*#{@email}\s*\z/i } if @email
       return nil if options.empty?
 
-      Rails.cache.fetch([@email.downcase, @ao_facebook_id], expires_in: 48.hours) do
+      Rails.cache.fetch([@email&.downcase, @ao_facebook_id], expires_in: 48.hours) do
         @aozora_user = Zorro::DB::User.find('$or' => options).sort(_updated_at: -1).first
       end
     end
