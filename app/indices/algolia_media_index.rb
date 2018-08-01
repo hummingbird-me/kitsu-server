@@ -9,7 +9,8 @@ class AlgoliaMediaIndex < BaseIndex
   attributes :start_date, :end_date, format: AlgoliaDateFormatter
 
   # Episode/Chapter count
-  attributes :episode_count, :episode_length, :chapter_count, :volume_count
+  attributes :episode_count, :chapter_count, :volume_count
+  attributes :episode_length, :total_length, format: SecondsToMinutesFormatter
 
   # Limit updates to happen less-frequently
   attribute :user_count, frequency: 10
