@@ -5,6 +5,7 @@ class MyAnimeListScraper
     include DateRangeParser
 
     def call
+      return unless page
       super
       import.save!
       scrape_async "#{@url}/characters"

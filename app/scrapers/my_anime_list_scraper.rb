@@ -19,8 +19,12 @@ class MyAnimeListScraper < Scraper
 
   private
 
+  def response
+    @response ||= http.get(@url)
+  end
+
   def page
-    @page ||= http.get(@url).body
+    @page ||= response.body unless response.status == 404
   end
 
   # @return [String] the main header of a standard MAL page
