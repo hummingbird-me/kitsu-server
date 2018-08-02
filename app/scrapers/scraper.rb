@@ -13,6 +13,7 @@ class Scraper
     end
   end
   class PageNotFound < StandardError; end
+  class TooManyRequests < StandardError; end
 
   # @param scrape [Scrape,String] the Scrape or URL to run
   def initialize(scrape)

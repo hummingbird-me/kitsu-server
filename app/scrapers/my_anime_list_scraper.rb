@@ -22,6 +22,7 @@ class MyAnimeListScraper < Scraper
   def response
     @response ||= http.get(@url).tap do |res|
       raise Scraper::PageNotFound if res.status == 404
+      raise Scraper::TooManyRequests if res.status == 429
     end
   end
 
