@@ -48,7 +48,8 @@ class MyAnimeListScraper
 
     def image
       return nil if sidebar.at_css('.btn-detail-add-picture').present?
-      URI(sidebar.at_css('img')['src'])
+      src = sidebar.at_css('img')['src']
+      URI(src) unless %r{images/questionmark} =~ src
     end
 
     def media_characters
