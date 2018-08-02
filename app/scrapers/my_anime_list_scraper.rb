@@ -20,11 +20,13 @@ class MyAnimeListScraper < Scraper
   private
 
   def response
-    @response ||= http.get(@url)
+    @response ||= http.get(@url).tap do |res|
+      raise Scraper::PageNotFound if res.status == 404
+    end
   end
 
   def page
-    @page ||= response.body unless response.status == 404
+    @page ||= response.body
   end
 
   # @return [String] the main header of a standard MAL page

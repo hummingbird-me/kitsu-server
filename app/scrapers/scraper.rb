@@ -12,6 +12,7 @@ class Scraper
       super("No matching scraper found registered to handle '#{url}'")
     end
   end
+  class PageNotFound < StandardError; end
 
   # @param scrape [Scrape,String] the Scrape or URL to run
   def initialize(scrape)
