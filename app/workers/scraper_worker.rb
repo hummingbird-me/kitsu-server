@@ -1,7 +1,7 @@
 class ScraperWorker
   include Sidekiq::Worker
 
-  def perform(klass_name, url)
-    klass_name.constantize.new(url).call
+  def perform(scrape)
+    Scrape.find(scrape).run
   end
 end
