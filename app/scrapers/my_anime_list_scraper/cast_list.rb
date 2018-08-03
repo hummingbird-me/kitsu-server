@@ -52,7 +52,7 @@ class MyAnimeListScraper
 
     def process_voice_rows(character_row, media_char)
       return nil unless character_row.at_css("a[href*='/people/']").present?
-      character_row.css("td.borderClass[align='right']").map do |person_row|
+      character_row.css("td.borderClass[align='right'] tr").map do |person_row|
         # Build the CharacterVoice
         person = object_for_link(person_row.at_css("a[href*='/people/']"))
         next unless person
