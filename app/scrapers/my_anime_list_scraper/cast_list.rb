@@ -31,7 +31,7 @@ class MyAnimeListScraper
     end
 
     def staff
-      return if staff_rows.blank?
+      return [] if staff_rows.blank?
       staff = staff_rows.map do |row|
         person = object_for_link(row.at_css("a[href*='/people/']"))
         next unless person
