@@ -54,6 +54,10 @@ gem 'flipper'
 gem 'flipper-redis'
 gem 'flipper-ui'
 
+# API Frameworks
+gem 'graphql'
+gem 'jsonapi-resources', '0.9.0'
+
 # Miscellaneous Utilities
 gem 'addressable' # Fancy address logic
 gem 'counter_culture' # Fancier counter caches
@@ -63,7 +67,6 @@ gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'google-api-client' # Google APIs
 gem 'ice_cube' # Episode release schedules
-gem 'jsonapi-resources', '0.9.0'
 gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.8.4' # Parse MAL XML shit
@@ -105,6 +108,7 @@ gem 'sinatra' # used by sidekiq/web
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
   gem 'dotenv-rails' # Load default ENV
+  gem 'graphiql-rails' # GraphQL console
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 

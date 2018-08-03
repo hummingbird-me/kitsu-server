@@ -235,6 +235,7 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (~> 0.7)
+    graphql (1.8.6)
     groupdate (4.0.1)
       activesupport (>= 4.2)
     guard (2.14.2)
@@ -687,6 +688,7 @@ DEPENDENCIES
   forest_liana
   friendly_id
   google-api-client
+  graphql
   guard
   guard-rspec
   hiredis
@@ -764,4 +766,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.14.6
+   1.16.1
