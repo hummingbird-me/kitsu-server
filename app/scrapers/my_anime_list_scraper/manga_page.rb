@@ -36,7 +36,7 @@ class MyAnimeListScraper
           # If it's a link, extract the person data
           person_id = %r{/people/(\d+)/.*}.match(node['href'])[1]
           # Find the person and add them to our accumulator
-          person = Mapping.lookup('myanimelist/person', person_id)
+          person = Mapping.lookup('myanimelist/people', person_id)
           acc << [person, '']
         end
       end

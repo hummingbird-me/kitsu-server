@@ -11,7 +11,7 @@ class MyAnimeListScraper
     def call
       super
       import.save!
-      create_mapping('myanimelist/person', external_id, person)
+      create_mapping('myanimelist/people', external_id, person)
     end
 
     def import
@@ -84,7 +84,7 @@ class MyAnimeListScraper
     end
 
     def person
-      @person ||= Mapping.lookup('myanimelist/person', external_id) || Person.new
+      @person ||= Mapping.lookup('myanimelist/people', external_id) || Person.new
     end
   end
 end

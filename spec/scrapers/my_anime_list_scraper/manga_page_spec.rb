@@ -59,7 +59,7 @@ RSpec.describe MyAnimeListScraper::MangaPage do
     let!(:artist_mapping) do
       Mapping.create!(
         item: artist,
-        external_site: 'myanimelist/person',
+        external_site: 'myanimelist/people',
         external_id: '23071'
       )
     end
@@ -67,7 +67,7 @@ RSpec.describe MyAnimeListScraper::MangaPage do
     let!(:writer_mapping) do
       Mapping.create!(
         item: writer,
-        external_site: 'myanimelist/person',
+        external_site: 'myanimelist/people',
         external_id: '27379'
       )
     end
