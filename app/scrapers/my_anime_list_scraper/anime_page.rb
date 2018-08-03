@@ -22,6 +22,7 @@ class MyAnimeListScraper
       media.start_date ||= start_date
       media.end_date ||= end_date
       media.anime_productions += productions
+      media.release_schedule ||= release_schedule
       media
     end
 
@@ -67,6 +68,25 @@ class MyAnimeListScraper
 
     def end_date
       aired[1]
+    end
+
+    def release_schedule
+      schedule = information['Broadcast']&.content
+      return if schedule.blank? || /Unknown/i =~ schedule
+      matches = /(\w+)s at (\d\d:\d\d) \(JST\)/i.match(schedule)
+      start_date = media.start_date.in_time_zone('Japan') - 23.hours
+      duration = media.episode_length&.minutes
+
+      IceCube::Schedule.new(start_date, duration: duration) do |s|
+        time = Time.parse(matches[2])
+        s.add_recurrence_rule(
+          IceCube::Rule.weekly
+            .day(matches[1].downcase.to_sym)
+            .hour_of_day(time.hour)
+            .minute_of_hour(time.min)
+            .count(media.episode_count)
+        )
+      end
     end
 
     private
