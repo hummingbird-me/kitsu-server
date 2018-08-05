@@ -3,6 +3,7 @@ class MyAnimeListScraper
     extend ActiveSupport::Concern
 
     def parse_date(date_str)
+      return if date_str.include?('?')
       Date.strptime(date_str, '%b %d, %Y')
     rescue ArgumentError
       Date.strptime(date_str, '%Y')
