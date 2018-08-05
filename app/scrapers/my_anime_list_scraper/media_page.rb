@@ -24,17 +24,16 @@ class MyAnimeListScraper
     end
 
     def titles
-      titles = hash_for_sidebar_section('Alternative Titles')
       {
-        en_us: titles['English']&.content&.strip,
+        en_us: sidebar_titles['English']&.content&.strip,
         en_jp: header,
-        ja_jp: titles['Japanese']&.content&.strip
+        ja_jp: sidebar_titles['Japanese']&.content&.strip
       }.compact.stringify_keys
     end
 
     # TODO: rename abbreviated_titles to alternate_titles
     def abbreviated_titles
-      hash_for_sidebar_section('Alternative Titles')['Synonyms']&.content&.split(',')&.map(&:strip)
+      sidebar_titles['Synonyms']&.content&.split(',')&.map(&:strip)
     end
 
     def poster_image
@@ -66,6 +65,10 @@ class MyAnimeListScraper
     end
 
     private
+
+    def sidebar_titles
+      @sidebar_titles ||= hash_for_sidebar_section('Alternative Titles') || {}
+    end
 
     def information
       @information ||= hash_for_sidebar_section('Information')

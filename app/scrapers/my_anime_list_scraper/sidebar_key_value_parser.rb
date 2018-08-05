@@ -3,6 +3,7 @@ class MyAnimeListScraper
     extend ActiveSupport::Concern
 
     def hash_for_sidebar_section(section_name)
+      return unless sidebar_sections[section_name]
       # For each top-level <div> tag in the section
       sidebar_sections[section_name].css('.dark_text').each_with_object({}) do |row, out|
         # Extract the key
