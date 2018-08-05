@@ -6,7 +6,11 @@ class MyAnimeListScraper
       return if date_str.include?('?')
       Date.strptime(date_str, '%b %d, %Y')
     rescue ArgumentError
-      Date.strptime(date_str, '%Y')
+      begin
+        Date.strptime(date_str, '%Y')
+      rescue ArgumentError
+        Date.strptime(date_str, '%b %Y')
+      end
     end
 
     def parse_date_range(date_range_str)
