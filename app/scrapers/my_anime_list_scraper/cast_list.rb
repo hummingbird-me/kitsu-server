@@ -24,7 +24,7 @@ class MyAnimeListScraper
         media_char.role = role.underscore.to_sym
 
         voices = process_voice_rows(row, media_char)
-        media_char.voices = [*media_char.voices, *voices].compact.uniq if voices
+        media_char.voices.<<(*voices) if voices
         media_char
       end
       chars.compact.uniq
