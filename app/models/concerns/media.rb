@@ -37,8 +37,16 @@ module Media
     has_many :media_attribute_votes, class_name: 'MediaAttributeVote', dependent: :destroy
     # Cast Info
     has_many :castings, as: 'media'
-    has_many :characters, class_name: 'MediaCharacter', as: 'media', dependent: :destroy
-    has_many :staff, class_name: 'MediaStaff', as: 'media', dependent: :destroy
+    has_many :characters,
+      class_name: 'MediaCharacter',
+      as: 'media',
+      dependent: :destroy,
+      inverse_of: :media
+    has_many :staff,
+      class_name: 'MediaStaff',
+      as: 'media',
+      dependent: :destroy,
+      inverse_of: :media
     has_many :productions, class_name: 'MediaProduction', as: 'media', dependent: :destroy
     # Franchise Info
     has_many :installments, as: 'media', dependent: :destroy
