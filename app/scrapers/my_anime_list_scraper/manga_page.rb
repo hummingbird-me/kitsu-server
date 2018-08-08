@@ -44,7 +44,7 @@ class MyAnimeListScraper
       staff = staff.select { |(person, _)| person.present? }
       # Build the MangaStaff instances
       staff.map do |(person, role)|
-        MediaStaff.where(person: person, media: media).first_or_create(role: role)
+        media.staff.where(person: person).first_or_initialize(role: role)
       end
     end
 
