@@ -33,8 +33,6 @@ module Media
     has_and_belongs_to_many :categories,
       before_add: :inc_total_media_count,
       before_remove: :dec_total_media_count
-    has_many :media_attributes, class_name: 'MediaAttribute', dependent: :destroy
-    has_many :media_attribute_votes, class_name: 'MediaAttributeVote', dependent: :destroy
     # Cast Info
     has_many :castings, as: 'media'
     has_many :characters,
