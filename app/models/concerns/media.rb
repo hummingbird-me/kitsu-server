@@ -50,7 +50,7 @@ module Media
     has_many :installments, as: 'media', dependent: :destroy
     has_many :franchises, through: :installments
     # User-generated content
-    has_many :library_entries, as: 'media', dependent: :destroy, inverse_of: :media
+    has_many :library_entries, foreign_key: name.foreign_key, dependent: :destroy
     has_many :media_reactions, dependent: :destroy
     has_many :reviews, as: 'media', dependent: :destroy
     has_many :posts, as: 'media', dependent: :nullify
