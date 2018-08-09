@@ -71,7 +71,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
-      :producers, :average_rating, :cover_image_top_offset, :release_schedule
+      :producers, :average_rating, :cover_image_top_offset, :release_schedule, :posts
     navigation_label 'Anime'
     weight(-20)
   end
@@ -90,7 +90,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
-      :average_rating, :cover_image_top_offset, :release_schedule
+      :average_rating, :cover_image_top_offset, :release_schedule, :posts
     navigation_label 'Manga'
     weight(-15)
   end
