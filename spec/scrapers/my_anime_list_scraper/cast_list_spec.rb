@@ -68,8 +68,8 @@ RSpec.describe MyAnimeListScraper::CastList do
     subject { described_class.new('https://myanimelist.net/manga/1/Monster/characters') }
 
     describe '#staff' do
-      it 'should return nil' do
-        expect(subject.staff).to be_nil
+      it 'should return an empty array' do
+        expect(subject.staff).to be_empty
       end
     end
 

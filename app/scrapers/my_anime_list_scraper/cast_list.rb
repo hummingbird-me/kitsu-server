@@ -23,7 +23,7 @@ class MyAnimeListScraper
         role = row.at_css("a[href*='/character/'] + .spaceit_pad > small").content
         media_char.role = role.underscore.to_sym
 
-        voices = process_voice_rows(row, media_char)
+        voices = process_voice_rows(row, media_char).compact
         media_char.voices.<<(*voices) if voices
         media_char
       end
