@@ -196,7 +196,7 @@ GEM
       rails (>= 4.0)
       useragent
     formatador (0.2.5)
-    friendly_id (5.2.3)
+    friendly_id (5.2.4)
       activerecord (>= 4.0.0)
     fspath (3.1.0)
     get_process_mem (0.2.1)
