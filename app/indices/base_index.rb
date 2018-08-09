@@ -97,14 +97,18 @@ class BaseIndex
       fast_associated_for(records).merge(slow_associated_for(records))
     end
 
+    def missing_associations_for(model)
+      return [] unless _associations
+      _associations.select { |assoc| target_association_for(model, assoc[:association]).nil? }
+    end
+
     ### Fast path (direct monomorphic associations we can pluck)
 
     # Returns a list of associations which can take the fastpath via SQL bulk loading
     def fast_associations_for(model)
       return [] unless _associations
-      _associations.reject do |assoc|
-        association = target_association_for(model, assoc[:association])
-        association.nil? || association.options[:polymorphic]
+      (_associations - missing_associations_for(model)).reject do |assoc|
+        target_association_for(model, assoc[:association]).options[:polymorphic]
       end
     end
 
@@ -156,7 +160,7 @@ class BaseIndex
     # Get the associations which need to be loaded with the slowpath
     def slow_associations_for(model)
       return [] unless _associations
-      _associations - fast_associations_for(model)
+      _associations - missing_associations_for(model) - fast_associations_for(model)
     end
 
     # Loads associated data through the slowpath, by building an inclusion hash and then traversing
