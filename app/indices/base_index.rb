@@ -11,15 +11,29 @@ class BaseIndex
     end
     alias_method :attributes, :attribute
 
-    def has_many(name, as:, via: name) # rubocop:disable Style/PredicateName
+    # rubocop:disable Style/PredicateName, Naming/UncommunicativeMethodParamName
+    def has_many(name, as:, via: name, polymorphic: false)
       self._associations ||= []
-      self._associations << { attr: as, association: via, name: name, plurality: :many }
+      self._associations << {
+        attr: as,
+        association: via,
+        name: name,
+        plurality: :many,
+        polymorphic: polymorphic
+      }
     end
 
-    def has_one(name, as:, via: name) # rubocop:disable Style/PredicateName
+    def has_one(name, as:, via: name, polymorphic: false)
       self._associations ||= []
-      self._associations << { attr: as, association: via, name: name, plurality: :one }
+      self._associations << {
+        attr: as,
+        association: via,
+        name: name,
+        plurality: :one,
+        polymorphic: polymorphic
+      }
     end
+    # rubocop:enable Style/PredicateName, Naming/UncommunicativeMethodParamName
 
     def _association_names
       @_association_names ||= self._associations.map { |assoc| assoc[:name] }
@@ -77,47 +91,27 @@ class BaseIndex
       end
     end
 
-    def applicable_associations_for(model)
-      return [] unless _associations
-      _associations.reject { |assoc| target_association_for(model, assoc[:association]).nil? }
-    end
-
-    def joins_hash_for(*keys)
-      keys.flatten.each_with_object({}) do |key, acc|
-        key_parts = key.to_s.split('.').map!(&:to_sym)
-        key_parts.reduce(acc) do |hash, elem|
-          hash[elem] ||= {}
-        end
-      end
-    end
-
-    def target_association_for(base, key)
-      key.to_s.split('.').reduce(base) do |acc, k|
-        acc = acc.klass if acc.is_a? ActiveRecord::Reflection::AbstractReflection
-        return nil unless acc.reflections[k]
-        acc.reflections[k]
-      end
-    end
-
-    def select_for_association(association, column)
-      return unless association
-      "array_agg(DISTINCT #{association.table_name}.#{column})"
-    end
-
-    def pluck_for_associations(model, associations)
-      <<-PLUCK
-        #{model.table_name}.id#{',' unless associations.empty?}
-        #{associations.map { |assoc|
-          select_for_association(target_association_for(model, assoc[:association]), assoc[:attr])
-        }.compact.join(', ')}
-      PLUCK
-    end
-
     def associated_for(records)
+      fast_associated_for(records).merge(slow_associated_for(records))
+    end
+
+    ### Fast path (direct monomorphic associations we can pluck)
+
+    # Returns a list of associations which can take the fastpath via SQL bulk loading
+    def fast_associations_for(model)
+      return [] unless _associations
+      _associations.reject do |assoc|
+        association = target_association_for(model, assoc[:association])
+        association.nil? || !association.options[:polymorphic]
+      end
+    end
+
+    # Get all the associations that can be loaded via high-speed plucking
+    def fast_associated_for(records)
       # Get the model
       model = records.model
       # Get the associations which apply to this model
-      associations = applicable_associations_for(model)
+      associations = fast_associations_for(model)
       # Generate the output hash keys
       association_keys = associations.map { |assoc| assoc[:name].to_sym }
       # Generate the joins hash
@@ -137,6 +131,78 @@ class BaseIndex
         end
         [id, associated]
       }.to_h
+    end
+
+    # Generate the array_agg() select for this association+column
+    def select_for_association(association, column)
+      return unless association
+      "array_agg(DISTINCT #{association.table_name}.#{column})"
+    end
+
+    # Build the
+    def pluck_for_associations(model, associations)
+      <<-PLUCK
+        #{model.table_name}.id#{',' unless associations.empty?}
+        #{associations.map { |assoc|
+          select_for_association(target_association_for(model, assoc[:association]), assoc[:attr])
+        }.compact.join(', ')}
+      PLUCK
+    end
+
+    ### Slow path (loading with Rails eager loading, traversal with methods)
+
+    # Get the associations which need to be loaded with the slowpath
+    def slow_associations_for(model)
+      return [] unless _associations
+      _associations - fast_associations_for(model)
+    end
+
+    # Loads associated data through the slowpath, by building an inclusion hash and then traversing
+    # through method calls.
+    def slow_associated_for(records)
+      associations = slow_associations_for(records.model)
+      includes_hash = joins_hash_for(associations.map { |x| x[:association] })
+
+      records.includes(includes_hash).each_with_object({}) do |record, out|
+        out[record.id] = associations.each_with_object({}) do |assoc, associated|
+          path = assoc[:association].split('.').map(&:to_sym)
+          value = path.reduce(record) do |acc, key|
+            if acc.respond_to?(key)
+              acc.send(key)
+            else
+              acc.map { |x| x.send(key) }
+            end
+          end
+          if value.respond_to?(assoc[:attr])
+            value = value.send(assoc[:attr])
+          else
+            value = value.map { |x| x.send(assoc[:attr]) }
+          end
+          associated[assoc[:name]] = value
+        end
+      end
+    end
+
+    # Traverses the graph of ActiveRecord model reflections, taking a dot.separated.list and
+    # returning the final target association that it refers to
+    # @param base [ActiveRecord::Base] the starting point for traversal
+    # @param key [String,#to_s] the dot-separated reference to the association
+    def target_association_for(base, key)
+      key.to_s.split('.').reduce(base) do |acc, k|
+        acc = acc.klass if acc.is_a? ActiveRecord::Reflection::AbstractReflection
+        return nil unless acc.reflections[k]
+        acc.reflections[k]
+      end
+    end
+
+    # Generates the hash for passing to joins/includes/eager_load
+    def joins_hash_for(*keys)
+      keys.flatten.each_with_object({}) do |key, acc|
+        key_parts = key.to_s.split('.').map!(&:to_sym)
+        key_parts.reduce(acc) do |hash, elem|
+          hash[elem] ||= {}
+        end
+      end
     end
   end
 
