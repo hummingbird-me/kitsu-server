@@ -41,8 +41,10 @@ class BaseIndex
     end
 
     def _singular_associations
-      return [] unless self._associations
-      @_singular_associations ||= self._associations.select { |assoc| assoc[:plurality] == :one }
+      return [] unless _associations
+      @_singular_associations ||= _associations.select do |assoc|
+        assoc[:plurality] == :one && assoc[:polymorphic] == false
+      end
     end
 
     def _attribute_names
