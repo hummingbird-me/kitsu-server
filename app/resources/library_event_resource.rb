@@ -10,5 +10,9 @@ class LibraryEventResource < BaseResource
   has_one :drama
 
   filter :user_id
-  filter :kind
+
+  filter :kind, apply: ->(records, values, _opts) {
+    values = values.map { |v| records.kinds[v] || v }
+    records.where(kind: values)
+  }
 end
