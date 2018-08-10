@@ -131,10 +131,8 @@ class User < ApplicationRecord
   belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false
-  has_many :followers, class_name: 'Follow', foreign_key: 'followed_id',
-                       dependent: :destroy, inverse_of: :followed
-  has_many :following, class_name: 'Follow', foreign_key: 'follower_id',
-                       dependent: :destroy, inverse_of: :follower
+  has_many :followers, class_name: 'Follow', foreign_key: 'followed_id', inverse_of: :followed
+  has_many :following, class_name: 'Follow', foreign_key: 'follower_id', inverse_of: :follower
   has_many :comments
   has_many :posts
   has_many :blocks, dependent: :delete_all
@@ -147,8 +145,8 @@ class User < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :media_reactions, dependent: :destroy
   has_many :media_reaction_votes, dependent: :destroy
-  has_many :comment_likes, dependent: :destroy
-  has_many :post_likes, dependent: :destroy
+  has_many :comment_likes
+  has_many :post_likes
   has_many :post_follows, dependent: :destroy
   has_many :review_likes, dependent: :destroy
   has_many :list_imports, dependent: :delete_all
