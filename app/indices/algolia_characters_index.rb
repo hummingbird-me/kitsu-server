@@ -9,5 +9,5 @@ class AlgoliaCharactersIndex < BaseIndex
   attribute :image, format: AttachmentValueFormatter
 
   has_many :media, via: 'media_characters.media', as: :canonical_title, polymorphic: true
-  has_one :media, via: 'primary_media', as: :canonical_title, polymorphic: true
+  has_one :primary_media, via: 'primary_media', as: :canonical_title, polymorphic: true
 end
