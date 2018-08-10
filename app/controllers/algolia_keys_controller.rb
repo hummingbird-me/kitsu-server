@@ -6,7 +6,8 @@ class AlgoliaKeysController < ApplicationController
       users: json_for(User),
       posts: json_for(Post),
       media: json_for(Anime),
-      groups: json_for(Group)
+      groups: json_for(Group),
+      characters: json_for(Character)
     }
   end
 
@@ -24,6 +25,10 @@ class AlgoliaKeysController < ApplicationController
 
   def groups
     render json: { groups: json_for(Group) }
+  end
+
+  def characters
+    render json: { characters: json_for(Character) }
   end
 
   private

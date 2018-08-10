@@ -44,6 +44,8 @@ class Character < ApplicationRecord
   has_many :manga_characters, dependent: :destroy
   has_many :drama_characters, dependent: :destroy
 
+  update_algolia('AlgoliaCharactersIndex')
+
   def canonical_name
     names[self[:canonical_name]]
   end
