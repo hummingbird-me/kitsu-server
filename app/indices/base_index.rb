@@ -179,11 +179,11 @@ class BaseIndex
               acc.map { |x| x.send(key) }
             end
           end
-          if value.respond_to?(assoc[:attr])
-            value = value.send(assoc[:attr])
-          else
-            value = value.map { |x| x.send(assoc[:attr]) }
-          end
+          value = if value.respond_to?(assoc[:attr])
+                    value.send(assoc[:attr])
+                  elsif value.respond_to?(:map)
+                    value.map { |x| x.send(assoc[:attr]) }
+                  end
           associated[assoc[:name]] = value
         end
       end
