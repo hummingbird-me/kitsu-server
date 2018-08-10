@@ -4,18 +4,13 @@ class UserDeletionService
   attr_reader :user
 
   def initialize(user)
-    if user.is_a?(User)
-      @user = user
-    else
-      @user = User.find(user)
-    end
+    @user = user.is_a?(User) ? user : User.find(user)
   end
 
   def delete
     delete_followers
     delete_following
     delete_likes
-    delete_comments
     anonymize_mod_stuff
   end
 
@@ -62,21 +57,6 @@ class UserDeletionService
     Post.where(id: post_ids)
         .update_in_batches('post_likes_count = COALESCE(post_likes_count, 1) - 1')
     PostLike.where(user: user).delete_all
-  end
-
-  def delete_comments
-    parent_ids = user.comments.select(:parent_id)
-    Comment.where(id: parent_ids)
-           .update_in_batches('replies_count = COALESCE(replies_count, 1) - 1')
-
-    post_ids = user.comments.where(parent_id: nil).select(:post_id)
-    Post.where(id: post_ids)
-        .update_in_batches('top_level_comments_count = COALESCE(top_level_comments_count, 1) - 1')
-
-    comment_ids = user.comments.select(:id)
-    Comment.where(parent_id: comment_ids).delete_all
-
-    Comment.where(user: user).delete_all
   end
 
   def anonymize_mod_stuff

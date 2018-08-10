@@ -133,8 +133,8 @@ class User < ApplicationRecord
   belongs_to :pinned_post, class_name: 'Post', required: false
   has_many :followers, class_name: 'Follow', foreign_key: 'followed_id', inverse_of: :followed
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id', inverse_of: :follower
-  has_many :comments
-  has_many :posts
+  has_many :comments, dependent: :destroy
+  has_many :posts, dependent: :destroy
   has_many :blocks, dependent: :delete_all
   has_many :blocked, class_name: 'Block', foreign_key: 'blocked_id', dependent: :delete_all
   has_many :linked_accounts, dependent: :delete_all
