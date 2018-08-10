@@ -30,7 +30,7 @@ class UserDeletionService
 
     # Remove the follows from Stream
     profile_feed = ProfileFeed.new(user.id)
-    feeds = follower_ids.map { |id| TimelineFeed.new(id) }
+    feeds = follower_ids.map { |f| TimelineFeed.new(f.follower_id) }
     feeds.each { |f| f.unfollow(profile_feed) }
 
     # Delete all the Follow instances
@@ -46,7 +46,7 @@ class UserDeletionService
 
     # Remove the follows from Stream
     timeline_feed = TimelineFeed.new(user.id)
-    feeds = following_ids.map { |id| ProfileFeed.new(id) }
+    feeds = following_ids.map { |f| ProfileFeed.new(f.followed_id) }
     timeline_feed.unfollow_many(feeds)
 
     # Delete all the follow instances
