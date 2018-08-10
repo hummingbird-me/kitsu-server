@@ -1364,7 +1364,7 @@ ActiveRecord::Schema.define(version: 20181010215125) do
   create_table "quotes", force: :cascade do |t|
     t.integer  "media_id",                               null: false
     t.text     "content",                                null: false
-    t.string   "character_name", limit: 255,             null: false
+    t.string   "character_name", limit: 255
     t.integer  "user_id"
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false

@@ -44,5 +44,5 @@ class Quote < ApplicationRecord
     )
   end
 
-  validates_presence_of :content, :character_name
+  validates_presence_of :content
 end
