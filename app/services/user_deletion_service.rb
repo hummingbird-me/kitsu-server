@@ -4,7 +4,11 @@ class UserDeletionService
   attr_reader :user
 
   def initialize(user)
-    @user = User.find(user) unless user.is_a?(User)
+    if user.is_a?(User)
+      @user = user
+    else
+      @user = User.find(user)
+    end
   end
 
   def delete
