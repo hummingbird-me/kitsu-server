@@ -59,7 +59,8 @@ class UserDeletionService
     user.comment_likes.delete_all
 
     post_ids = user.post_likes.select(:post_id)
-    Post.where(id: post_ids).update_in_batches('likes_count = COALESCE(likes_count, 1) - 1')
+    Post.where(id: post_ids)
+        .update_in_batches('post_likes_count = COALESCE(post_likes_count, 1) - 1')
     user.post_likes.delete_all
   end
 
