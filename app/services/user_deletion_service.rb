@@ -34,7 +34,7 @@ class UserDeletionService
     feeds.each { |f| f.unfollow(profile_feed) }
 
     # Delete all the Follow instances
-    user.followers.delete_all
+    Follow.where(followed: user).delete_all
   end
 
   def delete_following
@@ -50,18 +50,18 @@ class UserDeletionService
     timeline_feed.unfollow_many(feeds)
 
     # Delete all the follow instances
-    user.following.delete_all
+    Follow.where(follower: user).delete_all
   end
 
   def delete_likes
     comment_ids = user.comment_likes.select(:comment_id)
     Comment.where(id: comment_ids).update_in_batches('likes_count = COALESCE(likes_count, 1) - 1')
-    user.comment_likes.delete_all
+    CommentLike.where(user: user).delete_all
 
     post_ids = user.post_likes.select(:post_id)
     Post.where(id: post_ids)
         .update_in_batches('post_likes_count = COALESCE(post_likes_count, 1) - 1')
-    user.post_likes.delete_all
+    PostLike.where(user: user).delete_all
   end
 
   def delete_comments
@@ -76,7 +76,7 @@ class UserDeletionService
     comment_ids = user.comments.select(:id)
     Comment.where(parent_id: comment_ids).delete_all
 
-    user.comments.delete_all
+    Comment.where(user: user).delete_all
   end
 
   def anonymize_mod_stuff
