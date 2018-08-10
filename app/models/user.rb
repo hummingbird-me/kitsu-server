@@ -140,6 +140,7 @@ class User < ApplicationRecord
   has_many :linked_accounts, dependent: :delete_all
   has_many :profile_links, dependent: :delete_all
   has_many :user_roles, dependent: :delete_all
+  has_many :library_events, dependent: :delete_all
   has_many :library_entries, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :reviews, dependent: :destroy
