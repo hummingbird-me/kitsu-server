@@ -21,7 +21,7 @@
 #
 # rubocop:enable Metrics/LineLength
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :quote_like do
     association :user
     association :quote
