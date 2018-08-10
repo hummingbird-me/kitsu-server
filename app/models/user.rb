@@ -137,12 +137,11 @@ class User < ApplicationRecord
                        dependent: :destroy, inverse_of: :follower
   has_many :comments
   has_many :posts
-  has_many :blocks, dependent: :destroy
-  has_many :blocked, class_name: 'Block', foreign_key: 'blocked_id',
-                     dependent: :destroy
-  has_many :linked_accounts, dependent: :destroy
-  has_many :profile_links, dependent: :destroy
-  has_many :user_roles, dependent: :destroy
+  has_many :blocks, dependent: :delete_all
+  has_many :blocked, class_name: 'Block', foreign_key: 'blocked_id', dependent: :delete_all
+  has_many :linked_accounts, dependent: :delete_all
+  has_many :profile_links, dependent: :delete_all
+  has_many :user_roles, dependent: :delete_all
   has_many :library_entries, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :reviews, dependent: :destroy
@@ -152,28 +151,27 @@ class User < ApplicationRecord
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
   has_many :review_likes, dependent: :destroy
-  has_many :list_imports, dependent: :destroy
+  has_many :list_imports, dependent: :delete_all
   has_many :group_action_logs, dependent: :destroy
-  has_many :group_bans, dependent: :destroy
+  has_many :group_bans, dependent: :delete_all
   has_many :group_invites, dependent: :destroy
   has_many :group_members, dependent: :destroy
   has_many :group_reports
-  has_many :group_reports_as_moderator, class_name: 'GroupReport',
-                                        foreign_key: 'moderator_id'
+  has_many :group_reports_as_moderator, class_name: 'GroupReport', foreign_key: 'moderator_id'
   has_many :group_ticket_messages, dependent: :destroy
   has_many :group_tickets, dependent: :destroy
   has_many :leader_chat_messages, dependent: :destroy
   has_many :reports
-  has_many :reports_as_moderator, class_name: 'Report',
-                                  foreign_key: 'moderator_id'
+  has_many :reports_as_moderator, class_name: 'Report', foreign_key: 'moderator_id'
   has_many :site_announcements
-  has_many :stats, dependent: :destroy
-  has_many :library_events, dependent: :destroy
-  has_many :notification_settings, dependent: :destroy
-  has_many :one_signal_players, dependent: :destroy
+  has_many :stats, dependent: :delete_all
+  has_many :library_events, dependent: :delete_all
+  has_many :notification_settings, dependent: :delete_all
+  has_many :one_signal_players, dependent: :delete_all
   has_many :reposts, dependent: :destroy
-  has_many :ip_addresses, dependent: :destroy, class_name: 'UserIpAddress'
-  has_many :category_favorites, dependent: :destroy
+  has_many :ip_addresses, dependent: :delete_all, class_name: 'UserIpAddress'
+  has_many :category_favorites, dependent: :delete_all
+
   validates :email, format: { with: /\A.*@.*\..*\z/, message: 'is not an email' },
                     if: :email_changed?, allow_blank: true
   validates :email, :name, :password, :slug, absence: true, if: :unregistered?
@@ -375,18 +373,7 @@ class User < ApplicationRecord
   end
 
   before_destroy do
-    # Destroy personal posts
-    posts.where(target_group: nil, target_user: nil, media: nil).destroy_all
-    Post.where(target_user: self).update_all(target_user_id: -10)
-    Post.only_deleted.where(user_id: id).delete_all
-    # Reparent relationships to the "Deleted" user
-    posts.update_all(user_id: -10)
-    comments.update_all(user_id: -10)
-    group_reports.update_all(user_id: -10)
-    group_reports_as_moderator.update_all(moderator_id: -10)
-    reports.update_all(user_id: -10)
-    reports_as_moderator.update_all(moderator_id: -10)
-    site_announcements.update_all(user_id: -10)
+    UserDeletionService.new(self).delete
   end
 
   after_commit on: :create do

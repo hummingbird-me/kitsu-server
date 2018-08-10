@@ -1,4 +1,3 @@
-# coding: UTF-8
 # rubocop:disable Metrics/LineLength
 # == Schema Information
 #
