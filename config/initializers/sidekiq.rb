@@ -7,7 +7,7 @@ require 'sidekiq/middleware/client/current_user'
 Sidekiq.default_worker_options = { queue: 'later' }
 
 Sidekiq.configure_server do |config|
-  config.redis = { url: ENV['REDIS_URL'] }
+  config.redis = { url: ENV['REDIS_URL'], network_timeout: 3, pool_timeout: 3 }
   config.server_middleware do |chain|
     chain.add Sidekiq::Debounce
     chain.add Sidekiq::Middleware::Server::CurrentUser
@@ -21,7 +21,7 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV['REDIS_URL'] }
+  config.redis = { url: ENV['REDIS_URL'], network_timeout: 3, pool_timeout: 3 }
 
   config.client_middleware do |chain|
     chain.add Sidekiq::Middleware::Client::CurrentUser
