@@ -108,16 +108,16 @@ RSpec.describe User, type: :model do
 
   it { should have_db_index(:facebook_id) }
   it { should belong_to(:waifu) }
-  it { should have_many(:linked_accounts).dependent(:destroy) }
-  it { should have_many(:profile_links).dependent(:destroy) }
-  it { should have_many(:stats).dependent(:destroy) }
+  it { should have_many(:linked_accounts) }
+  it { should have_many(:profile_links) }
+  it { should have_many(:stats) }
   it { should belong_to(:pro_membership_plan) }
-  it { should have_many(:followers).dependent(:destroy) }
-  it { should have_many(:following).dependent(:destroy) }
+  it { should have_many(:followers) }
+  it { should have_many(:following) }
   it { should validate_uniqueness_of(:slug).case_insensitive.allow_nil }
   it { should validate_uniqueness_of(:email).case_insensitive }
-  it { should have_many(:library_events).dependent(:destroy) }
-  it { should have_many(:notification_settings).dependent(:destroy) }
+  it { should have_many(:library_events) }
+  it { should have_many(:notification_settings) }
   it { should have_many(:reposts).dependent(:destroy) }
 
   context 'for an unregistered user' do
