@@ -35,5 +35,14 @@ class Quote < ApplicationRecord
   belongs_to :character, required: true
   has_many :likes, class_name: 'QuoteLike', dependent: :destroy
 
+  def stream_activity
+    media.feed.activities.new(
+      content: content,
+      character_id: character_id,
+      updated_at: updated_at,
+      likes_count: likes_count
+    )
+  end
+
   validates_presence_of :content, :character_name
 end
