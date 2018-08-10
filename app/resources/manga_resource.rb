@@ -2,7 +2,6 @@ class MangaResource < MediaResource
   attributes :chapter_count, :volume_count, :serialization
   attribute :manga_type # DEPRECATED
 
-  has_many :quotes
   # ElasticSearch hookup
   index MediaIndex::Manga
   query :chapter_count, MediaResource::NUMERIC_QUERY
