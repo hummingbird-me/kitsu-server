@@ -23,7 +23,7 @@ class MyAnimeListScraper
         role = row.at_css("a[href*='/character/'] + .spaceit_pad > small").content
         media_char.role = role.underscore.to_sym
 
-        voices = process_voice_rows(row, media_char).compact
+        voices = process_voice_rows(row, media_char)&.compact
         media_char.voices.<<(*voices) if voices
         media_char
       end
@@ -51,7 +51,7 @@ class MyAnimeListScraper
     private
 
     def process_voice_rows(character_row, media_char)
-      return nil unless character_row.at_css("a[href*='/people/']").present?
+      return [] unless character_row.at_css("a[href*='/people/']").present?
       character_row.css("td.borderClass[align='right'] tr").map do |person_row|
         # Build the CharacterVoice
         person = object_for_link(person_row.at_css("a[href*='/people/']"))
