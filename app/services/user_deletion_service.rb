@@ -12,6 +12,7 @@ class UserDeletionService
     delete_following
     delete_likes
     anonymize_mod_stuff
+    Post.where(target_user: user).update_all(target_user: -10)
   end
 
   private
