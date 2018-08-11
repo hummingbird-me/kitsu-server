@@ -27,7 +27,8 @@ RSpec.describe DoorkeeperHelpers do
 
   context '#signed_in?' do
     it 'should return true if logged in' do
-      allow(instance).to receive(:current_user) { build(:user) }
+      user = build(:user)
+      allow(instance).to receive(:current_user) { token_for(user) }
       expect(instance.signed_in?).to be true
     end
     it 'should return false if not logged in' do
