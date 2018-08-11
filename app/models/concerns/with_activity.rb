@@ -7,7 +7,7 @@ module WithActivity
       obj.complete_stream_activity.try(real_action)
     }, on: :update
     after_commit ->(obj) { obj.complete_stream_activity&.create }, on: :create
-    after_commit ->(obj) { obj.complete_stream_activity&.destroy }, on: :destroy
+    after_destroy { obj.complete_stream_activity&.destroy }
   end
 
   # Call on stream_activity and fill in some defaults
