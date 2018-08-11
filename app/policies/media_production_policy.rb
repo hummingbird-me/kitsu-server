@@ -1,0 +1,1 @@
+class MediaProductionPolicy < ApplicationPolicy; end

@@ -1,0 +1,1 @@
+class CharacterVoicePolicy < ApplicationPolicy; end

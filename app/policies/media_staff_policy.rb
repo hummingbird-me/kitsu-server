@@ -1,0 +1,1 @@
+class MediaStaffPolicy < ApplicationPolicy; end

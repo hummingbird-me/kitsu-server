@@ -1,0 +1,1 @@
+class MediaCharacterPolicy < ApplicationPolicy; end
