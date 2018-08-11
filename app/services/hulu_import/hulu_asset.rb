@@ -31,6 +31,7 @@ module HuluImport
       @series ||= HuluSeries.new(@asset['series'])
     end
     delegate :media, to: :series
+    delegate :network, to: :series
 
     # @return [Integer] the number of the episode
     def number
@@ -106,7 +107,7 @@ module HuluImport
         url: @asset['link']
       ).first_or_create!(
         available_regions: %w[US],
-        embed_data: { eid: eid },
+        embed_data: { eid: eid, network: network },
         sub_lang: sub_language,
         dub_lang: dub_language
       )

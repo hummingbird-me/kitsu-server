@@ -44,6 +44,11 @@ module HuluImport
       @series['name']
     end
 
+    # @return [String] the name of the provider of this content
+    def network
+      @series['network']
+    end
+
     # @return [Enumerator<Episode>] an enumerator of all the episodes in the series
     def episodes(params = {})
       @episodes ||= HuluAsset.each(series: self, series_id: id, type: 'episode', **params)
