@@ -1,4 +1,4 @@
-class CharacterVoicesResource < BaseResource
+class CharacterVoiceResource < BaseResource
   immutable
   attribute :locale
 
