@@ -16,7 +16,7 @@ module DoorkeeperHelpers
 
   # Return boolean representing whether there is a user signed in
   def signed_in?
-    current_user.present?
+    current_user&.resource_owner.present?
   end
 
   # Validate token
