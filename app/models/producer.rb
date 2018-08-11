@@ -18,4 +18,5 @@ class Producer < ApplicationRecord
 
   has_many :anime_productions
   has_many :anime, through: :anime_productions
+  has_many :productions, class_name: 'MediaProduction', foreign_key: 'company_id'
 end

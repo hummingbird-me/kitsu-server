@@ -1,0 +1,1 @@
+class CharacterVoicesController < ApplicationController; end

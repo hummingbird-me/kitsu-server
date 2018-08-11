@@ -4,4 +4,5 @@ class ProducerResource < BaseResource
   filter :slug
 
   has_many :anime_productions
+  has_many :productions
 end

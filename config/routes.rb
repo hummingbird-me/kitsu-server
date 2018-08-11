@@ -57,14 +57,10 @@ Rails.application.routes.draw do
       jsonapi_resources :manga
       jsonapi_resources :drama
       # Cast Info
-      jsonapi_resources :anime_characters
-      jsonapi_resources :anime_castings
-      jsonapi_resources :anime_staff
-      jsonapi_resources :drama_characters
-      jsonapi_resources :drama_castings
-      jsonapi_resources :drama_staff
-      jsonapi_resources :manga_characters
-      jsonapi_resources :manga_staff
+      jsonapi_resources :media_characters
+      jsonapi_resources :media_productions
+      jsonapi_resources :media_staff
+      jsonapi_resources :character_voices
       # Other Info
       jsonapi_resources :mappings
       jsonapi_resources :genres
@@ -74,7 +70,6 @@ Rails.application.routes.draw do
       jsonapi_resources :anime_media_attributes
       jsonapi_resources :dramas_media_attributes
       jsonapi_resources :manga_media_attributes
-      jsonapi_resources :anime_productions
       jsonapi_resources :episodes
       jsonapi_resources :chapters
       jsonapi_resources :stats
@@ -84,6 +79,15 @@ Rails.application.routes.draw do
       jsonapi_resources :videos
       # DEPRECATED: Legacy systems
       jsonapi_resources :castings
+      jsonapi_resources :anime_characters
+      jsonapi_resources :anime_castings
+      jsonapi_resources :anime_staff
+      jsonapi_resources :drama_characters
+      jsonapi_resources :drama_castings
+      jsonapi_resources :drama_staff
+      jsonapi_resources :manga_characters
+      jsonapi_resources :manga_staff
+      jsonapi_resources :anime_productions
       get '/anime/:anime_id/_languages', to: 'anime#languages'
       jsonapi_resources :franchises
       jsonapi_resources :installments

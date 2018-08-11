@@ -1,0 +1,1 @@
+class MediaProductionsController < ApplicationController; end

@@ -14,8 +14,7 @@ class AnimeResource < MediaResource
   query :season, valid: ->(value, _ctx) { Anime::SEASONS.include?(value) }
   query :season_year
   query :streamers, valid: ->(value, _ctx) { Streamer.find_by_name(value) }
-  query :age_rating,
-    valid: ->(value, _ctx) { Anime.age_ratings.keys.include?(value) }
+  query :age_rating, valid: ->(value, _ctx) { Anime.age_ratings.key?(value) }
 
   def self.updatable_fields(context)
     super - [:nsfw]

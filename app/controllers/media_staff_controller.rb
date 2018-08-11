@@ -1,0 +1,1 @@
+class MediaStaffController < ApplicationController; end
