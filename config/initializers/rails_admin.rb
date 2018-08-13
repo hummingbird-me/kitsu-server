@@ -249,10 +249,10 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
 
   config.model 'Character' do
-    fields :id, :name, :mal_id
+    field :id
     field(:names, :serialized) { html_attributes rows: '6', cols: '70' }
     field(:other_names, :serialized) { html_attributes rows: '6', cols: '70' }
-    fields :description, :poster_image, :slug, :canonical_name
+    fields :description, :image, :slug, :canonical_name
     include_all_fields
   end
 end
