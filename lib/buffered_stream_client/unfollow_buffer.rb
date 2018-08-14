@@ -19,18 +19,20 @@ class BufferedStreamClient
 
     def flush_batch
       # TODO: switch to unfollow-many
-      unfollow = next_batch_for(size: 1).first
-      return unless unfollow
+      unfollows = next_batch_for(size: 3)
+      return unless unfollows.blank?
       begin
-        source = unfollow['source'].split(':')
-        target = unfollow['target'].split(':')
-        feed = StreamRails.client.feed(*source)
-        feed.unfollow(*target, unfollow['keep_history'])
+        unfollows.each do |unfollow|
+          source = unfollow['source'].split(':')
+          target = unfollow['target'].split(':')
+          feed = StreamRails.client.feed(*source)
+          feed.unfollow(*target, unfollow['keep_history'])
+        end
       rescue StandardError
-        return_batch_to([unfollow], group: 'default')
+        return_batch_to(unfollows, group: 'default')
         raise
       end
-      increment_metrics([unfollow])
+      increment_metrics(unfollows)
     end
 
     private
