@@ -51,8 +51,8 @@ class MyAnimeListScraper
       parts = information['Duration']&.content&.split(' ')
       parts.each_cons(2).reduce(0) do |duration, (number, unit)|
         case unit
-        when /\Ahr/i then duration + (number.to_i * 60)
-        when /\Amin/i then duration + number.to_i
+        when /\Ahr/i then duration + (number.to_i * 60 * 60)
+        when /\Amin/i then duration + (number.to_i * 60)
         else duration
         end
       end
