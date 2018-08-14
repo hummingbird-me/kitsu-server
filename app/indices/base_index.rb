@@ -67,9 +67,9 @@ class BaseIndex
         acc[value['kind']] << value['id']
       end
       results = result_ids.map { |kind, ids|
-        [kind, kind.classify.safe_constantize.find(ids).index_by(&:id)]
+        [kind, kind.classify.safe_constantize.find_by(id: ids).index_by(&:id)]
       }.to_h
-      hits.map { |hit| results.dig(hit['kind'], hit['id']) }
+      hits.map { |hit| results.dig(hit['kind'], hit['id']) }.compact
     end
 
     def index
