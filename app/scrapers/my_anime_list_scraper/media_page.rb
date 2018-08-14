@@ -18,7 +18,7 @@ class MyAnimeListScraper
       media.abbreviated_titles = [*media.abbreviated_titles, *abbreviated_titles].uniq
       media.synopsis ||= merged_synopsis
       media.genres += genres
-      media.subtype ||= subtype
+      media.subtype = subtype
       media.poster_image = poster_image unless media.poster_image.present?
       media
     end
