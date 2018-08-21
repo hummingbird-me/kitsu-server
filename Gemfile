@@ -45,7 +45,6 @@ gem 'sidekiq-scheduler'
 # Text pipeline
 gem 'html-pipeline'
 gem 'kramdown'
-gem 'onebox'
 gem 'rinku'
 gem 'sanitize'
 
