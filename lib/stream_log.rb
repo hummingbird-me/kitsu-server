@@ -5,7 +5,7 @@ module StreamLog
     return unless enabled?
     return unless log_follow?(source, target)
     follow = follow_key(source, target)
-    client.feed(*source).unfollow(target)
+    client.feed(*source).unfollow(*target)
     redis_pool.with do |r|
       r.sadd('unfollow', follow)
     end
@@ -15,7 +15,7 @@ module StreamLog
     return unless enabled?
     return unless log_follow?(source, target)
     follow = follow_key(source, target)
-    client.feed(*source).follow(target)
+    client.feed(*source).follow(*target)
     redis_pool.with do |r|
       r.srem('unfollow', follow)
     end
