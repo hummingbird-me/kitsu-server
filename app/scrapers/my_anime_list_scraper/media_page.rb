@@ -41,7 +41,11 @@ class MyAnimeListScraper
     end
 
     def subtype
-      information['Type'].content.strip.underscore.to_sym
+      subtype = information['Type'].content.strip.underscore
+      case subtype
+      when 'tv', 'ova', 'ona' then subtype.upcase.to_sym
+      else subtype.to_sym
+      end
     end
 
     def merged_synopsis

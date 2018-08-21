@@ -63,8 +63,8 @@ RSpec.describe MyAnimeListScraper::MediaPage do
       end
       subject { described_class.new('https://myanimelist.net/anime/306/Abenobashi') }
 
-      it 'should return :tv' do
-        expect(subject.subtype).to eq(:tv)
+      it 'should return :TV' do
+        expect(subject.subtype).to eq(:TV)
       end
     end
 
