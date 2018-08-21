@@ -10,25 +10,31 @@ module StreamDump
       where(target_group: group, target_user: nil)
     }
 
-    def stream_activity
-      target_feed = if target_group_id? then GroupFeed.new(target_group_id)
-                    elsif target_user_id? then ProfileFeed.new(target_user_id)
-                    else ProfileFeed.new(user_id)
-                    end
-      media_feed = MediaFeed.new(media_type, media_id) if media_id
-      as_post = becomes(::Post)
-      target_feed.activities.new(
-        time: updated_at,
-        updated_at: updated_at,
-        post_likes_count: post_likes_count,
-        comments_count: comments_count,
-        content: content,
-        to: [media_feed],
-        nsfw: nsfw,
-        verb: 'post',
-        object: as_post,
-        foreign_id: as_post
-      )
+    def stream_id
+      "Post:#{id}"
+    end
+
+    def notified_feeds
+      []
+    end
+
+    def mentioned_users
+      User.none
+    end
+
+    def other_feeds
+      feeds = []
+      feeds << GlobalFeed.new if user.share_to_global? && target_user.blank? && target_group.blank?
+      # Limit media-feed fanout when targeting a unit
+      feeds << (spoiled_unit ? media&.feed&.no_fanout : media&.feed)
+      feeds << spoiled_unit&.feed
+      feeds.compact
+    end
+
+    def complete_stream_activity
+      super.tap do |act|
+        act.verb = 'post'
+      end
     end
   end
 end
