@@ -48,8 +48,8 @@ RSpec.describe MyAnimeListScraper::AnimePage do
     end
 
     describe '#episode_length' do
-      it 'should return 106 (minutes)' do
-        expect(subject.episode_length).to eq(106)
+      it 'should return 106 minutes in seconds' do
+        expect(subject.episode_length).to eq(106 * 60)
       end
     end
 
