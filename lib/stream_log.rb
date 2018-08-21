@@ -40,6 +40,7 @@ module StreamLog
   def log_follow?(source, target)
     return false if %w[episode chapter media].include?(target[0]) && source[0] == 'timeline'
     return false if %w[interest_timeline].include?(source[0])
+    true
   end
 
   # Rewrites feeds to aim at their renamed equivalents
