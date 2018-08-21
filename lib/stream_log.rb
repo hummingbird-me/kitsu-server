@@ -4,6 +4,8 @@ module StreamLog
   def unfollow(source, target)
     return unless enabled?
     return unless log_follow?(source, target)
+    source = rewrite_feed(*source)
+    target = rewrite_feed(*target)
     follow = follow_key(source, target)
     client.feed(*source).unfollow(*target)
     redis_pool.with do |r|
@@ -14,6 +16,8 @@ module StreamLog
   def follow(source, target)
     return unless enabled?
     return unless log_follow?(source, target)
+    source = rewrite_feed(*source)
+    target = rewrite_feed(*target)
     follow = follow_key(source, target)
     client.feed(*source).follow(*target)
     redis_pool.with do |r|
@@ -23,14 +27,14 @@ module StreamLog
 
   def add_activity(feed, activity)
     return unless enabled?
-    target = rewrite_feed(*feed)
-    client.feed(*target).add_activity(activity)
+    feed = rewrite_feed(*feed)
+    client.feed(*feed).add_activity(activity)
   end
 
   def remove_activity(feed, id, foreign_id: false)
     return unless enabled?
-    target = rewrite_feed(*feed).join(':')
-    key = "#{target}/#{id}@#{foreign_id ? 'K' : 'S'}"
+    feed = rewrite_feed(*feed)
+    key = "#{feed.join(':')}/#{id}@#{foreign_id ? 'K' : 'S'}"
     redis_pool.with do |r|
       r.sadd('remove_activity', key)
     end
@@ -54,8 +58,8 @@ module StreamLog
   end
 
   def follow_key(source, target)
-    source = rewrite_feed(*source).join(':')
-    target = rewrite_feed(*target).join(':')
+    source = source.join(':')
+    target = target.join(':')
     "#{source}->#{target}"
   end
 
