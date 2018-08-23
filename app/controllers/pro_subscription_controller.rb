@@ -29,7 +29,14 @@ class ProSubscriptionController < ApplicationController
   end
 
   def destroy
-    # TODO: read the pro subscription info and destroy it
+    case user.pro_subscription.billing_service
+    when :apple_ios
+      # We cannot cancel an iOS subscription — cancellation must be done through Apple or in-app
+      render status: 400
+    when :stripe
+      user.pro_subscription.destroy!
+      render status: 200
+    end
   end
 
   def show
