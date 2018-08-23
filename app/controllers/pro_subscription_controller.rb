@@ -1,6 +1,7 @@
 class ProSubscriptionController < ApplicationController
   include CustomControllerHelpers
 
+  before_action :check_feature_flag!
   before_action :authenticate_user!
 
   def stripe
@@ -43,6 +44,10 @@ class ProSubscriptionController < ApplicationController
   end
 
   private
+
+  def check_feature_flag!
+    render status: 404 unless Flipper[:pro_subscriptions].enabled?(user)
+  end
 
   def user
     current_user.resource_owner
