@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       post '/pro-subscription/ios', to: 'pro_subscription#ios'
       delete '/pro-subscription', to: 'pro_subscription#destroy'
       get '/pro-subscription', to: 'pro_subscription#show'
+      post '/pro-gifts', to: 'pro_gifts#create'
 
       ### Library
       get '/library-entries/_issues', to: 'library_entries#issues'
