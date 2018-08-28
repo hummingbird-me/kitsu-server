@@ -34,12 +34,22 @@ class ProSubscriptionController < ApplicationController
     render_jsonapi_error 402, 'An unknown error occurred'
   end
 
+  def google_play
+    subscription = GooglePlaySubscriptionService.new(params[:token])
+    ProSubscription::GooglePlaySubscription.create!(user: user, billing_id: subscription.token)
+    render status: 200
+  rescue Google::Apis::ClientError
+    render_jsonapi_error 400, 'Google Play returned a client error'
+  rescue Google::Apis::ServerError
+    render_jsonapi_error 500, 'Something went wrong when validating with Google Play'
+  end
+
   def destroy
     case user.pro_subscription.billing_service
     when :apple_ios
       # We cannot cancel an iOS subscription — cancellation must be done through Apple or in-app
       render_jsonapi_error 400, 'Cannot cancel an iOS subscription outside of the App Store'
-    when :stripe
+    when :stripe, :google_play
       user.pro_subscription.destroy!
       render status: 200
     end

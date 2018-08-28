@@ -60,6 +60,7 @@ gem 'faraday'
 gem 'faraday_middleware'
 gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
+gem 'google-api-client' # Google APIs
 gem 'ice_cube' # Episode release schedules
 gem 'jsonapi-resources', '0.9.0'
 gem 'lograge' # Non-shitty logging

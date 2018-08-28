@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       # Pro Subscriptions
       post '/pro-subscription/stripe', to: 'pro_subscription#stripe'
       post '/pro-subscription/ios', to: 'pro_subscription#ios'
+      post '/pro-subscription/google-play', to: 'pro_subscription#google_play'
       delete '/pro-subscription', to: 'pro_subscription#destroy'
       get '/pro-subscription', to: 'pro_subscription#show'
       post '/pro-gifts', to: 'pro_gifts#create'
