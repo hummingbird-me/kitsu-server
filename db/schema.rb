@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724022853) do
+ActiveRecord::Schema.define(version: 20180823024854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1279,6 +1279,14 @@ ActiveRecord::Schema.define(version: 20180724022853) do
   add_index "posts", ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id", using: :btree
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
   add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
+
+  create_table "pro_gifts", force: :cascade do |t|
+    t.integer  "from_id",    null: false
+    t.integer  "to_id",      null: false
+    t.text     "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "pro_membership_plans", force: :cascade do |t|
     t.string   "name",                       null: false
