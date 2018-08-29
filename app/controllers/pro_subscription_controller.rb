@@ -35,8 +35,10 @@ class ProSubscriptionController < ApplicationController
   end
 
   def google_play
-    subscription = GooglePlaySubscriptionService.new(params[:token])
-    ProSubscription::GooglePlaySubscription.create!(user: user, billing_id: subscription.token)
+    token = params[:token]
+    subscription = GooglePlaySubscriptionService.new(token)
+    subscription.validate!
+    ProSubscription::GooglePlaySubscription.create!(user: user, billing_id: token)
     render status: 200
   rescue Google::Apis::ClientError
     render_jsonapi_error 400, 'Google Play returned a client error'

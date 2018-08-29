@@ -16,6 +16,7 @@ class GooglePlaySubscriptionService
   def subscription_purchase
     @subscription_purchase ||= api.get_purchase_subscription(PACKAGE_NAME, SUBSCRIPTION_ID, @token)
   end
+  alias_method :validate!, :subscription_purchase
 
   def start_date
     Time.at(subscription_purchase&.start_time_millis)
