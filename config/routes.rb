@@ -194,6 +194,7 @@ Rails.application.routes.draw do
       post :youtube, to: 'youtube#notify'
       get :getstream, to: 'getstream#verify'
       post :getstream, to: 'getstream#notify'
+      post '/google-play-billing', to: 'google_play_billing#notify'
     end
 
     ### Staging Sync
