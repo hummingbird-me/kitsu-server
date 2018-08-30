@@ -28,6 +28,7 @@ module StreamLog
   def add_activity(feed, activity)
     return unless enabled?
     feed = rewrite_feed(*feed)
+    activity['to'] = activity['to']&.map { |to| rewrite_feed(*to.split(':')).join(':') }
     client.feed(*feed).add_activity(activity)
   end
 
