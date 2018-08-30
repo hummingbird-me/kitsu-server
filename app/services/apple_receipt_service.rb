@@ -8,11 +8,11 @@ class AppleReceiptService
   end
 
   def start_date
-    Time.rfc3339(latest_receipt_info['purchase_date'])
+    DateTime.rfc3339(latest_receipt_info['purchase_date']).to_time # rubocop:disable Style/DateTime
   end
 
   def end_date
-    Time.rfc3339(latest_receipt_info['expires_date'])
+    DateTime.rfc3339(latest_receipt_info['expires_date']).to_time # rubocop:disable Style/DateTime
   end
 
   def billing_id
@@ -45,6 +45,7 @@ class AppleReceiptService
     @http ||= Faraday.new do |builder|
       builder.use FaradayMiddleware::EncodeJson
       builder.use FaradayMiddleware::ParseJson, content_type: /\bjson$/
+      builder.adapter Faraday.default_adapter
     end
   end
 end
