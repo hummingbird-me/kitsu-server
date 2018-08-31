@@ -6,6 +6,7 @@ module StreamLog
     return unless log_follow?(source, target)
     source = rewrite_feed(*source)
     target = rewrite_feed(*target)
+    return unless source && target
     follow = follow_key(source, target)
     client.feed(*source).unfollow(*target)
     redis_pool.with do |r|
@@ -18,6 +19,7 @@ module StreamLog
     return unless log_follow?(source, target)
     source = rewrite_feed(*source)
     target = rewrite_feed(*target)
+    return unless source && target
     follow = follow_key(source, target)
     client.feed(*source).follow(*target)
     redis_pool.with do |r|
@@ -28,7 +30,7 @@ module StreamLog
   def add_activity(feed, activity)
     return unless enabled?
     feed = rewrite_feed(*feed)
-    activity['to'] = activity['to']&.map { |to| rewrite_feed(*to.split(':')).join(':') }
+    activity['to'] = activity['to']&.map { |to| rewrite_feed(*to.split(':')).join(':') }&.compact
     client.feed(*feed).add_activity(activity)
   end
 
@@ -54,6 +56,11 @@ module StreamLog
     when 'user' then ['profile', id]
     when 'user_aggr' then ['profile_aggr', id]
     when 'media_airing' then ['media_releases', id]
+    when 'episode' then ['unit', "Episode-#{id}"]
+    when 'episode_aggr' then ['unit_aggr', "Episode-#{id}"]
+    when 'chapter' then ['unit', "Chapter-#{id}"]
+    when 'chapter_aggr' then ['unit_aggr', "Chapter-#{id}"]
+    when 'post', 'post_comments', 'post_comments_aggr', 'private_library' then nil
     else [group, id]
     end
   end
