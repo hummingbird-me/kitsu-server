@@ -27,7 +27,7 @@ class MediaFollowService
     update(progress_was, nil)
   end
 
-  def update(progress_was = nil, _progress = nil)
+  def update(progress_was = nil, progress = nil)
     follows_were = progress_was ? follows_for_progress(media, progress_was, limit: 3) : []
     follows = ignored? ? [] : follows_for_progress(media, progress)
 
