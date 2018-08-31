@@ -65,7 +65,8 @@ module StreamLog
   end
 
   def enabled?
-    Flipper[:stream_log].enabled?(User.current)
+    Flipper[:stream_log].enabled?(User.current) && ENV['STREAMLOG_APP_ID'] &&
+      ENV['STREAMLOG_API_KEY'] && ENV['STREAMLOG_APP_ID'] && ENV['STREAMLOG_REDIS_URL']
   end
 
   def redis_pool
