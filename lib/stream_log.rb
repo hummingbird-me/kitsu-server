@@ -31,7 +31,7 @@ module StreamLog
     return unless enabled?
     feed = rewrite_feed(*feed)
     return unless feed
-    activity['to'] = activity['to']&.map { |to| rewrite_feed(*to.split(':')).join(':') }&.compact
+    activity['to'] = activity['to']&.map { |to| rewrite_feed(*to.split(':'))&.join(':') }&.compact
     client.feed(*feed).add_activity(activity)
   end
 
