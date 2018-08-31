@@ -54,7 +54,7 @@ module StreamLog
   end
 
   def log_activity?(_feed, activity)
-    return false if activity['verb'] == 'updated'
+    return false if activity['verb'] == 'updated' || activity['verb'] == 'rated'
     true
   end
 
