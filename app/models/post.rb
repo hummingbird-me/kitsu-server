@@ -146,7 +146,7 @@ class Post < ApplicationRecord
   end
 
   before_update do
-    self.edited_at = Time.now if content_changed?
+    self.edited_at = Time.now if content_changed? || nsfw_changed? || spoiler?
     true
   end
 
