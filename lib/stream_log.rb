@@ -40,6 +40,7 @@ module StreamLog
   def remove_activity(feed, id, foreign_id: false)
     return unless enabled?
     feed = rewrite_feed(*feed)
+    return unless feed
     key = "#{feed.join(':')}/#{id}@#{foreign_id ? 'K' : 'S'}"
     redis_pool.with do |r|
       r.sadd('remove_activity', key)
