@@ -1,24 +1,4 @@
 require 'simplecov'
-require 'simplecov-lcov'
-require 'codeclimate-test-reporter' if ENV['CODECLIMATE_REPO_TOKEN']
-
-module SimpleCov
-  module Formatter
-    class MergedFormatter
-      def format(result)
-        SimpleCov::Formatter::HTMLFormatter.new.format(result)
-        SimpleCov::Formatter::LcovFormatter.new.format(result)
-        CodeClimate::TestReporter::Formatter.new.format(result) if ENV['CODECLIMATE_REPO_TOKEN']
-      end
-    end
-  end
-end
-
-SimpleCov::Formatter::LcovFormatter.config do |c|
-  c.single_report_path = 'coverage/lcov.info'
-  c.report_with_single_file = true
-end
-CodeClimate::TestReporter.start if ENV['CODECLIMATE_REPO_TOKEN']
 
 SimpleCov.start do
   add_filter '/spec/'
@@ -37,4 +17,3 @@ SimpleCov.start do
 
   track_files '{app,lib}/**/*.rb'
 end
-SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter

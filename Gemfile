@@ -132,9 +132,7 @@ group :test do
   gem 'webmock' # Web faking
 
   # Coverage
-  gem 'codeclimate-test-reporter' # CodeClimate coverage
   gem 'simplecov' # Local coverage
-  gem 'simplecov-lcov' # Report in LCOV format
 
   # Libraries used to test our API itself
   gem 'oauth2'
