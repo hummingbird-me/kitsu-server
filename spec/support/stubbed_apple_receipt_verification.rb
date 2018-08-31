@@ -1,9 +1,6 @@
 RSpec.shared_context 'Stubbed Apple Receipt Verification' do
   let(:verify_url) { 'http://example.com/receipt-verify' }
-  before {
-    AppleReceiptService
-    stub_const('AppleReceiptService::VERIFICATION_URL', verify_url)
-  }
+  before { stub_const('AppleReceiptService::VERIFICATION_URL', verify_url) }
   subject { described_class.new('fake_receipt') }
 
   def stub_receipt_verification(latest_receipt_info: {}, status: 0)

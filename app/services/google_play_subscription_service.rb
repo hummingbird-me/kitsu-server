@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'google/apis/androidpublisher_v3'
 
 class GooglePlaySubscriptionService
