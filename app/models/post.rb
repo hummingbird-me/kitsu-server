@@ -52,6 +52,7 @@ class Post < ApplicationRecord
   embed_links_in :content, to: :embed
 
   belongs_to :user, required: true, counter_cache: true
+  belongs_to :edited_by, class_name: 'User'
   belongs_to :target_user, class_name: 'User'
   belongs_to :target_group, class_name: 'Group'
   belongs_to :media, polymorphic: true
@@ -146,7 +147,10 @@ class Post < ApplicationRecord
   end
 
   before_update do
-    self.edited_at = Time.now if content_changed? || nsfw_changed? || spoiler?
+    if content_changed? || nsfw_changed? || spoiler?
+      self.edited_at = Time.now
+      self.edited_by = User.current
+    end
     true
   end
 
