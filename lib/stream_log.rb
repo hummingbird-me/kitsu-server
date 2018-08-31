@@ -29,6 +29,7 @@ module StreamLog
 
   def add_activity(feed, activity)
     return unless enabled?
+    return unless log_activity?(feed, activity)
     feed = rewrite_feed(*feed)
     return unless feed
     activity['to'] = activity['to']&.map { |to| rewrite_feed(*to.split(':'))&.join(':') }&.compact
@@ -48,6 +49,11 @@ module StreamLog
   def log_follow?(source, target)
     return false if %w[episode chapter media].include?(target[0]) && source[0] == 'timeline'
     return false if %w[interest_timeline].include?(source[0])
+    true
+  end
+
+  def log_activity?(_feed, activity)
+    return false if activity['verb'] == 'updated'
     true
   end
 
