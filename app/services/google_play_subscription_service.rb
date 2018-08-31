@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'google/apis/androidpublisher_v3'
 
 class GooglePlaySubscriptionService
   API_KEY = ENV['GOOGLE_PLAY_API_KEY'].freeze

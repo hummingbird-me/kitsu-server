@@ -1,21 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AppleReceiptService do
-  let(:verify_url) { 'http://example.com/receipt-verify' }
-  before { stub_const('AppleReceiptService::VERIFICATION_URL', verify_url) }
-  subject { described_class.new('fake_receipt') }
-
-  def stub_receipt_verification(latest_receipt_info: {}, status: 0)
-    response = { status: status, latest_receipt_info: latest_receipt_info }.to_json
-    stub_request(:post, verify_url).to_return(
-      status: 200,
-      body: response,
-      headers: {
-        'Content-Type' => 'application/json',
-        'Content-Length' => response.length
-      }
-    )
-  end
+  include_context 'Stubbed Apple Receipt Verification'
 
   it 'should raise an exception if the verification response status is nonzero' do
     stub_receipt_verification(status: 21100) # rubocop:disable Style/NumericLiterals

@@ -8,8 +8,7 @@ class ProSubscriptionController < ApplicationController
     customer = user.stripe_customer
     customer.source = params[:token]
     customer.save
-    ProSubscription::StripeSubscription.create!(user: user)
-    render status: 200
+    render json: ProSubscription::StripeSubscription.create!(user: user)
   rescue Stripe::CardError
     render_jsonapi_error 400, 'Invalid card'
   rescue Stripe::APIConnectionError
@@ -20,8 +19,10 @@ class ProSubscriptionController < ApplicationController
 
   def ios
     receipt = AppleReceiptService.new(params[:receipt])
-    ProSubscription::AppleSubscription.create!(user: user, billing_id: receipt.billing_id)
-    render status: 200
+    render json: ProSubscription::AppleSubscription.create!(
+      user: user,
+      billing_id: receipt.billing_id
+    )
   rescue AppleReceiptService::Error::ServerUnavailable, AppleReceiptService::Error::InternalError
     render_jsonapi_error 502, 'Failed to connect to Apple App Store'
   rescue AppleReceiptService::Error::MalformedReceipt,
@@ -38,12 +39,11 @@ class ProSubscriptionController < ApplicationController
     token = params[:token]
     subscription = GooglePlaySubscriptionService.new(token)
     subscription.validate!
-    ProSubscription::GooglePlaySubscription.create!(user: user, billing_id: token)
-    render status: 200
+    render json: ProSubscription::GooglePlaySubscription.create!(user: user, billing_id: token)
   rescue Google::Apis::ClientError
     render_jsonapi_error 400, 'Google Play returned a client error'
   rescue Google::Apis::ServerError
-    render_jsonapi_error 500, 'Something went wrong when validating with Google Play'
+    render_jsonapi_error 502, 'Something went wrong when validating with Google Play'
   end
 
   def destroy
@@ -53,25 +53,22 @@ class ProSubscriptionController < ApplicationController
       render_jsonapi_error 400, 'Cannot cancel an iOS subscription outside of the App Store'
     when :stripe, :google_play
       user.pro_subscription.destroy!
-      render status: 200
+      render json: {}
     end
   end
 
   def show
     if user.pro_subscription.present?
-      render json: {
-        service: user.pro_subscription.billing_service,
-        plan: 'yearly'
-      }
+      render json: user.pro_subscription
     else
-      render status: 404
+      render status: 404, json: {}
     end
   end
 
   private
 
   def check_feature_flag!
-    render status: 404 unless Flipper[:pro_subscriptions].enabled?(user)
+    render status: 404, json: {} unless Flipper[:pro_subscriptions].enabled?(user)
   end
 
   def user
