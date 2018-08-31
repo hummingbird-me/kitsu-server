@@ -28,7 +28,7 @@ module StreamLog
   end
 
   def add_activity(feed, activity)
-    activity = activity.dup
+    activity = activity.deep_dup
     return unless enabled?
     return unless log_activity?(feed, activity)
     feed = rewrite_feed(*feed)
