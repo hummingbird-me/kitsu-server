@@ -241,7 +241,7 @@ GEM
     httpclient (2.8.3)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
-    ice_cube (0.16.2)
+    ice_cube (0.16.3)
     image_optim (0.26.1)
       exifr (~> 1.2, >= 1.2.2)
       fspath (~> 3.0)
