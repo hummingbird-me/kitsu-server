@@ -60,6 +60,7 @@ gem 'faraday'
 gem 'faraday_middleware'
 gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
+gem 'google-api-client' # Google APIs
 gem 'ice_cube' # Episode release schedules
 gem 'jsonapi-resources', '0.9.0'
 gem 'lograge' # Non-shitty logging
@@ -75,6 +76,7 @@ gem 'sitemap_generator' # Generate Sitemaps
 gem 'stream-ruby', '~> 2.7.0' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
+gem 'stripe' # Money!
 gem 'typhoeus' # Parallelize scraping tasks
 
 # Rack Middleware
@@ -124,6 +126,7 @@ group :test do
   gem 'json_expressions' # Test outputted JSON
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
+  gem 'stripe-ruby-mock', require: 'stripe_mock' # Mock Stripe API
   gem 'test_after_commit' # Rails 4 doesn't run commit callbacks on transactions
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking

@@ -128,9 +128,9 @@ class User < ApplicationRecord
   enum theme: %i[light dark]
   enum ao_pro: %i[pro pro_plus]
 
-  belongs_to :pro_membership_plan, required: false
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false
+  has_one :pro_subscription, dependent: :destroy, required: false
   has_many :followers, class_name: 'Follow', foreign_key: 'followed_id', inverse_of: :followed
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id', inverse_of: :follower
   has_many :comments, dependent: :destroy
@@ -269,6 +269,22 @@ class User < ApplicationRecord
     pro_expires_at >= Time.now
   end
 
+  def pro_streak
+    return unless pro_started_at
+    streak_end = [Time.now, pro_expires_at].compact.min
+    streak_end - pro_started_at
+  end
+
+  def stripe_customer
+    @stripe_customer ||= if stripe_customer_id
+                           Stripe::Customer.retrieve(stripe_customer_id)
+                         else
+                           customer = Stripe::Customer.create(email: email)
+                           self.stripe_customer_id = customer.id
+                           customer
+                         end
+  end
+
   def blocked?(user)
     blocks.where(user: [self, user], blocked: [self, user]).exists?
   end
@@ -393,6 +409,7 @@ class User < ApplicationRecord
   end
 
   before_update do
+    self.max_pro_streak = [max_pro_streak, pro_streak].compact.max
     if name_changed?
       # Push it onto the front and limit
       self.past_names = [name_was, *past_names].first(PAST_NAMES_LIMIT)
@@ -403,7 +420,12 @@ class User < ApplicationRecord
     update_feed_completed
   end
 
-  after_commit if: ->(u) { u.email_changed? && !Rails.env.staging? } do
+  after_commit on: :update do
+    # Update email on Stripe
+    stripe_customer.save(email: email) if previous_changes['email']
+  end
+
+  after_commit if: ->(u) { u.previous_changes['email'] && !Rails.env.staging? } do
     self.confirmed_at = nil
     # Send Confirmation Email
     UserMailer.confirmation(self).deliver_later

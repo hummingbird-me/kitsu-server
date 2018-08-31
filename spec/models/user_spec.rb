@@ -111,7 +111,6 @@ RSpec.describe User, type: :model do
   it { should have_many(:linked_accounts) }
   it { should have_many(:profile_links) }
   it { should have_many(:stats) }
-  it { should belong_to(:pro_membership_plan) }
   it { should have_many(:followers) }
   it { should have_many(:following) }
   it { should validate_uniqueness_of(:slug).case_insensitive.allow_nil }
@@ -252,6 +251,40 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#pro_streak' do
+    context 'for a user with an active pro subscription' do
+      it 'should return the length between the start of pro and now' do
+        user = build(:user)
+        Timecop.freeze do
+          user.pro_started_at = 2.weeks.ago
+          expect(user.pro_streak).to eq(2.weeks)
+        end
+      end
+    end
+
+    context 'for a user with a past pro subscription' do
+      it 'should return the length between start and end of pro' do
+        user = build(:user)
+        Timecop.freeze do
+          user.pro_started_at = 8.weeks.ago
+          user.pro_expires_at = 1.week.ago
+          expect(user.pro_streak).to eq(7.weeks)
+        end
+      end
+    end
+  end
+
+  describe '#max_pro_streak' do
+    it 'should be updated in each User update' do
+      user = create(:user, max_pro_streak: 2.weeks)
+      Timecop.freeze do
+        expect(user.max_pro_streak).to eq(2.weeks)
+        user.update(pro_started_at: 4.weeks.ago)
+        expect(user.max_pro_streak).to eq(4.weeks)
+      end
+    end
+  end
+
   context 'after creation' do
     before do
       allow_any_instance_of(Feed).to receive(:follow)
@@ -278,6 +311,15 @@ RSpec.describe User, type: :model do
         .and_return(announcements)
       expect(announcements).to receive(:setup!)
       subject.save!
+    end
+  end
+
+  context 'after email update' do
+    it 'should synchronize the email to Stripe' do
+      user = create(:user)
+      expect(user.stripe_customer.email).to eq(user.email)
+      user.update!(email: 'mariya@takeuchi.org')
+      expect(user.stripe_customer.email).to eq('mariya@takeuchi.org')
     end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724022853) do
+ActiveRecord::Schema.define(version: 20180823024854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1280,6 +1280,14 @@ ActiveRecord::Schema.define(version: 20180724022853) do
   add_index "posts", ["deleted_at"], name: "index_posts_on_deleted_at", using: :btree
   add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
 
+  create_table "pro_gifts", force: :cascade do |t|
+    t.integer  "from_id",    null: false
+    t.integer  "to_id",      null: false
+    t.text     "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pro_membership_plans", force: :cascade do |t|
     t.string   "name",                       null: false
     t.integer  "amount",                     null: false
@@ -1288,6 +1296,16 @@ ActiveRecord::Schema.define(version: 20180724022853) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
+
+  create_table "pro_subscriptions", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.string   "billing_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "type",       null: false
+  end
+
+  add_index "pro_subscriptions", ["user_id"], name: "index_pro_subscriptions_on_user_id", using: :btree
 
   create_table "producers", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -1583,9 +1601,6 @@ ActiveRecord::Schema.define(version: 20180724022853) do
     t.integer  "approved_edit_count",                     default: 0
     t.integer  "rejected_edit_count",                     default: 0
     t.datetime "pro_expires_at"
-    t.string   "stripe_token",                limit: 255
-    t.integer  "pro_membership_plan_id"
-    t.string   "stripe_customer_id",          limit: 255
     t.text     "about_formatted"
     t.integer  "import_status"
     t.string   "import_from",                 limit: 255
@@ -1625,6 +1640,9 @@ ActiveRecord::Schema.define(version: 20180724022853) do
     t.string   "ao_facebook_id"
     t.integer  "ao_pro"
     t.string   "ao_imported"
+    t.datetime "pro_started_at"
+    t.integer  "max_pro_streak"
+    t.string   "stripe_customer_id"
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
