@@ -74,7 +74,7 @@ GEM
     algoliasearch-rails (1.20.4)
       algoliasearch (>= 1.17.0, < 2.0.0)
       json (>= 1.5.1)
-    annotate (2.7.3)
+    annotate (2.7.4)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
     arel (6.0.4)
