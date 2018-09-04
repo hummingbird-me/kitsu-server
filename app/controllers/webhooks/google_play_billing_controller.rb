@@ -6,13 +6,15 @@ module Webhooks
 
     def notify
       GooglePlayNotificationService.new(params).call
-      status 204
+      render status: 204
     end
 
     private
 
     def check_secret
-      status 400 unless ActiveSupport::SecurityUtils.secure_compare(SECRET, params[:secret])
+      unless ActiveSupport::SecurityUtils.secure_compare(SECRET, params[:secret])
+        render_jsonapi_error 400, 'Invalid Secret'
+      end
     end
   end
 end

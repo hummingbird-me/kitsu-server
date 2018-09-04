@@ -11,9 +11,9 @@ module Webhooks
 
       StripeEventService.new(event).call
 
-      render status: 200
+      render status: 204
     rescue JSON::ParserError, Stripe::SignatureVerificationError
-      render status: 400
+      render_jsonapi_error 400, 'Invalid payload'
     end
   end
 end
