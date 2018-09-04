@@ -6,7 +6,7 @@ module Webhooks
 
     def notify
       GooglePlayNotificationService.new(params).call
-      render status: 204
+      head status: 204
     end
 
     private
