@@ -11,9 +11,9 @@ module Webhooks
 
       StripeEventService.new(event).call
 
-      status 200
+      render status: 200
     rescue JSON::ParserError, Stripe::SignatureVerificationError
-      status 400
+      render status: 400
     end
   end
 end
