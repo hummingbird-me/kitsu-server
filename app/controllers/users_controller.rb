@@ -1,11 +1,7 @@
 class UsersController < ApplicationController
   include CustomControllerHelpers
 
-  http_basic_authenticate_with name: 'Production',
-                               password: ENV['STAGING_SYNC_SECRET'],
-                               only: :prod_sync
-  skip_before_action :validate_token!, only: :prod_sync
-  skip_after_action :enforce_policy_use, only: %i[prod_sync recover conflicts_index conflicts_update]
+  skip_after_action :enforce_policy_use, only: %i[recover conflicts_index conflicts_update]
 
   def recover
     query = params[:username]
@@ -38,17 +34,6 @@ class UsersController < ApplicationController
     conflict_resolver = Zorro::UserConflictResolver.new(user)
     user = conflict_resolver.merge_onto(chosen)
     render_jsonapi serialize_model(user)
-  end
-
-  def prod_sync
-    return unless Rails.env.staging?
-
-    id = params.require(:id)
-    values = params.permit(:password_digest, :email, :name, :pro_expires_at)
-
-    User.find_by(id: id)&.update(values)
-
-    render json: id, status: 200
   end
 
   def profile_strength

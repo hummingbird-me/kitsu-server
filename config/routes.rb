@@ -198,9 +198,6 @@ Rails.application.routes.draw do
       post '/google-play-billing', to: 'google_play_billing#notify'
     end
 
-    ### Staging Sync
-    post '/user/_prodsync', to: 'users#prod_sync'
-
     ### Authentication
     use_doorkeeper
 
