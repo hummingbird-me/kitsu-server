@@ -474,7 +474,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (12.3.1)
-    ranked-model (0.4.0)
+    ranked-model (0.4.1)
       activerecord (>= 3.1.12)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
