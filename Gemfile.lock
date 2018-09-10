@@ -418,8 +418,8 @@ GEM
       pundit
       rails (>= 4.2.1, < 5.1)
     rack (1.6.10)
-    rack-attack (5.2.0)
-      rack
+    rack-attack (5.4.0)
+      rack (>= 1.0, < 3)
     rack-cors (1.0.2)
     rack-pjax (1.0.0)
       nokogiri (~> 1.5)
