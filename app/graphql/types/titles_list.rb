@@ -1,6 +1,7 @@
 class Types::TitlesList < Types::BaseObject
-  field :localized, [Types::LocalizedString],
-    null: false,
+  include HasLocalizedField
+
+  localized_field :localized,
     description: 'The list of localized titles keyed by locale'
   field :alternatives, [String],
     null: false,
