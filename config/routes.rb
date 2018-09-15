@@ -196,6 +196,7 @@ Rails.application.routes.draw do
       post :getstream, to: 'getstream#notify'
       post :stripe, to: 'stripe#notify'
       post '/google-play-billing', to: 'google_play_billing#notify'
+      post '/apple-ios-billing', to: 'apple_ios_billing#notify'
     end
 
     ### Authentication
