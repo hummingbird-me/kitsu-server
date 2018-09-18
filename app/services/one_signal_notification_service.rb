@@ -37,7 +37,8 @@ class OneSignalNotificationService
   def params_for(platform)
     params = {
       app_id: app_id,
-      contents: { en: notification.message }
+      contents: { en: notification.message },
+      external_id: "#{notification.id}-#{platform}"
     }
     case platform
     when :mobile

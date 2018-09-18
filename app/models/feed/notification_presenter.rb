@@ -6,6 +6,7 @@ class Feed
 
     attr_reader :activity, :user
     delegate :group, to: :activity
+    delegate :id, to: :activity
 
     # @param activity [Feed::Activity] the activity object to generate a notification for
     # @param user [User] the user from whose perspective we are viewing this notification
