@@ -57,7 +57,7 @@ class OneSignalNotificationService
 
   def external_id_for(platform)
     platform = OneSignalPlayer.platforms[platform].to_s(16).upcase
-    "#{notification.id[0..-1]}#{platform}"
+    "#{notification.id[0..-2]}#{platform}"
   end
 
   def app_id
