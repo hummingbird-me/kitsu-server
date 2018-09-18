@@ -10,7 +10,8 @@ class GetstreamEventWorker
     when 'new'
       activity = Feed::Activity.new(feed, activity)
       if group == 'notifications'
-        user = User.find(id)
+        user = User.find_by(id: id)
+        return unless user
         OneSignalNotificationService.new(user, activity).run!
       end
     end
