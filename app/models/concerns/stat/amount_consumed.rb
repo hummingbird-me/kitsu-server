@@ -37,7 +37,9 @@ class Stat < ApplicationRecord
     def on_destroy(entry)
       stats_data['media'] -= 1
       stats_data['units'] -= entry.progress
-      stats_data['units'] -= entry.reconsume_count * (entry.media.send(unit_count) || 0)
+      if entry.media
+        stats_data['units'] -= entry.reconsume_count * (entry.media.send(unit_count) || 0)
+      end
       stats_data['time'] -= entry.time_spent
       save!
     end
