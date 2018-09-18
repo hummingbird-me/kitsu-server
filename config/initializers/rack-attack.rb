@@ -11,4 +11,11 @@ class Rack::Attack
       req.env['HTTP_AUTHORIZATION']
     end
   end
+
+  throttle('likes/token', limit: 40, period: 120.seconds) do |req|
+    if req.path == '/api/edge/post-likes' || req.path =='/api/edge/comment-likes' && req.post?
+      # return the email if present, nil otherwise
+      req.env['HTTP_AUTHORIZATION']
+    end
+  end
 end
