@@ -11,15 +11,19 @@ class StatWorker
   def perform(stat, user_id, action, model, changes)
     # Bail if the User has stopped existing (deletion)
     return unless User.exists?(user_id)
-    # Lock the User's stat row so no other workers can update it
-    stat = stat.constantize.for_user(user_id).lock!
+    # Load the stat
+    stat = stat.constantize.for_user(user_id)
+    return unless stat.respond_to?("on_#{action}")
     # Rehydrate the model
     model_class, model_attributes = model.values_at('class', 'attributes')
     model = model_class.constantize.new(model_attributes)
     # Wrap the model in a DirtyChangeWrapper to make it appear dirty
     wrapper = DirtyChangeWrapper.new(model, changes)
-    # Call down to the stat to run the action
-    stat.public_send("on_#{action}", wrapper) if stat.respond_to?("on_#{action}")
+    # Lock the User's stat row so no other workers can update it
+    stat.with_lock do
+      # Call down to the stat to run the action
+      stat.public_send("on_#{action}", wrapper)
+    end
   end
 
   # @see #perform
