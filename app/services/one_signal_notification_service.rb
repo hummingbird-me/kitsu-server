@@ -38,7 +38,7 @@ class OneSignalNotificationService
     params = {
       app_id: app_id,
       contents: { en: notification.message },
-      external_id: "#{notification.id}-#{platform}"
+      external_id: external_id_for(platform)
     }
     case platform
     when :mobile
@@ -53,6 +53,11 @@ class OneSignalNotificationService
 
   def notification
     @notification ||= Feed::NotificationPresenter.new(@activity, @user)
+  end
+
+  def external_id_for(platform)
+    platform = OneSignalPlayer.platforms[platform].to_s(16).upcase
+    "#{notification.id[0..-1]}#{platform}"
   end
 
   def app_id
