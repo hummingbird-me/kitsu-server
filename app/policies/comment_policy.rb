@@ -2,6 +2,7 @@ class CommentPolicy < ApplicationPolicy
   include GroupPermissionsHelpers
 
   def update?
+    return false unless user
     return false if user.has_role?(:banned)
     return true if is_admin?
     return true if group && has_group_permission?(:content)
