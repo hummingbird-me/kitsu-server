@@ -121,12 +121,8 @@ class Feed
     end
 
     def find(id)
-      act = feed.get(id_lte: id, limit: 1)['results'].first
-      # If we got an ActivityGroup, get the first Activity in it
-      act = act['activities'].first if act.key?('activities')
-
-      # If the ID is wrong, the activity doesn't exist in this feed.
-      return nil unless act['id'] == id
+      act = client.get_activities(ids: [id])['results'].first
+      return unless act
 
       # Enrich it
       enricher = StreamRails::Enrich.new(@including)

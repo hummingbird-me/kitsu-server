@@ -21,6 +21,9 @@ class BufferedStreamClient
   end
 
   # @api getstream-compat
+  delegate :get_activities, to: :@client
+
+  # @api getstream-compat
   def update_activities(*args)
     perform_action :update_activities, *args
   end
