@@ -96,7 +96,7 @@ class Feed
   end
 
   def read_feed
-    if Flipper[:fresh_feeds].enabled?(User.current)
+    if Flipper[:fresh_feeds].enabled?(User.current) && StreamLog.enabled?
       target = StreamLog.rewrite_feed(*read_target)
       StreamLog.client.feed(*target)
     else
