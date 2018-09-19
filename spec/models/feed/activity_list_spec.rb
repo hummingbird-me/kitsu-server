@@ -108,8 +108,8 @@ RSpec.describe Feed::ActivityList, type: :model do
     let(:act) { subject.new(attrs) }
 
     before do
-      expect(feed).to receive(:get)
-        .with(include(id_lte: attrs['id'], limit: 1))
+      expect(feed.client).to receive(:get_activities)
+        .with(ids: [attrs['id']])
         .and_return('results' => [attrs])
     end
 
