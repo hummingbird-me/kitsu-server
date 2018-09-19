@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
-  revision: 8ca697f2deab7f99c72b2f9ed09f96c7dcf1b40f
+  revision: 592fcb22e324d596c53aadb6e762e4d66fae9a3e
   specs:
     doorkeeper-grants_assertion (0.1.0)
       doorkeeper (>= 4.0)
@@ -151,7 +151,7 @@ GEM
     docile (1.3.0)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (4.2.6)
+    doorkeeper (4.3.2)
       railties (>= 4.2)
     dotenv (2.4.0)
     dotenv-rails (2.4.0)
