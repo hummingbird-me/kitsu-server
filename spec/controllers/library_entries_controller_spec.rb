@@ -99,7 +99,7 @@ RSpec.describe LibraryEntriesController, type: :controller do
         3.times { create(:library_entry, user: build(:user), media: anime) }
         get :index, filter: { user_id: user.id }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
-        expect(JSON.parse(response.body)['data'].count).to eq(4)
+        expect(JSON.parse(response.body)['data'].count).to eq(1)
       end
     end
   end
