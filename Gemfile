@@ -73,7 +73,7 @@ gem 'ranked-model' # Sortables!
 gem 'rbtrace' # Attach to running ruby processes
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'stream-ruby', '~> 2.7.0' # Feeds
+gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'stripe' # Money!
@@ -135,7 +135,7 @@ group :test do
   gem 'simplecov' # Local coverage
 
   # Libraries used to test our API itself
-  gem 'oauth2'
+  gem 'oauth2', github: 'oauth-xx/oauth2', branch: 'master'
 end
 
 group :production, :staging do
