@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/GetStream/stream-rails.git
+  remote: https://github.com/GetStream/stream-rails.git
   revision: 6e9a74d08516e3cc820c8dc866de659193bd56bc
   branch: feature/subreference-enrichment
   specs:
@@ -10,18 +10,18 @@ GIT
       stream-ruby (~> 2.4)
 
 GIT
-  remote: git://github.com/nuckchorris/rack-timeout.git
-  revision: 0e01a118a02c6843643cface4c10d10f7f002582
-  specs:
-    rack-timeout (0.4.2)
-
-GIT
   remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
   revision: 592fcb22e324d596c53aadb6e762e4d66fae9a3e
   specs:
     doorkeeper-grants_assertion (0.1.0)
       doorkeeper (>= 4.0)
       railties (>= 3.1)
+
+GIT
+  remote: https://github.com/nuckchorris/rack-timeout.git
+  revision: 0e01a118a02c6843643cface4c10d10f7f002582
+  specs:
+    rack-timeout (0.4.2)
 
 GIT
   remote: https://github.com/oauth-xx/oauth2.git
