@@ -25,7 +25,9 @@ RSpec.describe Authorization::Assertion::Twitter do
       .to_return(
         status: 200,
         body: twitter_auth_response,
-        headers: {}
+        headers: {
+          'Content-Type' => 'application/json'
+        }
       )
     stub_request(
       :get,
@@ -35,7 +37,9 @@ RSpec.describe Authorization::Assertion::Twitter do
       .to_return(
         status: 200,
         body: twitter_auth_response,
-        headers: {}
+        headers: {
+          'Content-Type' => 'application/json'
+        }
       )
     stub_request(
       :get,
@@ -45,7 +49,9 @@ RSpec.describe Authorization::Assertion::Twitter do
       .to_return(
         status: 200,
         body: twitter_users_show_response,
-        headers: {}
+        headers: {
+          'Content-Type' => 'application/json'
+        }
       )
     stub_request(
       :get,
@@ -55,7 +61,9 @@ RSpec.describe Authorization::Assertion::Twitter do
       .to_return(
         status: 200,
         body: twitter_followers_response,
-        headers: {}
+        headers: {
+          'Content-Type' => 'application/json'
+        }
       )
     Authorization::Assertion::Twitter.new(
       'any token',
