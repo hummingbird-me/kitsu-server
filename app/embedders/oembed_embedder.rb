@@ -11,7 +11,7 @@ class OembedEmbedder < Embedder
   end
 
   def match?
-    oembed_url.present?
+    oembed_data.present?
   end
 
   private
@@ -78,6 +78,10 @@ class OembedEmbedder < Embedder
   end
 
   def oembed_data
-    JSON.parse(get(oembed_url))
+    data = get(oembed_url)
+    return unless data
+    JSON.parse(data)
+  rescue JSON::ParserError
+    nil
   end
 end
