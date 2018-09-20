@@ -104,6 +104,10 @@ class Feed
     end
   end
 
+  def group
+    read_target.first
+  end
+
   def ==(other)
     other.class == self.class && other.id == id
   end
