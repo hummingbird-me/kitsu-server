@@ -11,7 +11,7 @@ module HTML
 
       # Check if user exists before we linkify it
       def link_to_mentioned_user(mention)
-        user = User.by_slug(mention).or(User.where(id: mention)).first
+        user = User.by_slug(mention).first || User.find_by(id: mention)
         return unless user
 
         result[:mentioned_users] |= [user.id]
