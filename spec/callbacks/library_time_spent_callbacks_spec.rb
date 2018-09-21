@@ -15,6 +15,10 @@ RSpec.describe LibraryTimeSpentCallbacks do
   let(:entry) { LibraryEntryDouble.new(progress: 5, reconsume_count: 5) }
   subject { described_class.new(entry) }
 
+  before do
+    allow(Kernel).to receive(:rand).and_return(1)
+  end
+
   describe '#before_save' do
     context 'with progress changed' do
       before { entry.progress_will_change! }
