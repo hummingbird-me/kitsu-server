@@ -12,5 +12,6 @@ class LibraryTimeSpentCallbacks < Callbacks
 
     diff = LibraryEntryDiff.new(record)
     record.time_spent += (diff.time_diff / 60)
+    record.recalculate_time_spent! if record.time_spent.negative?
   end
 end
