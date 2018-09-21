@@ -7,9 +7,10 @@ RSpec.describe LibraryTimeSpentCallbacks do
     attr_accessor :progress, :reconsume_count, :time_spent, :media
     define_attribute_methods :progress, :reconsume_count
 
-    def initialize(progress: nil, reconsume_count: nil)
+    def initialize(progress: nil, reconsume_count: nil, time_spent: 0)
       @progress = progress
       @reconsume_count = reconsume_count
+      @time_spent = time_spent
     end
   end
   let(:entry) { LibraryEntryDouble.new(progress: 5, reconsume_count: 5, time_spent: 400) }
