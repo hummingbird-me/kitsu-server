@@ -12,7 +12,7 @@ RSpec.describe LibraryTimeSpentCallbacks do
       @reconsume_count = reconsume_count
     end
   end
-  let(:entry) { LibraryEntryDouble.new(progress: 5, reconsume_count: 5) }
+  let(:entry) { LibraryEntryDouble.new(progress: 5, reconsume_count: 5, time_spent: 400) }
   subject { described_class.new(entry) }
 
   before do
