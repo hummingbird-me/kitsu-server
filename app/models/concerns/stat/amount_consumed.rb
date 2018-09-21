@@ -41,7 +41,12 @@ class Stat < ApplicationRecord
         stats_data['units'] -= entry.reconsume_count * (entry.media.send(unit_count) || 0)
       end
       stats_data['time'] -= entry.time_spent
-      save!
+
+      if should_recalculate?
+        recalculate!
+      else
+        save!
+      end
     end
 
     # @param entry [LibraryEntry] an entry that was updated
@@ -52,10 +57,18 @@ class Stat < ApplicationRecord
       stats_data['units'] += diff.reconsume_diff * (entry.media.send(unit_count) || 0)
       stats_data['time'] += diff.time_diff
 
-      save!
+      if should_recalculate?
+        recalculate!
+      else
+        save!
+      end
     end
 
     private
+
+    def should_recalculate?
+      %w[units time media].any? { |k| stats_data[k].negative? }
+    end
 
     # @return [String] the column for the media unit count
     def unit_count
