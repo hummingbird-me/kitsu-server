@@ -2,8 +2,14 @@ class GlobalStat < ApplicationRecord
   module AmountConsumed
     extend ActiveSupport::Concern
 
+    class_methods do
+      def recalculate!
+        first_or_initialize.recalculate!
+      end
+    end
+
     def recalculate!
-      self.stats_data = {
+      update(stats_data: {
         'percentiles' => {
           'media' => percentiles_for('media'),
           'units' => percentiles_for('units'),
@@ -14,11 +20,11 @@ class GlobalStat < ApplicationRecord
           'units' => average_for('units'),
           'time' => average_for('time')
         }
-      }
+      })
     end
 
     def percentiles_for(field)
-      percentiles = (0..1).step(BigDecimal.new('0.01')).to_a.map(&:to_s)
+      percentiles = (0..1).step(BigDecimal('0.01')).to_a.map(&:to_s)
       stat_class.pluck(<<-SQL)
         percentile_disc(array[#{percentiles.join(',')}])
         WITHIN GROUP (ORDER BY (stats_data->>'#{field}')::integer)
