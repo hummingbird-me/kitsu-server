@@ -69,7 +69,7 @@ class Stat < ApplicationRecord
     private
 
     def should_recalculate?
-      rand <= RECALCULATE_CHANCE || %w[units time media].any? { |k| stats_data[k].negative? }
+      rand <= RECALCULATION_CHANCE || %w[units time media].any? { |k| stats_data[k].negative? }
     end
 
     # @return [String] the column for the media unit count
