@@ -25,33 +25,51 @@ module ListSync
       private
 
       def fill_form
-        # Status
+        fill_status
+        fill_progress
+        fill_rating
+        fill_start_date
+        fill_end_date
+        fill_rewatches
+      end
+
+      def fill_status
         field_for(:status).value = mal_status_key
-        # Progress
+      end
+
+      def fill_progress
         if library_entry.kind == :anime
           field_for(:num_watched_episodes).value = library_entry.progress
         elsif library_entry.kind == :manga
           field_for(:num_read_chapters).value = library_entry.progress
           field_for(:num_read_volumes).value = library_entry.volumes_owned
         end
-        # Rating
-        if library_entry.rating
-          field_for(:score).value = library_entry.rating / 2
-        end
-        # Start Date
-        if library_entry.started_at
-          field_for(:start_date, :year).value = library_entry.started_at.year
-          field_for(:start_date, :month).value = library_entry.started_at.month
-          field_for(:start_date, :day).value = library_entry.started_at.day
-        end
-        # End Date
-        if library_entry.finished_at
-          finish_date = library_entry.finished_at
-          field_for(:finish_date, :year).value = finish_date.year
-          field_for(:finish_date, :month).value = finish_date.month
-          field_for(:finish_date, :day).value = finish_date.day
-        end
-        # Rewatches/rewatches
+      end
+
+      def fill_rating
+        return unless library_entry.rating
+
+        field_for(:score).value = library_entry.rating / 2
+      end
+
+      def fill_start_date
+        return unless library_entry.started_at
+
+        field_for(:start_date, :year).value = library_entry.started_at.year
+        field_for(:start_date, :month).value = library_entry.started_at.month
+        field_for(:start_date, :day).value = library_entry.started_at.day
+      end
+
+      def fill_end_date
+        return unless library_entry.finished_at
+
+        finish_date = library_entry.finished_at
+        field_for(:finish_date, :year).value = finish_date.year
+        field_for(:finish_date, :month).value = finish_date.month
+        field_for(:finish_date, :day).value = finish_date.day
+      end
+
+      def fill_rewatches
         if library_entry.kind == :anime
           field_for(:num_watched_times).value = library_entry.reconsume_count
         elsif library_entry.kind == :manga
