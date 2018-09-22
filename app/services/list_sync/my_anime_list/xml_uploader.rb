@@ -1,7 +1,7 @@
 module ListSync
   class MyAnimeList
     class XmlUploader
-      MEDIA_LINK = /(?<media>anime|manga)\.php\?id=(?<id>\d+)/
+      MEDIA_LINK = %r{(?<media>anime|manga)/(?<id>\d+)}
 
       def initialize(agent, xml)
         @agent = agent
