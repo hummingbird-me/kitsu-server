@@ -11,6 +11,19 @@ class Stat < ApplicationRecord
       { 'media' => 0, 'units' => 0, 'time' => 0 }
     end
 
+    # Override #stats_data to find the percentile for each stat
+    def stats_data
+      data = super
+      # Generate percentile data
+      if global_stat
+        data['percentiles'] = %w[media units time].each_with_object({}) do |key, out|
+          # Find the first percentile with a value above our own
+          out[key] = global_stat.stats_data[key].find_index { |val| val > data[key] }.to_f / 100
+        end
+      end
+      data
+    end
+
     # Recalculate this entire statistic from scratch
     # @return [self]
     def recalculate!
