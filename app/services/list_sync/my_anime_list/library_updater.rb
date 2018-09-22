@@ -36,7 +36,7 @@ module ListSync
           end
         else
           # If we dunno the error, just raise a generic one
-          raise ListSync::RemoteError, results_page.at_css('.bad_result').text
+          raise ListSync::RemoteError, badresult
         end
       end
 
