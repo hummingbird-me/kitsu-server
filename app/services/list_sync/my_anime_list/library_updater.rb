@@ -16,13 +16,29 @@ module ListSync
         copy_csrf_token_into(update_form)
         results_page = update_form.click_button
 
-        if results_page.at_css('.badresult')
-          raise ListSync::RemoteError, results_page.at_css('.badresult').text
-        end
+        raise_for(results_page.at_css('.badresult').text) if results_page.at_css('.badresult')
+
         true
       end
 
       private
+
+      def raise_for(badresult)
+        case badresult
+        when /Failed to add/i
+          begin
+            # Check if the media no longer exists
+            agent.get("https://myanimelist.net/#{media_kind}/#{mal_id}/found")
+          rescue Mechanize::ResponseCodeError
+            # If we 404'd then destroy the mapping and raise a NotFoundError
+            mal_mapping&.destroy!
+            raise ListSync::NotFoundError
+          end
+        else
+          # If we dunno the error, just raise a generic one
+          raise ListSync::RemoteError, results_page.at_css('.bad_result').text
+        end
+      end
 
       def fill_form
         fill_status
