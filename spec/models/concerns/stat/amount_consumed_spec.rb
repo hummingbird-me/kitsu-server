@@ -89,7 +89,14 @@ RSpec.describe Stat::AmountConsumed do
   end
 
   describe '#on_destroy' do
-    let(:entry) { create(:library_entry, user: user, anime: anime, progress: 3) }
+    let(:entry) do
+      create(:library_entry,
+        user: user,
+        anime: anime,
+        progress: 3,
+        reconsume_count: 0,
+        time_spent: 600)
+    end
 
     before do
       stat.stats_data = {

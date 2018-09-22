@@ -34,6 +34,9 @@ production:
   RankingUpdateWorker:
     # Every 6 hours, 5 minutes into the hour (so ratings get updated first)
     cron: '0 5 */6 * * *'
+  GlobalStatRecalculationWorker:
+    # Once a day
+    cron: '0 0 0 * * *'
   LibraryEntryLogRemovalWorker:
     # Once a day
     cron: '0 0 0 * * *'

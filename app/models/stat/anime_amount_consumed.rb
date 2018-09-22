@@ -32,5 +32,9 @@ class Stat < ApplicationRecord
     def unit_kind
       :episode
     end
+
+    def global_stat
+      GlobalStat::AnimeAmountConsumed.first
+    end
   end
 end
