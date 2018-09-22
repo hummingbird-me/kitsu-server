@@ -29,6 +29,10 @@ RSpec.describe Stat::AmountConsumed do
   let(:anime) { create(:anime, :with_episodes, episode_count: 5) }
   let!(:stat) { Stat::AnimeAmountConsumed.for_user(user) }
 
+  before do
+    allow(Kernel).to receive(:rand).and_return(1)
+  end
+
   describe '#default_data' do
     it 'should have a media count' do
       expect(stat.default_data).to have_key('media')
@@ -86,6 +90,14 @@ RSpec.describe Stat::AmountConsumed do
 
   describe '#on_destroy' do
     let(:entry) { create(:library_entry, user: user, anime: anime, progress: 3) }
+
+    before do
+      stat.stats_data = {
+        'media': 50,
+        'units': 600,
+        'time': 20000
+      }
+    end
 
     it 'should decrease the media count' do
       expect {
