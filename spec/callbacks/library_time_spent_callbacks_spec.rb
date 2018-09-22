@@ -12,6 +12,8 @@ RSpec.describe LibraryTimeSpentCallbacks do
       @reconsume_count = reconsume_count
       @time_spent = time_spent
     end
+
+    def recalculate_time_spent!; end
   end
   let(:entry) { LibraryEntryDouble.new(progress: 5, reconsume_count: 5, time_spent: 4000) }
   subject { described_class.new(entry) }
@@ -82,7 +84,7 @@ RSpec.describe LibraryTimeSpentCallbacks do
           allow(entry).to receive_message_chain(:media, :total_length) { 300 * 60 }
         end
 
-        it 'should increment time_spent by the total length of the media' do
+        it 'should decrement time_spent by the total length of the media' do
           entry.time_spent = 0
           expect {
             subject.before_save
