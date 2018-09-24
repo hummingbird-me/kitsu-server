@@ -1,8 +1,6 @@
 # Hooks onto LibraryEntry and manages updating the time_spent column as the progress/reconsume_count
 # change over time.
 class LibraryTimeSpentCallbacks < Callbacks
-  RECALCULATION_CHANCE = 0.1
-
   # @param klass [Class] the class to hook the callbacks for
   def self.hook(klass)
     klass.before_save(self)
@@ -14,6 +12,6 @@ class LibraryTimeSpentCallbacks < Callbacks
 
     diff = LibraryEntryDiff.new(record)
     record.time_spent += (diff.time_diff / 60)
-    record.recalculate_time_spent! if record.time_spent.negative? || rand <= RECALCULATION_CHANCE
+    record.recalculate_time_spent! if record.time_spent.negative?
   end
 end
