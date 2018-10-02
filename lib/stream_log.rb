@@ -7,11 +7,7 @@ module StreamLog
     source = rewrite_feed(*source)
     target = rewrite_feed(*target)
     return unless source && target
-    follow = follow_key(source, target)
     client.feed(*source).unfollow(*target)
-    redis_pool.with do |r|
-      r.sadd('unfollow', follow)
-    end
   end
 
   def follow(source, target)
@@ -41,10 +37,6 @@ module StreamLog
     return unless enabled?
     feed = rewrite_feed(*feed)
     return unless feed
-    key = "#{feed.join(':')}/#{id}@#{foreign_id ? 'K' : 'S'}"
-    redis_pool.with do |r|
-      r.sadd('remove_activity', key)
-    end
     client.feed(*feed).remove_activity(id, foreign_id)
   end
 
