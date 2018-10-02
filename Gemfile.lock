@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/GetStream/stream-rails.git
+  remote: git://github.com/GetStream/stream-rails.git
   revision: 6e9a74d08516e3cc820c8dc866de659193bd56bc
   branch: feature/subreference-enrichment
   specs:
@@ -10,22 +10,14 @@ GIT
       stream-ruby (~> 2.4)
 
 GIT
-  remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
-  revision: 592fcb22e324d596c53aadb6e762e4d66fae9a3e
-  specs:
-    doorkeeper-grants_assertion (0.1.0)
-      doorkeeper (>= 4.0)
-      railties (>= 3.1)
-
-GIT
-  remote: https://github.com/nuckchorris/rack-timeout.git
+  remote: git://github.com/nuckchorris/rack-timeout.git
   revision: 0e01a118a02c6843643cface4c10d10f7f002582
   specs:
     rack-timeout (0.4.2)
 
 GIT
-  remote: https://github.com/oauth-xx/oauth2.git
-  revision: 02679033c33fe908abc97780765b987ad3564abb
+  remote: git://github.com/oauth-xx/oauth2.git
+  revision: 3463b02018e9bbe85b06c41399f4c0b1128af257
   branch: master
   specs:
     oauth2 (1.4.0)
@@ -34,6 +26,14 @@ GIT
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
+
+GIT
+  remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
+  revision: 592fcb22e324d596c53aadb6e762e4d66fae9a3e
+  specs:
+    doorkeeper-grants_assertion (0.1.0)
+      doorkeeper (>= 4.0)
+      railties (>= 3.1)
 
 GEM
   remote: https://rubygems.org/
@@ -186,7 +186,7 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     fast_blank (1.0.0)
-    fastimage (2.1.3)
+    fastimage (2.1.4)
     ffi (1.9.25)
     flipper (0.15.0)
     flipper-redis (0.15.0)
