@@ -316,7 +316,7 @@ class User < ApplicationRecord
     alts = {}
     user_ips = ip_addresses.select(:ip_address)
     user_ip_count = user_ips.count
-    shared_ips = UserIpAddress.where(ip_address: user_ips).where.not(user: user).includes(:user)
+    shared_ips = UserIpAddress.where(ip_address: user_ips).where.not(user: self).includes(:user)
     alt_ip_counts = UserIpAddress.where(user_id: shared_ips.select(:user_id)).group(:user_id).count
 
     shared_ips.group(:user).count.each do |alt, shared_ips_count|
