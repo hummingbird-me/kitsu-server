@@ -313,7 +313,16 @@ class User < ApplicationRecord
   end
 
   def alts
-    UserIpAddress.where(ip_address: ip_addresses.select(:ip_address)).includes(:user).map(&:user)
+    alts = {}
+    user_ips = ip_addresses.select(:ip_address)
+    user_ip_count = user_ips.count
+    shared_ips = UserIpAddress.where(ip_address: user_ips).where.not(user: user).includes(:user)
+    alt_ip_counts = UserIpAddress.where(user_id: shared_ips.select(:user_id)).group(:user_id).count
+
+    shared_ips.group(:user).count.each do |alt, shared_ips_count|
+      alts[alt] = shared_ips_count.to_f / [[user_ip_count, alt_ip_counts[alt.id]].min, 2].max
+    end
+    alts.sort_by { |_, v| v }.reverse
   end
 
   def update_title(_role)

@@ -44,10 +44,16 @@ class UsersController < ApplicationController
   end
 
   def alts
-    user = current_user&.resource_owner
-    return render_jsonapi_error(401, 'Not permitted') unless user&.admin?
+    return render_jsonapi_error(401, 'Not permitted') unless user&.has_role?(:admin, User)
     target_user = User.find(params[:id])
-    alts = target_user.alts.map { |u| { slug: u.slug, name: u.name, id: u.id } }
+    alts = target_user.alts.map do |(u, weight)|
+      {
+        slug: u.slug,
+        name: u.name,
+        id: u.id,
+        weight: weight
+      }
+    end
     render json: alts
   end
 
