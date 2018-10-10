@@ -52,7 +52,7 @@
               </div>
 
               <p class="unsubscribe">
-                This email was sent to <%= @user.email %>.
+                This email was sent to <a href="mailto:<%= @user.email %>"><%= @user.email %></a>.
                 <a class="unsubscribe-link" href="https://kitsu.io/unsubscribe?email=<%= @user.email %>">
                   Unsubscribe
                 </a>
@@ -60,7 +60,7 @@
 
               <p class="copyright">
                 &copy;2018 Kitsu, Inc.<br />
-                2711 Centerville Rd ste 400  Wilmington, DE 19808
+                <a>2711 Centerville Rd ste 400  Wilmington, DE 19808</a>
               </p>
             </td>
           </tr>
