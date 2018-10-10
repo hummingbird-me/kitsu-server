@@ -46,6 +46,7 @@ class UsersController < ApplicationController
   def alts
     return render_jsonapi_error(401, 'Not permitted') unless user&.has_role?(:admin, User)
     target_user = User.find(params[:id])
+    ModeratorActionLog.generate!(user, 'viewed alts', target_user)
     alts = target_user.alts.map do |(u, weight)|
       {
         slug: u.slug,
@@ -60,6 +61,7 @@ class UsersController < ApplicationController
   def ban
     return render_jsonapi_error(401, 'Not permitted') unless user&.has_role?(:admin, User)
     target_user = User.find(params[:id])
+    ModeratorActionLog.generate!(user, 'banned', target_user)
     target_user.add_role(:banned)
     render json: { banned: true }
   end
@@ -67,6 +69,7 @@ class UsersController < ApplicationController
   def unban
     return render_jsonapi_error(401, 'Not permitted') unless user&.has_role?(:admin, User)
     target_user = User.find(params[:id])
+    ModeratorActionLog.generate!(user, 'unbanned', target_user)
     target_user.remove_role(:banned)
     render json: { banned: false }
   end
@@ -74,7 +77,9 @@ class UsersController < ApplicationController
   def destroy_content
     return render_jsonapi_error(401, 'Not permitted') unless user&.has_role?(:admin, User)
     target_user = User.find(params[:id])
-    Array.wrap(params[:kind]).each do |kind|
+    kinds = Array.wrap(params[:kind])
+    ModeratorActionLog.generate!(user, "destroyed #{kinds.join(', ')}", target_user)
+    kinds.each do |kind|
       case kind
       when 'posts'
         target_user.posts.update_all(deleted_at: Time.now)

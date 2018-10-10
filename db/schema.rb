@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180921200713) do
+ActiveRecord::Schema.define(version: 20181010215125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1099,6 +1099,15 @@ ActiveRecord::Schema.define(version: 20180921200713) do
 
   add_index "media_staff", ["media_type", "media_id"], name: "index_media_staff_on_media_type_and_media_id", using: :btree
   add_index "media_staff", ["person_id"], name: "index_media_staff_on_person_id", using: :btree
+
+  create_table "moderator_action_logs", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "target_id",   null: false
+    t.string   "target_type", null: false
+    t.string   "verb",        null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "not_interesteds", force: :cascade do |t|
     t.integer  "user_id"
