@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
   include Rails.application.routes.url_helpers
-  default from: 'hello@kitsu.io'
+  default from: 'Kitsu <help@kitsu.io>'
   layout 'mailer'
 end
