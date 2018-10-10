@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post '/users/_unsubscribe', to: 'users#unsubscribe'
       jsonapi_resources :users
       post '/users/_recover', to: 'users#recover'
+      post '/users/_confirm', to: 'users#confirm'
       get '/users/:id/_strength', to: 'users#profile_strength'
       get '/_flags', to: 'users#flags'
       # Profile data
