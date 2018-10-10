@@ -57,6 +57,35 @@ class UsersController < ApplicationController
     render json: alts
   end
 
+  def ban
+    return render_jsonapi_error(401, 'Not permitted') unless user&.has_role?(:admin, User)
+    target_user = User.find(params[:id])
+    target_user.add_role(:banned)
+    render json: { banned: true }
+  end
+
+  def unban
+    return render_jsonapi_error(401, 'Not permitted') unless user&.has_role?(:admin, User)
+    target_user = User.find(params[:id])
+    target_user.remove_role(:banned)
+    render json: { banned: false }
+  end
+
+  def destroy_content
+    return render_jsonapi_error(401, 'Not permitted') unless user&.has_role?(:admin, User)
+    target_user = User.find(params[:id])
+    Array.wrap(params[:kind]).each do |kind|
+      case kind
+      when 'posts'
+        target_user.posts.update_all(deleted_at: Time.now)
+      when 'comments'
+        target_user.comments.update_all(deleted_at: Time.now)
+      when 'reactions'
+        target_user.media_reactions.update_all(deleted_at: Time.now)
+      end
+    end
+  end
+
   def profile_strength
     user = current_user&.resource_owner
     user_id = params.require(:id).to_i

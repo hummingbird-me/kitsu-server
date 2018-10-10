@@ -14,6 +14,9 @@ Rails.application.routes.draw do
       post '/users/_confirm', to: 'users#confirm'
       get '/users/:id/_strength', to: 'users#profile_strength'
       get '/users/:id/_alts', to: 'users#alts'
+      post '/users/:id/_ban', to: 'users#ban'
+      delete '/users/:id/_ban', to: 'users#unban'
+      post '/users/:id/_nuke', to: 'users#destroy_content'
       get '/_flags', to: 'users#flags'
       # Profile data
       jsonapi_resources :profile_links
