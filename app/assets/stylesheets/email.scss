@@ -49,6 +49,10 @@ a.btn:hover {
   font-size: 14px;
   line-height: 21px;
   padding: 17px 0 30px;
+
+  a {
+    color: $light-purple;
+  }
 }
 
 .app-links {
