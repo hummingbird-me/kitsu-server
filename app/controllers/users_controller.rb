@@ -43,6 +43,14 @@ class UsersController < ApplicationController
     render_jsonapi serialize_model(user)
   end
 
+  def alts
+    user = current_user&.resource_owner
+    return render_jsonapi_error(401, 'Not permitted') unless user&.admin?
+    target_user = User.find(params[:id])
+    alts = target_user.alts.map { |u| { slug: u.slug, name: u.name, id: u.id } }
+    render json: alts
+  end
+
   def profile_strength
     user = current_user&.resource_owner
     user_id = params.require(:id).to_i

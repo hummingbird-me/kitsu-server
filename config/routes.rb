@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       post '/users/_recover', to: 'users#recover'
       post '/users/_confirm', to: 'users#confirm'
       get '/users/:id/_strength', to: 'users#profile_strength'
+      get '/users/:id/_alts', to: 'users#alts'
       get '/_flags', to: 'users#flags'
       # Profile data
       jsonapi_resources :profile_links
