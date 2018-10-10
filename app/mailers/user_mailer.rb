@@ -9,6 +9,7 @@ class UserMailer < ApplicationMailer
   end
 
   def password_reset(user)
+    @user = user
     @token = token_for(user, :email_password_reset, expires_in: 6.hours)
     @reset_link = client_url_for("/password-reset?token=#{@token.token}")
     mail to: user.email, subject: 'Reset your Kitsu password'
