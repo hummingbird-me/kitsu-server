@@ -1,0 +1,11 @@
+.email {
+  @extend .text-body;
+  background-color: $dark-purple;
+  width: 100%;
+}
+
+.column {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}

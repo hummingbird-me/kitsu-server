@@ -1,0 +1,65 @@
+/* Reset */
+
+@import "email/colors";
+@import "email/base";
+@import "email/layout";
+
+a.btn {
+  @extend .animated;
+  background-color: #17A085;
+  color: #fff;
+  border-radius: 56px;
+  display: inline-block;
+  padding: 14px 32px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 24px;
+  margin-bottom: 8px;
+  margin-top: 2px;
+}
+a.btn:hover {
+  transform: scale(1.1);
+}
+
+.logo-cell {
+  text-align: center;
+  padding: 32px 48px 18px;
+}
+
+.section-cell {
+  background: #fff;
+  color: #312731;
+  border-radius: 6px;
+  text-align: center;
+  padding: 32px 24px;
+  line-height: 0;
+}
+
+.section-with-illust > img:first-child {
+  margin: 12px;
+}
+
+.spacer-cell {
+  height: 32px;
+}
+
+.footer-cell {
+  color: #817A8D;
+  text-align: center;
+  font-size: 14px;
+  line-height: 21px;
+  padding: 17px 0 30px;
+}
+
+.app-links {
+  margin-bottom: 16px;
+}
+
+.unsubscribe {
+  margin-bottom: 8px;
+}
+
+.unsubscribe-link {
+  color: $light-purple !important;
+  text-decoration: underline !important;
+}

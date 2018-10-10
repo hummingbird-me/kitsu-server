@@ -1,5 +1,8 @@
 class UserMailer < ApplicationMailer
+  include Roadie::Rails::Automatic
+
   def confirmation(user)
+    @user = user
     @token = token_for(user, :email_confirm, expires_in: 7.days)
     @confirm_link = client_url_for("/confirm-email?token=#{@token.token}")
     mail to: user.email, subject: 'Welcome to Kitsu'
@@ -12,6 +15,13 @@ class UserMailer < ApplicationMailer
   end
 
   private
+
+  def roadie_options
+    super.merge(
+      keep_uninlinable_css: true,
+      url_options: Rails.application.config.action_mailer.default_url_options
+    )
+  end
 
   def token_for(user, scopes, expires_in:)
     scopes = scopes.join(' ') if scopes.is_a?(Array)

@@ -14,6 +14,13 @@ class UsersController < ApplicationController
     render_jsonapi_error(400, 'No user found')
   end
 
+  def confirm
+    token = Doorkeeper::AccessToken.by_token(params[:token])
+    return render_jsonapi_error(403, 'Not Authorized') unless token&.acceptable?(:email_confirm)
+    token.resource_owner.update(confirmed_at: Time.now)
+    render json: { confirmed: true }
+  end
+
   def unsubscribe
     query = params[:email]
     user = User.by_email(query).first

@@ -72,7 +72,9 @@ gem 'paranoia', '~> 2.4' # Faux deletion
 gem 'rack-timeout', github: 'nuckchorris/rack-timeout'
 gem 'ranked-model' # Sortables!
 gem 'rbtrace' # Attach to running ruby processes
+gem 'roadie-rails' # Inline CSS for emails
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
+gem 'sass-rails' # Process SCSS for emails
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
