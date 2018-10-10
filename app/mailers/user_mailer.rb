@@ -5,7 +5,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @token = token_for(user, :email_confirm, expires_in: 7.days)
     @confirm_link = client_url_for("/confirm-email?token=#{@token.token}")
-    mail to: user.email, subject: 'Welcome to Kitsu'
+    mail to: user.email, subject: 'Activate your Account'
   end
 
   def password_reset(user)
