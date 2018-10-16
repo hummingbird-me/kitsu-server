@@ -72,6 +72,7 @@ gem 'paranoia', '~> 2.4' # Faux deletion
 gem 'rack-timeout', github: 'nuckchorris/rack-timeout'
 gem 'ranked-model' # Sortables!
 gem 'rbtrace' # Attach to running ruby processes
+gem 'retriable' # Retry when errors happen
 gem 'roadie-rails' # Inline CSS for emails
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sass-rails' # Process SCSS for emails

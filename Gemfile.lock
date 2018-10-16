@@ -731,6 +731,7 @@ DEPENDENCIES
   rbtrace
   redis (> 3.3.0)
   redis-rails
+  retriable
   rinku
   roadie-rails
   rolify
