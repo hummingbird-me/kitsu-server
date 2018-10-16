@@ -29,7 +29,12 @@ class Stat < ApplicationRecord
   # Gets a user-specific instance of a stat, automatically generating it if it doesn't exist.
   # @return [Stat] the Stat for a user
   def self.for_user(user)
-    where(user: user).first_or_initialize(&:recalculate!)
+    Retriable.retriable(on: {
+      ActiveRecord::RecordNotUnique => nil,
+      ActiveRecord::RecordInvalid => /Type has already been taken/
+    }, max_elapsed_time: 30) do
+      where(user: user).first_or_initialize(&:recalculate!)
+    end
   end
 
   # Provides an overridable place to set default structure for the stats
