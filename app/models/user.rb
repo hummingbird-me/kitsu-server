@@ -121,6 +121,7 @@ class User < ApplicationRecord
 
   enum rating_system: %i[simple advanced regular]
   rolify after_add: :update_title, after_remove: :update_title
+  resourcify
   has_secure_password validations: false
   enum status: %i[unregistered registered aozora]
   update_index('users#user') { self }
