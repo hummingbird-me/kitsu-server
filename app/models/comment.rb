@@ -44,7 +44,7 @@ class Comment < ApplicationRecord
   processable :content, LongPipeline
   embed_links_in :content, to: :embed
 
-  belongs_to :user, required: true, counter_cache: true
+  belongs_to :user, required: true
   belongs_to :post, required: true, counter_cache: true, touch: true
   belongs_to :parent, class_name: 'Comment', required: false,
                       counter_cache: 'replies_count', touch: true
@@ -101,7 +101,10 @@ class Comment < ApplicationRecord
     true
   end
   after_create do
-    user.update_feed_completed!
+    unless user.feed_completed?
+      User.increment_counter(:comments_count, user.id)
+      user.update_feed_completed!
+    end
     # PostFollow.create(user: user, post: post)
   end
 end

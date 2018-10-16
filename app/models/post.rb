@@ -51,7 +51,7 @@ class Post < ApplicationRecord
   update_algolia 'AlgoliaPostsIndex'
   embed_links_in :content, to: :embed
 
-  belongs_to :user, required: true, counter_cache: true
+  belongs_to :user, required: true
   belongs_to :edited_by, class_name: 'User'
   belongs_to :target_user, class_name: 'User'
   belongs_to :target_group, class_name: 'Group'
@@ -155,6 +155,7 @@ class Post < ApplicationRecord
   end
 
   after_create do
+    User.increment_counter(:posts_count, user.id) unless user.posts_count >= 20
     media.trending_vote(user, 2.0) if media.present?
     GroupUnreadFanoutWorker.perform_async(target_group_id, user_id) if target_group.present?
     if community_recommendation.present?
