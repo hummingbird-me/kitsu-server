@@ -27,7 +27,7 @@ class MediaFollowService
     update(progress_was, nil)
   end
 
-  def update(_progress_was = nil, _progress = nil)
+  def update(progress_was = nil, progress = nil)
     return unless Flipper[:media_feeds_old].enabled?(User.current)
     follows_were = progress_was ? follows_for_progress(media, progress_was, limit: 3) : []
     follows = ignored? ? [] : follows_for_progress(media, progress)
