@@ -58,6 +58,7 @@
 #  pro_expires_at              :datetime
 #  profile_completed           :boolean          default(FALSE), not null
 #  rating_system               :integer          default(0), not null
+#  quotes_count                :integer          default(0), not null
 #  ratings_count               :integer          default(0), not null
 #  recommendations_up_to_date  :boolean
 #  rejected_edit_count         :integer          default(0)
