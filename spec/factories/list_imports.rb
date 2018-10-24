@@ -24,9 +24,9 @@
 
 FactoryBot.define do
   factory :list_import do
-    type 'ListImport'
+    type { 'ListImport' }
     user
     strategy { ListImport.strategies.keys.sample }
-    input_text 'xinil'
+    input_text { 'xinil' }
   end
 end

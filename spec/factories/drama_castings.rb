@@ -28,7 +28,7 @@
 
 FactoryBot.define do
   factory :drama_casting do
-    locale 'en'
+    locale { 'en' }
     association :drama_character, factory: :drama_character, strategy: :build
     association :person, factory: :person, strategy: :build
   end

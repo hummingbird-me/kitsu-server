@@ -45,13 +45,13 @@
 FactoryBot.define do
   factory :manga do
     titles { { en_jp: Faker::Name.name } }
-    canonical_title 'en_jp'
+    canonical_title { 'en_jp' }
     average_rating { rand(1.0..100.0) }
     start_date { Faker::Date.backward(10_000) }
 
     trait :categories do
       transient do
-        amount 5
+        amount { 5 }
       end
 
       after(:create) do |manga, evaluator|

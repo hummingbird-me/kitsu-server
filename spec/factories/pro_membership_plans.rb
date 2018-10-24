@@ -21,10 +21,10 @@ FactoryBot.define do
     name { Faker::App.name }
 
     factory :nonrecurring_pro_membership_plan do
-      recurring false
+      recurring { false }
     end
     factory :recurring_pro_membership_plan do
-      recurring true
+      recurring { true }
     end
   end
 end

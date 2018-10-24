@@ -116,10 +116,10 @@ FactoryBot.define do
     end
 
     trait :unregistered do
-      status :unregistered
-      password nil
-      name nil
-      email nil
+      status { :unregistered }
+      password { nil }
+      name { nil }
+      email { nil }
     end
 
     trait :with_avatar do

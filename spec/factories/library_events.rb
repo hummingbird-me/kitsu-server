@@ -33,14 +33,14 @@ FactoryBot.define do
     association :library_entry, strategy: :build
     association :user, strategy: :build
 
-    kind :updated
+    kind { :updated }
 
     trait :with_anime do
-      anime_id 1
+      anime_id { 1 }
     end
 
     trait :with_manga do
-      manga_id 1
+      manga_id { 1 }
     end
   end
 end

@@ -52,20 +52,20 @@
 FactoryBot.define do
   factory :anime do
     titles { { en_jp: Faker::Name.name } }
-    canonical_title 'en_jp'
+    canonical_title { 'en_jp' }
     average_rating { rand(1.0..100.0) }
     subtype { Anime.subtypes.keys.sample }
-    age_rating 'G'
-    episode_length 24
+    age_rating { 'G' }
+    episode_length { 24 }
     start_date { Faker::Date.backward(10_000) }
 
     trait :nsfw do
-      age_rating 'R18'
+      age_rating { 'R18' }
     end
 
     trait :categories do
       transient do
-        amount 5
+        amount { 5 }
       end
 
       after(:create) do |anime, evaluator|
