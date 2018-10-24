@@ -33,6 +33,8 @@ module Media
     has_and_belongs_to_many :categories,
       before_add: :inc_total_media_count,
       before_remove: :dec_total_media_count
+    # Quotes
+    has_many :quotes, as: 'media', dependent: :destroy, inverse_of: :media
     # Cast Info
     has_many :castings, as: 'media'
     has_many :characters,
