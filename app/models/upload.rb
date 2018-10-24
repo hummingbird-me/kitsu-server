@@ -34,7 +34,9 @@ class Upload < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :owner, polymorphic: true
 
-  has_attached_file :content, required: true
+  has_attached_file :content,
+    required: true,
+    original: { convert_options: '-auto-orient -strip' }
 
   scope :orphan, -> {
     where(
