@@ -44,6 +44,11 @@ class UserResource < BaseResource
     context[:current_user]&.resource_owner
   end
 
+  def pinned_post
+    return unless PostPolicy.new(context[:current_user], _model.pinned_post).show?
+    _model.pinned_post
+  end
+
   def _remove
     @model.destroy_later
   end
