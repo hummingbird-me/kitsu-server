@@ -235,6 +235,9 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (~> 0.7)
+    graphiql-rails (1.4.11)
+      railties
+      sprockets-rails
     graphql (1.8.6)
     groupdate (4.0.1)
       activesupport (>= 4.2)
@@ -688,6 +691,7 @@ DEPENDENCIES
   forest_liana
   friendly_id
   google-api-client
+  graphiql-rails
   graphql
   guard
   guard-rspec
