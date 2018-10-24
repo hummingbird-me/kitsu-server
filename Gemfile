@@ -56,6 +56,7 @@ gem 'flipper-ui'
 
 # API Frameworks
 gem 'graphql'
+gem 'graphql-batch'
 gem 'jsonapi-resources', '0.9.0'
 
 # Miscellaneous Utilities
