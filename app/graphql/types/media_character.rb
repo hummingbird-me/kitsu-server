@@ -16,7 +16,7 @@ class Types::MediaCharacter < Types::BaseObject
     null: false,
     description: 'The media'
 
-  field :voices, Types::Voice.connection_type, null: true do
+  field :voices, Types::CharacterVoice.connection_type, null: true do
     description 'The voices of this character'
     argument :locale, [String], required: false
   end
