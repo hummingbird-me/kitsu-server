@@ -32,17 +32,10 @@ class Quote < ApplicationRecord
   # defaults to required: true in Rails 5
   belongs_to :user, required: true, counter_cache: true
   belongs_to :media, required: true, polymorphic: true
-  belongs_to :character, required: true
   has_many :likes, class_name: 'QuoteLike', dependent: :destroy
+  has_many :quote_lines, dependent: :destroy
 
   def stream_activity
-    media.feed.activities.new(
-      content: content,
-      character_id: character_id,
-      updated_at: updated_at,
-      likes_count: likes_count
-    )
+    media.feed.activities.new(media: media)
   end
-
-  validates_presence_of :content
 end

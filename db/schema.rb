@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181010215125) do
+ActiveRecord::Schema.define(version: 20181024211956) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1361,19 +1361,28 @@ ActiveRecord::Schema.define(version: 20181010215125) do
   add_index "quote_likes", ["quote_id"], name: "index_quote_likes_on_quote_id", using: :btree
   add_index "quote_likes", ["user_id"], name: "index_quote_likes_on_user_id", using: :btree
 
-  create_table "quotes", force: :cascade do |t|
-    t.integer  "media_id",                               null: false
-    t.text     "content",                                null: false
-    t.string   "character_name", limit: 255
-    t.integer  "user_id"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.integer  "likes_count",                default: 0, null: false
-    t.integer  "character_id"
-    t.string   "media_type",                             null: false
+  create_table "quote_lines", force: :cascade do |t|
+    t.integer  "quote_id",     null: false
+    t.integer  "character_id", null: false
+    t.integer  "order",        null: false
+    t.string   "content",      null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
-  add_index "quotes", ["character_id"], name: "index_quotes_on_character_id", using: :btree
+  add_index "quote_lines", ["character_id"], name: "index_quote_lines_on_character_id", using: :btree
+  add_index "quote_lines", ["order"], name: "index_quote_lines_on_order", using: :btree
+  add_index "quote_lines", ["quote_id"], name: "index_quote_lines_on_quote_id", using: :btree
+
+  create_table "quotes", force: :cascade do |t|
+    t.integer  "media_id",                null: false
+    t.integer  "user_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "likes_count", default: 0, null: false
+    t.string   "media_type",              null: false
+  end
+
   add_index "quotes", ["media_id", "media_type"], name: "index_quotes_on_media_id_and_media_type", using: :btree
   add_index "quotes", ["media_id"], name: "index_quotes_on_media_id", using: :btree
 
