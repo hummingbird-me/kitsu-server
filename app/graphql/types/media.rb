@@ -1,4 +1,4 @@
-module Types::MediaInterface
+module Types::Media
   include Types::BaseInterface
   description 'A media in the Kitsu database'
 
