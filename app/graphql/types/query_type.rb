@@ -10,9 +10,9 @@ class Types::QueryType < Types::BaseObject
 
   def anime(slug: nil, id: nil)
     if slug
-      Anime.by_slug(slug)
+      ::Anime.by_slug(slug)
     elsif id
-      Anime.find(id)
+      ::Anime.find(id)
     end
   end
 end
