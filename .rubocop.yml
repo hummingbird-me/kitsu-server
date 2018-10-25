@@ -226,6 +226,10 @@ Style/RescueModifier:
   Enabled: true
 Style/SelfAssignment:
   Enabled: true
+Style/ClassAndModuleChildren:
+  Enabled: true
+  Exclude:
+  - app/graphql/**/*
 Layout/SpaceBeforeFirstArg:
   Enabled: true
 Layout/SpaceAfterColon:
