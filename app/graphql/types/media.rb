@@ -85,4 +85,9 @@ module Types::Media
     method: :cover_image,
     null: false,
     description: 'A large banner image for this media'
+
+  # Cast
+  field :characters, Types::MediaCharacter.connection_type,
+    null: true,
+    description: 'The characters who starred in this media'
 end
