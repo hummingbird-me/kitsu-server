@@ -55,6 +55,7 @@ gem 'flipper-redis'
 gem 'flipper-ui'
 
 # API Frameworks
+gem 'graphiql-rails'
 gem 'graphql'
 gem 'graphql-batch'
 gem 'jsonapi-resources', '0.9.0'
@@ -109,7 +110,6 @@ gem 'sinatra' # used by sidekiq/web
 group :development, :test do
   gem 'annotate' # Schema annotations inside model-related files
   gem 'dotenv-rails' # Load default ENV
-  gem 'graphiql-rails' # GraphQL console
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 

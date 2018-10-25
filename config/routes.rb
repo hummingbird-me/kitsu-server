@@ -4,6 +4,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   scope '/api' do
     post '/graphql', to: 'graphql#execute'
+    mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql'
     scope '/edge' do
       ### Users
       # These have to be first since they have precedence
@@ -186,9 +187,6 @@ Rails.application.routes.draw do
       mount Sidekiq::Web => '/sidekiq'
       mount PgHero::Engine => '/pghero'
       mount Flipper::UI.app(Flipper) => '/flipper'
-      if Rails.env.development?
-        mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql'
-      end
     end
     get '/admin', to: 'sessions#redirect'
     get '/sidekiq', to: 'sessions#redirect'
