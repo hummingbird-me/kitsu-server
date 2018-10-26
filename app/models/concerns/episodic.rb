@@ -29,7 +29,7 @@ module Episodic
   end
 
   included do
-    has_many :episodes, as: 'media', dependent: :destroy, inverse_of: 'media'
+    has_many :episodes, -> { order(number: :asc) }, as: 'media', dependent: :destroy, inverse_of: 'media'
     has_many :streaming_links, as: 'media', dependent: :destroy
     alias_attribute :progress_limit, :episode_count
 

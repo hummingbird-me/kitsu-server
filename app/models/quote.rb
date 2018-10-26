@@ -33,7 +33,7 @@ class Quote < ApplicationRecord
   belongs_to :user, required: true, counter_cache: true
   belongs_to :media, required: true, polymorphic: true
   has_many :likes, class_name: 'QuoteLike', dependent: :destroy
-  has_many :lines, class_name: 'QuoteLine', dependent: :destroy
+  has_many :lines, -> { rank(:order) }, class_name: 'QuoteLine', dependent: :destroy
 
   def stream_activity
     media.feed.activities.new(media: media)

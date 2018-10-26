@@ -100,6 +100,6 @@ module Types::Media
     description: 'A list of quotes from this media'
 
   def quotes
-    AssociationLoader.for(Anime, :quotes).load(object)
+    AssociationLoader.for(Anime, :quotes).load(object).then(&:to_a)
   end
 end
