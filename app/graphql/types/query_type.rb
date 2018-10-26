@@ -13,6 +13,8 @@ class Types::QueryType < Types::BaseObject
       ::Anime.by_slug(slug)
     elsif id
       ::Anime.find(id)
+    else
+      ::Anime.all
     end
   end
 end
