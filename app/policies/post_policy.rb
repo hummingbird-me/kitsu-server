@@ -1,12 +1,6 @@
 class PostPolicy < ApplicationPolicy
   include GroupPermissionsHelpers
 
-  def show?
-    return true if is_admin? || is_owner? || member?
-    return !record.nsfw? unless see_nsfw?
-    true
-  end
-
   def update?
     return false unless user
     return false if user.has_role?(:banned)
