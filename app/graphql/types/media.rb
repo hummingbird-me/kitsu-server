@@ -91,9 +91,17 @@ module Types::Media
     null: false,
     description: 'The characters who starred in this media'
 
+  def characters
+    AssociationLoader.for(Anime, :characters).load(object)
+  end
+
   field :staff, Types::MediaStaff.connection_type,
     null: false,
     description: 'The staff members who worked on this media'
+
+  def staff
+    AssociationLoader.for(Anime, :staff).load(object)
+  end
 
   field :quotes, Types::Quote.connection_type,
     null: false,
