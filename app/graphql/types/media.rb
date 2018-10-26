@@ -88,6 +88,10 @@ module Types::Media
 
   # Cast
   field :characters, Types::MediaCharacter.connection_type,
-    null: true,
+    null: false,
     description: 'The characters who starred in this media'
+
+  field :staff, Types::MediaStaff.connection_type,
+    null: false,
+    description: 'The staff members who worked on this media'
 end
