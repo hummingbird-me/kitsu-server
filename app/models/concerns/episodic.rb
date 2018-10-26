@@ -16,11 +16,11 @@ module Episodic
   end
 
   def recalculate_total_length!
-    update(total_length: episodes.sum(:length))
+    update(total_length: episodes.length_total)
   end
 
   def unit(number)
-    episodes.order(number: :asc).offset(number - 1).first if number >= 1
+    episodes.reorder(number: :asc).offset(number - 1).first if number >= 1
   end
 
   def default_progress_limit
@@ -29,7 +29,10 @@ module Episodic
   end
 
   included do
-    has_many :episodes, -> { order(number: :asc) }, as: 'media', dependent: :destroy, inverse_of: 'media'
+    has_many :episodes, -> { order(number: :asc) },
+      as: 'media',
+      dependent: :destroy,
+      inverse_of: 'media'
     has_many :streaming_links, as: 'media', dependent: :destroy
     alias_attribute :progress_limit, :episode_count
 
