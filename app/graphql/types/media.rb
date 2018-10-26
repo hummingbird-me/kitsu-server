@@ -94,4 +94,12 @@ module Types::Media
   field :staff, Types::MediaStaff.connection_type,
     null: false,
     description: 'The staff members who worked on this media'
+
+  field :quotes, Types::Quote.connection_type,
+    null: false,
+    description: 'A list of quotes from this media'
+
+  def quotes
+    AssociationLoader.for(Anime, :quotes).load(object)
+  end
 end
