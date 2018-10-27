@@ -1,4 +1,4 @@
-module Types::MediaInterface
+module Types::Media
   include Types::BaseInterface
   description 'A media in the Kitsu database'
 
@@ -85,4 +85,29 @@ module Types::MediaInterface
     method: :cover_image,
     null: false,
     description: 'A large banner image for this media'
+
+  # Cast
+  field :characters, Types::MediaCharacter.connection_type,
+    null: false,
+    description: 'The characters who starred in this media'
+
+  def characters
+    AssociationLoader.for(Anime, :characters).load(object)
+  end
+
+  field :staff, Types::MediaStaff.connection_type,
+    null: false,
+    description: 'The staff members who worked on this media'
+
+  def staff
+    AssociationLoader.for(Anime, :staff).load(object)
+  end
+
+  field :quotes, Types::Quote.connection_type,
+    null: false,
+    description: 'A list of quotes from this media'
+
+  def quotes
+    AssociationLoader.for(Anime, :quotes).load(object).then(&:to_a)
+  end
 end

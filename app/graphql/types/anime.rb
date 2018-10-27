@@ -1,4 +1,4 @@
 class Types::Anime < Types::BaseObject
-  implements Types::MediaInterface
+  implements Types::Media
   implements Types::EpisodicInterface
 end

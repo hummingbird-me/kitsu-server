@@ -20,8 +20,10 @@ module Types::EpisodicInterface
   end
 
   def episodes(number: nil)
-    episodes = object.episodes
-    episodes = episodes.where(number: number) if number
-    episodes.order(number: :asc)
+    if number
+      object.episodes.where(number: number)
+    else
+      AssociationLoader.for(Anime, :episodes).load(object).then(&:to_a)
+    end
   end
 end
