@@ -1,5 +1,5 @@
 class SentryTracing
-  def trace(key, data)
+  def self.trace(key, data)
     if key.start_with?('execute_query')
       # Set the transaction name based on the operation type and name
       selected_op = data[:query].selected_operation
