@@ -11,9 +11,12 @@ class SentryTracing
         op_name = 'anonymous'
       end
 
-      Raven.context.transaction.push("GraphQL/#{op_type}.#{op_name}")
-      yield
-      Raven.context.transaction.pop
+      begin
+        Raven.context.transaction.push("GraphQL/#{op_type}.#{op_name}")
+        yield
+      ensure
+        Raven.context.transaction.pop
+      end
     else
       yield
     end
