@@ -69,7 +69,8 @@ class Comment < ApplicationRecord
     to << post.user.notifications unless post.user == user
     to << parent&.user&.notifications unless parent&.user == user
     to += mentioned_users.map(&:notifications)
-    if parent.blank?
+    # Only bump for top-level comments made within the first week of OP
+    if parent.blank? && post.created_at > 7.days.ago
       to += post.other_feeds
       to += post.target_timelines
       to << post.target_feed
