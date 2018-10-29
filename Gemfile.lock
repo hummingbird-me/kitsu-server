@@ -25,10 +25,10 @@ GIT
 
 GIT
   remote: https://github.com/oauth-xx/oauth2.git
-  revision: 65749fc9bb76723d3274f30c6fde20cd3f2d7c5a
+  revision: 255bee13a0a4a13c5da9faebbae2e8a28ceff282
   branch: master
   specs:
-    oauth2 (1.4.0)
+    oauth2 (1.4.1)
       faraday (>= 0.8, < 0.16.0)
       jwt (>= 1.0, < 3.0)
       multi_json (~> 1.3)
