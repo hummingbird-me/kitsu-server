@@ -96,7 +96,7 @@ module Zorro
 
       options = []
       options << { '_auth_data_facebook.id' => @ao_facebook_id } if @ao_facebook_id
-      options << { email: /\A\s*#{@email}\s*\z/i } if @email
+      options << { email: @email } if @email
       return nil if options.empty?
 
       Rails.cache.fetch([@email&.downcase, @ao_facebook_id], expires_in: 48.hours) do
