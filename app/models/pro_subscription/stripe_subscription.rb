@@ -15,7 +15,7 @@ class ProSubscription
     before_validation on: :create do
       self.billing_id = Stripe::Subscription.create(
         customer: user.stripe_customer.id,
-        items: [{ plan: 'pro-yearly' }]
+        items: [{ plan: "pro-#{plan}" }]
       ).id
     end
   end
