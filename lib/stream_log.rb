@@ -26,9 +26,11 @@ module StreamLog
   def follow_many(follows, backlog)
     return unless enabled?
     follow_keys = follows.map do |follow|
-      next unless log_follow?(follow[:source], follow[:target])
-      source = rewrite_feed(*follow[:source])
-      target = rewrite_feed(*follow[:target])
+      source = follow[:source].split(':')
+      target = follow[:target].split(':')
+      next unless log_follow?(source, target)
+      source = rewrite_feed(*source)
+      target = rewrite_feed(*target)
       next unless source && target
       follow_key(source, target)
     end
