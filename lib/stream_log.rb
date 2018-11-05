@@ -76,7 +76,7 @@ module StreamLog
     when 'episode_aggr' then ['unit_aggr', "Episode-#{id}"]
     when 'chapter' then ['unit', "Chapter-#{id}"]
     when 'chapter_aggr' then ['unit_aggr', "Chapter-#{id}"]
-    when 'post_comments_aggr', 'private_library', 'post_comments' then nil
+    when 'post_comments_aggr', 'private_library' then nil
     else [group, id]
     end
   end
