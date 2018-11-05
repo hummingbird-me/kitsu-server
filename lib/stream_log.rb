@@ -23,6 +23,21 @@ module StreamLog
     end
   end
 
+  def follow_many(follows, backlog)
+    return unless enabled?
+    follow_keys = follows.map do |follow|
+      next unless log_follow?(follow[:source], follow[:target])
+      source = rewrite_feed(*follow[:source])
+      target = rewrite_feed(*follow[:target])
+      next unless source && target
+      follow_key(source, target)
+    end
+    redis_pool.with do |r|
+      r.srem('unfollow', follow_keys)
+    end
+    client.follow_many(follows, backlog)
+  end
+
   def add_activity(feed, activity)
     activity = activity.deep_dup
     return unless enabled?

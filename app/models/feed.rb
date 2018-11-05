@@ -74,7 +74,7 @@ class Feed
       follow.transform_values { |val| val.is_a?(Array) ? val.join(':') : val }
     end
     client.follow_many(follows, 10)
-    follows.each { |follow| StreamLog.follow(follow[:source], follow[:target]) }
+    StreamLog.follow_many(follows, 10)
   end
 
   def self.client
