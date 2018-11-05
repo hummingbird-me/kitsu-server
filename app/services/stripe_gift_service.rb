@@ -8,7 +8,7 @@ class StripeGiftService
   def call
     Stripe::Charge.create(
       # 1 year of PRO
-      amount: 36_00,
+      amount: 29_99,
       currency: 'usd',
       description: 'Kitsu Pro Gift',
       statement_descriptor: 'Kitsu Pro Gift',
