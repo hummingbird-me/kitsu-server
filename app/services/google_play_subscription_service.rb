@@ -5,18 +5,18 @@ require 'google/apis/androidpublisher_v3'
 class GooglePlaySubscriptionService
   API_KEY = ENV['GOOGLE_PLAY_API_KEY'].freeze
   PACKAGE_NAME = 'com.everfox.animetrackerandroid'
-  SUBSCRIPTION_ID = 'io.kitsu.pro.yearly'
 
-  def initialize(token)
+  def initialize(token, plan)
     @token = token
+    @plan = plan
   end
 
   def cancel
-    api.cancel_purchase_subscription(PACKAGE_NAME, SUBSCRIPTION_ID, @token)
+    api.cancel_purchase_subscription(PACKAGE_NAME, subscription_id, @token)
   end
 
   def subscription_purchase
-    @subscription_purchase ||= api.get_purchase_subscription(PACKAGE_NAME, SUBSCRIPTION_ID, @token)
+    @subscription_purchase ||= api.get_purchase_subscription(PACKAGE_NAME, subscription_id, @token)
   end
   alias_method :validate!, :subscription_purchase
 
@@ -32,5 +32,9 @@ class GooglePlaySubscriptionService
     @api ||= Google::Apis::AndroidpublisherV3::AndroidPublisherService.new.tap do |api|
       api.key = API_KEY
     end
+  end
+
+  def subscription_id
+    "io.kitsu.pro.#{@plan}"
   end
 end
