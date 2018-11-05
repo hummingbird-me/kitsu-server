@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181105191746) do
+ActiveRecord::Schema.define(version: 20181105200940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1299,11 +1299,12 @@ ActiveRecord::Schema.define(version: 20181105191746) do
   add_index "posts", ["media_type", "media_id"], name: "posts_media_type_media_id_idx", using: :btree
 
   create_table "pro_gifts", force: :cascade do |t|
-    t.integer  "from_id",    null: false
-    t.integer  "to_id",      null: false
+    t.integer  "from_id",                null: false
+    t.integer  "to_id",                  null: false
     t.text     "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "length",     default: 0, null: false
   end
 
   create_table "pro_membership_plans", force: :cascade do |t|
