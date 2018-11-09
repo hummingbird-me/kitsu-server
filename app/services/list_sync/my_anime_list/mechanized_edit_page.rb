@@ -15,18 +15,19 @@ module ListSync
       private
 
       def check_authentication!
-        if edit_page.uri.to_s.include?('login.php')
-          raise ListSync::AuthenticationError
-        end
+        raise ListSync::AuthenticationError if edit_page.uri.to_s.include?('login.php')
       end
 
       def edit_page
         return @edit_page if @edit_page
         raise ListSync::NotFoundError unless mal_id
+
         url = "https://myanimelist.net/ownlist/#{media_kind}/#{mal_id}/edit"
         @edit_page = @agent.get(url)
       rescue Mechanize::UnauthorizedError
         raise ListSync::AuthenticationError
+      rescue Mechanize::ResponseCodeError
+        raise ListSync::RemoteError
       end
 
       def csrf_token
