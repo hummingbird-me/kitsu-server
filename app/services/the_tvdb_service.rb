@@ -133,14 +133,16 @@ class TheTvdbService
     duration = media.episode_length&.minutes || 23
 
     IceCube::Schedule.new(start_date, duration: duration) do |s|
+      recurrence = if day_of_week.casecmp('daily').zero?
+                     IceCube::Rule.daily
+                   else
+                     IceCube::Rule.weekly.day(day_of_week.downcase.to_sym)
+                   end
       time = Time.parse(time)
-      s.add_recurrence_rule(
-        IceCube::Rule.weekly
-          .day(day_of_week.downcase.to_sym)
-          .hour_of_day(time.hour)
-          .minute_of_hour(time.min)
-          .count(media.episode_count)
-      )
+      recurrence = recurrence.hour_of_day(time.hour).minute_of_hour(time.min)
+      recurrence = recurrence.count(media.episode_count) if media.episode_count
+
+      s.add_recurrence_rule(recurrence)
     end
   end
 
