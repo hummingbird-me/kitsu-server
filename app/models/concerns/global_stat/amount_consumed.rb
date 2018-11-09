@@ -25,14 +25,14 @@ class GlobalStat < ApplicationRecord
 
     def percentiles_for(field)
       percentiles = (0..1).step(BigDecimal('0.01')).to_a.map(&:to_s)
-      stat_class.pluck(<<-SQL)
+      stat_class.pluck(<<-SQL).first
         percentile_disc(array[#{percentiles.join(',')}])
         WITHIN GROUP (ORDER BY (stats_data->>'#{field}')::integer)
       SQL
     end
 
     def average_for(field)
-      stat_class.average("(stats_data->>'#{field}')::integer")
+      stat_class.average("(stats_data->>'#{field}')::integer").to_f
     end
   end
 end
