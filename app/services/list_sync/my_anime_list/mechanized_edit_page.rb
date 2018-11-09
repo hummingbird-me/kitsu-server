@@ -41,8 +41,12 @@ module ListSync
         form['csrf_token'] = csrf_token
       end
 
+      def mal_mapping
+        @mal_mapping ||= media.mapping_for("myanimelist/#{media_kind}")
+      end
+
       def mal_id
-        @mal_id ||= media.mapping_for("myanimelist/#{media_kind}")&.external_id
+        mal_mapping&.external_id
       end
 
       def media_kind
