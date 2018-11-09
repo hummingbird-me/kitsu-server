@@ -32,7 +32,7 @@ class GlobalStat < ApplicationRecord
     end
 
     def average_for(field)
-      stat_class.average("(stats_data->>'#{field}')")
+      stat_class.average("(stats_data->>'#{field}')::integer")
     end
   end
 end
