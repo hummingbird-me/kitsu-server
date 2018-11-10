@@ -18,7 +18,9 @@ class Stat < ApplicationRecord
       if global_stat
         data['percentiles'] = %w[media units time].each_with_object({}) do |key, out|
           # Find the first percentile with a value above our own
-          out[key] = global_stat.stats_data[key].find_index { |val| val > data[key] }.to_f / 100
+          percentiles = global_stat.stats_data.dig('percentiles', key)
+          next unless percentiles
+          out[key] = percentiles.find_index { |val| val > data[key] }.to_f / 100
         end
       end
       data
