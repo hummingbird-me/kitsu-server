@@ -434,7 +434,7 @@ GEM
       pundit
       rails (>= 4.2.1, < 5.1)
     raabro (1.1.6)
-    rack (1.6.10)
+    rack (1.6.11)
     rack-attack (5.4.0)
       rack (>= 1.0, < 3)
     rack-cors (1.0.2)
