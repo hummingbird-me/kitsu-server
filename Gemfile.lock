@@ -636,6 +636,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.8)
     timecop (0.9.1)
+    tunemygc (1.0.71)
     twitter (6.2.0)
       addressable (~> 2.3)
       buftok (~> 0.2.0)
@@ -767,6 +768,7 @@ DEPENDENCIES
   stripe-ruby-mock
   test_after_commit
   timecop
+  tunemygc
   twitter
   typhoeus
   webmock
