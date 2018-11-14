@@ -13,7 +13,7 @@ class Stat < ApplicationRecord
 
     # Override #stats_data to find the percentile for each stat
     def stats_data
-      data = super
+      data = super || default_data
       # Generate percentile data
       if global_stat
         data['percentiles'] = %w[media units time].each_with_object({}) do |key, out|
