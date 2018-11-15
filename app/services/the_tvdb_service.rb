@@ -31,15 +31,15 @@ class TheTvdbService
     each_mapping do |anime, series_id, season_number|
       begin
         series = get_series(series_id)
-        episodes = get_episodes(series_id, season_number)
+        episodes = get_episodes(series_id, season_number).to_a
       rescue NotFound
         anime.mappings.where(external_id: tvdb_id).first.destroy!
         next
       end
 
       next unless episodes
-
       next if anime.episode_count && (anime.episode_count - episodes.count).abs > 2
+
       if anime.episode_count
         episodes = episodes[0..anime.episode_count - 1] if anime.episode_count
       else
@@ -84,9 +84,9 @@ class TheTvdbService
   def each_mapping
     pluck_mappings(@mappings)['Anime'].each do |(anime_id, tvdb_id)|
       anime = Anime.find(anime_id)
-      series_id, season_number = tvdb_id.split('/')
+      series_id, season_numbers = parse_identifier(tvdb_id)
 
-      yield anime, series_id, season_number
+      yield anime, series_id, season_numbers
     end
   end
 
@@ -100,8 +100,25 @@ class TheTvdbService
         end
   end
 
-  def get_episodes(series_id, season_number)
-    get("/series/#{series_id}/episodes/query?airedSeason=#{season_number || 1}")['data']
+  def get_episodes(series_id, season_numbers)
+    Enumerator.new do |y|
+      page = 1
+      template = Addressable::Template.new('/series/{series_id}/episodes/query{?query*}')
+      season_number = season_numbers if /\A\d+\z/ =~ season_number
+
+      loop do
+        url = template.expand(series_id: series_id, query: {
+          airedSeason: season_number,
+          page: page
+        }.compact)
+        response = get(url)
+        response['data'].each do |row|
+          y << row if season_numbers.include?(row['airedSeason'])
+        end
+        page = response.dig('links', 'next')
+        break unless page
+      end
+    end
   end
 
   def get_series(series_id)
@@ -126,6 +143,24 @@ class TheTvdbService
   end
 
   private
+
+  def parse_identifier(id)
+    series_id, season_numbers = id.split('/')
+    return [series_id, season_numbers] if /\A\d+\z/ =~ season_numbers
+
+    case season_numbers
+    when nil # No season provided
+      [series_id, 1]
+    when /\A\d+\z/ # Single season (8)
+      [series_id, season_numbers.to_i]
+    when /\A\d+-\d+\z/ # Season range (1-7)
+      season_range = Range.new(*season_numbers.split('-').map(&:to_i))
+      [series_id, season_range.to_a]
+    when /\A\d+(,\d+)*\z/ # Season list (1,2,3,4,5)
+      season_list = season_numbers.split(',').map(&:to_i)
+      [series_id, season_list]
+    end
+  end
 
   def parse_schedule(media, day_of_week, time)
     # Go back a day from the supposed start time since it can be wrong
