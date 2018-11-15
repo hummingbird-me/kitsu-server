@@ -2,11 +2,12 @@ class TheTvdbService
   class Row < TheTvdbService
     attr_reader :media, :data, :tvdb_episode_id, :tvdb_series_id
 
-    def initialize(media, data, tvdb_series_id)
+    def initialize(media, data, tvdb_series_id, first_number)
       @media = media
       @data = data
       @tvdb_episode_id = data['id']
       @tvdb_series_id = tvdb_series_id
+      @first_number = first_number
     end
 
     def update_episode
@@ -44,7 +45,7 @@ class TheTvdbService
     end
 
     def relative_number
-      data['airedEpisodeNumber']
+      data['airedEpisodeNumber'] - @first_number + 1 if data['airedEpisodeNumber'].present?
     end
 
     def synopsis

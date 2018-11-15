@@ -126,8 +126,9 @@ class TheTvdbService
   end
 
   def process_episode_data(episodes, media, tvdb_series_id)
+    first_number = episodes.first['airedEpisodeNumber']
     episodes.each do |tvdb_episode|
-      row = Row.new(media, tvdb_episode, tvdb_series_id)
+      row = Row.new(media, tvdb_episode, tvdb_series_id, first_number)
       row.update_episode
     end
   end
