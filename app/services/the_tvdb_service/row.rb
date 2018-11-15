@@ -35,9 +35,7 @@ class TheTvdbService
     end
 
     def number
-      return absolute_number unless absolute_number.blank? || absolute_number&.zero?
-
-      data['airedEpisodeNumber'].presence
+      relative_number
     end
 
     def season_number
