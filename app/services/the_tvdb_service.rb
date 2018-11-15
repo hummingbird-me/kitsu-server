@@ -147,13 +147,12 @@ class TheTvdbService
 
   def parse_identifier(id)
     series_id, season_numbers = id.split('/')
-    return [series_id, season_numbers] if /\A\d+\z/ =~ season_numbers
 
     case season_numbers
     when nil # No season provided
-      [series_id, 1]
+      [series_id, [1]]
     when /\A\d+\z/ # Single season (8)
-      [series_id, season_numbers.to_i]
+      [series_id, [season_numbers.to_i]]
     when /\A\d+-\d+\z/ # Season range (1-7)
       season_range = Range.new(*season_numbers.split('-').map(&:to_i))
       [series_id, season_range.to_a]
