@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181105200940) do
+ActiveRecord::Schema.define(version: 20181115034027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -974,6 +974,7 @@ ActiveRecord::Schema.define(version: 20181105200940) do
     t.string   "item_type",     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "issue"
   end
 
   add_index "mappings", ["external_site", "external_id", "item_type", "item_id"], name: "index_mappings_on_external_and_item", unique: true, using: :btree
