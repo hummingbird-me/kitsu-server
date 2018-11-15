@@ -12,11 +12,15 @@ class TheTvdbService
     def update_episode
       return unless number.present?
 
-      attributes = %i[
-        titles canonical_title number season_number relative_number synopsis thumbnail airdate
-      ].map { |k| [k, public_send(k)] }.to_h.reject { |_, v| v.blank? }
-
-      episode.update(attributes)
+      episode.titles = titles.merge(episode.titles)
+      episode.canonical_title ||= 'en_us'
+      episode.number ||= number
+      episode.season_number ||= season_number
+      episode.relative_number ||= relative_number
+      episode.synopsis ||= synopsis
+      episode.thumbnail = thumbnail if episode.thumbnail.blank?
+      episode.airdate ||= airdate
+      episode
     rescue StandardError => e
       Raven.capture_exception(e)
     end
@@ -31,6 +35,7 @@ class TheTvdbService
 
     def number
       return absolute_number unless absolute_number.blank? || absolute_number&.zero?
+
       data['airedEpisodeNumber'].presence
     end
 
