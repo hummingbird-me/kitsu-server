@@ -21,6 +21,7 @@ class TheTvdbService
       episode.synopsis ||= synopsis
       episode.thumbnail = thumbnail if episode.thumbnail.blank?
       episode.airdate ||= airdate
+      episode.save!
       episode
     rescue StandardError => e
       Raven.capture_exception(e)
