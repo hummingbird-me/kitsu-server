@@ -82,6 +82,12 @@ class Episode < ApplicationRecord
   end
   before_validation do
     self.length = media.episode_length if length.nil?
+
+    # If we have non-default titles, strip the defaults
+    if titles.any? { |_, t| /\AEpisode \d+\z/ !~ t }
+      self.titles = titles.reject { |_, t| /\AEpisode \d+\z/ =~ t }
+      self.canonical_title = titles.keys.find { |t| t =~ /en/ } unless canonical_title
+    end
   end
   after_save { media.recalculate_episode_length! if length_changed? }
   after_destroy { media.recalculate_episode_length! }
