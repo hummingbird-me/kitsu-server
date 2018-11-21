@@ -21,8 +21,8 @@ class ProGift < ApplicationRecord
 
   def duration
     case length
-    when :year then 1.year
-    when :month then 1.month
+    when 'year' then 1.year
+    when 'month' then 1.month
     else 0
     end
   end
