@@ -13,13 +13,13 @@ class StripeGiftService
 
   def call
     Stripe::Charge.create(
-      amount: PRICES[length],
+      amount: PRICES[@length],
       currency: 'usd',
       description: 'Kitsu Pro Gift',
       statement_descriptor: 'Kitsu Pro Gift',
       source: @token,
       metadata: {
-        length: length.to_s,
+        length: @length.to_s,
         gift: true,
         to: @to.id,
         from: @from.id
