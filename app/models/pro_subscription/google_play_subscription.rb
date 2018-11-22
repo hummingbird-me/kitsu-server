@@ -5,7 +5,7 @@ class ProSubscription
     end
 
     def service
-      @service ||= GooglePlaySubscriptionService.new(billing_id)
+      @service ||= GooglePlaySubscriptionService.new(billing_id, plan)
     end
 
     after_destroy do
