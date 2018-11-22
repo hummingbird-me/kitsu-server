@@ -79,7 +79,6 @@ RSpec.describe ProSubscriptionController, type: :controller do
 
     context 'with a valid receipt' do
       it 'should create an AppleSubscription object for me' do
-        p AppleReceiptService
         sign_in user
         stub_receipt_verification(
           latest_receipt_info: {
