@@ -18,12 +18,10 @@ RSpec.describe ProGiftService do
         it 'should update the pro expiry of the user to a year in the future' do
           from = build(:user)
           to = create(:user)
-          Timecop.freeze do
-            expect {
-              ProGiftService.new(from: from, to: to, length: :year).send
-            }.to(change { to.reload.pro_expires_at })
-            expect(to.reload.pro_expires_at).to eq(1.year.from_now)
-          end
+          expect {
+            ProGiftService.new(from: from, to: to, length: :year).send
+          }.to(change { to.reload.pro_expires_at })
+          expect(to.reload.pro_expires_at).to be_within(1.minute).of(1.year.from_now)
         end
       end
 
@@ -31,11 +29,10 @@ RSpec.describe ProGiftService do
         it 'should update the pro expiry of the recipient to a month in the future' do
           from = build(:user)
           to = create(:user)
-          Timecop.freeze do
-            expect {
-              ProGiftService.new(from: from, to: to, length: :month).send
-            }.to(change { to.reload.pro_expires_at }.to(1.month.from_now))
-          end
+          expect {
+            ProGiftService.new(from: from, to: to, length: :month).send
+          }.to(change { to.reload.pro_expires_at })
+          expect(to.reload.pro_expires_at).to be_within(1.minute).of(1.month.from_now)
         end
       end
     end
