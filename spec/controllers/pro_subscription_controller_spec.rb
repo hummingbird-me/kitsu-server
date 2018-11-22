@@ -13,25 +13,38 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should update my default card' do
         sign_in user
         expect {
-          post :stripe, token: stripe_mock.generate_card_token
+          post :stripe, token: stripe_mock.generate_card_token, plan: 'yearly'
         }.to(change { user.stripe_customer.sources.count })
       end
 
       it 'should create a StripeSubscription object for me' do
         sign_in user
         expect {
-          post :stripe, token: stripe_mock.generate_card_token
+          post :stripe, token: stripe_mock.generate_card_token, plan: 'yearly'
         }.to(change { user.pro_subscription })
       end
 
       it 'should return the subscription in JSON' do
         sign_in user
-        post :stripe, token: stripe_mock.generate_card_token
+        post :stripe, token: stripe_mock.generate_card_token, plan: 'yearly'
         expect(Oj.load(response.body)).to match_json_expression(
           user: user.id,
           service: 'stripe',
           plan: 'yearly'
         )
+      end
+
+      context 'and a monthly plan' do
+        before { stripe_mock.create_plan(id: 'pro-monthly') }
+        it 'should return the subscription in JSON with the correct monthly plan value' do
+          sign_in user
+          post :stripe, token: stripe_mock.generate_card_token, plan: 'monthly'
+          expect(Oj.load(response.body)).to match_json_expression(
+            user: user.id,
+            service: 'stripe',
+            plan: 'monthly'
+          )
+        end
       end
     end
 
@@ -40,7 +53,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
         sign_in user
         StripeMock.prepare_card_error(:invalid_number, :update_customer)
         expect {
-          post :stripe, token: stripe_mock.generate_card_token
+          post :stripe, token: stripe_mock.generate_card_token, plan: 'yearly'
         }.not_to(change { user.reload.stripe_customer.default_source })
       end
 
@@ -48,14 +61,14 @@ RSpec.describe ProSubscriptionController, type: :controller do
         sign_in user
         StripeMock.prepare_card_error(:invalid_number, :update_customer)
         expect {
-          post :stripe, token: stripe_mock.generate_card_token
+          post :stripe, token: stripe_mock.generate_card_token, plan: 'yearly'
         }.not_to(change { user.pro_subscription })
       end
 
       it 'should return a 400 error' do
         sign_in user
         StripeMock.prepare_card_error(:invalid_number, :update_customer)
-        post :stripe, token: stripe_mock.generate_card_token
+        post :stripe, token: stripe_mock.generate_card_token, plan: 'monthly'
         expect(response).to have_http_status(400)
       end
     end
@@ -76,7 +89,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
           }
         )
         expect {
-          post :ios, receipt: 'TEST_RECEIPT'
+          post :ios, receipt: 'TEST_RECEIPT', plan: 'yearly'
         }.to(change { user.pro_subscription })
       end
     end
@@ -85,7 +98,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should give an error message' do
         sign_in user
         stub_receipt_verification(status: 21002) # rubocop:disable Style/NumericLiterals
-        post :ios, receipt: 'TEST_RECEIPT'
+        post :ios, receipt: 'TEST_RECEIPT', plan: 'yearly'
         expect(response).to have_http_status(400)
         expect(response.body).to have_jsonapi_error(status: 400, detail: /malformed/i)
       end
@@ -95,7 +108,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should give a bad gateway error' do
         sign_in user
         stub_receipt_verification(status: 21150) # rubocop:disable Style/NumericLiterals
-        post :ios, receipt: 'TEST_RECEIPT'
+        post :ios, receipt: 'TEST_RECEIPT', plan: 'yearly'
         expect(response).to have_http_status(502)
         expect(response.body).to have_jsonapi_error(status: 502, detail: /Failed to connect/i)
       end
@@ -110,14 +123,14 @@ RSpec.describe ProSubscriptionController, type: :controller do
         expect(api).to receive(:get_purchase_subscription)
         sign_in user
         expect {
-          post :google_play, token: 'TEST'
+          post :google_play, token: 'TEST', plan: 'yearly'
         }.to(change { user.pro_subscription })
       end
 
       it 'should return the subscription in JSON' do
         expect(api).to receive(:get_purchase_subscription)
         sign_in user
-        post :google_play, token: 'TEST'
+        post :google_play, token: 'TEST', plan: 'yearly'
         expect(Oj.load(response.body)).to match_json_expression(
           user: user.id,
           service: 'google_play',
@@ -130,7 +143,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should return a bad gateway error' do
         expect(api).to receive(:get_purchase_subscription).and_raise(Google::Apis::ServerError, '')
         sign_in user
-        post :google_play, token: 'TEST'
+        post :google_play, token: 'TEST', plan: 'yearly'
         expect(response).to have_http_status(502)
         expect(response.body).to have_jsonapi_error(status: 502, detail: /went wrong.*Google Play/i)
       end
@@ -140,7 +153,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should return a 400 error' do
         expect(api).to receive(:get_purchase_subscription).and_raise(Google::Apis::ClientError, '')
         sign_in user
-        post :google_play, token: 'TEST'
+        post :google_play, token: 'TEST', plan: 'yearly'
         expect(response).to have_http_status(400)
         expect(response.body).to have_jsonapi_error(status: 400, detail: /client error/i)
       end
@@ -150,7 +163,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
   describe '#destroy' do
     context 'with an Apple subscription' do
       it 'should return a 400 error' do
-        ProSubscription::AppleSubscription.create!(billing_id: 'TEST', user: user)
+        ProSubscription::AppleSubscription.create!(billing_id: 'TEST', user: user, plan: :yearly)
         sign_in user
         delete :destroy
         expect(response).to have_http_status(400)
@@ -164,7 +177,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
         stripe_mock.create_plan(id: 'pro-yearly')
         user.stripe_customer.source = stripe_mock.generate_card_token
         user.stripe_customer.save
-        ProSubscription::StripeSubscription.create!(user: user)
+        ProSubscription::StripeSubscription.create!(user: user, plan: :yearly)
         sign_in user
       end
 
@@ -186,7 +199,11 @@ RSpec.describe ProSubscriptionController, type: :controller do
       include_context 'Stubbed Android Publisher Service'
 
       before do
-        ProSubscription::GooglePlaySubscription.create!(user: user, billing_id: 'TEST')
+        ProSubscription::GooglePlaySubscription.create!(
+          user: user,
+          billing_id: 'TEST',
+          plan: :yearly
+        )
         sign_in user
       end
 
@@ -210,7 +227,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
   describe '#show' do
     context 'with a subscription' do
       it 'should serialize the subscription into JSON' do
-        ProSubscription::AppleSubscription.create!(user: user, billing_id: 'TEST')
+        ProSubscription::AppleSubscription.create!(user: user, billing_id: 'TEST', plan: :yearly)
         sign_in user
         get :show
         expect(Oj.load(response.body)).to match_json_expression(
