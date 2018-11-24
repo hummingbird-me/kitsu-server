@@ -16,7 +16,7 @@ class Feed
   def follow(target, scrollback: 100)
     target = target.write_target if target.respond_to?(:write_target)
     StreamLog.follow(read_target, target)
-    read_feed.follow(*target, activity_copy_limit: scrollback)
+    read_feed.follow(*target, scrollback)
   end
 
   # Follow multiple Feeds, optionally with a scrollback.
