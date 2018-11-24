@@ -1,2 +1,0 @@
-class PrivateLibraryFeed < Feed
-end

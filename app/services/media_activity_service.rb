@@ -39,7 +39,6 @@ class MediaActivityService
       act.actor ||= user
       act.object ||= library_entry
       act.to ||= []
-      act.to << user.library_feed
       act.media ||= media
       act.nsfw ||= media.try(:nsfw?)
       act.foreign_id ||= library_entry

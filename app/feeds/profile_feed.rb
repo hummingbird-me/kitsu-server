@@ -2,10 +2,10 @@ class ProfileFeed < Feed
   prepend FanoutOptional
 
   def write_target
-    ['user', id]
+    ['profile', id]
   end
 
   def read_target
-    ['user_aggr', id]
+    ['profile_aggr', id]
   end
 end

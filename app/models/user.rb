@@ -346,24 +346,12 @@ class User < ApplicationRecord
     @timeline ||= TimelineFeed.new(id)
   end
 
-  def group_timeline
-    @group_timeline ||= GroupTimelineFeed.new(id)
-  end
-
   def notifications
     @notifications ||= NotificationsFeed.new(id)
   end
 
   def site_announcements_feed
     @site_announcements_feed ||= SiteAnnouncementsFeed.new(id)
-  end
-
-  def library_feed
-    @library_feed ||= PrivateLibraryFeed.new(id)
-  end
-
-  def interest_timeline_for(interest)
-    "#{interest.to_s.classify}TimelineFeed".safe_constantize.new(id)
   end
 
   def update_feed_completed
@@ -406,8 +394,6 @@ class User < ApplicationRecord
     profile_feed.setup!
     timeline.setup!
     site_announcements_feed.setup!
-    AnimeTimelineFeed.new(id).setup!
-    MangaTimelineFeed.new(id).setup!
 
     # Automatically join "Kitsu" group
     GroupMember.create!(user: self, group: Group.kitsu) if Group.kitsu
