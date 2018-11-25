@@ -1,11 +1,9 @@
 class ChapterFeed < Feed
-  def read_target
-    ['chapter_aggr', id]
+  def write_target
+    ['unit', "Chapter-#{id}"]
   end
 
-  def self.follows_for_progress(media, progress, limit: 3)
-    return [] unless progress
-    chapter_ids = media.chapters.for_progress(progress).limit(limit).order(number: :desc).ids
-    chapter_ids.map { |id| new(id) }
+  def read_target
+    ['unit_aggr', "Chapter-#{id}"]
   end
 end

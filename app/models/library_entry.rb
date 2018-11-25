@@ -237,22 +237,12 @@ class LibraryEntry < ApplicationRecord
     end
   end
 
-  after_commit on: :update do
-    unless imported
-      if dropped? || on_hold?
-        MediaFollowUpdateWorker.perform_for_entry(self, :destroy, progress_was)
-      else
-        MediaFollowUpdateWorker.perform_for_entry(self, :update, progress_was, progress)
-      end
-    end
-  end
-
   after_commit on: :destroy do
-    MediaFollowUpdateWorker.perform_for_entry(self, :destroy, progress_was)
+    MediaFollowService.new(user, media).destroy
   end
 
   after_commit on: :create do
-    MediaFollowUpdateWorker.perform_for_entry(self, :create, progress) unless imported
+    MediaFollowService.new(user, media).create
   end
 
   after_commit(on: :create, if: :sync_to_mal?) do
