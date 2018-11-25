@@ -31,7 +31,6 @@ class Feed
   # @param keep_history [Boolean] whether to keep the history from the follow
   def unfollow(target, keep_history: false)
     target = target.write_target if target.respond_to?(:write_target)
-    StreamLog.unfollow(read_target, target)
     read_feed.unfollow(*target, keep_history)
   end
 
@@ -50,7 +49,6 @@ class Feed
   # @param activity [#as_json] the JSON of the activity to add to the feed
   def add_activity(activity)
     act = activity.as_json
-    StreamLog.add_activity(write_target, act)
     write_feed.add_activity(act)
   end
 
@@ -58,13 +56,10 @@ class Feed
   # @param activity [#as_json] the JSON of the activity to remove from the feed
   def remove_activity(activity_or_id, foreign_id: false)
     if foreign_id
-      StreamLog.remove_activity(write_target, activity_or_id, foreign_id: true)
       write_feed.remove_activity(activity_or_id, foreign_id: true)
     elsif activity.respond_to(:id)
-      StreamLog.remove_activity(write_target, activity_or_id.id)
       write_feed.remove_activity(activity_or_id.id)
     else
-      StreamLog.remove_activity(write_target, activity_or_id)
       write_feed.remove_activity(activity_or_id)
     end
   end
@@ -97,12 +92,7 @@ class Feed
   end
 
   def read_feed
-    if fresh_feeds?
-      target = StreamLog.rewrite_feed(*read_target)
-      StreamLog.client.feed(*target)
-    else
-      client.feed(*read_target)
-    end
+    client.feed(*read_target)
   end
 
   def group
@@ -114,10 +104,6 @@ class Feed
   end
 
   private
-
-  def fresh_feeds?
-    Flipper[:fresh_feeds].enabled?(User.current) && StreamLog.enabled?
-  end
 
   def auto_follows
     return [] if write_target == read_target

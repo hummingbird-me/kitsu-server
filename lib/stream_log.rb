@@ -1,30 +1,18 @@
 module StreamLog
   module_function
 
-  def unfollow(source, target)
-    return unless enabled?
-    return unless log_follow?(source, target)
-    source = rewrite_feed(*source)
-    target = rewrite_feed(*target)
-    return unless source && target
-    client.feed(*source).unfollow(*target)
-  end
-
   def follow(source, target)
-    return unless enabled?
     return unless log_follow?(source, target)
     source = rewrite_feed(*source)
     target = rewrite_feed(*target)
     return unless source && target
     follow = follow_key(source, target)
-    client.feed(*source).follow(*target)
     redis_pool.with do |r|
       r.srem('unfollow', follow)
     end
   end
 
   def follow_many(follows, backlog)
-    return unless enabled?
     follow_keys = follows.map do |follow|
       source = follow[:source].split(':')
       target = follow[:target].split(':')
@@ -37,34 +25,11 @@ module StreamLog
     redis_pool.with do |r|
       r.srem('unfollow', follow_keys)
     end
-    client.follow_many(follows, backlog)
-  end
-
-  def add_activity(feed, activity)
-    activity = activity.deep_dup
-    return unless enabled?
-    return unless log_activity?(feed, activity)
-    feed = rewrite_feed(*feed)
-    return unless feed
-    activity['to'] = activity['to']&.map { |to| rewrite_feed(*to.split(':'))&.join(':') }&.compact
-    client.feed(*feed).add_activity(activity)
-  end
-
-  def remove_activity(feed, id, foreign_id: false)
-    return unless enabled?
-    feed = rewrite_feed(*feed)
-    return unless feed
-    client.feed(*feed).remove_activity(id, foreign_id)
   end
 
   def log_follow?(source, target)
     return false if %w[episode chapter media].include?(target[0]) && source[0] == 'timeline'
     return false if %w[interest_timeline].include?(source[0])
-    true
-  end
-
-  def log_activity?(_feed, activity)
-    return false if activity['verb'] == 'updated' || activity['verb'] == 'rated'
     true
   end
 
@@ -89,23 +54,9 @@ module StreamLog
     "#{source}->#{target}"
   end
 
-  def enabled?
-    Flipper[:stream_log].enabled?(User.current) && ENV['STREAMLOG_APP_ID'] &&
-      ENV['STREAMLOG_API_KEY'] && ENV['STREAMLOG_APP_ID'] && ENV['STREAMLOG_REDIS_URL']
-  end
-
   def redis_pool
     @redis_pool ||= ConnectionPool.new(size: ENV['RAILS_MAX_THREADS'] || 5) do
       Redis.new(url: ENV['STREAMLOG_REDIS_URL'])
     end
-  end
-
-  def client
-    @client ||= Stream::Client.new(
-      ENV['STREAMLOG_API_KEY'],
-      ENV['STREAMLOG_API_SECRET'],
-      ENV['STREAMLOG_APP_ID'],
-      location: 'us-east'
-    )
   end
 end
