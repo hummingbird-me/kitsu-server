@@ -69,8 +69,7 @@ class Comment < ApplicationRecord
     to << post.user.notifications unless post.user == user
     to << parent&.user&.notifications unless parent&.user == user
     to += mentioned_users.map(&:notifications)
-    # Only bump for top-level comments made within the first week of OP
-    if parent.blank? && post.created_at > 7.days.ago
+    if bump?
       to += post.other_feeds
       to += post.target_timelines
       to << post.target_feed
@@ -87,6 +86,19 @@ class Comment < ApplicationRecord
       mentioned_users: mentioned_users.pluck(:id),
       to: to - [user.notifications]
     )
+  end
+
+  # Should we bump the Post we're replying to?
+  # @return [Boolean] whether to bump
+  def bump?
+    # No bumping for subcomments
+    return false if parent.present?
+    # No bumping for posts older than 2 weeks
+    return false if post.created_at < 14.days.ago
+    # Only bump for 25% of comments on Kitsu-group posts
+    return rand <= 0.25 if post.target_group_id == Group.kitsu.id
+    # Otherwise yeah, bump away my dude
+    true
   end
 
   def mentioned_users
