@@ -53,7 +53,7 @@ class BufferedStreamClient
     # @param id [String,#to_s] the feed id
     # @param activity_copy_limit [Integer] the number of activities to copy
     # @return [Hash] a hash with the execution duration
-    def follow(group, id, activity_copy_limit: 300)
+    def follow(group, id, activity_copy_limit = 300)
       duration do
         @buffer.follow_buffer.push(activity_copy_limit,
           source: "#{@group}:#{@id}",
