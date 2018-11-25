@@ -15,7 +15,9 @@ class Feed
   # @param scrollback [Integer] the number of historical activities to import
   def follow(target, scrollback: 100)
     target = target.write_target if target.respond_to?(:write_target)
-    StreamLog.follow(read_target, target)
+    target = StreamLog.rewrite_feed(*target) if fresh_feeds?
+
+    StreamLog.follow(read_target, target) unless fresh_feeds?
     read_feed.follow(*target, scrollback)
   end
 
@@ -31,7 +33,9 @@ class Feed
   # @param keep_history [Boolean] whether to keep the history from the follow
   def unfollow(target, keep_history: false)
     target = target.write_target if target.respond_to?(:write_target)
-    StreamLog.unfollow(read_target, target)
+    target = StreamLog.rewrite_feed(*target) if fresh_feeds?
+
+    StreamLog.unfollow(read_target, target) unless fresh_feeds?
     read_feed.unfollow(*target, keep_history)
   end
 
@@ -50,7 +54,7 @@ class Feed
   # @param activity [#as_json] the JSON of the activity to add to the feed
   def add_activity(activity)
     act = activity.as_json
-    StreamLog.add_activity(write_target, act)
+    StreamLog.add_activity(write_target, act) unless fresh_feeds?
     write_feed.add_activity(act)
   end
 
@@ -58,13 +62,13 @@ class Feed
   # @param activity [#as_json] the JSON of the activity to remove from the feed
   def remove_activity(activity_or_id, foreign_id: false)
     if foreign_id
-      StreamLog.remove_activity(write_target, activity_or_id, foreign_id: true)
+      StreamLog.remove_activity(write_target, activity_or_id, foreign_id: true) unless fresh_feeds?
       write_feed.remove_activity(activity_or_id, foreign_id: true)
     elsif activity.respond_to(:id)
-      StreamLog.remove_activity(write_target, activity_or_id.id)
+      StreamLog.remove_activity(write_target, activity_or_id.id) unless fresh_feeds?
       write_feed.remove_activity(activity_or_id.id)
     else
-      StreamLog.remove_activity(write_target, activity_or_id)
+      StreamLog.remove_activity(write_target, activity_or_id) unless fresh_feeds?
       write_feed.remove_activity(activity_or_id)
     end
   end
@@ -93,11 +97,16 @@ class Feed
   alias_method :read_target, :default_target
 
   def write_feed
-    client.feed(*write_target)
+    if fresh_feeds?
+      target = StreamLog.rewrite_feed(*write_target)
+      StreamLog.client.feed(*target)
+    else
+      client.feed(*write_target)
+    end
   end
 
   def read_feed
-    if Flipper[:fresh_feeds].enabled?(User.current) && StreamLog.enabled?
+    if fresh_feeds?
       target = StreamLog.rewrite_feed(*read_target)
       StreamLog.client.feed(*target)
     else
@@ -114,6 +123,10 @@ class Feed
   end
 
   private
+
+  def fresh_feeds?
+    Flipper[:fresh_feeds].enabled?(User.current) && StreamLog.enabled?
+  end
 
   def auto_follows
     return [] if write_target == read_target
