@@ -28,7 +28,7 @@ RSpec.describe Feed, type: :model do
         allow(feed).to receive(:read_feed).and_return(read_feed)
         allow(target_feed).to receive(:write_target).and_return(write_target)
 
-        expect(read_feed).to receive(:follow).with(*write_target, activity_copy_limit: 17)
+        expect(read_feed).to receive(:follow).with(*write_target, 17)
         feed.follow(target_feed, scrollback: 17)
       end
     end
@@ -36,7 +36,7 @@ RSpec.describe Feed, type: :model do
     context 'with a feed tuple target' do
       it 'should add a follow from self.read_feed to the target' do
         allow(feed).to receive(:read_feed).and_return(read_feed)
-        expect(read_feed).to receive(:follow).with('foo', 1, activity_copy_limit: 13)
+        expect(read_feed).to receive(:follow).with('foo', 1, 13)
         feed.follow(['foo', 1], scrollback: 13)
       end
     end
