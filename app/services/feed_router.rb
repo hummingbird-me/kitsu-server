@@ -15,11 +15,6 @@ class FeedRouter
     # Timelines
     when 'global' then GlobalFeed.new
     when 'timeline' then TimelineFeed.new(id)
-    when 'interest_timeline'
-      case id
-      when /(\d+)-Anime/ then AnimeTimelineFeed.new($1)
-      when /(\d+)-Manga/ then MangaTimelineFeed.new($1)
-      end
 
     # Profiles
     when 'user', 'user_aggr' then ProfileFeed.new(id)
