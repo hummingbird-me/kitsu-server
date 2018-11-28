@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181125234910) do
+ActiveRecord::Schema.define(version: 20181128040156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,6 +257,7 @@ ActiveRecord::Schema.define(version: 20181125234910) do
     t.datetime "thumbnail_updated_at"
     t.text     "thumbnail_meta"
     t.boolean  "filler"
+    t.integer  "volume_id"
   end
 
   add_index "chapters", ["manga_id"], name: "index_chapters_on_manga_id", using: :btree
@@ -1738,6 +1739,22 @@ ActiveRecord::Schema.define(version: 20181125234910) do
   add_index "videos", ["episode_id"], name: "index_videos_on_episode_id", using: :btree
   add_index "videos", ["streamer_id"], name: "index_videos_on_streamer_id", using: :btree
   add_index "videos", ["sub_lang"], name: "index_videos_on_sub_lang", using: :btree
+
+  create_table "volumes", force: :cascade do |t|
+    t.jsonb    "titles",                 default: {}, null: false
+    t.string   "canonical_title"
+    t.integer  "number",                              null: false
+    t.string   "thumbnail_file_name"
+    t.string   "thumbnail_content_type"
+    t.integer  "thumbnail_file_size"
+    t.datetime "thumbnail_updated_at"
+    t.integer  "chapters_count",         default: 0,  null: false
+    t.integer  "manga_id",                            null: false
+    t.string   "isbn",                   default: [], null: false, array: true
+    t.date     "published_on"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
 
   create_table "votes", force: :cascade do |t|
     t.integer  "target_id",                              null: false

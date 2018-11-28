@@ -29,11 +29,11 @@
 class Chapter < ApplicationRecord
   include Titleable
 
-  belongs_to :manga
+  belongs_to :manga, required: true
+  belongs_to :volume, counter_cache: true
 
   has_attached_file :thumbnail
 
-  validates :manga, presence: true
   validates :number, presence: true
   validates :volume_number, presence: true
   validates_attachment :thumbnail, content_type: {
