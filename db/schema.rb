@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181115034027) do
+ActiveRecord::Schema.define(version: 20181125234910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -242,15 +242,15 @@ ActiveRecord::Schema.define(version: 20181115034027) do
 
   create_table "chapters", force: :cascade do |t|
     t.integer  "manga_id"
-    t.hstore   "titles",                             default: {},      null: false
-    t.string   "canonical_title",                    default: "en_jp", null: false
-    t.integer  "number",                                               null: false
+    t.hstore   "titles",                             default: {}, null: false
+    t.string   "canonical_title"
+    t.integer  "number",                                          null: false
     t.integer  "volume_number"
     t.integer  "length"
     t.text     "synopsis"
     t.date     "published"
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.string   "thumbnail_file_name",    limit: 255
     t.string   "thumbnail_content_type", limit: 255
     t.integer  "thumbnail_file_size"
@@ -466,10 +466,10 @@ ActiveRecord::Schema.define(version: 20181115034027) do
   add_index "dramas_media_attributes", ["media_attribute_id"], name: "index_dramas_media_attributes_on_media_attribute_id", using: :btree
 
   create_table "episodes", force: :cascade do |t|
-    t.integer  "media_id",                                             null: false
+    t.integer  "media_id",                                        null: false
     t.integer  "number"
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.integer  "season_number"
     t.text     "synopsis"
     t.string   "thumbnail_file_name",    limit: 255
@@ -478,9 +478,9 @@ ActiveRecord::Schema.define(version: 20181115034027) do
     t.datetime "thumbnail_updated_at"
     t.date     "airdate"
     t.integer  "length"
-    t.hstore   "titles",                             default: {},      null: false
-    t.string   "canonical_title",                    default: "en_jp", null: false
-    t.string   "media_type",                                           null: false
+    t.hstore   "titles",                             default: {}, null: false
+    t.string   "canonical_title"
+    t.string   "media_type",                                      null: false
     t.integer  "relative_number"
     t.text     "thumbnail_meta"
     t.boolean  "filler"
@@ -1800,8 +1800,6 @@ ActiveRecord::Schema.define(version: 20181115034027) do
   add_foreign_key "posts", "community_recommendations"
   add_foreign_key "posts", "users", column: "target_user_id"
   add_foreign_key "profile_links", "profile_link_sites"
-  add_foreign_key "quote_likes", "quotes"
-  add_foreign_key "quote_likes", "users"
   add_foreign_key "reports", "users", column: "moderator_id"
   add_foreign_key "reposts", "posts"
   add_foreign_key "reposts", "users"

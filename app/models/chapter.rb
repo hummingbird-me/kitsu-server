@@ -46,7 +46,7 @@ class Chapter < ApplicationRecord
 
   def self.create_defaults(count)
     chapters = ((1..count).to_a - pluck(:number)).map do |n|
-      new(number: n, volume_number: 1, titles: { en_jp: "Chapter #{n}" })
+      new(number: n, volume_number: 1)
     end
     transaction { chapters.each(&:save) }
     where("number > #{count}").destroy_all

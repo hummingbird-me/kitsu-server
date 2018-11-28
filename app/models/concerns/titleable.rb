@@ -2,8 +2,10 @@ module Titleable
   extend ActiveSupport::Concern
 
   included do
-    validates :canonical_title, presence: true
-    validate :has_english_title
+    with_options if: ->(obj) { obj.titles.present? } do
+      validates :canonical_title, presence: true
+      validate :has_english_title
+    end
   end
 
   def canonical_title
