@@ -151,10 +151,6 @@ class LibraryEntry < ApplicationRecord
     media.unit(progress + 1)
   end
 
-  def activity
-    MediaActivityService.new(self)
-  end
-
   def kind
     if anime.present? then :anime
     elsif manga.present? then :manga
@@ -216,8 +212,6 @@ class LibraryEntry < ApplicationRecord
   after_save do
     # Disable activities and trending vote on import
     unless imported || private?
-      activity.rating(rating)&.create if rating_changed? && rating.present?
-      activity.status(status)&.create if status_changed?
       media.trending_vote(user, 0.5) if progress_changed?
       media.trending_vote(user, 1.0) if status_changed?
     end
