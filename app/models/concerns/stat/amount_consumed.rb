@@ -8,7 +8,7 @@ class Stat < ApplicationRecord
 
     # The default stats_data values, automatically handled by the Stat superclass
     def default_data
-      { 'media' => 0, 'units' => 0, 'time' => 0 }
+      { 'media' => 0, 'units' => 0, 'time' => 0, 'completed' => 0 }
     end
 
     # Override #stats_data to find the percentile for each stat
@@ -38,6 +38,7 @@ class Stat < ApplicationRecord
       stats_data['media'] = entries.count
       stats_data['units'] = reconsume_units + entries.sum(:progress)
       stats_data['time'] = entries.sum(:time_spent)
+      stats_data['completed'] = entries.completed.count
 
       save!
     end
