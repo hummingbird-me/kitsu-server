@@ -20,7 +20,16 @@ class Stat < ApplicationRecord
           # Find the first percentile with a value above our own
           percentiles = global_stat.stats_data.dig('percentiles', key)
           next unless percentiles && data[key]
+
           out[key] = percentiles.find_index { |val| val > data[key] }.to_f / 100
+        end
+
+        data['averageDiffs'] = %w[media units time].each_with_object({}) do |key, out|
+          # Find the difference from average
+          average = global_stat.stats_data.dig('averages', key)
+          next unless average && data[key]
+
+          out[key] = (data[key] - average) / average
         end
       end
       data
