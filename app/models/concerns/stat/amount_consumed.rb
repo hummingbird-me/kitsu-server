@@ -27,7 +27,7 @@ class Stat < ApplicationRecord
         data['averageDiffs'] = %w[media units time].each_with_object({}) do |key, out|
           # Find the difference from average
           average = global_stat.stats_data.dig('average', key)
-          next unless average && data[key]
+          next unless average && data[key] && average.positive? && data[key].positive?
 
           out[key] = (data[key] - average) / average
         end
