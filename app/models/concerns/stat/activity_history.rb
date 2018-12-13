@@ -22,6 +22,7 @@ class Stat < ApplicationRecord
       time_diff = "greatest(#{time_after} - #{time_before}, 0)"
 
       activity_groups = user.library_events.where("changed_data ? 'progress'")
+                            .by_kind(media_kind)
                             .group(date_trunc)
                             .eager_load(media_kind)
                             .order("#{date_trunc} ASC")
