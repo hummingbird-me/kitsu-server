@@ -96,7 +96,7 @@ class Comment < ApplicationRecord
     # No bumping for posts older than 2 weeks
     return false if post.created_at < 14.days.ago
     # Only bump for 25% of comments on Kitsu-group posts
-    return rand <= 0.25 if post.target_group_id == Group.kitsu.id
+    return rand <= 0.25 if Group.kitsu && post.target_group_id == Group.kitsu.id
     # Otherwise yeah, bump away my dude
     true
   end
