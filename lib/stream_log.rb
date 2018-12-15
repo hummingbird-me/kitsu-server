@@ -28,6 +28,7 @@ module StreamLog
   end
 
   def log_follow?(source, target)
+    return false unless ENV['STREAMLOG_REDIS_URL']
     return false if %w[episode chapter media].include?(target[0]) && source[0] == 'timeline'
     return false if %w[interest_timeline].include?(source[0])
     true
