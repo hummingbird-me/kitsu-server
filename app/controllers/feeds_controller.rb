@@ -68,10 +68,6 @@ class FeedsController < ApplicationController
       return false unless %w[Manga Anime Drama].include?(media_type)
       media = media_type.safe_constantize.find_by(id: media_id)
       media && show?(media)
-    when 'interest_timeline'
-      user_id, interest = params[:id].split('-')
-      return false unless %w[Manga Anime Drama].include?(interest)
-      user_id.to_i == current_user&.resource_owner_id
     when 'user'
       user = User.find_by(id: params[:id])
       user && show?(user)
