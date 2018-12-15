@@ -28,6 +28,7 @@ class BufferedStreamClient
       groups.each do |group|
         follows = next_batch_for(group: group, size: BATCH_SIZE)
         next if follows.empty?
+
         begin
           StreamRails.client.follow_many(follows, group.to_i)
         rescue StandardError

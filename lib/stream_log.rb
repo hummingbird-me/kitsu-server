@@ -2,6 +2,7 @@ module StreamLog
   module_function
 
   def follow(source, target)
+    return false unless ENV['STREAMLOG_REDIS_URL']
     return unless log_follow?(source, target)
     source = rewrite_feed(*source)
     target = rewrite_feed(*target)
@@ -13,6 +14,7 @@ module StreamLog
   end
 
   def follow_many(follows, backlog)
+    return false unless ENV['STREAMLOG_REDIS_URL']
     follow_keys = follows.map do |follow|
       source = follow[:source].split(':')
       target = follow[:target].split(':')
@@ -23,12 +25,11 @@ module StreamLog
       follow_key(source, target)
     end
     redis_pool.with do |r|
-      r.srem('unfollow', follow_keys)
+      r.srem('unfollow', follow_keys) if follow_keys
     end
   end
 
   def log_follow?(source, target)
-    return false unless ENV['STREAMLOG_REDIS_URL']
     return false if %w[episode chapter media].include?(target[0]) && source[0] == 'timeline'
     return false if %w[interest_timeline].include?(source[0])
     true
