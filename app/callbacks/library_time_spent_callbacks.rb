@@ -11,6 +11,6 @@ class LibraryTimeSpentCallbacks < Callbacks
     return unless record.media.respond_to?(:episodes)
 
     diff = LibraryEntryDiff.new(record)
-    record.time_spent += (diff.time_diff / 60)
+    record.time_spent += diff.time_diff
   end
 end

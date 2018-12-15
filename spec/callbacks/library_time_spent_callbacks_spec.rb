@@ -30,14 +30,14 @@ RSpec.describe LibraryTimeSpentCallbacks do
         before do
           entry.progress += 5
           # Set up the chain of entry.media.episodes.for_range(range).sum(:length)
-          allow(entry).to receive_message_chain(:media, :episodes, :for_range, :sum) { 20 * 60 }
+          allow(entry).to receive_message_chain(:media, :episodes, :for_range, :sum) { 123 }
         end
 
-        it 'should increment time_spent' do
+        it 'should increment time_spent by the sum of the episode lengths so far' do
           entry.time_spent = 5
           expect {
             subject.before_save
-          }.to change(entry, :time_spent).by(20)
+          }.to change(entry, :time_spent).by(123)
         end
       end
 
@@ -45,14 +45,14 @@ RSpec.describe LibraryTimeSpentCallbacks do
         before do
           entry.progress -= 5
           # Set up the chain of entry.media.episodes.for_range(range).sum(:length)
-          allow(entry).to receive_message_chain(:media, :episodes, :for_range, :sum) { 20 * 60 }
+          allow(entry).to receive_message_chain(:media, :episodes, :for_range, :sum) { 123 }
         end
 
-        it 'should decrement time_spent' do
+        it 'should decrement time_spent by the sum of the episode lengths so far' do
           entry.time_spent = 25
           expect {
             subject.before_save
-          }.to change(entry, :time_spent).by(-20)
+          }.to change(entry, :time_spent).by(-123)
         end
       end
     end
@@ -65,14 +65,14 @@ RSpec.describe LibraryTimeSpentCallbacks do
           entry.reconsume_count += 2
           # Set up the chain of entry.media.total_length
           allow(entry).to receive_message_chain(:media, :episodes) { [] }
-          allow(entry).to receive_message_chain(:media, :total_length) { 300 * 60 }
+          allow(entry).to receive_message_chain(:media, :total_length) { 12345 }
         end
 
-        it 'should increment time_spent by the total length of the media' do
+        it 'should increment time_spent by the total length of the media times reconsume_count' do
           entry.time_spent = 0
           expect {
             subject.before_save
-          }.to change(entry, :time_spent).by(600)
+          }.to change(entry, :time_spent).by(24690)
         end
       end
 
@@ -81,14 +81,14 @@ RSpec.describe LibraryTimeSpentCallbacks do
           entry.reconsume_count -= 2
           # Set up the chain of entry.media.total_length
           allow(entry).to receive_message_chain(:media, :episodes) { [] }
-          allow(entry).to receive_message_chain(:media, :total_length) { 300 * 60 }
+          allow(entry).to receive_message_chain(:media, :total_length) { 12345 }
         end
 
-        it 'should decrement time_spent by the total length of the media' do
+        it 'should decrement time_spent by the total length of the media times reconsume_count' do
           entry.time_spent = 0
           expect {
             subject.before_save
-          }.to change(entry, :time_spent).by(-600)
+          }.to change(entry, :time_spent).by(-24690)
         end
       end
     end
