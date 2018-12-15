@@ -57,4 +57,8 @@ class Stat < ApplicationRecord
 
   before_validation :reset_data, unless: :stats_data
   after_find :recalculate!, unless: :has_default_keys?
+
+  before_create do
+    self.recalculated_at ||= Time.now
+  end
 end

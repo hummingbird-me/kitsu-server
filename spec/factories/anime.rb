@@ -75,7 +75,7 @@ FactoryBot.define do
 
     trait :with_episodes do
       after(:create) do |anime|
-        anime.episodes = create_list(:episode, anime.episode_count)
+        anime.episodes = create_list(:episode, anime.episode_count, length: anime.episode_length)
       end
     end
   end
