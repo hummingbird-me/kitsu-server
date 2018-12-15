@@ -49,6 +49,8 @@ class Stat < ApplicationRecord
       stats_data['time'] = entries.sum(:time_spent)
       stats_data['completed'] = entries.completed.count
 
+      self.recalculated_at = Time.now
+
       save!
     end
 

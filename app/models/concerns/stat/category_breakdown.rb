@@ -20,6 +20,8 @@ class Stat < ApplicationRecord
       stats_data['categories'] = categories
       stats_data['total'] = library_entries.count
 
+      self.recalculated_at = Time.now
+
       save!
     end
 

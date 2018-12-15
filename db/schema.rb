@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181128040156) do
+ActiveRecord::Schema.define(version: 20181215004955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1503,11 +1503,12 @@ ActiveRecord::Schema.define(version: 20181128040156) do
   end
 
   create_table "stats", force: :cascade do |t|
-    t.integer  "user_id",                 null: false
-    t.string   "type",                    null: false
-    t.jsonb    "stats_data", default: {}, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "user_id",                      null: false
+    t.string   "type",                         null: false
+    t.jsonb    "stats_data",      default: {}, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.datetime "recalculated_at",              null: false
   end
 
   add_index "stats", ["type", "user_id"], name: "index_stats_on_type_and_user_id", unique: true, using: :btree
