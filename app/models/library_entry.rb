@@ -165,10 +165,6 @@ class LibraryEntry < ApplicationRecord
     update(time_spent: new_time_spent)
   end
 
-  LibraryTimeSpentCallbacks.hook(self)
-  LibraryStatCallbacks.hook(self)
-  LibraryEventCallbacks.hook(self)
-
   before_validation do
     # TEMPORARY: If media is set, copy it to kind_id, otherwise if kind_id is
     # set, copy it to media!
@@ -230,6 +226,10 @@ class LibraryEntry < ApplicationRecord
       media.update_unit_count_guess(guess)
     end
   end
+
+  LibraryTimeSpentCallbacks.hook(self)
+  LibraryStatCallbacks.hook(self)
+  LibraryEventCallbacks.hook(self)
 
   after_commit on: :destroy do
     MediaFollowService.new(user, media).destroy
