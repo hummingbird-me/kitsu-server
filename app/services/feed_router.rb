@@ -27,7 +27,7 @@ class FeedRouter
     when 'group', 'group_aggr' then GroupFeed.new(id)
 
     # Reports
-    when 'reports' then ReportsFeed.new(id)
+    when 'reports', 'reports_aggr' then ReportsFeed.new(id)
     end
   end
 end
