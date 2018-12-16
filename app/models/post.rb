@@ -91,10 +91,7 @@ class Post < ApplicationRecord
 
   def other_feeds
     feeds = []
-    feeds << InterestGlobalFeed.new(target_interest) if target_interest
-    if user.share_to_global? && target_user.blank? && target_group.blank?
-      feeds << GlobalFeed.new
-    end
+    feeds << GlobalFeed.new if user.share_to_global? && target_user.blank? && target_group.blank?
     # Limit media-feed fanout when targeting a unit
     feeds << (spoiled_unit ? media&.feed&.no_fanout : media&.feed)
     feeds << spoiled_unit&.feed
