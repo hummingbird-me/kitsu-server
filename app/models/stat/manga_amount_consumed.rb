@@ -34,7 +34,7 @@ class Stat < ApplicationRecord
     end
 
     def global_stat
-      GlobalStat::MangaAmountConsumed.first
+      @global_stat ||= GlobalStat::MangaAmountConsumed.first
     end
   end
 end
