@@ -16,7 +16,7 @@ class PostgresSequenceFixer
   end
 
   def run
-    execute(<<-SQL)
+    execute(<<-SQL) if info
       SELECT SETVAL(
         '#{info[:sequence]}',
         COALESCE(MAX(#{info[:column]}), 1)
@@ -26,7 +26,7 @@ class PostgresSequenceFixer
   end
 
   def info
-    execute(<<-SQL).first.symbolize_keys
+    execute(<<-SQL).first&.symbolize_keys
       SELECT
         S.relname AS sequence,
         C.attname AS column,
