@@ -2,8 +2,6 @@ class Stat < ApplicationRecord
   # A common base for both the anime and manga amount-consumed stats.  In future, as we add more
   # media types, this is gonna be handy.
   module AmountConsumed
-    RECALCULATION_CHANCE = 0.1
-
     extend ActiveSupport::Concern
 
     # The default stats_data values, automatically handled by the Stat superclass
@@ -70,12 +68,9 @@ class Stat < ApplicationRecord
         stats_data['units'] -= entry.reconsume_count * (entry.media.send(unit_count) || 0)
       end
       stats_data['time'] -= entry.time_spent
+      stats_data['completed'] -= 1 if entry.completed_at_least_once?
 
-      if should_recalculate?
-        recalculate!
-      else
-        save!
-      end
+      save_or_recalculate!
     end
 
     # @param entry [LibraryEntry] an entry that was updated
@@ -86,6 +81,17 @@ class Stat < ApplicationRecord
       stats_data['units'] += diff.reconsume_diff * (entry.media.send(unit_count) || 0)
       stats_data['time'] += diff.time_diff
 
+      stats_data['completed'] += if entry.became_uncompleted? then -1
+                                 elsif entry.became_completed? then +1
+                                 else 0
+                                 end
+
+      save_or_recalculate!
+    end
+
+    private
+
+    def save_or_recalculate!
       if should_recalculate?
         recalculate!
       else
@@ -93,10 +99,8 @@ class Stat < ApplicationRecord
       end
     end
 
-    private
-
     def should_recalculate?
-      rand <= RECALCULATION_CHANCE || %w[units time media].any? { |k| stats_data[k].negative? }
+      %w[units time media].any? { |k| stats_data[k].negative? }
     end
 
     # @return [String] the column for the media unit count

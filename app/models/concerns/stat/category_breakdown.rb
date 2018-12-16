@@ -12,9 +12,8 @@ class Stat < ApplicationRecord
     # Recalculate this entire statistic from scratch
     # @return [self]
     def recalculate!
-      library_entries = user.library_entries.completed.by_kind(media_kind)
-      categories = library_entries.joins(media_kind => :categories)
-                                  .group(:category_id).count
+      library_entries = user.library_entries.completed_at_least_once.by_kind(media_kind)
+      categories = library_entries.joins(media_kind => :categories).group(:category_id).count
 
       self.stats_data = {}
       stats_data['categories'] = categories
@@ -25,28 +24,33 @@ class Stat < ApplicationRecord
       save!
     end
 
-    # @param [LibraryEntry] a media to increment the categories of
+    # @param [LibraryEntry] a dirty library entry to update the categories based on
     # @return [void]
     def on_create(entry)
-      stats_data['total'] += 1
+      on_update(entry)
+    end
 
-      entry.media.categories.each do |category|
-        stats_data['categories'][category.id] ||= 0
-        stats_data['categories'][category.id] += 1
-      end
+    # @param [LibraryEntry] a dirty library entry to update the categories based on
+    # @return [void]
+    def on_destroy(entry)
+      return unless entry.completed_at_least_once?
+
+      stats_data['total'] -= 1
+      update_categories_for(entry.media, by: -1)
 
       save!
     end
 
-    # @param [LibraryEntry] a media to decrement the categories of
+    # @param [LibraryEntry] a dirty library entry to update the categories based on
     # @return [void]
-    def on_destroy(entry)
-      stats_data['total'] -= 1
+    def on_update(entry)
+      change = if entry.became_completed? then +1
+               elsif entry.became_uncompleted? then -1
+               else 0
+               end
 
-      entry.media.categories.each do |category|
-        stats_data['categories'][category.id] ||= 0
-        stats_data['categories'][category.id] -= 1
-      end
+      stats_data['total'] += change
+      update_categories_for(entry.media, by: change)
 
       save!
     end
@@ -60,6 +64,17 @@ class Stat < ApplicationRecord
       data['categories'].select! { |category, _| category.parent_id == 228 }
       data['categories'].transform_keys!(&:title)
       data
+    end
+
+    # Increment or decrement the categories for a media by a given quantity
+    # @param media [Media,#categories] the media whose categories to update
+    # @param by [Integer] the number to update the categories by
+    # @return [void]
+    def update_categories_for(media, by: 0)
+      media.categories.each do |category|
+        stats_data['categories'][category.id] ||= 0
+        stats_data['categories'][category.id] += by
+      end
     end
 
     included do
