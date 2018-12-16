@@ -30,6 +30,10 @@ class BufferedStreamClient
         next if follows.empty?
 
         begin
+          # TODO: remove this
+          follows = follows.map do |follow|
+            follow.merge('target' => follow['target'].sub('user:', 'profile:'))
+          end
           StreamRails.client.follow_many(follows, group.to_i)
         rescue StandardError
           return_batch_to(follows, group: group)

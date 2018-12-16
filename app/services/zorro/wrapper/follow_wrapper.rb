@@ -25,7 +25,7 @@ module Zorro
         follows.each do |(follower_id, followed_id)|
           Feed.client.follow_many([{
             source: "timeline:#{follower_id}",
-            target: "user:#{followed_id}"
+            target: "profile:#{followed_id}"
           }], 50)
         end
       end
