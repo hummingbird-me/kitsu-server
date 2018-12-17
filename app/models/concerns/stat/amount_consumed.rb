@@ -45,7 +45,7 @@ class Stat < ApplicationRecord
       stats_data['media'] = entries.count
       stats_data['units'] = reconsume_units + entries.sum(:progress)
       stats_data['time'] = entries.sum(:time_spent)
-      stats_data['completed'] = entries.completed.count
+      stats_data['completed'] = entries.completed_at_least_once.count
 
       self.recalculated_at = Time.now
 
@@ -81,8 +81,8 @@ class Stat < ApplicationRecord
       stats_data['units'] += diff.reconsume_diff * (entry.media.send(unit_count) || 0)
       stats_data['time'] += diff.time_diff
 
-      stats_data['completed'] += if entry.became_uncompleted? then -1
-                                 elsif entry.became_completed? then +1
+      stats_data['completed'] += if diff.became_uncompleted? then -1
+                                 elsif diff.became_completed? then +1
                                  else 0
                                  end
 

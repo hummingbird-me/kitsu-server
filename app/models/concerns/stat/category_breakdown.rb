@@ -44,8 +44,9 @@ class Stat < ApplicationRecord
     # @param [LibraryEntry] a dirty library entry to update the categories based on
     # @return [void]
     def on_update(entry)
-      change = if entry.became_completed? then +1
-               elsif entry.became_uncompleted? then -1
+      diff = LibraryEntryDiff.new(entry)
+      change = if diff.became_completed? then +1
+               elsif diff.became_uncompleted? then -1
                else 0
                end
 

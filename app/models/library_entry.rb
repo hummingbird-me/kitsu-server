@@ -124,17 +124,6 @@ class LibraryEntry < ApplicationRecord
   end
   scope :completed_at_least_once, -> { completed.or(where('reconsume_count > ?', 0)) }
 
-  # Logical actual completion (counts rewatches as completed)
-  def became_uncompleted?
-    return false unless status_was == 'completed' || reconsume_count_was&.positive?
-    return true unless status == 'completed' || reconsume_count&.positive?
-  end
-
-  def became_completed?
-    return false if status_was == 'completed' || reconsume_count_was&.positive?
-    return true if status == 'completed' || reconsume_count&.positive?
-  end
-
   def completed_at_least_once?
     completed? || reconsume_count&.positive?
   end

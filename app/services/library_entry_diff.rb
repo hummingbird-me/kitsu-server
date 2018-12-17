@@ -23,6 +23,18 @@ class LibraryEntryDiff
     progress_time_diff + reconsume_time_diff
   end
 
+  # @return [Boolean] whether the entry has moved from completed to not
+  def became_uncompleted?
+    return false unless @entry.status_was == 'completed' || @entry.reconsume_count_was&.positive?
+    return true unless @entry.status == 'completed' || @entry.reconsume_count&.positive?
+  end
+
+  # @return [Boolean] whether the entry has moved to completed
+  def became_completed?
+    return false if @entry.status_was == 'completed' || @entry.reconsume_count_was&.positive?
+    return true if @entry.status == 'completed' || @entry.reconsume_count&.positive?
+  end
+
   private
 
   # @return [Integer] the time difference caused by the progress change
