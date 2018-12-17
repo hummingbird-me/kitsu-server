@@ -26,7 +26,7 @@ require 'rails_helper'
 RSpec.describe Stat::CategoryBreakdown do
   let(:user) { create(:user) }
   let(:anime) { create(:anime, :categories) }
-  let(:entry) { create(:library_entry, user: user, anime: anime, status: :completed) }
+  let(:entry) { build(:library_entry, user: user, media: anime, status: :completed) }
   let!(:stat) { Stat::AnimeCategoryBreakdown.for_user(user) }
 
   describe '#default_data' do
