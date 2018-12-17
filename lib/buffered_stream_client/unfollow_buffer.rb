@@ -20,7 +20,7 @@ class BufferedStreamClient
     def flush_batch
       # TODO: switch to unfollow-many
       unfollows = next_batch_for(size: 3)
-      return unless unfollows.blank?
+      return if unfollows.blank?
       begin
         unfollows.each do |unfollow|
           source = unfollow['source'].split(':')
