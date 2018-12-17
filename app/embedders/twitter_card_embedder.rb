@@ -4,7 +4,7 @@ class TwitterCardEmbedder < Embedder
       kind: kind,
       url: url,
       title: card('title'),
-      description: card['description'],
+      description: card('description'),
       site: {
         name: card('site')
       },
