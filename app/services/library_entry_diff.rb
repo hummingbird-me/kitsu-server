@@ -43,7 +43,7 @@ class LibraryEntryDiff
 
     progress_was = @entry.progress_was || 0
     action, range = if progress_diff.positive?
-                      [:+, (progress_was...@entry.progress)]
+                      [:+, (progress_was..@entry.progress)]
                     elsif progress_diff.negative?
                       [:-, ((@entry.progress + 1)..@entry.progress_was)]
                     end
