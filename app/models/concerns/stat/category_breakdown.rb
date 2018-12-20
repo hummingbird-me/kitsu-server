@@ -12,7 +12,8 @@ class Stat < ApplicationRecord
     # Recalculate this entire statistic from scratch
     # @return [self]
     def recalculate!
-      library_entries = user.library_entries.completed_at_least_once.by_kind(media_kind)
+      library_entries = user.library_entries.completed_at_least_once.privacy(:public)
+                            .by_kind(media_kind)
       categories = library_entries.joins(media_kind => :categories).group(:category_id).count
 
       self.stats_data = {}
