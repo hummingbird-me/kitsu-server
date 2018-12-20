@@ -34,6 +34,7 @@ class Stat < ApplicationRecord
     # @param [LibraryEntry] a dirty library entry to update the categories based on
     # @return [void]
     def on_destroy(entry)
+      return if entry.private?
       return unless entry.completed_at_least_once?
 
       stats_data['total'] -= 1
@@ -45,6 +46,8 @@ class Stat < ApplicationRecord
     # @param [LibraryEntry] a dirty library entry to update the categories based on
     # @return [void]
     def on_update(entry)
+      return if entry.private?
+
       diff = LibraryEntryDiff.new(entry)
       change = if diff.became_completed? then +1
                elsif diff.became_uncompleted? then -1
