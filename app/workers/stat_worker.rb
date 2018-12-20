@@ -33,6 +33,8 @@ class StatWorker
   # @see #perform
   def self.perform_async(stat, user, action, model)
     attributes = model.attributes
+    # Destruction doesn't set the update time which we need to account for recalculation
+    attributes['updated_at'] = Time.now if action.to_s == 'destroy'
     changes = model.changes
     super(stat, user.id, action, { class: model.class.name, attributes: attributes }, changes)
   end
