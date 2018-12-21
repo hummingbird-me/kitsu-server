@@ -103,6 +103,14 @@ module Types::Media
     AssociationLoader.for(Anime, :staff).load(object)
   end
 
+  field :productions, Types::MediaProduction.connection_type,
+    null: false,
+    description: 'The companies which helped to produce this media'
+
+  def productions
+    AssociationLoader.for(Anime, :productions).load(object)
+  end
+
   field :quotes, Types::Quote.connection_type,
     null: false,
     description: 'A list of quotes from this media'
