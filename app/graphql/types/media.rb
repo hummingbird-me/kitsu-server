@@ -63,6 +63,10 @@ module Types::Media
     null: false,
     description: 'The current releasing status of this media'
 
+  field :season, Types::ReleaseSeason,
+    null: false,
+    description: 'The season this was released in'
+
   # User Ratings
   field :average_rating, Float,
     null: true,
