@@ -77,8 +77,9 @@ class Stat < ApplicationRecord
     # @return [void]
     def update_categories_for(media, by: 0)
       media.categories.each do |category|
-        stats_data['categories'][category.id] ||= 0
-        stats_data['categories'][category.id] += by
+        category_id = category.id.to_s
+        stats_data['categories'][category_id] ||= 0
+        stats_data['categories'][category_id] += by
       end
     end
 
