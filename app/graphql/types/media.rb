@@ -64,7 +64,7 @@ module Types::Media
     description: 'The current releasing status of this media'
 
   field :season, Types::ReleaseSeason,
-    null: false,
+    null: true,
     description: 'The season this was released in'
 
   # User Ratings
