@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181215004955) do
+ActiveRecord::Schema.define(version: 20181225023100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20181215004955) do
     t.text     "cover_image_meta"
     t.integer  "total_length"
     t.text     "release_schedule"
+    t.string   "original_locale"
   end
 
   add_index "anime", ["age_rating"], name: "index_anime_on_age_rating", using: :btree
@@ -924,6 +925,7 @@ ActiveRecord::Schema.define(version: 20181215004955) do
     t.text     "poster_image_meta"
     t.text     "cover_image_meta"
     t.text     "release_schedule"
+    t.string   "original_locale"
   end
 
   add_index "manga", ["average_rating"], name: "manga_average_rating_idx", using: :btree
