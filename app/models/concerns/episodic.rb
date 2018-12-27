@@ -37,5 +37,9 @@ module Episodic
     alias_attribute :progress_limit, :episode_count
 
     validates :episode_count, numericality: { greater_than: 0 }, allow_nil: true
+
+    after_save do
+      episodes.where(length: nil).update_all(length: episode_length) if episode_length_changed?
+    end
   end
 end
