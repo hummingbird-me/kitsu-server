@@ -5,10 +5,7 @@ class GraphqlController < ApplicationController
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
-    }
+    context = { token: current_user, user: current_user&.resource_owner }
     result = KitsuSchema.execute(query,
       variables: variables,
       context: context,
