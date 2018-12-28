@@ -15,6 +15,17 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
+  field :global_trending, Types::Media.connection_type, null: false do
+    description 'List trending media on all of Kitsu'
+    argument :medium, String, required: true
+  end
+
+  def global_trending(medium:)
+    raise GraphQL::ExecutionError, 'Unknown medium' unless %w[Anime Manga].include?(medium)
+
+    TrendingService.new(medium, token: context[:token]).get(10)
+  end
+
   field :find_profile, Types::Profile, null: true do
     description 'Find a single user in the Kitsu database by slug or ID'
     argument :slug, String, required: false
