@@ -40,6 +40,10 @@ class UserResource < BaseResource
     _model.password_digest.present?
   end
 
+  def life_spent_on_anime
+    0
+  end
+
   def self.attribute_caching_context(context)
     context[:current_user]&.resource_owner
   end
