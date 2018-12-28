@@ -123,7 +123,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.4)
     connection_pool (2.2.2)
     counter_culture (1.11.0)
       activerecord (>= 3.0.0)
@@ -426,7 +426,7 @@ GEM
     puma_worker_killer (0.1.0)
       get_process_mem (~> 0.2)
       puma (>= 2.7, < 4)
-    pundit (1.1.0)
+    pundit (2.0.0)
       activesupport (>= 3.0.0)
     pundit-resources (1.1.1)
       activesupport
