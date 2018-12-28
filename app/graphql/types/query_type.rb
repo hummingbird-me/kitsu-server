@@ -1,7 +1,4 @@
 class Types::QueryType < Types::BaseObject
-  # Add root-level fields here.
-  # They will be entry points for queries on your schema.
-
   field :anime, Types::Anime.connection_type, null: false do
     description 'Anime in the Kitsu database'
     argument :slug, [String], required: false
@@ -15,6 +12,20 @@ class Types::QueryType < Types::BaseObject
       ::Anime.find(id)
     else
       ::Anime.all
+    end
+  end
+
+  field :find_profile, Types::Profile, null: true do
+    description 'Find a single user in the Kitsu database by slug or ID'
+    argument :slug, String, required: false
+    argument :id, String, required: false
+  end
+
+  def find_profile(slug: nil, id: nil)
+    if slug
+      ::User.find_by_slug(slug)
+    elsif id
+      ::User.find_by_id(id)
     end
   end
 end

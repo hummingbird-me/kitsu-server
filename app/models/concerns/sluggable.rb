@@ -21,5 +21,9 @@ module Sluggable
     rescue
       none
     end
+
+    def find_by_slug(slug)
+      friendly.find(slug)
+    end
   end
 end
