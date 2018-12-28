@@ -1,5 +1,6 @@
 module Types::Media
   include Types::BaseInterface
+  orphan_types Types::Manga, Types::Anime
   description 'A media in the Kitsu database'
 
   # Identifiers
