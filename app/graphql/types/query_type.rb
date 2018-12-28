@@ -51,4 +51,18 @@ class Types::QueryType < Types::BaseObject
       ::User.find_by_id(id)
     end
   end
+
+  field :find_character, Types::Character, null: true do
+    description 'Find a Character in the Kitsu database by slug or ID'
+    argument :slug, String, required: false
+    argument :id, String, required: false
+  end
+
+  def find_character(slug: nil, id: nil)
+    if slug
+      ::Character.find_by_slug(slug)
+    elsif id
+      ::Character.find_by_id(id)
+    end
+  end
 end
