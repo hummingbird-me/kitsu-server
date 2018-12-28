@@ -83,7 +83,7 @@ RSpec.describe Stat::CategoryBreakdown do
     it 'should decrement each category for the media' do
       category_count = anime.categories.count
       anime.categories.each do |category|
-        stat.stats_data['categories'][category.id] = 10
+        stat.stats_data['categories'][category.id.to_s] = 10
       end
 
       expect {
