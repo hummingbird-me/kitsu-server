@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181225023100) do
+ActiveRecord::Schema.define(version: 20181228000602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1607,79 +1607,60 @@ ActiveRecord::Schema.define(version: 20181225023100) do
   add_index "user_ip_addresses", ["user_id"], name: "index_user_ip_addresses_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                       limit: 255, default: ""
-    t.string   "name",                        limit: 255
-    t.string   "password_digest",             limit: 255, default: ""
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                           default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.datetime "created_at",                                                    null: false
-    t.datetime "updated_at",                                                    null: false
-    t.boolean  "recommendations_up_to_date"
-    t.string   "avatar_file_name",            limit: 255
-    t.string   "avatar_content_type",         limit: 255
+    t.string   "email",                     limit: 255, default: ""
+    t.string   "name",                      limit: 255
+    t.string   "password_digest",           limit: 255, default: ""
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.string   "avatar_file_name",          limit: 255
+    t.string   "avatar_content_type",       limit: 255
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.string   "facebook_id",                 limit: 255
-    t.string   "bio",                         limit: 140, default: "",          null: false
-    t.boolean  "sfw_filter",                              default: true
-    t.string   "mal_username",                limit: 255
-    t.integer  "life_spent_on_anime",                     default: 0,           null: false
-    t.string   "about",                       limit: 500, default: "",          null: false
+    t.string   "facebook_id",               limit: 255
+    t.boolean  "sfw_filter",                            default: true
+    t.string   "mal_username",              limit: 255
+    t.string   "about",                     limit: 500, default: "",          null: false
     t.datetime "confirmed_at"
-    t.string   "cover_image_file_name",       limit: 255
-    t.string   "cover_image_content_type",    limit: 255
+    t.string   "cover_image_file_name",     limit: 255
+    t.string   "cover_image_content_type",  limit: 255
     t.integer  "cover_image_file_size"
     t.datetime "cover_image_updated_at"
-    t.string   "title_language_preference",   limit: 255, default: "canonical"
-    t.integer  "followers_count",                         default: 0
-    t.integer  "following_count",                         default: 0
-    t.boolean  "ninja_banned",                            default: false
-    t.datetime "last_recommendations_update"
+    t.string   "title_language_preference", limit: 255, default: "canonical"
+    t.integer  "followers_count",                       default: 0
+    t.integer  "following_count",                       default: 0
     t.boolean  "avatar_processing"
-    t.boolean  "subscribed_to_newsletter",                default: true
-    t.string   "location",                    limit: 255
-    t.string   "waifu_or_husbando",           limit: 255
+    t.boolean  "subscribed_to_newsletter",              default: true
+    t.string   "location",                  limit: 255
+    t.string   "waifu_or_husbando",         limit: 255
     t.integer  "waifu_id"
-    t.boolean  "to_follow",                               default: false
-    t.string   "dropbox_token",               limit: 255
-    t.string   "dropbox_secret",              limit: 255
-    t.datetime "last_backup"
-    t.integer  "approved_edit_count",                     default: 0
-    t.integer  "rejected_edit_count",                     default: 0
+    t.boolean  "to_follow",                             default: false
     t.datetime "pro_expires_at"
-    t.text     "about_formatted"
-    t.integer  "import_status"
-    t.string   "import_from",                 limit: 255
-    t.string   "import_error",                limit: 255
-    t.string   "past_names",                              default: [],          null: false, array: true
+    t.string   "past_names",                            default: [],          null: false, array: true
     t.string   "gender"
     t.date     "birthday"
     t.string   "twitter_id"
-    t.integer  "comments_count",                          default: 0,           null: false
-    t.integer  "likes_given_count",                       default: 0,           null: false
-    t.integer  "likes_received_count",                    default: 0,           null: false
-    t.integer  "favorites_count",                         default: 0,           null: false
-    t.integer  "posts_count",                             default: 0,           null: false
-    t.integer  "ratings_count",                           default: 0,           null: false
-    t.integer  "reviews_count",                           default: 0,           null: false
-    t.inet     "ip_addresses",                            default: [],                       array: true
+    t.integer  "comments_count",                        default: 0,           null: false
+    t.integer  "likes_given_count",                     default: 0,           null: false
+    t.integer  "likes_received_count",                  default: 0,           null: false
+    t.integer  "favorites_count",                       default: 0,           null: false
+    t.integer  "posts_count",                           default: 0,           null: false
+    t.integer  "ratings_count",                         default: 0,           null: false
+    t.integer  "reviews_count",                         default: 0,           null: false
     t.string   "previous_email"
     t.integer  "pinned_post_id"
     t.string   "time_zone"
     t.string   "language"
-    t.string   "country",                     limit: 2
-    t.boolean  "share_to_global",                         default: true,        null: false
+    t.string   "country",                   limit: 2
+    t.boolean  "share_to_global",                       default: true,        null: false
     t.string   "title"
-    t.boolean  "profile_completed",                       default: false,       null: false
-    t.boolean  "feed_completed",                          default: false,       null: false
+    t.boolean  "profile_completed",                     default: false,       null: false
+    t.boolean  "feed_completed",                        default: false,       null: false
     t.boolean  "cover_image_processing"
-    t.integer  "rating_system",                           default: 0,           null: false
-    t.integer  "theme",                                   default: 0,           null: false
+    t.integer  "rating_system",                         default: 0,           null: false
+    t.integer  "theme",                                 default: 0,           null: false
     t.datetime "deleted_at"
-    t.integer  "media_reactions_count",                   default: 0,           null: false
-    t.integer  "status",                                  default: 1,           null: false
+    t.integer  "media_reactions_count",                 default: 0,           null: false
+    t.integer  "status",                                default: 1,           null: false
     t.citext   "slug"
     t.text     "avatar_meta"
     t.text     "cover_image_meta"
@@ -1691,7 +1672,7 @@ ActiveRecord::Schema.define(version: 20181225023100) do
     t.datetime "pro_started_at"
     t.integer  "max_pro_streak"
     t.string   "stripe_customer_id"
-    t.integer  "quotes_count",                            default: 0,           null: false
+    t.integer  "quotes_count",                          default: 0,           null: false
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
