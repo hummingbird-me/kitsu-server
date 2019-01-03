@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20190603133124) do
     t.integer "cover_image_top_offset", default: 0, null: false
     t.hstore "titles", default: {}, null: false
     t.string "canonical_title", default: "en_jp", null: false
-    t.string "abbreviated_titles", array: true
+    t.string "abbreviated_titles", default: [], null: false, array: true
     t.integer "popularity_rank"
     t.integer "rating_rank"
     t.integer "favorites_count", default: 0, null: false
@@ -383,7 +383,7 @@ ActiveRecord::Schema.define(version: 20190603133124) do
     t.string "slug", null: false
     t.hstore "titles", default: {}, null: false
     t.string "canonical_title", default: "en_jp", null: false
-    t.string "abbreviated_titles", array: true
+    t.string "abbreviated_titles", default: [], null: false, array: true
     t.integer "age_rating"
     t.string "age_rating_guide"
     t.integer "episode_count"
@@ -860,7 +860,7 @@ ActiveRecord::Schema.define(version: 20190603133124) do
     t.hstore "rating_frequencies", default: {}, null: false
     t.hstore "titles", default: {}, null: false
     t.string "canonical_title", default: "en_jp", null: false
-    t.string "abbreviated_titles", array: true
+    t.string "abbreviated_titles", default: [], null: false, array: true
     t.integer "user_count", default: 0, null: false
     t.integer "popularity_rank"
     t.integer "rating_rank"
