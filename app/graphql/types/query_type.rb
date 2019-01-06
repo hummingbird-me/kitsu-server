@@ -15,6 +15,22 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
+  field :manga, Types::Manga.connection_type, null: false do
+    description 'Manga in the Kitsu database'
+    argument :slug, [String], required: false
+    argument :id, [String], required: false
+  end
+
+  def manga(slug: nil, id: nil)
+    if slug
+      ::Manga.by_slug(slug)
+    elsif id
+      ::Manga.find(id)
+    else
+      ::Manga.all
+    end
+  end
+
   field :global_trending, Types::Media.connection_type, null: false do
     description 'List trending media on all of Kitsu'
     argument :medium, String, required: true
