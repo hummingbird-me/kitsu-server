@@ -1,6 +1,6 @@
 module Types::MediaUnitInterface
   include Types::BaseInterface
-  description 'An unit media in the Kitsu database'
+  description 'A media unit in the Kitsu database'
 
   field :titles, Types::TitlesList,
     null: false,
