@@ -1,5 +1,6 @@
 module Types::Media
   include Types::BaseInterface
+  include HasLocalizedField
   orphan_types Types::Manga, Types::Anime
   description 'A media in the Kitsu database'
 
@@ -24,13 +25,12 @@ module Types::Media
   end
 
   # Localized Synopsis
-  field :synopsis, [Types::LocalizedString],
-    null: false,
+  localized_field :synopsis, null: false,
     description: 'A brief (mostly spoiler-free) summary/description of the media'
 
   def synopsis
     # TODO: actually store localized synopsis data
-    [{ locale: 'en', text: object.synopsis }] if object.synopsis
+    { en: object.synopsis } if object.synopsis
   end
 
   # Age Rating
