@@ -1,29 +1,16 @@
-class Types::InputAnime < Types::BaseInputObject
-  argument :id, ID, required: false
+class Types::InputAnime < Types::InputChangeObject
+  subject ::Anime
 
-  def subject
-    @subject ||= Anime.where(id: id).first_or_initialize
-  end
+  localized_field :titles
+  argument :set_canonical_title, String, required: false
 
-  argument :add_titles, Types::Map, required: false
-  argument :remove_titles, [String], required: false
-
-  def apply_titles
-    subject.titles.merge(add_titles) if add_titles
-    remove_titles&.each { |k| subject.titles.delete(k) }
-  end
-
-  argument :add_characters, [Types::InputMediaCharacter], required: false
-  argument :remove_characters, [ID], required: false
-
-  def apply_characters
-    subject.characters << add_characters.map(&:applied) if add_characters
-    subject.characters.delete(*remove_characters)
-  end
+  has_many :characters, Types::InputMediaCharacter
 
   def applied
     apply_titles
+    subject.canonical_title = set_canonical_title if set_canonical_title
     apply_characters
-    subject.tap(&:save!)
+
+    subject
   end
 end
