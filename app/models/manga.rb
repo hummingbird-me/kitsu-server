@@ -53,6 +53,7 @@ class Manga < ApplicationRecord
   rails_admin { fields :chapter_count, :volume_count }
 
   has_many :chapters
+  has_many :volumes
   has_many :manga_characters, dependent: :destroy
   has_many :manga_staff, dependent: :destroy
   has_many :media_attributes, through: :manga_media_attributes

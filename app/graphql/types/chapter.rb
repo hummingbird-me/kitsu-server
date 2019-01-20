@@ -1,5 +1,5 @@
 class Types::Chapter < Types::BaseObject
-  implements Types::MediaUnitInterface
+  implements Types::MediaUnit
   description 'A chapter of a Manga'
 
   field :id, ID, null: false
@@ -8,7 +8,8 @@ class Types::Chapter < Types::BaseObject
     null: false,
     description: 'The volume this chapter is related to'
 
-  field :published, GraphQL::Types::ISO8601DateTime,
+  field :released_at, GraphQL::Types::ISO8601DateTime,
     null: true,
-    description: 'The time when the chapter was released'
+    description: 'The time when the chapter was released',
+    method: :published
 end

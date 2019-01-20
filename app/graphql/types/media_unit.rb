@@ -1,9 +1,9 @@
-module Types::MediaUnitInterface
+module Types::MediaUnit
   include Types::BaseInterface
   description 'A media unit in the Kitsu database'
 
   field :titles, Types::TitlesList,
-    null: false,
+    null: true,
     description: 'the Titles for this unit in various locales'
 
   def titles

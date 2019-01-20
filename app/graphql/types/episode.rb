@@ -1,5 +1,5 @@
 class Types::Episode < Types::BaseObject
-  implements Types::MediaUnitInterface
+  implements Types::MediaUnit
   description 'An Episode of a Media'
 
   field :id, ID, null: false

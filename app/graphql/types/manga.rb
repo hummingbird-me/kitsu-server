@@ -7,7 +7,8 @@ class Types::Manga < Types::BaseObject
 
   field :volume_count, Integer,
     null: true,
-    description: 'The number of volumes in this series'
+    description: 'The number of volumes in this series',
+    deprecation_reason: 'Changed to rather use a Volume model'
 
   field :chapters, Types::Chapter.connection_type, null: false do
     description 'Chapters for this manga'
@@ -22,6 +23,16 @@ class Types::Manga < Types::BaseObject
     end
   end
 
-  # TODO: add volume association so that someone can supply a volume number
-  # to get volume information and also all chapters related to it.
+  field :volumes, Types::Volume.connection_type, null: false do
+    description 'Volumes for this manga'
+    argument :number, [Integer], required: false
+  end
+
+  def volumes(number: nil)
+    if number
+      object.volumes.where(number: number)
+    else
+      AssociationLoader.for(Manga, :volumes).load(object).then(&:to_a)
+    end
+  end
 end
