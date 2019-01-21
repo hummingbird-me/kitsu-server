@@ -1,4 +1,8 @@
 class Types::InputChangeObject < Types::BaseInputObject
+  def as_json
+    arguments.to_h.transform_values(&:as_json)
+  end
+
   def self.subject(model)
     argument :id, ID, required: false
 
