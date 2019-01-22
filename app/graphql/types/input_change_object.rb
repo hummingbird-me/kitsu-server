@@ -29,9 +29,8 @@ class Types::InputChangeObject < Types::BaseInputObject
 
     define_method("apply_#{name}") do
       items = subject.public_send(name)
-      items << public_send("add_#{name}").map(&:applied) if public_send("add_#{name}")
+      items << public_send("add_#{name}").map(&:apply) if public_send("add_#{name}")
       items.delete(*public_send("remove_#{name}"))
-      pp items
     end
   end
 end

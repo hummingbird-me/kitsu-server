@@ -4,7 +4,9 @@ class Changeset < ApplicationRecord
 
   enum status: %i[submitted accepted partially_accepted rejected]
 
-  def input_objects
+  def input_object
     root_type.safe_constantize.new(change_data, context: nil, defaults_used: Set.new)
   end
+
+  delegate :apply, to: :input_object
 end

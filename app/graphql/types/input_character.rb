@@ -2,8 +2,8 @@ class Types::InputCharacter < Types::InputChangeObject
   subject ::Character
   localized_field :names
 
-  def applied
+  def apply
     apply_names
-    subject.tap(&:save!)
+    subject
   end
 end

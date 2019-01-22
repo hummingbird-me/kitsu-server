@@ -6,7 +6,7 @@ class Types::InputAnime < Types::InputChangeObject
 
   has_many :characters, Types::InputMediaCharacter
 
-  def applied
+  def apply
     apply_titles
     subject.canonical_title = set_canonical_title if set_canonical_title
     apply_characters
