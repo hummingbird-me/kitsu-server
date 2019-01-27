@@ -5,7 +5,7 @@ class Types::Volume < Types::BaseObject
 
   field :titles, Types::TitlesList,
     null: true,
-    description: 'the Titles for this unit in various locales'
+    description: 'The titles for this volume in various locales'
 
   def titles
     {
@@ -16,22 +16,22 @@ class Types::Volume < Types::BaseObject
 
   field :number, Integer,
     null: false,
-    description: 'The sequence number of this unit'
+    description: 'The sequence number of this volume'
 
   field :thumbnail, Types::Image,
     null: true,
-    description: 'A thumbnail image for the unit'
+    description: 'A thumbnail image for this volume'
 
   field :chapters_count, Integer,
     null: false,
-    description: 'Total chaters per Volume'
+    description: 'Total chapters per volume'
 
-  field :isbn, String,
+  field :isbn, [String],
     null: false,
-    description: 'Unique Identification for this Volume'
+    description: 'Identification of a specific release of the volume'
 
   field :released_at, GraphQL::Types::ISO8601DateTime,
     null: true,
-    description: 'The time when the Volume was released',
+    description: 'The time when the volume was released',
     method: :published_on
 end
