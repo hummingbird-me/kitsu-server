@@ -1,5 +1,6 @@
 class TheTvdbService
   class NotFound < StandardError; end
+  class MappingError < StandardError; end
 
   BASE_URL = 'https://api.thetvdb.com'.freeze
   API_KEY = ENV['THE_TVDB_API_KEY'].freeze
@@ -50,6 +51,8 @@ class TheTvdbService
       process_series_data(series, anime)
       process_episode_data(episodes, anime, series_id)
     end
+  rescue MappingError
+    anime.mappings.where(external_id)
   end
 
   # Uses the TVDB API to trade our API Key for an API Token and then memoizes it
@@ -93,7 +96,7 @@ class TheTvdbService
   def pluck_mappings(data)
     return if data.blank?
 
-    data.pluck(:item_type, :item_id, :external_id)
+    data.pluck(:id, :item_type, :item_id, :external_id)
         .each_with_object({}) do |(item_type, item_id, external_id), acc|
           acc[item_type] ||= {}
           acc[item_type][item_id] ||= external_id

@@ -3,7 +3,7 @@
 class MyAnimeListScraper < Scraper
   BASE_URL = 'https://myanimelist.net/'.freeze
   SOURCE_LINE = /^[\[\(](Written by .*|Source:.*)[\]\)]$/i
-  EMPTY_TEXT = /No .* has been added to this .*/i
+  EMPTY_TEXT = /No .* has been added to this .*|this .* doesn't seem to have a/i
   LANGUAGES = {
     'Brazilian' => 'pt_br',
     'English' => 'en',
@@ -20,7 +20,8 @@ class MyAnimeListScraper < Scraper
   private
 
   def response
-    @response ||= http.get(@url).tap do |res|
+    url = @url.sub('https://myanimelist.net/', 'http://35.197.16.231:8080/')
+    @response ||= http.get(url).tap do |res|
       raise Scraper::PageNotFound if res.status == 404
       raise Scraper::TooManyRequests if res.status == 429
     end
@@ -59,13 +60,15 @@ class MyAnimeListScraper < Scraper
 
   # @return [Hash<String,Nokogiri::XML::NodeSet] the sections in the MAL sidebar
   def main_sections
-    @main_sections ||= parse_sections(main.at_css('h2, .normal_header').parent.children)
+    @main_sections ||= parse_sections(main.at_css('h2, .normal_header')&.parent&.children)
   end
 
   # Parse a NodeSet where MAL has separate sections punctuated by <h2> headers
   # @param nodes [Nokogiri::HTML::NodeSet] the nodes to parse
   # @return [Hash<String,Nokogiri::XML::NodeSet>] the nodes divided into sections
   def parse_sections(nodes)
+    return {} if nodes.blank?
+
     # Keep track of what section we're in
     section = nil
     nodes.each_with_object({}) do |node, out|
