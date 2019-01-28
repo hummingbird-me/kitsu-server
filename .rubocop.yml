@@ -29,6 +29,8 @@ Style/CommentAnnotation:
   - DEPRECATED
 Layout/DotPosition:
   EnforcedStyle: leading
+Style/EmptyLineAfterGuardClause:
+  Enabled: false
 Naming/FileName:
   Enabled: true
   Exclude: ['**/jsonapi-resources.rb']
