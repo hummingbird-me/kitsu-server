@@ -221,6 +221,8 @@ class BaseIndex
   end
 
   def load_associated
+    return if Rails.env.development?
+    
     self.class.associated_for(_model.class.where(id: _model.id))[_model.id]
   end
 
@@ -250,6 +252,7 @@ class BaseIndex
 
   def save!
     return if Rails.env.development?
+
     if _new || model.new_record?
       index.add_object(as_json)
     elsif model.destroyed?
