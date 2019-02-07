@@ -16,4 +16,12 @@ class Types::Session < Types::BaseObject
   def profile
     object unless object.blank?
   end
+
+  field :braintree_client_token, String,
+    null: false,
+    description: 'The token for the Braintree Client SDK'
+
+  def braintree_client_token
+    $braintree.client_token.generate
+  end
 end
