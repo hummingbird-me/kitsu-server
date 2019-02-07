@@ -65,4 +65,12 @@ class Types::QueryType < Types::BaseObject
       ::Character.find_by_id(id)
     end
   end
+
+  field :session, Types::Session,
+    null: false,
+    description: 'Get your current session info'
+
+  def session
+    context[:user] || {}
+  end
 end
