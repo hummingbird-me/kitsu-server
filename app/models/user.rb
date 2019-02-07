@@ -298,6 +298,18 @@ class User < ApplicationRecord
                          end
   end
 
+  def braintree_customer_id
+    "kitsu_#{id}"
+  end
+
+  def braintree_customer
+    @braintree_customer ||= begin
+      $braintree.customer.find(braintree_customer_id)
+    rescue Braintree::NotFoundError
+      $braintree.customer.create(email: email)
+    end
+  end
+
   def blocked?(user)
     Block.where(user: [self, user], blocked: [self, user]).exists?
   end
@@ -430,6 +442,7 @@ class User < ApplicationRecord
 
   after_commit on: :update do
     # Update email on Stripe
+    $braintree.customer.update(braintree_customer_id, email: email) if previous_changes['email']
     stripe_customer.save(email: email) if previous_changes['email']
   end
 

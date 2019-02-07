@@ -1694,6 +1694,7 @@ ActiveRecord::Schema.define(version: 20190211224502) do
     t.integer  "quotes_count",                            default: 0,           null: false
     t.integer  "pro_tier"
     t.string   "pro_message"
+    t.string   "braintree_customer_id"
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
