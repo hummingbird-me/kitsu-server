@@ -8,6 +8,8 @@ class ProSubscription
       @subscription ||= Stripe::Subscription.retrieve(billing_id)
     end
 
+    alias_method :cancel!, :destroy!
+
     after_destroy do
       subscription.delete
     end
