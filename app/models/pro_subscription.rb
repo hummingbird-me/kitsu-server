@@ -1,4 +1,6 @@
 class ProSubscription < ApplicationRecord
+  class NoCancellationError < StandardError; end
+
   belongs_to :user, required: true
   enum tier: {
     pro: 1,
@@ -8,6 +10,10 @@ class ProSubscription < ApplicationRecord
   validates :type, presence: true
   validates :billing_id, presence: true
   validates :tier, presence: true
+
+  def cancel!
+    raise NoCancellationError
+  end
 
   def to_json(*args)
     {

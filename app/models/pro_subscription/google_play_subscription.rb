@@ -8,6 +8,8 @@ class ProSubscription
       @service ||= GooglePlaySubscriptionService.new(billing_id, tier)
     end
 
+    alias_method :cancel!, :destroy!
+
     after_destroy do
       service.cancel
     end
