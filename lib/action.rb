@@ -37,7 +37,8 @@ class Action
   include DSL
 
   def self.call(obj)
-    new(obj).tap(&:validate!).call
+    result = new(obj).tap(&:validate!).call
+    result.is_a?(Hash) ? OpenStruct.new(result) : result
   end
 
   def initialize(obj)
