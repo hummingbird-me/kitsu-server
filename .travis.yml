@@ -8,7 +8,7 @@ sudo: false
 env:
   STREAM_API_KEY=q3k9n9kqk3fb
   STREAM_API_SECRET=vkw87x3p323z6ma75n8dvnse98jrr9gkauf2zfjnzbgjpmm54ssnbync4yhhzugc
-  CC_TEST_REPORTER_ID=cc60d929b59ca02c57b5445ae9bfac1bc3c6f5176bd93bd4f91926ee8cfa3e64
+  CC_TEST_REPORTER_ID=5e2172ea5a30b07e172058a3b33dfe08c6354699808e8f3010acc32b1ef41395
   BUNDLE_GITHUB__HTTPS=true
 
 cache:
