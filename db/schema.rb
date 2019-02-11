@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181225023100) do
+ActiveRecord::Schema.define(version: 20190211224502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1326,7 +1326,7 @@ ActiveRecord::Schema.define(version: 20181225023100) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.string   "type",                   null: false
-    t.integer  "plan",       default: 0, null: false
+    t.integer  "tier",       default: 0, null: false
   end
 
   add_index "pro_subscriptions", ["user_id"], name: "index_pro_subscriptions_on_user_id", using: :btree
@@ -1692,6 +1692,8 @@ ActiveRecord::Schema.define(version: 20181225023100) do
     t.integer  "max_pro_streak"
     t.string   "stripe_customer_id"
     t.integer  "quotes_count",                            default: 0,           null: false
+    t.integer  "pro_tier"
+    t.string   "pro_message"
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
