@@ -1,18 +1,19 @@
 class ProSubscription < ApplicationRecord
   belongs_to :user, required: true
-  enum plan: {
-    yearly: 0,
-    monthly: 1
+  enum tier: {
+    pro: 1,
+    patron: 2
   }
 
   validates :type, presence: true
   validates :billing_id, presence: true
+  validates :tier, presence: true
 
   def to_json(*args)
     {
       user: user_id,
       service: billing_service,
-      plan: plan
+      tier: tier
     }.to_json(*args)
   end
 end

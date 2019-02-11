@@ -127,6 +127,7 @@ class User < ApplicationRecord
   update_algolia('AlgoliaUsersIndex')
   enum theme: %i[light dark]
   enum ao_pro: %i[pro pro_plus]
+  enum pro_tier: %i[ao_pro ao_pro_plus pro patron], _prefix: true
 
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false

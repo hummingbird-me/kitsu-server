@@ -3,5 +3,6 @@ FactoryBot.define do
     type { 'ProSubscription::StripeSubscription' }
     association :user, strategy: :build
     billing_id { 'test_customer_id' }
+    tier { ProSubscription.tiers.sample }
   end
 end
