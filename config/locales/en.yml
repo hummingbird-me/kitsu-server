@@ -20,6 +20,14 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  errors:
+    stripe:
+      card_error: 'Invalid card'
+      api_connection_error: 'Failed to connect to credit card network'
+      stripe_error: 'Something went wrong while processing the transaction'
+    pro:
+      invalid_self_gift: 'Cannot gift to self'
+      recipient_is_pro: 'Cannot gift to a user who already has pro'
   notifications:
     mention:
       post: "%{actor} mentioned you in a post."
