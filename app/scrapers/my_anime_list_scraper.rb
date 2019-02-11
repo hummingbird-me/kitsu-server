@@ -20,7 +20,6 @@ class MyAnimeListScraper < Scraper
   private
 
   def response
-    url = @url.sub('https://myanimelist.net/', 'http://35.197.16.231:8080/')
     @response ||= http.get(url).tap do |res|
       raise Scraper::PageNotFound if res.status == 404
       raise Scraper::TooManyRequests if res.status == 429
