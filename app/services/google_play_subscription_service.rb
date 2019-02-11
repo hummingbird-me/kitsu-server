@@ -6,9 +6,9 @@ class GooglePlaySubscriptionService
   API_KEY = ENV['GOOGLE_PLAY_API_KEY'].freeze
   PACKAGE_NAME = 'com.everfox.animetrackerandroid'
 
-  def initialize(token, plan)
+  def initialize(token, tier)
     @token = token
-    @plan = plan
+    @tier = tier
   end
 
   def cancel
@@ -35,6 +35,6 @@ class GooglePlaySubscriptionService
   end
 
   def subscription_id
-    "io.kitsu.pro.#{@plan}"
+    "io.kitsu.pro.#{@tier}-yearly"
   end
 end

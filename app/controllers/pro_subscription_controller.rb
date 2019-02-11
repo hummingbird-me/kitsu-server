@@ -8,7 +8,7 @@ class ProSubscriptionController < ApplicationController
     customer = user.stripe_customer
     customer.source = params[:token]
     customer.save
-    render json: ProSubscription::StripeSubscription.create!(user: user, plan: params[:plan])
+    render json: ProSubscription::StripeSubscription.create!(user: user, tier: params[:tier])
   rescue Stripe::CardError
     render_jsonapi_error 400, 'Invalid card'
   rescue Stripe::APIConnectionError
@@ -22,7 +22,7 @@ class ProSubscriptionController < ApplicationController
     render json: ProSubscription::AppleSubscription.create!(
       user: user,
       billing_id: receipt.billing_id,
-      plan: params[:plan]
+      tier: params[:tier]
     )
   rescue AppleReceiptService::Error::ServerUnavailable, AppleReceiptService::Error::InternalError
     render_jsonapi_error 502, 'Failed to connect to Apple App Store'
@@ -38,13 +38,13 @@ class ProSubscriptionController < ApplicationController
 
   def google_play
     token = params[:token]
-    plan = params[:plan]
-    subscription = GooglePlaySubscriptionService.new(token, plan)
+    tier = params[:tier]
+    subscription = GooglePlaySubscriptionService.new(token, tier)
     subscription.validate!
     render json: ProSubscription::GooglePlaySubscription.create!(
       user: user,
       billing_id: token,
-      plan: plan
+      tier: tier
     )
   rescue Google::Apis::ClientError
     render_jsonapi_error 400, 'Google Play returned a client error'

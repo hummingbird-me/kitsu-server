@@ -10,21 +10,9 @@ RSpec.describe Pro::ValidateGift do
         Pro::ValidateGift.call(
           from: alice,
           to: alice,
-          length: '1month'
+          tier: 'pro'
         )
       }.to raise_error(ProError::InvalidSelfGift)
-    end
-
-    context 'for length=forever' do
-      it 'should let them buy it anyways lol' do
-        expect {
-          Pro::ValidateGift.call(
-            from: alice,
-            to: alice,
-            length: 'forever'
-          )
-        }.not_to raise_error
-      end
     end
   end
 
@@ -38,7 +26,7 @@ RSpec.describe Pro::ValidateGift do
         Pro::ValidateGift.call(
           from: alice,
           to: bob,
-          length: '1month'
+          tier: 'pro'
         )
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
@@ -51,21 +39,21 @@ RSpec.describe Pro::ValidateGift do
         Pro::ValidateGift.call(
           from: alice,
           to: bob,
-          length: '1month'
+          tier: 'pro'
         )
       }.to raise_error(ProError::RecipientIsPro)
     end
   end
 
-  context 'with an unknown length string' do
-    it 'should raise ProError::InvalidLength' do
+  context 'with an unknown tier' do
+    it 'should raise ProError::InvalidTier' do
       expect {
         Pro::ValidateGift.call(
           from: alice,
           to: bob,
-          length: '30years'
+          tier: 'godly'
         )
-      }.to raise_error(ProError::InvalidLength)
+      }.to raise_error(ProError::InvalidTier)
     end
   end
 end
