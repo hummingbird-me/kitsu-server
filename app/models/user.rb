@@ -287,7 +287,7 @@ class User < ApplicationRecord
   end
 
   def blocked?(user)
-    blocks.where(user: [self, user], blocked: [self, user]).exists?
+    Block.where(user: [self, user], blocked: [self, user]).exists?
   end
 
   def confirmed
