@@ -267,9 +267,10 @@ class User < ApplicationRecord
 
   def pro_tier
     tier = super
-    # If it's expired and they're not ao_pro, return nil
-    return nil if pro_expires_at&.past? && tier.to_s.start_with?('ao_')
-    tier
+    # If they're Aozora pro, expiration doesn't apply
+    return tier if tier.to_s.start_with?('ao_')
+    # Otherwise check the expiration
+    tier unless pro_expires_at&.past?
   end
 
   def pro?
