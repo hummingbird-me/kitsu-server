@@ -42,7 +42,6 @@ Rails.application.routes.draw do
       # One Signal Players
       jsonapi_resources :one_signal_players
       # Pro Subscriptions
-      post '/pro-subscription/stripe', to: 'pro_subscription#stripe'
       post '/pro-subscription/ios', to: 'pro_subscription#ios'
       post '/pro-subscription/google-play', to: 'pro_subscription#google_play'
       delete '/pro-subscription', to: 'pro_subscription#destroy'
