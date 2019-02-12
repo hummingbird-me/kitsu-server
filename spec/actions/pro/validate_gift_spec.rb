@@ -35,6 +35,7 @@ RSpec.describe Pro::ValidateGift do
   context 'when the recipient already has pro' do
     it 'should raise ProError::RecipientIsPro' do
       bob.pro_expires_at = 1.month.from_now
+      bob.pro_tier = :pro
       expect {
         Pro::ValidateGift.call(
           from: alice,

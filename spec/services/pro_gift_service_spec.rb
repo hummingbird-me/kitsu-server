@@ -51,7 +51,7 @@ RSpec.describe ProGiftService do
     context 'with a recipient who already has pro' do
       it 'should raise an RecipientIsPro error' do
         from = build(:user)
-        to = build(:user, pro_expires_at: 2.months.from_now)
+        to = build(:user, pro_expires_at: 2.months.from_now, pro_tier: 'pro')
         expect {
           ProGiftService.new(from: from, to: to, length: :year).validate!
         }.to raise_error(ProGiftService::RecipientIsPro)
