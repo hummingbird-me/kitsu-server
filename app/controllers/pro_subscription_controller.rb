@@ -4,19 +4,6 @@ class ProSubscriptionController < ApplicationController
   before_action :check_feature_flag!
   before_action :authenticate_user!
 
-  def stripe
-    customer = user.stripe_customer
-    customer.source = params[:token]
-    customer.save
-    render json: ProSubscription::StripeSubscription.create!(user: user, tier: params[:tier])
-  rescue Stripe::CardError
-    render_jsonapi_error 400, 'Invalid card'
-  rescue Stripe::APIConnectionError
-    render_jsonapi_error 502, 'Failed to connect to credit card processor'
-  rescue Stripe::StripeError
-    render_jsonapi_error 500, 'Something went wrong with our credit card processor'
-  end
-
   def ios
     receipt = AppleReceiptService.new(params[:receipt])
     render json: ProSubscription::AppleSubscription.create!(
