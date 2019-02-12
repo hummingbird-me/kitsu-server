@@ -176,15 +176,23 @@ RSpec.describe User, type: :model do
 
   describe '#pro?' do
     it 'should return false if the user has no pro expiry' do
-      user = build(:user, pro_expires_at: nil)
+      user = build(:user, pro_expires_at: nil, pro_tier: nil)
       expect(user).not_to be_pro
     end
     it 'should return false if the user has already run out of pro' do
-      user = build(:user, pro_expires_at: 2.months.ago)
+      user = build(:user, pro_expires_at: 2.months.ago, pro_tier: 'pro')
       expect(user).not_to be_pro
     end
     it 'should return true if the user still has pro left' do
-      user = build(:user, pro_expires_at: 2.months.from_now)
+      user = build(:user, pro_expires_at: 2.months.from_now, pro_tier: 'pro')
+      expect(user).to be_pro
+    end
+    it 'should return true if the user has ao_pro and no expiration' do
+      user = build(:user, pro_tier: 'ao_pro', pro_expires_at: nil)
+      expect(user).to be_pro
+    end
+    it 'should return true if the user has ao_pro and a past expiration' do
+      user = build(:user, pro_tier: 'ao_pro', pro_expires_at: 6.months.ago)
       expect(user).to be_pro
     end
   end
