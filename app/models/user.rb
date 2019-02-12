@@ -126,8 +126,7 @@ class User < ApplicationRecord
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
   enum theme: %i[light dark]
-  enum ao_pro: %i[pro pro_plus]
-  enum pro_tier: %i[ao_pro ao_pro_plus pro patron], _prefix: true
+  enum pro_tier: %i[ao_pro ao_pro_plus pro patron]
 
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false
@@ -266,9 +265,20 @@ class User < ApplicationRecord
     end
   end
 
+  def pro_tier
+    tier = super
+    # If it's expired and they're not ao_pro, return nil
+    return nil if pro_expires_at&.past? && tier.to_s.start_with?('ao_')
+    tier
+  end
+
   def pro?
-    return false if pro_expires_at.nil?
-    pro_expires_at >= Time.now
+    !pro_tier.nil?
+  end
+
+  def ao_pro
+    # If they're ao_pro then strip the ao_ prefix and return it
+    pro_tier.to_s.sub('ao_').to_sym if pro_tier.to_s.start_with?('ao_')
   end
 
   def pro_streak
