@@ -3,11 +3,11 @@ class Types::ProSubscription < Types::BaseObject
 
   field :account, Types::Account,
     null: false,
-    description: 'The account which is subscribed to PRO benefits'
+    description: 'The account which is subscribed to Pro benefits'
 
-  field :plan, Types::ProSubscriptionPlan,
+  field :tier, Types::ProTier,
     null: false,
-    description: 'The plan this account is subscribed to'
+    description: 'The tier of Pro the account is subscribed to'
 
   field :billing_service, Types::RecurringBillingService,
     null: false,
