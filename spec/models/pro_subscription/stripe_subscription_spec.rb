@@ -17,7 +17,7 @@ RSpec.describe ProSubscription::StripeSubscription, type: :model do
     it 'should cancel the subscription on Stripe' do
       user = create(:user)
       user.stripe_customer.save(source: stripe_mock.generate_card_token)
-      sub = ProSubscription::StripeSubscription.create!(user: user)
+      sub = ProSubscription::StripeSubscription.create!(user: user, tier: 'pro')
       expect(sub.subscription).to receive(:delete).once
       sub.destroy!
     end
@@ -27,7 +27,7 @@ RSpec.describe ProSubscription::StripeSubscription, type: :model do
     it 'should create the subscription on Stripe' do
       user = create(:user)
       user.stripe_customer.save(source: stripe_mock.generate_card_token)
-      sub = ProSubscription::StripeSubscription.create!(user: user)
+      sub = ProSubscription::StripeSubscription.create!(user: user, tier: 'pro')
       expect(sub.billing_id).not_to be_nil
     end
   end
