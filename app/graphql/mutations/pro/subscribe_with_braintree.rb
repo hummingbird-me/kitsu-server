@@ -1,9 +1,9 @@
 class Mutations::Pro::SubscribeWithBraintree < Mutations::BaseMutation
   argument :tier, Types::ProTier,
-    null: false,
+    required: false,
     description: 'The tier to subscribe to'
   argument :nonce, String,
-    null: false,
+    required: false,
     description: 'The payment method nonce provided by the Braintree Client SDK'
 
   payload_type Types::ProSubscription
