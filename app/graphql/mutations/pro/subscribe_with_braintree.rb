@@ -1,7 +1,7 @@
 class Mutations::Pro::SubscribeWithBraintree < Mutations::BaseMutation
-  argument :plan, Types::ProMembershipPlan,
+  argument :tier, Types::ProTier,
     null: false,
-    description: 'The plan to subscribe to'
+    description: 'The tier to subscribe to'
   argument :nonce, String,
     null: false,
     description: 'The payment method nonce provided by the Braintree Client SDK'
@@ -14,10 +14,9 @@ class Mutations::Pro::SubscribeWithBraintree < Mutations::BaseMutation
     true
   end
 
-  def resolve(plan:, nonce:)
-    $braintree.customer.update(user.braintree_customer.id, payment_method_nonce: nonce)
+  def resolve(tier:, nonce:)
 
-    ProSubscription::BraintreeSubscription.create!(user: user, plan: plan)
+    Pro::SubscribeWithBraintree.call(user: user, tier: tier, nonce: nonce)
   rescue Net::ReadTimeout, Braintree::DownForMaintenanceError
     raise GraphQL::ExecutionError, 'Connection to Braintree timed out'
   rescue Braintree::ServerError, Braintree::SSLCertificateError, Braintree::UnexpectedError,
