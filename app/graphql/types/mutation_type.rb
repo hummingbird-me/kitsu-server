@@ -1,9 +1,9 @@
 class Types::MutationType < Types::BaseObject
-  field :ping, String,
-    null: false,
-    description: 'Fixes GraphQL; does nothing else.'
-
-  def ping
-    'pong'
-  end
+  # Kitsu Pro
+  field :pro_subscribe_with_stripe,
+    mutation: Mutations::Pro::SubscribeWithStripe,
+    description: 'Subscribe to Pro using Stripe'
+  field :pro_unsubscribe,
+    mutation: Mutations::Pro::Unsubscribe,
+    description: "End the users' pro subscription"
 end
