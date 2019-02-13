@@ -260,6 +260,8 @@ class BaseIndex
     elsif dirty?
       index.save_object(as_json)
     end
+  rescue Algolia::AlgoliaError
+    false
   end
 
   def algolia_id
