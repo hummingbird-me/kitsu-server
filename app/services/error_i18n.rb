@@ -1,7 +1,7 @@
 class ErrorI18n
   class << self
     def self.translate(error)
-      klass = error.class
+      klass = error.class unless error.is_a?(Class)
       # Filter ancestry to just descendants of StandardError
       ancestors = klass.ancestors.select { |c| c <= StandardError }
       # Convert the class names into I18n keys
@@ -9,7 +9,6 @@ class ErrorI18n
       # Look up the main key and fallback to the ancestors
       I18n.translate(keys.shift, scope: 'errors', default: keys)
     end
-
     alias_method :t, :translate
   end
 end
