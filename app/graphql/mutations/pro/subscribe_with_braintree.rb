@@ -9,19 +9,17 @@ class Mutations::Pro::SubscribeWithBraintree < Mutations::BaseMutation
   payload_type Types::ProSubscription
 
   def ready?
-    raise GraphQL::ExecutionError, 'Must be logged in' if user.blank?
+    raise GraphQL::ExecutionError, ErrorI18n.t(NotLoggedInError) if user.blank?
 
     true
   end
 
   def resolve(tier:, nonce:)
-
     Pro::SubscribeWithBraintree.call(user: user, tier: tier, nonce: nonce)
-  rescue Net::ReadTimeout, Braintree::DownForMaintenanceError
-    raise GraphQL::ExecutionError, 'Connection to Braintree timed out'
-  rescue Braintree::ServerError, Braintree::SSLCertificateError, Braintree::UnexpectedError,
-         Braintree::AuthenticationError, Braintree::ConfigurationError
-    raise GraphQL::ExecutionError, 'Something went wrong when connecting to Braintree'
+  rescue Net::ReadTimeout
+    raise GraphQL::ExecutionError, I18n.t('errors.braintree.braintree_error')
+  rescue Braintree::BraintreeError => ex
+    raise GraphQL::ExecutionError, ErrorI18n.t(ex)
   end
 
   private

@@ -21,14 +21,18 @@
 
 en:
   errors:
+    standard_error: 'An unknown error occurred'
     not_logged_in_error: 'Must be logged in to do that'
     stripe:
       card_error: 'Invalid card'
       api_connection_error: 'Failed to connect to credit card network'
       stripe_error: 'Something went wrong while processing the transaction'
-    pro:
+    braintree:
+      braintree_error: 'Failed to connect to payment processor'
+    pro_error:
       invalid_self_gift: 'Cannot gift to self'
       recipient_is_pro: 'Cannot gift to a user who already has pro'
+      invalid_tier: 'That is not a valid tier of pro'
   notifications:
     mention:
       post: "%{actor} mentioned you in a post."
