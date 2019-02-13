@@ -8,6 +8,8 @@ class ProSubscription
       user.braintree_customer.payment_methods.find(&:default?)
     end
 
+    alias_method :cancel!, :destroy!
+
     after_destroy do
       $braintree.subscription.cancel(billing_id)
     end
