@@ -11,19 +11,15 @@ class Mutations::Pro::SubscribeWithStripe < Mutations::BaseMutation
   payload_type Types::ProSubscription
 
   def ready?
-    raise GraphQL::ExecutionError, 'Must be logged in' if user.blank?
+    raise GraphQL::ExecutionError, ErrorI18n.t(NotLoggedInError) if user.blank?
 
     true
   end
 
   def resolve(tier:, token:)
     Pro::SubscribeWithStripe.call(user: user, tier: tier, token: token).subscription
-  rescue Stripe::CardError
-    raise GraphQL::ExecutionError, 'Invalid card'
-  rescue Stripe::APIConnectionError
-    raise GraphQL::ExecutionError, 'Failed to connect to credit card processor'
-  rescue Stripe::StripeError
-    raise GraphQL::ExecutionError, 'Something went wrong with our credit card processor'
+  rescue Stripe::StripeError => ex
+    raise GraphQL::ExecutionError, ErrorI18n.t(ex)
   end
 
   private
