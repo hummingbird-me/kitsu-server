@@ -15,7 +15,7 @@ class Mutations::Pro::SubscribeWithBraintree < Mutations::BaseMutation
   end
 
   def resolve(tier:, nonce:)
-    Pro::SubscribeWithBraintree.call(user: user, tier: tier, nonce: nonce)
+    Pro::SubscribeWithBraintree.call(user: user, tier: tier, nonce: nonce).subscription
   rescue Net::ReadTimeout
     raise GraphQL::ExecutionError, I18n.t('errors.braintree.braintree_error')
   rescue Braintree::BraintreeError => ex
