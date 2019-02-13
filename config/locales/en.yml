@@ -21,6 +21,7 @@
 
 en:
   errors:
+    not_logged_in_error: 'Must be logged in to do that'
     stripe:
       card_error: 'Invalid card'
       api_connection_error: 'Failed to connect to credit card network'
