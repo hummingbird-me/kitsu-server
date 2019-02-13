@@ -1,5 +1,5 @@
-module ProError
-  class InvalidSelfGift < StandardError; end
-  class RecipientIsPro < StandardError; end
-  class InvalidTier < StandardError; end
+class ProError < StandardError
+  class InvalidSelfGift < ProError; end
+  class RecipientIsPro < ProError; end
+  class InvalidTier < ProError; end
 end
