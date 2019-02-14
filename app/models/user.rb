@@ -303,10 +303,10 @@ class User < ApplicationRecord
   end
 
   def braintree_customer
-    @braintree_customer ||= begin
+    begin
       $braintree.customer.find(braintree_customer_id)
     rescue Braintree::NotFoundError
-      $braintree.customer.create!(email: email)
+      $braintree.customer.create!(email: email, id: braintree_customer_id)
     end
   end
 
