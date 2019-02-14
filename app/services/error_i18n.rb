@@ -1,6 +1,6 @@
 class ErrorI18n
   class << self
-    def self.translate(error)
+    def translate(error)
       klass = error.class unless error.is_a?(Class)
       # Filter ancestry to just descendants of StandardError
       ancestors = klass.ancestors.select { |c| c <= StandardError }
