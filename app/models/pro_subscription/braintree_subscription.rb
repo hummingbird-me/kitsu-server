@@ -11,13 +11,13 @@ class ProSubscription
     alias_method :cancel!, :destroy!
 
     after_destroy do
-      $braintree.subscription.cancel(billing_id)
+      $braintree.subscription.cancel!(billing_id)
     end
 
     before_validation on: :create do
-      self.billing_id = $braintree.subscription.create(
+      self.billing_id = $braintree.subscription.create!(
         payment_method_token: payment_method.token,
-        plan_id: "kitsu-pro-#{plan}"
+        plan_id: "kitsu-#{tier}-yearly"
       ).id
     end
   end
