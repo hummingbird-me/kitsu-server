@@ -306,7 +306,7 @@ class User < ApplicationRecord
     @braintree_customer ||= begin
       $braintree.customer.find(braintree_customer_id)
     rescue Braintree::NotFoundError
-      $braintree.customer.create(email: email)
+      $braintree.customer.create!(email: email)
     end
   end
 
@@ -442,7 +442,7 @@ class User < ApplicationRecord
 
   after_commit on: :update do
     # Update email on Stripe
-    $braintree.customer.update(braintree_customer_id, email: email) if previous_changes['email']
+    $braintree.customer.update(braintree_customer.id, email: email) if previous_changes['email']
     stripe_customer.save(email: email) if previous_changes['email']
   end
 
