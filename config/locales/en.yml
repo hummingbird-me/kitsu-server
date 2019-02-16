@@ -52,3 +52,10 @@ en:
     aired:
       anime: "Episode %{number} of %{title} aired!"
       manga: "Chapter %{number} of %{title} was released!"
+  pro_mailer:
+    gift_email:
+      subject: "%{name} has given you Kitsu %{tier}!"
+    welcome_email:
+      subject: "Welcome to Kitsu %{tier}"
+    cancellation_email:
+      subject: "Your Kitsu %{tier} subscription has been cancelled"
