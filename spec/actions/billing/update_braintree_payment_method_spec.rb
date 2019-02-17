@@ -5,14 +5,13 @@ RSpec.describe Billing::UpdateBraintreePaymentMethod do
 
   describe 'with a valid subscription paypal nonce' do
     it 'should update the user default payment method' do
-      customer = Billing::UpdateBraintreePaymentMethod.call(
+      payment_method = Billing::UpdateBraintreePaymentMethod.call(
         user: user,
         nonce: 'fake-paypal-billing-agreement-nonce'
       )
 
-      expect(customer).to be_a(Braintree::Customer)
-      expect(customer.payment_methods[0]).to be_a(Braintree::PayPalAccount)
-      expect(customer.payment_methods[0]).to be_default
+      expect(payment_method).to be_a(Braintree::PayPalAccount)
+      expect(payment_method).to be_default
     end
   end
 

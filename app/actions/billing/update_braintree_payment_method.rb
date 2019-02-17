@@ -4,7 +4,13 @@ module Billing
     parameter :nonce, required: true
 
     def call
-      $braintree.customer.update!(user.braintree_customer.id, payment_method_nonce: nonce)
+      $braintree.payment_method.create!(
+        customer_id: user.braintree_customer.id,
+        payment_method_nonce: nonce,
+        options: {
+          make_default: true
+        }
+      )
     end
   end
 end

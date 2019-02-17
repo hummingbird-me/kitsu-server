@@ -1,29 +1,25 @@
 require 'rails_helper'
 
 RSpec.describe Pro::GiftWithBraintree do
-  let(:user) { build(:user) }
+  let(:alice) { build(:user) }
+  let(:bob) { build(:user) }
 
-  describe 'with a valid subscription paypal nonce' do
-    it 'should update the user default payment method' do
-      customer = Billing::UpdateBraintreePaymentMethod.call(
-        user: user,
-        nonce: 'fake-paypal-billing-agreement-nonce'
-      )
+  it 'should charge the user the amount for the tier' do
+    expect($braintree).to receive_message_chain(:transaction, :sale!).with(
+      match_json_expression({
+        amount: '49.00',
+        payment_method_nonce: 'fake-paypal-one-time-nonce',
+        options: {
+          submit_for_settlement: true
+        }
+      }.ignore_extra_keys!)
+    )
 
-      expect(customer).to be_a(Braintree::Customer)
-      expect(customer.payment_methods[0]).to be_a(Braintree::PayPalAccount)
-      expect(customer.payment_methods[0]).to be_default
-    end
-  end
-
-  describe 'with an invalid payment nonce' do
-    it 'should fail loudly' do
-      expect {
-        Billing::UpdateBraintreePaymentMethod.call(
-          user: user,
-          nonce: 'fake-consumed-nonce'
-        )
-      }.to raise_error(Braintree::BraintreeError)
-    end
+    Pro::GiftWithBraintree.call(
+      tier: 'patron',
+      nonce: 'fake-paypal-one-time-nonce',
+      from: alice,
+      to: bob
+    )
   end
 end
