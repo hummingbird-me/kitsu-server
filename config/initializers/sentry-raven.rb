@@ -3,6 +3,7 @@ Raven.configure do |config|
   config.excluded_exceptions += [
     'Rack::Utils::InvalidParameterError', # Rack was unable to decode a parameter
   ]
+  config.logger = Rails.logger
 end
 
 module RavenBreadcrumbs

@@ -1,7 +1,11 @@
 module Zorro
   # Connect to MongoDB if configured
   if ENV['AOZORA_MONGO_URL'].present?
-    Client = Mongo::Client.new(ENV['AOZORA_MONGO_URL'], max_pool_size: 24)
+    Client = Mongo::Client.new(
+      ENV['AOZORA_MONGO_URL'],
+      max_pool_size: 24,
+      logger: Rails.logger
+    )
   end
 
   Cache = LookupCache.new
