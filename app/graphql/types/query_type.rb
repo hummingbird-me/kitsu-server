@@ -73,4 +73,12 @@ class Types::QueryType < Types::BaseObject
   def session
     context[:user] || {}
   end
+
+  field :patrons, Types::User.connection_type, null: false do
+    description 'Patrons sorted by a Proprietary Magic Algorithm'
+  end
+
+  def patrons
+    User.patron.followed_first(context[:user]).order(followers_count: :desc)
+  end
 end
