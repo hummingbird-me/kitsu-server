@@ -303,11 +303,9 @@ class User < ApplicationRecord
   end
 
   def braintree_customer
-    begin
-      $braintree.customer.find(braintree_customer_id)
-    rescue Braintree::NotFoundError
-      $braintree.customer.create!(email: email, id: braintree_customer_id)
-    end
+    $braintree.customer.find(braintree_customer_id)
+  rescue Braintree::NotFoundError
+    $braintree.customer.create!(email: email, id: braintree_customer_id)
   end
 
   def blocked?(user)
