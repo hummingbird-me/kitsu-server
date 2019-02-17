@@ -74,7 +74,7 @@ class Types::QueryType < Types::BaseObject
     context[:user] || {}
   end
 
-  field :patrons, Types::User.connection_type, null: false do
+  field :patrons, Types::Profile.connection_type, null: false do
     description 'Patrons sorted by a Proprietary Magic Algorithm'
   end
 
