@@ -1,0 +1,1 @@
+class NotLoggedInError < StandardError; end

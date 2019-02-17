@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190211224502) do
+ActiveRecord::Schema.define(version: 20190217050321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1308,7 +1308,7 @@ ActiveRecord::Schema.define(version: 20190211224502) do
     t.text     "message"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-    t.integer  "length",     default: 0, null: false
+    t.integer  "tier",       default: 0, null: false
   end
 
   create_table "pro_membership_plans", force: :cascade do |t|
@@ -1694,6 +1694,7 @@ ActiveRecord::Schema.define(version: 20190211224502) do
     t.integer  "quotes_count",                            default: 0,           null: false
     t.integer  "pro_tier"
     t.string   "pro_message"
+    t.string   "braintree_customer_id"
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree

@@ -1,3 +1,20 @@
-You've received a year of Kitsu PRO, courtesy of <%= @gift.from.name %>!
-
-<%= @gift.message %>
+<%- content_for(:preview) do %>
+  <%= @gift.message %>
+<%- end %>
+<tr><td class="spacer-cell"></td></tr>
+<tr>
+  <td class="section-cell section-with-illust">
+    <%- if @gift.tier == :pro %>
+      <%= image_tag("illustrations/likes-1.png", width: 128, height: 128, alt: "") %>
+    <%- elsif @gift.tier == :patron %>
+      <%= image_tag("illustrations/likes-given-3.png", width: 128, height: 128, alt: "") %>
+    <%- end %>
+    <h1 class="text-header">
+      <%= t('.subject', name: @gift.user.name, tier: @gift.tier.titleize) %>
+    </h1>
+    <p class="text-quote">
+      <%= image_tag(@gift.user.avatar(:large), width: 80, height: 80, alt: @gift.user.name, class: "avatar") %>
+      <span><%= @gift.message %></span>
+    </p>
+  </td>
+</tr>

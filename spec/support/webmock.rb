@@ -7,7 +7,8 @@ WebMock.disable_net_connect!(allow: [
   'lorempixel.com',
   'localhost',
   'elasticsearch:9200',
-  'oembed.com'
+  'oembed.com',
+  'api.sandbox.braintreegateway.com'
 ])
 
 RSpec.shared_context 'MAL CDN' do

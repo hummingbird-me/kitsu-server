@@ -13,6 +13,8 @@ SimpleCov.start do
   add_group 'Workers', 'app/workers'
   add_group 'Serializers', 'app/serializers'
   add_group 'Policies', 'app/policies'
+  add_group 'Actions', 'app/actions'
+  add_group 'GraphQL', 'app/graphql'
   add_group 'Libs', 'lib/'
 
   track_files '{app,lib}/**/*.rb'
