@@ -12,4 +12,7 @@ class Types::MutationType < Types::BaseObject
   field :pro_set_message,
     mutation: Mutations::Pro::SetMessage,
     description: "Set the user's pro message"
+  field :pro_set_discord,
+    mutation: Mutations::Pro::SetDiscord,
+    description: "Set the user's discord tag"
 end
