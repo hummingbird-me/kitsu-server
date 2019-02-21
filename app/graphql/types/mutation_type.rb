@@ -8,5 +8,8 @@ class Types::MutationType < Types::BaseObject
     description: 'Subscribe to Pro using Stripe'
   field :pro_unsubscribe,
     mutation: Mutations::Pro::Unsubscribe,
-    description: "End the users' pro subscription"
+    description: "End the user's pro subscription"
+  field :pro_set_message,
+    mutation: Mutations::Pro::SetMessage,
+    description: "Set the user's pro message"
 end
