@@ -3,6 +3,8 @@ module Pro
     parameter :user, load: User, required: true
     parameter :message, required: true
 
+    validates :message, length: { maximum: 120 }
+
     def call
       raise NotAuthorizedError unless can_set_message?
 
