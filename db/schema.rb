@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190217050321) do
+ActiveRecord::Schema.define(version: 20190221013130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1695,6 +1695,7 @@ ActiveRecord::Schema.define(version: 20190217050321) do
     t.integer  "pro_tier"
     t.string   "pro_message"
     t.string   "braintree_customer_id"
+    t.string   "pro_discord_user"
   end
 
   add_index "users", ["ao_id"], name: "index_users_on_ao_id", unique: true, using: :btree
