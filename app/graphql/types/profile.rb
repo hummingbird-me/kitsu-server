@@ -36,4 +36,8 @@ class Types::Profile < Types::BaseObject
   field :pro_tier, Types::ProTier,
     null: true,
     description: 'The level of Pro this user currently has'
+
+  field :pro_message, String,
+    null: true,
+    description: 'The message this user has submitted for the Hall of Fame'
 end
