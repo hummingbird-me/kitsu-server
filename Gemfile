@@ -88,7 +88,6 @@ gem 'stream_rails', github: 'GetStream/stream-rails',
 gem 'typhoeus' # Parallelize scraping tasks
 
 # Cash Money
-gem 'braintree'
 gem 'stripe'
 
 # Rack Middleware

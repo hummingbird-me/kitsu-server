@@ -27,8 +27,6 @@ en:
       card_error: 'Invalid card'
       api_connection_error: 'Failed to connect to credit card network'
       stripe_error: 'Something went wrong while processing the transaction'
-    braintree:
-      braintree_error: 'Failed to connect to payment processor'
     pro_error:
       invalid_self_gift: 'Cannot gift to self'
       recipient_is_pro: 'Cannot gift to a user who already has pro'

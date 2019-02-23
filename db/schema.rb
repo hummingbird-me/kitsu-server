@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190221013130) do
+ActiveRecord::Schema.define(version: 20190223050111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1694,7 +1694,6 @@ ActiveRecord::Schema.define(version: 20190221013130) do
     t.integer  "quotes_count",                            default: 0,           null: false
     t.integer  "pro_tier"
     t.string   "pro_message"
-    t.string   "braintree_customer_id"
     t.string   "pro_discord_user"
   end
 

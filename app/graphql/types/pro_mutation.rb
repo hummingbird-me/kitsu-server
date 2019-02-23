@@ -1,8 +1,5 @@
 class Types::ProMutation < Types::BaseObject
   # Subscription Management
-  field :subscribe_with_braintree,
-    mutation: Mutations::Pro::SubscribeWithBraintree,
-    description: 'Subscribe to Pro using Braintree'
   field :subscribe_with_stripe,
     mutation: Mutations::Pro::SubscribeWithStripe,
     description: 'Subscribe to Pro using Stripe'
