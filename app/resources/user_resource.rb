@@ -6,7 +6,8 @@ class UserResource < BaseResource
   attributes :name, :past_names, :slug, :about, :location, :waifu_or_husbando, :followers_count,
     :following_count, :life_spent_on_anime, :birthday, :gender, :comments_count, :favorites_count,
     :likes_given_count, :reviews_count, :likes_received_count, :posts_count, :ratings_count,
-    :media_reactions_count, :pro_expires_at, :title, :profile_completed, :feed_completed, :website
+    :media_reactions_count, :pro_expires_at, :title, :profile_completed, :feed_completed, :website,
+    :pro_tier
   attributes :avatar, :cover_image, format: :attachment
   attributes(*PRIVATE_FIELDS)
 
