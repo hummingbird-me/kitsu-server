@@ -3,29 +3,16 @@ class Mutations::Pro::Unsubscribe < Mutations::BaseMutation
 
   def ready?
     raise GraphQL::ExecutionError, 'Must be logged in' if user.blank?
-    raise GraphQL::ExecutionError, 'No subscription found' if subscription.blank?
 
     true
   end
 
-  def resolve
-    user = context[:user]
-    subscription = user.pro_subscription
-
-    subscription.cancel!
-
-    { expires_at: user.pro_expires_at }
+  def resolve(reason: nil)
+    Pro::Unsubscribe.call(
+      user: context[:user],
+      reason: reason
+    )
   rescue ProSubscription::NoCancellationError
-    raise GraphQL::ExecutionError, 'Cannot cancel an iOS subscription'
-  end
-
-  private
-
-  def user
-    context[:user]
-  end
-
-  def subscription
-    user.pro_subscription
+    raise GraphQL::ExecutionError, 'Cannot cancel that type of subscription here'
   end
 end
