@@ -407,6 +407,9 @@ GEM
     parallel (1.12.1)
     paranoia (2.4.1)
       activerecord (>= 4.0, < 5.3)
+    paypal-sdk-rest (1.7.3)
+      multi_json (~> 1.0)
+      xml-simple
     pg (0.21.0)
     pg_query (1.0.2)
     pghero (2.2.0)
@@ -663,6 +666,7 @@ GEM
       hashdiff
     webrobots (0.1.2)
     where-or (0.1.6)
+    xml-simple (1.1.5)
 
 PLATFORMS
   ruby
@@ -724,6 +728,7 @@ DEPENDENCIES
   paperclip-optimizer
   parallel
   paranoia (~> 2.4)
+  paypal-sdk-rest (~> 1)
   pg
   pg_query
   pghero

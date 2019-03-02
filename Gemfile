@@ -88,6 +88,7 @@ gem 'stream_rails', github: 'GetStream/stream-rails',
 gem 'typhoeus' # Parallelize scraping tasks
 
 # Cash Money
+gem 'paypal-sdk-rest', '~> 1'
 gem 'stripe'
 
 # Rack Middleware
