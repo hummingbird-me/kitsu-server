@@ -27,8 +27,8 @@ namespace :paypal_pro do
           }
         }],
         merchant_preferences: {
-          cancel_url: 'http://localhost:3000/cancel',
-          return_url: 'http://localhost:3000/processagreement',
+          cancel_url: 'https://www.paypal.com/checkoutnow/error',
+          return_url: 'https://www.paypal.com/checkoutnow/error',
           max_fail_attempts: '0',
           auto_bill_amount: 'YES',
           initial_fail_amount_action: 'CANCEL'
