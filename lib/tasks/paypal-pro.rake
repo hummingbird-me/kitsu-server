@@ -35,6 +35,11 @@ namespace :paypal_pro do
         }
       )
       plan.create!
+
+      # They won't let you activate in the same request as creation
+      patch = PayPal::SDK::REST::Patch.new(op: 'replace', path: '/', value: { state: 'ACTIVE' })
+      plan.update!(patch)
+
       puts "PAYPAL_#{tier[:name]}_PLAN=#{plan.id}"
     end
   end
