@@ -48,14 +48,14 @@ class LibraryEntriesController < ApplicationController
   end
 
   def download_xml
-    render status: 404 unless User.current.present?
-    render status: 404 unless Flipper[:xml_download].enabled?(User.current)
-    render status: 400 unless params[:kind].in?(%w[anime manga])
+    head status: 404 unless User.current.present?
+    head status: 404 unless Flipper[:xml_download].enabled?(User.current)
+    head status: 400 unless params[:kind].in?(%w[anime manga])
 
     user = User.current
     xml = ListSync::MyAnimeList::XmlGenerator.new(user, params[:kind].to_sym).to_xml
 
-    send_data xml, filename: "#{user.name}-#{params[:kind]}.xml"
+    send_data xml, filename: "kitsu-#{user.slug}-#{params[:kind]}.xml"
   end
 
   def update_params
