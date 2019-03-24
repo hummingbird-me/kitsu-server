@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       get '/pro-subscription', to: 'pro_subscription#show'
 
       ### Library
+      get '/library-entries/_xml', to: 'library_entries#download_xml'
       get '/library-entries/_issues', to: 'library_entries#issues'
       delete '/library-entries/_bulk', to: 'library_entries#bulk_delete'
       patch '/library-entries/_bulk', to: 'library_entries#bulk_update'

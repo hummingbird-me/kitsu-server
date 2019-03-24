@@ -47,6 +47,17 @@ class LibraryEntriesController < ApplicationController
     render json: serialize_entries(entries)
   end
 
+  def download_xml
+    render status: 404 unless User.current.present?
+    render status: 404 unless Flipper[:xml_download].enabled?(User.current)
+    render status: 400 unless params[:kind].in?(%w[anime manga])
+
+    user = User.current
+    xml = ListSync::MyAnimeList::XmlGenerator.new(user, params[:kind].to_sym).to_xml
+
+    send_data xml, filename: "#{user.name}-#{params[:kind]}.xml"
+  end
+
   def update_params
     params.dig(:data, :attributes).permit(:status)
   end
