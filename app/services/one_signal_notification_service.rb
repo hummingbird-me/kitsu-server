@@ -6,7 +6,14 @@ class OneSignalNotificationService
 
   def run!
     notification = notify!
-    invalid_players = notification.map { |res| res&.dig('errors', 'invalid_player_ids') }
+    invalid_players = notification.map do |res|
+      Raven.breadcrumbs.record(
+        data: res,
+        category: 'onesignal',
+        message: "Notified #{@user.name}"
+      )
+      res&.dig('errors', 'invalid_player_ids')
+    end
     invalid_players = invalid_players.flatten.compact
     OneSignalPlayer.where(player_id: invalid_players).delete_all if invalid_players
   end
