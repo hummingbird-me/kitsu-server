@@ -9,6 +9,7 @@ module ListSync
     rescue ListSync::AuthenticationError
       linked_account.update!(sync_to: false, disabled_reason: 'Login failed')
       error! pending_logs, 'Login failed'
+      raise
     rescue ListSync::RemoteError => e
       error! pending_logs, e.message
       raise
