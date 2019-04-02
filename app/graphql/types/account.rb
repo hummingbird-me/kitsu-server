@@ -15,7 +15,12 @@ class Types::Account < Types::BaseObject
     null: true,
     description: 'The PRO subscription for this account'
 
+  # TODO: allow for multiple emails per user in the actual database
+  def email
+    [object.email]
+  end
+
   def profile
-    self
+    object
   end
 end
