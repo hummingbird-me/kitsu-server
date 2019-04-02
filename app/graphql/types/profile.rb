@@ -5,6 +5,9 @@ class Types::Profile < Types::BaseObject
   field :slug, String,
     null: true,
     description: 'The URL-friendly identifier for this profile'
+  field :url, String,
+    null: true,
+    description: 'The URL for this profile'
 
   # Name
   field :name, String,
@@ -40,4 +43,8 @@ class Types::Profile < Types::BaseObject
   field :pro_message, String,
     null: true,
     description: 'The message this user has submitted for the Hall of Fame'
+
+  def url
+    "https://kitsu/users/#{object.slug || object.id}"
+  end
 end
