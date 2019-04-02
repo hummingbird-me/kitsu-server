@@ -14,4 +14,8 @@ class Types::Account < Types::BaseObject
   field :pro_subscription, Types::ProSubscription,
     null: true,
     description: 'The PRO subscription for this account'
+
+  def profile
+    self
+  end
 end
