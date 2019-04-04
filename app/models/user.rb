@@ -279,7 +279,7 @@ class User < ApplicationRecord
 
   def ao_pro
     # If they're ao_pro then strip the ao_ prefix and return it
-    pro_tier.to_s.sub('ao_').to_sym if pro_tier.to_s.start_with?('ao_')
+    pro_tier.to_s.sub('ao_', '').to_sym if pro_tier.to_s.start_with?('ao_')
   end
 
   def pro_streak
