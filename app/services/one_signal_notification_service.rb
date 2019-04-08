@@ -12,7 +12,7 @@ class OneSignalNotificationService
         category: 'onesignal',
         message: "Notified #{@user.name}"
       )
-      res&.dig('errors', 'invalid_player_ids')
+      res&.dig('errors', 'invalid_player_ids') if res['errors'].is_a?(Hash)
     end
     invalid_players = invalid_players.flatten.compact
     OneSignalPlayer.where(player_id: invalid_players).delete_all if invalid_players
