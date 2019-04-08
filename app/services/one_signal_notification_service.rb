@@ -1,4 +1,6 @@
 class OneSignalNotificationService
+  class OneSignalError < StandardError; end
+
   def initialize(user, activity)
     @user = user
     @activity = activity
@@ -12,7 +14,14 @@ class OneSignalNotificationService
         category: 'onesignal',
         message: "Notified #{@user.name}"
       )
-      res&.dig('errors', 'invalid_player_ids') if res['errors'].is_a?(Hash)
+      if res['errors'].is_a?(Hash)
+        res&.dig('errors', 'invalid_player_ids')
+      else
+        Array.wrap(res['errors']).each do |message|
+          ex = OneSignalError.new(message)
+          Raven.capture_exception(ex)
+        end
+      end
     end
     invalid_players = invalid_players.flatten.compact
     OneSignalPlayer.where(player_id: invalid_players).delete_all if invalid_players
