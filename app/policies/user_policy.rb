@@ -17,7 +17,7 @@ class UserPolicy < ApplicationPolicy
       all - %i[confirmed title pro_expires_at about_formatted comments_count favorites_count
                followers_count following_count import_from import_error import_status ip_addresses
                last_backup ratings_count rejected_edit_count reviews_count sign_in_count
-               stripe_customer_id life_spent_on_anime ao_pro]
+               stripe_customer_id life_spent_on_anime ao_pro pro_tier]
     end
   end
 
