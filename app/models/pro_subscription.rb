@@ -6,6 +6,11 @@ class ProSubscription < ApplicationRecord
     pro: 1,
     patron: 2
   }
+  enum state: {
+    pending: 0, # Waiting for initial setup to complete
+    current: 1, # Currently up-to-date on payments
+    errored: 2  # Error during processing
+  }
 
   validates :type, presence: true
   validates :billing_id, presence: true
