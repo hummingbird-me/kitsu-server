@@ -8,6 +8,8 @@ module Pro
     validates :tier, inclusion: { in: %w[pro patron] }
 
     def call
+      user.pro_subscription&.destroy!
+
       Billing::UpdateStripeSource.call(user: user, token: token)
       subscription = ProSubscription::StripeSubscription.create!(user: user, tier: tier)
 
