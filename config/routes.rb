@@ -4,6 +4,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   scope '/api' do
     post '/graphql', to: 'graphql#execute'
+    get '/graphql-playground', to: 'graphql_playground#show'
     mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql'
     scope '/edge' do
       ### Users
