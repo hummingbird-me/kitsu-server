@@ -55,7 +55,6 @@ gem 'flipper-redis'
 gem 'flipper-ui'
 
 # API Frameworks
-gem 'graphiql-rails'
 gem 'graphql'
 gem 'graphql-batch'
 gem 'jsonapi-resources', '0.9.0'
