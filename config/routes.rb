@@ -4,7 +4,8 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   scope '/api' do
     post '/graphql', to: 'graphql#execute'
-    get '/graphql-playground', to: 'graphql_playground#show'
+    get '/playground', to: 'graphql_playground#show'
+    get '/graphiql', to: redirect('/api/playground')
     scope '/edge' do
       ### Users
       # These have to be first since they have precedence
