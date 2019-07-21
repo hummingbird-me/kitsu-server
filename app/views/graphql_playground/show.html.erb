@@ -51,8 +51,13 @@
   </div>
   <script>
     window.addEventListener('load', function (event) {
+      var session = JSON.parse(localStorage['ember_simple_auth:session'] || '{}');
+      var token = session['authenticated'] && session['authenticated']['access_token'];
+      var headers = token ? { Authorization: 'Bearer ' + token } : {};
+
       GraphQLPlayground.init(document.getElementById('root'), {
-        endpoint: '/api/graphql'
+        endpoint: '/api/graphql',
+        headers: headers
       })
     })
   </script>
