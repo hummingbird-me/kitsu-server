@@ -235,9 +235,6 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (~> 0.7)
-    graphiql-rails (1.4.11)
-      railties
-      sprockets-rails
     graphql (1.8.11)
     graphql-batch (0.3.10)
       graphql (>= 0.8, < 2)
@@ -697,7 +694,6 @@ DEPENDENCIES
   forest_liana
   friendly_id
   google-api-client
-  graphiql-rails
   graphql
   graphql-batch
   guard
@@ -778,4 +774,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.16.1
+   1.17.3

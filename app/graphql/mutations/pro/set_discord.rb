@@ -3,6 +3,8 @@ class Mutations::Pro::SetDiscord < Mutations::BaseMutation
     required: true,
     description: 'Your discord tag (Name#1234)'
 
+  field :discord, String, null: false
+
   def ready?
     # Check that we're logged in
     raise GraphQL::ExecutionError, ErrorI18n.t(NotLoggedInError) if user.blank?
@@ -15,6 +17,8 @@ class Mutations::Pro::SetDiscord < Mutations::BaseMutation
       user: User.current,
       discord: discord
     )
+
+    { discord: discord }
   rescue NotAuthorizedError => ex
     raise GraphQL::ExecutionError, ErrorI18n.t(ex)
   end

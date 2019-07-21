@@ -1,7 +1,7 @@
 class LibraryEventResource < BaseResource
   immutable
 
-  attributes :changed_data, :kind, :created_at
+  attributes :changed_data, :kind
 
   has_one :library_entry
   has_one :user
