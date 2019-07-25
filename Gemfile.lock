@@ -18,6 +18,15 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: https://github.com/hummingbird-me/strait.git
+  revision: 994ceeec79bdc647b995618cd0e27c08d521804d
+  branch: master
+  specs:
+    strait (1.0.0)
+      connection_pool (>= 2.0, < 3.0)
+      redis (~> 4.0, >= 3.0)
+
+GIT
   remote: https://github.com/nuckchorris/rack-timeout.git
   revision: 0e01a118a02c6843643cface4c10d10f7f002582
   specs:
@@ -758,6 +767,7 @@ DEPENDENCIES
   sinatra
   sitemap_generator
   spring
+  strait!
   stream-ruby (~> 2.10.0)
   stream_rails!
   stripe
