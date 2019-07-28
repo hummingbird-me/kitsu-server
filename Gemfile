@@ -1,11 +1,9 @@
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 source 'https://rubygems.org'
-ruby '2.3.1'
 
 # Core Stuff
 gem 'puma'
-gem 'rails', '4.2.10'
-gem 'rails-api'
+gem 'rails', '5.0.7.2'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
