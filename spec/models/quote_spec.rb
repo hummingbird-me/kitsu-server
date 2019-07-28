@@ -35,6 +35,6 @@ RSpec.describe Quote, type: :model do
   it { should belong_to(:media) }
   it { should have_many(:likes).class_name('QuoteLike') }
 
-  it { should validate_presence_of(:user) }
-  it { should validate_presence_of(:media) }
+  it { should validate_presence_of(:user).with_message('must exist') }
+  it { should validate_presence_of(:media).with_message('must exist') }
 end

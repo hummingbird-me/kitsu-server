@@ -49,7 +49,7 @@ RSpec.describe Comment, type: :model do
   context 'with content' do
     before { subject.content = 'some content' }
 
-    it { should_not validate_presence_of(:uploads) }
+    it { should_not validate_presence_of(:uploads).with_message('must exist') }
   end
 
   context 'with uploads' do

@@ -22,7 +22,7 @@ require 'rails_helper'
 RSpec.describe Mapping, type: :model do
   subject { build(:mapping) }
   it { should belong_to(:item) }
-  it { should validate_presence_of(:item) }
+  it { should validate_presence_of(:item).with_message('must exist') }
   it { should validate_presence_of(:external_site) }
   it { should validate_presence_of(:external_id) }
   it do

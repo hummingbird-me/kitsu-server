@@ -30,9 +30,9 @@ require 'rails_helper'
 
 RSpec.describe AnimeCasting, type: :model do
   it { should belong_to(:anime_character) }
-  it { should validate_presence_of(:anime_character) }
+  it { should validate_presence_of(:anime_character).with_message('must exist') }
   it { should belong_to(:person) }
-  it { should validate_presence_of(:person) }
+  it { should validate_presence_of(:person).with_message('must exist') }
   it { should belong_to(:licensor).class_name('Producer') }
   it { should validate_length_of(:locale).is_at_most(20) }
   it { should validate_length_of(:notes).is_at_most(140) }

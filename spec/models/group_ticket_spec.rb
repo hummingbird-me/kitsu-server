@@ -32,9 +32,9 @@ require 'rails_helper'
 
 RSpec.describe GroupTicket, type: :model do
   it { should belong_to(:group) }
-  it { should validate_presence_of(:group) }
+  it { should validate_presence_of(:group).with_message('must exist') }
   it { should belong_to(:user) }
-  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:user).with_message('must exist') }
   it { should belong_to(:assignee).class_name('User') }
   it { should define_enum_for(:status) }
   it do

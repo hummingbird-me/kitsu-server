@@ -46,7 +46,7 @@ RSpec.describe ListImport do
 
   it { should define_enum_for(:status) }
   it { should belong_to(:user) }
-  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:user).with_message('must exist') }
   it { should define_enum_for(:strategy) }
   it { should validate_presence_of(:strategy) }
   it { should have_attached_file(:input_file) }

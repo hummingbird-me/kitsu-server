@@ -40,15 +40,15 @@ RSpec.describe Review, type: :model do
   subject { build(:review, user: user) }
   it { should have_many(:likes).class_name('ReviewLike') }
   it { should belong_to(:media) }
-  it { should validate_presence_of(:media) }
+  it { should validate_presence_of(:media).with_message('must exist') }
   it 'should validate uniqueness per media and user' do
     subject.save!
     expect(subject).to validate_uniqueness_of(:media_id).scoped_to(:user_id)
   end
   it { should belong_to(:user).counter_cache(true) }
-  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:user).with_message('must exist') }
   it { should belong_to(:library_entry) }
-  it { should validate_presence_of(:library_entry) }
+  it { should validate_presence_of(:library_entry).with_message('must exist') }
   it { should validate_presence_of(:content) }
 
   describe '#steam_activity' do

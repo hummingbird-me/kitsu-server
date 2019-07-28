@@ -35,7 +35,7 @@ RSpec.describe Episode, type: :model do
   let(:anime) { create(:anime) }
 
   it { should have_many(:videos) }
-  it { should validate_presence_of(:media) }
+  it { should validate_presence_of(:media).with_message('must exist') }
   it { should validate_presence_of(:number) }
   it 'should strip XSS from synopsis' do
     subject.synopsis = '<script>prompt("PASSWORD:")</script>' * 3

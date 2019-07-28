@@ -25,7 +25,7 @@ require 'rails_helper'
 
 RSpec.describe GroupTicketMessage, type: :model do
   it { should belong_to(:user) }
-  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:user).with_message('must exist') }
   it { should belong_to(:ticket).class_name('GroupTicket') }
-  it { should validate_presence_of(:ticket) }
+  it { should validate_presence_of(:ticket).with_message('must exist') }
 end
