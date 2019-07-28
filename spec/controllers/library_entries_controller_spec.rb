@@ -48,7 +48,7 @@
 require 'rails_helper'
 
 RSpec.describe LibraryEntriesController, type: :controller do
-  LIBRARY_ENTRY ||= { status: String, progress: Fixnum }.freeze
+  LIBRARY_ENTRY ||= { status: String, progress: Integer }.freeze
   let(:user) { create(:user) }
   let(:anime) { create(:anime) }
 

@@ -39,7 +39,9 @@ module Episodic
     validates :episode_count, numericality: { greater_than: 0 }, allow_nil: true
 
     after_save do
-      episodes.where(length: nil).update_all(length: episode_length) if episode_length_changed?
+      if saved_change_to_episode_length?
+        episodes.where(length: nil).update_all(length: episode_length)
+      end
     end
   end
 end

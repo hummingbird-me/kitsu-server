@@ -27,31 +27,32 @@ class LibraryEventService
   private
 
   def rated_event
-    event_for(:rated) if @entry.rating_changed?
+    event_for(:rated) if @entry.saved_change_to_rating?
   end
 
   def progressed_event
-    if @entry.progress_changed? || @entry.reconsume_count_changed? || @entry.volumes_owned_changed?
+    if @entry.saved_change_to_progress? || @entry.saved_change_to_reconsume_count? ||
+       @entry.saved_change_to_volumes_owned?
       event_for(:progressed)
     end
   end
 
   def updated_event
-    event_for(:updated) if @entry.status_changed?
+    event_for(:updated) if @entry.saved_change_to_status?
   end
 
   def reacted_event
-    event_for(:reacted) if @entry.media_reaction_id_changed?
+    event_for(:reacted) if @entry.saved_change_to_media_reaction_id?
   end
 
   def annotated_event
-    event_for(:annotated) if @entry.notes_changed?
+    event_for(:annotated) if @entry.saved_change_to_notes?
   end
 
   def event_for(kind)
     LibraryEvent.new(
       kind: kind,
-      changed_data: @entry.changes.slice(*CHANGES_FOR_EVENT[kind]),
+      changed_data: @entry.saved_changes.slice(*CHANGES_FOR_EVENT[kind]),
       library_entry_id: @entry.id,
       anime_id: @entry.anime_id,
       manga_id: @entry.manga_id,

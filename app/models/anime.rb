@@ -141,10 +141,10 @@ class Anime < ApplicationRecord
   end
 
   after_save do
-    if (episode_count_guess_changed? && !episode_count_guess.nil?) &&
+    if (saved_change_to_episode_count_guess? && !episode_count_guess.nil?) &&
        episodes.length != episode_count_guess
       episodes.create_defaults(episode_count_guess || 0)
-    elsif episode_count_changed? && episodes.length != episode_count
+    elsif saved_change_to_episode_count? && episodes.length != episode_count
       episodes.create_defaults(episode_count || 0)
     end
   end

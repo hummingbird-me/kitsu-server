@@ -35,7 +35,7 @@ class StatWorker
     attributes = model.attributes
     # Destruction doesn't set the update time which we need to account for recalculation
     attributes['updated_at'] = Time.now if action.to_s == 'destroy'
-    changes = model.changes
+    changes = model.saved_changes
     super(stat, user.id, action, { class: model.class.name, attributes: attributes }, changes)
   end
 end

@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 # Core Stuff
 gem 'puma'
-gem 'rails', '5.0.7.2'
+gem 'rails', '5.1.7'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
@@ -22,7 +22,7 @@ gem 'bcrypt'
 gem 'doorkeeper'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'pundit'
-gem 'pundit-resources'
+gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
 gem 'rolify'
 gem 'twitter'
 

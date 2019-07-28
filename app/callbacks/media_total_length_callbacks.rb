@@ -26,7 +26,7 @@ class MediaTotalLengthCallbacks < Callbacks
   def after_update
     media.with_lock do
       media.total_length ||= 0
-      media.total_length += ((record.length || 0) - (record.length_was || 0))
+      media.total_length += ((record.length || 0) - (record.length_before_last_save || 0))
       media.save!
     end
   end
