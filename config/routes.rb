@@ -171,7 +171,11 @@ Rails.application.routes.draw do
       get '/groups/:id/_stats', to: 'groups#stats'
       post '/groups/:id/_read', to: 'groups#read'
 
-      get '/algolia-keys/:action', controller: 'algolia_keys'
+      get '/algolia-keys/user', to: 'algolia_keys#user'
+      get '/algolia-keys/posts', to: 'algolia_keys#posts'
+      get '/algolia-keys/media', to: 'algolia_keys#media'
+      get '/algolia-keys/groups', to: 'algolia_keys#groups'
+      get '/algolia-keys/character', to: 'algolia_keys#character'
       get '/algolia-keys', to: 'algolia_keys#all'
 
       # Integrations
