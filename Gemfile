@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 # Core Stuff
 gem 'puma'
-gem 'rails', '5.0.7.2'
+gem 'rails', '5.1.7'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
