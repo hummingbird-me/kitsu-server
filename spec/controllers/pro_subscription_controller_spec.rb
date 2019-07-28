@@ -18,7 +18,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
           }
         )
         expect {
-          post :ios, receipt: 'TEST_RECEIPT', tier: 'pro'
+          post :ios, params: { receipt: 'TEST_RECEIPT', tier: 'pro' }
         }.to(change { user.pro_subscription })
       end
     end
@@ -27,7 +27,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should give an error message' do
         sign_in user
         stub_receipt_verification(status: 21002) # rubocop:disable Style/NumericLiterals
-        post :ios, receipt: 'TEST_RECEIPT', tier: 'pro'
+        post :ios, params: { receipt: 'TEST_RECEIPT', tier: 'pro' }
         expect(response).to have_http_status(400)
         expect(response.body).to have_jsonapi_error(status: 400, detail: /malformed/i)
       end
@@ -37,7 +37,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should give a bad gateway error' do
         sign_in user
         stub_receipt_verification(status: 21150) # rubocop:disable Style/NumericLiterals
-        post :ios, receipt: 'TEST_RECEIPT', tier: 'pro'
+        post :ios, params: { receipt: 'TEST_RECEIPT', tier: 'pro' }
         expect(response).to have_http_status(502)
         expect(response.body).to have_jsonapi_error(status: 502, detail: /Failed to connect/i)
       end
@@ -52,14 +52,14 @@ RSpec.describe ProSubscriptionController, type: :controller do
         expect(api).to receive(:get_purchase_subscription)
         sign_in user
         expect {
-          post :google_play, token: 'TEST', tier: 'pro'
+          post :google_play, params: { token: 'TEST', tier: 'pro' }
         }.to(change { user.pro_subscription })
       end
 
       it 'should return the subscription in JSON' do
         expect(api).to receive(:get_purchase_subscription)
         sign_in user
-        post :google_play, token: 'TEST', tier: 'pro'
+        post :google_play, params: { token: 'TEST', tier: 'pro' }
         expect(Oj.load(response.body)).to match_json_expression(
           user: user.id,
           service: 'google_play',
@@ -72,7 +72,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should return a bad gateway error' do
         expect(api).to receive(:get_purchase_subscription).and_raise(Google::Apis::ServerError, '')
         sign_in user
-        post :google_play, token: 'TEST', tier: 'pro'
+        post :google_play, params: { token: 'TEST', tier: 'pro' }
         expect(response).to have_http_status(502)
         expect(response.body).to have_jsonapi_error(status: 502, detail: /went wrong.*Google Play/i)
       end
@@ -82,7 +82,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
       it 'should return a 400 error' do
         expect(api).to receive(:get_purchase_subscription).and_raise(Google::Apis::ClientError, '')
         sign_in user
-        post :google_play, token: 'TEST', tier: 'pro'
+        post :google_play, params: { token: 'TEST', tier: 'pro' }
         expect(response).to have_http_status(400)
         expect(response.body).to have_jsonapi_error(status: 400, detail: /client error/i)
       end
