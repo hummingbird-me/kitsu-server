@@ -48,7 +48,7 @@ RSpec.describe Post, type: :model do
   subject { build(:post) }
 
   it { should belong_to(:user) }
-  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:user).with_message('must exist') }
   it { should belong_to(:target_user).class_name('User') }
   it { should belong_to(:media) }
   it { should belong_to(:spoiled_unit) }
@@ -62,7 +62,7 @@ RSpec.describe Post, type: :model do
   context 'with content' do
     before { subject.content = 'some content' }
 
-    it { should_not validate_presence_of(:uploads) }
+    it { should_not validate_presence_of(:uploads).with_message('must exist') }
   end
 
   context 'with uploads' do

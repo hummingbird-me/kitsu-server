@@ -7,7 +7,7 @@ AllCops:
   DisplayStyleGuide: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
-Layout/AlignParameters:
+Layout/AlignArguments:
   EnforcedStyle: with_fixed_indentation
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
@@ -29,7 +29,7 @@ Style/CommentAnnotation:
   - DEPRECATED
 Layout/DotPosition:
   EnforcedStyle: leading
-Style/EmptyLineAfterGuardClause:
+Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Naming/FileName:
   Enabled: true
@@ -47,9 +47,9 @@ Style/GuardClause:
   MinBodyLength: 3
 Style/IfUnlessModifier:
   Enabled: true
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 Style/LambdaCall:
   Enabled: true
@@ -194,7 +194,7 @@ Style/EmptyLiteral:
   Enabled: true
 Style/EvenOdd:
   Enabled: true
-Style/FlipFlop:
+Layout/FlipFlop:
   Enabled: true
 Style/IfWithSemicolon:
   Enabled: true
@@ -253,8 +253,6 @@ Layout/SpaceBeforeComment:
 Layout/SpaceBeforeSemicolon:
   Enabled: true
 Layout/SpaceAroundOperators:
-  Enabled: true
-Layout/SpaceAroundKeyword:
   Enabled: true
 Layout/SpaceInsideParens:
   Enabled: true

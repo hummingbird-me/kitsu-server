@@ -29,9 +29,6 @@ module Kitsu
     # UTC all the way
     config.time_zone = 'UTC'
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     # Include all concern directories in app/*/concerns
     concern_dirs = Dir['app/*/concerns'].map { |d| File.expand_path(d) }
     config.eager_load_paths += concern_dirs
@@ -49,9 +46,9 @@ module Kitsu
     config.api_only = false
 
     # Set up Flipper's Memoizer middleware
-    config.middleware.insert_before 0, 'Flipper::Middleware::Memoizer'
+    config.middleware.insert_before 0, Flipper::Middleware::Memoizer
     # Enable CORS
-    config.middleware.insert_before 0, 'Rack::Cors' do
+    config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
         resource '*', headers: :any,

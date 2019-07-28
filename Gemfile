@@ -1,11 +1,9 @@
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 source 'https://rubygems.org'
-ruby '2.3.1'
 
 # Core Stuff
 gem 'puma'
-gem 'rails', '4.2.10'
-gem 'rails-api'
+gem 'rails', '5.0.7.2'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
@@ -18,7 +16,6 @@ gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
 gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
-gem 'where-or' # RAILS-5: Remove this, it just backports AR#where
 
 # Auth{entication,orization}
 gem 'bcrypt'
@@ -140,7 +137,6 @@ group :test do
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
   gem 'stripe-ruby-mock', require: 'stripe_mock' # Mock Stripe API
-  gem 'test_after_commit' # Rails 4 doesn't run commit callbacks on transactions
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
 

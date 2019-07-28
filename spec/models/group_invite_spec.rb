@@ -31,11 +31,11 @@ require 'rails_helper'
 
 RSpec.describe GroupInvite, type: :model do
   it { should belong_to(:group) }
-  it { should validate_presence_of(:group) }
+  it { should validate_presence_of(:group).with_message('must exist') }
   it { should belong_to(:user) }
-  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:user).with_message('must exist') }
   it { should belong_to(:sender).class_name('User') }
-  it { should validate_presence_of(:sender) }
+  it { should validate_presence_of(:sender).with_message('must exist') }
 
   it 'should limit to one active invite per user per group' do
     invite = create(:group_invite)

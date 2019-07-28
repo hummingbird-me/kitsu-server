@@ -28,10 +28,10 @@ require 'rails_helper'
 
 RSpec.describe GroupActionLog, type: :model do
   it { should belong_to(:target) }
-  it { should validate_presence_of(:target) }
+  it { should validate_presence_of(:target).with_message('must exist') }
   it { should belong_to(:group) }
-  it { should validate_presence_of(:group) }
+  it { should validate_presence_of(:group).with_message('must exist') }
   it { should belong_to(:user) }
-  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:user).with_message('must exist') }
   it { should validate_presence_of(:verb) }
 end

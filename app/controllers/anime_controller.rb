@@ -1,6 +1,4 @@
 class AnimeController < ApplicationController
-  skip_after_action :enforce_policy_use, only: %i[languages index]
-
   def languages
     languages = Casting.where(media_id: params[:anime_id], media_type: 'Anime')
                        .distinct.pluck(:language).compact

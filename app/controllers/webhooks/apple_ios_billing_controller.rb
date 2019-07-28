@@ -6,7 +6,7 @@ module Webhooks
 
     def notify
       AppleReceiptService.new(params[:latest_receipt]).call
-      head status: 204
+      head 204
     end
 
     private

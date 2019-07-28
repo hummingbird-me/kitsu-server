@@ -27,8 +27,8 @@ require 'rails_helper'
 
 RSpec.describe AnimeStaff, type: :model do
   it { should belong_to(:anime) }
-  it { should validate_presence_of(:anime) }
+  it { should validate_presence_of(:anime).with_message('must exist') }
   it { should belong_to(:person) }
-  it { should validate_presence_of(:person) }
+  it { should validate_presence_of(:person).with_message('must exist') }
   it { should validate_length_of(:role).is_at_most(140) }
 end

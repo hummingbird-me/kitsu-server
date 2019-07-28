@@ -3,7 +3,6 @@ module CustomControllerHelpers
 
   included do
     include Pundit
-    skip_after_action :enforce_policy_use
   end
 
   def serialize_error(status, message)

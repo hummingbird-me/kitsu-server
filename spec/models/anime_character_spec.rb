@@ -27,8 +27,8 @@ require 'rails_helper'
 
 RSpec.describe AnimeCharacter, type: :model do
   it { should belong_to(:anime) }
-  it { should validate_presence_of(:anime) }
+  it { should validate_presence_of(:anime).with_message('must exist') }
   it { should belong_to(:character) }
-  it { should validate_presence_of(:character) }
+  it { should validate_presence_of(:character).with_message('must exist') }
   it { should define_enum_for(:role) }
 end

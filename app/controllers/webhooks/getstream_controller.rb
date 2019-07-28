@@ -6,7 +6,7 @@ module Webhooks
                                  password: ENV['STREAM_WEBHOOK_PASS']
 
     def verify
-      render text: StreamRails.client.api_key
+      render plain: StreamRails.client.api_key
     end
 
     def notify
@@ -16,7 +16,7 @@ module Webhooks
         GetstreamEventWorker.perform_async(feed, event, activity)
       end
 
-      head status: 200
+      head 200
     end
   end
 end

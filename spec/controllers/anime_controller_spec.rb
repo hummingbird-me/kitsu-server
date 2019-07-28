@@ -61,7 +61,7 @@ RSpec.describe AnimeController, type: :controller do
   describe '#index' do
     describe 'with filter[slug]' do
       it 'should respond with an anime' do
-        get :index, filter: { slug: anime.slug }
+        get :index, params: { filter: { slug: anime.slug } }
         expect(response.body).to have_resources(ANIME.dup, 'anime')
       end
     end
@@ -69,7 +69,7 @@ RSpec.describe AnimeController, type: :controller do
     describe 'with filter[text]', elasticsearch: true do
       it 'should respond with an anime' do
         anime.save!
-        get :index, filter: { text: anime.canonical_title }
+        get :index, params: { filter: { text: anime.canonical_title } }
         expect(response.body).to have_resources(ANIME.dup, 'anime')
       end
     end
@@ -77,27 +77,29 @@ RSpec.describe AnimeController, type: :controller do
 
   describe '#show' do
     it 'should respond with an anime' do
-      get :show, id: anime.id
+      get :show, params: { id: anime.id }
       expect(response.body).to have_resource(ANIME.dup, 'anime')
     end
     it 'has status ok' do
-      get :show, id: anime.id
+      get :show, params: { id: anime.id }
       expect(response).to have_http_status(:ok)
     end
   end
 
   describe '#create' do
     def create_anime
-      post :create, data: {
-        type: 'anime',
-        attributes: {
-          titles: {
-            en_jp: 'Boku no Pico'
-          },
-          canonicalTitle: 'en_jp',
-          abbreviatedTitles: ['BnP'],
-          startDate: '2006-09-07',
-          endDate: '2006-09-07'
+      post :create, params: {
+        data: {
+          type: 'anime',
+          attributes: {
+            titles: {
+              en_jp: 'Boku no Pico'
+            },
+            canonicalTitle: 'en_jp',
+            abbreviatedTitles: ['BnP'],
+            startDate: '2006-09-07',
+            endDate: '2006-09-07'
+          }
         }
       }
     end

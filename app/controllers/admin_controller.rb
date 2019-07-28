@@ -4,11 +4,11 @@ class AdminController < ActionController::Base
   protect_from_forgery with: :null_session
 
   rescue_from ActionController::InvalidAuthenticityToken do
-    render text: 'Token expired/invalid', status: 403
+    render plain: 'Token expired/invalid', status: 403
   end
 
   rescue_from Pundit::NotAuthorizedError do
-    render text: 'Not authorized', status: 403
+    render plain: 'Not authorized', status: 403
   end
 
   def pundit_user

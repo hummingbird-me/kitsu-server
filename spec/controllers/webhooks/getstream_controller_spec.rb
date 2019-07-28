@@ -26,7 +26,7 @@ RSpec.describe Webhooks::GetstreamController, type: :controller do
       let(:body) { fixture('getstream_webhook/feed_remove_request.json') }
 
       it 'should return a status of OK' do
-        post :notify, body
+        post :notify, body: body
         expect(response).to have_http_status(:ok)
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe Webhooks::GetstreamController, type: :controller do
       let(:body) { fixture('getstream_webhook/new_feed_request.json') }
 
       it 'should return a status of OK' do
-        post :notify, body
+        post :notify, body: body
         expect(response).to have_http_status(:ok)
       end
     end

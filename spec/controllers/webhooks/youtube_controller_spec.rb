@@ -13,11 +13,12 @@ RSpec.describe Webhooks::YoutubeController, type: :controller do
   describe '#verify' do
     context 'for an unsubscribe' do
       it 'should reply with the challenge' do
-        get :verify,
+        get :verify, params: {
           'linked_account' => '0',
           'hub.mode' => 'unsubscribe',
           'hub.topic' => linked_account.topic_url,
           'hub.challenge' => challenge
+        }
         expect(response).to have_http_status(:ok)
         expect(response.body).to eq(challenge)
       end
@@ -26,11 +27,12 @@ RSpec.describe Webhooks::YoutubeController, type: :controller do
     describe 'for a subscribe' do
       context 'with the correct topic' do
         it 'should reply with the challenge' do
-          get :verify,
+          get :verify, params: {
             'linked_account' => linked_account.id,
             'hub.mode' => 'subscribe',
             'hub.topic' => linked_account.topic_url,
             'hub.challenge' => challenge
+          }
           expect(response).to have_http_status(:ok)
           expect(response.body).to eq(challenge)
         end
@@ -38,11 +40,12 @@ RSpec.describe Webhooks::YoutubeController, type: :controller do
 
       context 'with an incorrect topic' do
         it 'should reply with a 404' do
-          get :verify,
+          get :verify, params: {
             'linked_account' => linked_account.id,
             'hub.mode' => 'subscribe',
             'hub.topic' => 'FAKE TOPIC',
             'hub.challenge' => challenge
+          }
           expect(response).to have_http_status(404)
         end
       end
@@ -65,7 +68,7 @@ RSpec.describe Webhooks::YoutubeController, type: :controller do
       end
 
       it 'should return a status of OK' do
-        post :notify, linked_account: linked_account.id
+        post :notify, params: { linked_account: linked_account.id }
         expect(response).to have_http_status(:ok)
       end
 
@@ -75,7 +78,7 @@ RSpec.describe Webhooks::YoutubeController, type: :controller do
         expect(notif_class).to receive(:new).and_return(notif)
         expect(notif).to receive(:post!).with(linked_account.user)
         stub_const('YoutubeService::Notification', notif_class)
-        post :notify, linked_account: linked_account.id
+        post :notify, params: { linked_account: linked_account.id }
       end
     end
 
@@ -93,7 +96,7 @@ RSpec.describe Webhooks::YoutubeController, type: :controller do
       end
 
       it 'should return a status of OK' do
-        post :notify, linked_account: linked_account.id
+        post :notify, params: { linked_account: linked_account.id }
         expect(response).to have_http_status(:ok)
       end
 
@@ -101,7 +104,7 @@ RSpec.describe Webhooks::YoutubeController, type: :controller do
         notif_class = double('YoutubeService::Notification')
         expect(notif_class).not_to receive(:new)
         stub_const('YoutubeService::Notification', notif_class)
-        post :notify, linked_account: linked_account.id
+        post :notify, params: { linked_account: linked_account.id }
       end
     end
   end

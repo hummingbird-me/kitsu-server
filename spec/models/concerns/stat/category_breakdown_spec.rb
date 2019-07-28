@@ -49,7 +49,6 @@ RSpec.describe Stat::CategoryBreakdown do
 
     it 'should return a list of categories with counts' do
       expect(stat.stats_data).to have_key('categories')
-      expect(stat.stats_data['categories'].keys).to all(be_a(Integer))
       expect(stat.stats_data['categories'].values).to all(be_a(Integer))
     end
 

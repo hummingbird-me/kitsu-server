@@ -1,8 +1,6 @@
 class UsersController < ApplicationController
   include CustomControllerHelpers
 
-  skip_after_action :enforce_policy_use, only: %i[recover conflicts_index conflicts_update]
-
   def recover
     query = params[:username]
     reset = PasswordResetService.new(query)

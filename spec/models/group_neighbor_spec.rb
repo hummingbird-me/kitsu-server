@@ -27,7 +27,7 @@ RSpec.describe GroupNeighbor, type: :model do
   it do
     should belong_to(:source).class_name('Group').counter_cache('neighbors_count')
   end
-  it { should validate_presence_of(:source) }
+  it { should validate_presence_of(:source).with_message('must exist') }
   it { should belong_to(:destination).class_name('Group') }
-  it { should validate_presence_of(:destination) }
+  it { should validate_presence_of(:destination).with_message('must exist') }
 end
