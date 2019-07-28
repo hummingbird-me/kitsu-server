@@ -1,4 +1,4 @@
-FROM rails:4.2
+FROM rails:5.0
 MAINTAINER Kitsu, Inc.
 
 RUN mkdir -p /opt/kitsu/server
