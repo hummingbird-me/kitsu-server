@@ -32,6 +32,15 @@ class ApplicationController < JSONAPI::ResourceController
     end
   end
 
+  rescue_from Strait::RateLimitExceeded do
+    render status: 429, json: {
+      errors: [{
+        status: 429,
+        title: 'Rate Limit Exceeded'
+      }]
+    }
+  end
+
   if Raven.configuration.capture_allowed?
     on_server_error do |error|
       extra = {}
