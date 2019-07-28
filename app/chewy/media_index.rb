@@ -19,20 +19,20 @@ class MediaIndex < Chewy::Index
     # Get character names for a series
     def get_characters(type, ids)
       groupify Casting.joins(:character).where(media_id: ids, media_type: type)
-        .uniq.pluck(:media_id, 'characters.name')
+        .distinct.pluck(:media_id, 'characters.name')
     end
 
     # Get person names for a series
     def get_people(type, ids)
       groupify Casting.joins(:person).where(media_id: ids, media_type: type)
-        .uniq.pluck(:media_id, 'people.name')
+        .distinct.pluck(:media_id, 'people.name')
     end
 
     # Get Streamers for a series
     def get_streamers(type, ids)
       groupify StreamingLink
         .joins(:streamer)
-        .where(media_id: ids, media_type: type).uniq
+        .where(media_id: ids, media_type: type).distinct
         .pluck(:media_id, 'streamers.site_name')
     end
   end

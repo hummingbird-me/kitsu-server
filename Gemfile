@@ -16,7 +16,6 @@ gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
 gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'redis-rails' # Redis on Rails
-gem 'where-or' # RAILS-5: Remove this, it just backports AR#where
 
 # Auth{entication,orization}
 gem 'bcrypt'
