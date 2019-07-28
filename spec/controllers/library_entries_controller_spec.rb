@@ -48,7 +48,7 @@
 require 'rails_helper'
 
 RSpec.describe LibraryEntriesController, type: :controller do
-  LIBRARY_ENTRY ||= { status: String, progress: Integer }.freeze
+  LIBRARY_ENTRY ||= { status: String, progress: Fixnum }.freeze
   let(:user) { create(:user) }
   let(:anime) { create(:anime) }
 
@@ -56,7 +56,7 @@ RSpec.describe LibraryEntriesController, type: :controller do
     describe 'with filter[user_id]' do
       it 'should respond with a list of library entries' do
         3.times { create(:library_entry, user: user) }
-        get :index, filter: { user_id: user }
+        get :index, params: { filter: { user_id: user } }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
       end
     end
@@ -64,7 +64,9 @@ RSpec.describe LibraryEntriesController, type: :controller do
     describe 'with filter[media_type] + filter[media_id]' do
       it 'should respond with a list of library entries' do
         3.times { create(:library_entry, media: anime) }
-        get :index, filter: { media_id: anime.id, media_type: 'Anime' }
+        get :index, params: {
+          filter: { media_id: anime.id, media_type: 'Anime' }
+        }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
       end
     end
@@ -73,8 +75,9 @@ RSpec.describe LibraryEntriesController, type: :controller do
       it 'should respond with a single library entry as an array' do
         create(:library_entry, user: user, media: anime)
         3.times { create(:library_entry, user: build(:user), media: anime) }
-        get :index, filter: { media_id: anime.id, media_type: 'Anime',
-                              user_id: user }
+        get :index, params: {
+          filter: { media_id: anime.id, media_type: 'Anime', user_id: user }
+        }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
         expect(JSON.parse(response.body)['data'].count).to eq(1)
       end
@@ -88,7 +91,7 @@ RSpec.describe LibraryEntriesController, type: :controller do
           create(:library_entry, user: build(:user), media: anime,
                                  private: true)
         end
-        get :index, filter: { user_id: user.id }
+        get :index, params: { filter: { user_id: user.id } }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
         expect(JSON.parse(response.body)['data'].count).to eq(1)
       end
@@ -97,7 +100,7 @@ RSpec.describe LibraryEntriesController, type: :controller do
         sign_in(user)
         create(:library_entry, user: user, media: anime, private: true)
         3.times { create(:library_entry, user: build(:user), media: anime) }
-        get :index, filter: { user_id: user.id }
+        get :index, params: { filter: { user_id: user.id } }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
         expect(JSON.parse(response.body)['data'].count).to eq(1)
       end

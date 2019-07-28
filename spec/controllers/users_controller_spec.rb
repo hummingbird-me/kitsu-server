@@ -111,18 +111,18 @@ RSpec.describe UsersController, type: :controller do
     describe 'with filter[self]' do
       it 'should respond with a user when authenticated' do
         sign_in user
-        get :index, filter: { self: 'yes' }
+        get :index, params: { filter: { self: 'yes' } }
         expect(response.body).to have_resources(CURRENT_USER.dup, 'users')
         expect(response).to have_http_status(:ok)
       end
       it 'should respond with an empty list when unauthenticated' do
-        get :index, filter: { self: 'yes' }
+        get :index, params: { filter: { self: 'yes' } }
         expect(response.body).to have_empty_resource
       end
     end
     describe 'with filter[name]' do
       it 'should find by username' do
-        get :index, filter: { name: user.name }
+        get :index, params: { filter: { name: user.name } }
         user_json = USER.merge(name: user.name)
         expect(response.body).to have_resources(user_json, 'users')
       end
@@ -131,17 +131,17 @@ RSpec.describe UsersController, type: :controller do
 
   describe '#show' do
     it 'should respond with a user' do
-      get :show, id: user.id
+      get :show, params: { id: user.id }
       expect(response.body).to have_resource(USER.dup, 'users')
     end
     it 'has status ok' do
-      get :show, id: user.id
+      get :show, params: { id: user.id }
       expect(response).to have_http_status(:ok)
     end
 
     context 'without authentication' do
       it 'should not return the password or email' do
-        get :show, id: user.id
+        get :show, params: { id: user.id }
         expect(response.body).not_to have_resource({
           password: String,
           email: String
@@ -152,13 +152,15 @@ RSpec.describe UsersController, type: :controller do
 
   describe '#create' do
     def create_user
-      post :create, data: {
-        type: 'users',
-        attributes: {
-          name: 'Senjougahara',
-          about: 'hitagi crab',
-          email: 'senjougahara@hita.gi',
-          password: 'headtilt'
+      post :create, params: {
+        data: {
+          type: 'users',
+          attributes: {
+            name: 'Senjougahara',
+            bio: 'hitagi crab',
+            email: 'senjougahara@hita.gi',
+            password: 'headtilt'
+          }
         }
       }
     end
@@ -182,11 +184,14 @@ RSpec.describe UsersController, type: :controller do
     let(:user) { create(:user) }
     def update_user
       sign_in user
-      post :update, id: user.id, data: {
-        type: 'users',
+      post :update, params: {
         id: user.id,
-        attributes: {
-          name: 'crab'
+        data: {
+          type: 'users',
+          id: user.id,
+          attributes: {
+            name: 'crab'
+          }
         }
       }
     end
