@@ -18,6 +18,16 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: https://github.com/hummingbird-me/pundit-resources.git
+  revision: a93c8708a697591bbbf9cac2a5d7a6695d769e61
+  specs:
+    pundit-resources (1.1.1)
+      activesupport
+      jsonapi-resources
+      pundit
+      rails (>= 4.2.1)
+
+GIT
   remote: https://github.com/hummingbird-me/strait.git
   revision: 994ceeec79bdc647b995618cd0e27c08d521804d
   branch: master
@@ -439,11 +449,6 @@ GEM
       puma (>= 2.7, < 4)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
-    pundit-resources (1.1.1)
-      activesupport
-      jsonapi-resources
-      pundit
-      rails (>= 4.2.1, < 5.1)
     raabro (1.1.6)
     rack (2.0.7)
     rack-attack (5.4.2)
@@ -739,7 +744,7 @@ DEPENDENCIES
   puma
   puma_worker_killer
   pundit
-  pundit-resources
+  pundit-resources!
   rack-attack
   rack-cors
   rack-timeout!

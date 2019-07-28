@@ -22,7 +22,7 @@ gem 'bcrypt'
 gem 'doorkeeper'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'pundit'
-gem 'pundit-resources'
+gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
 gem 'rolify'
 gem 'twitter'
 
