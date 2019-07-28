@@ -6,7 +6,7 @@ class BufferedStreamClient
     # We can send 250 follow-many requests per 60 seconds
     RATE_LIMIT = 60.seconds / 240 * GROUPS_PER_BATCH
     # Each follow-many is limited to 2500 entries
-    BATCH_SIZE = 2_400
+    BATCH_SIZE = 1_500
     # Match a valid feed name
     VALID_FEED = /\A[\w-]+:[\w-]+\z/i
 
