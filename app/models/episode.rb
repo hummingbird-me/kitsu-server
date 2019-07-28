@@ -88,7 +88,7 @@ class Episode < ApplicationRecord
     self.titles = titles.reject { |_, t| /\AEpisode \d+\z/ =~ t || t.blank? }
     self.canonical_title = titles.keys.find { |t| t =~ /en/ } unless canonical_title
   end
-  after_save { media.recalculate_episode_length! if length_changed? }
+  after_save { media.recalculate_episode_length! if saved_change_to_length? }
   after_destroy { media.recalculate_episode_length! }
 
   after_commit(on: :create) { feed.setup! }

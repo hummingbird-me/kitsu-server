@@ -96,10 +96,10 @@ class Manga < ApplicationRecord
   end
 
   after_save do
-    if (chapter_count_guess_changed? && !chapter_count_guess.nil?) &&
+    if (saved_change_to_chapter_count_guess? && !chapter_count_guess.nil?) &&
        chapters.length != chapter_count_guess
       chapters.create_defaults(chapter_count_guess || 0)
-    elsif chapter_count_changed? && chapters.length != chapter_count
+    elsif saved_change_to_chapter_count? && chapters.length != chapter_count
       chapters.create_defaults(chapter_count || 0)
     end
   end

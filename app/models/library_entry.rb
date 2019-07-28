@@ -213,20 +213,20 @@ class LibraryEntry < ApplicationRecord
   after_save do
     # Disable activities and trending vote on import
     unless imported || private?
-      media.trending_vote(user, 0.5) if progress_changed?
-      media.trending_vote(user, 1.0) if status_changed?
+      media.trending_vote(user, 0.5) if saved_change_to_progress?
+      media.trending_vote(user, 1.0) if saved_change_to_status?
     end
 
-    if rating_changed?
+    if saved_change_to_rating?
       media.transaction do
-        media.decrement_rating_frequency(rating_was)
+        media.decrement_rating_frequency(rating_before_last_save)
         media.increment_rating_frequency(rating)
       end
       user.update_feed_completed!
       user.update_profile_completed!
     end
 
-    if progress_changed?
+    if saved_change_to_progress?
       guess = [(progress + 1), media.default_progress_limit].min
       media.update_unit_count_guess(guess)
     end
