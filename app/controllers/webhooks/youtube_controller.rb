@@ -12,10 +12,10 @@ module Webhooks
       if !linked_account && mode == 'unsubscribe' # deleted linked-account
         render plain: challenge
       elsif linked_account && mode == 'subscribe' # created linked-account
-        return head status: 404 unless topic == linked_account.topic_url
+        return head 404 unless topic == linked_account.topic_url
         render plain: challenge
       else
-        head status: 404
+        head 404
       end
     end
 
@@ -28,7 +28,7 @@ module Webhooks
         YoutubeService::Notification.new(body).post!(linked_account.user)
       end
 
-      head status: 200
+      head 200
     end
 
     private

@@ -16,7 +16,7 @@ module Webhooks
         GetstreamEventWorker.perform_async(feed, event, activity)
       end
 
-      head status: 200
+      head 200
     end
   end
 end
