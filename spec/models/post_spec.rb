@@ -76,7 +76,7 @@ RSpec.describe Post, type: :model do
 
   context 'with a spoiled unit' do
     subject { build(:post, spoiled_unit: build(:episode)) }
-    it { should validate_presence_of(:media).with_message('must exist') }
+    it { should validate_presence_of(:media) }
     it { should allow_value(true).for(:spoiler) }
   end
 

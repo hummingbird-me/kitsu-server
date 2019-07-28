@@ -51,8 +51,8 @@ RSpec.describe LibraryEntry, type: :model do
   let(:anime) { create(:anime, episode_count: 5) }
   subject { build(:library_entry) }
 
-  it { should validate_presence_of(:user).with_message('must exist') }
-  it { should validate_presence_of(:media).with_message('must exist') }
+  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:media) }
   it { should validate_presence_of(:status) }
   it { should validate_presence_of(:progress) }
   it { should validate_presence_of(:reconsume_count) }
