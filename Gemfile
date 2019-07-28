@@ -137,7 +137,6 @@ group :test do
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
   gem 'stripe-ruby-mock', require: 'stripe_mock' # Mock Stripe API
-  gem 'test_after_commit' # Rails 4 doesn't run commit callbacks on transactions
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
 
