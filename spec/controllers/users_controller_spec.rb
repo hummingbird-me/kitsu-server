@@ -157,7 +157,7 @@ RSpec.describe UsersController, type: :controller do
           type: 'users',
           attributes: {
             name: 'Senjougahara',
-            bio: 'hitagi crab',
+            about: 'hitagi crab',
             email: 'senjougahara@hita.gi',
             password: 'headtilt'
           }
