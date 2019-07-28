@@ -1,6 +1,4 @@
 class GraphqlController < ApplicationController
-  skip_after_action :enforce_policy_use
-
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]

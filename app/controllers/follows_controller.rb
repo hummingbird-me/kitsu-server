@@ -1,7 +1,4 @@
 class FollowsController < ApplicationController
-  skip_after_action :enforce_policy_use, only: %i[import_from_facebook
-                                                  import_from_twitter]
-
   def import_from_facebook
     facebook = Authorization::Assertion::Facebook.new(params[:assertion])
     render json: serialize_follows(facebook.auto_follows)

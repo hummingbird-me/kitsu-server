@@ -7,6 +7,9 @@ class ApplicationController < JSONAPI::ResourceController
     super + '/api/edge'
   end
 
+  # TODO: get rid of this dumb hack for pundit-resources
+  def enforce_policy_use(*); end
+
   before_action :validate_token!
   around_action :store_user_on_thread
   around_action :store_region_on_thread
