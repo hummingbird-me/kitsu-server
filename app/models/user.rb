@@ -120,13 +120,14 @@ class User < ApplicationRecord
   ].join.freeze
 
   enum rating_system: %i[simple advanced regular]
-  rolify after_add: :update_title, after_remove: :update_title
-  has_secure_password validations: false
   enum status: %i[unregistered registered aozora]
-  update_index('users#user') { self }
-  update_algolia('AlgoliaUsersIndex')
   enum theme: %i[light dark]
   enum pro_tier: %i[ao_pro ao_pro_plus pro patron]
+  enum email_status: %i[email_unconfirmed email_confirmed email_bounced]
+  rolify after_add: :update_title, after_remove: :update_title
+  has_secure_password validations: false
+  update_index('users#user') { self }
+  update_algolia('AlgoliaUsersIndex')
 
   belongs_to :waifu, required: false, class_name: 'Character'
   belongs_to :pinned_post, class_name: 'Post', required: false
