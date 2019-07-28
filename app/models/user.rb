@@ -437,6 +437,6 @@ class User < ApplicationRecord
   after_commit if: ->(u) { u.previous_changes['email'] && !Rails.env.staging? } do
     self.confirmed_at = nil
     # Send Confirmation Email
-    UserMailer.confirmation(self).deliver_later
+    Accounts::SendConfirmationEmailWorker.perform_async(self)
   end
 end
