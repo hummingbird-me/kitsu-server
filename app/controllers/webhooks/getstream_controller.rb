@@ -6,7 +6,7 @@ module Webhooks
                                  password: ENV['STREAM_WEBHOOK_PASS']
 
     def verify
-      render text: StreamRails.client.api_key
+      render plain: StreamRails.client.api_key
     end
 
     def notify
