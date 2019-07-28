@@ -84,10 +84,7 @@ class LibraryEntryResource < BaseResource
 
   def self.status_counts(filters, opts = {})
     return if should_query?(filters)
-    statuses = LibraryEntry.statuses.invert
-    find_records(filters, opts).group(:status).count.transform_keys do |status|
-      statuses[status]
-    end
+    find_records(filters, opts).group(:status).count
   end
 
   def self.sortable_fields(context)
