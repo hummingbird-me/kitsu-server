@@ -37,12 +37,6 @@ GIT
       redis (~> 4.0, >= 3.0)
 
 GIT
-  remote: https://github.com/nuckchorris/rack-timeout.git
-  revision: 0e01a118a02c6843643cface4c10d10f7f002582
-  specs:
-    rack-timeout (0.4.2)
-
-GIT
   remote: https://github.com/oauth-xx/oauth2.git
   revision: 58471c95c5473d9a494e45534df96f0cf935a2bb
   branch: master
@@ -749,7 +743,6 @@ DEPENDENCIES
   pundit-resources!
   rack-attack
   rack-cors
-  rack-timeout!
   rails (= 5.1.7)
   rails_12factor
   rails_admin
