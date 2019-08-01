@@ -1,7 +1,7 @@
 language: ruby
 dist: precise
 rvm:
-  - 2.3.1
+  - 2.5.5
 
 sudo: false
 
