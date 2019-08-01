@@ -16,6 +16,9 @@ cache:
   directories:
     - vendor/bundle
 
+before_install:
+  - gem update bundler
+
 install:
   - bundle install --deployment --jobs=3 --retry=3
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
