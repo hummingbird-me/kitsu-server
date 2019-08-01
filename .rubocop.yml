@@ -6,7 +6,7 @@ AllCops:
   DisplayCopNames: false
   DisplayStyleGuide: true
   StyleGuideCopsOnly: false
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.5
 Layout/AlignArguments:
   EnforcedStyle: with_fixed_indentation
 Style/BlockDelimiters:
