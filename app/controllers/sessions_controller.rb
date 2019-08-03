@@ -4,12 +4,12 @@ class SessionsController < ActionController::Base
   end
 
   def create
-    return render status: 403, text: 'Token missing' if params[:token].blank?
+    return render status: 403, plain: 'Token missing' if params[:token].blank?
     token = Doorkeeper::AccessToken.by_token(params[:token])
     is_admin = token.resource_owner.roles.where(name: 'admin').exists?
-    return render status: 403, text: 'Not allowed' unless is_admin
+    return render status: 403, plain: 'Not allowed' unless is_admin
     session[:token] = params[:token]
-    render status: 200, text: 'Success'
+    render status: 200, plain: 'Success'
   end
 
   def redirect
