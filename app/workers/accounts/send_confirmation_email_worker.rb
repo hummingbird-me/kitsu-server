@@ -6,7 +6,7 @@ module Accounts
     def perform(user_id)
       user = User.find(user_id)
 
-      SendConfirmationEmail.call(user)
+      SendConfirmationEmail.call(user: user)
     end
 
     def self.perform_async(user)
