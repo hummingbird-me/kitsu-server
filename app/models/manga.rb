@@ -55,8 +55,8 @@ class Manga < ApplicationRecord
   has_many :chapters
   has_many :manga_characters, dependent: :destroy
   has_many :manga_staff, dependent: :destroy
-  has_many :media_attributes, through: :manga_media_attributes
   has_many :manga_media_attributes
+  has_many :media_attributes, through: :manga_media_attributes
 
   validates :chapter_count, numericality: { greater_than: 0 }, allow_nil: true
 
