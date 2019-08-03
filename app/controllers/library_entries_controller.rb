@@ -37,7 +37,7 @@ class LibraryEntriesController < ApplicationController
     else
       operation_scope.destroy_all
     end
-    render nothing: true, status: 204
+    head status: 204
   end
 
   def bulk_update

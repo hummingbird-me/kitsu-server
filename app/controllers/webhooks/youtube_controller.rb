@@ -40,7 +40,7 @@ module Webhooks
     end
 
     def check_linked_account_param
-      render status: 400, text: 'Missing linked_account' unless params.include?(:linked_account)
+      render status: 400, plain: 'Missing linked_account' unless params.include?(:linked_account)
     end
   end
 end
