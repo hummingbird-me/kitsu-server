@@ -36,8 +36,6 @@ class OneSignalNotificationService
     return [] unless players.exists?
     # load players, grouping by platform
     player_ids = players.group(:platform).pluck(:platform, 'array_agg(player_id)').to_h
-    # fix platform enum keys
-    player_ids.transform_keys! { |k| OneSignalPlayer.platforms.invert[k].to_sym }
     # Remove duplicate IDs and blanks
     player_ids.transform_values! { |v| v.uniq.reject(&:blank?) }
     # Notify them
