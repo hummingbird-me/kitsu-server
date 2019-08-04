@@ -33,10 +33,10 @@ class OneSignalNotificationService
   private
 
   def notify!
-    return [] unless notification.setting
+    return { results: [] } unless notification.setting
     platforms = OneSignalPlayer.platforms.values_at(*notification.setting.enabled_platforms)
     players = OneSignalPlayer.where(platform: platforms, user: @user)
-    return [] unless players.exists?
+    return { results: [] } unless players.exists?
     # load players, grouping by platform
     player_ids = players.group(:platform).pluck(:platform, 'array_agg(player_id)').to_h
     # Remove duplicate IDs and blanks
