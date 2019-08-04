@@ -49,6 +49,7 @@ class ListImport < ApplicationRecord
   # Apply the ListImport
   def apply
     # Send info to Sentry
+    Raven.context.transaction.push type
     Raven.user_context(id: user.id, email: user.email, username: user.name)
     Raven.extra_context(
       input_text: input_text.to_s,
