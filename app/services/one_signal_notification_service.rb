@@ -8,7 +8,7 @@ class OneSignalNotificationService
 
   def run!
     notification = notify!
-    invalid_players = notification.map do |res|
+    invalid_players = notification[:results].map do |res|
       Raven.breadcrumbs.record(
         data: res,
         category: 'onesignal',
@@ -16,11 +16,14 @@ class OneSignalNotificationService
       )
       if res['errors'].is_a?(Hash)
         res&.dig('errors', 'invalid_player_ids')
+      elsif Array.wrap(res['errors']).include?('All included players are not subscribed')
+        notification[:player_ids]
       else
         Array.wrap(res['errors']).each do |message|
           ex = OneSignalError.new(message)
           Raven.capture_exception(ex)
         end
+        []
       end
     end
     invalid_players = invalid_players.flatten.compact
@@ -39,7 +42,12 @@ class OneSignalNotificationService
     # Remove duplicate IDs and blanks
     player_ids.transform_values! { |v| v.uniq.reject(&:blank?) }
     # Notify them
-    player_ids.map { |platform, ids| notify_players(platform, ids) }
+    results = player_ids.map { |platform, ids| notify_players(platform, ids) }
+    # Return things
+    {
+      player_ids: player_ids,
+      results: results
+    }
   end
 
   def notify_players(platform, players)
