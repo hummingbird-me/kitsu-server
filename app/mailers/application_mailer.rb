@@ -12,15 +12,11 @@ class ApplicationMailer < ActionMailer::Base
   default from: 'Kitsu <help@kitsu.io>'
   layout 'mailer'
 
-  rescue_from(*SMTP_HARD_BOUNCES) do |ex|
-    raise MailSendError::HardBounce, message.to
-  rescue StandardError
-    raise ex
+  rescue_from(*SMTP_HARD_BOUNCES) do
+    raise MailSendError::HardBounce
   end
 
-  rescue_from(*SMTP_SOFT_BOUNCES) do |ex|
-    raise MailSendError::SoftBounce, message.to
-  rescue StandardError
-    raise ex
+  rescue_from(*SMTP_SOFT_BOUNCES) do
+    raise MailSendError::SoftBounce
   end
 end
