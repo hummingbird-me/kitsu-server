@@ -41,6 +41,15 @@ class ApplicationController < JSONAPI::ResourceController
     }
   end
 
+  rescue_from Stoplight::Error::RedLight do
+    render status: 502, json: {
+      errors: [{
+        status: 502,
+        title: 'Service is degraded, please try again later'
+      }]
+    }
+  end
+
   if Raven.configuration.capture_allowed?
     on_server_error do |error|
       extra = {}
