@@ -64,22 +64,20 @@ class ListImport < ApplicationRecord
     yield({ status: :running, total: total, progress: 0 })
     Chewy.strategy(:atomic) do
       each_with_index do |(media, data), index|
-        begin
-          next unless media.present?
-          # Merge the library entries
-          le = LibraryEntry.where(user_id: user.id, media: media).first_or_initialize
-          le.imported = true
-          le = merged_entry(le, data)
-          le.save! unless le.status.nil?
-          yield({ status: :running, total: total, progress: index + 1 })
-        rescue StandardError => e
-          Raven.capture_exception(e)
-          yield({
-            status: :partially_failed,
-            error_message: e.message,
-            error_trace: e.backtrace.join("\n")
-          })
-        end
+        next unless media.present?
+        # Merge the library entries
+        le = LibraryEntry.where(user_id: user.id, media: media).first_or_initialize
+        le.imported = true
+        le = merged_entry(le, data)
+        le.save! unless le.status.nil?
+        yield({ status: :running, total: total, progress: index + 1 })
+      rescue StandardError => e
+        Raven.capture_exception(e)
+        yield({
+          status: :partially_failed,
+          error_message: e.message,
+          error_trace: e.backtrace.join("\n")
+        })
       end
     end
     yield({ status: :completed, total: total, progress: total })
