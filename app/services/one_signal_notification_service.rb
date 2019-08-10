@@ -27,6 +27,7 @@ class OneSignalNotificationService
       end
     end
     invalid_players = invalid_players.flatten.compact
+    Raven.extra_context(invalid_players: invalid_players)
     OneSignalPlayer.where(player_id: invalid_players).delete_all if invalid_players
   end
 
