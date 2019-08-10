@@ -17,7 +17,7 @@ class OneSignalNotificationService
       if res['errors'].is_a?(Hash)
         res&.dig('errors', 'invalid_player_ids')
       elsif Array.wrap(res['errors']).include?('All included players are not subscribed')
-        notification[:player_ids]
+        notification[:player_ids].values.flatten
       else
         Array.wrap(res['errors']).each do |message|
           ex = OneSignalError.new(message)
@@ -27,7 +27,6 @@ class OneSignalNotificationService
       end
     end
     invalid_players = invalid_players.flatten.compact
-    Raven.extra_context(invalid_players: invalid_players)
     OneSignalPlayer.where(player_id: invalid_players).delete_all if invalid_players
   end
 
