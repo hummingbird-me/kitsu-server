@@ -1,20 +1,21 @@
 class MangadexImport
   class Row
     LANGUAGES = {
-      'Brazilian' => 'pt_br',
       'Chinese (Simp)' => 'zh_Hans',
       'English' => 'en',
+      'Filipino' => 'fil',
       'French' => 'fr',
       'German' => 'de',
-      'Hebrew' => 'he',
-      'Hungarian' => 'hu',
       'Indonesian' => 'id_in',
       'Italian' => 'it',
       'Japanese' => 'ja_jp',
       'Korean' => 'ko',
       'Malay' => 'ms',
+      'Polish' => 'pl',
+      'Portuguese (Br)' => 'pt',
       'Spanish' => 'es',
-      'Thai' => 'th'
+      'Thai' => 'th',
+      'Vietnamese' => 'vi'
     }.freeze
 
     attr_reader :kitsu_data, :mangadex_data
