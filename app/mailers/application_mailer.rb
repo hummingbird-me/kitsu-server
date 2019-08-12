@@ -1,12 +1,22 @@
 class ApplicationMailer < ActionMailer::Base
   SMTP_SOFT_BOUNCES = [
+    Errno::EINVAL,
+    Errno::ECONNRESET,
+    Errno::ECONNREFUSED,
+    EOFError,
+    Net::ProtocolError,
+    SocketError,
     IOError,
-    Net::SMTPAuthenticationError,
-    Net::SMTPServerBusy,
-    Net::SMTPUnknownError,
-    TimeoutError
+    TimeoutError,
+    Postmark::HttpClientError,
+    Postmark::InternalServerError,
+    Postmark::TimeoutError
   ].freeze
-  SMTP_HARD_BOUNCES = [Net::SMTPFatalError, Net::SMTPSyntaxError].freeze
+  SMTP_HARD_BOUNCES = [
+    Postmark::InactiveRecipientError,
+    Net::SMTPFatalError,
+    Net::SMTPSyntaxError
+  ].freeze
 
   include Rails.application.routes.url_helpers
   default from: 'Kitsu <help@kitsu.io>'
