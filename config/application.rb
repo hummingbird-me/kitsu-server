@@ -67,16 +67,23 @@ module Kitsu
     }
 
     # Email Server
-    config.action_mailer.delivery_method = :smtp
     config.action_mailer.perform_deliveries = true
     config.action_mailer.raise_delivery_errors = true
-    config.action_mailer.smtp_settings = {
-      address: ENV['SMTP_ADDRESS'],
-      port: ENV['SMTP_PORT']&.to_i,
-      user_name: ENV['SMTP_USERNAME'],
-      password: ENV['SMTP_PASSWORD'],
-      authentication: ENV['SMTP_AUTHENTICATION']&.to_sym
-    }.compact
+    if ENV['POSTMARK_API_TOKEN']
+      config.action_mailer.delivery_method = :postmark
+      config.action_mailer.postmark_settings = {
+        api_token: ENV['POSTMARK_API_TOKEN']
+      }
+    else
+      config.action_mailer.delivery_method = :smtp
+      config.action_mailer.smtp_settings = {
+        address: ENV['SMTP_ADDRESS'],
+        port: ENV['SMTP_PORT']&.to_i,
+        user_name: ENV['SMTP_USERNAME'],
+        password: ENV['SMTP_PASSWORD'],
+        authentication: ENV['SMTP_AUTHENTICATION']&.to_sym
+      }.compact
+    end
 
     # Redis caching
     config.cache_store = :redis_store, ENV['REDIS_URL'], { expires_in: 1.day }
