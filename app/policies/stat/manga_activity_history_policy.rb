@@ -1,1 +1,3 @@
-class Stat::MangaActivityHistoryPolicy < StatPolicy; end
+class Stat
+  class MangaActivityHistoryPolicy < StatPolicy; end
+end

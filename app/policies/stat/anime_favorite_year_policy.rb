@@ -1,1 +1,3 @@
-class Stat::AnimeFavoriteYearPolicy < StatPolicy; end
+class Stat
+  class AnimeFavoriteYearPolicy < StatPolicy; end
+end

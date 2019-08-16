@@ -1,1 +1,3 @@
-class Stat::AnimeAmountConsumedPolicy < StatPolicy; end
+class Stat
+  class AnimeAmountConsumedPolicy < StatPolicy; end
+end

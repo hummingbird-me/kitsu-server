@@ -1,1 +1,3 @@
-class Stat::AnimeCategoryBreakdownPolicy < StatPolicy; end
+class Stat
+  class AnimeCategoryBreakdownPolicy < StatPolicy; end
+end
