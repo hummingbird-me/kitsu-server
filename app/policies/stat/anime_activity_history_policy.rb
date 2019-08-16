@@ -1,1 +1,3 @@
-class Stat::AnimeActivityHistoryPolicy < StatPolicy; end
+class Stat
+  class AnimeActivityHistoryPolicy < StatPolicy; end
+end

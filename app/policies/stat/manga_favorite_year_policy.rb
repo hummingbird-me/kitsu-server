@@ -1,1 +1,3 @@
-class Stat::MangaFavoriteYearPolicy < StatPolicy; end
+class Stat
+  class MangaFavoriteYearPolicy < StatPolicy; end
+end

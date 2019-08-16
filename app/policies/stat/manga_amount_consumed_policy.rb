@@ -1,1 +1,3 @@
-class Stat::MangaAmountConsumedPolicy < StatPolicy; end
+class Stat
+  class MangaAmountConsumedPolicy < StatPolicy; end
+end
