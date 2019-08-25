@@ -28,15 +28,6 @@ GIT
       rails (>= 4.2.1)
 
 GIT
-  remote: https://github.com/hummingbird-me/strait.git
-  revision: 994ceeec79bdc647b995618cd0e27c08d521804d
-  branch: master
-  specs:
-    strait (1.0.0)
-      connection_pool (>= 2.0, < 3.0)
-      redis (~> 4.0, >= 3.0)
-
-GIT
   remote: https://github.com/oauth-xx/oauth2.git
   revision: 58471c95c5473d9a494e45534df96f0cf935a2bb
   branch: master
@@ -633,6 +624,9 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    strait (1.1.0)
+      connection_pool (>= 2.0, < 3.0)
+      redis (~> 4.0, >= 3.0)
     stream-ruby (2.10.0)
       faraday (>= 0.10.0, < 1.0)
       http_signatures (~> 0)
@@ -774,7 +768,7 @@ DEPENDENCIES
   sinatra
   sitemap_generator
   spring
-  strait!
+  strait
   stream-ruby (~> 2.10.0)
   stream_rails!
   stripe

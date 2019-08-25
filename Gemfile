@@ -78,8 +78,7 @@ gem 'roadie-rails' # Inline CSS for emails
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sass-rails' # Process SCSS for emails
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'strait', github: 'hummingbird-me/strait',
-              branch: 'master'
+gem 'strait' # Rate limiting anything!
 gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
