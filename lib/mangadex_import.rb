@@ -8,16 +8,17 @@ class MangadexImport
 
   def import!
     each_mangadex_entry do |data, name, mal_id|
-      puts name
-
       kitsu_id = kitsu_id_by_mal_id(mal_id) if mal_id.present?
-      kitsu_id = kitsu_id_by_name(name) if kitsu_id.blank?
+
+      if kitsu_id.blank?
+        kitsu_id = kitsu_id_by_name(name)
+        validate_kitsu_id(kitsu_id)
+      end
+
+      puts "Kitsu Id: #{kitsu_id}"
 
       row = Row.new(kitsu_data(kitsu_id), data)
       row.create_or_update
-
-
-
     end
   end
 
@@ -37,24 +38,30 @@ class MangadexImport
     url.split('/').last
   end
 
+  def validate_kitsu_id(kitsu_id)
+    # I am not sure what to really validate this on
+    # we already know subtype is correct.
+  end
+
   private
 
   def kitsu_id_by_mal_id(mal_id)
     Mapping.where(
       external_site: 'myanimelist/manga',
       external_id: mal_id
-    ).first
+    ).first&.item_id
   end
 
+  # TODO: check what this actually returns
   def kitsu_id_by_name(name)
-    AlgoliaMediaIndex.search(
-      name,
-      filters: 'kind:manga AND NOT subtype:novel',
-      hitsPerPage: 3
-    ).first.try(:id)
+    Mapping.guess(
+      'manga',
+      title: name,
+      subtype: 'NOT subtype:novel'
+    )
   end
 
   def kitsu_data(kitsu_id)
-    Manga.find_or_initialize_by(kitsu_id)
+    Manga.where(id: kitsu_id).first_or_initialize
   end
 end
