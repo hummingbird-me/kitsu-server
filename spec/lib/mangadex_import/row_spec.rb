@@ -29,13 +29,11 @@ RSpec.describe MangadexImport::Row do
         kitsu_new_entry.abbreviated_titles << random_title
         subject.mangadex_abbreviated_titles
 
-        # unsure why order matters
-        # most likely using wrong comparison in rspec or something.
         combined_titles = subject.mangadex_data['alt_titles']
-        combined_titles.prepend(random_title)
+        combined_titles << random_title
 
         expect(subject.kitsu_data.abbreviated_titles.size).to eq(8)
-        expect(subject.kitsu_data.abbreviated_titles).to eq(combined_titles)
+        expect(subject.kitsu_data.abbreviated_titles).to match_array(combined_titles)
       end
 
       it 'should combine if no kitsu titles present' do

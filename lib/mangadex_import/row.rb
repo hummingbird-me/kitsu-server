@@ -1,36 +1,5 @@
 class MangadexImport
   class Row
-    LANGUAGES = {
-      'arabic' => 'ar',
-      'bulgarian' => 'bg',
-      'burmese' => 'my',
-      'catalan' => 'ca',
-      'chinese (trad)' => 'zh_Hant',
-      'chinese (simp)' => 'zh_Hans',
-      'english' => 'en',
-      'filipino' => 'fil',
-      'french' => 'fr',
-      'german' => 'de',
-      'hungarian' => 'hu',
-      'indonesian' => 'id_in',
-      'italian' => 'it',
-      'japanese' => 'ja_jp',
-      'korean' => 'ko',
-      'malay' => 'ms',
-      'persian' => 'fa',
-      'polish' => 'pl',
-      'portuguese (br)' => 'pt_br',
-      'portuguese (pt)' => 'pt',
-      'romanian' => 'ro',
-      'russian' => 'ru',
-      'spanish' => 'es',
-      'spanish (es)' => 'es',
-      'spanish (latem)' => 'es',
-      'thai' => 'th',
-      'turkish' => 'tr',
-      'vietnamese' => 'vi'
-    }.freeze
-
     CATEGORY_MAPPINGS = {
       '4-koma' => '',
       'award-winning' => '',
@@ -94,7 +63,7 @@ class MangadexImport
     end
 
     def mangadex_canonical_title
-      LANGUAGES[mangadex_original_locale&.downcase]
+      MangadexImport::LANGUAGES[mangadex_original_locale&.downcase]
     end
 
     def mangadex_chapter_count
@@ -197,13 +166,8 @@ class MangadexImport
 
       mangadex_data['chapters'].each do |mangadex_chapter|
         kitsu_chapter = kitsu_data.chapters.where(number: mangadex_chapter['chapter']).first_or_initialize
-        kitsu_chapter.volume_number ||= mangadex_chapter['volume']
-        kitsu_chapter.titles = mangadex_chapter_titles(
-          kitsu_chapter.titles,
-          mangadex_chapter['alt_titles']
-        )
-
-        kitsu_chapter.save
+        chapter = MangadexImport::Chapter.new(kitsu_chapter, mangadex_chapter)
+        chapter.create_or_update!
       end
     end
 
@@ -213,18 +177,6 @@ class MangadexImport
       category = category.tr(' ', '-').downcase
       return CATEGORY_MAPPINGS[category] if CATEGORY_MAPPINGS.key?(category)
       category
-    end
-
-    def mangadex_chapter_titles(kitsu_titles, mangadex_titles)
-      kitsu_titles.compact!
-
-      mangadex_titles.compact.each do |title, value|
-        kitsu_titles[LANGUAGES[title]] ||= value
-      end
-
-      puts kitsu_titles
-
-      kitsu_titles
     end
   end
 end

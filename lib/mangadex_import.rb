@@ -1,6 +1,37 @@
 class MangadexImport
   attr_reader :file_location
 
+  LANGUAGES = {
+    'arabic' => 'ar',
+    'bulgarian' => 'bg',
+    'burmese' => 'my',
+    'catalan' => 'ca',
+    'chinese (trad)' => 'zh_Hant',
+    'chinese (simp)' => 'zh_Hans',
+    'english' => 'en',
+    'filipino' => 'fil',
+    'french' => 'fr',
+    'german' => 'de',
+    'hungarian' => 'hu',
+    'indonesian' => 'id_in',
+    'italian' => 'it',
+    'japanese' => 'ja_jp',
+    'korean' => 'ko',
+    'malay' => 'ms',
+    'persian' => 'fa',
+    'polish' => 'pl',
+    'portuguese (br)' => 'pt_br',
+    'portuguese (pt)' => 'pt',
+    'romanian' => 'ro',
+    'russian' => 'ru',
+    'spanish' => 'es',
+    'spanish (es)' => 'es',
+    'spanish (latem)' => 'es',
+    'thai' => 'th',
+    'turkish' => 'tr',
+    'vietnamese' => 'vi'
+  }.freeze
+
   # ideally pass in location here?
   def initialize
     @file_location = 'tmp/mangadex_import/manga-batch-1-temp.ndjson'
