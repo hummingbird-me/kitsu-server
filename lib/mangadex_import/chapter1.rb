@@ -8,8 +8,9 @@ class MangadexImport
     def create_or_update!
       @kitsu_chapter.volume ||= mangadex_volume
       @kitsu_chapter.titles = mangadex_chapter_titles
+      @kitsu_chapter.canonical_title ||= mangadex_canonical_title if @kitsu_chapter.titles.present?
 
-      @kitsu_chapter.save
+      @kitsu_chapter.save!
     end
 
     def mangadex_volume
@@ -22,13 +23,15 @@ class MangadexImport
     def mangadex_chapter_titles
       kitsu_titles = @kitsu_chapter.titles.compact
 
-      @mangadex_chapter['alt_titles'].compact.each do |title, value|
+      @mangadex_chapter['alt_titles']&.compact&.each do |title, value|
         kitsu_titles[MangadexImport::LANGUAGES[title]] ||= value
       end
 
-      puts kitsu_titles
-
       kitsu_titles
+    end
+
+    def mangadex_canonical_title
+      @kitsu_chapter.titles.keys.first
     end
   end
 end

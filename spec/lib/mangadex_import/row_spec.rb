@@ -46,7 +46,7 @@ RSpec.describe MangadexImport::Row do
 
     describe '#mangadex_canonical_title' do
       it 'should return the proper language iso code' do
-        expect(subject.mangadex_canonical_title).to eq('ja_jp')
+        expect(subject.mangadex_canonical_title).to eq('en_jp')
       end
 
       it 'should return nil if origin is nil' do
@@ -84,9 +84,12 @@ RSpec.describe MangadexImport::Row do
       end
     end
 
-    describe '#mangadex_poster_image_file_name' do
-      it 'should return when present' do
-        expect(subject.mangadex_poster_image_file_name).to eq('https://mangadex.org/images/manga/12091.jpg')
+    describe '#mangadex_poster_image' do
+      it 'should update if poster image does not exist' do
+        stub_request(:get, 'https://mangadex.org/images/manga/12091.jpg').to_return(status: 200)
+        subject.mangadex_poster_image
+
+        expect(subject.kitsu_data.poster_image_file_name).to eq('12091.jpg')
       end
     end
 

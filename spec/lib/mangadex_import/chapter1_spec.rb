@@ -27,7 +27,7 @@ RSpec.describe MangadexImport::Chapter1 do
         kitsu_new_chapter.titles = { 'en_jp' => random_title }
 
         combined_titles = kitsu_new_chapter.titles
-        combined_titles.merge!('en' => 'Cat')
+        combined_titles['en'] = 'Cat'
 
         expect(subject.mangadex_chapter_titles.size).to eq(2)
         expect(subject.mangadex_chapter_titles).to eq(combined_titles)

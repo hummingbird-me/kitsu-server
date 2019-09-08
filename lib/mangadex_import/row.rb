@@ -35,12 +35,15 @@ class MangadexImport
       end
 
       @kitsu_data.save!
+      kitsu_after_manga_save_fields.each do |kitsu_field|
+        public_send("mangadex_#{kitsu_field}")
+      end
     end
 
     def kitsu_generic_fields
       %w[
         age_rating canonical_title
-        end_date original_locale poster_image_file_name
+        end_date original_locale
         serialization slug start_date synopsis
         volume_count
       ]
@@ -48,8 +51,13 @@ class MangadexImport
 
     def kitsu_custom_fields
       %w[
-        abbreviated_titles chapter_count titles categories author artist
-        chapters subtype
+        abbreviated_titles chapter_count titles categories subtype
+      ]
+    end
+
+    def kitsu_after_manga_save_fields
+      %w[
+        author artist chapters poster_image
       ]
     end
 
@@ -80,8 +88,8 @@ class MangadexImport
       mangadex_data['title']['origin']
     end
 
-    def mangadex_poster_image_file_name
-      mangadex_data['thumbnail']
+    def mangadex_poster_image
+      @kitsu_data.poster_image = mangadex_data['thumbnail'] if @kitsu_data.poster_image.blank?
     end
 
     def mangadex_serialization
@@ -105,7 +113,7 @@ class MangadexImport
     end
 
     def mangadex_titles
-      @kitsu_data.titles[kitsu_data.canonical_title] ||= mangadex_data['title']['name']
+      @kitsu_data.titles['en_jp'] ||= mangadex_data['title']['name']
     end
 
     def mangadex_volume_count
@@ -166,7 +174,7 @@ class MangadexImport
 
       mangadex_data['chapters'].each do |mangadex_chapter|
         kitsu_chapter = kitsu_data.chapters.where(number: mangadex_chapter['chapter']).first_or_initialize
-        chapter = MangadexImport::Chapter.new(kitsu_chapter, mangadex_chapter)
+        chapter = MangadexImport::Chapter1.new(kitsu_chapter, mangadex_chapter)
         chapter.create_or_update!
       end
     end

@@ -15,7 +15,8 @@ class MangadexImport
     'hungarian' => 'hu',
     'indonesian' => 'id_in',
     'italian' => 'it',
-    'japanese' => 'ja_jp',
+    'japanese' => 'en_jp',
+    # 'japanese' => 'ja_jp',
     'korean' => 'ko',
     'malay' => 'ms',
     'persian' => 'fa',
@@ -33,8 +34,8 @@ class MangadexImport
   }.freeze
 
   # ideally pass in location here?
-  def initialize
-    @file_location = 'tmp/mangadex_import/manga-batch-1-temp.ndjson'
+  def initialize(file_location = nil)
+    @file_location = file_location || 'tmp/mangadex_import/manga-batch-1-temp.ndjson'
   end
 
   def import!
@@ -83,13 +84,19 @@ class MangadexImport
     ).first&.item_id
   end
 
-  # TODO: check what this actually returns
+  # Will attemp to find the Kitsu Manga by id
+  #
+  # This is kind of inefficient because we then get this again
+  # Using Manga.where in #kitsu_data(kitsu_id)
+  #
+  # @param name [String] title of manga from mangadex data
+  # @return [Int, nil] kitsu id if it exists
   def kitsu_id_by_name(name)
     Mapping.guess(
       'manga',
       title: name,
       subtype: 'NOT subtype:novel'
-    )
+    )&.id
   end
 
   def kitsu_data(kitsu_id)
