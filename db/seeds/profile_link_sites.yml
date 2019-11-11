@@ -143,3 +143,13 @@ website:
   name: Website
   validate_find: '\A(?<protocol>https?:\/\/)(www.)?(?<url>(.)+)\z'
   validate_replace: '\k<protocol>\k<url>'
+mastodon:
+  id: 30
+  name: Mastodon
+  validate_find: '\A(?<protocol>https?://)(?<instance>.+\..+)(?<path>.*)\z'
+  validate_replace: '\k<protocol>\k<instance>\k<path>'
+xmpp:
+  id: 31
+  name: XMPP
+  validate_find: "\\A(?<localpart>[^@/<>'\"]+)@(?<domain>[^@/<>'\"]+)\\z"
+  validate_replace: '\k<localpart>@\k<domain>'

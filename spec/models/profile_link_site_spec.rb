@@ -682,4 +682,54 @@ RSpec.describe ProfileLinkSite, type: :model do
       end
     end
   end # end of validate context
+
+  # Mastodon
+  describe 'Mastodon' do
+    context 'success' do
+      it 'should work with http' do
+        urls = %w[
+          http://niu.moe/@lumi
+        ]
+        site = build(:profile_link_site, :mastodon)
+
+        urls.each do |url|
+          temp = Regexp.new(site.validate_find).match(url)
+          expect(temp[:protocol]).to eq('http://')
+          expect(temp[:instance]).to eq('niu.moe')
+          expect(temp[:path]).to eq('/@lumi')
+        end
+      end
+      it 'should work with https' do
+        urls = %w[
+          https://niu.moe/@lumi
+        ]
+        site = build(:profile_link_site, :mastodon)
+
+        urls.each do |url|
+          temp = Regexp.new(site.validate_find).match(url)
+          expect(temp[:protocol]).to eq('https://')
+          expect(temp[:instance]).to eq('niu.moe')
+          expect(temp[:path]).to eq('/@lumi')
+        end
+      end
+    end
+  end
+
+  # XMPP/Jabber
+  describe 'XMPP/Jabber' do
+    context 'success' do
+      it 'should parse a JID correctly' do
+        urls = %w[
+          localpart@domain.tld
+        ]
+        site = build(:profile_link_site, :xmpp)
+
+        urls.each do |url|
+          temp = Regexp.new(site.validate_find).match(url)
+          expect(temp[:localpart]).to eq('localpart')
+          expect(temp[:domain]).to eq('domain.tld')
+        end
+      end
+    end
+  end
 end

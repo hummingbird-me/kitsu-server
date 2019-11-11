@@ -191,6 +191,18 @@ FactoryBot.define do
       validate_find { '(?<protocol>https?://)(www.)?(?<url>(.)+\.(.)+)' }
       validate_replace { '\k<protocol\k<url>' }
     end
+
+    # Mastodon
+    trait :mastodon do
+      validate_find { '\A(?<protocol>https?://)(?<instance>.+\.[^/]+)(?<path>.*)\z' }
+      validate_replace { '\k<protocol\k<instance>\k<path>' }
+    end
+
+    # XMPP/Jabber
+    trait :xmpp do
+      validate_find { '\A(?<localpart>[^@/<>\'"]+)@(?<domain>[^@/<>\'"]+)\z' }
+      validate_replace { '\k<localpart>@\k<domain>' }
+    end
     # rubocop:enable Metrics/LineLength
   end
 end
