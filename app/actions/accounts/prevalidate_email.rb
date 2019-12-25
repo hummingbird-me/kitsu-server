@@ -15,11 +15,11 @@ class PrevalidateEmail < Action
   private
 
   def reason
-    ActiveSupport::StringInquirer.new(response_data['reason'])
+    ActiveSupport::StringInquirer.new(response_data['reason'] || '')
   end
 
   def result
-    ActiveSupport::StringInquirer.new(response_data['result'])
+    ActiveSupport::StringInquirer.new(response_data['result'] || '')
   end
 
   def response_data
