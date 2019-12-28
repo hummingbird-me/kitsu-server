@@ -20,8 +20,9 @@ before_install:
   - gem update --system
   - gem update bundler
   - bundle --version
+  - sudo systemctl stop elasticsearch
   - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.2/elasticsearch-2.4.2.deb && sudo dpkg -i --force-confnew elasticsearch-2.4.2.deb
-  - sudo systemctl restart elasticsearch
+  - sudo systemctl start elasticsearch
   - sleep 3
   - systemctl status elasticsearch
   - sudo cat /etc/elasticsearch/elasticsearch.yml
