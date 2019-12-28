@@ -53,7 +53,7 @@ jobs:
 
     - name: Set Up Test Environment
       env:
-        DATABASE_URL: postgresql://postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
+        DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
         REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
         ELASTICSEARCH_URL: localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
@@ -62,7 +62,7 @@ jobs:
 
     - name: Run Tests
       env:
-        DATABASE_URL: postgresql://postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
+        DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
         REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
         ELASTICSEARCH_URL: localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
