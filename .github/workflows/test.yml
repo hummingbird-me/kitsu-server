@@ -57,6 +57,7 @@ jobs:
         REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
         ELASTICSEARCH_URL: localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
+        env
         bundle exec rake db:create db:schema:load
 
     - name: Run Tests
