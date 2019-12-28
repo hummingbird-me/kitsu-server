@@ -3,11 +3,11 @@ name: Kitsu Test Suite
 on: [push, pull_request]
 
 env:
-  STREAM_API_KEY=q3k9n9kqk3fb
-  STREAM_API_SECRET=vkw87x3p323z6ma75n8dvnse98jrr9gkauf2zfjnzbgjpmm54ssnbync4yhhzugc
-  CC_TEST_REPORTER_ID=5e2172ea5a30b07e172058a3b33dfe08c6354699808e8f3010acc32b1ef41395
-  BUNDLE_GITHUB__HTTPS=true
-  LOG_LEVEL=warn
+  STREAM_API_KEY: q3k9n9kqk3fb
+  STREAM_API_SECRET: vkw87x3p323z6ma75n8dvnse98jrr9gkauf2zfjnzbgjpmm54ssnbync4yhhzugc
+  CC_TEST_REPORTER_ID: 5e2172ea5a30b07e172058a3b33dfe08c6354699808e8f3010acc32b1ef41395
+  BUNDLE_GITHUB__HTTPS: true
+  LOG_LEVEL: warn
 
 jobs:
   build:
