@@ -19,6 +19,7 @@ cache:
 before_install:
   - gem update --system
   - gem update bundler
+  - bundle --version
 
 install:
   - bundle install --deployment --jobs=3 --retry=3
