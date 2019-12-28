@@ -13,45 +13,51 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    container:
-      image: ruby:2.6
-
     services:
       postgres:
-        image: postgres:10
+        image: postgres:10-alpine
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
           - 5432/tcp
       redis:
-        image: redis
+        image: redis:alpine
         ports:
           - 6379/tcp
       elasticsearch:
-        image: elasticsearch:2
+        image: elasticsearch:2-alpine
         ports:
           - 9200/tcp
 
     steps:
     - uses: actions/checkout@v1
 
+    - name: Restore Cached Dependencies
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+
     - name: Install Dependencies
       run: |
         apt-get -yqq install libpq-dev
         gem install bundler
+        bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
 
     - name: Set Up Test Environment
       env:
-        DATABASE_URL: postgresql://postgres@postgres:5432/kitsu_test
-        REDIS_URL: redis://redis:6379/1
-        ELASTICSEARCH_URL: elasticsearch:9200
+        DATABASE_URL: postgresql://postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
+        REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
+        ELASTICSEARCH_URL: localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
         bundle exec rake db:create db:schema:load
 
     - name: Run Tests
       env:
-        DATABASE_URL: postgresql://postgres@postgres:${{ job.services.postgres.ports[5432] }}/kitsu_test
-        REDIS_URL: redis://redis:${{ job.services.redis.ports[6379] }}/1
-        ELASTICSEARCH_URL: elasticsearch:${{ job.services.elasticsearch.ports[9200] }}
+        DATABASE_URL: postgresql://postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
+        REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
+        ELASTICSEARCH_URL: localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
         bundle exec rspec
