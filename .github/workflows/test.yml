@@ -42,9 +42,9 @@ jobs:
 
     - name: Set Up Test Environment
       env:
-        DATABASE_URL: postgresql://postgres@postgres:${{ job.services.postgres.ports[5432] }}/kitsu_test
-        REDIS_URL: redis://redis:${{ job.services.redis.ports[6379] }}/1
-        ELASTICSEARCH_URL: elasticsearch:${{ job.services.elasticsearch.ports[9200] }}
+        DATABASE_URL: postgresql://postgres@postgres:5432/kitsu_test
+        REDIS_URL: redis://redis:6379/1
+        ELASTICSEARCH_URL: elasticsearch:9200
       run: |
         bundle exec rake db:create db:schema:load
 
