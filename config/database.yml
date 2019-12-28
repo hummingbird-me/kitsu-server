@@ -1,6 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  url: <%= ENV.fetch('DATABASE_URL') %>
 <% if $0.include?('sidekiq') %>
   reaping_frequency: 10
   checkout_timeout: 5
