@@ -21,6 +21,7 @@ before_install:
   - gem update bundler
   - bundle --version
   - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.2/elasticsearch-2.4.2.deb && sudo dpkg -i --force-confnew elasticsearch-2.4.2.deb && sudo systemctl restart elasticsearch
+  - systemctl status elasticsearch
 
 install:
   - bundle install --deployment --jobs=3 --retry=3
