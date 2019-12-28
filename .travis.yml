@@ -20,6 +20,7 @@ before_install:
   - gem update --system
   - gem update bundler
   - bundle --version
+  - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.0/elasticsearch-2.3.0.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.0.deb && sudo service elasticsearch restart
 
 install:
   - bundle install --deployment --jobs=3 --retry=3
