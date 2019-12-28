@@ -25,6 +25,7 @@ before_install:
   - sudo cat /etc/elasticsearch/elasticsearch.yml
   - sudo lsof -i
   - sleep 30
+  - sudo journalctl -n1000 -u elasticsearch
 
 install:
   - bundle install --deployment --jobs=3 --retry=3
