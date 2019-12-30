@@ -3,7 +3,7 @@ class RealEmailValidator < ActiveModel::EachValidator
   def validate_each(record, attr, value)
     return if value.blank?
 
-    response = PrevalidateEmail.call(email: value)
+    response = Accounts::PrevalidateEmail.call(email: value)
 
     record.errors[attr] << 'could not be delivered to' if response.result.undeliverable?
   end
