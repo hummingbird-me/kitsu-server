@@ -1,4 +1,4 @@
-class AddThumbnailToChapter < ActiveRecord::Migration
+class AddThumbnailToChapter < ActiveRecord::Migration[4.2]
   def change
     add_column :chapters, :thumbnail_file_name, :string, limit: 255
     add_column :chapters, :thumbnail_content_type, :string, limit: 255

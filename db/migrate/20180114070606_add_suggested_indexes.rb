@@ -1,4 +1,4 @@
-class AddSuggestedIndexes < ActiveRecord::Migration
+class AddSuggestedIndexes < ActiveRecord::Migration[4.2]
   def change
     commit_db_transaction
     add_index :characters, [:slug], algorithm: :concurrently

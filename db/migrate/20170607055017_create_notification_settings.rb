@@ -1,4 +1,4 @@
-class CreateNotificationSettings < ActiveRecord::Migration
+class CreateNotificationSettings < ActiveRecord::Migration[4.2]
   def change
     create_table :notification_settings do |t|
       t.integer :setting_type, null: false, required: true

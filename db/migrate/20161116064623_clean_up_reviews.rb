@@ -1,4 +1,4 @@
-class CleanUpReviews < ActiveRecord::Migration
+class CleanUpReviews < ActiveRecord::Migration[4.2]
   class Vote < ActiveRecord::Base; end
   class Review < ActiveRecord::Base
     has_many :votes, as: 'target', dependent: :delete_all

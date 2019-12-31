@@ -1,4 +1,4 @@
-class CreateChapters < ActiveRecord::Migration
+class CreateChapters < ActiveRecord::Migration[4.2]
   def change
     create_table :chapters do |t|
       # belongs_to manga

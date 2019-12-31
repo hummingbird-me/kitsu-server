@@ -1,4 +1,4 @@
-class CreateMarathons < ActiveRecord::Migration
+class CreateMarathons < ActiveRecord::Migration[4.2]
   def change
     create_table :marathons do |t|
       t.references :library_entry, foreign_key: true, null: false

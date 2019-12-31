@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class FillDefaultHiddenOnGroupMembersAndFollows < ActiveRecord::Migration
+class FillDefaultHiddenOnGroupMembersAndFollows < ActiveRecord::Migration[4.2]
   using UpdateInBatches
   disable_ddl_transaction!
 

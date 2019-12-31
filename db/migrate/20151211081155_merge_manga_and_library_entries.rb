@@ -1,4 +1,4 @@
-class MergeMangaAndLibraryEntries < ActiveRecord::Migration
+class MergeMangaAndLibraryEntries < ActiveRecord::Migration[4.2]
   def change
     # Anime --> Media
     remove_index :library_entries, [:user_id, :anime_id]

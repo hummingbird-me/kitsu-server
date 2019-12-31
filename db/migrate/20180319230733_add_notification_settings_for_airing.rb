@@ -1,4 +1,4 @@
-class AddNotificationSettingsForAiring < ActiveRecord::Migration
+class AddNotificationSettingsForAiring < ActiveRecord::Migration[4.2]
   def change
     execute <<-SQL
       INSERT INTO notification_settings (

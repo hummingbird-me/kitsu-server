@@ -1,4 +1,4 @@
-class CleanAnime < ActiveRecord::Migration
+class CleanAnime < ActiveRecord::Migration[4.2]
   def change
     # G => 1, PG => 2, R => 3, X => 4
     change_column :anime, :age_rating, "integer USING (

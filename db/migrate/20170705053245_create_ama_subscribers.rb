@@ -1,4 +1,4 @@
-class CreateAMASubscribers < ActiveRecord::Migration
+class CreateAMASubscribers < ActiveRecord::Migration[4.2]
   def change
     create_table :ama_subscribers do |t|
       t.references :ama, foreign_key: true, index: true, null: false

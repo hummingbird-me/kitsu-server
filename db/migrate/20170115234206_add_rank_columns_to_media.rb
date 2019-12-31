@@ -1,4 +1,4 @@
-class AddRankColumnsToMedia < ActiveRecord::Migration
+class AddRankColumnsToMedia < ActiveRecord::Migration[4.2]
   def change
     change_table :anime do |t|
       t.integer :popularity_rank

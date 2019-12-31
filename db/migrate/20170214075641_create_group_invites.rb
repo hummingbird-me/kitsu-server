@@ -1,4 +1,4 @@
-class CreateGroupInvites < ActiveRecord::Migration
+class CreateGroupInvites < ActiveRecord::Migration[4.2]
   def change
     create_table :group_invites do |t|
       t.references :group, index: true, foreign_key: true, null: false

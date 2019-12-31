@@ -1,4 +1,4 @@
-class CreateMediaAttributes < ActiveRecord::Migration
+class CreateMediaAttributes < ActiveRecord::Migration[4.2]
   def change
     create_table :media_attributes do |t|
       t.string :title, null: false, index: true, required: true

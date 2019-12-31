@@ -1,4 +1,4 @@
-class CreateVolumes < ActiveRecord::Migration
+class CreateVolumes < ActiveRecord::Migration[4.2]
   def change
     create_table :volumes do |t|
       t.jsonb :titles, default: {}, null: false

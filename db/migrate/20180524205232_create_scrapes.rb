@@ -1,4 +1,4 @@
-class CreateScrapes < ActiveRecord::Migration
+class CreateScrapes < ActiveRecord::Migration[4.2]
   def change
     create_table :scrapes do |t|
       t.text :target_url, null: false

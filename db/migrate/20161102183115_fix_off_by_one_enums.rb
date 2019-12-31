@@ -1,4 +1,4 @@
-class FixOffByOneEnums < ActiveRecord::Migration
+class FixOffByOneEnums < ActiveRecord::Migration[4.2]
   def change
     execute <<-SQL.squish
       UPDATE anime

@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class SpaceOutRanksForFavorites < ActiveRecord::Migration
+class SpaceOutRanksForFavorites < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   disable_ddl_transaction!

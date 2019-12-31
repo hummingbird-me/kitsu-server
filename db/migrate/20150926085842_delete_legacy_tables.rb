@@ -1,4 +1,4 @@
-class DeleteLegacyTables < ActiveRecord::Migration
+class DeleteLegacyTables < ActiveRecord::Migration[4.2]
   def change
     # Replace with OAuth shit or rebuild separate from OAuth
     # Currently is mixing concerns

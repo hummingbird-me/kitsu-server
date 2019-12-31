@@ -1,4 +1,4 @@
-class CreateMediaRelationships < ActiveRecord::Migration
+class CreateMediaRelationships < ActiveRecord::Migration[4.2]
   def change
     create_table :media_relationships do |t|
       t.references :source, polymorphic: true, null: false, index: true

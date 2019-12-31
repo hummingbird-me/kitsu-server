@@ -1,4 +1,4 @@
-class MakeEpisodeTitlesNullable < ActiveRecord::Migration
+class MakeEpisodeTitlesNullable < ActiveRecord::Migration[4.2]
   def up
     change_column_null :episodes, :canonical_title, true
     change_column_default :episodes, :canonical_title, nil

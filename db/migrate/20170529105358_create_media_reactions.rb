@@ -1,4 +1,4 @@
-class CreateMediaReactions < ActiveRecord::Migration
+class CreateMediaReactions < ActiveRecord::Migration[4.2]
   def change
     create_table :media_reactions do |t|
       t.references :user, index: true, foreign_key: true, required: true

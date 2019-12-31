@@ -1,4 +1,4 @@
-class CleanAnimeMore < ActiveRecord::Migration
+class CleanAnimeMore < ActiveRecord::Migration[4.2]
   def change
     # Unify column names with manga and genericize bayesian_rating name
     rename_column :anime, :started_airing_date, :start_date

@@ -1,4 +1,4 @@
-class InvertDefaultOnHiddenColumn < ActiveRecord::Migration
+class InvertDefaultOnHiddenColumn < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   def change

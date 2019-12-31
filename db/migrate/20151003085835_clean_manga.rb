@@ -1,4 +1,4 @@
-class CleanManga < ActiveRecord::Migration
+class CleanManga < ActiveRecord::Migration[4.2]
   def change
     # => Titles
     add_column :manga, :titles, :hstore, default: '', null: false

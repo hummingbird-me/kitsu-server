@@ -1,4 +1,4 @@
-class CopyMALIdToMappings < ActiveRecord::Migration
+class CopyMALIdToMappings < ActiveRecord::Migration[4.2]
   def change
     execute <<-SQL.squish
       INSERT INTO mappings (

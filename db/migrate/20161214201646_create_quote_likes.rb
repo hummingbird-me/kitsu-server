@@ -1,4 +1,4 @@
-class CreateQuoteLikes < ActiveRecord::Migration
+class CreateQuoteLikes < ActiveRecord::Migration[4.2]
   def change
     create_table :quote_likes do |t|
       t.references :user, index: true, null: false

@@ -1,4 +1,4 @@
-class CreateLibraryEvents < ActiveRecord::Migration
+class CreateLibraryEvents < ActiveRecord::Migration[4.2]
   def change
     # not needed anymore, will be repalced with LibraryEvents
     drop_table(:marathon_events , if_exists: true)

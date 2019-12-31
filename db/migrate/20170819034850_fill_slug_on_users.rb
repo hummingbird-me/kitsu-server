@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class FillSlugOnUsers < ActiveRecord::Migration
+class FillSlugOnUsers < ActiveRecord::Migration[4.2]
   using UpdateInBatches
   disable_ddl_transaction!
 

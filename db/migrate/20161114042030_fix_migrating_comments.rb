@@ -1,4 +1,4 @@
-class FixMigratingComments < ActiveRecord::Migration
+class FixMigratingComments < ActiveRecord::Migration[4.2]
   class Substory < ActiveRecord::Base
     belongs_to :user
     belongs_to :target, polymorphic: true

@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class ConvertEpisodeNumberToAbsoluteSystem < ActiveRecord::Migration
+class ConvertEpisodeNumberToAbsoluteSystem < ActiveRecord::Migration[4.2]
   using UpdateInBatches
   disable_ddl_transaction!
 

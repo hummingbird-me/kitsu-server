@@ -1,4 +1,4 @@
-class CreateNewCastingTables < ActiveRecord::Migration
+class CreateNewCastingTables < ActiveRecord::Migration[4.2]
   def change
     # Characters (an association between Media <-> Character)
     create_table :anime_characters do |t|

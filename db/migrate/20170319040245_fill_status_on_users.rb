@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class FillStatusOnUsers < ActiveRecord::Migration
+class FillStatusOnUsers < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   self.disable_ddl_transaction!

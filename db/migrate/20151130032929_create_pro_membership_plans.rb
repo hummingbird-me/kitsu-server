@@ -1,4 +1,4 @@
-class CreateProMembershipPlans < ActiveRecord::Migration
+class CreateProMembershipPlans < ActiveRecord::Migration[4.2]
   def change
     create_table :pro_membership_plans do |t|
       t.string :name, null: false

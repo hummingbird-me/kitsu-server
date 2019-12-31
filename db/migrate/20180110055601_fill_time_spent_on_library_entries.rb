@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class FillTimeSpentOnLibraryEntries < ActiveRecord::Migration
+class FillTimeSpentOnLibraryEntries < ActiveRecord::Migration[4.2]
   disable_ddl_transaction!
   using UpdateInBatches
 

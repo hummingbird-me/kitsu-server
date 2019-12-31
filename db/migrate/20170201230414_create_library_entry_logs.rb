@@ -1,4 +1,4 @@
-class CreateLibraryEntryLogs < ActiveRecord::Migration
+class CreateLibraryEntryLogs < ActiveRecord::Migration[4.2]
   def change
     create_table :library_entry_logs do |t|
       t.references :linked_account, null: false, index: true

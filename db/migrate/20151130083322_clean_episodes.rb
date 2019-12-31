@@ -1,4 +1,4 @@
-class CleanEpisodes < ActiveRecord::Migration
+class CleanEpisodes < ActiveRecord::Migration[4.2]
   class Episode < ActiveRecord::Base
     belongs_to :anime
   end

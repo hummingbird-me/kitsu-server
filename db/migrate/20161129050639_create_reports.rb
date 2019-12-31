@@ -1,4 +1,4 @@
-class CreateReports < ActiveRecord::Migration
+class CreateReports < ActiveRecord::Migration[4.2]
   def change
     create_table :reports do |t|
       # To be filled out by reporter only

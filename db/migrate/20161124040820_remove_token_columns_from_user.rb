@@ -1,4 +1,4 @@
-class RemoveTokenColumnsFromUser < ActiveRecord::Migration
+class RemoveTokenColumnsFromUser < ActiveRecord::Migration[4.2]
   def change
     remove_column :users, :confirmation_token
     remove_column :users, :confirmation_sent_at

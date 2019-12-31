@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class FillReactionSkipped < ActiveRecord::Migration
+class FillReactionSkipped < ActiveRecord::Migration[4.2]
   using UpdateInBatches
   disable_ddl_transaction!
 

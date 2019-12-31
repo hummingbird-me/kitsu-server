@@ -1,4 +1,4 @@
-class AddMetaToAttachmentFieldsOnModels < ActiveRecord::Migration
+class AddMetaToAttachmentFieldsOnModels < ActiveRecord::Migration[4.2]
   def change
     add_column :anime, :poster_image_meta, :text
     add_column :anime, :cover_image_meta, :text

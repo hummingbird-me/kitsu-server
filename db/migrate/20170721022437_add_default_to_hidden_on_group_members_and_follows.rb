@@ -1,4 +1,4 @@
-class AddDefaultToHiddenOnGroupMembersAndFollows < ActiveRecord::Migration
+class AddDefaultToHiddenOnGroupMembersAndFollows < ActiveRecord::Migration[4.2]
   def change
     change_column_default :group_members, :hidden, true
     change_column_null :group_members, :hidden, false

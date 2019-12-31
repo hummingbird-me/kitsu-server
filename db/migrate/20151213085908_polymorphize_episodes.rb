@@ -1,4 +1,4 @@
-class PolymorphizeEpisodes < ActiveRecord::Migration
+class PolymorphizeEpisodes < ActiveRecord::Migration[4.2]
   def change
     rename_column :episodes, :anime_id, :media_id
     change_column_null :episodes, :media_id, false

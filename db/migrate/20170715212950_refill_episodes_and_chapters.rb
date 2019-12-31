@@ -1,4 +1,4 @@
-class RefillEpisodesAndChapters < ActiveRecord::Migration
+class RefillEpisodesAndChapters < ActiveRecord::Migration[4.2]
   self.disable_ddl_transaction!
   def change
     Anime.joins('LEFT OUTER JOIN episodes ON episodes.media_id = anime.id').distinct

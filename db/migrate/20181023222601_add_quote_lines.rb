@@ -1,4 +1,4 @@
-class AddQuoteLines < ActiveRecord::Migration
+class AddQuoteLines < ActiveRecord::Migration[4.2]
   def change
     create_table :quote_lines do |t|
       t.references :quote, null: false, index: true

@@ -1,4 +1,4 @@
-class AddDeletedAccountUser < ActiveRecord::Migration
+class AddDeletedAccountUser < ActiveRecord::Migration[4.2]
   def up
     add_column :users, :deleted_at, :datetime
 

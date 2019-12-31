@@ -1,4 +1,4 @@
-class CleanUpHuluEmbedData < ActiveRecord::Migration
+class CleanUpHuluEmbedData < ActiveRecord::Migration[4.2]
   class Video < ActiveRecord::Base; end
   class Streamer < ActiveRecord::Base; end
 

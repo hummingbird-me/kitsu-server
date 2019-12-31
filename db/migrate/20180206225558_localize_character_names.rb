@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class LocalizeCharacterNames < ActiveRecord::Migration
+class LocalizeCharacterNames < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   def change

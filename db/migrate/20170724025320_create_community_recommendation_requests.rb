@@ -1,4 +1,4 @@
-class CreateCommunityRecommendationRequests < ActiveRecord::Migration
+class CreateCommunityRecommendationRequests < ActiveRecord::Migration[4.2]
   def change
     create_table :community_recommendation_requests do |t|
       t.references :user, index: true, null: false, foreign_key: true, required: true

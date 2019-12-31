@@ -1,4 +1,4 @@
-class ConvertRankToPermissions < ActiveRecord::Migration
+class ConvertRankToPermissions < ActiveRecord::Migration[4.2]
   class GroupMember < ActiveRecord::Base
     has_many :permissions, class_name: 'GroupPermission'
     enum rank: %i[pleb mod admin]

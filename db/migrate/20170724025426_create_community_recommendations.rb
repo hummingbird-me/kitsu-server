@@ -1,4 +1,4 @@
-class CreateCommunityRecommendations < ActiveRecord::Migration
+class CreateCommunityRecommendations < ActiveRecord::Migration[4.2]
   def change
     create_table :community_recommendations do |t|
       t.references :media, index: true, polymorphic: true, required: true

@@ -1,4 +1,4 @@
-class AddAozoraColumnsToUsers < ActiveRecord::Migration
+class AddAozoraColumnsToUsers < ActiveRecord::Migration[4.2]
   def change
     # Normally we'd prefer to store this in Mappings but that would slow down lookups significantly.
     add_column :users, :ao_id, :string

@@ -1,4 +1,4 @@
-class CreateGroupActionLogs < ActiveRecord::Migration
+class CreateGroupActionLogs < ActiveRecord::Migration[4.2]
   def change
     create_table :group_action_logs do |t|
       t.references :user, null: false, foreign_key: true

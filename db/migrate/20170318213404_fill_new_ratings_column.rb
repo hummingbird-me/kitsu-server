@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class FillNewRatingsColumn < ActiveRecord::Migration
+class FillNewRatingsColumn < ActiveRecord::Migration[4.2]
   using UpdateInBatches
   disable_ddl_transaction!
   class LibraryEntry < ActiveRecord::Base; end

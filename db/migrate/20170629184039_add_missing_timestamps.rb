@@ -1,4 +1,4 @@
-class AddMissingTimestamps < ActiveRecord::Migration
+class AddMissingTimestamps < ActiveRecord::Migration[4.2]
   def change
     tables = %i[
       anime_castings anime_characters anime_productions anime_staff

@@ -1,4 +1,4 @@
-class CreateListImports < ActiveRecord::Migration
+class CreateListImports < ActiveRecord::Migration[4.2]
   def change
     create_table :list_imports do |t|
       # STI type such as ListImport::MyAnimeList

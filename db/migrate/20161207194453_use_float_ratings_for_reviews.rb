@@ -1,4 +1,4 @@
-class UseFloatRatingsForReviews < ActiveRecord::Migration
+class UseFloatRatingsForReviews < ActiveRecord::Migration[4.2]
   class Review < ActiveRecord::Base; end
   def change
     Review.where(rating: 0).update_all(rating: 1)

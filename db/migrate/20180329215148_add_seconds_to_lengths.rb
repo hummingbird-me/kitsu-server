@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class AddSecondsToLengths < ActiveRecord::Migration
+class AddSecondsToLengths < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   def change

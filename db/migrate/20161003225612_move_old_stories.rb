@@ -1,4 +1,4 @@
-class MoveOldStories < ActiveRecord::Migration
+class MoveOldStories < ActiveRecord::Migration[4.2]
   class Story < ActiveRecord::Base
     belongs_to :library_entry
     belongs_to :user

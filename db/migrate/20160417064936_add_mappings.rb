@@ -1,4 +1,4 @@
-class AddMappings < ActiveRecord::Migration
+class AddMappings < ActiveRecord::Migration[4.2]
   def change
     create_table :mappings do |t|
       t.string :external_site, null: false

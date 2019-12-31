@@ -1,4 +1,4 @@
-class CreateGlobalStats < ActiveRecord::Migration
+class CreateGlobalStats < ActiveRecord::Migration[4.2]
   def change
     create_table :global_stats do |t|
       t.string :type, null: false

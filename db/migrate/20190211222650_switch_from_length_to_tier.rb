@@ -1,4 +1,4 @@
-class SwitchFromLengthToTier < ActiveRecord::Migration
+class SwitchFromLengthToTier < ActiveRecord::Migration[4.2]
   def change
     rename_column :pro_subscriptions, :plan, :tier
     add_column :users, :pro_tier, :integer

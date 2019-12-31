@@ -1,4 +1,4 @@
-class CreateBlocks < ActiveRecord::Migration
+class CreateBlocks < ActiveRecord::Migration[4.2]
   def change
     create_table :blocks do |t|
       t.references :user, index: true, foreign_key: true, null: false

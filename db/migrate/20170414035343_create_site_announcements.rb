@@ -1,4 +1,4 @@
-class CreateSiteAnnouncements < ActiveRecord::Migration
+class CreateSiteAnnouncements < ActiveRecord::Migration[4.2]
   def change
     create_table :site_announcements do |t|
       t.references :user, foreign_key: true, null: false

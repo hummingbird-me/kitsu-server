@@ -1,4 +1,4 @@
-class AddMediaReactionIdToLibraryEntry < ActiveRecord::Migration
+class AddMediaReactionIdToLibraryEntry < ActiveRecord::Migration[4.2]
   def change
     # Disable timeout
     ActiveRecord::Base.connection.execute('SET statement_timeout = 0')

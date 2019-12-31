@@ -1,4 +1,4 @@
-class MoveUserWebsiteToProfileLinkSite < ActiveRecord::Migration
+class MoveUserWebsiteToProfileLinkSite < ActiveRecord::Migration[4.2]
   def change
     User.where.not(website: nil).find_each do |user|
       ProfileLink.create(

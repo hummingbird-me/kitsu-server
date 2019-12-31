@@ -1,4 +1,4 @@
-class FixOnboardingColumnFills < ActiveRecord::Migration
+class FixOnboardingColumnFills < ActiveRecord::Migration[4.2]
   def change
     # Because the ratings_count requirement has gone up, we need to start over
     # on this one.  The other (feed_completed) is all more lenient than before,

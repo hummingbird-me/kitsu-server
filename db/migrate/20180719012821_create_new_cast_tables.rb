@@ -1,4 +1,4 @@
-class CreateNewCastTables < ActiveRecord::Migration
+class CreateNewCastTables < ActiveRecord::Migration[4.2]
   def change
     create_table :media_characters do |t|
       t.references :media, polymorphic: true, index: true, null: false

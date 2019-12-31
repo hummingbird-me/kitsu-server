@@ -1,4 +1,4 @@
-class CreateStreamingLinks < ActiveRecord::Migration
+class CreateStreamingLinks < ActiveRecord::Migration[4.2]
   def change
     change_table :streamers do |t|
       t.attachment :logo

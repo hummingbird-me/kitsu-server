@@ -1,4 +1,4 @@
-class RemoveDefaultAverageRatingAndMoveMangaAverageRatingToCorrectColumn < ActiveRecord::Migration
+class RemoveDefaultAverageRatingAndMoveMangaAverageRatingToCorrectColumn < ActiveRecord::Migration[4.2]
   def change
     change_column_null :anime, :average_rating, true
     reversible do |dir|

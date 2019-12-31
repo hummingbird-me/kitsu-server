@@ -1,4 +1,4 @@
-class BackfillEpisodesAndChapters < ActiveRecord::Migration
+class BackfillEpisodesAndChapters < ActiveRecord::Migration[4.2]
   self.disable_ddl_transaction!
   def change
     Anime.joins(:episodes)

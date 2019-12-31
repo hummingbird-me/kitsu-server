@@ -1,4 +1,4 @@
-class FixRatingFrequencies < ActiveRecord::Migration
+class FixRatingFrequencies < ActiveRecord::Migration[4.2]
   def change
     mappings = (0.5..5).step(0.5).to_a.map do |rating|
       [rating, (rating * 4) - 1]

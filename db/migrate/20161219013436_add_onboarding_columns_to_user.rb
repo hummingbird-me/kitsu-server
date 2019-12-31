@@ -1,4 +1,4 @@
-class AddOnboardingColumnsToUser < ActiveRecord::Migration
+class AddOnboardingColumnsToUser < ActiveRecord::Migration[4.2]
   def change
     # Remove onboarding boolean
     remove_column :users, :onboarded

@@ -1,4 +1,4 @@
-class CreateProGifts < ActiveRecord::Migration
+class CreateProGifts < ActiveRecord::Migration[4.2]
   def change
     create_table :pro_gifts do |t|
       t.references :from, null: false

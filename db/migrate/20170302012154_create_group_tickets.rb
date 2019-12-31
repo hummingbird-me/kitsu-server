@@ -1,4 +1,4 @@
-class CreateGroupTickets < ActiveRecord::Migration
+class CreateGroupTickets < ActiveRecord::Migration[4.2]
   def change
     create_table :group_tickets do |t|
       t.references :user, foreign_key: true, index: true, null: false

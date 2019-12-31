@@ -1,4 +1,4 @@
-class AddJoinTablesForMediaAttribute < ActiveRecord::Migration
+class AddJoinTablesForMediaAttribute < ActiveRecord::Migration[4.2]
   def change
     create_table :anime_media_attributes do |t|
       t.references :anime, null: false, index: true,

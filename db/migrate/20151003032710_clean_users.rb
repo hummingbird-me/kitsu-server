@@ -1,4 +1,4 @@
-class CleanUsers < ActiveRecord::Migration
+class CleanUsers < ActiveRecord::Migration[4.2]
   class User < ActiveRecord::Base; end
 
   def change

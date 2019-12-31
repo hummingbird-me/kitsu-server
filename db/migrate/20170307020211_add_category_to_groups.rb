@@ -1,4 +1,4 @@
-class AddCategoryToGroups < ActiveRecord::Migration
+class AddCategoryToGroups < ActiveRecord::Migration[4.2]
   def change
     add_reference :groups, :category, index: true
     GroupCategory.create!(name: 'Misc.', id: 7)

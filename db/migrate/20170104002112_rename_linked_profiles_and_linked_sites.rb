@@ -1,4 +1,4 @@
-class RenameLinkedProfilesAndLinkedSites < ActiveRecord::Migration
+class RenameLinkedProfilesAndLinkedSites < ActiveRecord::Migration[4.2]
   def change
     # rename LinkedProfile -> LinkedAccount
     rename_table :linked_profiles, :linked_accounts

@@ -1,4 +1,4 @@
-class CopyQuotesToQuoteLines < ActiveRecord::Migration
+class CopyQuotesToQuoteLines < ActiveRecord::Migration[4.2]
   def change
     execute <<-SQL.squish
       INSERT INTO quote_lines (

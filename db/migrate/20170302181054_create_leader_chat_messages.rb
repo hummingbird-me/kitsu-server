@@ -1,4 +1,4 @@
-class CreateLeaderChatMessages < ActiveRecord::Migration
+class CreateLeaderChatMessages < ActiveRecord::Migration[4.2]
   def change
     create_table :leader_chat_messages do |t|
       t.references :user, null: false, foreign_key: true, index: true

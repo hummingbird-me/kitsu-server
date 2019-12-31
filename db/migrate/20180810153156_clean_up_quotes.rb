@@ -1,4 +1,4 @@
-class CleanUpQuotes < ActiveRecord::Migration
+class CleanUpQuotes < ActiveRecord::Migration[4.2]
   def change
     say_with_time 'Filling character_id' do
       Quote.includes(:media).find_each do |quote|

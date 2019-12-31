@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class FillMangaAgeRatings < ActiveRecord::Migration
+class FillMangaAgeRatings < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   self.disable_ddl_transaction!

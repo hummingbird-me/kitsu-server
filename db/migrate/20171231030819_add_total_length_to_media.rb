@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class AddTotalLengthToMedia < ActiveRecord::Migration
+class AddTotalLengthToMedia < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   def change

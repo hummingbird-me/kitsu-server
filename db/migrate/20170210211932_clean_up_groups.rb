@@ -1,4 +1,4 @@
-class CleanUpGroups < ActiveRecord::Migration
+class CleanUpGroups < ActiveRecord::Migration[4.2]
   def change
     # Get rid of old trending stuff
     execute 'DROP VIEW IF EXISTS group_members_histogram CASCADE'

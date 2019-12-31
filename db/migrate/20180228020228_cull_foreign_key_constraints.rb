@@ -1,4 +1,4 @@
-class CullForeignKeyConstraints < ActiveRecord::Migration
+class CullForeignKeyConstraints < ActiveRecord::Migration[4.2]
   def change
     # Foreign keys to User model
     remove_foreign_key :ama_subscribers, :users

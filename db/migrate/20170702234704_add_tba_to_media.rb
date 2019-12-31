@@ -1,4 +1,4 @@
-class AddTbaToMedia < ActiveRecord::Migration
+class AddTbaToMedia < ActiveRecord::Migration[4.2]
   def change
     %i[anime dramas].each do |table|
       change_table table do |t|

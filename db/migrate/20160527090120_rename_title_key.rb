@@ -1,4 +1,4 @@
-class RenameTitleKey < ActiveRecord::Migration
+class RenameTitleKey < ActiveRecord::Migration[4.2]
   class Anime < ActiveRecord::Base; end
   class Drama < ActiveRecord::Base; end
   class Manga < ActiveRecord::Base; end

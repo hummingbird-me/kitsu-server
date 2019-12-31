@@ -1,4 +1,4 @@
-class CleanUpCastings < ActiveRecord::Migration
+class CleanUpCastings < ActiveRecord::Migration[4.2]
   class Casting < ActiveRecord::Base; end
 
   def change

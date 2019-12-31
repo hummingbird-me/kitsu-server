@@ -1,4 +1,4 @@
-class CreateGroupNeighbors < ActiveRecord::Migration
+class CreateGroupNeighbors < ActiveRecord::Migration[4.2]
   def change
     create_table :group_neighbors do |t|
       t.references :source, index: true, null: false

@@ -1,4 +1,4 @@
-class CleanUpFranchises < ActiveRecord::Migration
+class CleanUpFranchises < ActiveRecord::Migration[4.2]
   def change
     ## Switch to Titleable concern
     add_column :franchises, :titles, :hstore, default: '', null: false

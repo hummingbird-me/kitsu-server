@@ -1,4 +1,4 @@
-class CreateDrama < ActiveRecord::Migration
+class CreateDrama < ActiveRecord::Migration[4.2]
   def change
     create_table :dramas do |t|
       ## Title Info

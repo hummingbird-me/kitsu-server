@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class BackfillLibraryTimestamps < ActiveRecord::Migration
+class BackfillLibraryTimestamps < ActiveRecord::Migration[4.2]
   using UpdateInBatches
   self.disable_ddl_transaction!
 

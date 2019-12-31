@@ -1,4 +1,4 @@
-class AddWatchDatesToLibraryEntries < ActiveRecord::Migration
+class AddWatchDatesToLibraryEntries < ActiveRecord::Migration[4.2]
   def change
     change_table :library_entries do |t|
       t.timestamp :started_at

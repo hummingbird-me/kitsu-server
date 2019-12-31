@@ -1,4 +1,4 @@
-class AddIndicesToAllTheThings < ActiveRecord::Migration
+class AddIndicesToAllTheThings < ActiveRecord::Migration[4.2]
   def change
     add_index :favorites, [:user_id, :item_type]
     add_index :comments, :parent_id

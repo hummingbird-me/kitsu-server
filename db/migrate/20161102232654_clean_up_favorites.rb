@@ -1,4 +1,4 @@
-class CleanUpFavorites < ActiveRecord::Migration
+class CleanUpFavorites < ActiveRecord::Migration[4.2]
   def change
     change_column_null :favorites, :user_id, false
     change_column_null :favorites, :item_id, false

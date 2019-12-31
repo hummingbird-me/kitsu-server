@@ -1,4 +1,4 @@
-class CreateUserIpaddresses < ActiveRecord::Migration
+class CreateUserIpaddresses < ActiveRecord::Migration[4.2]
   def change
     create_table :user_ip_addresses do |t|
       t.references :user, foreign_key: true, index: true, null: false

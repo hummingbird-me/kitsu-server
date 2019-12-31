@@ -1,4 +1,4 @@
-class AddFirstMessageToTickets < ActiveRecord::Migration
+class AddFirstMessageToTickets < ActiveRecord::Migration[4.2]
   def change
     add_reference :group_tickets, :first_message
     add_foreign_key :group_tickets, :group_ticket_messages,

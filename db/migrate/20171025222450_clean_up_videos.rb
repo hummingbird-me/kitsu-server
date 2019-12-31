@@ -1,4 +1,4 @@
-class CleanUpVideos < ActiveRecord::Migration
+class CleanUpVideos < ActiveRecord::Migration[4.2]
   def change
     change_column :videos, :embed_data, :jsonb, default: {}, using: 'embed_data::json::jsonb'
     change_column_null :videos, :created_at, false

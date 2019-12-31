@@ -1,4 +1,4 @@
-class CleanUpPeople < ActiveRecord::Migration
+class CleanUpPeople < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   def change

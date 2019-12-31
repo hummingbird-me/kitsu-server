@@ -1,4 +1,4 @@
-class AddIndicesToLibraryEntries < ActiveRecord::Migration
+class AddIndicesToLibraryEntries < ActiveRecord::Migration[4.2]
   self.disable_ddl_transaction!
 
   def change

@@ -1,4 +1,4 @@
-class CreateGroupPermissions < ActiveRecord::Migration
+class CreateGroupPermissions < ActiveRecord::Migration[4.2]
   def change
     create_table :group_permissions do |t|
       t.references :group_member, index: true, foreign_key: true, null: false

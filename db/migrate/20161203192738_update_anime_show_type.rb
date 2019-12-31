@@ -1,4 +1,4 @@
-class UpdateAnimeShowType < ActiveRecord::Migration
+class UpdateAnimeShowType < ActiveRecord::Migration[4.2]
   class Anime < ActiveRecord::Base; end
 
   def change

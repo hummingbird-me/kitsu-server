@@ -1,4 +1,4 @@
-class CreateMediaAttributeVotes < ActiveRecord::Migration
+class CreateMediaAttributeVotes < ActiveRecord::Migration[4.2]
   def change
     create_table :media_attribute_votes do |t|
       t.references :user, foreign_key: true, index: true, null: false

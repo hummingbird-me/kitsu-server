@@ -1,4 +1,4 @@
-class FillLibraryEntryOnStories < ActiveRecord::Migration
+class FillLibraryEntryOnStories < ActiveRecord::Migration[4.2]
   def change
     execute <<-SQL.squish
       UPDATE stories s

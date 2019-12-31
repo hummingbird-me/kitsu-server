@@ -1,4 +1,4 @@
-class UpdateQuotes < ActiveRecord::Migration
+class UpdateQuotes < ActiveRecord::Migration[4.2]
   def change
     # Add the character_id column
     add_column :quotes, :character_id, :integer

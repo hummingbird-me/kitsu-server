@@ -1,6 +1,6 @@
 require 'update_in_batches'
 
-class BackfillNsfwEntries < ActiveRecord::Migration
+class BackfillNsfwEntries < ActiveRecord::Migration[4.2]
   using UpdateInBatches
   disable_ddl_transaction!
 

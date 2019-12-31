@@ -1,4 +1,4 @@
-class CreateGroupReports < ActiveRecord::Migration
+class CreateGroupReports < ActiveRecord::Migration[4.2]
   def change
     create_table :group_reports do |t|
       t.text :explanation

@@ -1,4 +1,4 @@
-class AddNotificationSettingsForUsers < ActiveRecord::Migration
+class AddNotificationSettingsForUsers < ActiveRecord::Migration[4.2]
   disable_ddl_transaction!
   def change
     User.find_each do |user|

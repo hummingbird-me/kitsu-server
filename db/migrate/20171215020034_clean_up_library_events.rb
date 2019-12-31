@@ -1,4 +1,4 @@
-class CleanUpLibraryEvents < ActiveRecord::Migration
+class CleanUpLibraryEvents < ActiveRecord::Migration[4.2]
   def up
     rename_column :library_events, :event, :kind
   end

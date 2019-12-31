@@ -1,4 +1,4 @@
-class CleanUpLibraryEntries < ActiveRecord::Migration
+class CleanUpLibraryEntries < ActiveRecord::Migration[4.2]
   def change
     remove_column :library_entries, :last_watched
     remove_column :library_entries, :imported

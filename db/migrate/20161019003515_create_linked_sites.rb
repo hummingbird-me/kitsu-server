@@ -1,4 +1,4 @@
-class CreateLinkedSites < ActiveRecord::Migration
+class CreateLinkedSites < ActiveRecord::Migration[4.2]
   def change
     create_table :linked_sites do |t|
       t.string :name, null: false

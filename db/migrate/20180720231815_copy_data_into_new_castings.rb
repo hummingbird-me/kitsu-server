@@ -1,4 +1,4 @@
-class CopyDataIntoNewCastings < ActiveRecord::Migration
+class CopyDataIntoNewCastings < ActiveRecord::Migration[4.2]
   def change
     execute <<-SQL.squish
       INSERT INTO media_characters (

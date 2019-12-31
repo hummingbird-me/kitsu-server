@@ -1,4 +1,4 @@
-class RenameMappingsMediaToItem < ActiveRecord::Migration
+class RenameMappingsMediaToItem < ActiveRecord::Migration[4.2]
   def change
     rename_column :mappings, :media_type, :item_type
     rename_column :mappings, :media_id, :item_id

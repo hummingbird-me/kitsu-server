@@ -1,4 +1,4 @@
-class CreateStats < ActiveRecord::Migration
+class CreateStats < ActiveRecord::Migration[4.2]
   def change
     create_table :stats do |t|
       t.references :user, index: true, foreign_key: true, null: false

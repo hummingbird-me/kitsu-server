@@ -1,4 +1,4 @@
-class AddMemberAndBanNotes < ActiveRecord::Migration
+class AddMemberAndBanNotes < ActiveRecord::Migration[4.2]
   def change
     # Add GroupBan#notes column
     add_column :group_bans, :notes, :text

@@ -1,4 +1,4 @@
-class SwitchToNewRatings < ActiveRecord::Migration
+class SwitchToNewRatings < ActiveRecord::Migration[4.2]
   def change
     missed_entries = LibraryEntry.where(new_rating: nil).where.not(rating: nil)
     missed_entries.update_all('new_rating = (rating * 4) - 1')
