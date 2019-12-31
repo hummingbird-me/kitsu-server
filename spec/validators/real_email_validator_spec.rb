@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe RealEmailValidator do
   subject { described_class.new(attributes: %i[email]) }
-  RecordClass = Struct.new(:email, :name) do
+  RealEmailRecordClass = Struct.new(:email, :name) do
     extend ActiveModel::Naming
     include ActiveModel::Validations
   end
 
   context 'with an undeliverable email address' do
-    let(:record) { RecordClass.new(email: 'invalid@fake.fake') }
+    let(:record) { RealEmailRecordClass.new(email: 'invalid@fake.fake') }
     before do
       allow(Accounts::PrevalidateEmail).to receive(:call).and_return(
         OpenStruct.new(
@@ -26,7 +26,7 @@ RSpec.describe RealEmailValidator do
   end
 
   context 'with an unknown email' do
-    let(:record) { RecordClass.new('valid@gmail.com') }
+    let(:record) { RealEmailRecordClass.new('valid@gmail.com') }
     before do
       allow(Accounts::PrevalidateEmail).to receive(:call).and_return(
         OpenStruct.new(
@@ -43,7 +43,7 @@ RSpec.describe RealEmailValidator do
   end
 
   context 'with a deliverable email' do
-    let(:record) { RecordClass.new('valid@gmail.com') }
+    let(:record) { RealEmailRecordClass.new('valid@gmail.com') }
     before do
       allow(Accounts::PrevalidateEmail).to receive(:call).and_return(
         OpenStruct.new(
