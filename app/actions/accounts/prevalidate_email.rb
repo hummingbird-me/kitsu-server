@@ -24,34 +24,30 @@ module Accounts
     end
 
     def response_data
-      return default_unknown_response unless API_KEY
+      return @response_data if @response_data
+      return @response_data = default_unknown_response_for('unauthorized') unless API_KEY
+
+      response = HTTP.timeout(HTTP_TIMEOUT.to_i).get(url)
 
       if response.status == 200
-        @response_data ||= response.parse
+        @response_data = response.parse
       else
         Raven.capture_exception(TheCheckerError.new, extra: {
           response_status: response.status,
           response_data: response.parse
         })
-        default_unknown_response
+        @response_data = default_unknown_response_for('bad_gateway')
       end
-    end
-
-    def response
-      return nil if @response == :timed_out
-
-      @response ||= HTTP.timeout(HTTP_TIMEOUT).get(url)
     rescue HTTP::TimeoutError => e
       Raven.capture_exception(e)
-      @response = :timed_out
-      nil
+      @response_data = default_unknown_response_for('timeout')
     end
 
-    def default_unknown_response
+    def default_unknown_response_for(reason)
       {
-        'result': 'unknown',
-        'reason': 'timeout',
-        'email': email
+        'result' => 'unknown',
+        'reason' => reason,
+        'email' => email
       }
     end
 
