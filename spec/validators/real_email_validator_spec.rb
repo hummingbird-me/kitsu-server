@@ -58,5 +58,4 @@ RSpec.describe RealEmailValidator do
       expect(record.errors).to be_empty
     end
   end
-
 end
