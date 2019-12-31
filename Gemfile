@@ -24,7 +24,6 @@ gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doork
 gem 'pundit'
 gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
 gem 'rolify'
-gem 'twitter'
 
 # Attachments
 gem 'aws-sdk', '< 3.0'
@@ -64,6 +63,7 @@ gem 'faraday_middleware'
 gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'google-api-client' # Google APIs
+gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules
 gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites

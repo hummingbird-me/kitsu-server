@@ -4,14 +4,6 @@ class FollowsController < ApplicationController
     render json: serialize_follows(facebook.auto_follows)
   end
 
-  def import_from_twitter
-    twitter = Authorization::Assertion::TwitterAuth.new(
-      params[:access_token],
-      params[:access_token_secret]
-    )
-    render json: serialize_follows(twitter.import_friends)
-  end
-
   def serialize_follows(follows)
     serializer.serialize_to_hash(wrap_in_resources(follows))
   end

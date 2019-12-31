@@ -178,6 +178,9 @@ class User < ApplicationRecord
   validates :email, :name, :password, :slug, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false }, if: :email_changed?, allow_blank: true
+  validates :email, real_email: true, if: ->(user) {
+    Flipper.enabled?(:email_validation) && user.email_changed?
+  }
   with_options if: :slug_changed?, allow_nil: true do
     validates :slug, uniqueness: { case_sensitive: false }
     validates :slug, format: {
