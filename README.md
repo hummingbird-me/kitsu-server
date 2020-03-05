@@ -2,10 +2,11 @@
 [![Build Status](https://travis-ci.org/hummingbird-me/kitsu-server.svg?branch=the-future)](https://travis-ci.org/hummingbird-me/kitsu-server) [![Code Climate](https://codeclimate.com/github/hummingbird-me/kitsu-server/badges/gpa.svg)](https://codeclimate.com/github/hummingbird-me/kitsu-server) [![Test Coverage](https://codeclimate.com/github/hummingbird-me/kitsu-server/badges/coverage.svg)](https://codeclimate.com/github/hummingbird-me/kitsu-server/coverage)
 
 ---
-**<p align="center">This is our server repository. It contains the rails application for Kitsu.<br />Check out the [meta], [client] and [api docs] repositories.</p>**
+**<p align="center">This is our server repository. It contains the rails application for Kitsu.<br />Check out the [tools], [client], [mobile app] and [api docs] repositories.</p>**
 
-[meta]:https://github.com/hummingbird-me/hummingbird
+[tools]:https://github.com/hummingbird-me/kitsu-tools
 [client]:https://github.com/hummingbird-me/hummingbird-client
+[mobile app]:https://github.com/hummingbird-me/kitsu-mobile
 [api docs]:https://github.com/hummingbird-me/api-docs
 
 ---
@@ -15,7 +16,7 @@ This README outlines the details of collaborating on this application.
 ## Styleguide
 
 * [Ruby](https://github.com/bbatsov/ruby-style-guide)
-* [Rails](https://github.com/bbatsov/rails-style-guide) - - [Amendments](https://github.com/hummingbird-me/hummingbird/blob/the-future/server/README.md#rails)
+* [Rails](https://github.com/bbatsov/rails-style-guide) - - [Amendments](https://github.com/hummingbird-me/kitsu-server/blob/the-future/README.md#rails)
 
 ## Styleguide Amendments
 
