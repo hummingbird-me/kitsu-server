@@ -6,7 +6,6 @@ class Mutations::Anime::Create < Mutations::BaseMutation
   field :anime, Types::Anime, null: true
 
   def resolve(input:)
-    a = input.to_model
     anime = Anime.create!(input.to_model)
     { anime: anime }
   end

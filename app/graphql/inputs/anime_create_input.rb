@@ -13,15 +13,15 @@ class Inputs::AnimeCreateInput < Inputs::BaseInputObject
   argument :episode_length, Integer, required: false
 
   def to_model
-    modified = { 
-      titles: self.titles.localized,
-      abbreviated_titles: self.titles.alternatives,
-      canonical_title: self.titles.canonical_key,
-      synopsis: self.synopsis['en']
+    modified = {
+      titles: titles.localized,
+      abbreviated_titles: titles.alternatives,
+      canonical_title: titles.canonical_key,
+      synopsis: synopsis['en']
     }
 
-    modified[:cover_image] = self.banner_image if self.banner_image
+    modified[:cover_image] = banner_image if banner_image
 
-    self.to_h.except(:banner_image).merge(modified)
+    to_h.except(:banner_image).merge(modified)
   end
 end
