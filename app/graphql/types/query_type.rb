@@ -1,18 +1,46 @@
 class Types::QueryType < Types::BaseObject
-  field :anime, Types::Anime.connection_type, null: false do
-    description 'Anime in the Kitsu database'
-    argument :slug, [String], required: false
-    argument :id, [String], required: false
+  field :find_anime, Types::Anime, null: false do
+    description "Get a single Anime"
+    argument :id, ID, required: false
+    argument :slug, String, required: false
   end
 
-  def anime(slug: nil, id: nil)
-    if slug
-      ::Anime.by_slug(slug)
-    elsif id
+  def find_anime(id: nil, slug: nil)
+    if id
       ::Anime.find(id)
-    else
-      ::Anime.all
+    elsif slug
+      ::Anime.by_slug(slug).first
     end
+  end
+
+  field :anime, Types::Anime.connection_type, null: false do
+    description 'Anime in the Kitsu database'
+  end
+
+  def anime
+    ::Anime.all
+  end
+
+  field :find_manga, Types::Manga, null: false do
+    description 'Get a single Manga'
+    argument :id, ID, required: false
+    argument :slug, String, required: false
+  end
+
+  def find_manga(id: nil, slug: nil)
+    if id
+      ::Manga.find(id)
+    elsif slug
+      ::Manga.by_slug(slug).first
+    end
+  end
+
+  field :manga, Types::Manga.connection_type, null: false do
+    description 'Manga in the Kitsu database'
+  end
+
+  def manga
+    ::Manga.all
   end
 
   field :global_trending, Types::Media.connection_type, null: false do
