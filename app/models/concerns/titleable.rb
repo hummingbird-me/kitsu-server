@@ -11,7 +11,7 @@ module Titleable
   def canonical_title
     titles[self[:canonical_title]]
   end
-  
+
   def canonical_title_key
     self[:canonical_title]
   end
