@@ -13,18 +13,18 @@ class Inputs::AnimeUpdateInput < Inputs::BaseInputObject
   argument :episode_length, Integer, required: false
 
   def to_model
-    modified = Hash.new
-    if self.titles
+    modified = {}
+    if titles
       modified.merge!(
-        titles: self.titles.localized,
-        abbreviated_titles: self.titles.alternatives,
-        canonical_title: self.titles.canonical_key
+        titles: titles.localized,
+        abbreviated_titles: titles.alternatives,
+        canonical_title: titles.canonical_key
       )
     end
 
-    modified[:synopsis] = self.synopsis['en'] if self.synopsis
-    modified[:cover_image] = self.banner_image if self.banner_image
+    modified[:synopsis] = synopsis['en'] if synopsis
+    modified[:cover_image] = banner_image if banner_image
 
-    self.to_h.except(:banner_image).merge(modified)
+    to_h.except(:banner_image).merge(modified)
   end
 end

@@ -26,7 +26,8 @@ module Types::Media
   end
 
   # Localized Synopsis
-  localized_field :synopsis, null: false,
+  localized_field :synopsis,
+    null: false,
     description: 'A brief (mostly spoiler-free) summary/description of the media'
 
   def synopsis
