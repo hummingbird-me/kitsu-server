@@ -399,7 +399,7 @@ GEM
     paranoia (2.4.1)
       activerecord (>= 4.0, < 5.3)
     pg (1.2.2)
-    pg_query (1.1.0)
+    pg_query (1.2.0)
     pghero (2.4.1)
       activerecord (>= 5)
     postmark (1.15.0)
