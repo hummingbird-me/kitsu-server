@@ -33,6 +33,7 @@ gem 'image_optim_pack', require: false
 gem 'paperclip', '~> 5.0'
 gem 'paperclip-meta'
 gem 'paperclip-optimizer'
+gem 'apollo_upload_server'
 
 # Background tasks
 gem 'sidekiq', '~> 5'

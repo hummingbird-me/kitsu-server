@@ -96,6 +96,9 @@ GEM
     annotate (2.7.4)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
+    apollo_upload_server (2.0.1)
+      graphql (>= 1.8)
+      rails (>= 4.2)
     arel (8.0.0)
     arel-helpers (2.7.0)
       activerecord (>= 3.1.0, < 6)
@@ -668,6 +671,7 @@ DEPENDENCIES
   addressable
   algoliasearch-rails
   annotate
+  apollo_upload_server
   attr_encrypted (~> 3.1.0)
   aws-sdk (< 3.0)
   bcrypt
@@ -768,4 +772,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
