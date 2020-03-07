@@ -9,4 +9,7 @@ class Types::TitlesList < Types::BaseObject
   field :canonical, String,
     null: false,
     description: 'The official or de facto international title'
+  field :canonical_key, String,
+    null: false,
+    description: 'The locale code that identifies which title is used as the canonical title'
 end
