@@ -101,7 +101,6 @@ gem 'tunemygc' # Tune Garbage Collector
 gem 'sentry-raven' # Send error data to Sentry
 
 # Admin Panel
-gem 'forest_liana' # Forest Admin
 gem 'pg_query' # pghero indexes
 gem 'pghero'
 gem 'rails_admin'

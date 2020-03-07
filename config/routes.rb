@@ -197,7 +197,6 @@ Rails.application.routes.draw do
     get '/pghero', to: 'sessions#redirect'
     get '/flipper', to: 'sessions#redirect'
     resources :sessions, only: %i[new create]
-    mount ForestLiana::Engine => '/forest'
 
     ### Webhooks
     namespace :hooks, module: 'webhooks' do
