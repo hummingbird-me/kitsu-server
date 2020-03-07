@@ -1,6 +1,6 @@
 class Types::QueryType < Types::BaseObject
   field :find_anime, Types::Anime, null: false do
-    description "Get a single Anime"
+    description 'Get a single Anime'
     argument :id, ID, required: false
     argument :slug, String, required: false
   end

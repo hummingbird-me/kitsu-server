@@ -7,7 +7,7 @@ AllCops:
   DisplayStyleGuide: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.5
-Layout/AlignArguments:
+Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
@@ -21,12 +21,12 @@ Style/CollectionMethods:
 Style/CommentAnnotation:
   Enabled: true
   Keywords:
-  - TODO
-  - FIXME
-  - OPTIMIZE
-  - HACK
-  - REVIEW
-  - DEPRECATED
+    - TODO
+    - FIXME
+    - OPTIMIZE
+    - HACK
+    - REVIEW
+    - DEPRECATED
 Layout/DotPosition:
   EnforcedStyle: leading
 Layout/EmptyLineAfterGuardClause:
@@ -47,9 +47,9 @@ Style/GuardClause:
   MinBodyLength: 3
 Style/IfUnlessModifier:
   Enabled: true
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 Style/LambdaCall:
   Enabled: true
@@ -62,23 +62,23 @@ Style/NumericLiterals:
 Style/PercentLiteralDelimiters:
   Enabled: true
   PreferredDelimiters:
-    "%": "[]"
-    "%i": "[]"
-    "%q": "[]"
-    "%Q": "[]"
-    "%r": "{}"
-    "%s": "()"
-    "%w": "[]"
-    "%W": "[]"
-    "%x": "[]"
+    '%': '[]'
+    '%i': '[]'
+    '%q': '[]'
+    '%Q': '[]'
+    '%r': '{}'
+    '%s': '()'
+    '%w': '[]'
+    '%W': '[]'
+    '%x': '[]'
 Naming/PredicateName:
   Enabled: true
   NamePrefix:
-  - is_
-  - has_
-  - have_
-  NamePrefixBlacklist:
-  - is_
+    - is_
+    - has_
+    - have_
+  ForbiddenPrefixes:
+    - is_
 Style/RaiseArgs:
   Enabled: true
   EnforcedStyle: exploded
@@ -104,7 +104,7 @@ Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyleForEmptyBraces: no_space
 Style/SymbolProc:
   Enabled: true
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Enabled: true
   EnforcedStyle: final_newline
 Style/TrailingCommaInArguments:
@@ -144,7 +144,7 @@ Metrics/ModuleLength:
 Metrics/CyclomaticComplexity:
   Enabled: true
   Max: 10
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: true
   Max: 100
   AllowURI: true
@@ -194,7 +194,7 @@ Style/EmptyLiteral:
   Enabled: true
 Style/EvenOdd:
   Enabled: true
-Layout/FlipFlop:
+Lint/FlipFlop:
   Enabled: true
 Style/IfWithSemicolon:
   Enabled: true
@@ -231,7 +231,13 @@ Style/SelfAssignment:
 Style/ClassAndModuleChildren:
   Enabled: true
   Exclude:
-  - app/graphql/**/*
+    - app/graphql/**/*
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 Layout/SpaceBeforeFirstArg:
   Enabled: true
 Layout/SpaceAfterColon:
@@ -274,7 +280,7 @@ Lint/DeprecatedClassMethods:
   Enabled: true
 Security/Eval:
   Enabled: true
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Enabled: true
 Lint/LiteralInInterpolation:
   Enabled: true
@@ -288,7 +294,7 @@ Lint/UnderscorePrefixedVariableName:
   Enabled: true
 Lint/UselessSetterCall:
   Enabled: true
-Rails/HasAndBelongsToMany:
-  Enabled: false
-Rails/TimeZone:
-  Enabled: false
+# Rails/HasAndBelongsToMany:
+#   Enabled: false
+# Rails/TimeZone:
+#   Enabled: false
