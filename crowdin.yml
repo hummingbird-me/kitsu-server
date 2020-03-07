@@ -2,6 +2,6 @@ commit_message: "Update translations for %locale%\n\n[ci skip]"
 append_commit_message: false
 files:
   - source: /config/locales/*.en.yml
-    translation: /config/locales/%file_name%.%two_letters_code%.yaml
+    translation: /config/locales/%file_name%.%locale%.yaml
     translation_replace:
       ".en": ""
