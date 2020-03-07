@@ -255,7 +255,7 @@ GEM
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
-    hashdiff (1.0.0)
+    hashdiff (1.0.1)
     heapy (0.1.3)
     hetchy (1.0.0)
     hiredis (0.6.1)
@@ -633,7 +633,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
-    webmock (3.7.6)
+    webmock (3.8.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
