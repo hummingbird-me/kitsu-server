@@ -138,7 +138,7 @@ GEM
     css_parser (1.7.1)
       addressable
     dante (0.2.0)
-    database_cleaner (1.7.0)
+    database_cleaner (1.8.3)
     declarative (0.0.10)
     declarative-option (0.1.0)
     delayed_paperclip (3.0.1)
