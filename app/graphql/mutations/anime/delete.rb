@@ -7,6 +7,7 @@ class Mutations::Anime::Delete < Mutations::BaseMutation
 
   def resolve(id:)
     anime = Anime.find(id)
+    authorize anime, :destroy?
     anime.destroy!
     { result: { id: id, deleted: true } }
   end
