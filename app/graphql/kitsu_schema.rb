@@ -7,7 +7,7 @@ class KitsuSchema < GraphQL::Schema
   use GraphQL::Batch
   tracer SentryTracing
 
-  def self.resolve_type(type, object, context)
+  def self.resolve_type(_type, object, _context)
     "Types::#{object.class.name}".safe_constantize
   end
 end

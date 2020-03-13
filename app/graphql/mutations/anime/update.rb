@@ -10,6 +10,7 @@ class Mutations::Anime::Update < Mutations::BaseMutation
 
   def resolve(id:, input:)
     anime = Anime.find(id)
+    authorize anime, :update?
     anime.update!(input.to_model)
     { anime: anime }
   end
