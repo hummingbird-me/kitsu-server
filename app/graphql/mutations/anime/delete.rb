@@ -3,12 +3,12 @@ class Mutations::Anime::Delete < Mutations::BaseMutation
     required: true,
     description: 'ID of the Anime to delete'
 
-  field :result, Types::AnimeDeleteResult, null: false
+  field :result, Types::DeleteResult, null: false
 
   def resolve(id:)
     anime = Anime.find(id)
     authorize anime, :destroy?
     anime.destroy!
-    { result: { id: id, deleted: true } }
+    { result: { id: id, type_name: 'Anime' } }
   end
 end
