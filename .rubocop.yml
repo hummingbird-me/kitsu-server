@@ -8,7 +8,7 @@ AllCops:
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.5
 Layout/ArgumentAlignment:
-  EnforcedStyle: with_fixed_indentation
+  Enabled: false
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
 Style/CollectionMethods:
