@@ -1,5 +1,3 @@
-require: rubocop-rails
-
 AllCops:
   Exclude:
     - db/**/*
