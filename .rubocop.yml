@@ -1,3 +1,5 @@
+require: rubocop-rails
+
 AllCops:
   Exclude:
     - db/**/*
@@ -8,7 +10,7 @@ AllCops:
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.5
 Layout/ArgumentAlignment:
-  Enabled: false
+  EnforcedStyle: with_fixed_indentation
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
 Style/CollectionMethods:
@@ -294,7 +296,7 @@ Lint/UnderscorePrefixedVariableName:
   Enabled: true
 Lint/UselessSetterCall:
   Enabled: true
-# Rails/HasAndBelongsToMany:
-#   Enabled: false
-# Rails/TimeZone:
-#   Enabled: false
+Rails/HasAndBelongsToMany:
+  Enabled: false
+Rails/TimeZone:
+  Enabled: false
