@@ -21,7 +21,7 @@ module Types::Media
       localized: object.titles,
       alternatives: object.abbreviated_titles,
       canonical: object.canonical_title,
-      canonical_key: object.canonical_title_key
+      canonical_locale: object.canonical_title_key
     }
   end
 
