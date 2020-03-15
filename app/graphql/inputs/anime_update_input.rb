@@ -8,7 +8,7 @@ class Inputs::AnimeUpdateInput < Inputs::BaseInputObject
   argument :end_date, Types::Date, required: false
   argument :poster_image, ApolloUploadServer::Upload, required: false
   argument :banner_image, ApolloUploadServer::Upload, required: false
-  argument :youtube_video_id, String, required: false
+  argument :youtube_trailer_video_id, String, required: false
   argument :episode_count, Integer, required: false
   argument :episode_length, Integer, required: false
 
@@ -18,13 +18,14 @@ class Inputs::AnimeUpdateInput < Inputs::BaseInputObject
       modified.merge!(
         titles: titles.localized,
         abbreviated_titles: titles.alternatives,
-        canonical_title: titles.canonical_key
+        canonical_title: titles.canonical_locale
       )
     end
 
     modified[:synopsis] = synopsis['en'] if synopsis
     modified[:cover_image] = banner_image if banner_image
+    modified[:youtube_video_id] = youtube_trailer_video_id if youtube_trailer_video_id
 
-    to_h.except(:banner_image).merge(modified)
+    to_h.except(:banner_image, :youtube_trailer_video_id).merge(modified)
   end
 end
