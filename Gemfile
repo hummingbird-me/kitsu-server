@@ -128,6 +128,9 @@ group :development, :test do
 
   # Debugging tests and scripts
   gem 'pry-byebug'
+
+  # Code linter/formatter
+  gem 'rubocop-rails', require: false
 end
 
 group :test do
