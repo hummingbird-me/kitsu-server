@@ -28,7 +28,7 @@ class LibraryGapsService
       rating: []
     ) do |(id, votes, reaction_skipped, reactions, ratings), out|
       out[:attributes] << id if votes.zero?
-      out[:reaction] << id if reactions.zero? && [0, 1].include?(reaction_skipped)
+      out[:reaction] << id if reactions.zero? && reaction_skipped != 'ignored'
       out[:rating] << id if ratings.zero?
     end
   end
