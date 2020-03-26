@@ -1,6 +1,6 @@
 AllCops:
   Exclude:
-    - db/**/*
+    - db/**
     - bin/**/*
     - Guardfile
   DisplayCopNames: false
