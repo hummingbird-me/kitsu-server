@@ -1,4 +1,4 @@
-class MakeAbbreviatedTitlesRequired < ActiveRecord::Migration
+class MakeAbbreviatedTitlesRequired < ActiveRecord::Migration[4.2]
   using UpdateInBatches
 
   def change
