@@ -1,5 +1,6 @@
 class Mutations::Anime::Create < Mutations::BaseMutation
-  argument :input, Inputs::AnimeCreateInput,
+  argument :input,
+    Inputs::AnimeCreateInput,
     required: true,
     description: 'New Anime to create'
 

@@ -1,8 +1,10 @@
 class Mutations::Anime::Update < Mutations::BaseMutation
-  argument :id, ID,
+  argument :id,
+    ID,
     required: true,
     description: 'ID of the Anime to update'
-  argument :input, Inputs::AnimeUpdateInput,
+  argument :input,
+    Inputs::AnimeUpdateInput,
     required: true,
     description: 'Anime attributes to update'
 

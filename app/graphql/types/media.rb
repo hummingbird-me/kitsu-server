@@ -26,7 +26,8 @@ module Types::Media
   end
 
   # Localized Synopsis
-  localized_field :synopsis,
+  localized_field
+    :synopsis,
     null: false,
     description: 'A brief (mostly spoiler-free) summary/description of the media'
 
@@ -70,7 +71,8 @@ module Types::Media
     null: true,
     description: 'The season this was released in'
 
-  field :tba, String,
+  field :tba,
+    String,
     null: true,
     description: 'Description of when this media is expected to release'
 
