@@ -2,8 +2,8 @@ class Mutations::BaseMutation < GraphQL::Schema::Mutation
   include BehindFeatureFlag
 
   def authorize(model, method)
-    unless Pundit.policy!(context[:token], model).public_send(method)
-      raise GraphQL::ExecutionError, "You don't have permission to do that"
-    end
+    return if Pundit.policy!(context[:token], model).public_send(method)
+
+    raise GraphQL::ExecutionError, "You don't have permission to do that"
   end
 end
