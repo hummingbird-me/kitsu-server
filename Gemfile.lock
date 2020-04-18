@@ -72,6 +72,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_flag (1.5.0)
+      activerecord (>= 5)
     activejob (5.1.7)
       activesupport (= 5.1.7)
       globalid (>= 0.3.6)
@@ -665,6 +667,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_flag
   activerecord-import
   addressable
   algoliasearch-rails
