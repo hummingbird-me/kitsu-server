@@ -22,9 +22,16 @@ RSpec.describe DirtyChangeWrapper do
       expect(subject.baz_changed?).to be_truthy
     end
 
-    it 'should provide a _changes method to expose the raw change array' do
-      expect(subject).to respond_to(:baz_changes)
-      expect(subject.baz_changes).to eq(%w[bar bat])
+    it 'should provide a _change method to expose the raw change array' do
+      expect(subject).to respond_to(:baz_change)
+      expect(subject.baz_change).to eq(%w[bar bat])
+    end
+  end
+
+  context 'for unchanged properties' do
+    it 'should provide a _was method which returns the current value' do
+      expect(subject).to respond_to(:foo_was)
+      expect(subject.foo_was).to eq('bar')
     end
   end
 
@@ -34,9 +41,9 @@ RSpec.describe DirtyChangeWrapper do
       expect(subject.nope_changed?).to be_falsey
     end
 
-    it 'should provide a _changes method which returns nil' do
-      expect(subject).to respond_to(:nope_changes)
-      expect(subject.nope_changes).to be_nil
+    it 'should provide a _change method which returns nil' do
+      expect(subject).to respond_to(:nope_change)
+      expect(subject.nope_change).to be_nil
     end
   end
 
