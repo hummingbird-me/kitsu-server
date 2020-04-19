@@ -71,3 +71,18 @@ jobs:
         ELASTICSEARCH_URL: localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
         bundle exec rspec
+
+    - name: Deploy
+      uses: octokit/request-action@v2.x
+      if: github.ref == 'the-future'
+      with:
+        route: POST /repos/:repo/deployments
+        repo: ${{ github.repository }}
+        ref: ${{ github.sha }}
+        environment: staging
+        auto_merge: false
+        mediaType:
+          previews:
+            - flash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

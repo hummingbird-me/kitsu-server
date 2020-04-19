@@ -1,3 +1,9 @@
 log/*
-coverage
+tmp
 public/system
+public/*.xml.gz
+coverage/
+spec/tmp
+.bundle
+vendor/bundle
+.git
