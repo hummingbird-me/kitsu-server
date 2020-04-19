@@ -127,6 +127,7 @@ class User < ApplicationRecord
   enum title_language_preference: %i[canonical romanized localized]
 
   rolify after_add: :update_title, after_remove: :update_title
+  flag :permissions, %i[admin community_mod database_mod]
   has_secure_password validations: false
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
@@ -345,15 +346,15 @@ class User < ApplicationRecord
   end
 
   def update_title(_role)
-    if has_role?(:admin)
+    if permissions.admin?
       update(title: 'Staff')
-    elsif has_role?(:admin, Anime) || has_role?(:mod)
+    elsif permissions.database_mod? || permissions.community_mod?
       update(title: 'Mod')
     end
   end
 
   def admin?
-    title == 'Staff' || title == 'Mod'
+    permissions.admin? || permissions.database_mod? || permissions.community_mod?
   end
 
   def profile_feed

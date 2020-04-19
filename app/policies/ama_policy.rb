@@ -1,4 +1,6 @@
 class AMAPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def update?
     record.author == user || is_admin?
   end
@@ -8,6 +10,6 @@ class AMAPolicy < ApplicationPolicy
   end
 
   def create?
-    is_admin?
+    can_administrate?
   end
 end

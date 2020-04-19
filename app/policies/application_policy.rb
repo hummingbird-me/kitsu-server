@@ -36,9 +36,9 @@ class ApplicationPolicy
     true
   end
 
-  # By default, resources are only editable by admins
+  # By default, resources are not editable except by admins
   def edit?
-    is_admin?
+    can_administrate?
   end
   alias_method :create?, :edit?
   alias_method :update?, :edit?
@@ -83,27 +83,6 @@ class ApplicationPolicy
     raise OAuth::ForbiddenTokenError.for_scopes(scopes) unless has_scope?(*scopes)
   end
 
-  # Politely ask if the user has an admin role for the record.  If your "scope"
-  # for administration is not the record itself, you can manually specify the
-  # scope as a parameter.
-  #
-  # @param [Object, Class, optional] scope The record or class you require the
-  #   admin role on
-  # @return [Boolean] Whether the current user has the admin role for the
-  #   requested scope
-  def is_admin?(scope = record) # rubocop:disable Style/PredicateName
-    # TODO: get rid of global `mod` role and switch to local mod stuff
-    user&.has_role?(:admin, scope) || user&.has_role?(:mod)
-  end
-
-  # Ask if the user has any admin roles, in general.
-  #
-  # @return [Boolean] Whether the current user has any admin roles
-  def is_any_admin? # rubocop:disable Style/PredicateName
-    # TODO: get rid of global `mod` role and switch to local mod stuff
-    user && user.roles.where(name: %w[admin mod]).count
-  end
-
   # Check the record.user association to see if it's owned by the current user.
   #
   # @return [Boolean] Whether the current user is the owner of the record
@@ -114,11 +93,15 @@ class ApplicationPolicy
     true
   end
 
-  # Get a policy instance for a different object, so we can delegate to it.
+  # Check if the user has an administrative permission
   #
-  # @return [ApplicationPolicy] The policy instance for this object
-  def policy_for(model)
-    Pundit.policy!(token, model)
+  # @return [Boolean] whether the user has that permission
+  def has_permission?(permission)
+    user&.permissions&.set?(permission)
+  end
+
+  def can_administrate?
+    false
   end
 
   def show?
@@ -127,11 +110,27 @@ class ApplicationPolicy
   end
 
   %i[dashboard? export? history? show_in_app?].each do |action|
-    define_method(action) { is_any_admin? }
+    define_method(action) { has_permission?(:database_mod) }
   end
 
   def new?
-    is_any_admin?
+    can_administrate?
+  end
+
+  # Get a policy instance for a different object, so we can delegate to it.
+  #
+  # @return [ApplicationPolicy] The policy instance for this object
+  def policy_for(model)
+    Pundit.policy!(token, model)
+  end
+
+  def self.administrated_by(permission)
+    define_method(:can_administrate?) do
+      has_permission?(permission)
+    end
+    Scope.define_method(:can_administrate?) do
+      has_permission?(permission)
+    end
   end
 
   # Provide access control and act as #show?
@@ -144,18 +143,16 @@ class ApplicationPolicy
       @user = token&.resource_owner
     end
 
+    def can_administrate?
+      false
+    end
+
     def resolve
       scope
     end
 
     def blocked_users
       Block.hidden_for(user)
-    end
-
-    def is_admin? # rubocop:disable Style/PredicateName
-      # Get the actual model instance
-      admin_scope = scope.respond_to?(:model) ? scope.model : scope
-      user&.has_role?(:admin, admin_scope)
     end
 
     def see_nsfw?
