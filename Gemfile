@@ -83,6 +83,7 @@ gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'typhoeus' # Parallelize scraping tasks
+gem 'graphql-client'
 
 # Cash Money
 gem 'stripe'
