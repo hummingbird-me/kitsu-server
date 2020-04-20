@@ -68,6 +68,7 @@ class ListImport
                   day
                 }
                 media {
+                  id
                   idMal
                   title {
                     romaji
@@ -100,6 +101,7 @@ class ListImport
                   day
                 }
                 media {
+                  id
                   idMal
                   title {
                     romaji
