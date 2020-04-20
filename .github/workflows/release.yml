@@ -1,6 +1,6 @@
 name: Kitsu API Deployment
 
-on: deployment
+on: [deployment]
 
 jobs:
   build:
