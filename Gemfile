@@ -63,6 +63,7 @@ gem 'faraday_middleware'
 gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'google-api-client' # Google APIs
+gem 'graphql-client' # make graphql calls
 gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules
 gem 'lograge' # Non-shitty logging
@@ -83,7 +84,6 @@ gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'typhoeus' # Parallelize scraping tasks
-gem 'graphql-client'
 
 # Cash Money
 gem 'stripe'

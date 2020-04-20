@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ListImport
   class AnilistV2
     class Row

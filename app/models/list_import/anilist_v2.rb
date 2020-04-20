@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ListImport
   class AnilistV2 < ListImport
     GRAPHQL_API = 'https://graphql.anilist.co'.freeze
