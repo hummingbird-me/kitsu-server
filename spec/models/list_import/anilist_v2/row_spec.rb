@@ -12,23 +12,17 @@ RSpec.describe ListImport::AnilistV2::Row do
       end
 
       it 'should work for myanimelist lookup' do
-        allow(Mapping).to receive(:lookup).with("AniList/#{type}", anilist_media_id).and_return(nil)
-        expect(Mapping).to receive(:lookup)
-          .with("MyAnimeList #{type.capitalize}", mal_media_id)
-          .and_return('hello')
+        allow(Mapping).to receive(:lookup).with("AniList/#{type}", anilist_media_id) { nil }
+        expect(Mapping).to receive(:lookup).with("MyAnimeList #{type.capitalize}", mal_media_id) { db_media }
 
-        subject.media_mapping
+        expect { subject.media_mapping }.to change { Mapping.count }.by(1)
       end
 
       it 'should work for guess' do
-        allow(Mapping).to receive(:lookup).and_return(nil)
-        expect(Mapping).to receive(:guess)
-          .with(
-            klass,
-            guess_params
-          ).and_return('hello')
+        allow(Mapping).to receive(:lookup) { nil }
+        expect(Mapping).to receive(:guess).with(klass, guess_params) { db_media }
 
-        subject.media_mapping
+        expect { subject.media_mapping }.to change { Mapping.count }.by(1)
       end
     end
 
@@ -136,6 +130,7 @@ RSpec.describe ListImport::AnilistV2::Row do
   context 'Anime' do
     subject { described_class.new(JSON.parse(media.to_json, object_class: OpenStruct), type) }
     let(:media) { JSON.parse(fixture('list_import/anilist_v2/anime_completed_accel_world.json')).deep_transform_keys(&:underscore) }
+    let(:db_media) { create(:anime) }
 
     let(:formatted_data) do
       {
@@ -171,6 +166,7 @@ RSpec.describe ListImport::AnilistV2::Row do
   context 'Manga' do
     subject { described_class.new(JSON.parse(media.to_json, object_class: OpenStruct), type) }
     let(:media) { JSON.parse(fixture('list_import/anilist_v2/manga_current_arifureta.json')).deep_transform_keys(&:underscore) }
+    let(:db_media) { create(:manga) }
 
     let(:formatted_data) do
       {
