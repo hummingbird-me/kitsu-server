@@ -72,12 +72,9 @@ jobs:
       run: |
         bundle exec rspec
 
-    - name: Print Github ref
-      run: echo "${{ github.ref }}"
-
     - name: Deploy
       uses: octokit/request-action@v2.x
-      if: success() && github.ref == 'the-future'
+      if: success() && github.ref == 'refs/head/the-future'
       with:
         route: POST /repos/:repo/deployments
         repo: ${{ github.repository }}
