@@ -1,0 +1,23 @@
+name: Kitsu API Deployment
+
+on: [deployment]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v1
+
+    - name: Connect to Package Registry
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: "echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin"
+    - name: Build Docker Image
+      run: |
+        docker build -t release .
+    - name: Push Docker Image
+      run: |
+        docker push release docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8}
+        docker push release docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
