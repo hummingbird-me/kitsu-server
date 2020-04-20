@@ -15,7 +15,7 @@ class ListImport
       return false if input_text.blank?
       return true if user_exists?
 
-      errors.add(:input_text, "Anilist user not found - #{input_text}")
+      errors.add(:input_text, "AniList user not found - #{input_text}")
     end
 
     def count
@@ -23,21 +23,27 @@ class ListImport
     end
 
     def each
+      %w[anime manga].each do |type|
+        send("#{type}_list").each do |media|
+          row = Row.new(media, type)
 
+          yield row.media_mapping, row.data
+        end
+      end
     end
 
     private
 
     def anime_list
-      result.data.anime.lists.map { |list| list.entries }.flatten
+      media_lists.data.anime.lists.map(&:entries).flatten
     end
 
     def manga_list
-      result.data.manga.lists.map { |list| list.entries }.flatten
+      media_lists.data.manga.lists.map(&:entries).flatten
     end
 
     def user_exists?
-      @user_exists ||= media_lists.errors.detect { |error| error.last.include?("404") }.blank?
+      @user_exists ||= media_lists&.errors&.detect { |error| error.last.include?('404') }.blank?
     end
 
     def media_lists
