@@ -16,7 +16,10 @@
     "day": null
   },
   "media": {
+    "id": 12345,
     "idMal": 96528,
+    "episodes": null,
+    "chapters": null,
     "title": {
       "romaji": "Arifureta Shokugyou de Sekai Saikyou",
       "english": "Arifureta: From Commonplace to World’s Strongest",

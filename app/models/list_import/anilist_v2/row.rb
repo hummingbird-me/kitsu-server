@@ -1,25 +1,24 @@
 class ListImport
   class AnilistV2
     class Row
-      attr_reader :node, :type
-
       def initialize(node, type)
         @node = node
-        @type = type
+        @type = type.to_s # anime | manga
       end
 
-      def mapping
-
-      end
-
-      # For mapping guess
-      def mapping_info
-
+      def media_mapping
+        Mapping.lookup(anilist_key, media.id) ||
+          Mapping.lookup(mal_key, mal_id) ||
+          Mapping.guess(type.classify.safe_constantize, media_info)
       end
 
       def data
         fields.map { |field| [field, send(field)] }.to_h.compact
       end
+
+      private
+
+      attr_reader :node, :type
 
       def fields
         %i[
@@ -28,7 +27,15 @@ class ListImport
         ]
       end
 
-      private
+      # For mapping guess
+      def media_info
+        {
+          title: title,
+          subtype: type,
+          episode_count: media.episodes,
+          chapter_count: media.chapters
+        }.compact
+      end
 
       # 100-point scale to 20-point scale (raw)
       # rating -> score
@@ -81,12 +88,24 @@ class ListImport
         date_node.to_h.values_at(:year, :month, :day).join('-').to_date.to_s
       end
 
+      def anilist_key
+        "AniList/#{type}"
+      end
+
+      def mal_key
+        "MyAnimeList #{type.capitalize}"
+      end
+
+      def media
+        node.media
+      end
+
       def mal_id
-        node.media.id_mal
+        media.id_mal
       end
 
       def titles
-        node.media.title
+        media.title
       end
 
       def title
