@@ -82,5 +82,6 @@ jobs:
         environment: staging
         auto_merge: false
         mediaType: '{"previews": ["flash"]}'
+        required_contexts: "[]"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
