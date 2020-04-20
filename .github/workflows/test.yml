@@ -74,7 +74,7 @@ jobs:
 
     - name: Deploy
       uses: octokit/request-action@v2.x
-      if: success() && github.ref == 'refs/head/the-future'
+      if: success() && github.ref == 'refs/heads/the-future'
       with:
         route: POST /repos/:repo/deployments
         repo: ${{ github.repository }}
