@@ -1,4 +1,4 @@
-FROM ruby:2.5
+FROM ruby:2.6
 MAINTAINER Kitsu, Inc.
 
 RUN mkdir -p /opt/kitsu/server
