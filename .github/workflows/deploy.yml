@@ -15,6 +15,7 @@ jobs:
         deployment_id: ${{ github.event.deployment.id }}
         environment: staging
         state: in_progress
+        log_url: https://github.com/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
         GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
