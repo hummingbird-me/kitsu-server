@@ -2,8 +2,6 @@
 
 class ListImport
   class AnilistV2 < ListImport
-    GRAPHQL_API = 'https://graphql.anilist.co'.freeze
-
     # accepts a username as input
     validates :input_text, length: {
       minimum: 3,
@@ -21,7 +19,7 @@ class ListImport
     end
 
     def count
-      anime_list.count + manga_list.count
+      @count ||= anime_list.count + manga_list.count
     end
 
     def each
@@ -49,96 +47,87 @@ class ListImport
     end
 
     def media_lists
-      @media_lists ||= client.query(media_lists_query)
+      @media_lists ||= AnilistV2Wrapper::Client.query(
+        MEDIA_LIST_QUERY,
+        variables: {
+          user_name: input_text
+        }
+      )
     end
 
-    def media_lists_query
-      @media_lists_query ||= client.parse <<-'GRAPHQL'
-        {
-          anime: MediaListCollection(userName: input_text, type: ANIME) {
-            lists {
-              name
-              entries {
-                score
-                status
-                repeat
-                progress
-                progressVolumes
-                notes
-                startedAt {
-                  year
-                  month
-                  day
-                }
-                completedAt {
-                  year
-                  month
-                  day
-                }
-                media {
-                  id
-                  idMal
-                  title {
-                    romaji
-                    english
-                    native
-                    userPreferred
-                  }
+    MEDIA_LIST_QUERY = AnilistV2Wrapper::Client.parse <<-'GRAPHQL'
+      query($user_name: String) {
+        anime: MediaListCollection(userName: $user_name, type: ANIME) {
+          lists {
+            name
+            entries {
+              score
+              status
+              repeat
+              progress
+              progressVolumes
+              notes
+              startedAt {
+                year
+                month
+                day
+              }
+              completedAt {
+                year
+                month
+                day
+              }
+              media {
+                id
+                idMal
+                episodes
+                chapters
+                title {
+                  romaji
+                  english
+                  native
+                  userPreferred
                 }
               }
             }
-          },
-          manga: MediaListCollection(userName: input_text, type: MANGA) {
-            lists {
-              name
-              entries {
-                score
-                status
-                repeat
-                progress
-                progressVolumes
-                notes
-                startedAt {
-                  year
-                  month
-                  day
-                }
-                completedAt {
-                  year
-                  month
-                  day
-                }
-                media {
-                  id
-                  idMal
-                  title {
-                    romaji
-                    english
-                    native
-                    userPreferred
-                  }
+          }
+        },
+        manga: MediaListCollection(userName: $user_name, type: MANGA) {
+          lists {
+            name
+            entries {
+              score
+              status
+              repeat
+              progress
+              progressVolumes
+              notes
+              startedAt {
+                year
+                month
+                day
+              }
+              completedAt {
+                year
+                month
+                day
+              }
+              media {
+                id
+                idMal
+                episodes
+                chapters
+                title {
+                  romaji
+                  english
+                  native
+                  userPreferred
                 }
               }
             }
           }
         }
-      GRAPHQL
-    end
-
-    def client
-      @client ||= GraphQL::Client.new(schema: schema, execute: http)
-    end
-
-    def http
-      @http ||= GraphQL::Client::HTTP.new(GRAPHQL_API) do
-        def headers(context)
-          { 'Content-Type': 'application/json' }
-        end
-      end
-    end
-
-    def schema
-      @schema ||= GraphQL::Client.load_schema(http)
-    end
+      }
+    GRAPHQL
   end
 end

@@ -93,7 +93,7 @@ class ListImport
       end
 
       def formatted_date(date_node)
-        date_node.to_h.values_at(:year, :month, :day).join('-').to_date.to_s
+        date_node.to_h.symbolize_keys.values_at(:year, :month, :day).join('-').to_date.to_s
       end
 
       def anilist_key
