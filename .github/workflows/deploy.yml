@@ -15,7 +15,7 @@ jobs:
         deployment_id: ${{ github.event.deployment.id }}
         environment: staging
         state: in_progress
-        log_url: https://github.com/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
+        log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
         GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
@@ -47,6 +47,7 @@ jobs:
         repo: ${{ github.repository }}
         deployment_id: ${{ github.event.deployment.id }}
         environment: staging
+        log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         state: success
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
@@ -59,6 +60,8 @@ jobs:
         repo: ${{ github.repository }}
         deployment_id: ${{ github.event.deployment.id }}
         environment: staging
+        log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        environment_url: https://latest.staging.kitsu.io
         state: failure
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
