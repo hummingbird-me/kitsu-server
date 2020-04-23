@@ -87,3 +87,4 @@ jobs:
         required_contexts: "[]"
       env:
         GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        ACTIONS_STEP_DEBUG: true
