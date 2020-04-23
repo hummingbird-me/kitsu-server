@@ -3,7 +3,7 @@ name: Kitsu API Deployment
 on: [deployment]
 
 jobs:
-  build:
+  Deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,11 @@ jobs:
     - name: Build Docker Image
       run: |
         docker build -t release .
+    - name: Tag Docker image
+      run: |
+        docker tag release docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8}
+        docker tag release docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
     - name: Push Docker Image
       run: |
-        docker push release docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8}
-        docker push release docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
+        docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8}
+        docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
