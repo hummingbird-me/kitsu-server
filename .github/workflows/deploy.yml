@@ -7,6 +7,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Report Deployment Starting
+      uses: octokit/request-action@v2.x
+      with:
+        route: POST /repos/:repo/deployments/:deployment_id/statuses
+        repo: ${{ github.repository }}
+        deployment_id: ${{ github.event.deployment.id }}
+        environment: staging
+        state: in_progress
+        mediaType: '{"previews": ["flash", "ant-man"]}'
+      env:
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
     - name: Checkout Repository
       uses: actions/checkout@v1
 
@@ -25,3 +37,28 @@ jobs:
       run: |
         docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8}
         docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
+
+    - name: Report Deployment Success
+      uses: octokit/request-action@v2.x
+      if: success()
+      with:
+        route: POST /repos/:repo/deployments/:deployment_id/statuses
+        repo: ${{ github.repository }}
+        deployment_id: ${{ github.event.deployment.id }}
+        environment: staging
+        state: success
+        mediaType: '{"previews": ["flash", "ant-man"]}'
+      env:
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+    - name: Report Deployment Failure
+      uses: octokit/request-action@v2.x
+      if: failure()
+      with:
+        route: POST /repos/:repo/deployments/:deployment_id/statuses
+        repo: ${{ github.repository }}
+        deployment_id: ${{ github.event.deployment.id }}
+        environment: staging
+        state: failure
+        mediaType: '{"previews": ["flash", "ant-man"]}'
+      env:
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}

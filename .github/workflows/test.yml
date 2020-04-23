@@ -83,6 +83,7 @@ jobs:
         ref: ${{ github.sha }}
         environment: staging
         auto_merge: false
+        description: "Deploy ${{ github.sha }} to Staging"
         mediaType: '{"previews": ["flash"]}'
         required_contexts: "[]"
       env:
