@@ -1,6 +1,9 @@
 FROM ruby:2.6
 MAINTAINER Kitsu, Inc.
 
+# Install bundler
+RUN gem install bundler -v '~> 2.1'
+
 RUN mkdir -p /opt/kitsu/server
 WORKDIR /opt/kitsu/server
 
