@@ -5,7 +5,6 @@ class ListImportResource < BaseResource
   model_hint model: ListImport::MyAnimeList
   model_hint model: ListImport::AnimePlanet
   model_hint model: ListImport::Anilist
-  model_hint model: ListImport::AnilistV2
   model_hint model: ListImport::Aozora
 
   # Parameters

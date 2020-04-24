@@ -3,11 +3,11 @@
 require 'graphql/client'
 require 'graphql/client/http'
 
-module AnilistV2Wrapper
+module AnilistApiWrapper
   GRAPHQL_API = 'https://graphql.anilist.co'
 
   HTTP = GraphQL::Client::HTTP.new(GRAPHQL_API) do
-    def headers(context)
+    def headers(_)
       { 'Content-Type': 'application/json' }
     end
   end

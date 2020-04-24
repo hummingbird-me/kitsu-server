@@ -1,31 +1,7 @@
-# rubocop:disable Metrics/LineLength
-# == Schema Information
-#
-# Table name: list_imports
-#
-#  id                      :integer          not null, primary key
-#  error_message           :text
-#  error_trace             :text
-#  input_file_content_type :string
-#  input_file_file_name    :string
-#  input_file_file_size    :integer
-#  input_file_updated_at   :datetime
-#  input_text              :text
-#  progress                :integer
-#  status                  :integer          default(0), not null
-#  strategy                :integer          not null
-#  total                   :integer
-#  type                    :string           not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  user_id                 :integer          not null
-#
-# rubocop:enable Metrics/LineLength
+# frozen_string_literal: true
 
 class ListImport
   class Anilist < ListImport
-    ANILIST_API = 'https://anilist.co/api/'.freeze
-
     # accepts a username as input
     validates :input_text, length: {
       minimum: 3,
@@ -36,77 +12,122 @@ class ListImport
     validate :ensure_user_exists, on: :create
 
     def ensure_user_exists
-      return if input_text.blank?
+      return false if input_text.blank?
+      return true if user_exists?
 
-      @auth_token ||= get_auth_token
-      request = Typhoeus::Request.get(build_url(input_text))
-
-      case request.code
-      when 404
-        errors.add(:input_text, 'Anilist user not found.')
-      end
+      errors.add(:input_text, "AniList user not found - #{input_text}")
     end
 
     def count
-      # animelist will get me everything
-      get("#{input_text}/animelist")['stats']['status_distribution'].map { |type|
-        # if user does not have any stats return 0
-        next 0 if type.last.count.zero?
-
-        type.last.values.inject(&:+)
-      }.inject(&:+)
+      @count ||= anime_list.count + manga_list.count
     end
 
     def each
-      # pass in toyhammered/#{anime}list
       %w[anime manga].each do |type|
-        list = get("#{input_text}/#{type}list")['lists']
-        # in case there are no anime/manga
-        # need to prevent an error being raised
-        list&.each do |status|
-          # status[0] is always going to be either
-          # completed, on-hold, etc... just skip over that part
-          status[1].each do |media|
-            row = Row.new(media, type)
+        send("#{type}_list").each do |media|
+          row = Row.new(media, type)
 
-            yield row.media, row.data
-          end
+          yield row.media_mapping, row.data
         end
       end
     end
 
     private
 
-    def get_auth_token
-      url = "#{ANILIST_API}auth/access_token"
-      request = Typhoeus::Request.new(url,
-        method: :post,
-        body: {
-          grant_type: 'client_credentials',
-          client_id: 'toyhammered-c6imc',
-          client_secret: 'P8sO0FJ58OwluYiek30N'
+    def anime_list
+      media_lists.data.anime.lists.map(&:entries).flatten
+    end
+
+    def manga_list
+      media_lists.data.manga.lists.map(&:entries).flatten
+    end
+
+    def user_exists?
+      @user_exists ||= media_lists&.errors&.detect { |error| error.last.include?('404') }.blank?
+    end
+
+    def media_lists
+      @media_lists ||= AnilistApiWrapper::Client.query(
+        MEDIA_LIST_QUERY,
+        variables: {
+          user_name: input_text
+        }
+      )
+    end
+
+    MEDIA_LIST_QUERY = AnilistApiWrapper::Client.parse <<-'GRAPHQL'
+      query($user_name: String) {
+        anime: MediaListCollection(userName: $user_name, type: ANIME) {
+          lists {
+            name
+            entries {
+              score
+              status
+              repeat
+              progress
+              progressVolumes
+              notes
+              startedAt {
+                year
+                month
+                day
+              }
+              completedAt {
+                year
+                month
+                day
+              }
+              media {
+                id
+                idMal
+                episodes
+                chapters
+                title {
+                  romaji
+                  english
+                  native
+                  userPreferred
+                }
+              }
+            }
+          }
         },
-        headers: { Accept: 'application/json' })
-
-      request.run
-
-      json = JSON.parse(request.response.body)['access_token']
-      json
-    end
-
-    def get(url)
-      @auth_token ||= get_auth_token
-      url = build_url(url)
-
-      request = Typhoeus::Request.get(url)
-
-      json = JSON.parse(request.body)
-      json
-    end
-
-    def build_url(path)
-      # toyhammered/animelist
-      "#{ANILIST_API}user/#{path}?access_token=#{@auth_token}"
-    end
+        manga: MediaListCollection(userName: $user_name, type: MANGA) {
+          lists {
+            name
+            entries {
+              score
+              status
+              repeat
+              progress
+              progressVolumes
+              notes
+              startedAt {
+                year
+                month
+                day
+              }
+              completedAt {
+                year
+                month
+                day
+              }
+              media {
+                id
+                idMal
+                episodes
+                chapters
+                title {
+                  romaji
+                  english
+                  native
+                  userPreferred
+                }
+              }
+            }
+          }
+        }
+      }
+    GRAPHQL
   end
 end
