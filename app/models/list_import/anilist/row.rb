@@ -16,7 +16,14 @@ class ListImport
         other_mapping = Mapping.lookup(mal_key, mal_id) ||
                         Mapping.guess(type.classify.safe_constantize, media_info)
 
-        Mapping.create(item: other_mapping, external_site: anilist_key, external_id: media.id) if other_mapping.present?
+        if other_mapping.present?
+          Mapping.create(
+            item: other_mapping,
+            external_site: anilist_key,
+            external_id: media.id
+          )
+        end
+
         other_mapping
       end
 

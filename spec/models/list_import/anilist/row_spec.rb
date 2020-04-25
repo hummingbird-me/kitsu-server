@@ -131,8 +131,12 @@ RSpec.describe ListImport::Anilist::Row do
 
   context 'Anime' do
     subject { described_class.new(JSON.parse(media.to_json, object_class: OpenStruct), type) }
-    let(:media) { JSON.parse(fixture('list_import/anilist/anime_completed_accel_world.json')).deep_transform_keys(&:underscore) }
+
     let(:db_media) { create(:anime) }
+    let(:media) do
+      JSON.parse(fixture('list_import/anilist/anime_completed_accel_world.json'))
+          .deep_transform_keys(&:underscore)
+    end
 
     let(:formatted_data) do
       {
@@ -173,8 +177,11 @@ RSpec.describe ListImport::Anilist::Row do
 
   context 'Manga' do
     subject { described_class.new(JSON.parse(media.to_json, object_class: OpenStruct), type) }
-    let(:media) { JSON.parse(fixture('list_import/anilist/manga_current_arifureta.json')).deep_transform_keys(&:underscore) }
     let(:db_media) { create(:manga) }
+    let(:media) do
+      JSON.parse(fixture('list_import/anilist/manga_current_arifureta.json'))
+          .deep_transform_keys(&:underscore)
+    end
 
     let(:formatted_data) do
       {
