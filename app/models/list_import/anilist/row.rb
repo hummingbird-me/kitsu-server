@@ -5,7 +5,7 @@ class ListImport
     class Row
       def initialize(node, type)
         @node = node
-        @type = type.to_s # anime | manga
+        @type = type.to_s.downcase # anime | manga
       end
 
       def media_mapping
@@ -31,7 +31,7 @@ class ListImport
       def fields
         %i[
           rating status reconsume_count progress
-          notes started_at finished_at
+          notes started_at finished_at volumes_owned
         ]
       end
 
@@ -96,12 +96,18 @@ class ListImport
         date_node.to_h.symbolize_keys.values_at(:year, :month, :day).join('-').to_date.to_s
       end
 
+      def volumes_owned
+        return unless type == 'manga'
+
+        node.progress_volumes.presence || 0
+      end
+
       def anilist_key
-        "AniList/#{type}"
+        "anilist/#{type}"
       end
 
       def mal_key
-        "MyAnimeList #{type.capitalize}"
+        "myanimelist/#{type}"
       end
 
       def media

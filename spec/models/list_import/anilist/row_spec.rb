@@ -7,15 +7,15 @@ RSpec.describe ListImport::Anilist::Row do
     describe '#media_mapping' do
       it 'should work for anilist lookup' do
         expect(Mapping).to receive(:lookup)
-          .with("AniList/#{type}", anilist_media_id)
+          .with("anilist/#{type}", anilist_media_id)
           .and_return('hello')
 
         subject.media_mapping
       end
 
       it 'should work for myanimelist lookup' do
-        allow(Mapping).to receive(:lookup).with("AniList/#{type}", anilist_media_id) { nil }
-        expect(Mapping).to receive(:lookup).with("MyAnimeList #{type.capitalize}", mal_media_id) { db_media }
+        allow(Mapping).to receive(:lookup).with("anilist/#{type}", anilist_media_id) { nil }
+        expect(Mapping).to receive(:lookup).with("myanimelist/#{type}", mal_media_id) { db_media }
 
         expect { subject.media_mapping }.to change { Mapping.count }.by(1)
       end
@@ -163,6 +163,12 @@ RSpec.describe ListImport::Anilist::Row do
     end
 
     it_behaves_like 'Anilist generic row fields', Anime
+
+    describe '#volumes_owned' do
+      it 'should always be nil' do
+        expect(subject.data[:volumes_owned]).to be_nil
+      end
+    end
   end
 
   context 'Manga' do
@@ -198,5 +204,19 @@ RSpec.describe ListImport::Anilist::Row do
     end
 
     it_behaves_like 'Anilist generic row fields', Manga
+
+    describe '#volumes_owned' do
+      it 'should default to 0' do
+        media[:progress_volumes] = nil
+
+        expect(subject.data[:volumes_owned]).to be_zero
+      end
+
+      it 'can optionally exist' do
+        media[:progress_volumes] = 5
+
+        expect(subject.data[:volumes_owned]).to eq(5)
+      end
+    end
   end
 end
