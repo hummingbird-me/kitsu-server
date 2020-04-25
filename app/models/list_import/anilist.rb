@@ -61,7 +61,7 @@ class ListImport
           lists {
             name
             entries {
-              score
+              score(format: POINT_100)
               status
               repeat
               progress
@@ -96,7 +96,7 @@ class ListImport
           lists {
             name
             entries {
-              score
+              score(format: POINT_100)
               status
               repeat
               progress
