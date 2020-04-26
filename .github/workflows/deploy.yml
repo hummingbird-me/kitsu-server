@@ -3,6 +3,7 @@ name: Kitsu API Deployment
 on: [deployment]
 
 env:
+  SENTRY_ORG: kitsu
   SENTRY_PROJECT: server
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
 
@@ -26,7 +27,7 @@ jobs:
     - name: Install Sentry CLI
       run: curl -sL https://sentry.io/get-cli/ | bash
     - name: Report Release to Sentry
-      run: sentry-cli releases new -p $SENTRY_PROJECT ${GITHUB_SHA::8}
+      run: sentry-cli releases new ${GITHUB_SHA::8}
 
     - name: Checkout Repository
       uses: actions/checkout@v1
