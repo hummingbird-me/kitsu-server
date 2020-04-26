@@ -2,6 +2,10 @@ name: Kitsu API Deployment
 
 on: [deployment]
 
+env:
+  SENTRY_PROJECT: server
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
+
 jobs:
   Deploy:
     runs-on: ubuntu-latest
@@ -19,10 +23,16 @@ jobs:
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
         GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+    - name: Install Sentry CLI
+      run: curl -sL https://sentry.io/get-cli/ | bash
+    - name: Report Release to Sentry
+      run: sentry-cli releases new -p $SENTRY_PROJECT ${GITHUB_SHA::8}
 
     - name: Checkout Repository
       uses: actions/checkout@v1
 
+    - name: Add Commits to Sentry Release
+      run: sentry-cli releases set-commits --auto ${GITHUB_SHA::8}
     - name: Connect to Package Registry
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,6 +49,9 @@ jobs:
         docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8}
         docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
 
+    - name: Finalize Sentry Release
+      if: success()
+      run: sentry-cli releases finalize ${GITHUB_SHA::8}
     - name: Report Deployment Success
       uses: octokit/request-action@v2.x
       if: success()
