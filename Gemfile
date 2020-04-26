@@ -26,6 +26,7 @@ gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
 gem 'rolify'
 
 # Attachments
+gem 'apollo_upload_server'
 gem 'aws-sdk', '< 3.0'
 gem 'delayed_paperclip'
 gem 'image_optim', require: false

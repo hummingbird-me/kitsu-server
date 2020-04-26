@@ -20,12 +20,14 @@ module Types::Media
     {
       localized: object.titles,
       alternatives: object.abbreviated_titles,
-      canonical: object.canonical_title
+      canonical: object.canonical_title,
+      canonical_locale: object.canonical_title_key
     }
   end
 
   # Localized Synopsis
-  localized_field :synopsis, null: false,
+  localized_field :synopsis,
+    null: false,
     description: 'A brief (mostly spoiler-free) summary/description of the media'
 
   def synopsis
@@ -68,6 +70,11 @@ module Types::Media
     null: true,
     description: 'The season this was released in'
 
+  field :tba,
+    String,
+    null: true,
+    description: 'Description of when this media is expected to release'
+
   # User Ratings
   field :average_rating, Float,
     null: true,
@@ -97,7 +104,7 @@ module Types::Media
     description: 'The characters who starred in this media'
 
   def characters
-    AssociationLoader.for(Anime, :characters).load(object)
+    AssociationLoader.for(object.class, :characters).load(object)
   end
 
   field :staff, Types::MediaStaff.connection_type,
@@ -105,7 +112,7 @@ module Types::Media
     description: 'The staff members who worked on this media'
 
   def staff
-    AssociationLoader.for(Anime, :staff).load(object)
+    AssociationLoader.for(object.class, :staff).load(object)
   end
 
   field :productions, Types::MediaProduction.connection_type,
@@ -113,7 +120,7 @@ module Types::Media
     description: 'The companies which helped to produce this media'
 
   def productions
-    AssociationLoader.for(Anime, :productions).load(object)
+    AssociationLoader.for(object.class, :productions).load(object)
   end
 
   field :quotes, Types::Quote.connection_type,
@@ -121,6 +128,6 @@ module Types::Media
     description: 'A list of quotes from this media'
 
   def quotes
-    AssociationLoader.for(Anime, :quotes).load(object).then(&:to_a)
+    AssociationLoader.for(object.class, :quotes).load(object).then(&:to_a)
   end
 end

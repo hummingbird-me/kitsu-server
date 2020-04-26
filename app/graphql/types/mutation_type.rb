@@ -1,4 +1,4 @@
 class Types::MutationType < Types::BaseObject
-  # Kitsu Pro
   field :pro, Types::ProMutation, null: false
+  field :anime, Types::AnimeMutation, null: false
 end
