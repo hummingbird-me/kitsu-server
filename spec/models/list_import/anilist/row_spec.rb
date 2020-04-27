@@ -24,7 +24,7 @@ RSpec.describe ListImport::Anilist::Row do
         allow(Mapping).to receive(:lookup) { nil }
         expect(Mapping).to receive(:guess).with(klass, guess_params) { db_media }
 
-        expect { subject.media }.to change { Mapping.count }.by(1)
+        expect { subject.media }.to_not change { Mapping.count }.by(1)
       end
     end
 
