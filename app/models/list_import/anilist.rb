@@ -27,7 +27,7 @@ class ListImport
         send("#{type}_list").each do |media|
           row = Row.new(media, type)
 
-          yield row.media_mapping, row.data
+          yield row.media, row.data
         end
       end
     end

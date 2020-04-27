@@ -41,7 +41,7 @@ RSpec.describe ListImport::Anilist do
 
     it 'should yield 12 times' do
       expect(ListImport::Anilist::Row).to receive(:new).at_least(:once) { row_double }
-      expect(row_double).to receive(:media_mapping).at_least(:once)
+      expect(row_double).to receive(:media).at_least(:once)
       expect(row_double).to receive(:data).at_least(:once)
 
       expect { |b|

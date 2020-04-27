@@ -4,27 +4,27 @@ require 'rails_helper'
 
 RSpec.describe ListImport::Anilist::Row do
   shared_examples_for 'Anilist generic row fields' do |klass|
-    describe '#media_mapping' do
+    describe '#media' do
       it 'should work for anilist lookup' do
         expect(Mapping).to receive(:lookup)
           .with("anilist/#{type}", anilist_media_id)
           .and_return('hello')
 
-        subject.media_mapping
+        subject.media
       end
 
-      it 'should work for myanimelist lookup' do
+      it 'should work for myanimelist lookup and create new Mapping' do
         allow(Mapping).to receive(:lookup).with("anilist/#{type}", anilist_media_id) { nil }
         expect(Mapping).to receive(:lookup).with("myanimelist/#{type}", mal_media_id) { db_media }
 
-        expect { subject.media_mapping }.to change { Mapping.count }.by(1)
+        expect { subject.media }.to change { Mapping.count }.by(1)
       end
 
       it 'should work for guess' do
         allow(Mapping).to receive(:lookup) { nil }
         expect(Mapping).to receive(:guess).with(klass, guess_params) { db_media }
 
-        expect { subject.media_mapping }.to change { Mapping.count }.by(1)
+        expect { subject.media }.to change { Mapping.count }.by(1)
       end
     end
 

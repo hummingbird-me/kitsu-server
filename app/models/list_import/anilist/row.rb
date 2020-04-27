@@ -8,23 +8,20 @@ class ListImport
         @type = type.to_s.downcase # anime | manga
       end
 
-      def media_mapping
-        anilist_mapping = Mapping.lookup(anilist_key, media.id)
-
+      def media
         return anilist_mapping if anilist_mapping.present?
 
-        other_mapping = Mapping.lookup(mal_key, mal_id) ||
-                        Mapping.guess(type.classify.safe_constantize, media_info)
-
-        if other_mapping.present?
+        if mal_mapping.present?
           Mapping.create(
-            item: other_mapping,
+            item: mal_mapping,
             external_site: anilist_key,
-            external_id: media.id
+            external_id: media_data.id
           )
+
+          return mal_mapping
         end
 
-        other_mapping
+        guess_mapping
       end
 
       def data
@@ -47,8 +44,8 @@ class ListImport
         {
           title: title,
           subtype: type,
-          episode_count: media.episodes,
-          chapter_count: media.chapters
+          episode_count: media_data.episodes,
+          chapter_count: media_data.chapters
         }.compact
       end
 
@@ -117,16 +114,16 @@ class ListImport
         "myanimelist/#{type}"
       end
 
-      def media
+      def media_data
         node.media
       end
 
       def mal_id
-        media.id_mal
+        media_data.id_mal
       end
 
       def titles
-        media.title
+        media_data.title
       end
 
       def title
@@ -134,6 +131,18 @@ class ListImport
           titles.english.presence ||
           titles.native.presence ||
           titles.user_preferred
+      end
+
+      def anilist_mapping
+        @anilist_mapping ||= Mapping.lookup(anilist_key, media_data.id)
+      end
+
+      def mal_mapping
+        @mal_mapping ||= Mapping.lookup(mal_key, mal_id)
+      end
+
+      def guess_mapping
+        @guess_mapping ||= Mapping.guess(type.classify.safe_constantize, media_info)
       end
     end
   end
