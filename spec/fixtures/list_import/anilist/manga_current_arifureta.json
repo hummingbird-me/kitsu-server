@@ -1,0 +1,30 @@
+{
+  "score": 70,
+  "status": "CURRENT",
+  "repeat": 0,
+  "progress": 38,
+  "progressVolumes": 0,
+  "notes": "The best notes!",
+  "startedAt": {
+    "year": 2017,
+    "month": 11,
+    "day": 12
+  },
+  "completedAt": {
+    "year": null,
+    "month": null,
+    "day": null
+  },
+  "media": {
+    "id": 12345,
+    "idMal": 96528,
+    "episodes": null,
+    "chapters": null,
+    "title": {
+      "romaji": "Arifureta Shokugyou de Sekai Saikyou",
+      "english": "Arifureta: From Commonplace to World’s Strongest",
+      "native": "ありふれた職業で世界最強",
+      "userPreferred": "Arifureta Shokugyou de Sekai Saikyou"
+    }
+  }
+}

@@ -1,384 +1,228 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ListImport::Anilist::Row do
-  let(:anime) { fixture('list_import/anilist/toy-anime.json') }
-  let(:manga) { fixture('list_import/anilist/toy-manga.json') }
-
-  context 'Anime' do
-    subject do
-      described_class.new(
-        JSON.parse(anime)['lists']['on_hold'].first,
-        'anime'
-      )
-    end
-
+  shared_examples_for 'Anilist generic row fields' do |klass|
     describe '#media' do
-      it 'should work for lookup' do
+      it 'should work for anilist lookup' do
         expect(Mapping).to receive(:lookup)
-          .with('anilist', 'anime/1')
+          .with("anilist/#{type}", anilist_media_id)
           .and_return('hello')
 
         subject.media
+      end
+
+      it 'should work for myanimelist lookup and create new Mapping' do
+        allow(Mapping).to receive(:lookup).with("anilist/#{type}", anilist_media_id) { nil }
+        expect(Mapping).to receive(:lookup).with("myanimelist/#{type}", mal_media_id) { db_media }
+
+        expect { subject.media }.to change { Mapping.count }.by(1)
       end
 
       it 'should work for guess' do
-        allow(Mapping).to receive(:lookup).and_return(nil)
-        expect(Mapping).to receive(:guess)
-          .with(Anime,
-            id: 1,
-            title: 'COWBOY BEBOP',
-            subtype: 'TV',
-            episode_count: 26)
-          .and_return('hello')
-        subject.media
+        allow(Mapping).to receive(:lookup) { nil }
+        expect(Mapping).to receive(:guess).with(klass, guess_params) { db_media }
+
+        expect { subject.media }.to change { Mapping.count }.by(0)
       end
     end
 
-    describe '#media_info' do
-      it 'should return the id' do
-        expect(subject.media_info[:id]).to eq(1)
+    describe '#data' do
+      it 'should create a hash with all fields removing any nil' do
+        expect(subject.data).to include(formatted_data)
       end
-      it 'should return the romaji title' do
-        expect(subject.media_info[:title]).to eq('COWBOY BEBOP')
+    end
+
+    describe '#score' do
+      it 'should convert no score to nil' do
+        media[:score] = 0
+
+        expect(subject.data[:rating]).to be_nil
       end
 
-      it 'should return subtype' do
-        expect(subject.media_info[:subtype]).to eq('TV')
-      end
+      context 'properly converts from 100 point scale to 20 point scale for valid scores' do
+        it 'generic conversion' do
+          expect(subject.data[:rating]).to eq(rating)
+        end
 
-      it 'should return total episodes' do
-        expect(subject.media_info[:episode_count]).to eq(26)
-      end
+        it 'converts from 89 to 18' do
+          media[:score] = 89
 
-      it 'should not return total amount of chapters' do
-        expect(subject.media_info[:chapter_count]).to eq(nil)
+          expect(subject.data[:rating]).to eq(18)
+        end
       end
     end
 
     describe '#status' do
-      context 'of "completed"' do
-        it 'should return :completed' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['completed'].first,
-            'anime'
-          )
+      it 'is completed' do
+        media['status'] = 'COMPLETED'
 
-          expect(subject.status).to eq(:completed)
-        end
-      end
-      context 'of "watching"' do
-        it 'should return :current' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['watching'].first,
-            'anime'
-          )
-
-          expect(subject.status).to eq(:current)
-        end
-      end
-      context 'of "plan to watch"' do
-        it 'should return :planned' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['plan_to_watch'].first,
-            'anime'
-          )
-
-          expect(subject.status).to eq(:planned)
-        end
-      end
-      context 'of "on-hold"' do
-        it 'should return :on_hold' do
-          expect(subject.status).to eq(:on_hold)
-        end
-      end
-      context 'of "dropped"' do
-        it 'should return :dropped' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['dropped'].first,
-            'anime'
-          )
-
-          expect(subject.status).to eq(:dropped)
-        end
-      end
-    end
-
-    describe '#progress' do
-      it 'should return total episodes watched' do
-        expect(subject.progress).to eq(1)
-      end
-    end
-
-    describe '#volumes' do
-      it 'should not exist' do
-        expect(subject.volumes).to eq(nil)
-      end
-    end
-
-    describe '#rating' do
-      it 'should return nil if 0' do
-        expect(subject.rating).to eq(nil)
+        expect(subject.data[:status]).to eq(:completed)
       end
 
-      it 'should convert 3/100 to the minimum score' do
-        subject = described_class.new(
-          JSON.parse(anime)['lists']['completed'][2],
-          'anime'
-        )
+      it 'is watching/reading' do
+        media['status'] = 'CURRENT'
 
-        expect(subject.rating).to eq(2)
+        expect(subject.data[:status]).to eq(:current)
       end
 
-      it 'should convert 90/100 to 18/20' do
-        subject = described_class.new(
-          JSON.parse(anime)['lists']['completed'].first,
-          'anime'
-        )
+      it 'is planning' do
+        media['status'] = 'PLANNING'
 
-        expect(subject.rating).to eq(18)
+        expect(subject.data[:status]).to eq(:planned)
       end
 
-      it 'should convert 69/100 to 14/20' do
-        subject = described_class.new(
-          JSON.parse(anime)['lists']['completed'][1],
-          'anime'
-        )
+      it 'is paused' do
+        media['status'] = 'PAUSED'
 
-        expect(subject.rating).to eq(14)
+        expect(subject.data[:status]).to eq(:on_hold)
+      end
+
+      it 'is dropped' do
+        media['status'] = 'DROPPED'
+
+        expect(subject.data[:status]).to eq(:dropped)
       end
     end
 
     describe '#reconsume_count' do
-      it 'should return 0 if not rewatched' do
-        expect(subject.reconsume_count).to eq(0)
+      it 'should exist' do
+        expect(subject.data[:reconsume_count]).to eq(reconsume_count)
       end
-      it 'should return amount of times rewatched' do
-        subject = described_class.new(
-          JSON.parse(anime)['lists']['completed'].first,
-          'anime'
-        )
+    end
 
-        expect(subject.reconsume_count).to eq(4)
+    describe '#progress' do
+      it 'should exist' do
+        expect(subject.data[:progress]).to eq(progress)
       end
     end
 
     describe '#notes' do
-      context 'with notes being empty' do
-        it 'should return nil' do
-          expect(subject.notes).to be_nil
-        end
-      end
-
-      context 'with notes being filled out' do
-        it 'should return text' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['completed'].first,
-            'anime'
-          )
-
-          expect(subject.notes).to_not be_nil
-        end
+      it 'can optionally exist' do
+        expect(subject.data[:notes]).to eq(notes)
       end
     end
 
     describe '#started_at' do
-      context 'with date being empty' do
-        it 'should return nil' do
-          expect(subject.started_at).to be_nil
-        end
+      it 'can optionally exist' do
+        expect(subject.data[:started_at]).to eq(started_at)
       end
-      context 'with YYYY existing' do
-        it 'should default day and month to 01' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['completed'][2],
-            'anime'
-          )
-          # YYYY
-          expect(subject.started_at).to eq(Date.new(2016))
-        end
-      end
-      context 'with YYYY/MM existing' do
-        it 'should default day to 01' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['completed'][1],
-            'anime'
-          )
-          # YYYY-MM
-          expect(subject.started_at).to eq(Date.new(2016, 10))
-        end
-      end
-      context 'with YYYY/MM/DD existing' do
-        it 'should return a valid ISO 8601 date' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['completed'].first,
-            'anime'
-          )
-          # YYYY-MM-DD
-          expect(subject.started_at).to eq(Date.new(2016, 10, 3))
-        end
+
+      it 'can be null' do
+        media[:started_at] = { year: nil, month: nil, day: nil }
+
+        expect(subject.data[:started_at]).to be_nil
       end
     end
 
     describe '#finished_at' do
-      context 'with date being empty' do
-        it 'should return nil' do
-          expect(subject.finished_at).to be_nil
-        end
+      it 'can optionally exist' do
+        expect(subject.data[:finished_at]).to eq(finished_at)
       end
-      context 'with YYYY existing' do
-        it 'should default day and month to 01' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['completed'][2],
-            'anime'
-          )
-          # YYYY
-          expect(subject.finished_at).to eq(Date.new(2016))
-        end
+
+      it 'can be null' do
+        media[:completed_at] = { year: nil, month: nil, day: nil }
+
+        expect(subject.data[:finished_at]).to be_nil
       end
-      context 'with YYYY/MM existing' do
-        it 'should default day to 01' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['completed'][1],
-            'anime'
-          )
-          # YYYY-MM
-          expect(subject.finished_at).to eq(Date.new(2016, 10))
-        end
-      end
-      context 'with YYYY/MM/DD existing' do
-        it 'should return a valid ISO 8601 date' do
-          subject = described_class.new(
-            JSON.parse(anime)['lists']['completed'].first,
-            'anime'
-          )
-          # YYYY-MM-DD
-          expect(subject.finished_at).to eq(Date.new(2016, 10, 10))
-        end
+    end
+  end
+
+  context 'Anime' do
+    subject { described_class.new(JSON.parse(media.to_json, object_class: OpenStruct), type) }
+
+    let(:db_media) { create(:anime) }
+    let(:media) do
+      JSON.parse(fixture('list_import/anilist/anime_completed_accel_world.json'))
+          .deep_transform_keys(&:underscore)
+    end
+
+    let(:formatted_data) do
+      {
+        rating: rating,
+        status: :completed,
+        reconsume_count: reconsume_count,
+        progress: progress,
+        started_at: started_at,
+        finished_at: finished_at
+      }
+    end
+
+    let(:type) { 'anime' }
+    let(:rating) { 20 }
+    let(:reconsume_count) { 3 }
+    let(:progress) { 24 }
+    let(:notes) { nil }
+    let(:started_at) { '2012-09-03' }
+    let(:finished_at) { '2012-09-21' }
+    let(:anilist_media_id) { 11_759 }
+    let(:mal_media_id) { 11_990 }
+    let(:guess_params) do
+      {
+        title: 'Accel World',
+        subtype: type,
+        episode_count: 24
+      }
+    end
+
+    it_behaves_like 'Anilist generic row fields', Anime
+
+    describe '#volumes_owned' do
+      it 'should always be nil' do
+        expect(subject.data[:volumes_owned]).to be_nil
       end
     end
   end
 
   context 'Manga' do
-    subject do
-      described_class.new(
-        JSON.parse(manga)['lists']['completed'].first,
-        'manga'
-      )
+    subject { described_class.new(JSON.parse(media.to_json, object_class: OpenStruct), type) }
+    let(:db_media) { create(:manga) }
+    let(:media) do
+      JSON.parse(fixture('list_import/anilist/manga_current_arifureta.json'))
+          .deep_transform_keys(&:underscore)
     end
 
-    describe '#media' do
-      it 'should work for lookup' do
-        expect(Mapping).to receive(:lookup)
-          .with('anilist', 'manga/30933')
-          .and_return('hello')
-
-        subject.media
-      end
-
-      it 'should work for guess' do
-        allow(Mapping).to receive(:lookup).and_return(nil)
-        expect(Mapping).to receive(:guess).with(Manga,
-          id: 30_933,
-          title: 'Elfen Lied',
-          subtype: 'Manga',
-          chapter_count: 113).and_return('hello')
-
-        subject.media
-      end
+    let(:formatted_data) do
+      {
+        rating: rating,
+        notes: notes,
+        status: :current,
+        reconsume_count: reconsume_count,
+        progress: progress,
+        started_at: started_at
+      }
     end
 
-    describe '#media_info' do
-      it 'should return the id' do
-        expect(subject.media_info[:id]).to eq(30_933)
-      end
-      it 'should return the romaji title' do
-        expect(subject.media_info[:title]).to eq('Elfen Lied')
-      end
-
-      it 'should return subtype' do
-        expect(subject.media_info[:subtype]).to eq('Manga')
-      end
-
-      it 'should not return any episodes' do
-        expect(subject.media_info[:episode_count]).to eq(nil)
-      end
-
-      it 'should return total amount of chapters' do
-        expect(subject.media_info[:chapter_count]).to eq(113)
-      end
+    let(:type) { 'manga' }
+    let(:rating) { 14 }
+    let(:reconsume_count) { 0 }
+    let(:progress) { 38 }
+    let(:notes) { 'The best notes!' }
+    let(:started_at) { '2017-11-12' }
+    let(:finished_at) { nil }
+    let(:anilist_media_id) { 12_345 }
+    let(:mal_media_id) { 96_528 }
+    let(:guess_params) do
+      {
+        title: 'Arifureta Shokugyou de Sekai Saikyou',
+        subtype: type
+      }
     end
 
-    describe '#status' do
-      context 'of "completed"' do
-        it 'should return :completed' do
-          expect(subject.status).to eq(:completed)
-        end
-      end
-      context 'of "reading"' do
-        it 'should return :current' do
-          subject = described_class.new(
-            JSON.parse(manga)['lists']['reading'].first,
-            'manga'
-          )
+    it_behaves_like 'Anilist generic row fields', Manga
 
-          expect(subject.status).to eq(:current)
-        end
-      end
-      context 'of "plan to read"' do
-        it 'should return :planned' do
-          subject = described_class.new(
-            JSON.parse(manga)['lists']['plan_to_read'].first,
-            'manga'
-          )
+    describe '#volumes_owned' do
+      it 'should default to 0' do
+        media[:progress_volumes] = nil
 
-          expect(subject.status).to eq(:planned)
-        end
-      end
-      context 'of "on-hold"' do
-        it 'should return :on_hold' do
-          subject = described_class.new(
-            JSON.parse(manga)['lists']['on_hold'].first,
-            'manga'
-          )
-          expect(subject.status).to eq(:on_hold)
-        end
-      end
-      context 'of "dropped"' do
-        it 'should return :dropped' do
-          subject = described_class.new(
-            JSON.parse(manga)['lists']['dropped'].first,
-            'manga'
-          )
-
-          expect(subject.status).to eq(:dropped)
-        end
-      end
-    end
-
-    describe '#progress' do
-      it 'should return total chapters read' do
-        expect(subject.progress).to eq(113)
-      end
-    end
-
-    describe '#volumes' do
-      it 'should return volumes read' do
-        expect(subject.volumes).to eq(12)
-      end
-    end
-
-    describe '#reconsume_count' do
-      it 'should return 0' do
-        expect(subject.reconsume_count).to eq(0)
+        expect(subject.data[:volumes_owned]).to be_zero
       end
 
-      it 'should return amount of times reread' do
-        subject = described_class.new(
-          JSON.parse(manga)['lists']['completed'][1],
-          'manga'
-        )
+      it 'can optionally exist' do
+        media[:progress_volumes] = 5
 
-        expect(subject.reconsume_count).to eq(69)
+        expect(subject.data[:volumes_owned]).to eq(5)
       end
     end
   end

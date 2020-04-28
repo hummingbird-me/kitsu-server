@@ -1,0 +1,30 @@
+{
+  "score": 100,
+  "status": "COMPLETED",
+  "repeat": 3,
+  "progress": 24,
+  "progressVolumes": null,
+  "notes": null,
+  "startedAt": {
+    "year": 2012,
+    "month": 9,
+    "day": 3
+  },
+  "completedAt": {
+    "year": 2012,
+    "month": 9,
+    "day": 21
+  },
+  "media": {
+    "id": 11759,
+    "idMal": 11990,
+    "episodes": 24,
+    "chapters": null,
+    "title": {
+      "romaji": "Accel World",
+      "english": "Accel World",
+      "native": "アクセル・ワールド",
+      "userPreferred": "Accel World"
+    }
+  }
+}

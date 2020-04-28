@@ -1,0 +1,414 @@
+{
+  "data": {
+    "anime": {
+      "lists": [
+        {
+          "name": "Planning",
+          "status": "PLANNING",
+          "entries": [
+            {
+              "score": 0,
+              "repeat": 0,
+              "progress": 0,
+              "progressVolumes": null,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "media": {
+                "id": 3269,
+                "idMal": 3269,
+                "episodes": 1,
+                "chapters": null,
+                "title": {
+                  "romaji": ".hack//G.U. Trilogy",
+                  "english": null,
+                  "native": null,
+                  "userPreferred": ".hack//G.U. Trilogy"
+                }
+              }
+            },
+            {
+              "score": 0,
+              "repeat": 0,
+              "progress": 0,
+              "progressVolumes": null,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "media": {
+                "id": 873,
+                "idMal": 873,
+                "episodes": 26,
+                "chapters": null,
+                "title": {
+                  "romaji": ".hack//Roots",
+                  "english": ".hack//Roots",
+                  "native": ".hack//Roots",
+                  "userPreferred": ".hack//Roots"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Completed",
+          "status": "COMPLETED",
+          "entries": [
+            {
+              "score": 90,
+              "repeat": 0,
+              "progress": 26,
+              "progressVolumes": null,
+              "notes": "THESE are some cool notes man!!?\nwhatup dude?!?!\nsweeeeeeett.\nline stuff: \\n\\t\\n\ncool",
+              "startedAt": {
+                "year": 2020,
+                "month": 4,
+                "day": 30
+              },
+              "completedAt": {
+                "year": 2012,
+                "month": 8,
+                "day": 5
+              },
+              "media": {
+                "id": 48,
+                "idMal": 48,
+                "episodes": 26,
+                "chapters": null,
+                "title": {
+                  "romaji": ".hack//Sign",
+                  "english": ".hack//Sign",
+                  "native": ".hack//SIGN",
+                  "userPreferred": ".hack//Sign"
+                }
+              }
+            },
+            {
+              "score": 100,
+              "repeat": 0,
+              "progress": 25,
+              "progressVolumes": null,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": 2012,
+                "month": 8,
+                "day": 3
+              },
+              "media": {
+                "id": 5525,
+                "idMal": 5525,
+                "episodes": 25,
+                "chapters": null,
+                "title": {
+                  "romaji": "07-Ghost",
+                  "english": "07-Ghost",
+                  "native": "セブンゴースト",
+                  "userPreferred": "07-Ghost"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Watching",
+          "status": "CURRENT",
+          "entries": [
+            {
+              "score": 0,
+              "repeat": 0,
+              "progress": 0,
+              "progressVolumes": null,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "media": {
+                "id": 21417,
+                "idMal": 31790,
+                "episodes": 12,
+                "chapters": null,
+                "title": {
+                  "romaji": "Active Raid: Kidou Kyoushuushitsu Dai Hakkei",
+                  "english": "Active Raid",
+                  "native": "アクティヴレイド 機動強襲室第八係",
+                  "userPreferred": "Active Raid: Kidou Kyoushuushitsu Dai Hakkei"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Paused",
+          "status": "PAUSED",
+          "entries": [
+            {
+              "score": 0,
+              "repeat": 0,
+              "progress": 10,
+              "progressVolumes": null,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "media": {
+                "id": 53,
+                "idMal": 53,
+                "episodes": 24,
+                "chapters": null,
+                "title": {
+                  "romaji": "Ai Yori Aoshi",
+                  "english": "Ai Yori Aoshi",
+                  "native": "藍より青し",
+                  "userPreferred": "Ai Yori Aoshi"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dropped",
+          "status": "DROPPED",
+          "entries": [
+            {
+              "score": 20,
+              "repeat": 0,
+              "progress": 1,
+              "progressVolumes": null,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "media": {
+                "id": 16201,
+                "idMal": 16201,
+                "episodes": 13,
+                "chapters": null,
+                "title": {
+                  "romaji": "Aku no Hana",
+                  "english": "Flowers of Evil",
+                  "native": "惡の華",
+                  "userPreferred": "Aku no Hana"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "manga": {
+      "lists": [
+        {
+          "name": "Reading",
+          "status": "CURRENT",
+          "entries": [
+            {
+              "score": 0,
+              "repeat": 0,
+              "progress": 24,
+              "progressVolumes": 0,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "media": {
+                "id": 51035,
+                "idMal": 21035,
+                "episodes": null,
+                "chapters": null,
+                "title": {
+                  "romaji": "/Blush-DC: Himitsu",
+                  "english": null,
+                  "native": "/Blush-DC〜秘♥蜜〜",
+                  "userPreferred": "/Blush-DC: Himitsu"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Completed",
+          "status": "COMPLETED",
+          "entries": [
+            {
+              "score": 100,
+              "repeat": 0,
+              "progress": 249,
+              "progressVolumes": 0,
+              "notes": null,
+              "startedAt": {
+                "year": 2017,
+                "month": 6,
+                "day": 4
+              },
+              "completedAt": {
+                "year": 2017,
+                "month": 11,
+                "day": 7
+              },
+              "media": {
+                "id": 30003,
+                "idMal": 3,
+                "episodes": null,
+                "chapters": 249,
+                "title": {
+                  "romaji": "20th Century Boys",
+                  "english": "20th Century Boys",
+                  "native": "20世紀少年",
+                  "userPreferred": "20th Century Boys"
+                }
+              }
+            },
+            {
+              "score": 100,
+              "repeat": 0,
+              "progress": 16,
+              "progressVolumes": 0,
+              "notes": null,
+              "startedAt": {
+                "year": 2017,
+                "month": 12,
+                "day": 24
+              },
+              "completedAt": {
+                "year": 2017,
+                "month": 12,
+                "day": 24
+              },
+              "media": {
+                "id": 30743,
+                "idMal": 743,
+                "episodes": null,
+                "chapters": 16,
+                "title": {
+                  "romaji": "21st Century Boys",
+                  "english": "21st Century Boys",
+                  "native": "21世紀少年",
+                  "userPreferred": "21st Century Boys"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Planning",
+          "status": "PLANNING",
+          "entries": [
+            {
+              "score": 0,
+              "repeat": 0,
+              "progress": 0,
+              "progressVolumes": 0,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "media": {
+                "id": 86292,
+                "idMal": 90491,
+                "episodes": null,
+                "chapters": 17,
+                "title": {
+                  "romaji": "After Hours",
+                  "english": "After Hours",
+                  "native": "アフターアワーズ",
+                  "userPreferred": "After Hours"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dropped",
+          "status": "DROPPED",
+          "entries": [
+            {
+              "score": 0,
+              "repeat": 0,
+              "progress": 3,
+              "progressVolumes": 0,
+              "notes": null,
+              "startedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "completedAt": {
+                "year": null,
+                "month": null,
+                "day": null
+              },
+              "media": {
+                "id": 86082,
+                "idMal": 85781,
+                "episodes": null,
+                "chapters": null,
+                "title": {
+                  "romaji": "Dungeon Meshi",
+                  "english": "Delicious in Dungeon",
+                  "native": "ダンジョン飯",
+                  "userPreferred": "Dungeon Meshi"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
