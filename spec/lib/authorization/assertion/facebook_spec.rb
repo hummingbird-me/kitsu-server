@@ -3,9 +3,9 @@ require 'authorization/assertion/facebook'
 
 RSpec.describe Authorization::Assertion::Facebook do
   before do
-    stub_request(:get, %r{https://graph.facebook.com/v2.11/me\?.*})
+    stub_request(:get, %r{https://graph.facebook.com/v6.0/me\?.*})
       .to_return(body: fixture('auth/facebook/self.json'))
-    stub_request(:get, %r{https://graph.facebook.com/v2.11/me/friends\?.*})
+    stub_request(:get, %r{https://graph.facebook.com/v6.0/me/friends\?.*})
       .to_return(body: fixture('auth/facebook/friends.json'))
   end
   let(:facebook_auth) { Authorization::Assertion::Facebook.new('any token') }
