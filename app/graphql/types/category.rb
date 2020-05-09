@@ -15,7 +15,7 @@ class Types::Category < Types::BaseObject
     null: false,
     description: 'The URL-friendly identifier of this Category.'
 
-  field :anidb_id, Integer,
+  field :anidb_id, ID,
     null: true,
     description: 'Kitsu category mapping to Anidb category.'
 
@@ -27,10 +27,6 @@ class Types::Category < Types::BaseObject
     null: false,
     description: 'Whether the category is Not-Safe-for-Work.',
     method: :nsfw?
-
-  field :image, Types::Image,
-    null: true,
-    description: 'An image of the category.'
 
   field :parent, Types::Category,
     null: true,
