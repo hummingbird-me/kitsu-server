@@ -116,11 +116,11 @@ class Types::QueryType < Types::BaseObject
     argument :id, String, required: false
   end
 
-  def find_category(slug: nil, id: nil)
-    if slug
-      ::Category.find_by(slug: slug)
-    elsif id
+  def find_category(id: nil, slug: nil)
+    if id
       ::Category.find(id)
+    elsif slug
+      ::Category.find_by(slug: slug)
     end
   end
 end
