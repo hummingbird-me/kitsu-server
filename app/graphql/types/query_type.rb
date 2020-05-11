@@ -67,16 +67,19 @@ class Types::QueryType < Types::BaseObject
   end
 
   field :find_profile, Types::Profile, null: true do
-    description 'Find a single user in the Kitsu database by slug or ID'
-    argument :slug, String, required: false
+    description 'Find a single user in the Kitsu database by ID, Slug, or Name'
     argument :id, String, required: false
+    argument :slug, String, required: false
+    argument :name, String, required: false
   end
 
-  def find_profile(slug: nil, id: nil)
-    if slug
-      ::User.find_by_slug(slug)
-    elsif id
-      ::User.find_by_id(id)
+  def find_profile(id: nil, slug: nil, name: nil)
+    if id
+      ::User.find(id)
+    elsif slug
+      ::User.find_by(slug: slug)
+    elsif name
+      ::User.find_by(name: name)
     end
   end
 
