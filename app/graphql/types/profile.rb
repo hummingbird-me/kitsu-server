@@ -2,17 +2,18 @@ class Types::Profile < Types::BaseObject
   description 'A user profile on Kitsu'
 
   field :id, ID, null: false
+
   field :slug, String,
     null: true,
     description: 'The URL-friendly identifier for this profile'
-  field :url, String,
-    null: true,
-    description: 'The URL for this profile'
 
-  # Name
   field :name, String,
     null: false,
     description: 'A non-unique, user-visible name for the profile.  Can contain spaces, emoji, etc.'
+
+  field :url, String,
+    null: true,
+    description: 'The full URL for this profile'
 
   field :avatar_image, Types::Image,
     method: :avatar,
@@ -27,6 +28,14 @@ class Types::Profile < Types::BaseObject
   field :about, String,
     null: true,
     description: 'A short biographical blurb about this profile'
+
+  field :about_formatted, String,
+    null: true,
+    description: 'Your about section formatted.'
+
+  field :bio, String,
+    null: false,
+    description: 'Description of your hobbies, interests, etc...'
 
   field :waifu, Types::Character,
     null: true,
@@ -44,7 +53,59 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The message this user has submitted for the Hall of Fame'
 
+  field :location, String,
+    null: true,
+    description: 'Your general location to be displayed on your profile.'
+
+  field :gender, String,
+    null: true,
+    description: 'What you identify as.'
+
+  # field :birthday, GraphQL::Types::ISO8601Date,
+  #   null: true,
+  #   description: 'When you were born, or something like that...'
+
+  field :time_zone, String,
+    null: true,
+    description: 'The time_zone for this user.'
+
+  field :country, String,
+    null: true,
+    description: 'The country you are in currently.'
+
+  field :followers, Types::Profile.connection_type,
+    null: false,
+    description: 'The people the user follows'
+
+  field :following, Types::Profile.connection_type,
+    null: false,
+    description: 'The people the user is following'
+
+  field :library_entries, Types::LibraryEntry.connection_type, null: false do
+    description 'All the entries of media related to this user.'
+
+    argument :status, Types::LibraryEntry::Status, required: false
+  end
+
+  field :pinned_post, Types::Post,
+    null: true,
+    description: 'Post pinned to the user profile'
+
   def url
     "https://kitsu/users/#{object.slug || object.id}"
+  end
+
+  def followers
+    AssociationLoader.for(object.class, :followers).load(object)
+  end
+
+  def following
+    AssociationLoader.for(object.class, :following).load(object)
+  end
+
+  def library_entries(status: nil)
+    entries = object.library_entries
+    entries = entries.where(status: status) if status
+    entries
   end
 end
