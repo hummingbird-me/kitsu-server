@@ -61,9 +61,9 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'What you identify as.'
 
-  # field :birthday, GraphQL::Types::ISO8601Date,
-  #   null: true,
-  #   description: 'When you were born, or something like that...'
+  field :birthday, GraphQL::Types::ISO8601Date,
+    null: true,
+    description: 'When you were born, or something like that...'
 
   field :time_zone, String,
     null: true,

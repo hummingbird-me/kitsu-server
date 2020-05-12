@@ -52,16 +52,16 @@ class Types::LibraryEntry < Types::BaseObject
   field :rating, Integer,
     null: true,
     description: 'How much you enjoyed this media (lower meaning not liking).'
-  #
-  # field :started_at, GraphQL::Types::ISO8601DateTime,
-  #   null: true,
-  #   description: 'When the profile started this media.'
-  #
-  # field :finished_at, GraphQL::Types::ISO8601DateTime,
-  #   null: true,
-  #   description: 'When the profile finished this media.'
 
-  # field :progressed_at, GraphQL::Types::ISO8601DateTime,
-  #   null: true,
-  #   description: 'unsure'
+  field :started_at, GraphQL::Types::ISO8601DateTime,
+    null: true,
+    description: 'When the profile started this media.'
+
+  field :finished_at, GraphQL::Types::ISO8601DateTime,
+    null: true,
+    description: 'When the profile finished this media.'
+
+  field :progressed_at, GraphQL::Types::ISO8601DateTime,
+    null: true,
+    description: 'unsure'
 end
