@@ -338,6 +338,8 @@ RSpec.describe ProfileLinkSite, type: :model do
             https://www.soundcloud.com/toyhammered
             https://soundcloud.com/toyhammered
             toyhammered
+            toy-hammered
+            toy_hammered
           ]
           site = build(:profile_link_site, :soundcloud)
 
