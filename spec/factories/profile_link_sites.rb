@@ -98,7 +98,7 @@ FactoryBot.define do
 
     # SoundCloud
     trait :soundcloud do
-      validate_find { '\A(https?://)?(www.)?(soundcloud.com/)?(?<username>[a-zA-Z0-9]+)\z' }
+      validate_find { '\A(https?://)?(www.)?(soundcloud.com/)?(?<username>[a-zA-Z0-9\-]+)\z' }
       validate_replace { 'https://soundcloud.com/\k<username>' }
     end
 
