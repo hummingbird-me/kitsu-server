@@ -131,11 +131,7 @@ module Types::Media
     AssociationLoader.for(object.class, :quotes).load(object).then(&:to_a)
   end
 
-  field :categories, Types::Category.connection_type,
+  field :categories, Types::CategoryConnection,
     null: false,
     description: 'A list of categories for this media'
-
-  def categories
-    AssociationLoader.for(object.class, :categories).load(object)
-  end
 end
