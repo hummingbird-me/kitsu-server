@@ -15,14 +15,6 @@ class Types::Category < Types::BaseObject
     null: false,
     description: 'The URL-friendly identifier of this Category.'
 
-  field :anidb_id, ID,
-    null: true,
-    description: 'Kitsu category mapping to Anidb category.'
-
-  field :total_media_count, Integer,
-    null: false,
-    description: 'The amount of media that include this category.'
-
   field :nsfw, Boolean,
     null: false,
     description: 'Whether the category is Not-Safe-for-Work.',
@@ -32,9 +24,6 @@ class Types::Category < Types::BaseObject
     null: true,
     description: 'The parent category. Each category can have one parent.'
 
-  field :child_count, Integer,
-    null: false,
-    description: 'The amount of categories that are children to this category.'
 
   field :children, Types::Category.connection_type,
     null: true,
