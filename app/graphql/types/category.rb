@@ -24,9 +24,9 @@ class Types::Category < Types::BaseObject
     null: true,
     description: 'The parent category. Each category can have one parent.'
 
-
-  field :children, Types::Category.connection_type,
+  field :children, Types::Category::ChildConnection,
     null: true,
+    connection: true,
     description: 'The child categories.'
 
   def children
