@@ -708,6 +708,7 @@ DEPENDENCIES
   image_optim_pack
   json_expressions
   jsonapi-resources (= 0.9.0)
+  jwt
   kramdown
   kramdown-parser-gfm
   librato-rails
