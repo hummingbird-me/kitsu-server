@@ -7,7 +7,7 @@ class Types::LibraryEntry < Types::BaseObject
     null: false,
     description: 'The profile who created this library entry.'
 
-  field :media, Types::Media.connection_type,
+  field :media, Types::Media,
     null: false,
     description: 'The media related to this library entry.'
 
@@ -64,8 +64,4 @@ class Types::LibraryEntry < Types::BaseObject
   field :progressed_at, GraphQL::Types::ISO8601DateTime,
     null: true,
     description: 'unsure'
-
-  def media
-    AssociationLoader.for(object.class, :media).load(object)
-  end
 end

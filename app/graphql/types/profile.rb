@@ -81,16 +81,10 @@ class Types::Profile < Types::BaseObject
     null: false,
     description: 'The people the user is following'
 
-  field :anime_library_entries, Types::LibraryEntry.connection_type, null: false do
-    description 'All anime related to the profile'
+  field :library_entries, [Types::LibraryEntry], null: false do
+    description 'All media related to the profile'
 
-    argument :status, Types::LibraryEntry::Status, required: false
-  end
-
-  field :manga_library_entries, Types::LibraryEntry.connection_type, null: false do
-    description 'All manga related to the profile'
-
-    argument :status, Types::LibraryEntry::Status, required: false
+    argument :media_type, Types::MediaTypeChoice, required: true
   end
 
   field :pinned_post, Types::Post,
@@ -109,13 +103,7 @@ class Types::Profile < Types::BaseObject
     AssociationLoader.for(object.class, :following).load(object)
   end
 
-  def anime_library_entries(status: nil)
-    query = { media_type: 'Anime', status: status }.compact
-    object.library_entries.where(query)
-  end
-
-  def manga_library_entries(status: nil)
-    query = { media_type: 'Manga', status: status }.compact
-    object.library_entries.where(query)
+  def library_entries(media_type: nil)
+    object.library_entries.where(media_type: media_type)
   end
 end
