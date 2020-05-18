@@ -334,16 +334,16 @@ RSpec.describe ProfileLinkSite, type: :model do
       context 'success' do
         it 'should return a username' do
           urls = %w[
-            soundcloud.com/toyhammered
-            https://www.soundcloud.com/toyhammered
-            https://soundcloud.com/toyhammered
-            toyhammered
+            soundcloud.com/toy-hamme_red
+            https://www.soundcloud.com/toy-hamme_red
+            https://soundcloud.com/toy-hamme_red
+            toy-hamme_red
           ]
           site = build(:profile_link_site, :soundcloud)
 
           urls.each do |url|
             temp = site.validate_find.match(url)
-            expect(temp[:username]).to eq('toyhammered')
+            expect(temp[:username]).to eq('toy-hamme_red')
           end
         end
       end
