@@ -5,7 +5,8 @@ class Types::MediaReaction < Types::BaseObject
 
   field :profile, Types::Profile,
     null: false,
-    description: 'The profile who wrote this reaction.'
+    description: 'The profile who wrote this reaction.',
+    method: :user
 
   field :media, Types::Media,
     null: false,

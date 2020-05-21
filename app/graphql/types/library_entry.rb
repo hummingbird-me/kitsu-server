@@ -5,7 +5,8 @@ class Types::LibraryEntry < Types::BaseObject
 
   field :profile, Types::Profile,
     null: false,
-    description: 'The profile who created this library entry.'
+    description: 'The profile who created this library entry.',
+    method: :user
 
   field :media, Types::Media,
     null: false,
