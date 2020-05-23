@@ -77,11 +77,31 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The country you are in currently.'
 
+  field :followers, Types::Profile.connection_type,
+    null: false,
+    description: 'The people the user follows'
+
+  field :following, Types::Profile.connection_type,
+    null: false,
+    description: 'The people the user is following'
+
   def url
     "https://kitsu/users/#{object.slug || object.id}"
   end
 
   def stats
     object
+  end
+
+  def followers
+    AssociationLoader.for(object.class, :followers).load(object).then do |follows|
+      follows.map(&:follower)
+    end
+  end
+
+  def following
+    AssociationLoader.for(object.class, :following).load(object).then do |follows|
+      follows.map(&:followed)
+    end
   end
 end
