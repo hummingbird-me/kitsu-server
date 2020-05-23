@@ -12,9 +12,9 @@ class Types::LibraryEntry < Types::BaseObject
     null: false,
     description: 'The media related to this library entry.'
 
-  # field :status, Types::LibraryEntry::Status,
-  #   null: false,
-  #   description: ''
+  field :status, Types::LibraryEntryStatus,
+    null: false,
+    description: ''
 
   # field :media_reaction, Types::MediaReaction,
   #   null: true,
