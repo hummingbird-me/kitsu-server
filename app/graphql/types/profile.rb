@@ -112,4 +112,14 @@ class Types::Profile < Types::BaseObject
   def comments
     AssociationLoader.for(object.class, :comments).scope(object)
   end
+
+  field :library_entries, [Types::LibraryEntry], null: false do
+    description 'All media related to the profile'
+
+    argument :media_type, Types::MediaTypeChoice, required: true
+  end
+
+  def library_entries(media_type: nil)
+    object.library_entries.where(media_type: media_type)
+  end
 end
