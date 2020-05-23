@@ -96,11 +96,15 @@ class Types::Profile < Types::BaseObject
   end
 
   def followers
-    AssociationLoader.for(object.class, :followers).load(object)
+    AssociationLoader.for(object.class, :followers).load(object).then do |follows|
+      follows.map(&:follower)
+    end
   end
 
   def following
-    AssociationLoader.for(object.class, :following).load(object)
+    AssociationLoader.for(object.class, :following).load(object).then do |follows|
+      follows.map(&:followed)
+    end
   end
 
   def library_entries(media_type: nil)
