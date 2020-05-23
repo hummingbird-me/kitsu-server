@@ -87,10 +87,6 @@ class Types::Profile < Types::BaseObject
     argument :media_type, Types::MediaTypeChoice, required: true
   end
 
-  field :pinned_post, Types::Post,
-    null: true,
-    description: 'Post pinned to the user profile'
-
   def url
     "https://kitsu/users/#{object.slug || object.id}"
   end
