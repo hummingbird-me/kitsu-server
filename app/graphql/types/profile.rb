@@ -44,7 +44,17 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The message this user has submitted for the Hall of Fame'
 
+  field :library_entries, [Types::LibraryEntry], null: false do
+    description 'All media related to the profile'
+
+    argument :media_type, Types::MediaTypeChoice, required: true
+  end
+
   def url
     "https://kitsu/users/#{object.slug || object.id}"
+  end
+
+  def library_entries(media_type: nil)
+    object.library_entries.where(media_type: media_type)
   end
 end
