@@ -24,7 +24,7 @@ class Types::MediaReaction < Types::BaseObject
     null: false,
     description: 'The reaction text related to a media.'
 
-  # field :votes, Types::MediaReactionVoteConnection,
-  #   null: false,
-  #   description: 'Upvotes for this reaction.'
+  field :votes, Types::MediaReactionVoteConnection,
+    null: false,
+    description: 'Upvotes for this reaction.'
 end
