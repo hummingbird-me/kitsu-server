@@ -65,6 +65,10 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'When the user was born'
 
+  field :pinned_post, Types::Post,
+    null: true,
+    description: 'Post pinned to the user profile'
+
   field :stats, Types::ProfileStats,
     null: false,
     description: 'The different stats we calculate for this user.'
