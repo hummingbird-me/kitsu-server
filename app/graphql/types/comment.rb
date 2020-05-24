@@ -23,21 +23,20 @@ class Types::Comment < Types::BaseObject
   field :parent, Types::Comment,
     null: true,
     description: 'The parent comment if this comment was a reply to another.'
-  #
+
   # field :likes, Types::CommentLike.connection_type,
   #   null: false,
   #   description: ''
 
-  # NOTE: bit trickier because of different foreign_key
-  # field :replies, Types::Comment.connection_type,
-  #   null: false,
-  #   description: ''
+  field :replies, Types::Comment.connection_type,
+    null: false,
+    description: 'All replies to a specific comment.'
 
   def likes
     AssociationLoader.for(object.class, :likes).load(object)
   end
 
   def replies
-    AssociationLoader.for(object.class, :replies).load(:object)
+    AssociationLoader.for(object.class, :replies).load(object)
   end
 end
