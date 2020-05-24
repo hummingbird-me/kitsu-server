@@ -96,4 +96,20 @@ class Types::Profile < Types::BaseObject
       RecordLoader.for(object.class).load_many(follows.pluck(:followed_id))
     end
   end
+
+  field :posts, Types::Post.connection_type,
+    null: false,
+    description: 'All posts this profile has made.'
+
+  def posts
+    AssociationLoader.for(object.class, :posts).load(object)
+  end
+
+  field :comments, Types::Comment.connection_type,
+    null: false,
+    description: 'All comments to any post this user has made.'
+
+  def comments
+    AssociationLoader.for(object.class, :comments).load(object)
+  end
 end
