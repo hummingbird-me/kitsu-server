@@ -60,10 +60,9 @@ class Types::Account < Types::BaseObject
     null: true,
     description: 'Your preferred language of choice for media to display as.'
 
-  # NOTE: most likely want to make this an ENUM.
-  # field :rating_system, Integer,
-  #   null: false,
-  #   description: 'The system used when rating media'
+  field :rating_system, Types::RatingSystem,
+    null: false,
+    description: 'The system used when rating media'
 
   # TODO: allow for multiple emails per user in the actual database
   def email
