@@ -4,7 +4,7 @@ module Authorization
       # The Aozora Facebook App ID
       AOZORA_FACEBOOK_APP_ID = '1467094533604194'.freeze
       # Facebook URL stuff
-      API_VERSION = 'v2.11'.freeze
+      API_VERSION = 'v6.0'.freeze
       URL_PREFIX = "https://graph.facebook.com/#{API_VERSION}".freeze
       URL_TEMPLATE = Addressable::Template.new("#{URL_PREFIX}/{+path*}{?query*}").freeze
       # The data to load from Facebook
