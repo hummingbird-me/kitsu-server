@@ -26,8 +26,7 @@ module WithAvatar
       }
 
     after_commit if: :avatar_updated_at_changed? do
-      url = avatar.url(:original).gsub('media.kitsu.io', 'kitsu-media.s3.amazonaws.com')
-      ImgixPurgeService.purge(url)
+      ImgixPurgeService.purge(avatar.url(:original))
     end
   end
 end

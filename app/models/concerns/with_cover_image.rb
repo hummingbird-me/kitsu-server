@@ -24,8 +24,7 @@ module WithCoverImage
       }
 
     after_commit if: :cover_image_updated_at_changed? do
-      url = cover_image.url(:original).gsub('media.kitsu.io', 'kitsu-media.s3.amazonaws.com')
-      ImgixPurgeService.purge(url)
+      ImgixPurgeService.purge(cover_image.url(:original))
     end
   end
 end
