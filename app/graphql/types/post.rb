@@ -33,14 +33,14 @@ class Types::Post < Types::BaseObject
     null: false,
     description: 'All comments related to this post.'
 
-  # field :likes, Types::PostLike.connection_type,
-  #   null: false,
-  #   description: ''
-  #
-  # field :follows, Types::PostFollow.connection_type,
-  #   null: false,
-  #   description: ''
-  #
+  field :likes, Types::Profile.connection_type,
+    null: false,
+    description: 'Users that have liked this post.'
+
+  field :follows, Types::Profile.connection_type,
+    null: false,
+    description: 'Users that are watching this post'
+
   # field :uploads, Types::Image.connection_type,
   #   null: false,
   #   description: ''
@@ -50,10 +50,14 @@ class Types::Post < Types::BaseObject
   end
 
   def likes
-    AssocationLoader.for(object.class, :likes).load(object)
+    AssociationLoader.for(object.class, :post_likes).load(object).then do |likes|
+      likes.map(&:user)
+    end
   end
 
   def follows
-    AssociationLoader.for(object.class, :follows).load(object)
+    AssociationLoader.for(object.class, :post_follows).load(object).then do |follows|
+      follows.map(&:user)
+    end
   end
 end
