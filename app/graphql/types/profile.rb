@@ -44,7 +44,15 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The message this user has submitted for the Hall of Fame'
 
+  field :stats, Types::StatType,
+    null: false,
+    description: 'The different stats we calculate for this user.'
+
   def url
     "https://kitsu/users/#{object.slug || object.id}"
+  end
+
+  def stats
+    object
   end
 end
