@@ -61,14 +61,6 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'When you were born, or something like that...'
 
-  field :time_zone, String,
-    null: true,
-    description: 'The time_zone for this user.'
-
-  field :country, String,
-    null: true,
-    description: 'The country you are in currently.'
-
   field :followers, Types::Profile.connection_type,
     null: false,
     description: 'The people the user follows'

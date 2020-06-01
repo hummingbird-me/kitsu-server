@@ -64,6 +64,14 @@ class Types::Account < Types::BaseObject
     null: false,
     description: 'The system used when rating media'
 
+  field :time_zone, String,
+    null: true,
+    description: 'The time_zone for this user.'
+
+  field :country, String,
+    null: true,
+    description: 'The country you are in currently.'
+
   # TODO: allow for multiple emails per user in the actual database
   def email
     [object.email]
