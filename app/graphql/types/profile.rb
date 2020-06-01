@@ -7,13 +7,13 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The URL-friendly identifier for this profile'
 
-  field :name, String,
-    null: false,
-    description: 'A non-unique, user-visible name for the profile.  Can contain spaces, emoji, etc.'
-
   field :url, String,
     null: true,
     description: 'The full URL for this profile'
+
+  field :name, String,
+    null: false,
+    description: 'A non-unique, user-visible name for the profile.  Can contain spaces, emoji, etc.'
 
   field :avatar_image, Types::Image,
     method: :avatar,
