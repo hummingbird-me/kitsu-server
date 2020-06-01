@@ -29,14 +29,6 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'A short biographical blurb about this profile'
 
-  field :about_formatted, String,
-    null: true,
-    description: 'Your about section formatted.'
-
-  field :bio, String,
-    null: false,
-    description: 'Description of your hobbies, interests, etc...'
-
   field :waifu, Types::Character,
     null: true,
     description: 'The character this profile has declared as their waifu or husbando'
