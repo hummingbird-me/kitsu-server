@@ -79,13 +79,13 @@ class Types::Profile < Types::BaseObject
 
   def followers
     AssociationLoader.for(object.class, :followers).load(object).then do |follows|
-      follows.map(&:follower)
+      RecordLoader.for(object.class).load_many(follows.pluck(:follower_id))
     end
   end
 
   def following
     AssociationLoader.for(object.class, :following).load(object).then do |follows|
-      follows.map(&:followed)
+      RecordLoader.for(object.class).load_many(follows.pluck(:followed_id))
     end
   end
 end
