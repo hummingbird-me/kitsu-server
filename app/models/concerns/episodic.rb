@@ -40,7 +40,7 @@ module Episodic
 
     after_save do
       if saved_change_to_episode_length?
-        episodes.where(length: nil).update_all(length: episode_length)
+        episodes.where(length: nil).or(episodes.where(length: 0)).update_all(length: episode_length)
       end
     end
   end
