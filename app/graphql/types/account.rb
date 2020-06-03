@@ -18,59 +18,59 @@ class Types::Account < Types::BaseObject
   #
   # field :pro_started_at, GraphQL::Types::ISO8601DateTime,
   #   null: true,
-  #   description: 'When your pro subscription started'
+  #   description: 'Time PRO subscription started for the account'
   #
   # # unsure if this is the right place
   # field :pro_expires_at, GraphQL::Types::ISO8601DateTime,
   #   null: true,
-  #   description: 'When your pro subscription expires'
+  #   description: 'Time PRO subscription expires for the account'
 
   field :max_pro_streak, Integer,
     null: true,
-    description: ''
+    description: 'Longest period an account has had a PRO subscription for in seconds'
 
   field :facebook_id, String,
     null: true,
-    description: 'Facebook account linked to the user.'
+    description: 'Facebook account linked to the account'
 
   field :twitter_id, String,
     null: true,
-    description: 'Twitter account linked to user.'
+    description: 'Twitter account linked to the account'
 
   field :sfw_filter, Boolean,
     null: true,
-    description: 'Whether Not-Safe-for-Work content is shown.'
+    description: 'Whether Not Safe For Work content is accessible'
 
   field :mal_username, String,
     null: true,
-    description: 'Your MyAnimeList username.'
+    description: 'MyAnimeList account linked to the account'
 
   # field :past_names, [String, null: true],
-  #   description: 'A list of this users past names'
+  #   description: 'Names previously used by the account'
 
   field :theme, Integer,
     null: false,
-    description: 'Options are the Devil! - Josh'
+    description: 'Preferred UI theme for the account'
 
   field :language, String,
     null: true,
-    description: 'Primary language for this user.'
+    description: 'Primary language for the account'
 
   field :title_language_preference, String,
     null: true,
-    description: 'Your preferred language of choice for media to display as.'
+    description: 'Preferred language for media titles'
 
   field :rating_system, Types::RatingSystem,
     null: false,
-    description: 'The system used when rating media'
+    description: 'Media rating system used for the account'
 
   field :time_zone, String,
     null: true,
-    description: 'The time_zone for this user.'
+    description: 'Time zone of the account'
 
   field :country, String,
     null: true,
-    description: 'The country you are in currently.'
+    description: 'Country the account resides in'
 
   # TODO: allow for multiple emails per user in the actual database
   def email

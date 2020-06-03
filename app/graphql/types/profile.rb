@@ -5,15 +5,15 @@ class Types::Profile < Types::BaseObject
 
   field :slug, String,
     null: true,
-    description: 'The URL-friendly identifier for this profile'
+    description: 'A unique URL-friendly identifier used for the profile URL
 
   field :url, String,
     null: true,
-    description: 'The full URL for this profile'
+    description: 'A fully qualified URL to the profile'
 
   field :name, String,
     null: false,
-    description: 'A non-unique, user-visible name for the profile.  Can contain spaces, emoji, etc.'
+    description: 'A non-unique publicly visible name for the profile. Minimum of 3 characters and any Unicode character is valid'
 
   field :avatar_image, Types::Image,
     method: :avatar,
@@ -55,19 +55,19 @@ class Types::Profile < Types::BaseObject
 
   field :gender, String,
     null: true,
-    description: 'What you identify as.'
+    description: 'What the user identifies as'
 
   field :birthday, GraphQL::Types::ISO8601Date,
     null: true,
-    description: 'When you were born, or something like that...'
+    description: 'When the user was born'
 
   field :followers, Types::Profile.connection_type,
     null: false,
-    description: 'The people the user follows'
+    description: 'People that follow the user'
 
   field :following, Types::Profile.connection_type,
     null: false,
-    description: 'The people the user is following'
+    description: 'People the user is following'
 
   def url
     "https://kitsu/users/#{object.slug || object.id}"
