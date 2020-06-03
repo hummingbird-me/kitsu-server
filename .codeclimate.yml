@@ -4,6 +4,7 @@
 engines:
   rubocop:
     enabled: true
+    channel: rubocop-0-83
   scsslint:
     enabled: true
   bundler_audit:
