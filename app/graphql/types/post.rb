@@ -3,7 +3,7 @@ class Types::Post < Types::BaseObject
 
   field :id, ID, null: false
 
-  field :profile, Types::Profile,
+  field :author, Types::Profile,
     null: false,
     description: 'The user who created this post.',
     method: :user
@@ -12,11 +12,11 @@ class Types::Post < Types::BaseObject
     null: true,
     description: 'The media tagged in this post.'
 
-  field :spoiler, Boolean,
+  field :is_spoiler, Boolean,
     null: false,
     description: 'If this post spoils the tagged media.'
 
-  field :nsfw, Boolean,
+  field :is_nsfw, Boolean,
     null: false,
     description: 'If a post is Not-Safe-for-Work.',
     method: :nsfw?
@@ -51,13 +51,13 @@ class Types::Post < Types::BaseObject
 
   def likes
     AssociationLoader.for(object.class, :post_likes).load(object).then do |likes|
-      likes.map(&:user)
+      RecordLoader.for(User).load_many(likes.pluck(:user_id))
     end
   end
 
   def follows
     AssociationLoader.for(object.class, :post_follows).load(object).then do |follows|
-      follows.map(&:user)
+      RecordLoader.for(User).load_many(follows.pluck(:user_id))
     end
   end
 end
