@@ -7,9 +7,9 @@ class Types::Comment < Types::BaseObject
     null: false,
     description: 'The post that this comment is attached to.'
 
-  field :profile, Types::Profile,
+  field :author, Types::Profile,
     null: false,
-    description: 'The owner of this post',
+    description: 'The user who created this comment for the parent post.',
     method: :user
 
   field :content, String,
@@ -34,7 +34,7 @@ class Types::Comment < Types::BaseObject
 
   def likes
     AssociationLoader.for(object.class, :likes).load(object).then do |likes|
-      likes.map(&:user)
+      RecordLoader.for(User).load_many(likes.pluck(:user_id))
     end
   end
 
