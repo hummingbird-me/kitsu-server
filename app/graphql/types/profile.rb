@@ -35,15 +35,15 @@ class Types::Profile < Types::BaseObject
 
   field :waifu_or_husbando, String,
     null: true,
-    description: 'The user-provided (unsanitized) string used to identify the role of the waifu'
+    description: 'The user-provided (unsanitized) string used to identify the role of the waifu. \'Waifu\' or \'Husbando\''
 
   field :pro_tier, Types::Enum::ProTier,
     null: true,
-    description: 'The level of Pro this user currently has'
+    description: 'The PRO level the user currently has'
 
   field :pro_message, String,
     null: true,
-    description: 'The message this user has submitted for the Hall of Fame'
+    description: 'The message this user has submitted to the Hall of Fame'
 
   field :stats, Types::ProfileStats,
     null: false,
@@ -51,7 +51,7 @@ class Types::Profile < Types::BaseObject
 
   field :location, String,
     null: true,
-    description: 'Your general location to be displayed on your profile.'
+    description: 'The user\'s general location'
 
   field :gender, String,
     null: true,
