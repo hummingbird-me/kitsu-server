@@ -1,5 +1,9 @@
 # Kitsu Server
-[![Build Status](https://travis-ci.org/hummingbird-me/kitsu-server.svg?branch=the-future)](https://travis-ci.org/hummingbird-me/kitsu-server) [![Code Climate](https://codeclimate.com/github/hummingbird-me/kitsu-server/badges/gpa.svg)](https://codeclimate.com/github/hummingbird-me/kitsu-server) [![Test Coverage](https://codeclimate.com/github/hummingbird-me/kitsu-server/badges/coverage.svg)](https://codeclimate.com/github/hummingbird-me/kitsu-server/coverage)
+
+![Kitsu Test Suite](https://github.com/hummingbird-me/kitsu-server/workflows/Kitsu%20Test%20Suite/badge.svg)
+![Kitsu API Deployment](https://github.com/hummingbird-me/kitsu-server/workflows/Kitsu%20API%20Deployment/badge.svg)
+[![Code Climate](https://codeclimate.com/github/hummingbird-me/kitsu-server/badges/gpa.svg)](https://codeclimate.com/github/hummingbird-me/kitsu-server) 
+[![Test Coverage](https://codeclimate.com/github/hummingbird-me/kitsu-server/badges/coverage.svg)](https://codeclimate.com/github/hummingbird-me/kitsu-server/coverage)
 
 ---
 **<p align="center">This is our server repository. It contains the rails application for Kitsu.<br />Check out the [tools], [client], [mobile app] and [api docs] repositories.</p>**
