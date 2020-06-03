@@ -5,7 +5,7 @@ class Types::Profile < Types::BaseObject
 
   field :slug, String,
     null: true,
-    description: 'A unique URL-friendly identifier used for the profile URL
+    description: 'A unique URL-friendly identifier used for the profile URL'
 
   field :url, String,
     null: true,
