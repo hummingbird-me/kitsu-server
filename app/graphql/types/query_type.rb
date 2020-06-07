@@ -112,8 +112,9 @@ class Types::QueryType < Types::BaseObject
 
   field :find_category, Types::Category, null: true do
     description 'Find a category in the Kitsu Database by slug or ID'
+
+    argument :id, ID, required: false
     argument :slug, String, required: false
-    argument :id, String, required: false
   end
 
   def find_category(id: nil, slug: nil)
