@@ -24,7 +24,11 @@ class Types::Category < Types::BaseObject
     null: true,
     description: 'The parent category. Each category can have one parent.'
 
-  field :children, Types::CategoryConnection,
+  field :children, Types::Category.connection_type,
     null: true,
     description: 'The child categories.'
+
+  def children
+    AssociationLoader.for(object.class, :children).load(object)
+  end
 end
