@@ -1,9 +1,9 @@
 class Types::MediaReactionVote < Types::BaseObject
-  description 'The profile who upvoted a specific media reaction.'
+  description 'The author who upvoted a specific media reaction.'
 
   field :id, ID, null: false
 
-  field :profile, Types::Profile,
+  field :author, Types::Profile,
     null: false,
     description: 'Profile who upvoted this media reaction.',
     method: :user

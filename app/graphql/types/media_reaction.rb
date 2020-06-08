@@ -3,9 +3,9 @@ class Types::MediaReaction < Types::BaseObject
 
   field :id, ID, null: false
 
-  field :profile, Types::Profile,
+  field :author, Types::Profile,
     null: false,
-    description: 'The profile who wrote this reaction.',
+    description: 'The author who wrote this reaction.',
     method: :user
 
   field :media, Types::Media,
@@ -24,7 +24,11 @@ class Types::MediaReaction < Types::BaseObject
     null: false,
     description: 'The reaction text related to a media.'
 
-  # field :votes, Types::MediaReactionVoteConnection,
-  #   null: false,
-  #   description: 'Upvotes for this reaction.'
+  field :likes, Types::MediaReactionVote.connection_type,
+    null: false,
+    description: 'Upvotes for this reaction.'
+
+  def likes
+    AssociationLoader.for(object.class, :votes).load(object)
+  end
 end
