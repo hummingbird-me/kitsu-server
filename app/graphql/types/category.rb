@@ -15,7 +15,7 @@ class Types::Category < Types::BaseObject
     null: false,
     description: 'The URL-friendly identifier of this Category.'
 
-  field :nsfw, Boolean,
+  field :is_nsfw, Boolean,
     null: false,
     description: 'Whether the category is Not-Safe-for-Work.',
     method: :nsfw?
