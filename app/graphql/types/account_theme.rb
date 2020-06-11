@@ -1,4 +1,4 @@
 class Types::AccountTheme < Types::BaseEnum
-  value 'light'
-  value 'dark'
+  value 'LIGHT', value: 'light'
+  value 'DARK', value: 'dark'
 end

@@ -37,7 +37,7 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The character this profile has declared as their waifu or husbando'
 
-  field :waifu_or_husbando, String,
+  field :waifu_or_husbando, Types::WaifuOrHusbando,
     null: true,
     description:
       <<~DESCRIPTION.strip
