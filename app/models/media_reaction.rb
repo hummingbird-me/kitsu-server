@@ -53,7 +53,7 @@ class MediaReaction < ApplicationRecord
 
   validates :media_id, uniqueness: { scope: %i[user_id media_type] }, unless: :deleted?
   validates :media, polymorphism: { type: Media }
-  validates :reaction, length: { maximum: 140 }, allow_nil: false
+  validates :reaction, length: { maximum: 140 }, allow_blank: false
 
   resourcify
 
@@ -87,5 +87,9 @@ class MediaReaction < ApplicationRecord
 
   def deleted?
     deleted_at.present?
+  end
+
+  def reaction=(value)
+    super(value&.strip)
   end
 end

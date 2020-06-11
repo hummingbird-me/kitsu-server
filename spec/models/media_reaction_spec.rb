@@ -45,4 +45,7 @@ RSpec.describe MediaReaction, type: :model do
 
   it { should belong_to(:user) }
   it { should belong_to(:library_entry) }
+
+  it { should validate_length_of(:reaction).is_at_most(140) }
+  it { should_not allow_value('').for(:reaction) }
 end
