@@ -13,7 +13,11 @@ class Types::Profile < Types::BaseObject
 
   field :name, String,
     null: false,
-    description: 'A non-unique publicly visible name for the profile. Minimum of 3 characters and any Unicode character is valid'
+    description: 
+      <<~DESCRIPTION.strip
+        A non-unique publicly visible name for the profile.
+        Minimum of 3 characters and any valid Unicode character
+      DESCRIPTION
 
   field :avatar_image, Types::Image,
     method: :avatar,
@@ -35,7 +39,11 @@ class Types::Profile < Types::BaseObject
 
   field :waifu_or_husbando, String,
     null: true,
-    description: 'The user-provided (unsanitized) string used to identify the role of the waifu. \'Waifu\' or \'Husbando\''
+    description: 
+      <<~DESCRIPTION.strip
+        The user-provided (unsanitized) string used to identify
+        the role of the waifu. 'Waifu' or 'Husbando'
+      DESCRIPTION
 
   field :pro_tier, Types::Enum::ProTier,
     null: true,
