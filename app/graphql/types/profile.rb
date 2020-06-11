@@ -13,7 +13,7 @@ class Types::Profile < Types::BaseObject
 
   field :name, String,
     null: false,
-    description: 
+    description:
       <<~DESCRIPTION.strip
         A non-unique publicly visible name for the profile.
         Minimum of 3 characters and any valid Unicode character
@@ -39,7 +39,7 @@ class Types::Profile < Types::BaseObject
 
   field :waifu_or_husbando, String,
     null: true,
-    description: 
+    description:
       <<~DESCRIPTION.strip
         The user-provided (unsanitized) string used to identify
         the role of the waifu. 'Waifu' or 'Husbando'
@@ -59,7 +59,7 @@ class Types::Profile < Types::BaseObject
 
   field :location, String,
     null: true,
-    description: 'The user\'s general location'
+    description: "The user's general location"
 
   field :gender, String,
     null: true,

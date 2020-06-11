@@ -15,7 +15,6 @@ class Types::Account < Types::BaseObject
     null: true,
     description: 'The PRO subscription for this account'
 
-  #
   # field :pro_started_at, GraphQL::Types::ISO8601DateTime,
   #   null: true,
   #   description: 'Time PRO subscription started for the account'
@@ -48,7 +47,7 @@ class Types::Account < Types::BaseObject
   # field :past_names, [String, null: true],
   #   description: 'Names previously used by the account'
 
-  field :theme, Integer,
+  field :theme, Types::AccountTheme,
     null: false,
     description: 'Preferred UI theme for the account'
 
