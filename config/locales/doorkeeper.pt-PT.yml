@@ -1,0 +1,112 @@
+pt:
+  activerecord:
+    attributes:
+      doorkeeper/application:
+        name: 'Nome'
+        redirect_uri: 'URI de redirecionamento'
+    errors:
+      models:
+        doorkeeper/application:
+          attributes:
+            redirect_uri:
+              fragment_present: 'não deve conter um fragmento.'
+              invalid_uri: 'tem de ser um URI valido.'
+              relative_uri: 'tem de ser um URI absoluto.'
+              secured_uri: 'tem de ser um URI HTTPS/SSL.'
+  doorkeeper:
+    applications:
+      confirmations:
+        destroy: 'Tens a certeza?'
+      buttons:
+        edit: 'Editar'
+        destroy: 'Destruir'
+        submit: 'Submeter'
+        cancel: 'Cancelar'
+        authorize: 'Autorizar'
+      form:
+        error: 'Ops! Cheque o formulário para possíveis erros'
+      help:
+        redirect_uri: 'Use uma linha por URI'
+        native_redirect_uri: 'Use %{native_redirect_uri} para testes locais'
+        scopes: 'Separe escopos com espaços. Deixe em branco para usar o escopo padrão.'
+      edit:
+        title: 'Editar aplicação'
+      index:
+        title: 'Suas aplicações'
+        new: 'Nova Aplicação'
+        name: 'Nome'
+        callback_url: 'URL de retorno'
+      new:
+        title: 'Nova Aplicação'
+      show:
+        title: 'Aplicação: %{name}'
+        application_id: 'Id da Aplicação'
+        secret: 'Segredo'
+        scopes: 'Escopos'
+        callback_urls: 'Urls de retorno'
+        actions: 'Ações'
+    authorizations:
+      buttons:
+        authorize: 'Autorizar'
+        deny: 'Negar'
+      error:
+        title: 'Ocorreu um erro'
+      new:
+        title: 'Autorização necessária'
+        prompt: 'Autoriza %{client_name} a usar sua conta?'
+        able_to: 'Essa aplicação terá permissão para'
+      show:
+        title: 'Codigo de autorização'
+    authorized_applications:
+      confirmations:
+        revoke: 'Tens a certeza?'
+      buttons:
+        revoke: 'Revogar'
+      index:
+        title: 'Suas aplicações autorizadas'
+        application: 'Aplicação'
+        created_at: 'Criado as'
+        date_format: '%d-%m-%Y %H:%M:%S'
+    errors:
+      messages:
+        #Common error messages
+        invalid_request: 'O pedido não tem um parâmetro importante, inclue um valor de parâmetro não suportado, ou esta mal-formado.'
+        invalid_redirect_uri: 'O uri de redirecionamento incluído não é valido.'
+        unauthorized_client: 'O cliente não está autorizado a fazer esse pedido usando este metodo.'
+        access_denied: 'O dono do recurso ou o servidor de autenticação negou o pedido.'
+        invalid_scope: 'O escopo pedido é invalido, desconhecido ou mal-formado.'
+        server_error: 'O servidor de autorização encontrou uma condição inesperada que a preveniu de completar o pedido.'
+        temporarily_unavailable: 'O servidor de autorização atualmente está impossibilitado de completar o pedido devido a um overload momentâneo ou uma manutenção no servidor.'
+        #configuration error messages
+        credential_flow_not_configured: 'O fluxo de senha do dono do recurso falhou devido ao Doorkeeper.configure.resource_owner_from_credentials não estar configurado.'
+        resource_owner_authenticator_not_configured: 'Procura pelo dono do recurso falhou devido ao Doorkeeper.configure.resource_owner_authenticator não estar configurado.'
+        #Access grant errors
+        unsupported_response_type: 'O servidor de autorização não suporta esse tipo de resposta.'
+        #Access token errors
+        invalid_client: 'A autorização do cliente falhou devido a um cliente desconhecido, autenticação não incluída, ou método de autenticação não suportado.'
+        invalid_grant: 'O tipo de garantia de autorização provido é invalido, expirou, foi revogado, não corresponde ao URI de redirecionamento usado na solicitação de autorização, ou foi emitido para outro cliente.'
+        unsupported_grant_type: 'O tipo de garantia de autorização não é suportado pelo servidor de autorização.'
+        #Password Access token errors
+        invalid_resource_owner: 'As credenciais de dono de recurso providas são inválidas, ou dono do recurso não foi encontrado'
+        invalid_token:
+          revoked: "O código de acesso foi revogado"
+          expired: "O código de acesso expirou"
+          unknown: "O código de acesso é inválido"
+    flash:
+      applications:
+        create:
+          notice: 'Aplicação criada'
+        destroy:
+          notice: 'Aplicação deletada.'
+        update:
+          notice: 'Aplicação atualizada.'
+      authorized_applications:
+        destroy:
+          notice: 'Aplicação revogada.'
+    layouts:
+      admin:
+        nav:
+          oauth2_provider: 'Provedor de OAuth2'
+          applications: 'Aplicações'
+      application:
+        title: 'Necessaria permissão OAuth'
