@@ -1,0 +1,59 @@
+#Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+pt:
+  devise:
+    confirmations:
+      confirmed: "O teu endereço de e-mail foi confirmado com sucesso."
+      send_instructions: "Receberás um e-mail com instruções sobre como confirmar o teu endereço de e-mail em alguns minutos."
+      send_paranoid_instructions: "Se o teu endereço de e-mail já existir no nosso banco de dados, receberás um e-mail com instruções sobre como confirmar o teu endereço de e-mail em alguns minutos."
+    failure:
+      already_authenticated: "Já tens a sessão inciada."
+      inactive: "A tua conta ainda não está ativada."
+      invalid: "%{authentication_keys} ou palavra-passe inválidos."
+      locked: "A tua conta está bloqueada."
+      last_attempt: "Tens mais uma tentativa antes da tua conta ser bloqueada."
+      not_found_in_database: "%{authentication_keys} ou palavra-passe inválidos."
+      timeout: "A tua sessão expirou. Inicia sessão novamente para continuar."
+      unauthenticated: "Precisas de iniciar sessão ou criar uma conta antes de continuar."
+      unconfirmed: "Precisas de confirmar o teu endereço de e-mail antes de continuar."
+    mailer:
+      confirmation_instructions:
+        subject: "Instruções de confirmação"
+      reset_password_instructions:
+        subject: "Instruções para repor a palavra-passe"
+      unlock_instructions:
+        subject: "Instruções de desbloqueio"
+    omniauth_callbacks:
+      failure: "Não foi possível autenticar-te com o %{kind} devido a \"%{reason}\"."
+      success: "Autenticado com sucesso na conta %{kind}."
+    passwords:
+      no_token: "Você não pode acessar essa página sem vir de um email de reset de senha. Se você veio de um email de reset de senha, tenha certeza de ter aberto o link completo do email."
+      send_instructions: "Você receberá um email com instruções para resetar sua senha em alguns momentos."
+      send_paranoid_instructions: "Se seu email já existir em nosso banco de dados, você receberá um link para recuperar sua senha no seu email em alguns minutos."
+      updated: "A tua senha foi trocada com sucesso. Agora você está logado."
+      updated_not_active: "A tua senha foi atualizada com sucesso."
+    registrations:
+      destroyed: "Adeus! Sua conta foi cancelada com sucesso. Vamos sentir sua falta."
+      signed_up: "Bem-vindo! Você logou com sucesso."
+      signed_up_but_inactive: "Você fez login com sucesso. Porem, não podemos continuar pois sua conta não foi ativada."
+      signed_up_but_locked: "Você fez login com sucesso. Porem, não podemos continuar pois sua conta esta bloqueada."
+      signed_up_but_unconfirmed: "Uma mensagem com um link de confirmação foi enviado para o teu endereço de e-mail. Usa o link para ativar a tua conta."
+      update_needs_confirmation: "Você atualizou sua conta com sucesso, porem precisamos verificar seu novo endereço de email. Por favor cheque seu email e abra o link de confirmação para confirmar seu novo email."
+      updated: "A tua conta foi atualizada com sucesso."
+    sessions:
+      signed_in: "Sessão iniciada com sucesso."
+      signed_out: "Sessão terminada com sucesso."
+      already_signed_out: "Sessão terminada com sucesso."
+    unlocks:
+      send_instructions: "Receberás um e-mail com instruções sobre como desbloquear a tua conta em alguns minutos."
+      send_paranoid_instructions: "Se a tua conta existe, irás receber um e-mail com instruções sobre como desbloquear a tua conta em alguns minutos."
+      unlocked: "A tua conta foi desbloqueada com sucesso. Por favor inicia sessão para continuar."
+  errors:
+    messages:
+      already_confirmed: "já foi confirmado, tenta iniciar sessão"
+      confirmation_period_expired: "precisa de ser confirmado dentro de %{period}, por favor solicita um novo"
+      expired: "expirou, por favor solicita um novo"
+      not_found: "não encontrado"
+      not_locked: "não foi bloqueada"
+      not_saved:
+        one: "1 erro impediu este %{resource} de ser salvo:"
+        other: "%{count} erros impediram este %{resource} de ser salvo:"
