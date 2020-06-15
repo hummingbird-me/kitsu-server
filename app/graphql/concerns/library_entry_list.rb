@@ -53,6 +53,8 @@ module LibraryEntryList
 
   def library_entries(status = nil)
     query = { media_type: media_type, status: status }.compact
-    object.library_entries.where(query)
+    AssociationLoader.for(object.class, :library_entries).load(object).then do |library_entries|
+      library_entries.where(query)
+    end
   end
 end
