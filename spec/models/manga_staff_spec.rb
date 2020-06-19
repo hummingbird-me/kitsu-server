@@ -26,9 +26,7 @@
 require 'rails_helper'
 
 RSpec.describe MangaStaff, type: :model do
-  it { should belong_to(:manga) }
-  it { should validate_presence_of(:manga).with_message('must exist') }
-  it { should belong_to(:person) }
-  it { should validate_presence_of(:person).with_message('must exist') }
+  it { should belong_to(:manga).required }
+  it { should belong_to(:person).required }
   it { should validate_length_of(:role).is_at_most(140) }
 end

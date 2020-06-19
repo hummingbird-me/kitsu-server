@@ -1,10 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Video, type: :model do
-  it { should belong_to(:episode) }
-  it { should validate_presence_of(:episode).with_message('must exist') }
-  it { should belong_to(:streamer) }
-  it { should validate_presence_of(:streamer).with_message('must exist') }
+  it { should belong_to(:episode).required }
+  it { should belong_to(:streamer).required }
   it { should validate_presence_of(:url) }
 
   describe '.available_in(region)' do

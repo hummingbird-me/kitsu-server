@@ -26,7 +26,7 @@ require 'rails_helper'
 RSpec.describe Stat, type: :model do
   subject { build(:stat) }
 
-  it { should belong_to(:user) }
+  it { should belong_to(:user).required }
   it { should validate_presence_of(:type) }
   it { should validate_uniqueness_of(:type).scoped_to(:user_id) }
 

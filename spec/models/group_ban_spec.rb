@@ -28,10 +28,7 @@
 require 'rails_helper'
 
 RSpec.describe GroupBan, type: :model do
-  it { should belong_to(:group) }
-  it { should validate_presence_of(:group).with_message('must exist') }
-  it { should belong_to(:user) }
-  it { should validate_presence_of(:user).with_message('must exist') }
-  it { should belong_to(:moderator).class_name('User') }
-  it { should validate_presence_of(:moderator).with_message('must exist') }
+  it { should belong_to(:group).required }
+  it { should belong_to(:user).required }
+  it { should belong_to(:moderator).class_name('User').required }
 end

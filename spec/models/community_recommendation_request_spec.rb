@@ -26,5 +26,5 @@ RSpec.describe CommunityRecommendationRequest, type: :model do
   subject { build(:community_recommendation_request) }
 
   it { should have_many(:community_recommendations) }
-  it { should belong_to(:user) }
+  it { should belong_to(:user).required }
 end

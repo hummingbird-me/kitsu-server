@@ -47,8 +47,7 @@ require 'rails_helper'
 RSpec.describe Post, type: :model do
   subject { build(:post) }
 
-  it { should belong_to(:user) }
-  it { should validate_presence_of(:user).with_message('must exist') }
+  it { should belong_to(:user).required }
   it { should belong_to(:target_user).class_name('User') }
   it { should belong_to(:media) }
   it { should belong_to(:spoiled_unit) }

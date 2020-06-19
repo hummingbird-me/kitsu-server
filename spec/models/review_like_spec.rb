@@ -24,8 +24,6 @@ require 'rails_helper'
 
 RSpec.describe ReviewLike, type: :model do
   subject { build(:review_like) }
-  it { should belong_to(:review) }
-  it { should validate_presence_of(:review).with_message('must exist') }
-  it { should belong_to(:user) }
-  it { should validate_presence_of(:user).with_message('must exist') }
+  it { should belong_to(:review).required }
+  it { should belong_to(:user).required }
 end

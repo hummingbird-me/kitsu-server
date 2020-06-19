@@ -25,8 +25,8 @@
 # rubocop:enable Metrics/LineLength
 
 class StreamingLink < ApplicationRecord
-  belongs_to :media, polymorphic: true, touch: true
-  belongs_to :streamer
+  belongs_to :media, polymorphic: true, touch: true, required: true
+  belongs_to :streamer, required: true
 
   validates :media, :streamer, :url, :subs, :dubs, presence: true
   validates :media, polymorphism: { type: Media }

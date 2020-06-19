@@ -29,12 +29,14 @@ class Block < ApplicationRecord
 
   validate :not_blocking_admin
   def not_blocking_admin
+    return unless blocked
     errors.add(:blocked, 'You cannot block admins.') if blocked.has_role?(:admin)
     errors.add(:blocked, 'You cannot block moderators.') if blocked.title == 'Mod'
   end
 
   validate :not_blocking_self
   def not_blocking_self
+    return unless blocked && user
     errors.add(:blocked, 'You cannot block yourself.') if blocked == user
   end
 

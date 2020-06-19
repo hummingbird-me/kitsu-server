@@ -27,7 +27,7 @@ RSpec.shared_examples 'episodic' do
     context 'with a run length' do
       it 'should return a number based on the length' do
         subject.start_date = 2.weeks.ago.to_date
-        subject.end_date = Date.today
+        subject.end_date = Time.now.utc.to_date
         expect(subject.default_progress_limit).to eq(7)
       end
     end

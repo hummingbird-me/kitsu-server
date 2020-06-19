@@ -31,11 +31,9 @@ RSpec.describe Follow, type: :model do
   subject { build(:follow, follower: user_follower, followed: user_followed) }
 
   it { should belong_to(:follower).class_name('User')
-    .counter_cache(:following_count).touch(true) }
-  it { should validate_presence_of(:follower).with_message('must exist') }
+    .counter_cache(:following_count).touch(true).required }
   it { should belong_to(:followed).class_name('User')
-    .counter_cache(:followers_count).touch(true) }
-  it { should validate_presence_of(:followed).with_message('must exist') }
+    .counter_cache(:followers_count).touch(true).required }
 
   it "should add follow to follower's timeline on create" do
     expect(subject.follower.timeline).to receive(:follow)

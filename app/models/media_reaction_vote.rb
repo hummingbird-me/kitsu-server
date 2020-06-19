@@ -33,7 +33,7 @@ class MediaReactionVote < ApplicationRecord
   validate :vote_on_self
 
   def vote_on_self
-    errors.add(:user, 'You can not vote for yourself') if media_reaction.user == user
+    errors.add(:user, 'You can not vote for yourself') if media_reaction&.user == user
   end
 
   def stream_activity

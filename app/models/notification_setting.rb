@@ -37,7 +37,7 @@ class NotificationSetting < ApplicationRecord
   }.freeze
 
   enum setting_type: NOTIFICATION_TYPES
-  belongs_to :user
+  belongs_to :user, required: true
 
   def enabled_platforms
     %i[email fb_messenger mobile web].select do |platform|

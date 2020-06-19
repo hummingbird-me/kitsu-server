@@ -76,7 +76,7 @@ RSpec.describe Group, type: :model do
   it do
     should have_many(:action_logs).class_name('GroupActionLog').dependent(:destroy)
   end
-  it { should belong_to(:category).class_name('GroupCategory') }
+  it { should belong_to(:category).class_name('GroupCategory').required }
   it { should validate_length_of(:tagline).is_at_most(60) }
 
   it 'should set up the feed on create' do
