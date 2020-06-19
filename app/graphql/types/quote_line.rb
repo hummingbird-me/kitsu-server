@@ -13,7 +13,7 @@ class Types::QuoteLine < Types::BaseObject
     description: 'The character who said this line'
 
   def character
-    AssociationLoader.for(QuoteLine, :character).load(object)
+    AssociationLoader.for(QuoteLine, :character).scope(object)
   end
 
   field :content, String,
