@@ -109,4 +109,22 @@ class Types::QueryType < Types::BaseObject
   def patrons
     User.patron.followed_first(context[:user]).order(followers_count: :desc)
   end
+
+  field :find_category_by_id, Types::Category, null: false do
+    description 'Find a category by id in the Kitsu Database'
+    argument :id, ID, required: true
+  end
+
+  def find_category_by_id(id:)
+    ::Category.find(id)
+  end
+
+  field :find_category_by_slug, Types::Category, null: false do
+    description 'Find a category by slug in the Kitsu Database'
+    argument :slug, String, required: true
+  end
+
+  def find_category_by_slug(slug:)
+    ::Category.find_by(slug: slug)
+  end
 end
