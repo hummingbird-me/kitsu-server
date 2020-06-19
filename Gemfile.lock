@@ -323,6 +323,8 @@ GEM
     kaminari-core (1.2.1)
     kramdown (2.2.1)
       rexml
+    kramdown-parser-gfm (1.1.0)
+      kramdown (~> 2.0)
     librato-metrics (2.1.2)
       aggregate (~> 0.2.2)
       faraday
@@ -701,6 +703,7 @@ DEPENDENCIES
   json_expressions
   jsonapi-resources (= 0.9.0)
   kramdown
+  kramdown-parser-gfm
   librato-rails
   lograge
   mechanize
