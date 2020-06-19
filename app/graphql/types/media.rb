@@ -104,7 +104,7 @@ module Types::Media
     description: 'The characters who starred in this media'
 
   def characters
-    AssociationLoader.for(object.class, :characters).load(object)
+    AssociationLoader.for(object.class, :characters).scope(object)
   end
 
   field :staff, Types::MediaStaff.connection_type,
@@ -112,7 +112,7 @@ module Types::Media
     description: 'The staff members who worked on this media'
 
   def staff
-    AssociationLoader.for(object.class, :staff).load(object)
+    AssociationLoader.for(object.class, :staff, policy: :media_staff).scope(object)
   end
 
   field :productions, Types::MediaProduction.connection_type,
@@ -120,7 +120,7 @@ module Types::Media
     description: 'The companies which helped to produce this media'
 
   def productions
-    AssociationLoader.for(object.class, :productions).load(object)
+    AssociationLoader.for(object.class, :productions, policy: :media_production).scope(object)
   end
 
   field :quotes, Types::Quote.connection_type,
@@ -128,7 +128,7 @@ module Types::Media
     description: 'A list of quotes from this media'
 
   def quotes
-    AssociationLoader.for(object.class, :quotes).load(object).then(&:to_a)
+    AssociationLoader.for(object.class, :quotes).scope(object).then(&:to_a)
   end
 
   field :categories, Types::Category.connection_type,
@@ -136,6 +136,6 @@ module Types::Media
     description: 'A list of categories for this media'
 
   def categories
-    AssociationLoader.for(object.class, :categories).load(object)
+    AssociationLoader.for(object.class, :categories).scope(object)
   end
 end

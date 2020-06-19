@@ -23,7 +23,7 @@ module Types::EpisodicInterface
     if number
       object.episodes.where(number: number)
     else
-      AssociationLoader.for(Anime, :episodes).load(object).then(&:to_a)
+      AssociationLoader.for(Anime, :episodes).scope(object).then(&:to_a)
     end
   end
 end

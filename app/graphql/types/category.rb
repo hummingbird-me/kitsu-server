@@ -38,6 +38,6 @@ class Types::Category < Types::BaseObject
     description: 'The child categories.'
 
   def children
-    AssociationLoader.for(object.class, :children).load(object)
+    AssociationLoader.for(object.class, :children, policy: :category).scope(object)
   end
 end
