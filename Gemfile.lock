@@ -655,7 +655,7 @@ GEM
     unf_ext (0.0.7.7)
     unicode_plot (0.0.4)
       enumerable-statistics (>= 2.0.1)
-    webmock (3.8.2)
+    webmock (3.8.3)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
