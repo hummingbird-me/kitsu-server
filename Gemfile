@@ -43,6 +43,7 @@ gem 'sidekiq-scheduler'
 # Text pipeline
 gem 'html-pipeline'
 gem 'kramdown'
+gem 'kramdown-parser-gfm'
 gem 'rinku'
 gem 'sanitize'
 
