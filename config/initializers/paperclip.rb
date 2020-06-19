@@ -32,3 +32,7 @@ end
 
 Paperclip::MediaTypeSpoofDetector.prepend(IgnoreOctetStream::SpoofDetector)
 Paperclip::UriAdapter.prepend(IgnoreOctetStream::Download)
+
+Paperclip::UriAdapter.register
+Paperclip::DataUriAdapter.register
+Paperclip::HttpUrlProxyAdapter.register
