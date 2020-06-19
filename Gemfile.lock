@@ -115,7 +115,7 @@ GEM
       aws-sdk-core (= 2.10.100)
     aws-sigv4 (1.0.2)
     bcrypt (3.1.13)
-    benchmark-ips (2.7.2)
+    benchmark-ips (2.8.2)
     bson (4.9.2)
     builder (3.2.4)
     byebug (11.1.3)
