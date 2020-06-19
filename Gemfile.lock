@@ -406,7 +406,7 @@ GEM
       activerecord (>= 4.0, < 6.1)
     pg (1.2.3)
     pg_query (1.2.0)
-    pghero (2.4.2)
+    pghero (2.5.0)
       activerecord (>= 5)
     postmark (1.21.1)
       json
