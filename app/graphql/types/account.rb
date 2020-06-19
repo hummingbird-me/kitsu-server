@@ -7,22 +7,22 @@ class Types::Account < Types::BaseObject
     null: false,
     description: 'The email addresses associated with this account'
 
+  # TODO: allow for multiple emails per user in the actual database
+  def email
+    [object.email]
+  end
+
   field :profile, Types::Profile,
     null: false,
     description: 'The profile for this account'
 
+  def profile
+    object
+  end
+
   field :pro_subscription, Types::ProSubscription,
     null: true,
     description: 'The PRO subscription for this account'
-
-  # field :pro_started_at, GraphQL::Types::ISO8601DateTime,
-  #   null: true,
-  #   description: 'Time PRO subscription started for the account'
-  #
-  # # unsure if this is the right place
-  # field :pro_expires_at, GraphQL::Types::ISO8601DateTime,
-  #   null: true,
-  #   description: 'Time PRO subscription expires for the account'
 
   field :max_pro_streak, Integer,
     null: true,
@@ -39,13 +39,6 @@ class Types::Account < Types::BaseObject
   field :sfw_filter, Boolean,
     null: true,
     description: 'Whether Not Safe For Work content is accessible'
-
-  field :mal_username, String,
-    null: true,
-    description: 'MyAnimeList account linked to the account'
-
-  # field :past_names, [String, null: true],
-  #   description: 'Names previously used by the account'
 
   field :theme, Types::AccountTheme,
     null: false,
@@ -70,13 +63,4 @@ class Types::Account < Types::BaseObject
   field :country, String,
     null: true,
     description: 'Country the account resides in'
-
-  # TODO: allow for multiple emails per user in the actual database
-  def email
-    [object.email]
-  end
-
-  def profile
-    object
-  end
 end
