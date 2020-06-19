@@ -1,15 +1,24 @@
 class Types::Category < Types::BaseObject
+  include HasLocalizedField
   description 'Information about a specific Category'
 
   field :id, ID, null: false
 
-  field :title, String,
+  localized_field :title,
     null: false,
     description: 'The name of the category.'
 
-  field :description, String,
+  def title
+    { en: object.title } if object.title
+  end
+
+  localized_field :description,
     null: true,
     description: 'A description of the category.'
+
+  def description
+    { en: object.description } if object.description
+  end
 
   field :slug, String,
     null: false,
