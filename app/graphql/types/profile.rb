@@ -40,7 +40,7 @@ class Types::Profile < Types::BaseObject
   field :waifu_or_husbando, Types::WaifuOrHusbando,
     null: true,
     description:
-      <<~DESCRIPTION.strip
+      <<~DESCRIPTION.squish
         The user-provided (unsanitized) string used to identify
         the role of the waifu. 'Waifu' or 'Husbando'
       DESCRIPTION
