@@ -86,13 +86,13 @@ class Types::Profile < Types::BaseObject
   end
 
   def followers
-    AssociationLoader.for(object.class, :followers).load(object).then do |follows|
+    AssociationLoader.for(object.class, :followers, policy: :follow).scope(object).then do |follows|
       RecordLoader.for(object.class).load_many(follows.pluck(:follower_id))
     end
   end
 
   def following
-    AssociationLoader.for(object.class, :following).load(object).then do |follows|
+    AssociationLoader.for(object.class, :following, policy: :follow).scope(object).then do |follows|
       RecordLoader.for(object.class).load_many(follows.pluck(:followed_id))
     end
   end
