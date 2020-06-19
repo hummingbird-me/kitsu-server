@@ -22,7 +22,6 @@
 require 'rails_helper'
 
 RSpec.describe GroupPermission, type: :model do
-  it { should belong_to(:group_member) }
-  it { should validate_presence_of(:group_member).with_message('must exist') }
+  it { should belong_to(:group_member).required }
   it { should define_enum_for(:permission) }
 end

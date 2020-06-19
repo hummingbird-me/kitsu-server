@@ -31,10 +31,8 @@ require 'rails_helper'
 RSpec.describe Quote, type: :model do
   subject { build(:quote) }
 
-  it { should belong_to(:user).counter_cache(true) }
-  it { should belong_to(:media) }
+  it { should belong_to(:user).counter_cache(true).required }
+  it { should belong_to(:media).required }
   it { should have_many(:likes).class_name('QuoteLike') }
 
-  it { should validate_presence_of(:user).with_message('must exist') }
-  it { should validate_presence_of(:media).with_message('must exist') }
 end

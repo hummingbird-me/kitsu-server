@@ -80,7 +80,7 @@ class Group < ApplicationRecord
   has_many :leader_chat_messages, dependent: :destroy
   has_many :bans, class_name: 'GroupBan', dependent: :destroy
   has_many :action_logs, class_name: 'GroupActionLog', dependent: :destroy
-  belongs_to :category, class_name: 'GroupCategory'
+  belongs_to :category, class_name: 'GroupCategory', required: true
   belongs_to :pinned_post, class_name: 'Post', required: false
 
   validates :name, presence: true,

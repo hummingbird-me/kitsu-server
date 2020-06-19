@@ -26,8 +26,8 @@ require 'rails_helper'
 RSpec.describe PostFollow, type: :model do
   subject { build(:post_follow) }
 
-  it { should belong_to(:post) }
-  it { should belong_to(:user) }
+  it { should belong_to(:post).required }
+  it { should belong_to(:user).required }
   it { should validate_uniqueness_of(:post).scoped_to(:user_id) }
 
   context 'which is on AMA that is closed' do

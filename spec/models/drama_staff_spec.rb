@@ -26,9 +26,7 @@
 require 'rails_helper'
 
 RSpec.describe DramaStaff, type: :model do
-  it { should belong_to(:drama) }
-  it { should validate_presence_of(:drama).with_message('must exist') }
-  it { should belong_to(:person) }
-  it { should validate_presence_of(:person).with_message('must exist') }
+  it { should belong_to(:drama).required }
+  it { should belong_to(:person).required }
   it { should validate_length_of(:role).is_at_most(140) }
 end

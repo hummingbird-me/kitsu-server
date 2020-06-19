@@ -39,5 +39,5 @@ RSpec.describe CommunityRecommendation, type: :model do
   it { should belong_to(:manga) }
   it { should belong_to(:drama) }
   it { should have_many(:reasons) }
-  it { should belong_to(:community_recommendation_request) }
+  it { should belong_to(:community_recommendation_request).required }
 end

@@ -26,9 +26,7 @@
 require 'rails_helper'
 
 RSpec.describe MangaCharacter, type: :model do
-  it { should belong_to(:manga) }
-  it { should validate_presence_of(:manga).with_message('must exist') }
-  it { should belong_to(:character) }
-  it { should validate_presence_of(:character).with_message('must exist') }
+  it { should belong_to(:manga).required }
+  it { should belong_to(:character).required }
   it { should define_enum_for(:role) }
 end

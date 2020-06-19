@@ -34,12 +34,12 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-  it { should belong_to(:post).counter_cache(true) }
+  it { should belong_to(:post).counter_cache(true).required }
   it {
     should belong_to(:parent).class_name('Comment')
                              .counter_cache('replies_count')
   }
-  it { should belong_to(:user) }
+  it { should belong_to(:user).required }
   it { should have_many(:replies).class_name('Comment').dependent(:destroy) }
   it { should have_many(:likes).class_name('CommentLike').dependent(:destroy) }
   it { should validate_length_of(:content).is_at_most(9_000) }
