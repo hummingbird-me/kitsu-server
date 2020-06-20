@@ -332,4 +332,15 @@ class Types::QueryType < GraphQL::Schema::Object
   def find_library_event_by_id(id:)
     RecordLoader.for(::LibraryEvent, token: context[:token]).load(id)
   end
+
+  field :nolt_token, Types::NoltToken, null: false do
+    description 'Generate a single sign-on token for Nolt'
+  end
+
+  def nolt_token
+    user = context[:user]
+    raise GraphQL::ExecutionError, "You must be logged in to do that" if user.blank?
+
+    Accounts::GenerateNoltToken.call(user: user)
+  end
 end
