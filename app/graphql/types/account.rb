@@ -48,7 +48,7 @@ class Types::Account < Types::BaseObject
     null: true,
     description: 'Primary language for the account'
 
-  field :title_language_preference, String,
+  field :title_language_preference, Types::TitleLanguagePreference,
     null: true,
     description: 'Preferred language for media titles'
 
