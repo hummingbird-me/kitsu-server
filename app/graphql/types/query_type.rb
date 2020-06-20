@@ -109,4 +109,15 @@ class Types::QueryType < Types::BaseObject
   def patrons
     User.patron.followed_first(context[:user]).order(followers_count: :desc)
   end
+
+  field :nolt_token, Types::NoltToken, null: false do
+    description 'Generate a single sign-on token for Nolt'
+  end
+
+  def nolt_token
+    user = context[:user]
+    raise GraphQL::ExecutionError, "You must be logged in to do that" if user.blank?
+
+    Accounts::GenerateNoltToken.call(user: user)
+  end
 end
