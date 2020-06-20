@@ -44,7 +44,7 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The message this user has submitted for the Hall of Fame'
 
-  field :stats, Types::StatType,
+  field :stats, Types::ProfileStats,
     null: false,
     description: 'The different stats we calculate for this user.'
 
