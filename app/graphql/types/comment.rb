@@ -33,12 +33,12 @@ class Types::Comment < Types::BaseObject
     description: 'All replies to a specific comment.'
 
   def likes
-    AssociationLoader.for(object.class, :likes).load(object).then do |likes|
+    AssociationLoader.for(object.class, :likes, policy: :comment_like).scope(object).then do |likes|
       RecordLoader.for(User).load_many(likes.pluck(:user_id))
     end
   end
 
   def replies
-    AssociationLoader.for(object.class, :replies).load(object)
+    AssociationLoader.for(object.class, :replies, policy: :comment).scope(object)
   end
 end

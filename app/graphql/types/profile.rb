@@ -102,7 +102,7 @@ class Types::Profile < Types::BaseObject
     description: 'All posts this profile has made.'
 
   def posts
-    AssociationLoader.for(object.class, :posts).load(object)
+    AssociationLoader.for(object.class, :posts).scope(object)
   end
 
   field :comments, Types::Comment.connection_type,
@@ -110,6 +110,6 @@ class Types::Profile < Types::BaseObject
     description: 'All comments to any post this user has made.'
 
   def comments
-    AssociationLoader.for(object.class, :comments).load(object)
+    AssociationLoader.for(object.class, :comments).scope(object)
   end
 end

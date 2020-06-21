@@ -46,17 +46,17 @@ class Types::Post < Types::BaseObject
   #   description: ''
 
   def comments
-    AssociationLoader.for(object.class, :comments).load(object)
+    AssociationLoader.for(object.class, :comments).scope(object)
   end
 
   def likes
-    AssociationLoader.for(object.class, :post_likes).load(object).then do |likes|
+    AssociationLoader.for(object.class, :post_likes).scope(object).then do |likes|
       RecordLoader.for(User).load_many(likes.pluck(:user_id))
     end
   end
 
   def follows
-    AssociationLoader.for(object.class, :post_follows).load(object).then do |follows|
+    AssociationLoader.for(object.class, :post_follows).scope(object).then do |follows|
       RecordLoader.for(User).load_many(follows.pluck(:user_id))
     end
   end
