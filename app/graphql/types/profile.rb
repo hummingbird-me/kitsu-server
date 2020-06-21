@@ -134,6 +134,6 @@ class Types::Profile < Types::BaseObject
     description: 'Media reactions written by this user.'
 
   def media_reactions
-    AssociationLoader.for(object.class, :media_reactions).load(object)
+    AssociationLoader.for(object.class, :media_reactions).scope(object)
   end
 end

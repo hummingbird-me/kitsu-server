@@ -29,6 +29,6 @@ class Types::MediaReaction < Types::BaseObject
     description: 'Upvotes for this reaction.'
 
   def likes
-    AssociationLoader.for(object.class, :votes).load(object)
+    AssociationLoader.for(object.class, :votes, policy: :media_reaction_vote_policy).scope(object)
   end
 end
