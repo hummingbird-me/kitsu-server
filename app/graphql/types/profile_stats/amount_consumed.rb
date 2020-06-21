@@ -1,9 +1,9 @@
 class Types::ProfileStats::AmountConsumed < Types::BaseObject
-  description ''
+  description 'Generic Amount Consumed based on Media'
 
   field :time, Integer,
     null: false,
-    description: ''
+    description: 'Total time spent in minutes.'
 
   def time
     object['time']
@@ -11,7 +11,7 @@ class Types::ProfileStats::AmountConsumed < Types::BaseObject
 
   field :media, Integer,
     null: false,
-    description: ''
+    description: 'Total amount of media.'
 
   def media
     object['media']
@@ -19,7 +19,7 @@ class Types::ProfileStats::AmountConsumed < Types::BaseObject
 
   field :units, Integer,
     null: false,
-    description: ''
+    description: 'Total progress per media including reconsuming.'
 
   def units
     object['units']
@@ -27,7 +27,7 @@ class Types::ProfileStats::AmountConsumed < Types::BaseObject
 
   field :completed, Integer,
     null: false,
-    description: ''
+    description: 'Total media completed atleast once.'
 
   def completed
     object['completed']
