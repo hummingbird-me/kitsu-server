@@ -1,8 +1,6 @@
 class Types::ProfileStats < Types::BaseObject
   description 'The different types of user stats that we calculate.'
 
-  # graphql_name 'StatType'
-
   OPTIONS = {
     anime_amount_consumed: 'Stat::AnimeAmountConsumed',
     manga_amount_consumed: 'Stat::MangaAmountConsumed',
@@ -17,14 +15,14 @@ class Types::ProfileStats < Types::BaseObject
   field :manga_amount_consumed, Types::ProfileStats::MangaAmountConsumed,
     null: false,
     description: 'The total amount of manga you ahve read over your whole life.'
-  #
-  # field :anime_category_breakdown, Types::ProfileStat,
-  #   null: false,
-  #   description: 'The breakdown of the different categories related to the anime you have completed'
-  #
-  # field :manga_category_breakdown, Types::ProfileStat,
-  #   null: false,
-  #   description: 'The breakdown of the different categories related to the manga you have completed'
+
+  field :anime_category_breakdown, Types::ProfileStats::AnimeCategoryBreakdown,
+    null: false,
+    description: 'The breakdown of the different categories related to the anime you have completed'
+
+  field :manga_category_breakdown, Types::ProfileStats::MangaCategoryBreakdown,
+    null: false,
+    description: 'The breakdown of the different categories related to the manga you have completed'
 
   def anime_amount_consumed
     stat(:anime_amount_consumed)
