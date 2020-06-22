@@ -24,7 +24,7 @@ pt:
         cancel: 'Cancelar'
         authorize: 'Autorizar'
       form:
-        error: 'Ops! Cheque o formulário para possíveis erros'
+        error: 'Ops! Verifica erros possíveis no teu formulário'
       help:
         redirect_uri: 'Use uma linha por URI'
         native_redirect_uri: 'Use %{native_redirect_uri} para testes locais'
@@ -32,7 +32,7 @@ pt:
       edit:
         title: 'Editar aplicação'
       index:
-        title: 'Suas aplicações'
+        title: 'As tuas aplicações'
         new: 'Nova Aplicação'
         name: 'Nome'
         callback_url: 'URL de retorno'
@@ -53,30 +53,30 @@ pt:
         title: 'Ocorreu um erro'
       new:
         title: 'Autorização necessária'
-        prompt: 'Autoriza %{client_name} a usar sua conta?'
+        prompt: 'Autoriza %{client_name} a usar a tua conta?'
         able_to: 'Essa aplicação terá permissão para'
       show:
-        title: 'Codigo de autorização'
+        title: 'Código de autorização'
     authorized_applications:
       confirmations:
         revoke: 'Tens a certeza?'
       buttons:
         revoke: 'Revogar'
       index:
-        title: 'Suas aplicações autorizadas'
+        title: 'As tuas aplicações autorizadas'
         application: 'Aplicação'
-        created_at: 'Criado as'
+        created_at: 'Criado às'
         date_format: '%d-%m-%Y %H:%M:%S'
     errors:
       messages:
         #Common error messages
-        invalid_request: 'O pedido não tem um parâmetro importante, inclue um valor de parâmetro não suportado, ou esta mal-formado.'
+        invalid_request: 'O pedido não tem um parâmetro importante, inclui um valor de parâmetro não suportado, ou está mal-formado.'
         invalid_redirect_uri: 'O uri de redirecionamento incluído não é valido.'
-        unauthorized_client: 'O cliente não está autorizado a fazer esse pedido usando este metodo.'
+        unauthorized_client: 'O cliente não está autorizado a fazer este pedido usando este método.'
         access_denied: 'O dono do recurso ou o servidor de autenticação negou o pedido.'
         invalid_scope: 'O escopo pedido é invalido, desconhecido ou mal-formado.'
-        server_error: 'O servidor de autorização encontrou uma condição inesperada que a preveniu de completar o pedido.'
-        temporarily_unavailable: 'O servidor de autorização atualmente está impossibilitado de completar o pedido devido a um overload momentâneo ou uma manutenção no servidor.'
+        server_error: 'O servidor de autorização encontrou uma condição inesperada que o preveniu de completar o pedido.'
+        temporarily_unavailable: 'O servidor de autorização atualmente está impossibilitado de completar o pedido devido a uma sobrecarga temporária ou uma manutenção no servidor.'
         #configuration error messages
         credential_flow_not_configured: 'O fluxo de senha do dono do recurso falhou devido ao Doorkeeper.configure.resource_owner_from_credentials não estar configurado.'
         resource_owner_authenticator_not_configured: 'Procura pelo dono do recurso falhou devido ao Doorkeeper.configure.resource_owner_authenticator não estar configurado.'
@@ -97,7 +97,7 @@ pt:
         create:
           notice: 'Aplicação criada'
         destroy:
-          notice: 'Aplicação deletada.'
+          notice: 'Aplicação apagada.'
         update:
           notice: 'Aplicação atualizada.'
       authorized_applications:
@@ -109,4 +109,4 @@ pt:
           oauth2_provider: 'Provedor de OAuth2'
           applications: 'Aplicações'
       application:
-        title: 'Necessaria permissão OAuth'
+        title: 'Necessária permissão OAuth'
