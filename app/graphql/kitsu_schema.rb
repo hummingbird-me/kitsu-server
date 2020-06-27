@@ -1,7 +1,10 @@
 class KitsuSchema < GraphQL::Schema
+  include ErrorMapping
+
   default_max_page_size 100
 
   mutation Types::MutationType
+
   query Types::QueryType
 
   use GraphQL::Batch
