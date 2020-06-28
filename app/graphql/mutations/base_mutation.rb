@@ -2,9 +2,9 @@ class Mutations::BaseMutation < GraphQL::Schema::Mutation
   include BehindFeatureFlag
   include CustomPayloadType
 
-  def authorize(model, method)
-    return if Pundit.policy!(context[:token], model).public_send(method)
+  def authorize(record, method)
+    return if Pundit.policy!(context[:token], record).public_send(method)
 
-    raise GraphQL::ExecutionError, "You don't have permission to do that"
+    raise Errors::NotAuthorized, "You don't have permission to do that"
   end
 end
