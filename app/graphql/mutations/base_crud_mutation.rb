@@ -20,7 +20,7 @@ class Mutations::BaseCrudMutation < Mutations::BaseMutation
 
   def update(input)
     record = model_klass.find(input[:id])
-    # authorize record, authorize_action
+    authorize record, authorize_action
 
     record.update(input.to_model)
 
