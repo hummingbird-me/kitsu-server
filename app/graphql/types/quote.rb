@@ -13,6 +13,6 @@ class Types::Quote < Types::BaseObject
     description: 'The lines of the quote'
 
   def lines
-    AssociationLoader.for(Quote, :lines).load(object).then(&:to_a)
+    AssociationLoader.for(Quote, :lines, policy: :quote_line).scope(object).then(&:to_a)
   end
 end

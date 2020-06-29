@@ -1,0 +1,1 @@
+class QuoteLinePolicy < ApplicationPolicy; end
