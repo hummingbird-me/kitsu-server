@@ -1,6 +1,6 @@
 class Types::QueryType < Types::BaseObject
   field :anime, Types::Anime.connection_type, null: false do
-    description 'Anime in the Kitsu database'
+    description 'All Anime in the Kitsu database'
   end
 
   def anime
@@ -52,7 +52,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   field :global_trending, Types::Media.connection_type, null: false do
-    description 'List trending media on all of Kitsu'
+    description 'List trending media on Kitsu'
     argument :medium, String, required: true
   end
 
