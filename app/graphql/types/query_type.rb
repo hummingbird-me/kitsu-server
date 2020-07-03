@@ -1,18 +1,4 @@
 class Types::QueryType < Types::BaseObject
-  field :find_anime, Types::Anime, null: false do
-    description 'Get a single Anime'
-    argument :id, ID, required: false
-    argument :slug, String, required: false
-  end
-
-  def find_anime(id: nil, slug: nil)
-    if id
-      ::Anime.find(id)
-    elsif slug
-      ::Anime.by_slug(slug).first
-    end
-  end
-
   field :anime, Types::Anime.connection_type, null: false do
     description 'Anime in the Kitsu database'
   end
@@ -21,26 +7,48 @@ class Types::QueryType < Types::BaseObject
     ::Anime.all
   end
 
-  field :find_manga, Types::Manga, null: false do
-    description 'Get a single Manga'
-    argument :id, ID, required: false
-    argument :slug, String, required: false
+  field :find_anime_by_id, Types::Anime, null: false do
+    description 'Find a single Anime by ID'
+    argument :id, ID, required: true
   end
 
-  def find_manga(id: nil, slug: nil)
-    if id
-      ::Manga.find(id)
-    elsif slug
-      ::Manga.by_slug(slug).first
-    end
+  def find_anime_by_id(id:)
+    ::Anime.find(id)
+  end
+
+  field :find_anime_by_slug, Types::Anime, null: false do
+    description 'Find a single Anime by Slug'
+    argument :slug, String, required: true
+  end
+
+  def find_anime_by_slug(slug:)
+    ::Anime.find_by(slug: slug)
   end
 
   field :manga, Types::Manga.connection_type, null: false do
-    description 'Manga in the Kitsu database'
+    description 'All Manga in the Kitsu database'
   end
 
   def manga
     ::Manga.all
+  end
+
+  field :find_manga_by_id, Types::Manga, null: false do
+    description 'Find a single Manga by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_manga_by_id(id:)
+    ::Manga.find(id)
+  end
+
+  field :find_manga_by_slug, Types::Manga, null: false do
+    description 'Find a single Manga by Slug'
+    argument :slug, String, required: true
+  end
+
+  def find_manga_by_slug(slug:)
+    ::Manga.find_by(slug: slug)
   end
 
   field :global_trending, Types::Media.connection_type, null: false do
@@ -66,32 +74,40 @@ class Types::QueryType < Types::BaseObject
     TrendingService.new(medium, token: context[:token]).get_network(10)
   end
 
-  field :find_profile, Types::Profile, null: true do
-    description 'Find a single user in the Kitsu database by slug or ID'
-    argument :slug, String, required: false
-    argument :id, String, required: false
+  field :find_profile_by_id, Types::Profile, null: true do
+    description 'Find a single User by ID'
+    argument :id, ID, required: true
   end
 
-  def find_profile(slug: nil, id: nil)
-    if slug
-      ::User.find_by_slug(slug)
-    elsif id
-      ::User.find_by_id(id)
-    end
+  def find_profile_by_id(id: nil)
+    ::User.find(id)
   end
 
-  field :find_character, Types::Character, null: true do
-    description 'Find a Character in the Kitsu database by slug or ID'
-    argument :slug, String, required: false
-    argument :id, String, required: false
+  field :find_profile_by_slug, Types::Profile, null: true do
+    description 'Find a single User by Slug'
+    argument :slug, String, required: true
   end
 
-  def find_character(slug: nil, id: nil)
-    if slug
-      ::Character.find_by_slug(slug)
-    elsif id
-      ::Character.find_by_id(id)
-    end
+  def find_profile_by_slug(slug:)
+    ::User.find_by(slug: slug)
+  end
+
+  field :find_character_by_id, Types::Character, null: true do
+    description 'Find a single Character by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_character_by_id(id:)
+    ::Character.find(id)
+  end
+
+  field :find_character_by_slug, Types::Character, null: true do
+    description 'Find a single Character by Slug'
+    argument :slug, String, required: true
+  end
+
+  def find_character(slug:)
+    ::Character.find_by(slug: slug)
   end
 
   field :session, Types::Session,
@@ -111,7 +127,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   field :find_category_by_id, Types::Category, null: false do
-    description 'Find a category by id in the Kitsu Database'
+    description 'Find a single Category by ID'
     argument :id, ID, required: true
   end
 
@@ -120,7 +136,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   field :find_category_by_slug, Types::Category, null: false do
-    description 'Find a category by slug in the Kitsu Database'
+    description 'Find a single Category by Slug'
     argument :slug, String, required: true
   end
 
