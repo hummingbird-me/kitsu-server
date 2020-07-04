@@ -29,7 +29,7 @@ GIT
 
 GIT
   remote: https://github.com/oauth-xx/oauth2.git
-  revision: ad109a3569fe9c70e28ab17f2d445d86029453f8
+  revision: 815307fb9d053c722afac29bf72c44fd0f10f31f
   branch: master
   specs:
     oauth2 (1.4.3)
