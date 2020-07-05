@@ -143,4 +143,12 @@ class Types::QueryType < Types::BaseObject
   def find_category_by_slug(slug:)
     ::Category.find_by(slug: slug)
   end
+
+  field :mapping, Types::Mapping.connection_type, null: false do
+    description 'All Mappings in the Kitsu database'
+  end
+
+  def mapping
+    ::Mapping.all
+  end
 end
