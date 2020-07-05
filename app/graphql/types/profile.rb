@@ -120,4 +120,12 @@ class Types::Profile < Types::BaseObject
   def library
     object
   end
+
+  field :site_links, Types::SiteLink.connection_type,
+    null: true,
+    description: 'Links related to a profile.'
+
+  def site_links
+    AssociationLoader.for(object.class, :profile_links).scope(object)
+  end
 end
