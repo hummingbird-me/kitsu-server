@@ -1,4 +1,4 @@
-class Types::CharacterRole < Types::BaseEnum
+class Types::Enum::CharacterRole < Types::Enum::Base
   value 'MAIN', 'A character who appears throughout a series and is a focal point of the media',
     value: 'main'
   value 'RECURRING', 'A character who appears in multiple episodes but is not a main character',

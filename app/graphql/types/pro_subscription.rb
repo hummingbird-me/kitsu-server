@@ -5,11 +5,11 @@ class Types::ProSubscription < Types::BaseObject
     null: false,
     description: 'The account which is subscribed to Pro benefits'
 
-  field :tier, Types::ProTier,
+  field :tier, Types::Enum::ProTier,
     null: false,
     description: 'The tier of Pro the account is subscribed to'
 
-  field :billing_service, Types::RecurringBillingService,
+  field :billing_service, Types::Enum::RecurringBillingService,
     null: false,
     description: 'The billing service used for this subscription'
 end

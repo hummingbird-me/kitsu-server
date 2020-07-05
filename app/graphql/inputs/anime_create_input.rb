@@ -1,7 +1,7 @@
 class Inputs::AnimeCreateInput < Inputs::BaseInputObject
   argument :titles, Inputs::TitlesListInput, required: true
   argument :synopsis, Types::Map, required: true
-  argument :age_rating, Types::AgeRating, required: false
+  argument :age_rating, Types::Enum::AgeRating, required: false
   argument :age_rating_guide, String, required: false
   argument :tba, String, required: false
   argument :start_date, Types::Date, required: false

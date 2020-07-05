@@ -1,7 +1,7 @@
 class Mutations::Pro::SubscribeWithStripe < Mutations::BaseMutation
   behind_feature_flag :pro_subscriptions
 
-  argument :tier, Types::ProTier,
+  argument :tier, Types::Enum::ProTier,
     required: true,
     description: 'The tier to subscribe to'
   argument :token, String,

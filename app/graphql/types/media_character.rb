@@ -4,7 +4,7 @@ class Types::MediaCharacter < Types::BaseObject
   # Identifiers
   field :id, ID, null: false
 
-  field :role, Types::CharacterRole,
+  field :role, Types::Enum::CharacterRole,
     null: false,
     description: 'The role this character had in the media'
 
