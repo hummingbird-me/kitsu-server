@@ -12,7 +12,7 @@ class AnimeResource < MediaResource
   # ElasticSearch hookup
   index MediaIndex::Anime
   query :season, valid: ->(value, _ctx) { Anime::SEASONS.include?(value) }
-  query :season_year
+  query :season_year, NUMERIC_QUERY
   query :streamers, valid: ->(value, _ctx) { Streamer.find_by_name(value) }
   query :age_rating, valid: ->(value, _ctx) { Anime.age_ratings.key?(value) }
 
