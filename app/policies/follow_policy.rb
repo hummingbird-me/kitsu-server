@@ -13,6 +13,7 @@ class FollowPolicy < ApplicationPolicy
   # Override to user follower instead of user
   def is_owner? # rubocop:disable Style/PredicateName
     return false unless user && record.follower_id == user.id
+    return false if user.has_role?(:banned)
     return false if record.follower_id_was && record.follower_id_was != user.id
     true
   end
