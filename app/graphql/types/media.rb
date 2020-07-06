@@ -36,7 +36,7 @@ module Types::Media
   end
 
   # Age Rating
-  field :age_rating, Types::AgeRating,
+  field :age_rating, Types::Enum::AgeRating,
     null: true,
     description: 'The recommended minimum age group for this media'
 
@@ -62,11 +62,11 @@ module Types::Media
     null: true,
     description: 'The time of the next release of this media'
 
-  field :status, Types::ReleaseStatus,
+  field :status, Types::Enum::ReleaseStatus,
     null: false,
     description: 'The current releasing status of this media'
 
-  field :season, Types::ReleaseSeason,
+  field :season, Types::Enum::ReleaseSeason,
     null: true,
     description: 'The season this was released in'
 

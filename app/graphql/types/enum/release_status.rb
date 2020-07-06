@@ -1,4 +1,4 @@
-class Types::ReleaseStatus < Types::BaseEnum
+class Types::Enum::ReleaseStatus < Types::Enum::Base
   value 'TBA', 'The release date has not been announced yet', value: :tba
   value 'FINISHED', 'This media is no longer releasing', value: :finished
   value 'CURRENT', 'This media is currently releasing', value: :current

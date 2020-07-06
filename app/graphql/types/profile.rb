@@ -36,7 +36,7 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The user-provided (unsanitized) string used to identify the role of the waifu'
 
-  field :pro_tier, Types::ProTier,
+  field :pro_tier, Types::Enum::ProTier,
     null: true,
     description: 'The level of Pro this user currently has'
 

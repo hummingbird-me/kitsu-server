@@ -1,4 +1,4 @@
-class Types::AgeRating < Types::BaseEnum
+class Types::Enum::AgeRating < Types::Enum::Base
   value 'G', 'Acceptable for all ages'
   value 'PG', 'Parental guidance suggested; should be safe for preteens and older'
   value 'R', 'Possible lewd or intense themes; should be safe for teens and older'

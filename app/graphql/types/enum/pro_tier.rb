@@ -1,4 +1,4 @@
-class Types::ProTier < Types::BaseEnum
+class Types::Enum::ProTier < Types::Enum::Base
   value 'AO_PRO', 'Aozora Pro (only hides ads)',
     deprecation_reason: 'No longer for sale',
     value: 'ao_pro'
