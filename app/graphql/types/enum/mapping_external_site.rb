@@ -1,6 +1,9 @@
 class Types::Enum::MappingExternalSite < Types::Enum::Base
   value 'MY_ANIME_LIST_ANIME', value: 'myanimelist/anime'
   value 'MY_ANIME_LIST_MANGA', value: 'myanimelist/manga'
+  value 'MY_ANIME_LIST_CHARACTERS', value: 'myanimelist/character'
+  value 'MY_ANIME_LIST_PEOPLE', value: 'myanimelist/people'
+  value 'MY_ANIME_LIST_PRODUCERS', value: 'myanimelist/producer'
   value 'ANILIST_ANIME', value: 'anilist/anime'
   value 'ANILIST_MANGA', value: 'anilist/manga'
   value 'THE_TVDB', value: 'thetvdb'
