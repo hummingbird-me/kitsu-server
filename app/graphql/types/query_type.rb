@@ -144,11 +144,13 @@ class Types::QueryType < Types::BaseObject
     ::Category.find_by(slug: slug)
   end
 
-  field :mapping, Types::Mapping.connection_type, null: false do
-    description 'All Mappings in the Kitsu database'
+  field :find_mapping, Types::Mapping.connection_type, null: false do
+    description 'Find a specific Mapping by External ID and External Site.'
+    argument :external_id, ID, required: true
+    argument :external_site, Types::Enum::MappingExternalSite, required: true
   end
 
-  def mapping
-    ::Mapping.all
+  def find_mapping(external_id:, external_site:)
+    ::Mapping.lookup(external_site, external_id)
   end
 end
