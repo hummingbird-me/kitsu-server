@@ -3,7 +3,7 @@ class Types::Mapping < Types::BaseObject
 
   field :id, ID, null: false
 
-  field :external_site, String,
+  field :external_site, Types::Enum::MappingExternalSite,
     null: false,
     description: 'The name of the site which kitsu media is being linked from.'
 
