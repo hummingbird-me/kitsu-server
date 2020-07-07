@@ -9,7 +9,7 @@ class Types::Enum::MappingExternalSite < Types::Enum::Base
   value 'ANI_DB', value: 'anidb'
   value 'ANIME_NEWS_NETWORK', value: 'animenewsnetwork'
   value 'MANGA_UPDATES', value: 'mangaupdates'
-  value 'HULU', 'hulu'
+  value 'HULU', value: 'hulu'
   value 'IMDB_EPISODES', value: 'imdb/episodes'
   value 'AOZORA', value: 'aozora'
   value 'TRAKT', value: 'trakt'
