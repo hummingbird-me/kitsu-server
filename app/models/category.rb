@@ -28,6 +28,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Category < ApplicationRecord
+  include Mappable
   extend FriendlyId
   friendly_id :title, use: %i[slugged finders history]
   resourcify

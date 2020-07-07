@@ -144,13 +144,13 @@ class Types::QueryType < Types::BaseObject
     ::Category.find_by(slug: slug)
   end
 
-  field :find_mapping, Types::Mapping.connection_type, null: false do
-    description 'Find a specific Mapping by External ID and External Site.'
+  field :lookup_mapping, Types::Union::MappingItem, null: true do
+    description 'Find a specific Mapping Item by External ID and External Site.'
     argument :external_id, ID, required: true
     argument :external_site, Types::Enum::MappingExternalSite, required: true
   end
 
-  def find_mapping(external_id:, external_site:)
+  def lookup_mapping(external_id:, external_site:)
     ::Mapping.lookup(external_site, external_id)
   end
 end

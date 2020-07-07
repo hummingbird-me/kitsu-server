@@ -26,6 +26,7 @@
 
 class Character < ApplicationRecord
   include LocalizableModel
+  include Mappable
   extend FriendlyId
   friendly_id :slug_candidates, use: %i[slugged finders history]
 

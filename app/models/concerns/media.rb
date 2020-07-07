@@ -10,6 +10,7 @@ module Media
     include Trendable
     include WithCoverImage
     include Sluggable
+    include Mappable
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
@@ -61,7 +62,6 @@ module Media
     has_many :posts, as: 'media', dependent: :nullify
     has_many :favorites, as: 'item', dependent: :destroy, inverse_of: :item
     # Other Media Data
-    has_many :mappings, as: 'item', dependent: :destroy
     has_many :media_relationships,
       class_name: 'MediaRelationship',
       as: 'source',

@@ -21,6 +21,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Person < ApplicationRecord
+  include Mappable
   has_attached_file :image
 
   has_many :castings, dependent: :destroy
