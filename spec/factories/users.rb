@@ -115,6 +115,10 @@ FactoryBot.define do
       after(:create) { |user| user.add_role(:admin, Anime) }
     end
 
+    trait :banned do
+      after(:create) { |user| user.add_role(:banned) }
+    end
+
     trait :unregistered do
       status { :unregistered }
       password { nil }
