@@ -138,4 +138,12 @@ module Types::Media
   def categories
     AssociationLoader.for(object.class, :categories).scope(object)
   end
+
+  field :mappings, Types::Mapping.connection_type,
+    null: false,
+    description: 'A list of mappings for this media'
+
+  def mappings
+    AssociationLoader.for(object.class, :mappings).scope(object)
+  end
 end

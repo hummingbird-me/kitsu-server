@@ -30,6 +30,7 @@
 
 class Episode < ApplicationRecord
   include Titleable
+  include Mappable
 
   belongs_to :media, polymorphic: true
   has_many :videos

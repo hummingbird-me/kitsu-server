@@ -12,6 +12,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Producer < ApplicationRecord
+  include Mappable
   extend FriendlyId
 
   friendly_id :name, use: %i[slugged finders history]
