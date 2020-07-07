@@ -1,6 +1,6 @@
 class FollowPolicy < ApplicationPolicy
   def create?
-    is_owner?
+    is_owner? && !user.has_role?(:banned)
   end
   alias_method :update?, :create?
   alias_method :destroy?, :create?
@@ -13,8 +13,8 @@ class FollowPolicy < ApplicationPolicy
   # Override to user follower instead of user
   def is_owner? # rubocop:disable Style/PredicateName
     return false unless user && record.follower_id == user.id
-    return false if user.has_role?(:banned)
     return false if record.follower_id_was && record.follower_id_was != user.id
+
     true
   end
 end
