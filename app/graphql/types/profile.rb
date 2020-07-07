@@ -37,13 +37,9 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The character this profile has declared as their waifu or husbando'
 
-  field :waifu_or_husbando, Types::WaifuOrHusbando,
+  field :waifu_or_husbando, Types::Enum::WaifuOrHusbando,
     null: true,
-    description:
-      <<~DESCRIPTION.squish
-        The user-provided (unsanitized) string used to identify
-        the role of the waifu. 'Waifu' or 'Husbando'
-      DESCRIPTION
+    description: "The properly-gendered term for the user's waifu"
 
   field :pro_tier, Types::Enum::ProTier,
     null: true,

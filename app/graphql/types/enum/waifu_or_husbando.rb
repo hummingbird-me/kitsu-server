@@ -1,4 +1,4 @@
-class Types::WaifuOrHusbando < Types::BaseEnum
+class Types::Enum::WaifuOrHusbando < Types::Enum::Base
   value 'WAIFU', value: 'waifu'
   value 'HUSBANDO', value: 'husbando'
 end

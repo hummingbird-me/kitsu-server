@@ -40,19 +40,15 @@ class Types::Account < Types::BaseObject
     null: true,
     description: 'Whether Not Safe For Work content is accessible'
 
-  field :theme, Types::AccountTheme,
-    null: false,
-    description: 'Preferred UI theme for the account'
-
   field :language, String,
     null: true,
     description: 'Primary language for the account'
 
-  field :title_language_preference, Types::TitleLanguagePreference,
+  field :title_language_preference, Types::Enum::TitleLanguagePreference,
     null: true,
     description: 'Preferred language for media titles'
 
-  field :rating_system, Types::RatingSystem,
+  field :rating_system, Types::Enum::RatingSystem,
     null: false,
     description: 'Media rating system used for the account'
 
@@ -62,5 +58,5 @@ class Types::Account < Types::BaseObject
 
   field :country, String,
     null: true,
-    description: 'Country the account resides in'
+    description: 'The country this user resides in'
 end
