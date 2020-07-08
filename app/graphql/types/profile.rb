@@ -11,6 +11,10 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'A fully qualified URL to the profile'
 
+  def url
+    "https://kitsu/users/#{object.slug || object.id}"
+  end
+
   field :name, String,
     null: false,
     description:
@@ -49,10 +53,6 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The message this user has submitted to the Hall of Fame'
 
-  field :stats, Types::ProfileStats,
-    null: false,
-    description: 'The different stats we calculate for this user.'
-
   field :location, String,
     null: true,
     description: "The user's general location"
@@ -65,27 +65,27 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'When the user was born'
 
-  field :followers, Types::Profile.connection_type,
+  field :stats, Types::ProfileStats,
     null: false,
-    description: 'People that follow the user'
-
-  field :following, Types::Profile.connection_type,
-    null: false,
-    description: 'People the user is following'
-
-  def url
-    "https://kitsu/users/#{object.slug || object.id}"
-  end
+    description: 'The different stats we calculate for this user.'
 
   def stats
     object
   end
+
+  field :followers, Types::Profile.connection_type,
+    null: false,
+    description: 'People that follow the user'
 
   def followers
     AssociationLoader.for(object.class, :followers, policy: :follow).scope(object).then do |follows|
       RecordLoader.for(object.class).load_many(follows.pluck(:follower_id))
     end
   end
+
+  field :following, Types::Profile.connection_type,
+    null: false,
+    description: 'People the user is following'
 
   def following
     AssociationLoader.for(object.class, :following, policy: :follow).scope(object).then do |follows|
