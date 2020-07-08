@@ -5,7 +5,7 @@ class Types::Profile < Types::BaseObject
 
   field :slug, String,
     null: true,
-    description: 'A unique URL-friendly identifier used for the profile URL'
+    description: 'The URL-friendly identifier for this profile'
 
   field :url, String,
     null: true,
@@ -65,6 +65,10 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'When the user was born'
 
+  field :pinned_post, Types::Post,
+    null: true,
+    description: 'Post pinned to the user profile'
+
   field :stats, Types::ProfileStats,
     null: false,
     description: 'The different stats we calculate for this user.'
@@ -91,5 +95,21 @@ class Types::Profile < Types::BaseObject
     AssociationLoader.for(object.class, :following, policy: :follow).scope(object).then do |follows|
       RecordLoader.for(object.class).load_many(follows.pluck(:followed_id))
     end
+  end
+
+  field :posts, Types::Post.connection_type,
+    null: false,
+    description: 'All posts this profile has made.'
+
+  def posts
+    AssociationLoader.for(object.class, :posts).scope(object)
+  end
+
+  field :comments, Types::Comment.connection_type,
+    null: false,
+    description: 'All comments to any post this user has made.'
+
+  def comments
+    AssociationLoader.for(object.class, :comments).scope(object)
   end
 end
