@@ -1,5 +1,5 @@
-module Errors::ErrorInterface
-  include Types::BaseInterface
+module Types::Interface::Errors::Base
+  include Types::Interface::Base
   description 'Generic error fields used by all errors.'
 
   field :message, String,
@@ -9,8 +9,4 @@ module Errors::ErrorInterface
   field :path, [String],
     null: false,
     description: 'Which input value this error came from'
-
-  field :extensions, Errors::Extensions,
-    null: true,
-    description: ''
 end
