@@ -28,15 +28,15 @@ class Types::Comment < Types::BaseObject
     null: false,
     description: 'Users who liked this comment.'
 
-  field :replies, Types::Comment.connection_type,
-    null: false,
-    description: 'All replies to a specific comment.'
-
   def likes
     AssociationLoader.for(object.class, :likes, policy: :comment_like).scope(object).then do |likes|
       RecordLoader.for(User).load_many(likes.pluck(:user_id))
     end
   end
+
+  field :replies, Types::Comment.connection_type,
+    null: false,
+    description: 'All replies to a specific comment.'
 
   def replies
     AssociationLoader.for(object.class, :replies, policy: :comment).scope(object)

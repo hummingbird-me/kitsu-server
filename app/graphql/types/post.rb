@@ -33,27 +33,23 @@ class Types::Post < Types::BaseObject
     null: false,
     description: 'All comments related to this post.'
 
-  field :likes, Types::Profile.connection_type,
-    null: false,
-    description: 'Users that have liked this post.'
-
-  field :follows, Types::Profile.connection_type,
-    null: false,
-    description: 'Users that are watching this post'
-
-  # field :uploads, Types::Image.connection_type,
-  #   null: false,
-  #   description: ''
-
   def comments
     AssociationLoader.for(object.class, :comments).scope(object)
   end
+
+  field :likes, Types::Profile.connection_type,
+    null: false,
+    description: 'Users that have liked this post.'
 
   def likes
     AssociationLoader.for(object.class, :post_likes).scope(object).then do |likes|
       RecordLoader.for(User).load_many(likes.pluck(:user_id))
     end
   end
+
+  field :follows, Types::Profile.connection_type,
+    null: false,
+    description: 'Users that are watching this post'
 
   def follows
     AssociationLoader.for(object.class, :post_follows).scope(object).then do |follows|
