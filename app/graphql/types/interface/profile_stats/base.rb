@@ -1,5 +1,5 @@
-module Types::ProfileStats::ProfileStatInterface
-  include Types::BaseInterface
+module Types::Interface::ProfileStats::Base
+  include Types::Interface::Base
   description 'The basic stat information.'
 
   field :id, ID, null: false

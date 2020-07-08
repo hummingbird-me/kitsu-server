@@ -1,8 +1,4 @@
 class Types::ProfileStats::MangaAmountConsumed < Types::BaseObject
-  implements Types::ProfileStats::ProfileStatInterface
-
-  field :data, Types::ProfileStats::AmountConsumed,
-    null: false,
-    description: 'The breakdown of this specific stat.',
-    method: :stats_data
+  implements Types::Interface::ProfileStats::Base
+  implements Types::Interface::ProfileStats::AmountConsumed
 end

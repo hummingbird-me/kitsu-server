@@ -1,4 +1,5 @@
-class Types::ProfileStats::CategoryBreakdown < Types::BaseObject
+module Types::Interface::ProfileStats::CategoryBreakdown
+  include Types::Interface::ProfileStats::Base
   description 'Generic Category Breakdown based on Media'
 
   field :total, Integer,
@@ -6,7 +7,7 @@ class Types::ProfileStats::CategoryBreakdown < Types::BaseObject
     description: 'The total amount of library entries.'
 
   def total
-    object['total']
+    object.stats_data['total']
   end
 
   field :categories, Types::Map,
@@ -18,6 +19,6 @@ class Types::ProfileStats::CategoryBreakdown < Types::BaseObject
       DESCRIPTION
 
   def categories
-    object['categories']
+    object.stats_data['categories']
   end
 end

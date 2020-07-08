@@ -1,8 +1,11 @@
 class Types::ProfileStats::AnimeAmountConsumed < Types::BaseObject
-  implements Types::ProfileStats::ProfileStatInterface
+  implements Types::Interface::ProfileStats::AmountConsumed
 
-  field :data, Types::ProfileStats::AmountConsumed,
+  field :time, Integer,
     null: false,
-    description: 'The breakdown of this specific stat.',
-    method: :stats_data
+    description: 'Total time spent in minutes.'
+
+  def time
+    object.stats_data['time']
+  end
 end
