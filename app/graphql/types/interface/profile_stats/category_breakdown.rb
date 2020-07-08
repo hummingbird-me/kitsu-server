@@ -14,7 +14,7 @@ module Types::Interface::ProfileStats::CategoryBreakdown
     null: false,
     description:
       <<~DESCRIPTION.squish
-        A Dictionary of category_id -> count for all categories
+        A Map of category_id -> count for all categories
         present on the library entries
       DESCRIPTION
 

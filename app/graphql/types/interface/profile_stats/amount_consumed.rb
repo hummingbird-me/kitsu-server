@@ -12,7 +12,7 @@ module Types::Interface::ProfileStats::AmountConsumed
 
   field :units, Integer,
     null: false,
-    description: 'Total progress per media including reconsuming.'
+    description: 'Total progress of library including reconsuming.'
 
   def units
     object.stats_data['units']
