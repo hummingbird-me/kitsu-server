@@ -112,4 +112,12 @@ class Types::Profile < Types::BaseObject
   def comments
     AssociationLoader.for(object.class, :comments).scope(object)
   end
+
+  field :library, Types::Library,
+    null: false,
+    description: 'The user library of their media'
+
+  def library
+    object
+  end
 end
