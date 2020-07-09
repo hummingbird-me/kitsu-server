@@ -3,16 +3,15 @@ class Types::LibraryEntry < Types::BaseObject
 
   field :id, ID, null: false
 
-  field :profile, Types::Profile,
+  field :user, Types::Profile,
     null: false,
-    description: 'The profile who created this library entry.',
-    method: :user
+    description: 'The user who created this library entry.'
 
   field :media, Types::Media,
     null: false,
     description: 'The media related to this library entry.'
 
-  field :status, Types::LibraryEntryStatus,
+  field :status, Types::Enum::LibraryEntryStatus,
     null: false,
     description: ''
 
@@ -22,14 +21,12 @@ class Types::LibraryEntry < Types::BaseObject
 
   field :progress, Integer,
     null: false,
-    description: ''
+    description: 'The number of episodes/chapters this user has watched/read'
 
-  # How do we check that user is a Staff/Mod or the user related to this library_entry?
   field :private, Boolean,
     null: false,
     description: 'If this library entry is publicly visibile from their profile, or hidden.'
 
-  # How do we check that user is a Staff/Mod or the user related to this library_entry?
   field :notes, String,
     null: true,
     description: 'Notes left by the profile related to this library entry.'
@@ -56,13 +53,13 @@ class Types::LibraryEntry < Types::BaseObject
 
   field :started_at, GraphQL::Types::ISO8601DateTime,
     null: true,
-    description: 'When the profile started this media.'
+    description: 'When the user started this media.'
 
   field :finished_at, GraphQL::Types::ISO8601DateTime,
     null: true,
-    description: 'When the profile finished this media.'
+    description: 'When the user finished this media.'
 
   field :progressed_at, GraphQL::Types::ISO8601DateTime,
     null: true,
-    description: 'unsure'
+    description: 'When the user last watched an episode or read a chapter of this media.'
 end

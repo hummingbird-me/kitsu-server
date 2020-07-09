@@ -113,11 +113,11 @@ class Types::Profile < Types::BaseObject
     AssociationLoader.for(object.class, :comments).scope(object)
   end
 
-  field :library_entries, Types::MediaAssociation,
+  field :library, Types::Library,
     null: false,
-    description: 'The user Library Entries which make up their Media List'
+    description: 'The user library of their media'
 
-  def library_entries
+  def library
     object
   end
 end
