@@ -12,9 +12,9 @@ class Types::MediaReaction < Types::BaseObject
     null: false,
     description: 'The media related to this reaction.'
 
-  # field :library_entry, Types::LibraryEntry,
-  #   null: false,
-  #   description: 'The library entry related to this reaction.'
+  field :library_entry, Types::LibraryEntry,
+    null: false,
+    description: 'The library entry related to this reaction.'
 
   field :progress, Integer,
     null: false,
@@ -24,11 +24,14 @@ class Types::MediaReaction < Types::BaseObject
     null: false,
     description: 'The reaction text related to a media.'
 
-  field :likes, Types::MediaReactionVote.connection_type,
+  field :likes, Types::Profile.connection_type,
     null: false,
     description: 'Upvotes for this reaction.'
 
   def likes
-    AssociationLoader.for(object.class, :votes, policy: :media_reaction_vote_policy).scope(object)
+    AssociationLoader.for(object.class, :votes, policy: :media_reaction_vote)
+                     .scope(object).then do |likes|
+      RecordLoader.for(User).load_many(likes.pluck(:user_id))
+    end
   end
 end
