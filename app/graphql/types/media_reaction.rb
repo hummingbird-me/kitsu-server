@@ -26,7 +26,7 @@ class Types::MediaReaction < Types::BaseObject
 
   field :likes, Types::Profile.connection_type,
     null: false,
-    description: 'Upvotes for this reaction.'
+    description: 'Users who liked this reaction.'
 
   def likes
     AssociationLoader.for(object.class, :votes, policy: :media_reaction_vote)
