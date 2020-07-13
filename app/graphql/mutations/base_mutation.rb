@@ -1,5 +1,6 @@
 class Mutations::BaseMutation < GraphQL::Schema::Mutation
   include BehindFeatureFlag
+  include CustomPayloadType
 
   def authorize(model, method)
     return if Pundit.policy!(context[:token], model).public_send(method)
