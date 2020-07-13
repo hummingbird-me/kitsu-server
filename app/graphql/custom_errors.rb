@@ -1,3 +1,5 @@
+# HACK: https://github.com/rmosolgo/graphql-ruby/blob/master/lib/graphql/execution/errors.rb
+# MonkeyPatching this method so it always returns graphql errors as data
 module GraphQL
   module Execution
     class Errors

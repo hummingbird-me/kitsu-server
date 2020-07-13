@@ -12,5 +12,5 @@ module Types::Interface::Errors::Base
 
   field :code, String,
     null: true,
-    description: ''
+    description: 'The error code.'
 end
