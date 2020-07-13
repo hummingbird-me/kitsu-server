@@ -1,3 +1,5 @@
+require 'custom_errors'
+
 class KitsuSchema < GraphQL::Schema
   use GraphQL::Execution::Interpreter
   use GraphQL::Analysis::AST
