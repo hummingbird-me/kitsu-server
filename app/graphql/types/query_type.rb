@@ -7,16 +7,16 @@ class Types::QueryType < Types::BaseObject
     ::Anime.all
   end
 
-  field :find_anime_by_id, Types::Anime, null: false do
+  field :find_anime_by_id, Types::Anime, null: true do
     description 'Find a single Anime by ID'
     argument :id, ID, required: true
   end
 
   def find_anime_by_id(id:)
-    ::Anime.find(id)
+    ::Anime.find_by(id: id)
   end
 
-  field :find_anime_by_slug, Types::Anime, null: false do
+  field :find_anime_by_slug, Types::Anime, null: true do
     description 'Find a single Anime by Slug'
     argument :slug, String, required: true
   end
@@ -33,16 +33,16 @@ class Types::QueryType < Types::BaseObject
     ::Manga.all
   end
 
-  field :find_manga_by_id, Types::Manga, null: false do
+  field :find_manga_by_id, Types::Manga, null: true do
     description 'Find a single Manga by ID'
     argument :id, ID, required: true
   end
 
   def find_manga_by_id(id:)
-    ::Manga.find(id)
+    ::Manga.find_by(id: id)
   end
 
-  field :find_manga_by_slug, Types::Manga, null: false do
+  field :find_manga_by_slug, Types::Manga, null: true do
     description 'Find a single Manga by Slug'
     argument :slug, String, required: true
   end
@@ -80,7 +80,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def find_profile_by_id(id: nil)
-    ::User.find(id)
+    ::User.find_by(id: id)
   end
 
   field :find_profile_by_slug, Types::Profile, null: true do
@@ -98,7 +98,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def find_character_by_id(id:)
-    ::Character.find(id)
+    ::Character.find_by(id: id)
   end
 
   field :find_character_by_slug, Types::Character, null: true do
@@ -126,16 +126,16 @@ class Types::QueryType < Types::BaseObject
     User.patron.followed_first(context[:user]).order(followers_count: :desc)
   end
 
-  field :find_category_by_id, Types::Category, null: false do
+  field :find_category_by_id, Types::Category, null: true do
     description 'Find a single Category by ID'
     argument :id, ID, required: true
   end
 
   def find_category_by_id(id:)
-    ::Category.find(id)
+    ::Category.find_by(id: id)
   end
 
-  field :find_category_by_slug, Types::Category, null: false do
+  field :find_category_by_slug, Types::Category, null: true do
     description 'Find a single Category by Slug'
     argument :slug, String, required: true
   end
