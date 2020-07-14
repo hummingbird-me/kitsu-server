@@ -3,9 +3,13 @@
 module GraphQL
   module Execution
     class Errors
-      def with_error_handling(_ctx)
+      alias_method :original_with_error_handling, :with_error_handling
+
+      def with_error_handling(ctx, &block)
         yield
       rescue StandardError => e
+        return original_with_error_handling(ctx, &block) if ctx.query.query?
+
         klass = "Errors::#{e.class}".safe_constantize
 
         if klass&.respond_to?(:graphql_error)
