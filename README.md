@@ -6,11 +6,11 @@
 [![Test Coverage](https://codeclimate.com/github/hummingbird-me/kitsu-server/badges/coverage.svg)](https://codeclimate.com/github/hummingbird-me/kitsu-server/coverage)
 
 ---
-**<p align="center">This is our server repository. It contains the rails application for Kitsu.<br />Check out the [tools], [client], [mobile app] and [api docs] repositories.</p>**
+**<p align="center">This is our server repository. It contains the rails application for Kitsu.<br />Check out the [tools], [web], [mobile] and [api docs] repositories.</p>**
 
 [tools]:https://github.com/hummingbird-me/kitsu-tools
-[client]:https://github.com/hummingbird-me/hummingbird-client
-[mobile app]:https://github.com/hummingbird-me/kitsu-mobile
+[web]:https://github.com/hummingbird-me/hummingbird-client
+[mobile]:https://github.com/hummingbird-me/kitsu-mobile
 [api docs]:https://github.com/hummingbird-me/api-docs
 
 ---
