@@ -1,11 +1,11 @@
 class Types::SiteLink < Types::BaseObject
-  description 'A link to an external site related to a specific user profile'
+  description "A link to a user's profile on an external site."
 
   field :id, ID, null: false
 
   field :url, String,
     null: false,
-    description: 'The full url for the site, including the user profile.'
+    description: 'A fully qualified URL of the user profile on an external site.'
 
   field :author, Types::Profile,
     null: false,
