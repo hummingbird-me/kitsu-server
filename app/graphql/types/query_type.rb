@@ -59,7 +59,7 @@ class Types::QueryType < Types::BaseObject
   def global_trending(medium:)
     raise GraphQL::ExecutionError, 'Unknown medium' unless %w[Anime Manga].include?(medium)
 
-    TrendingService.new(medium, token: context[:token]).get(10)
+    TrendingService.new(medium.safe_constantize, token: context[:token]).get(10)
   end
 
   field :local_trending, Types::Media.connection_type, null: false do
@@ -71,7 +71,7 @@ class Types::QueryType < Types::BaseObject
     raise GraphQL::ExecutionError, 'Unknown medium' unless %w[Anime Manga].include?(medium)
     return [] unless context[:user]
 
-    TrendingService.new(medium, token: context[:token]).get_network(10)
+    TrendingService.new(medium.safe_constantize, token: context[:token]).get_network(10)
   end
 
   field :find_profile_by_id, Types::Profile, null: true do
