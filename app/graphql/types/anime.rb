@@ -2,6 +2,10 @@ class Types::Anime < Types::BaseObject
   implements Types::Media
   implements Types::EpisodicInterface
 
+  field :subtype, Types::Enum::AnimeSubtype,
+    null: false,
+    description: 'A secondary type for categorizing Anime.'
+
   field :youtube_trailer_video_id,
     String,
     null: true,

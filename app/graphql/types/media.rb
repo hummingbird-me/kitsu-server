@@ -24,10 +24,6 @@ module Types::Media
     self.class.name.split('::').last
   end
 
-  field :subtype, String,
-    null: false,
-    description: 'The subtype of the media. i.e: TV, manga, novel, etc...'
-
   # Localized Titles
   field :titles, Types::TitlesList,
     null: false,
