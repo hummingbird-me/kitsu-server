@@ -11,6 +11,23 @@ module Types::Media
     null: false,
     description: 'The URL-friendly identifier of this media'
 
+  field :media_type, String,
+    null: false,
+    description: <<~DESCRIPTION.squish
+      Anime or Manga. This is used by search because
+      it can mix both media in results and this will
+      be the only way to identify it.
+    DESCRIPTION
+
+  # Types::Anime -> Anime
+  def media_type
+    self.class.name.split('::').last
+  end
+
+  field :subtype, String,
+    null: false,
+    description: 'The subtype of the media. i.e: TV, manga, novel, etc...'
+
   # Localized Titles
   field :titles, Types::TitlesList,
     null: false,
