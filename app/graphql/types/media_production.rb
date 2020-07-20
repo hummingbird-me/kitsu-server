@@ -12,7 +12,7 @@ class Types::MediaProduction < Types::BaseObject
     null: false,
     description: 'The producer'
 
-  field :media, Types::Media,
+  field :media, Types::Interface::Media,
     null: false,
     description: 'The media'
 end

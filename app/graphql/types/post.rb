@@ -8,7 +8,7 @@ class Types::Post < Types::BaseObject
     description: 'The user who created this post.',
     method: :user
 
-  field :media, Types::Media,
+  field :media, Types::Interface::Media,
     null: true,
     description: 'The media tagged in this post.'
 

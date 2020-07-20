@@ -1,6 +1,7 @@
-module Types::Media
-  include Types::BaseInterface
+module Types::Interface::Media
+  include Types::Interface::Base
   include HasLocalizedField
+
   orphan_types Types::Manga, Types::Anime
   description 'A media in the Kitsu database'
 
@@ -10,6 +11,19 @@ module Types::Media
   field :slug, String,
     null: false,
     description: 'The URL-friendly identifier of this media'
+
+  field :type, String,
+    null: false,
+    description: <<~DESCRIPTION.squish
+      Anime or Manga. This is used by search because
+      it can mix both media in results and this will
+      be the only way to identify it.
+    DESCRIPTION
+
+  # Types::Anime -> Anime
+  def type
+    self.class.name.split('::').last
+  end
 
   # Localized Titles
   field :titles, Types::TitlesList,

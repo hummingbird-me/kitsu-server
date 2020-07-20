@@ -7,7 +7,7 @@ class Types::LibraryEntry < Types::BaseObject
     null: false,
     description: 'The user who created this library entry.'
 
-  field :media, Types::Media,
+  field :media, Types::Interface::Media,
     null: false,
     description: 'The media related to this library entry.'
 

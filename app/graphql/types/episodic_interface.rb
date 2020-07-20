@@ -1,5 +1,5 @@
 module Types::EpisodicInterface
-  include Types::BaseInterface
+  include Types::Interface::Base
   description 'An episodic media in the Kitsu database'
 
   field :episode_count, Integer,

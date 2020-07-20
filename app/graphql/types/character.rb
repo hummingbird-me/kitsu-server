@@ -20,7 +20,7 @@ class Types::Character < Types::BaseObject
     }
   end
 
-  field :primary_media, Types::Media,
+  field :primary_media, Types::Interface::Media,
     null: true,
     description: 'The original media this character showed up in'
 
