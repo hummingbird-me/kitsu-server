@@ -14,11 +14,7 @@ module Types::Interface::Media
 
   field :type, String,
     null: false,
-    description: <<~DESCRIPTION.squish
-      Anime or Manga. This is used by search because
-      it can mix both media in results and this will
-      be the only way to identify it.
-    DESCRIPTION
+    description: 'Anime or Manga.'
 
   # Types::Anime -> Anime
   def type
