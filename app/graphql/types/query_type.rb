@@ -51,7 +51,7 @@ class Types::QueryType < Types::BaseObject
     ::Manga.find_by(slug: slug)
   end
 
-  field :global_trending, Types::Media.connection_type, null: false do
+  field :global_trending, Types::Interface::Media.connection_type, null: false do
     description 'List trending media on Kitsu'
     argument :medium, String, required: true
   end
@@ -62,7 +62,7 @@ class Types::QueryType < Types::BaseObject
     TrendingService.new(medium.safe_constantize, token: context[:token]).get(10)
   end
 
-  field :local_trending, Types::Media.connection_type, null: false do
+  field :local_trending, Types::Interface::Media.connection_type, null: false do
     description 'List trending media within your network'
     argument :medium, String, required: true
   end
