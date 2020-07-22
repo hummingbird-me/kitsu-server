@@ -1,4 +1,4 @@
-require 'custom_errors'
+require_dependency 'custom_errors'
 
 class KitsuSchema < GraphQL::Schema
   use GraphQL::Execution::Interpreter
