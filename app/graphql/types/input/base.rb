@@ -5,7 +5,7 @@ class Types::Input::Base < GraphQL::Schema::InputObject
   # These need to be unique, so I am forcible doing that.
   # I am thou, and thou art I, but you will always be an input!
   def self.graphql_name
-    split_name = name.split('::')[1..-1]
+    split_name = name.split('::')[2..-1]
 
     if CRUD_OPERATION.exclude?(split_name.last.downcase)
       "#{super}Input"
