@@ -1,4 +1,4 @@
-class Inputs::LibraryEntry::Create < Inputs::Base
+class Types::Input::LibraryEntry::Create < Types::Input::Base
   argument :user_id, ID, required: true
   argument :media_id, ID, required: true
   argument :media_type, Types::Enum::MediaType, required: true

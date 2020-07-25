@@ -1,4 +1,4 @@
-class Inputs::LibraryEntry::Update < Inputs::Base
+class Types::Input::LibraryEntry::Update < Types::Input::Base
   argument :id, ID, required: true
 
   argument :status, Types::Enum::LibraryEntryStatus, required: false

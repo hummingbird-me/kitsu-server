@@ -1,6 +1,6 @@
 class Mutations::LibraryEntry::Delete < Mutations::Base
   argument :input,
-    Inputs::LibraryEntry::Delete,
+    Types::Input::Delete,
     required: true,
     description: 'Delete Library Entry',
     as: :library_entry

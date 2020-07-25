@@ -1,6 +1,6 @@
 class Mutations::LibraryEntry::Create < Mutations::Base
   argument :input,
-    Inputs::LibraryEntry::Create,
+    Types::Input::LibraryEntry::Create,
     required: true,
     description: 'Create a Library Entry',
     as: :library_entry

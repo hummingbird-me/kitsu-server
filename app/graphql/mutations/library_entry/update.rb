@@ -1,6 +1,6 @@
 class Mutations::LibraryEntry::Update < Mutations::Base
   argument :input,
-    Inputs::LibraryEntry::Update,
+    Types::Input::LibraryEntry::Update,
     required: true,
     description: 'Update Library Entry',
     as: :library_entry
