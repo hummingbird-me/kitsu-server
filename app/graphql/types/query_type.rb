@@ -25,6 +25,43 @@ class Types::QueryType < Types::BaseObject
     ::Anime.find_by(slug: slug)
   end
 
+  field :search_anime, Types::Anime.connection_type, null: false do
+    description 'Search for Anime using filters.'
+
+    argument :title, String, required: false
+    argument :season, [Types::Enum::ReleaseSeason],
+      required: false,
+      # NOTE: unsure how to make this work
+      prepare: ->(values, _) { [values.map { |value| "season:#{value}" }.join(' OR ')] }
+    argument :season_year, Types::Scalar::NumericRange,
+      required: false,
+      description: 'i.e: 2015 | 2015..2019 | ..2019 | 2015..',
+      prepare: ->(value, _) { "seasonYear#{value}" }
+    argument :year, Integer,
+      required: false,
+      prepare: ->(value, _) { "year=#{value}" }
+    argument :age_rating, [Types::Enum::AgeRating],
+      required: false,
+      description: 'This will add an OR delimiter between each',
+      # HACK: can't convert from array -> string. Will just return Array with single value.
+      # https://github.com/rmosolgo/graphql-ruby/issues/1059
+      prepare: ->(values, _ctx) { [values.map { |value| "ageRating:#{value}" }.join(' OR ')] }
+    argument :episode_count, Types::Scalar::NumericOperator,
+      required: false,
+      prepare: ->(value, _) { "episodeCount#{value}" },
+      description: <<~DESCRIPTION
+        Permitted Operators: (#{Types::Scalar::NumericOperator::NUMERIC_OPERATORS.join(' | ')}).
+        i.e: = 10 | >= 10 | != 10
+      DESCRIPTION
+  end
+
+  def search_anime(title: '', **filters)
+    filters[:kind] = 'kind:anime'
+    formatted_filters = filters.values.join(' AND ')
+
+    AlgoliaMediaIndex.search(title, filters: formatted_filters)
+  end
+
   field :manga, Types::Manga.connection_type, null: false do
     description 'All Manga in the Kitsu database'
   end
