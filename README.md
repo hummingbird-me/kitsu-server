@@ -65,3 +65,7 @@ you, and we have a `.rubocop.yml` which we develop with.
      # ... and finally the rest of the methods!
    end
    ```
+   
+## Contributors
+   
+[![](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/images/0)](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/links/0)[![](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/images/1)](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/links/1)[![](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/images/2)](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/links/2)[![](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/images/3)](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/links/3)[![](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/images/4)](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/links/4)[![](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/images/5)](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/links/5)[![](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/images/6)](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/links/6)[![](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/images/7)](https://sourcerer.io/fame/wopian/hummingbird-me/kitsu-server/links/7)
