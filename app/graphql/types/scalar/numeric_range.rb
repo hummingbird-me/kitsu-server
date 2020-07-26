@@ -3,8 +3,8 @@
 class Types::Scalar::NumericRange < Types::Scalar::Base
   description ''
 
-  NUMBER = /(\d+(?:\.\d+)?)/
-  NUMERIC_RANGE = /\A#{NUMBER}?(\.{2,3})?#{NUMBER}?\z/
+  NUMBER = /(\d+(?:\.\d+)?)/.freeze
+  NUMERIC_RANGE = /\A#{NUMBER}?(\.{2,3})?#{NUMBER}?\z/.freeze
 
   def self.coerce_input(input_value, _context)
     matches = NUMERIC_RANGE.match(input_value)

@@ -3,8 +3,8 @@
 class Types::Scalar::NumericOperator < Types::Scalar::Base
   description ''
 
-  PARSER = /\A(!=|>=|<=|>|<|=){1,2}\s(\d+)/
-  NUMERIC_OPERATORS = %w(= != > >= < <=)
+  PARSER = /\A(!=|>=|<=|>|<|=){1,2}\s(\d+)/.freeze
+  NUMERIC_OPERATORS = %w(= != > >= < <=).freeze
 
   def self.coerce_input(input_value, _context)
     matches = PARSER.match(input_value)
