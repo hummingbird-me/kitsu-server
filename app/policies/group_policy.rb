@@ -39,7 +39,8 @@ class GroupPolicy < ApplicationPolicy
     def resolve
       group_ids = GroupMember.joins(:group).merge(Group.closed).for_user(user).pluck(:group_id)
       groups = group_ids.map { |id| "id = #{id}" }
-      visible_groups = "(#{[*groups].compact.join(' OR ')}) OR (privacy:open OR privacy:restricted)"
+      visible_hidden_groups = groups.empty? ? "" : "(#{[*groups].compact.join(' OR ')}) OR "
+      visible_groups = "#{visible_hidden_groups}(privacy:open OR privacy:restricted)"
       see_nsfw? ? visible_groups : "(#{visible_groups}) AND NOT nsfw:true"
     end
   end
