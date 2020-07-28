@@ -7,6 +7,10 @@ module Types::Interface::Errors::Base
     description: 'A description of the error'
 
   field :path, [String],
-    null: false,
+    null: true,
     description: 'Which input value this error came from'
+
+  field :code, String,
+    null: true,
+    description: 'The error code.'
 end
