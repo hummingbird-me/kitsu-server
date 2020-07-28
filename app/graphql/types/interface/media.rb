@@ -156,4 +156,12 @@ module Types::Interface::Media
   def mappings
     AssociationLoader.for(object.class, :mappings).scope(object)
   end
+
+  field :reactions, Types::MediaReaction.connection_type,
+    null: false,
+    description: 'A list of reactions for this media'
+
+  def reactions
+    AssociationLoader.for(object.class, :media_reactions).scope(object)
+  end
 end

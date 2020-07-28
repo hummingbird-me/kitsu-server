@@ -128,4 +128,12 @@ class Types::Profile < Types::BaseObject
   def site_links
     AssociationLoader.for(object.class, :profile_links).scope(object)
   end
+
+  field :media_reactions, Types::MediaReaction.connection_type,
+    null: false,
+    description: 'Media reactions written by this user.'
+
+  def media_reactions
+    AssociationLoader.for(object.class, :media_reactions).scope(object)
+  end
 end

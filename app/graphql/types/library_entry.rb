@@ -15,9 +15,9 @@ class Types::LibraryEntry < Types::BaseObject
     null: false,
     description: ''
 
-  # field :media_reaction, Types::MediaReaction,
-  #   null: true,
-  #   description: 'Reaction for this specific media'
+  field :reaction, Types::MediaReaction,
+    null: true,
+    description: 'The reaction based on the media of this library entry.'
 
   field :progress, Integer,
     null: false,
