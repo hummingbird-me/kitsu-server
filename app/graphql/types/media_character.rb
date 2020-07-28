@@ -12,7 +12,7 @@ class Types::MediaCharacter < Types::BaseObject
     null: false,
     description: 'The character'
 
-  field :media, Types::Media,
+  field :media, Types::Interface::Media,
     null: false,
     description: 'The media'
 

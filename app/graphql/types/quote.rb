@@ -4,7 +4,7 @@ class Types::Quote < Types::BaseObject
   # Identifiers
   field :id, ID, null: false
 
-  field :media, Types::Media,
+  field :media, Types::Interface::Media,
     null: false,
     description: 'The media this quote is excerpted from'
 
