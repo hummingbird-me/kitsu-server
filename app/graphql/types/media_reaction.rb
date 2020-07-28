@@ -8,7 +8,7 @@ class Types::MediaReaction < Types::BaseObject
     description: 'The author who wrote this reaction.',
     method: :user
 
-  field :media, Types::Media,
+  field :media, Types::Interface::Media,
     null: false,
     description: 'The media related to this reaction.'
 
