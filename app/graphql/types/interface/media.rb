@@ -29,7 +29,7 @@ module Types::Interface::Media
   def titles
     {
       localized: object.titles,
-      alternatives: object.abbreviated_titles,
+      alternatives: object.abbreviated_titles.presence || [],
       canonical: object.canonical_title,
       canonical_locale: object.canonical_title_key
     }
