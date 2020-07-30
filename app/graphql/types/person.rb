@@ -2,8 +2,15 @@ class Types::Person < Types::BaseObject
   description 'A Voice Actor, Director, Animator, or other person who works in the creation and\
     localization of media'
 
-  # Identifiers
   field :id, ID, null: false
+
+  field :name, String,
+    null: false,
+    description: 'The primary name of this person.'
+
+  field :slug, String,
+    null: false,
+    description: 'The URL-friendly identifier of this person.'
 
   field :names, Types::TitlesList,
     null: false,
