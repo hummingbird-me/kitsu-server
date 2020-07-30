@@ -106,7 +106,7 @@ class Types::QueryType < Types::BaseObject
     argument :slug, String, required: true
   end
 
-  def find_character(slug:)
+  def find_character_by_slug(slug:)
     ::Character.find_by(slug: slug)
   end
 
