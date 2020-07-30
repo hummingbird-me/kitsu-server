@@ -19,7 +19,7 @@ module Titleable
   private
 
   def has_english_title?
-    titles.keys.any? { |k| k.end_with?('_en') || k.start_with?('en_') }
+    titles.keys.any? { |k| k.start_with?('en') }
   end
 
   def has_english_title
