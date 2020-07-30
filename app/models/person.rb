@@ -22,6 +22,8 @@
 
 class Person < ApplicationRecord
   include Mappable
+  extend FriendlyId
+  friendly_id :name, use: %i[slugged finders history]
   has_attached_file :image
 
   has_many :castings, dependent: :destroy
