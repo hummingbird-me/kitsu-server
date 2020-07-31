@@ -41,9 +41,13 @@ class Types::Profile < Types::BaseObject
     null: true,
     description: 'The character this profile has declared as their waifu or husbando'
 
-  field :waifu_or_husbando, Types::Enum::WaifuOrHusbando,
+  field :waifu_or_husbando, String,
     null: true,
-    description: "The properly-gendered term for the user's waifu"
+    description: <<~DESCRIPTION.squish
+      The properly-gendered term for the user's waifu.
+      This should normally only be 'Waifu' or 'Husbando' but some
+      people are jerks, including the person who wrote this...
+    DESCRIPTION
 
   field :pro_tier, Types::Enum::ProTier,
     null: true,
