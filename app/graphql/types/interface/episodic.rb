@@ -1,4 +1,4 @@
-module Types::EpisodicInterface
+module Types::Interface::Episodic
   include Types::Interface::Base
   description 'An episodic media in the Kitsu database'
 
