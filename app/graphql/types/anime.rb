@@ -1,6 +1,7 @@
 class Types::Anime < Types::BaseObject
   implements Types::Interface::Media
   implements Types::Interface::Episodic
+  implements Types::Interface::Streamable
 
   field :subtype, Types::Enum::AnimeSubtype,
     null: false,
