@@ -15,12 +15,12 @@ class Types::Video < Types::BaseObject
   field :sub_language, String,
     null: false,
     description: 'The language this is subbed in',
-    as: :sub_lang
+    method: :sub_lang
 
   field :dub_language, String,
     null: false,
     description: 'The language this is dubbed in.',
-    as: :dub_lang
+    method: :dub_lang
 
   field :episode, Types::Episode,
     null: false,

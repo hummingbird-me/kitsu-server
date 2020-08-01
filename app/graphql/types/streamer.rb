@@ -11,7 +11,7 @@ class Types::Streamer < Types::BaseObject
     null: false,
     description: 'Additional media this site is streaming.'
 
-  field :videos, Types::Videos.connection_type,
+  field :videos, Types::Video.connection_type,
     null: false,
     description: 'Videos of the media being streamed.'
 end
