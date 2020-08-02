@@ -1,6 +1,17 @@
 class Types::MutationType < Types::BaseObject
   field :pro, Types::ProMutation, null: false
-  field :anime, Types::AnimeMutation, null: false
+
+  field :create_anime,
+    mutation: Mutations::Anime::Create,
+    description: 'Create an Anime.'
+
+  field :update_anime,
+    mutation: Mutations::Anime::Update,
+    description: 'Update an Anime.'
+
+  field :delete_anime,
+    mutation: Mutations::Anime::Delete,
+    description: 'Delete an Anime.'
 
   field :create_library_entry,
     mutation: Mutations::LibraryEntry::Create,

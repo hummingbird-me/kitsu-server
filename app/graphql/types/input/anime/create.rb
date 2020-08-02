@@ -1,6 +1,6 @@
-class Inputs::AnimeUpdateInput < Inputs::BaseInputObject
-  argument :titles, Inputs::TitlesListInput, required: false
-  argument :synopsis, Types::Map, required: false
+class Types::Input::Anime::Create < Types::Input::Base
+  argument :titles, Types::Input::TitlesList, required: true
+  argument :synopsis, Types::Map, required: true
   argument :age_rating, Types::Enum::AgeRating, required: false
   argument :age_rating_guide, String, required: false
   argument :tba, String, required: false
@@ -13,16 +13,13 @@ class Inputs::AnimeUpdateInput < Inputs::BaseInputObject
   argument :episode_length, Integer, required: false
 
   def to_model
-    modified = {}
-    if titles
-      modified.merge!(
-        titles: titles.localized,
-        abbreviated_titles: titles.alternatives,
-        canonical_title: titles.canonical_locale
-      )
-    end
+    modified = {
+      titles: titles.localized,
+      abbreviated_titles: titles.alternatives,
+      canonical_title: titles.canonical_locale,
+      synopsis: synopsis['en']
+    }
 
-    modified[:synopsis] = synopsis['en'] if synopsis
     modified[:cover_image] = banner_image if banner_image
     modified[:youtube_video_id] = youtube_trailer_video_id if youtube_trailer_video_id
 

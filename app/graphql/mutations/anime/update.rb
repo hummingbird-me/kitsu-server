@@ -1,19 +1,31 @@
-class Mutations::Anime::Update < Mutations::BaseMutation
-  argument :id,
-    ID,
-    required: true,
-    description: 'ID of the Anime to update'
+class Mutations::Anime::Update < Mutations::Base
   argument :input,
-    Inputs::AnimeUpdateInput,
+    Types::Input::Anime::Update,
     required: true,
-    description: 'Anime attributes to update'
+    description: 'Update an Anime.',
+    as: :anime
 
   field :anime, Types::Anime, null: true
 
-  def resolve(id:, input:)
-    anime = Anime.find(id)
-    authorize anime, :update?
-    anime.update!(input.to_model)
-    { anime: anime }
+  def load_anime(value)
+    anime = ::Anime.find(value.id)
+    anime.assign_attributes(value.to_model)
+    anime
+  end
+
+  def authorized?(anime:)
+    super(anime, :update?)
+  end
+
+  def resolve(anime:)
+    anime.save
+
+    if anime.errors.any?
+      Errors::RailsModel.graphql_error(anime)
+    else
+      {
+        anime: anime
+      }
+    end
   end
 end
