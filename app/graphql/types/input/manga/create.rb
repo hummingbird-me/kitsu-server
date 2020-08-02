@@ -1,5 +1,5 @@
 class Types::Input::Manga::Create < Types::Input::Base
-  argument :titles, Inputs::TitlesListInput, required: true
+  argument :titles, Types::Input::TitlesList, required: true
   argument :synopsis, Types::Map, required: true
   argument :subtype, Types::Enum::MangaSubtype, required: true
 
