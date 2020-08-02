@@ -1,9 +1,9 @@
 class Types::QueryType < Types::BaseObject
-  field :my_account, Types::Account, null: true do
-    description 'Your Kitsu account details. You must supply an Authorization token in header.'
+  field :current_account, Types::Account, null: true do
+    description 'Kitsu account details. You must supply an Authorization token in header.'
   end
 
-  def my_account
+  def current_account
     User.current
   end
 
