@@ -75,7 +75,7 @@ class Types::QueryType < Types::BaseObject
     AlgoliaMediaIndex.search(title, filters: 'kind:manga')
   end
 
-  field :search_media_by_title, Types::Media.connection_type, null: false do
+  field :search_media_by_title, Types::Interface::Media.connection_type, null: false do
     description <<~DESCRIPTION.squish
       Search for any media (Anime, Manga) by title using Algolia.
       The most relevant results will be at the top.
