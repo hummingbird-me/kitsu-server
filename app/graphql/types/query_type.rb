@@ -1,4 +1,12 @@
 class Types::QueryType < Types::BaseObject
+  field :current_account, Types::Account, null: true do
+    description 'Kitsu account details. You must supply an Authorization token in header.'
+  end
+
+  def current_account
+    User.current
+  end
+
   field :anime, Types::Anime.connection_type, null: false do
     description 'All Anime in the Kitsu database'
   end
