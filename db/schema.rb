@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200730023943) do
+ActiveRecord::Schema.define(version: 20200803004935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1467,7 +1467,9 @@ ActiveRecord::Schema.define(version: 20200730023943) do
     t.string "dubs", default: ["ja"], null: false, array: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "regions", default: ["US"], array: true
     t.index ["media_type", "media_id"], name: "index_streaming_links_on_media_type_and_media_id"
+    t.index ["regions"], name: "index_streaming_links_on_regions", using: :gin
     t.index ["streamer_id"], name: "index_streaming_links_on_streamer_id"
   end
 
@@ -1637,16 +1639,18 @@ ActiveRecord::Schema.define(version: 20200730023943) do
   create_table "videos", id: :serial, force: :cascade do |t|
     t.string "url", limit: 255, null: false
     t.jsonb "embed_data", default: {}, null: false
-    t.string "available_regions", limit: 255, default: ["US"], array: true
+    t.string "regions", limit: 255, default: ["US"], array: true
     t.integer "episode_id", null: false
     t.integer "streamer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sub_lang", limit: 255
     t.string "dub_lang", limit: 255
-    t.index ["available_regions"], name: "index_videos_on_available_regions", using: :gin
+    t.string "subs", default: ["en"], array: true
+    t.string "dubs", default: ["ja"], array: true
     t.index ["dub_lang"], name: "index_videos_on_dub_lang"
     t.index ["episode_id"], name: "index_videos_on_episode_id"
+    t.index ["regions"], name: "index_videos_on_regions", using: :gin
     t.index ["streamer_id"], name: "index_videos_on_streamer_id"
     t.index ["sub_lang"], name: "index_videos_on_sub_lang"
   end
