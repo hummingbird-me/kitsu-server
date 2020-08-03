@@ -153,4 +153,22 @@ class Types::QueryType < Types::BaseObject
   def lookup_mapping(external_id:, external_site:)
     ::Mapping.lookup(external_site, external_id)
   end
+
+  field :find_person_by_id, Types::Person, null: true do
+    description 'Find a single Person by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_person_by_id(id:)
+    ::Person.find_by(id: id)
+  end
+
+  field :find_person_by_slug, Types::Person, null: true do
+    description 'Find a single Person by Slug'
+    argument :slug, String, required: true
+  end
+
+  def find_person_by_slug(slug:)
+    ::Person.find_by(slug: slug)
+  end
 end

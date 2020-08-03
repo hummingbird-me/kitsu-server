@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200603235008) do
+ActiveRecord::Schema.define(version: 20200730023943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1160,7 +1160,6 @@ ActiveRecord::Schema.define(version: 20200603235008) do
     t.string "name", limit: 255
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "mal_id"
     t.string "image_file_name", limit: 255
     t.string "image_content_type", limit: 255
     t.integer "image_file_size"
@@ -1170,8 +1169,8 @@ ActiveRecord::Schema.define(version: 20200603235008) do
     t.string "other_names", default: [], null: false, array: true
     t.text "description"
     t.date "birthday"
-    t.index ["mal_id"], name: "index_people_on_mal_id", unique: true
-    t.index ["mal_id"], name: "person_mal_id", unique: true
+    t.string "slug"
+    t.index ["slug"], name: "index_people_on_slug", unique: true
   end
 
   create_table "post_follows", id: :serial, force: :cascade do |t|
