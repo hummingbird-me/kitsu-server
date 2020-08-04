@@ -1,7 +1,6 @@
 class Types::Anime < Types::BaseObject
   implements Types::Interface::Media
   implements Types::Interface::Episodic
-  implements Types::Interface::Streamable
 
   field :subtype, Types::Enum::AnimeSubtype,
     null: false,
@@ -12,4 +11,12 @@ class Types::Anime < Types::BaseObject
     null: true,
     method: :youtube_video_id,
     description: 'Video id for a trailer on YouTube'
+
+  field :streaming_links, Types::StreamingLink.connection_type,
+    null: false,
+    description: ''
+
+  def streaming_links
+    AssociationLoader.for(object.class, :streaming_links).scope(object)
+  end
 end

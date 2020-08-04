@@ -1,4 +1,6 @@
 class Types::StreamingLink < Types::BaseObject
+  implements Types::Interface::Streamable
+
   description ''
 
   field :id, ID, null: false
@@ -7,19 +9,7 @@ class Types::StreamingLink < Types::BaseObject
     null: false,
     description: 'The media being streamed'
 
-  field :dubs, [String],
-    null: false,
-    description: 'Spoken language is replaced by language of choice.'
-
-  field :subs, [String],
-    null: false,
-    description: 'Languages this is translated to. Usually placed at bottom of media.'
-
   field :url, String,
     null: false,
     description: 'Fully qualified URL for the streaming link.'
-
-  field :streamer, Types::Streamer,
-    null: false,
-    description: 'The site that is streaming this media.'
 end

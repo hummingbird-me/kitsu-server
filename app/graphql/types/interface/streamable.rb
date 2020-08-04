@@ -1,12 +1,20 @@
 module Types::Interface::Streamable
   include Types::Interface::Base
-  description 'Media that is streamable'
+  description ''
 
-  field :streaming_links, Types::StreamingLink.connection_type,
+  field :streamer, Types::Streamer,
     null: false,
-    description: ''
+    description: 'The site that is streaming this media.'
 
-  def streaming_links
-    AssociationLoader.for(object.class, :streaming_links).scope(object)
-  end
+  field :regions, [String],
+    null: false,
+    description: 'Which regions this video is available in.'
+
+  field :subs, [String],
+    null: false,
+    description: 'Languages this is translated to. Usually placed at bottom of media.'
+
+  field :dubs, [String],
+    null: false,
+    description: 'Spoken language is replaced by language of choice.'
 end
