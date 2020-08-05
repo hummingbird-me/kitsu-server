@@ -41,7 +41,11 @@ class Types::Person < Types::BaseObject
     null: true,
     description: 'An image of the person'
 
-  field :voices, Types::CharacterVoice,
+  field :voices, Types::CharacterVoice.connection_type,
     null: true,
-    description: 'The voice-acting roles this person has had'
+    description: 'The voice-acting roles this person has had.'
+
+  def voices
+    AssociationLoader.for(object.class, :voices).scope(object)
+  end
 end
