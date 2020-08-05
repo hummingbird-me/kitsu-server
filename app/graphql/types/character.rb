@@ -9,7 +9,7 @@ class Types::Character < Types::BaseObject
     description: 'The URL-friendly identifier of this character'
 
   field :names, Types::TitlesList,
-    null: false,
+    null: true,
     description: 'The name for this character in various locales'
 
   def names
