@@ -179,4 +179,13 @@ class Types::QueryType < Types::BaseObject
   def find_person_by_slug(slug:)
     ::Person.find_by(slug: slug)
   end
+
+  field :find_library_entry_by_id, Types::LibraryEntry, null: true do
+    description ' Find a single Library Entry by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_library_entry_by_id(id:)
+    ::LibraryEntry.find_by(id: id)
+  end
 end
