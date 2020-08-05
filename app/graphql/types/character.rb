@@ -27,4 +27,12 @@ class Types::Character < Types::BaseObject
   field :image, Types::Image,
     null: true,
     description: 'An image of the character'
+
+  field :media, Types::MediaCharacter.connection_type,
+    null: true,
+    description: 'Additional media this character showed up in'
+
+  def media
+    AssociationLoader.for(object.class, :media_characters).scope(object)
+  end
 end
