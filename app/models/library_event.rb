@@ -38,6 +38,8 @@ class LibraryEvent < ApplicationRecord
   enum kind: %i[progressed updated reacted rated annotated]
   validates :kind, presence: true
 
+  # 2017 Toy had horrible naming conventions and 2017 Nuck approved shitty code of mine.
+  # this filters by media_types NOT kind....
   scope :by_kind, ->(*kinds) do
     t = arel_table
     columns = kinds.map { |k| t[:"#{k}_id"] }
