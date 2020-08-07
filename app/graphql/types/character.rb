@@ -30,7 +30,7 @@ class Types::Character < Types::BaseObject
 
   field :media, Types::MediaCharacter.connection_type,
     null: true,
-    description: 'Additional media this character showed up in'
+    description: 'Media this character appears in.'
 
   def media
     AssociationLoader.for(object.class, :media_characters).scope(object)
