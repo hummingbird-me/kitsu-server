@@ -63,11 +63,17 @@ class Types::LibraryEntry < Types::BaseObject
     null: true,
     description: 'When the user last watched an episode or read a chapter of this media.'
 
-  field :library_events, Types::LibraryEvent.connection_type,
-    null: true,
-    description: 'History of user actions for this library entry.'
+  field :library_events, Types::LibraryEvent.connection_type, null: true do
+    description 'History of user actions for this library entry.'
+    argument :media_types, [Types::Enum::MediaType],
+      required: false,
+      default_value: %w[Anime],
+      prepare: ->(media_types, _ctx) { media_types.map(&:downcase) }
+  end
 
-  def library_events
-    AssociationLoader.for(object.class, :library_events).scope(object)
+  def library_events(media_types:)
+    AssociationLoader.for(object.class, :library_events).scope(object).then do |library_events|
+      library_events.by_kind(*media_types)
+    end
   end
 end
