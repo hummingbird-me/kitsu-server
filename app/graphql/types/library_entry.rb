@@ -62,4 +62,12 @@ class Types::LibraryEntry < Types::BaseObject
   field :progressed_at, GraphQL::Types::ISO8601DateTime,
     null: true,
     description: 'When the user last watched an episode or read a chapter of this media.'
+
+  field :library_events, Types::LibraryEvent.connection_type,
+    null: true,
+    description: 'History of user actions for this library entry.'
+
+  def library_events
+    AssociationLoader.for(object.class, :library_events).scope(object)
+  end
 end
