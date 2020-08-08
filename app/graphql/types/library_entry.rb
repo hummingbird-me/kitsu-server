@@ -62,4 +62,18 @@ class Types::LibraryEntry < Types::BaseObject
   field :progressed_at, GraphQL::Types::ISO8601DateTime,
     null: true,
     description: 'When the user last watched an episode or read a chapter of this media.'
+
+  field :events, Types::LibraryEvent.connection_type, null: true do
+    description 'History of user actions for this library entry.'
+    argument :media_types, [Types::Enum::MediaType],
+      required: false,
+      default_value: %w[Anime],
+      prepare: ->(media_types, _ctx) { media_types.map(&:downcase) }
+  end
+
+  def events(media_types:)
+    AssociationLoader.for(object.class, :library_events).scope(object).then do |library_events|
+      library_events.by_kind(*media_types)
+    end
+  end
 end
