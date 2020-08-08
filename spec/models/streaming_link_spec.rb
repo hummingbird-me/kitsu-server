@@ -27,9 +27,8 @@
 require 'rails_helper'
 
 RSpec.describe StreamingLink, type: :model do
+  include_examples 'streamable'
+
   it { should belong_to(:media).required }
-  it { should belong_to(:streamer).required }
   it { should validate_presence_of(:url) }
-  it { should validate_presence_of(:subs) }
-  it { should validate_presence_of(:dubs) }
 end

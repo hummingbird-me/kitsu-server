@@ -25,12 +25,10 @@
 # rubocop:enable Metrics/LineLength
 
 class StreamingLink < ApplicationRecord
-  belongs_to :media, polymorphic: true, touch: true, required: true
-  belongs_to :streamer, required: true
+  include Streamable
 
-  validates :media, :streamer, :url, :subs, :dubs, presence: true
+  belongs_to :media, polymorphic: true, touch: true, optional: false
+
+  validates :media, :url, presence: true
   validates :media, polymorphism: { type: Media }
-
-  scope :dubbed, ->(langs) { where('dubs @> ARRAY[?]::varchar[]', langs) }
-  scope :subbed, ->(langs) { where('subs @> ARRAY[?]::varchar[]', langs) }
 end

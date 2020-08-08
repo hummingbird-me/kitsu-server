@@ -1,7 +1,9 @@
 class VideoResource < BaseResource
   caching
 
-  attributes :url, :available_regions, :sub_lang, :dub_lang, :embed_data
+  attributes :url, :sub_lang, :dub_lang, :embed_data
+  attributes :subs, :dubs, :regions
+  attribute :available_regions, delegate: :regions # DEPRECATED
 
   has_one :episode
   has_one :streamer
