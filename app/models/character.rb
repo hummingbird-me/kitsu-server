@@ -63,4 +63,8 @@ class Character < ApplicationRecord
       (-> { [primary_media.canonical_title, canonical_name] } if primary_media)
     ].compact
   end
+
+  before_save do
+    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
+  end
 end

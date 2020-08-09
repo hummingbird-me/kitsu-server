@@ -57,6 +57,10 @@ class AMA < ApplicationRecord
     self.end_date = start_date + 1.hour if end_date.blank? || start_date >= end_date
   end
 
+  before_save do
+    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
+  end
+
   after_commit do
     ama_starting_soon_time = start_date - 1.hour
     AMAStartingWorker.perform_at(ama_starting_soon_time, self)

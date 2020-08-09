@@ -18,6 +18,10 @@ class GroupCategory < ApplicationRecord
   friendly_id :name, use: %i[slugged finders history]
   has_many :groups, foreign_key: 'category_id'
 
+  before_save do
+    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
+  end
+
   before_destroy do
     misc = GroupCategory.where(slug: 'misc').first
     groups.update_all(category_id: misc.id)

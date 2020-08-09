@@ -39,6 +39,10 @@ class CommunityRecommendationRequest < ApplicationRecord
     )
   end
 
+  before_save do
+    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
+  end
+
   after_create do
     CommunityRecommendationFollow.create(
       user: user,

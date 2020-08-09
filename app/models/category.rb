@@ -57,4 +57,8 @@ class Category < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png]
   }
   validates :title, presence: true
+
+  before_save do
+    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
+  end
 end

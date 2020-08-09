@@ -19,4 +19,8 @@ class Genre < ApplicationRecord
 
   has_and_belongs_to_many :anime
   has_and_belongs_to_many :manga
+
+  before_save do
+    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
+  end
 end
