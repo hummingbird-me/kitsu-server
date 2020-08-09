@@ -79,7 +79,7 @@ class Episode < ApplicationRecord
   MediaTotalLengthCallbacks.hook(self)
 
   before_save do
-    self.synopsis = Sanitize.fragment(synopsis, Sanitize::Config::RESTRICTED)
+    self.description = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
   end
   before_validation do
     self.length = media.episode_length if length.nil?
