@@ -1,8 +1,8 @@
 class AlgoliaMediaIndex < BaseIndex
   self.index_name = 'media'
 
-  # Titles & synopsis
-  attributes :titles, :abbreviated_titles, :canonical_title, :synopsis
+  # Titles & description
+  attributes :titles, :abbreviated_titles, :canonical_title, :description
 
   # Properties of the media
   attributes :age_rating, :subtype, :season, :year, :season_year, :interest
