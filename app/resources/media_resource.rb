@@ -38,9 +38,18 @@ class MediaResource < BaseResource
 
   caching
 
-  attributes :synopsis,
-    # Cover image location
-    :cover_image_top_offset,
+  attribute :synopsis # DEPRECATED
+  def synopsis
+    description
+  end
+
+  attribute :description
+  def description
+    _model.description['en']
+  end
+
+  # Cover image location
+  attributes :cover_image_top_offset,
     # Titles
     :titles, :canonical_title, :abbreviated_titles,
     # Ratings
