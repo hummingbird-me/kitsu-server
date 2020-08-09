@@ -95,7 +95,7 @@ module HuluImport
         season_number: season_number,
         length: length,
         titles: { en_jp: title },
-        synopsis: synopsis
+        description: { en: synopsis }
       )
     end
 

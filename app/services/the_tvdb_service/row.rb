@@ -18,7 +18,7 @@ class TheTvdbService
       episode.number ||= number
       episode.season_number ||= season_number
       episode.relative_number ||= relative_number
-      episode.synopsis ||= synopsis
+      episode.description['en'] ||= synopsis
       episode.thumbnail = thumbnail if episode.thumbnail.blank?
       episode.airdate ||= airdate
       episode.save!

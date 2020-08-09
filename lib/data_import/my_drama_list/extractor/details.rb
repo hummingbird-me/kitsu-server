@@ -48,8 +48,8 @@ module DataImport
           (details['Also Known as'] || '').split(';').map(&:strip)
         end
 
-        def synopsis
-          dom.css('.show-synopsis > p').map(&:content).join('\n\n')
+        def description
+          { en: dom.css('.show-synopsis > p').map(&:content).join('\n\n') }
         end
 
         def episode_count
@@ -84,7 +84,7 @@ module DataImport
 
         def to_h
           %i[
-            titles canonical_title abbreviated_titles synopsis episode_count
+            titles canonical_title abbreviated_titles description episode_count
             episode_length subtype poster_image start_date end_date country
           ].map { |k| [k, send(k)] }.to_h
         end

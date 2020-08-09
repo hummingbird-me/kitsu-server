@@ -55,7 +55,7 @@ module Zorro
           titles: titles,
           abbreviated_titles: details['synonyms'],
           subtype: subtype,
-          synopsis: details['synopsis'],
+          description: { en: details['synopsis'] },
           episode_length: episode_length,
           episode_count: episode_count,
           poster_image: canonical_for(anime_data['imageUrl']),
