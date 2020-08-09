@@ -27,6 +27,6 @@
 FactoryBot.define do
   factory :character do
     name { Faker::Name.name }
-    description { Faker::Lorem.paragraph }
+    description { { en: Faker::Lorem.sentence } }
   end
 end
