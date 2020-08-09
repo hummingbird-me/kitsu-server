@@ -67,7 +67,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     field :abbreviated_titles, :serialized do
       html_attributes rows: '6', cols: '70'
     end
-    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image, :cover_image,
+    fields :canonical_title, :description, :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
@@ -86,7 +86,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     field :abbreviated_titles, :serialized do
       html_attributes rows: '6', cols: '70'
     end
-    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image, :cover_image,
+    fields :canonical_title, :description, :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
@@ -100,7 +100,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     parent Manga
     fields :id, :manga
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    fields :canonical_title, :number, :synopsis, :published, :volume_number,
+    fields :canonical_title, :number, :description, :published, :volume_number,
       :length, :thumbnail
     include_all_fields
     navigation_label 'Chapters'
@@ -112,7 +112,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     field :abbreviated_titles, :serialized do
       html_attributes rows: '6', cols: '70'
     end
-    fields :canonical_title, :synopsis, :slug, :subtype, :poster_image,
+    fields :canonical_title, :description, :slug, :subtype, :poster_image,
       :cover_image, :age_rating, :age_rating_guide
     include_all_fields
     navigation_label 'Drama'
@@ -220,7 +220,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model 'Episode' do
     fields :id, :media
     field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    fields :canonical_title, :number, :relative_number, :season_number, :synopsis, :airdate,
+    fields :canonical_title, :number, :relative_number, :season_number, :description, :airdate,
       :length, :thumbnail
     include_all_fields
     field :media_id do
