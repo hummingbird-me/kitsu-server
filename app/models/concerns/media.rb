@@ -99,11 +99,11 @@ module Media
 
     after_commit :setup_feed, on: :create
 
-    before_save :sanitize_description
-
-    def sanitize_description
-      description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
-    end
+    # before_save :sanitize_description
+    #
+    # def sanitize_description
+    #   description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
+    # end
   end
 
   class_methods do
