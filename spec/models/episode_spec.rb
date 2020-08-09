@@ -38,9 +38,9 @@ RSpec.describe Episode, type: :model do
   it { should validate_presence_of(:media) }
   it { should validate_presence_of(:number) }
   it 'should strip XSS from description' do
-    subject.description = '<script>prompt("PASSWORD:")</script>' * 3
+    subject.description['en'] = '<script>prompt("PASSWORD:")</script>' * 3
     subject.save!
-    expect(subject.description).not_to include('<script>')
+    expect(subject.description['en']).not_to include('<script>')
   end
   context 'triggers recalculation of episode length on anime' do
     it 'after destroy' do
