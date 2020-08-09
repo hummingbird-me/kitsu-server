@@ -125,7 +125,7 @@ class MediaResource < BaseResource
               should: [
                 { multi_match: {
                   fields: %w[
-                    titles.* abbreviated_titles synopsis people characters
+                    titles.* abbreviated_titles description people characters
                   ],
                   query: values.join(' '),
                   fuzziness: 2,
