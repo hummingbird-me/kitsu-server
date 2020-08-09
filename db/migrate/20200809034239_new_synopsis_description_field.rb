@@ -3,7 +3,7 @@ class NewSynopsisDescriptionField < ActiveRecord::Migration[5.1]
     Anime.logger = Logger.new(STDERR)
 
     %i(anime episodes manga chapters dramas).each do |model_name|
-      add_column model_name, :temp_synopsis, :jsonb, default: {}, null: false
+      add_column model_name, :temp_description, :jsonb, default: {}, null: false
     end
 
     %i(

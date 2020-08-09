@@ -4,7 +4,7 @@ class UpdateNewSynopsisDescriptionField < ActiveRecord::Migration[5.1]
 
     %i(anime episodes manga chapters dramas).each do |model_name|
       remove_column model_name, :synopsis
-      rename_column model_name, :temp_synopsis, :synopsis
+      rename_column model_name, :temp_description, :description
     end
 
     %i(

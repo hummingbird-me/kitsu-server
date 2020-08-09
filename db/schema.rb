@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 20200809034845) do
     t.integer "total_length"
     t.text "release_schedule"
     t.string "original_locale"
-    t.jsonb "synopsis", default: {}
+    t.jsonb "description", default: {}, null: false
     t.index ["age_rating"], name: "index_anime_on_age_rating"
     t.index ["average_rating"], name: "anime_average_rating_idx"
     t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: { average_rating: :desc }
@@ -242,7 +242,7 @@ ActiveRecord::Schema.define(version: 20200809034845) do
     t.text "thumbnail_meta"
     t.boolean "filler"
     t.integer "volume_id"
-    t.jsonb "synopsis", default: {}, null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["manga_id"], name: "index_chapters_on_manga_id"
   end
 
@@ -416,7 +416,7 @@ ActiveRecord::Schema.define(version: 20200809034845) do
     t.text "cover_image_meta"
     t.integer "total_length", default: 0, null: false
     t.text "release_schedule"
-    t.jsonb "synopsis", default: {}
+    t.jsonb "description", default: {}, null: false
     t.index ["slug"], name: "index_dramas_on_slug"
   end
 
@@ -456,7 +456,7 @@ ActiveRecord::Schema.define(version: 20200809034845) do
     t.integer "relative_number"
     t.text "thumbnail_meta"
     t.boolean "filler"
-    t.jsonb "synopsis", default: {}
+    t.jsonb "description", default: {}, null: false
     t.index ["media_type", "media_id"], name: "index_episodes_on_media_type_and_media_id"
   end
 
@@ -873,7 +873,7 @@ ActiveRecord::Schema.define(version: 20200809034845) do
     t.text "cover_image_meta"
     t.text "release_schedule"
     t.string "original_locale"
-    t.jsonb "synopsis", default: {}
+    t.jsonb "description", default: {}, null: false
     t.index ["average_rating"], name: "manga_average_rating_idx"
     t.index ["slug"], name: "index_manga_on_slug"
     t.index ["user_count"], name: "manga_user_count_idx"

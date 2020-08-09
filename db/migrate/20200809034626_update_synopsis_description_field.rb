@@ -10,7 +10,7 @@ class UpdateSynopsisDescriptionField < ActiveRecord::Migration[5.1]
     %i(anime episodes manga chapters dramas).each do |model_name|
       model = model_name.to_s.classify.constantize
       model.all.update_in_batches(<<-SQL)
-        temp_synopsis = json_build_object('en', synopsis)::jsonb
+        temp_description = json_build_object('en', synopsis)::jsonb
       SQL
     end
 
