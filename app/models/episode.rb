@@ -31,6 +31,7 @@
 class Episode < ApplicationRecord
   include Titleable
   include Mappable
+  include DescriptionSanitation
 
   belongs_to :media, polymorphic: true
   has_many :videos
@@ -78,9 +79,6 @@ class Episode < ApplicationRecord
 
   MediaTotalLengthCallbacks.hook(self)
 
-  before_save do
-    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
-  end
   before_validation do
     self.length = media.episode_length if length.nil?
     self.season_number ||= 1

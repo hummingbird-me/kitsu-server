@@ -22,6 +22,7 @@
 
 class CommunityRecommendationRequest < ApplicationRecord
   include WithActivity
+  include DescriptionSanitation
 
   belongs_to :user, required: true
   has_many :community_recommendations
@@ -37,10 +38,6 @@ class CommunityRecommendationRequest < ApplicationRecord
     user.profile_feed.activities.new(
       title: title
     )
-  end
-
-  before_save do
-    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
   end
 
   after_create do

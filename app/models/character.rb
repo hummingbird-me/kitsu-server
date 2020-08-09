@@ -27,6 +27,7 @@
 class Character < ApplicationRecord
   include LocalizableModel
   include Mappable
+  include DescriptionSanitation
   extend FriendlyId
   friendly_id :slug_candidates, use: %i[slugged finders history]
 
@@ -62,9 +63,5 @@ class Character < ApplicationRecord
       -> { canonical_name },
       (-> { [primary_media.canonical_title, canonical_name] } if primary_media)
     ].compact
-  end
-
-  before_save do
-    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
   end
 end

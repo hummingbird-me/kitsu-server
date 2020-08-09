@@ -22,6 +22,7 @@
 
 class Person < ApplicationRecord
   include Mappable
+  include DescriptionSanitation
   extend FriendlyId
   friendly_id :name, use: %i[slugged finders history]
   has_attached_file :image
@@ -36,8 +37,4 @@ class Person < ApplicationRecord
     content_type: %w[image/jpg image/jpeg image/png]
   }
   validates :name, presence: true
-
-  before_save do
-    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
-  end
 end

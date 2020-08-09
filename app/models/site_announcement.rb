@@ -20,6 +20,7 @@
 
 class SiteAnnouncement < ApplicationRecord
   include WithActivity
+  include DescriptionSanitation
 
   belongs_to :user, required: true
 
@@ -27,9 +28,5 @@ class SiteAnnouncement < ApplicationRecord
 
   def stream_activity
     SiteAnnouncementsGlobalFeed.new.activities.new
-  end
-
-  before_save do
-    description['en'] = Sanitize.fragment(description, Sanitize::Config::RESTRICTED)
   end
 end
