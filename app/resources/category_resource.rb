@@ -11,4 +11,8 @@ class CategoryResource < BaseResource
   paginator :unlimited
 
   filters :parent_id, :slug, :nsfw
+
+  def description
+    _model.description['en']
+  end
 end
