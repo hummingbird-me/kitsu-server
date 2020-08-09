@@ -14,7 +14,7 @@ class Types::Anime < Types::BaseObject
 
   field :streaming_links, Types::StreamingLink.connection_type,
     null: false,
-    description: ''
+    description: 'The stream links.'
 
   def streaming_links
     AssociationLoader.for(object.class, :streaming_links).scope(object)

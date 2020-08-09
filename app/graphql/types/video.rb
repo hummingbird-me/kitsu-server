@@ -1,7 +1,6 @@
 class Types::Video < Types::BaseObject
   implements Types::Interface::Streamable
-
-  description ''
+  description 'The media video.'
 
   field :id, ID, null: false
 
@@ -9,11 +8,10 @@ class Types::Video < Types::BaseObject
     null: false,
     description: 'The url of the video.'
 
-  # Might want to turn into enum
   field :available_regions, [String],
     null: false,
     description: 'Which regions this video is available in.',
-    deprecation_reason: 'Please use regions',
+    deprecation_reason: 'Please use regions.',
     method: :regions
 
   field :sub_language, String,

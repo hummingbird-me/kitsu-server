@@ -1,7 +1,6 @@
 class Types::StreamingLink < Types::BaseObject
   implements Types::Interface::Streamable
-
-  description ''
+  description 'The stream link.'
 
   field :id, ID, null: false
 
