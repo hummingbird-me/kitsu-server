@@ -53,7 +53,7 @@ class KitsuEmbedder < Embedder
   def description
     case subject
     when User then subject.about
-    when Media then subject.synopsis
+    when Media then subject.description
     when Post, Comment then subject.content
     end
   end
