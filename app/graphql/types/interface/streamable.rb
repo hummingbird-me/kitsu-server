@@ -1,6 +1,6 @@
 module Types::Interface::Streamable
   include Types::Interface::Base
-  description ''
+  description 'Media that is streamable.'
 
   field :streamer, Types::Streamer,
     null: false,
