@@ -13,12 +13,7 @@ class Types::Category < Types::BaseObject
   end
 
   localized_field :description,
-    null: true,
-    description: 'A description of the category.'
-
-  def description
-    { en: object.description } if object.description
-  end
+    description: 'A brief summary or description of the catgory.'
 
   field :slug, String,
     null: false,
