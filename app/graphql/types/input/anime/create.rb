@@ -1,6 +1,6 @@
 class Types::Input::Anime::Create < Types::Input::Base
   argument :titles, Types::Input::TitlesList, required: true
-  argument :synopsis, Types::Map, required: true
+  argument :description, Types::Map, required: true
   argument :age_rating, Types::Enum::AgeRating, required: false
   argument :age_rating_guide, String, required: false
   argument :tba, String, required: false
@@ -17,7 +17,7 @@ class Types::Input::Anime::Create < Types::Input::Base
       titles: titles.localized,
       abbreviated_titles: titles.alternatives,
       canonical_title: titles.canonical_locale,
-      synopsis: synopsis['en']
+      description: description
     }
 
     modified[:cover_image] = banner_image if banner_image
