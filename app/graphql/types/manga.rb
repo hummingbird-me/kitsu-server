@@ -16,4 +16,12 @@ class Types::Manga < Types::BaseObject
   field :volume_count, Integer,
     null: true,
     description: 'The number of volumes in this manga.'
+
+  field :chapters, Types::Chapter.connection_type,
+    null: true,
+    description: 'The chapters of the manga.'
+
+  def chapters
+    AssociationLoader.for(object.class, :chapters).scope(object)
+  end
 end
