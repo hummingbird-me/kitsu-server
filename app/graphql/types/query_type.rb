@@ -50,6 +50,15 @@ class Types::QueryType < Types::BaseObject
     ::Manga.all
   end
 
+  field :manga_by_status, Types::Manga.connection_type, null: true do
+    description 'All Manga with specific Status'
+    argument :status, Types::Enum::ReleaseStatus, required: true
+  end
+
+  def manga_by_status(status:)
+    ::Manga.public_send(status)
+  end
+
   field :find_manga_by_id, Types::Manga, null: true do
     description 'Find a single Manga by ID'
     argument :id, ID, required: true
