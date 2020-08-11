@@ -15,6 +15,15 @@ class Types::QueryType < Types::BaseObject
     ::Anime.all
   end
 
+  field :anime_by_status, Types::Anime.connection_type, null: true do
+    description 'All Anime with specific Status'
+    argument :status, Types::Enum::ReleaseStatus, required: true
+  end
+
+  def anime_by_status(status:)
+    ::Anime.public_send(status)
+  end
+
   field :find_anime_by_id, Types::Anime, null: true do
     description 'Find a single Anime by ID'
     argument :id, ID, required: true
@@ -181,11 +190,31 @@ class Types::QueryType < Types::BaseObject
   end
 
   field :find_library_entry_by_id, Types::LibraryEntry, null: true do
-    description ' Find a single Library Entry by ID'
+    description 'Find a single Library Entry by ID'
     argument :id, ID, required: true
   end
 
   def find_library_entry_by_id(id:)
     ::LibraryEntry.find_by(id: id)
+  end
+
+  field :library_entries_by_media_type, Types::LibraryEntry.connection_type, null: true do
+    description 'List of Library Entries by MediaType'
+    argument :media_type, Types::Enum::MediaType, required: true
+  end
+
+  def library_entries_by_media_type(media_type:)
+    ::LibraryEntry.where(media_type: media_type)
+  end
+
+  field :library_entries_by_media, Types::LibraryEntry.connection_type, null: true do
+    description 'List of Library Entries by MediaType and MediaId'
+
+    argument :media_type, Types::Enum::MediaType, required: true
+    argument :media_id, ID, required: true
+  end
+
+  def library_entries_by_media(media_type:, media_id:)
+    ::LibraryEntry.where(media_type: media_type, media_id: media_id)
   end
 end
