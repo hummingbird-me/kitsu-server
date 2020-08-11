@@ -19,7 +19,7 @@ class Types::Manga < Types::BaseObject
 
   field :chapters, Types::Chapter.connection_type,
     null: true,
-    description: 'The chapters of the manga.'
+    description: 'The chapters in the manga.'
 
   def chapters
     AssociationLoader.for(object.class, :chapters).scope(object)

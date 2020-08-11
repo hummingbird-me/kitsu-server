@@ -16,7 +16,7 @@ class Types::Volume < Types::BaseObject
 
   field :number, Integer,
     null: false,
-    description: 'The number of pages in this chapter.'
+    description: 'The volume number.'
 
   field :published, GraphQL::Types::ISO8601Date,
     null: true,
