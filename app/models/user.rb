@@ -124,6 +124,8 @@ class User < ApplicationRecord
   enum theme: %i[light dark]
   enum pro_tier: %i[ao_pro ao_pro_plus pro patron]
   enum email_status: %i[email_unconfirmed email_confirmed email_bounced]
+  enum title_language_preference: %i[canonical romanized localized]
+
   rolify after_add: :update_title, after_remove: :update_title
   has_secure_password validations: false
   update_index('users#user') { self }
