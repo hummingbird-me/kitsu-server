@@ -27,7 +27,7 @@ class Types::Person < Types::BaseObject
   end
 
   localized_field :description,
-    description: 'A brief summary or description of the character.'
+    description: 'A brief biography or description of the person.'
 
   field :birthday, Types::Date,
     null: true,
