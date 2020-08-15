@@ -11,4 +11,12 @@ class Types::Anime < Types::BaseObject
     null: true,
     method: :youtube_video_id,
     description: 'Video id for a trailer on YouTube'
+
+  field :streaming_links, Types::StreamingLink.connection_type,
+    null: false,
+    description: 'The stream links.'
+
+  def streaming_links
+    AssociationLoader.for(object.class, :streaming_links).scope(object)
+  end
 end
