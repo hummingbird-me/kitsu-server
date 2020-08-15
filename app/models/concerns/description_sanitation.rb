@@ -6,6 +6,6 @@ module DescriptionSanitation
   end
 
   def sanitize_description
-    description.transform_values { |desc| Sanitize.fragment(desc, Sanitize::Config::RESTRICTED) }
+    description.transform_values! { |desc| Sanitize.fragment(desc, Sanitize::Config::RESTRICTED) }
   end
 end
