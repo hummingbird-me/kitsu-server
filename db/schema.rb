@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20200809034845) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "citext"
@@ -1541,7 +1540,7 @@ ActiveRecord::Schema.define(version: 20200809034845) do
     t.string "cover_image_content_type", limit: 255
     t.integer "cover_image_file_size"
     t.datetime "cover_image_updated_at"
-    t.string "title_language_preference", limit: 255, default: "canonical"
+    t.integer "title_language_preference", default: 0
     t.integer "followers_count", default: 0
     t.integer "following_count", default: 0
     t.boolean "ninja_banned", default: false
