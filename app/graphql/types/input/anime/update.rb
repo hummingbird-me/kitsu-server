@@ -16,6 +16,7 @@ class Types::Input::Anime::Update < Types::Input::Base
 
   def to_model
     modified = {}
+
     if titles
       modified.merge!(
         titles: titles.localized,
@@ -24,7 +25,6 @@ class Types::Input::Anime::Update < Types::Input::Base
       )
     end
 
-    modified[:description].merge!(description) if description
     modified[:cover_image] = banner_image if banner_image
     modified[:youtube_video_id] = youtube_trailer_video_id if youtube_trailer_video_id
 

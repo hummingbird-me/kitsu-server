@@ -8,7 +8,7 @@ class Mutations::Anime::Create < Mutations::Base
   field :anime, Types::Anime, null: true
 
   def load_anime(value)
-    ::Anime.new(value.to_h)
+    ::Anime.new(value.to_model)
   end
 
   def authorized?(anime:)
