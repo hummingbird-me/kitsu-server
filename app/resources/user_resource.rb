@@ -49,7 +49,7 @@ class UserResource < BaseResource
 
   def title_language_preference=(value)
     _model.title_language_preference =
-      if value.to_s == 'english'
+      if value == 'english'
         :localized
       else
         value.to_sym
