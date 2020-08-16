@@ -16,8 +16,7 @@ class Types::Input::Anime::Create < Types::Input::Base
     modified = {
       titles: titles.localized,
       abbreviated_titles: titles.alternatives,
-      canonical_title: titles.canonical_locale,
-      description: description
+      canonical_title: titles.canonical_locale
     }
 
     modified[:cover_image] = banner_image if banner_image

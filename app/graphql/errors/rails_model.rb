@@ -3,6 +3,7 @@ module Errors
     def self.graphql_error(record)
       errors = record.errors.map do |attribute, message|
         {
+          code: 'ValidationError',
           message: record.errors.full_message(attribute, message),
           path: ['attributes', attribute.to_s.camelize(:lower)]
         }
