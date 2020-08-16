@@ -41,6 +41,16 @@ class UserResource < BaseResource
     _model.password_digest.present?
   end
 
+  def title_language_preference
+    return :english if _model.title_language_preference == :localized
+
+    _model.title_language_preference
+  end
+
+  def title_language_preference=(value)
+    _model.title_language_preference = value == 'english' ? :localized : value.to_sym
+  end
+
   def self.attribute_caching_context(context)
     context[:current_user]&.resource_owner
   end
