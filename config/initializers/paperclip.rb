@@ -44,8 +44,12 @@ module PaperclipBlurhash
   def populate_meta(queue)
     meta = super(queue)
 
+    original = queue[:original]
+    return meta unless original.is_a?(String) || original.respond_to?(:path)
+    path = original.respond_to?(:path) ? original.path : original
+
     # Scale down so we don't have as much data to fuck with
-    image = MiniMagick::Image.open(queue[:original])
+    image = MiniMagick::Image.open(path)
     image.resize '600x600>'
     pixels = image.get_pixels.flatten
 
