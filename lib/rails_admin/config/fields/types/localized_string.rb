@@ -30,7 +30,7 @@ module RailsAdmin
 
             value.each_line
                  .map { |line| line.split(':').map(&:strip) }
-                 .filter { |line| line.count == 2 }
+                 .select { |line| line.count == 2 }
                  .to_h
           end
 
