@@ -4,7 +4,7 @@ module RailsAdmin
   module Config
     module Fields
       module Types
-        class LocalizedString < RailsAdmin::Config::Fields::Types::Text
+        class StringList < RailsAdmin::Config::Fields::Types::Text
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
