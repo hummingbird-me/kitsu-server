@@ -30,6 +30,47 @@ module IgnoreOctetStream
   end
 end
 
+module PaperclipBlurhash
+  def blurhash
+    return unless instance.respond_to?(:"#{name}_meta") && instance_read(:meta)
+
+    if (meta = meta_decode(instance_read(:meta)))
+      meta[:blurhash]
+    end
+  end
+
+  private
+
+  def populate_meta(queue)
+    meta = super(queue)
+
+    original = queue[:original]
+    return meta unless original.is_a?(String) || original.respond_to?(:path)
+    path = original.respond_to?(:path) ? original.path : original
+
+    # Scale down so we don't have as much data to fuck with
+    image = MiniMagick::Image.open(path)
+    image.resize '600x600>'
+    pixels = image.get_pixels.flatten
+
+    # Blurhash looks like shit below 3 or above 6 in any dimension
+    blurhash_size = image.dimensions.map do |x|
+      (x.to_f / 100).floor.clamp(3, 6)
+    end
+
+    meta[:blurhash] = Blurhash.encode(
+      image.width,
+      image.height,
+      pixels,
+      x_comp: blurhash_size[0],
+      y_comp: blurhash_size[1]
+    )
+
+    meta
+  end
+end
+
+Paperclip::Attachment.prepend(PaperclipBlurhash)
 Paperclip::MediaTypeSpoofDetector.prepend(IgnoreOctetStream::SpoofDetector)
 Paperclip::UriAdapter.prepend(IgnoreOctetStream::Download)
 

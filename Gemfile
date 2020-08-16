@@ -28,9 +28,12 @@ gem 'rolify'
 # Attachments
 gem 'apollo_upload_server'
 gem 'aws-sdk', '< 3.0'
+# released version of blurhash has too-narrow ffi version
+gem 'blurhash', github: 'gargron/blurhash'
 gem 'delayed_paperclip'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
+gem 'mini_magick'
 gem 'paperclip', '~> 5.0'
 gem 'paperclip-meta'
 gem 'paperclip-optimizer'

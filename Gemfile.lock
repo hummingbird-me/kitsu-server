@@ -18,6 +18,13 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: https://github.com/gargron/blurhash.git
+  revision: 9084bfa64fbadbaff1ba95c52bda3153efcb3f84
+  specs:
+    blurhash (0.1.4)
+      ffi (~> 1.10)
+
+GIT
   remote: https://github.com/hummingbird-me/pundit-resources.git
   revision: a93c8708a697591bbbf9cac2a5d7a6695d769e61
   specs:
@@ -361,6 +368,7 @@ GEM
     mime-types-data (3.2020.0512)
     mimemagic (0.3.5)
     mini_histogram (0.1.3)
+    mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.1)
@@ -670,6 +678,7 @@ DEPENDENCIES
   aws-sdk (< 3.0)
   bcrypt
   benchmark-ips
+  blurhash!
   chewy
   connection_pool
   counter_culture
@@ -708,6 +717,7 @@ DEPENDENCIES
   librato-rails
   lograge
   mechanize
+  mini_magick
   mongo
   nokogiri (~> 1.10.8)
   oauth2!

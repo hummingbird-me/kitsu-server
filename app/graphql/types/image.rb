@@ -3,12 +3,6 @@ class Types::Image < Types::BaseObject
     null: false,
     description: 'The original image'
 
-  field :views, [Types::ImageView],
-    null: false,
-    description: 'The various generated views of this image' do
-      argument :names, [String], required: false
-    end
-
   def original
     {
       name: 'original',
@@ -16,6 +10,11 @@ class Types::Image < Types::BaseObject
       width: object.width(:original),
       height: object.height(:original)
     }
+  end
+
+  field :views, [Types::ImageView], null: false do
+    description 'The various generated views of this image'
+    argument :names, [String], required: false
   end
 
   def views(names: object.styles.keys)
@@ -28,5 +27,9 @@ class Types::Image < Types::BaseObject
         height: object.height(style)
       }
     end
+  end
+
+  field :blurhash, String, null: true do
+    description 'A blurhash-encoded version of this image'
   end
 end
