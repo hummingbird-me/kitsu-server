@@ -48,12 +48,7 @@ class UserResource < BaseResource
   end
 
   def title_language_preference=(value)
-    _model.title_language_preference =
-      if value == 'english'
-        :localized
-      else
-        value.to_sym
-      end
+    _model.title_language_preference = value == 'english' ? :localized : value.to_sym
   end
 
   def self.attribute_caching_context(context)
