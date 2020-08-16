@@ -1,4 +1,7 @@
 require Rails.root.join('lib/rails_admin/config/fields/types/citext')
+require Rails.root.join('lib/rails_admin/config/fields/types/localized_string')
+require Rails.root.join('lib/rails_admin/config/fields/types/localized_text')
+require Rails.root.join('lib/rails_admin/config/fields/types/string_list')
 
 RailsAdmin::ApplicationHelper.module_exec do
   def edit_user_link
@@ -63,11 +66,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Anime
   config.model 'Anime' do
     field :id
-    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    field :abbreviated_titles, :serialized do
-      html_attributes rows: '6', cols: '70'
-    end
-    field(:description, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :titles, :localized_string
+    field :abbreviated_titles, :string_list
+    field :description, :localized_text
     fields :canonical_title, :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
     include_all_fields
@@ -83,11 +84,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Manga
   config.model 'Manga' do
     field :id
-    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    field :abbreviated_titles, :serialized do
-      html_attributes rows: '6', cols: '70'
-    end
-    field(:description, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :titles, :localized_string
+    field :abbreviated_titles, :string_list
+    field :description, :localized_text
     fields :canonical_title, :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
     include_all_fields
@@ -101,8 +100,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model 'Chapter' do
     parent Manga
     fields :id, :manga
-    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    field(:description, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :titles, :localized_string
+    field :description, :localized_text
     fields :canonical_title, :number, :published, :volume_number,
       :length, :thumbnail
     include_all_fields
@@ -111,11 +110,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Drama
   config.model 'Drama' do
     field :id
-    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    field :abbreviated_titles, :serialized do
-      html_attributes rows: '6', cols: '70'
-    end
-    field(:description, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :titles, :localized_string
+    field :abbreviated_titles, :string_list
+    field :description, :localized_text
     fields :canonical_title, :slug, :subtype, :poster_image,
       :cover_image, :age_rating, :age_rating_guide
     include_all_fields
@@ -223,8 +220,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
 
   config.model 'Episode' do
     fields :id, :media
-    field(:titles, :serialized) { html_attributes rows: '6', cols: '70' }
-    field(:description, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :titles, :localized_string
+    field :description, :localized_text
     fields :canonical_title, :number, :relative_number, :season_number, :airdate,
       :length, :thumbnail
     include_all_fields
@@ -259,9 +256,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
 
   config.model 'Character' do
     field :id
-    field(:names, :serialized) { html_attributes rows: '6', cols: '70' }
-    field(:other_names, :serialized) { html_attributes rows: '6', cols: '70' }
-    field(:description, :serialized) { html_attributes rows: '6', cols: '70' }
+    field :names, :localized_string
+    field :other_names, :string_list
+    field :description, :localized_text
     fields :image, :slug, :canonical_name
     include_all_fields
   end
