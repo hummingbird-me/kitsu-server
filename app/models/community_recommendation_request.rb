@@ -22,6 +22,7 @@
 
 class CommunityRecommendationRequest < ApplicationRecord
   include WithActivity
+  include DescriptionSanitation
 
   belongs_to :user, required: true
   has_many :community_recommendations

@@ -29,13 +29,13 @@ RSpec.describe DataImport::MyDramaList::Extractor::Details do
     end
   end
 
-  describe '#synopsis' do
-    it 'should return the plaintext synopsis' do
+  describe '#description' do
+    it 'should return the plaintext description' do
       expected_synopsis = <<-EOF.strip_heredoc.gsub(/\s+/, ' ').strip
         An evil criminal organisation called Sigma kidnap prominment business
         leaders to harvest their DNA and only Karate-Robo Zaborgar can save them
       EOF
-      expect(subject.synopsis).to eq(expected_synopsis)
+      expect(subject.description).to eq({ en: expected_synopsis })
     end
   end
 

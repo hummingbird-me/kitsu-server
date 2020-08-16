@@ -1,4 +1,6 @@
 class Types::Episode < Types::BaseObject
+  include HasLocalizedField
+
   description 'An Episode of a Media'
 
   field :id, ID, null: false
@@ -14,18 +16,12 @@ class Types::Episode < Types::BaseObject
     }
   end
 
+  localized_field :description,
+    description: 'A brief summary or description of the episode.'
+
   field :number, Integer,
     null: false,
     description: 'The sequence number of this episode in the season'
-
-  field :synopsis, [Types::LocalizedString],
-    null: true,
-    description: 'A brief summary or description of the episode'
-
-  def synopsis
-    # TODO: actually store localized synopsis data
-    [{ locale: 'en', text: object.synopsis }] if object.synopsis
-  end
 
   field :length, Integer,
     null: true,

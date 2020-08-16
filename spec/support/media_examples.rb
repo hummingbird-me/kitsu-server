@@ -15,6 +15,7 @@ RSpec.shared_examples 'media' do
   it { should have_db_column(:rating_frequencies).of_type(:hstore) }
   it { should have_db_column(:start_date).of_type(:date) }
   it { should have_db_column(:end_date).of_type(:date) }
+  it { should have_db_column(:description).of_type(:jsonb) }
   it { should have_and_belong_to_many(:genres) }
   it { should have_many(:castings) }
   it { should have_many(:library_entries) }
@@ -127,6 +128,14 @@ RSpec.shared_examples 'media' do
       allow(subject).to receive(:feed).and_return(feed)
       expect(subject.feed).to receive(:setup!)
       subject.save!
+    end
+  end
+
+  describe '#sanitize_description' do
+    it 'should strip XSS from description' do
+      subject.description['en'] = '<script>prompt("PASSWORD:")</script>' * 3
+      subject.save!
+      expect(subject.description['en']).not_to include('<script>')
     end
   end
 end

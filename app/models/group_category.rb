@@ -14,6 +14,7 @@
 
 class GroupCategory < ApplicationRecord
   include Sluggable
+  include DescriptionSanitation
 
   friendly_id :name, use: %i[slugged finders history]
   has_many :groups, foreign_key: 'category_id'

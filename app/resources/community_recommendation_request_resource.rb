@@ -4,4 +4,8 @@ class CommunityRecommendationRequestResource < BaseResource
   has_many :community_recommendations
 
   filter :user_id
+
+  def description
+    _model.description['en']
+  end
 end

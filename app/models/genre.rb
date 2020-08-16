@@ -13,6 +13,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Genre < ApplicationRecord
+  include DescriptionSanitation
   extend FriendlyId
   friendly_id :name, use: %i[slugged finders history]
   resourcify

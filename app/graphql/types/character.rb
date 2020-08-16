@@ -1,7 +1,8 @@
 class Types::Character < Types::BaseObject
+  include HasLocalizedField
+
   description 'Information about a Character in the Kitsu database'
 
-  # Identifiers
   field :id, ID, null: false
 
   field :slug, String,
@@ -19,6 +20,9 @@ class Types::Character < Types::BaseObject
       canonical: object.canonical_name
     }
   end
+
+  localized_field :description,
+    description: 'A brief summary or description of the character.'
 
   field :primary_media, Types::Interface::Media,
     null: true,

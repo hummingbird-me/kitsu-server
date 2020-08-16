@@ -11,6 +11,7 @@ module Media
     include WithCoverImage
     include Sluggable
     include Mappable
+    include DescriptionSanitation
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify

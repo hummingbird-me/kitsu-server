@@ -54,7 +54,7 @@ class MediaIndex < Chewy::Index
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
-      field :synopsis, type: 'string', analyzer: 'english'
+      translatable_field :description
       # Enumerated values
       field :age_rating, :subtype, type: 'string'
       # Various Data
@@ -89,7 +89,7 @@ class MediaIndex < Chewy::Index
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
-      field :synopsis, type: 'string', analyzer: 'english'
+      translatable_field :description
       # Enumerated values
       field :age_rating, :subtype, type: 'string'
       # Various Data
@@ -123,7 +123,7 @@ class MediaIndex < Chewy::Index
       # Titles and freeform text
       translatable_field :titles
       field :abbreviated_titles, type: 'string'
-      field :synopsis, type: 'string', analyzer: 'english'
+      translatable_field :description
       # Enumerated values
       field :age_rating, :subtype, type: 'string'
       # Various Data

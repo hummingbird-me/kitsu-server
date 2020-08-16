@@ -29,6 +29,7 @@
 
 class Category < ApplicationRecord
   include Mappable
+  include DescriptionSanitation
   extend FriendlyId
   friendly_id :title, use: %i[slugged finders history]
   resourcify

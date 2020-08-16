@@ -16,7 +16,7 @@ class MyAnimeListScraper
       media.titles = media.titles.merge(titles)
       media.canonical_title ||= 'en_jp'
       media.abbreviated_titles = [*media.abbreviated_titles, *abbreviated_titles].uniq
-      media.synopsis ||= merged_synopsis
+      media.description['en'] ||= merged_synopsis
       media.genres += genres
       media.subtype = subtype
       media.poster_image = poster_image unless media.poster_image.present?

@@ -2,7 +2,7 @@ class Types::Input::Manga::Update < Types::Input::Base
   argument :id, ID, required: true
 
   argument :titles, Types::Input::TitlesList, required: false
-  argument :synopsis, Types::Map, required: false
+  argument :description, Types::Map, required: false
   argument :subtype, Types::Enum::MangaSubtype, required: false
   argument :age_rating, Types::Enum::AgeRating, required: false
   argument :age_rating_guide, String, required: false
@@ -26,7 +26,7 @@ class Types::Input::Manga::Update < Types::Input::Base
       )
     end
 
-    modified[:synopsis] = synopsis['en'] if synopsis
+    modified[:description].merge!(description) if description
     modified[:cover_image] = banner_image if banner_image
 
     to_h.except(:banner_image).merge(modified)

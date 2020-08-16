@@ -2,7 +2,7 @@ class Types::Input::Anime::Update < Types::Input::Base
   argument :id, ID, required: true
 
   argument :titles, Types::Input::TitlesList, required: false
-  argument :synopsis, Types::Map, required: false
+  argument :description, Types::Map, required: false
   argument :age_rating, Types::Enum::AgeRating, required: false
   argument :age_rating_guide, String, required: false
   argument :tba, String, required: false
@@ -24,7 +24,7 @@ class Types::Input::Anime::Update < Types::Input::Base
       )
     end
 
-    modified[:synopsis] = synopsis['en'] if synopsis
+    modified[:description].merge!(description) if description
     modified[:cover_image] = banner_image if banner_image
     modified[:youtube_video_id] = youtube_trailer_video_id if youtube_trailer_video_id
 

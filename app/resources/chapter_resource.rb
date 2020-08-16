@@ -1,7 +1,17 @@
 class ChapterResource < BaseResource
   caching
 
-  attributes :titles, :canonical_title, :volume_number, :number, :synopsis,
+  attribute :synopsis # DEPRECATED
+  def synopsis
+    description
+  end
+
+  attribute :description
+  def description
+    _model.description['en']
+  end
+
+  attributes :titles, :canonical_title, :volume_number, :number,
     :published, :length
   attribute :thumbnail, format: :attachment
 

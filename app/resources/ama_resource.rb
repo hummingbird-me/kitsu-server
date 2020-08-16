@@ -16,4 +16,8 @@ class AMAResource < BaseResource
       end
     end
   }
+
+  def description
+    _model.description['en']
+  end
 end

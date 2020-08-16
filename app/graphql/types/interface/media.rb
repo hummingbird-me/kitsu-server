@@ -35,15 +35,8 @@ module Types::Interface::Media
     }
   end
 
-  # Localized Synopsis
-  localized_field :synopsis,
-    null: false,
-    description: 'A brief (mostly spoiler-free) summary/description of the media'
-
-  def synopsis
-    # TODO: actually store localized synopsis data
-    { en: object.synopsis } if object.synopsis
-  end
+  localized_field :description,
+    description: 'A brief (mostly spoiler free) summary or description of the media.'
 
   # Age Rating
   field :age_rating, Types::Enum::AgeRating,

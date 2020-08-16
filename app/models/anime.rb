@@ -123,7 +123,7 @@ class Anime < ApplicationRecord
 
   def self.fuzzy_find(title)
     MediaIndex::Anime.query(multi_match: {
-      fields: %w[titles.* abbreviated_titles synopsis actors characters],
+      fields: %w[titles.* abbreviated_titles description actors characters],
       query: title,
       fuzziness: 2,
       max_expansions: 15,

@@ -1,4 +1,6 @@
 class Types::Person < Types::BaseObject
+  include HasLocalizedField
+
   description 'A Voice Actor, Director, Animator, or other person who works in the creation and\
     localization of media'
 
@@ -24,18 +26,12 @@ class Types::Person < Types::BaseObject
     }
   end
 
+  localized_field :description,
+    description: 'A brief biography or description of the person.'
+
   field :birthday, Types::Date,
     null: true,
     description: 'The day when this person was born'
-
-  field :biography, Types::Person,
-    null: true,
-    description: 'A short biography of the person'
-
-  def biography
-    # TODO: actually store localized bio data
-    [{ locale: 'en', text: object.description }] if object.description
-  end
 
   field :image, Types::Image,
     null: true,

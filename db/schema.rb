@@ -30,7 +30,6 @@ ActiveRecord::Schema.define(version: 20200812034201) do
   end
 
   create_table "amas", id: :serial, force: :cascade do |t|
-    t.string "description", null: false
     t.integer "author_id", null: false
     t.integer "original_post_id", null: false
     t.integer "ama_subscribers_count", default: 0, null: false
@@ -38,6 +37,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.datetime "end_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["author_id"], name: "index_amas_on_author_id"
     t.index ["original_post_id"], name: "index_amas_on_original_post_id"
   end
@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.integer "age_rating"
     t.integer "episode_count"
     t.integer "episode_length"
-    t.text "synopsis", default: "", null: false
     t.string "youtube_video_id", limit: 255
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -81,6 +80,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.integer "total_length"
     t.text "release_schedule"
     t.string "original_locale"
+    t.jsonb "description", default: {}, null: false
     t.index ["age_rating"], name: "index_anime_on_age_rating"
     t.index ["average_rating"], name: "anime_average_rating_idx"
     t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: { average_rating: :desc }
@@ -187,7 +187,6 @@ ActiveRecord::Schema.define(version: 20200812034201) do
 
   create_table "categories", id: :serial, force: :cascade do |t|
     t.string "title", null: false
-    t.string "description"
     t.string "slug", null: false
     t.integer "anidb_id"
     t.integer "parent_id"
@@ -200,6 +199,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "child_count", default: 0, null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["anidb_id"], name: "index_categories_on_anidb_id"
     t.index ["parent_id"], name: "index_categories_on_parent_id"
     t.index ["slug"], name: "index_categories_on_slug"
@@ -232,7 +232,6 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.integer "number", null: false
     t.integer "volume_number"
     t.integer "length"
-    t.text "synopsis"
     t.date "published"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -243,6 +242,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.text "thumbnail_meta"
     t.boolean "filler"
     t.integer "volume_id"
+    t.jsonb "description", default: {}, null: false
     t.index ["manga_id"], name: "index_chapters_on_manga_id"
   end
 
@@ -259,7 +259,6 @@ ActiveRecord::Schema.define(version: 20200812034201) do
 
   create_table "characters", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255
-    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "mal_id"
@@ -273,6 +272,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.jsonb "names", default: {}, null: false
     t.string "canonical_name", null: false
     t.string "other_names", default: [], null: false, array: true
+    t.jsonb "description", default: {}, null: false
     t.index ["mal_id"], name: "character_mal_id", unique: true
     t.index ["mal_id"], name: "index_characters_on_mal_id", unique: true
     t.index ["slug"], name: "index_characters_on_slug"
@@ -322,9 +322,9 @@ ActiveRecord::Schema.define(version: 20200812034201) do
   create_table "community_recommendation_requests", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "title"
-    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["user_id"], name: "index_community_recommendation_requests_on_user_id"
   end
 
@@ -391,7 +391,6 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.integer "subtype"
     t.date "start_date"
     t.date "end_date"
-    t.text "synopsis"
     t.string "youtube_video_id"
     t.string "country", default: "ja", null: false
     t.string "cover_image_file_name"
@@ -417,6 +416,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.text "cover_image_meta"
     t.integer "total_length", default: 0, null: false
     t.text "release_schedule"
+    t.jsonb "description", default: {}, null: false
     t.index ["slug"], name: "index_dramas_on_slug"
   end
 
@@ -444,7 +444,6 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "season_number"
-    t.text "synopsis"
     t.string "thumbnail_file_name", limit: 255
     t.string "thumbnail_content_type", limit: 255
     t.integer "thumbnail_file_size"
@@ -457,6 +456,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.integer "relative_number"
     t.text "thumbnail_meta"
     t.boolean "filler"
+    t.jsonb "description", default: {}, null: false
     t.index ["media_type", "media_id"], name: "index_episodes_on_media_type_and_media_id"
   end
 
@@ -523,7 +523,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.string "slug", limit: 255
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "description"
+    t.jsonb "description", default: {}, null: false
   end
 
   create_table "genres_manga", id: false, force: :cascade do |t|
@@ -566,9 +566,9 @@ ActiveRecord::Schema.define(version: 20200812034201) do
   create_table "group_categories", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
-    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "description", default: {}, null: false
   end
 
   create_table "group_invites", id: :serial, force: :cascade do |t|
@@ -838,7 +838,6 @@ ActiveRecord::Schema.define(version: 20200812034201) do
 
   create_table "manga", id: :serial, force: :cascade do |t|
     t.string "slug", limit: 255
-    t.text "synopsis"
     t.string "poster_image_file_name", limit: 255
     t.string "poster_image_content_type", limit: 255
     t.integer "poster_image_file_size"
@@ -874,6 +873,7 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.text "cover_image_meta"
     t.text "release_schedule"
     t.string "original_locale"
+    t.jsonb "description", default: {}, null: false
     t.index ["average_rating"], name: "manga_average_rating_idx"
     t.index ["slug"], name: "index_manga_on_slug"
     t.index ["user_count"], name: "manga_user_count_idx"
@@ -1167,9 +1167,9 @@ ActiveRecord::Schema.define(version: 20200812034201) do
     t.jsonb "names", default: {}, null: false
     t.string "canonical_name", null: false
     t.string "other_names", default: [], null: false, array: true
-    t.text "description"
     t.date "birthday"
     t.string "slug"
+    t.jsonb "description", default: {}, null: false
     t.index ["slug"], name: "index_people_on_slug", unique: true
   end
 
@@ -1408,12 +1408,12 @@ ActiveRecord::Schema.define(version: 20200812034201) do
 
   create_table "site_announcements", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
-    t.text "description"
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title", null: false
     t.string "image_url"
+    t.jsonb "description", default: {}, null: false
   end
 
   create_table "stats", id: :serial, force: :cascade do |t|

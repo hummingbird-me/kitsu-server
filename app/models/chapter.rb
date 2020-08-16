@@ -28,6 +28,7 @@
 
 class Chapter < ApplicationRecord
   include Titleable
+  include DescriptionSanitation
 
   belongs_to :manga, required: true
   belongs_to :volume, counter_cache: true
@@ -54,10 +55,6 @@ class Chapter < ApplicationRecord
 
   def feed
     ChapterFeed.new(id)
-  end
-
-  before_save do
-    self.synopsis = Sanitize.fragment(synopsis, Sanitize::Config::RESTRICTED)
   end
 
   after_commit(on: :create) { feed.setup! }

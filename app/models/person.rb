@@ -22,6 +22,7 @@
 
 class Person < ApplicationRecord
   include Mappable
+  include DescriptionSanitation
   extend FriendlyId
   friendly_id :name, use: %i[slugged finders history]
   has_attached_file :image

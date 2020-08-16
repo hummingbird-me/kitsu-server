@@ -1,7 +1,17 @@
 class EpisodeResource < BaseResource
   caching
 
-  attributes :titles, :canonical_title, :season_number, :number, :relative_number, :synopsis,
+  attribute :synopsis # DEPRECATED
+  def synopsis
+    description
+  end
+
+  attribute :description
+  def description
+    _model.description['en']
+  end
+
+  attributes :titles, :canonical_title, :season_number, :number, :relative_number,
     :airdate, :length
   attribute :thumbnail, format: :attachment
 

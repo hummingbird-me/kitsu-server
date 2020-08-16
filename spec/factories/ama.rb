@@ -28,7 +28,7 @@
 FactoryBot.define do
   factory :ama do
     start_date { Time.now }
-    description { Faker::Lorem.sentence }
+    description { { en: Faker::Lorem.sentence } }
     association :author, factory: :user, strategy: :build
     association :original_post, factory: :post, strategy: :build
   end

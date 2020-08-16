@@ -15,7 +15,7 @@ class MyAnimeListScraper
     def import
       episode.titles = episode.titles.merge(titles)
       episode.canonical_title = canonical_title
-      episode.synopsis ||= synopsis
+      episode.description['en'] ||= synopsis
       episode.length ||= length
       episode.airdate ||= airdate
       episode.number ||= number

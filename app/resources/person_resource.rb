@@ -1,5 +1,5 @@
 class PersonResource < BaseResource
-  attributes :name, :mal_id
+  attributes :name, :mal_id, :description
   attribute :image, format: :attachment
 
   has_many :castings
@@ -8,5 +8,9 @@ class PersonResource < BaseResource
 
   def mal_id
     'Moved to mappings relationship.'
+  end
+
+  def description
+    _model.description['en']
   end
 end

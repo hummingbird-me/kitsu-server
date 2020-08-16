@@ -20,6 +20,7 @@
 
 class SiteAnnouncement < ApplicationRecord
   include WithActivity
+  include DescriptionSanitation
 
   belongs_to :user, required: true
 

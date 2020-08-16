@@ -26,6 +26,8 @@
 # rubocop:enable Metrics/LineLength
 
 class AMA < ApplicationRecord
+  include DescriptionSanitation
+
   belongs_to :author, required: true, class_name: 'User'
   belongs_to :original_post, required: true, class_name: 'Post'
   has_many :ama_subscribers, dependent: :destroy
