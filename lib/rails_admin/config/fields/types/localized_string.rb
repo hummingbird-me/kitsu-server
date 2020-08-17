@@ -29,7 +29,7 @@ module RailsAdmin
             return if value.blank?
 
             value.each_line
-                 .map { |line| line.split(':').map(&:strip) }
+                 .map { |line| line.split(':', 2).map(&:strip) }
                  .select { |line| line.count == 2 }
                  .to_h
           end
