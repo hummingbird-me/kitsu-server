@@ -1,4 +1,4 @@
-module Types::Interface::Timestamp
+module Types::Interface::WithTimestamps
   include Types::Interface::Base
 
   field :created_at, GraphQL::Types::ISO8601DateTime, null: false
