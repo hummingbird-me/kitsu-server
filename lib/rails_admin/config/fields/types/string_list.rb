@@ -26,7 +26,7 @@ module RailsAdmin
           end
 
           def parse_value(value)
-            return if value.blank?
+            return [] if value.blank?
 
             value.each_line.to_a
           end
