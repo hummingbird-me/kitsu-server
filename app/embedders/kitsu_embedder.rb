@@ -10,7 +10,7 @@ class KitsuEmbedder < Embedder
       kind: "link.kitsu.#{type.singularize}",
       url: url,
       title: title,
-      description: description,
+      description: description['en'],
       image: image,
       site: { name: 'Kitsu' },
       kitsu: {
