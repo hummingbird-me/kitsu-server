@@ -1,4 +1,6 @@
-class Types::QueryType < Types::BaseObject
+class Types::QueryType < GraphQL::Schema::Object
+  connection_type_class(Types::BaseConnection)
+
   field :current_account, Types::Account, null: true do
     description 'Kitsu account details. You must supply an Authorization token in header.'
   end
