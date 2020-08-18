@@ -42,7 +42,7 @@ class UserResource < BaseResource
   end
 
   def title_language_preference
-    return :english if _model.title_language_preference == :localized
+    return :english if _model.title_language_preference == 'localized'
 
     _model.title_language_preference
   end
