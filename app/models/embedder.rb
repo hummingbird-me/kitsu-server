@@ -26,7 +26,7 @@ class Embedder
   # {
   #   kind: 'image|video|audio|link',       <-- Required; can also be kind.something (subscope)
   #   title: String,                        <-- Required
-  #   description: String,                  <-- Optional
+  #   description: String,                  <-- Optional; Changed for localization, hardcoded en.
   #   url: String,                          <-- Required; the URL for the link
   #   site: {                               <-- Site Information; Required
   #     name: String,                         <-- Required
