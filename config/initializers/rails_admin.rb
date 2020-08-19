@@ -66,7 +66,13 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Anime
   config.model 'Anime' do
     field :id
-    field :titles, :localized_string
+    field :titles, :localized_string do
+      default_value <<~TITLES
+        en:
+        en_jp:
+        ja_jp:
+      TITLES
+    end
     field :abbreviated_titles, :string_list
     field :description, :localized_text
     fields :canonical_title, :slug, :subtype, :poster_image, :cover_image,
@@ -84,7 +90,13 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   # Manga
   config.model 'Manga' do
     field :id
-    field :titles, :localized_string
+    field :titles, :localized_string do
+      default_value <<~TITLES
+        en:
+        en_jp:
+        ja_jp:
+      TITLES
+    end
     field :abbreviated_titles, :string_list
     field :description, :localized_text
     fields :canonical_title, :slug, :subtype, :poster_image, :cover_image,
