@@ -42,6 +42,6 @@ class Types::Person < Types::BaseObject
     description: 'The voice-acting roles this person has had.'
 
   def voices
-    AssociationLoader.for(object.class, :voices).scope(object)
+    AssociationLoader.for(object.class, :voices, policy: :character_voice).scope(object)
   end
 end
