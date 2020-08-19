@@ -1,10 +1,9 @@
 class Types::CharacterVoice < Types::BaseObject
   description 'Information about a VA (Person) voicing a Character in a Media'
 
-  # Identifiers
   field :id, ID, null: false
 
-  field :mediaCharacter, Types::MediaCharacter,
+  field :media_character, Types::MediaCharacter,
     null: false,
     description: 'The MediaCharacter node'
 
