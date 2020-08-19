@@ -26,7 +26,7 @@ module RailsAdmin
           end
 
           def parse_value(value)
-            return if value.blank?
+            return {} if value.blank?
 
             section = 'en'
             value.each_line.each_with_object({ 'en' => '' }) do |line, obj|
