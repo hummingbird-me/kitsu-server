@@ -25,4 +25,10 @@ class AlgoliaMediaIndex < BaseIndex
   has_many :people, as: :name, via: 'castings.person'
   has_many :characters, as: :name, via: 'castings.character'
   has_many :streamers, as: :site_name, via: 'streaming_links.streamer'
+
+  def as_json(*)
+    super.tap do |json|
+      json['synopsis'] = json.dig('description', 'en')
+    end
+  end
 end
