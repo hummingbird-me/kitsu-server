@@ -34,7 +34,7 @@ module RailsAdmin
                 section = line[2..-1].strip
                 obj[section] = ''
               else
-                obj[section] << line
+                obj[section] << line.strip
               end
             end
           end
