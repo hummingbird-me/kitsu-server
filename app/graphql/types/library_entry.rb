@@ -13,7 +13,8 @@ class Types::LibraryEntry < Types::BaseObject
 
   field :last_unit, Types::Interface::Unit,
     null: true,
-    description: 'The last unit consumed'
+    description: 'The last unit consumed',
+    method: :unit
 
   field :next_unit, Types::Interface::Unit,
     null: true,
