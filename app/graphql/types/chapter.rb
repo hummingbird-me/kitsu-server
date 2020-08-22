@@ -1,40 +1,12 @@
 class Types::Chapter < Types::BaseObject
-  include HasLocalizedField
+  implements Types::Interface::Unit
 
-  description 'A single chapter part of a volume.'
+  description 'A single chapter of a manga'
 
-  field :id, ID, null: false
-
-  field :titles, Types::TitlesList,
-    null: false,
-    description: 'The titles for this chapter in various locales'
-
-  def titles
-    {
-      localized: object.titles,
-      canonical: object.canonical_title
-    }
-  end
-
-  field :number, Integer,
-    null: false,
-    description: 'The number of pages in this chapter.'
-
-  field :published, GraphQL::Types::ISO8601Date,
+  field :released_at, GraphQL::Types::ISO8601Date,
+    method: :published,
     null: true,
-    description: 'The date when this chapter was released.'
-
-  # NOTE: once synopsis changes have been merged
-  # localized_field :description,
-  #   description: 'A brief summary or description of the chapter.'
-
-  field :thumbnail, Types::Image,
-    null: true,
-    description: 'A thumbnail image for the chapter.'
-
-  field :volume_number, Integer,
-    null: true,
-    description: 'The volume number this chapter is in.'
+    description: 'When this chapter was released'
 
   field :volume, Types::Volume,
     null: true,
