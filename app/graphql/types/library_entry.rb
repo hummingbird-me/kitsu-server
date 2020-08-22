@@ -11,6 +11,15 @@ class Types::LibraryEntry < Types::BaseObject
     null: false,
     description: 'The media related to this library entry.'
 
+  field :last_unit, Types::Interface::Unit,
+    null: true,
+    description: 'The last unit consumed',
+    method: :unit
+
+  field :next_unit, Types::Interface::Unit,
+    null: true,
+    description: 'The next unit to be consumed'
+
   field :status, Types::Enum::LibraryEntryStatus,
     null: false,
     description: ''
