@@ -126,6 +126,8 @@ class Types::Profile < Types::BaseObject
   end
 
   field :library_events, Types::LibraryEvent.connection_type, null: false do
+    description 'A list of library events for this user'
+
     argument :kind, [Types::Enum::LibraryEventKind], required: false
   end
 
