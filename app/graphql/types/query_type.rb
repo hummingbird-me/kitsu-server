@@ -228,4 +228,22 @@ class Types::QueryType < GraphQL::Schema::Object
   def library_entries_by_media(media_type:, media_id:)
     ::LibraryEntry.where(media_type: media_type, media_id: media_id)
   end
+
+  field :find_library_event_by_id, Types::LibraryEvent, null: true do
+    description 'Find a single Library Event by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_library_event_by_id(id:)
+    ::LibraryEvent.find_by(id: id)
+  end
+
+  field :library_events_by_kind, Types::LibraryEvent.connection_type, null: true do
+    description 'List of Library Events by Kind'
+    argument :kind, [Types::Enum::LibraryEventKind], required: true
+  end
+
+  def library_events_by_kind(kind:)
+    ::LibraryEvent.where(kind: kind)
+  end
 end
