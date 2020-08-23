@@ -140,4 +140,12 @@ class Types::Profile < Types::BaseObject
   def media_reactions
     AssociationLoader.for(object.class, :media_reactions).scope(object)
   end
+
+  field :favorites, Types::Favorite.connection_type,
+    null: false,
+    description: 'Favorite media, characters, and people'
+
+  def favorites
+    AssociationLoader.for(object.class, :favorites).scope(object)
+  end
 end
