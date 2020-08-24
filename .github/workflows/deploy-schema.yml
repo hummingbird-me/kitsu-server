@@ -1,7 +1,6 @@
 name: Apollo Studio Schema Changes
 
-#on: [deployment]
-on: [pull_request] # Debug
+on: [deployment]
 
 env:
   BUNDLE_GITHUB__HTTPS: true
