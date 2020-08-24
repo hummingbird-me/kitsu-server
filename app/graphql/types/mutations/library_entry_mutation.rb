@@ -1,13 +1,21 @@
 class Types::Mutations::LibraryEntryMutation < Types::BaseObject
   field :create,
     mutation: ::Mutations::LibraryEntry::Create,
-    description: 'Create a Library Entry.'
+    description: 'Create a library entry'
 
   field :update,
     mutation: ::Mutations::LibraryEntry::Update,
-    description: 'Update a Library Entry.'
+    description: 'Update a library entry'
+
+  field :update_status_by_id,
+    mutation: ::Mutations::LibraryEntry::UpdateStatusById,
+    description: 'Update a library entry status by id'
+
+  field :update_status_by_media,
+    mutation: ::Mutations::LibraryEntry::UpdateStatusByMedia,
+    description: 'Update a library entry status by media'
 
   field :delete,
     mutation: ::Mutations::LibraryEntry::Delete,
-    description: 'Delete a Library Entry.'
+    description: 'Delete a library entry'
 end
