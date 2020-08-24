@@ -4,10 +4,11 @@ class Types::Library < Types::BaseObject
   field :all, Types::LibraryEntry.connection_type, null: false do
     description 'All Library Entries for a specific Media'
     argument :media_type, Types::Enum::MediaType, required: true
+    argument :status, [Types::Enum::LibraryEntryStatus], required: false
   end
 
-  def all(media_type:)
-    library_entries(media_type: media_type)
+  def all(media_type:, status: nil)
+    library_entries(media_type: media_type, status: status)
   end
 
   field :current, Types::LibraryEntry.connection_type, null: false do
