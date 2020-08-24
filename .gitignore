@@ -9,3 +9,6 @@
 ## Environment normalization:
 /.bundle
 /vendor/bundle
+
+## Apollo Studio
+/schema.graphql
