@@ -2,13 +2,13 @@ class Mutations::LibraryEntry::UpdateStatusByMedia < Mutations::Base
   argument :input,
     Types::Input::LibraryEntry::UpdateStatusByMedia,
     required: true,
-    description: 'Update a library entry status by media',
+    description: 'Update library entry status by media',
     as: :library_entry
 
   field :library_entry, Types::LibraryEntry, null: true
 
   def load_library_entry(value)
-    library_entry = ::LibraryEntry.find_by(
+    library_entry = ::LibraryEntry.find_by!(
       user_id: current_user.id,
       media_id: value.media_id,
       media_type: value.media_type

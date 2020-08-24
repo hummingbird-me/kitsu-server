@@ -2,7 +2,7 @@ class Mutations::LibraryEntry::UpdateStatusById < Mutations::Base
   argument :input,
     Types::Input::LibraryEntry::UpdateStatusById,
     required: true,
-    description: 'Update a library entry status by id',
+    description: 'Update library entry status by id',
     as: :library_entry
 
   field :library_entry, Types::LibraryEntry, null: true
