@@ -1,4 +1,6 @@
 class Types::Producer < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A company involved in the creation or localization of media'
 
   # Identifiers

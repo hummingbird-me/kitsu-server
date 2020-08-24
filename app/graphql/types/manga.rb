@@ -1,5 +1,6 @@
 class Types::Manga < Types::BaseObject
   implements Types::Interface::Media
+  implements Types::Interface::WithTimestamps
 
   field :subtype, Types::Enum::MangaSubtype,
     null: false,

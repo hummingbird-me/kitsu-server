@@ -1,4 +1,6 @@
 class Types::CharacterVoice < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'Information about a VA (Person) voicing a Character in a Media'
 
   field :id, ID, null: false

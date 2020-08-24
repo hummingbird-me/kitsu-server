@@ -1,4 +1,6 @@
 class Types::QuoteLine < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A line in a quote'
 
   # Identifiers

@@ -1,4 +1,6 @@
 class Types::Profile < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A user profile on Kitsu'
 
   field :id, ID, null: false

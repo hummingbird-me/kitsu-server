@@ -1,4 +1,6 @@
 class Types::SiteLink < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description "A link to a user's profile on an external site."
 
   field :id, ID, null: false

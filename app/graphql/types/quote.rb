@@ -1,4 +1,6 @@
 class Types::Quote < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A quote from a media'
 
   # Identifiers

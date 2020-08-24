@@ -1,5 +1,6 @@
 class Types::Chapter < Types::BaseObject
   implements Types::Interface::Unit
+  implements Types::Interface::WithTimestamps
 
   description 'A single chapter of a manga'
 

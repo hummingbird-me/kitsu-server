@@ -1,5 +1,6 @@
 class Types::Episode < Types::BaseObject
   implements Types::Interface::Unit
+  implements Types::Interface::WithTimestamps
 
   description 'An Episode of a Media'
 

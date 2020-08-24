@@ -1,4 +1,6 @@
 class Types::Comment < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A comment on a post'
 
   field :id, ID, null: false
