@@ -1,5 +1,5 @@
 namespace :graphql do
-  task :dump_schema do
+  task dump_schema: :environment do
     require 'graphql/rake_task'
 
     GraphQL::RakeTask.new(
