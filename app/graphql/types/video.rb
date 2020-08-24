@@ -1,5 +1,7 @@
 class Types::Video < Types::BaseObject
   implements Types::Interface::Streamable
+  implements Types::Interface::WithTimestamps
+
   description 'The media video.'
 
   field :id, ID, null: false

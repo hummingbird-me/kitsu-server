@@ -1,4 +1,6 @@
 class Types::Account < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A user account on Kitsu'
 
   field :id, ID, null: false

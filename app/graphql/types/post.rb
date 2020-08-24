@@ -1,4 +1,6 @@
 class Types::Post < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A post that is visible to your followers and globally in the news-feed.'
 
   field :id, ID, null: false

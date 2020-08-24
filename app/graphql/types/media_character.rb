@@ -1,4 +1,6 @@
 class Types::MediaCharacter < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'Information about a Character starring in a Media'
 
   # Identifiers

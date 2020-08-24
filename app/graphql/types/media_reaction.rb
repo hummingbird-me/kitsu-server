@@ -1,4 +1,6 @@
 class Types::MediaReaction < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A simple review that is 140 characters long expressing how you felt about a media'
 
   field :id, ID, null: false

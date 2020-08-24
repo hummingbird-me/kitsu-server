@@ -1,4 +1,6 @@
 class Types::Streamer < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'The streaming company.'
 
   field :id, ID, null: false

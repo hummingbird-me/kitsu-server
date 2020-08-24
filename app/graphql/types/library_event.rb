@@ -1,4 +1,6 @@
 class Types::LibraryEvent < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'History of user actions for a library entry.'
 
   field :id, ID, null: false

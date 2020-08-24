@@ -1,4 +1,6 @@
 class Types::LibraryEntry < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'Information about a specific media entry for a user'
 
   field :id, ID, null: false

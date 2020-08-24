@@ -1,4 +1,6 @@
 class Types::ProSubscription < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A subscription to Kitsu PRO'
 
   field :account, Types::Account,

@@ -1,4 +1,6 @@
 class Types::MediaStaff < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'Information about a person working on an anime'
 
   # Identifiers

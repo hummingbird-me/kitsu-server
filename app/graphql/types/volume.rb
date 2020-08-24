@@ -1,4 +1,6 @@
 class Types::Volume < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'A manga volume which can contain multiple chapters.'
 
   field :id, ID, null: false

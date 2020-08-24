@@ -1,4 +1,6 @@
 class Types::MediaProduction < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'The role a company played in the creation or localization of a media'
 
   # Identifiers

@@ -1,4 +1,6 @@
 class Types::Mapping < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+
   description 'Media Mappings from External Sites (MAL, Anilist, etc..) to Kitsu.'
 
   field :id, ID, null: false
