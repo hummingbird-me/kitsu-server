@@ -23,6 +23,14 @@ class Types::Mutations::LibraryEntryMutation < Types::BaseObject
     mutation: ::Mutations::LibraryEntry::UpdateProgressByMedia,
     description: 'Update library entry progress by media'
 
+  field :update_rating_by_id,
+    mutation: ::Mutations::LibraryEntry::UpdateRatingById,
+    description: 'Update library entry rating by id'
+
+  field :update_rating_by_media,
+    mutation: ::Mutations::LibraryEntry::UpdateRatingByMedia,
+    description: 'Update library entry rating by media'
+
   field :delete,
     mutation: ::Mutations::LibraryEntry::Delete,
     description: 'Delete a library entry'
