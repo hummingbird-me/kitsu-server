@@ -125,6 +125,20 @@ class Types::Profile < Types::BaseObject
     object
   end
 
+  field :library_events, Types::LibraryEvent.connection_type, null: false do
+    description 'A list of library events for this user'
+
+    argument :kind, [Types::Enum::LibraryEventKind], required: false
+  end
+
+  def library_events(kind: nil)
+    filters = { kind: kind }.compact
+
+    AssociationLoader.for(object.class, :library_events).scope(object).then do |library_events|
+      library_events.where(filters)
+    end
+  end
+
   field :site_links, Types::SiteLink.connection_type,
     null: true,
     description: 'Links to the user on other (social media) sites.'
