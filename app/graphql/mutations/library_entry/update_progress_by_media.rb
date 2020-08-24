@@ -1,8 +1,8 @@
-class Mutations::LibraryEntry::UpdateStatusByMedia < Mutations::Base
+class Mutations::LibraryEntry::UpdateProgressByMedia < Mutations::Base
   argument :input,
-    Types::Input::LibraryEntry::UpdateStatusByMedia,
+    Types::Input::LibraryEntry::UpdateProgressByMedia,
     required: true,
-    description: 'Update library entry status by media',
+    description: 'Update library entry progress by media',
     as: :library_entry
 
   field :library_entry, Types::LibraryEntry, null: true

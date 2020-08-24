@@ -1,18 +1,14 @@
-class Mutations::LibraryEntry::UpdateStatusByMedia < Mutations::Base
+class Mutations::LibraryEntry::UpdateProgressById < Mutations::Base
   argument :input,
-    Types::Input::LibraryEntry::UpdateStatusByMedia,
+    Types::Input::LibraryEntry::UpdateProgressById,
     required: true,
-    description: 'Update library entry status by media',
+    description: 'Update library entry progress by id',
     as: :library_entry
 
   field :library_entry, Types::LibraryEntry, null: true
 
   def load_library_entry(value)
-    library_entry = ::LibraryEntry.find_by!(
-      user_id: current_user.id,
-      media_id: value.media_id,
-      media_type: value.media_type
-    )
+    library_entry = ::LibraryEntry.find(value.id)
     library_entry.assign_attributes(value.to_h)
     library_entry
   end
