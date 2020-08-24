@@ -7,4 +7,8 @@ class Mutations::Base < GraphQL::Schema::Mutation
 
     [false, Errors::Pundit::NotAuthorizedError.graphql_error]
   end
+
+  def current_user
+    User.current
+  end
 end
