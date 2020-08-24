@@ -9,7 +9,7 @@ class Mutations::LibraryEntry::UpdateProgressById < Mutations::Base
 
   def load_library_entry(value)
     library_entry = ::LibraryEntry.find(value.id)
-    library_entry.assign_attributes(value.to_model)
+    library_entry.assign_attributes(value.to_h)
     library_entry
   end
 
