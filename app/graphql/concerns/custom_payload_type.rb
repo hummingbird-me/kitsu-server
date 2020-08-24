@@ -30,9 +30,10 @@ module CustomPayloadType
     end
 
     def generate_resolver_name
-      return graphql_name if CRUD_OPERATION.exclude?(graphql_name.downcase)
+      return graphql_name unless graphql_name.downcase.starts_with?(*CRUD_OPERATION)
 
       # Mutations::Anime::Create -> AnimeCreate
+      # Mutations::LibraryEntry::UpdateStatusById -> LibraryEntryUpdateStatusById
       name.split('::')[1..-1].join
     end
   end
