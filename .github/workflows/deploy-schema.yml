@@ -4,6 +4,7 @@ name: Apollo Studio Schema Changes
 on: [pull_request] # Debug
 
 env:
+  BUNDLE_GITHUB__HTTPS: true
   LOG_LEVEL: warn
 
 jobs:
@@ -19,8 +20,17 @@ jobs:
     services:
       postgres:
         image: postgres:10-alpine
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitsu_test
+        ports:
+          - 5432/tcp
       redis:
         image: redis:alpine
+        ports:
+          - 6379/tcp
 
     steps:
     - name: Checkout Repository
@@ -53,6 +63,9 @@ jobs:
 
     - name: Dump GraphQL Schema
       run: bin/rails graphql:dump_schema
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
+        REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
 
     - name: Upload GraphQL Schema
       run: npx apollo service:push --graph=kitsu --key=${{ secrets.APOLLO_KEY }} --variant=current --localSchemaFile=./schema.graphql
