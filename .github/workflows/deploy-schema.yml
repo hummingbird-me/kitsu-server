@@ -1,7 +1,7 @@
 name: Apollo Studio Schema Changes
 
 #on: [deployment]
-on: [push,pull_request] # Debug
+on: [pull_request] # Debug
 
 env:
   LOG_LEVEL: warn
