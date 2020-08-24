@@ -16,11 +16,11 @@ class Types::Mutations::LibraryEntryMutation < Types::BaseObject
     description: 'Update library entry status by media'
 
   field :update_progress_by_id,
-    mutation: ::Mutations::LibraryEntry::UpdateStatusById,
+    mutation: ::Mutations::LibraryEntry::UpdateProgressById,
     description: 'Update library entry progress by id'
 
   field :update_progress_by_media,
-    mutation: ::Mutations::LibraryEntry::UpdateStatusByMedia,
+    mutation: ::Mutations::LibraryEntry::UpdateProgressByMedia,
     description: 'Update library entry progress by media'
 
   field :delete,
