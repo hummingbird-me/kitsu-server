@@ -1,6 +1,6 @@
 name: Apollo Studio Schema Changes
 
-on: [deployment]
+on: [deployment,push]
 
 env:
   BUNDLE_GITHUB__HTTPS: true
@@ -144,6 +144,6 @@ jobs:
         annotations: true
         fail-on-breaking: false
 
-    - name: Upload GraphQL Schema
-      run: npx apollo service:push --graph=kitsu --key=${{ secrets.APOLLO_KEY }} --variant=current --localSchemaFile=./schema.graphql
+    #- name: Upload GraphQL Schema
+    #  run: npx apollo service:push --graph=kitsu --key=${{ secrets.APOLLO_KEY }} --variant=current --localSchemaFile=./schema.graphql
 
