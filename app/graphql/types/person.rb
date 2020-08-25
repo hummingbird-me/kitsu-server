@@ -51,6 +51,6 @@ class Types::Person < Types::BaseObject
     description: 'Information about the person working on specific media'
 
   def media_staff
-    AssociationLoader.for(object.class, :staff, policy: :media_staff)
+    AssociationLoader.for(object.class, :staff, policy: :media_staff).scope(object)
   end
 end
