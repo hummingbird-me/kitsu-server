@@ -67,4 +67,83 @@ jobs:
         REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
 
     - name: Upload GraphQL Schema
+      run: npx apollo service:push --graph=kitsu --key=${{ secrets.APOLLO_KEY }} --variant=current --localSchemaFile=./schema.graphqlname: Apollo Studio Schema Changes
+
+on: [deployment,pull_request]
+
+env:
+  BUNDLE_GITHUB__HTTPS: true
+  LOG_LEVEL: warn
+
+jobs:
+  apollo-studio:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [14]
+        ruby_version: [2.6.x]
+
+    runs-on: ${{ matrix.os }}
+
+    services:
+      postgres:
+        image: postgres:10-alpine
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitsu_test
+        ports:
+          - 5432/tcp
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379/tcp
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v1
+
+    - name: Restore Cached Dependencies
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+
+    - name: Setup Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node_version }}
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get -yqq install libpq-dev
+        gem install bundler
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+
+    - name: Dump GraphQL Schema
+      run: bin/rails graphql:dump_schema
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
+        REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
+    
+    - name: GraphQL Inspector
+      uses: kamilkisiela/graphql-inspector@v2.2.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        schema: schema.graphql
+        endpoint: https://kitsu.io/api/graphql
+        annotations: true
+        fail-on-breaking: false
+
+    - name: Upload GraphQL Schema
       run: npx apollo service:push --graph=kitsu --key=${{ secrets.APOLLO_KEY }} --variant=current --localSchemaFile=./schema.graphql
+
