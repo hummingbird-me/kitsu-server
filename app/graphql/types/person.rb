@@ -45,4 +45,12 @@ class Types::Person < Types::BaseObject
   def voices
     AssociationLoader.for(object.class, :voices, policy: :character_voice).scope(object)
   end
+
+  field :media_staff, Types::MediaStaff.connection_type,
+    null: true,
+    description: 'Information about the person working on specific media'
+
+  def media_staff
+    AssociationLoader.for(object.class, :staff, policy: :media_staff)
+  end
 end
