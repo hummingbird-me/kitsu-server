@@ -20,7 +20,7 @@ class Types::Profile < Types::BaseObject
   field :name, String,
     null: false,
     description:
-      <<~DESCRIPTION.strip
+      <<~DESCRIPTION.squish
         A non-unique publicly visible name for the profile.
         Minimum of 3 characters and any valid Unicode character
       DESCRIPTION

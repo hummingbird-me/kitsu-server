@@ -2,8 +2,10 @@ class Types::Person < Types::BaseObject
   include HasLocalizedField
   implements Types::Interface::WithTimestamps
 
-  description 'A Voice Actor, Director, Animator, or other person who works in the creation and\
-    localization of media'
+  description <<~DESCRIPTION.squish
+    A Voice Actor, Director, Animator, or other person who works in
+    the creation and localization of media
+  DESCRIPTION
 
   field :id, ID, null: false
 
