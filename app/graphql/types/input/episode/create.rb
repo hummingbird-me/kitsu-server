@@ -6,7 +6,7 @@ class Types::Input::Episode::Create < Types::Input::Base
 
   argument :description, Types::Map, required: false
   argument :length, Integer, required: false
-  argument :aired_at, Types::Date, required: false
+  argument :released_at, Types::Date, required: false, as: :airdate
   argument :thumbnail_image, ApolloUploadServer::Upload, required: false
 
   def to_model

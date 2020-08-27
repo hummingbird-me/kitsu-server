@@ -5,7 +5,7 @@ class Types::Input::Episode::Update < Types::Input::Base
   argument :number, Integer, required: false
   argument :description, Types::Map, required: false
   argument :length, Integer, required: false
-  argument :aired_at, Types::Date, required: false
+  argument :released_at, Types::Date, required: false, as: :airdate
   argument :thumbnail_image, ApolloUploadServer::Upload, required: false
 
   def to_model
