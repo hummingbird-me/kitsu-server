@@ -1,4 +1,6 @@
 require_dependency 'custom_errors'
+require_dependency 'monkey_patching/custom_scoped_type_complexity'
+require_dependency 'monkey_patching/custom_max_query_complexity'
 
 class KitsuSchema < GraphQL::Schema
   use GraphQL::Execution::Interpreter
