@@ -154,6 +154,14 @@ class Types::QueryType < GraphQL::Schema::Object
     User.patron.followed_first(context[:user]).order(followers_count: :desc)
   end
 
+  field :categories, Types::Category.connection_type, null: true do
+    description 'All Categories in the Kitsu Database'
+  end
+
+  def categories
+    ::Category.all
+  end
+
   field :find_category_by_id, Types::Category, null: true do
     description 'Find a single Category by ID'
     argument :id, ID, required: true
