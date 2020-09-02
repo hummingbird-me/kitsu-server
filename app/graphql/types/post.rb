@@ -16,7 +16,8 @@ class Types::Post < Types::BaseObject
 
   field :is_spoiler, Boolean,
     null: false,
-    description: 'If this post spoils the tagged media.'
+    description: 'If this post spoils the tagged media.',
+    method: :spoiler?
 
   field :is_nsfw, Boolean,
     null: false,
