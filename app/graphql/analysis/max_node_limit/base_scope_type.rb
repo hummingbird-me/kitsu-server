@@ -13,12 +13,11 @@ module Analysis
 
       # @param query [GraphQL::Query] Used for `query.possible_types`
       # @param node [Language::Nodes::Field] The AST node; used for providing argument values when necessary
-      # @param field_definition [GraphQL::Field, GraphQL::Schema::Field]
+      # @param field_definition [GraphQL::Field, GraphQL::Schema::Field] Used for getting the `.complexity` configuration
       def initialize(query, node: nil, field_definition: nil)
         @query = query
         @node = node
         @field_definition = field_definition
-
         @scoped_children = nil
       end
 

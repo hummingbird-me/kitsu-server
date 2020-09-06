@@ -5,9 +5,11 @@ module Analysis
     class ConnectionScopeType < BaseScopeType
       def valid?
         if node_argument.nil?
-          raise GraphQL::AnalysisError, "Connection '#{field_definition.name}' requires the argument 'first' or 'last' to be supplied."
+          message = "Connection '#{field_definition.name}' requires the argument 'first' or 'last' to be supplied."
+          raise GraphQL::AnalysisError.new(message, ast_node: @node)
         elsif !argument_value.between?(1, 100)
-          raise GraphQL::AnalysisError, "Connection '#{field_definition.name}' argument '#{node_argument.name}' must be between 1 - 100."
+          message = "Connection '#{field_definition.name}' argument '#{node_argument.name}' must be between 1 - 100."
+          raise GraphQL::AnalysisError.new(message, ast_node: @node)
         end
 
         true
