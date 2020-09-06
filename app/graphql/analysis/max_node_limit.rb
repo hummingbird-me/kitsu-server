@@ -2,23 +2,21 @@
 
 module Analysis
   class MaxNodeLimit < GraphQL::Analysis::AST::Analyzer
-    NODE_LIMIT = 100_000
-    # State for the query complexity calculation:
-    # - `nodes_on_type` holds complexity scores for each type in an IRep node
+    NODE_LIMIT = 500_000
+
     def initialize(query)
       super
+
       @nodes_on_type_by_query = {}
       @errors = []
     end
 
-    def analyze?
-      true
-    end
-
+    # @return [Array<GraqhQL::AnalysisError>, GraqhQL::AnalysisError, nil]
     def result
       return @errors.uniq if @errors.present?
+      return max_possible_nodes_limit_error if max_possible_nodes > NODE_LIMIT
 
-      max_possible_nodes
+      nil
     end
 
     def on_enter_field(node, _parent, visitor)
@@ -33,6 +31,7 @@ module Analysis
       current_node = node_type(node, visitor)
 
       # This will actually raise an error if invalid.
+      # We need to capture and store that to send back later.
       begin
         current_node.valid?
       rescue GraphQL::AnalysisError => e
@@ -49,13 +48,11 @@ module Analysis
       # but I think that's ok. If the arguments _didn't_ match,
       # then the query would have been rejected as invalid.
       nodes_on_type = @nodes_on_type_by_query[visitor.query] ||= [
-        BaseScopeType.new(
-          query,
-          visitor.response_path
-        )
+        BaseScopeType.new(query)
       ]
 
-      current_node = nodes_on_type.last.scoped_children[parent_type][field_key] ||= current_node
+      current_node = nodes_on_type.last
+                                  .scoped_children[parent_type][field_key] ||= current_node
       # Push it on the stack.
       nodes_on_type.push(current_node)
     end
@@ -77,10 +74,12 @@ module Analysis
 
     # @return [Integer]
     def max_possible_nodes
-      @nodes_on_type_by_query.reduce(0) do |total, (_query, nodes_on_type)|
+      @max_possible_nodes ||= @nodes_on_type_by_query.reduce(0) do |total, (_query, nodes_on_type)|
         root_node = nodes_on_type.last
-        # Use this entry point to calculate the total complexity
-        total_nodes_amount_for_query = merged_node_amounts_for_scopes([root_node.scoped_children])
+        # Use this entry point to calculate the total node amounts
+        total_nodes_amount_for_query = merged_node_amounts_for_scopes([
+          root_node.scoped_children
+        ])
 
         total + total_nodes_amount_for_query
       end
@@ -102,15 +101,12 @@ module Analysis
 
       "Analysis::MaxNodeLimit::#{prefix}ScopeType".safe_constantize.new(
         visitor.query,
-        visitor.response_path,
         node: node,
         field_definition: visitor.field_definition
       )
     end
 
     def merged_node_amounts_for_scopes(scoped_children_hashes, total = 0)
-      # return total if scoped_children_hashes.blank?
-
       scoped_children_array = []
 
       scoped_children_hashes.each do |scoped_children_hash|
@@ -129,13 +125,21 @@ module Analysis
         if child.terminal?
           current_total += child.total_nodes(total)
         else
-          child_nodes = merged_node_amounts_for_scopes(Array.wrap(child.scoped_children), total)
+          child_nodes = merged_node_amounts_for_scopes(
+            Array.wrap(child.scoped_children),
+            total
+          )
 
           current_total += child.total_nodes(child_nodes)
         end
       end
 
       current_total
+    end
+
+    def max_possible_nodes_limit_error
+      message = "Your request of #{max_possible_nodes} exceeds the node limit: #{NODE_LIMIT}"
+      GraphQL::AnalysisError.new(message)
     end
   end
 end
