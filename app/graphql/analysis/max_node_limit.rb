@@ -16,7 +16,7 @@ module Analysis
       return @errors.uniq if @errors.present?
       return max_possible_nodes_limit_error if max_possible_nodes > NODE_LIMIT
 
-      nil
+      max_possible_nodes
     end
 
     def on_enter_field(node, _parent, visitor)

@@ -15,7 +15,8 @@ RSpec.describe Analysis::MaxNodeLimit do
     GraphQL::Execution::Multiplex.new(
       schema: schema,
       queries: [query.dup, query.dup],
-      context: {}
+      context: {},
+      max_complexity: 100
     )
   end
 
@@ -34,9 +35,9 @@ RSpec.describe Analysis::MaxNodeLimit do
     end
 
     it 'sums the complexity for single custom type' do
-      complexities = reduce_result.first
+      total_nodes = reduce_result.first
 
-      expect(complexities).to eq(2)
+      expect(total_nodes).to eq(2)
     end
 
     context 'when nested context type' do
@@ -57,9 +58,9 @@ RSpec.describe Analysis::MaxNodeLimit do
       end
 
       it 'sums the complexity for nested custom type' do
-        complexities = reduce_result.first
+        total_nodes = reduce_result.first
 
-        expect(complexities).to eq(3)
+        expect(total_nodes).to eq(3)
       end
     end
   end
@@ -88,9 +89,9 @@ RSpec.describe Analysis::MaxNodeLimit do
       end
 
       it 'sums the complexity based on the limit provided' do
-        complexities = reduce_result.first
+        total_nodes = reduce_result.first
 
-        expect(complexities).to eq(11)
+        expect(total_nodes).to eq(11)
       end
     end
 
@@ -135,9 +136,9 @@ RSpec.describe Analysis::MaxNodeLimit do
       end
 
       it 'properly calculates the total nodes' do
-        complexities = reduce_result.first
+        total_nodes = reduce_result.first
 
-        expect(complexities).to eq(1111)
+        expect(total_nodes).to eq(1111)
       end
     end
 
@@ -169,9 +170,9 @@ RSpec.describe Analysis::MaxNodeLimit do
       end
 
       it 'properly calculates the total nodes' do
-        complexities = reduce_result.first
+        total_nodes = reduce_result.first
 
-        expect(complexities).to eq(131)
+        expect(total_nodes).to eq(131)
       end
     end
 
@@ -192,10 +193,10 @@ RSpec.describe Analysis::MaxNodeLimit do
       end
 
       it 'returns an error' do
-        complexities = reduce_result.first
+        total_nodes = reduce_result.first
 
-        expect(complexities.count).to eq(1)
-        expect(complexities.first).to be_an_instance_of(GraphQL::AnalysisError)
+        expect(total_nodes.count).to eq(1)
+        expect(total_nodes.first).to be_an_instance_of(GraphQL::AnalysisError)
       end
     end
 
@@ -216,11 +217,34 @@ RSpec.describe Analysis::MaxNodeLimit do
       end
 
       it 'returns an error' do
-        complexities = reduce_result.first
+        total_nodes = reduce_result.first
 
-        expect(complexities.count).to eq(1)
-        expect(complexities.first).to be_an_instance_of(GraphQL::AnalysisError)
+        expect(total_nodes.count).to eq(1)
+        expect(total_nodes.first).to be_an_instance_of(GraphQL::AnalysisError)
       end
+    end
+  end
+
+  describe 'multiplex queries' do
+    let(:query_string) do
+      %[
+        query {
+          findProfileById(id: 1) {
+            id
+            followers(first: 10) {
+              nodes {
+                id
+              }
+            }
+          }
+        }
+      ]
+    end
+
+    it 'sums nodes for both queries' do
+      total_nodes = reduce_multiplex_result.first
+
+      expect(total_nodes).to eq(22)
     end
   end
 end
