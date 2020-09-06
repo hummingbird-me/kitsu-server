@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Analysis
-  class MaxQueryComplexity
+  class MaxNodeLimit
     class BaseScopeType
       attr_reader :field_definition, :response_path, :query
 

@@ -13,7 +13,7 @@ class KitsuSchema < GraphQL::Schema
   use GraphQL::Batch
   tracer SentryTracing
 
-  query_analyzer Analysis::MaxQueryComplexity
+  query_analyzer Analysis::MaxNodeLimit
 
   def self.resolve_type(_type, object, _context)
     "Types::#{object.class.name}".safe_constantize
