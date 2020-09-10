@@ -1,7 +1,5 @@
 class Types::Union::Base < GraphQL::Schema::Union
-  def self.graphql_name(new_name = nil)
-    return super(new_name) if new_name.present?
-
+  def self.default_graphql_name
     "#{super}Union"
   end
 end

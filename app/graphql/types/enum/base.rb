@@ -1,7 +1,5 @@
 class Types::Enum::Base < GraphQL::Schema::Enum
-  def self.graphql_name(new_name = nil)
-    return super(new_name) if new_name.present?
-
+  def self.default_graphql_name
     "#{super}Enum"
   end
 end
