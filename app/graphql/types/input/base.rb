@@ -6,13 +6,13 @@ class Types::Input::Base < GraphQL::Schema::InputObject
   def self.default_graphql_name
     split_name = name.split('::')[2..-1]
 
-    if CRUD_OPERATION.exclude?(split_name.last.downcase)
-      "#{super}Input"
-    else
+    if split_name.last.downcase.starts_with?(*CRUD_OPERATION)
       # Used so that it will throw an error if name.nil?
       super
       # Types::Input::Anime::Create -> AnimeCreate
       "#{split_name.join}Input"
+    else
+      "#{super}Input"
     end
   end
 end
