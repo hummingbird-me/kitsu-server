@@ -83,39 +83,45 @@ class Types::Profile < Types::BaseObject
     object
   end
 
-  field :followers, Types::Profile.connection_type,
-    null: false,
-    description: 'People that follow the user'
+  field :followers, Types::Profile.connection_type, null: false do
+    description 'People that follow the user'
+    argument :sort, [Types::Input::Profile::Sort], required: false
+    argument :followed_at, [Types::Input::Follow::Sort], required: false
+  end
 
-  def followers
+  def followers(sort: nil, followed_at: nil)
     AssociationLoader.for(object.class, :followers, policy: :follow).scope(object).then do |follows|
       RecordLoader.for(object.class).load_many(follows.pluck(:follower_id))
     end
   end
 
-  field :following, Types::Profile.connection_type,
-    null: false,
-    description: 'People the user is following'
+  field :following, Types::Profile.connection_type, null: false do
+    description 'People the user is following'
+    argument :sort, [Types::Input::Profile::Sort], required: false
+    argument :following_at, [Types::Input::Follow::Sort], required: false
+  end
 
-  def following
+  def following(sort: nil, following_at: nil)
     AssociationLoader.for(object.class, :following, policy: :follow).scope(object).then do |follows|
       RecordLoader.for(object.class).load_many(follows.pluck(:followed_id))
     end
   end
 
-  field :posts, Types::Post.connection_type,
-    null: false,
-    description: 'All posts this profile has made.'
+  field :posts, Types::Post.connection_type, null: false do
+    description 'All posts this user has made'
+    argument :sort, [Types::Input::Post::Sort], required: false
+  end
 
-  def posts
+  def posts(sort: nil)
     AssociationLoader.for(object.class, :posts).scope(object)
   end
 
-  field :comments, Types::Comment.connection_type,
-    null: false,
-    description: 'All comments to any post this user has made.'
+  field :comments, Types::Comment.connection_type, null: false do
+    description 'All comments to any post this user has made'
+    argument :sort, [Types::Input::Comment::Sort], required: false
+  end
 
-  def comments
+  def comments(sort: nil)
     AssociationLoader.for(object.class, :comments).scope(object)
   end
 
@@ -141,27 +147,33 @@ class Types::Profile < Types::BaseObject
     end
   end
 
-  field :site_links, Types::SiteLink.connection_type,
-    null: true,
-    description: 'Links to the user on other (social media) sites.'
+  field :site_links, Types::SiteLink.connection_type, null: true do
+    description 'Links to the user on other (social media) sites'
 
-  def site_links
+    argument :sort, [Types::Input::SiteLink::Sort], required: false
+  end
+
+  def site_links(sort: nil)
     AssociationLoader.for(object.class, :profile_links).scope(object)
   end
 
-  field :media_reactions, Types::MediaReaction.connection_type,
-    null: false,
-    description: 'Media reactions written by this user.'
+  field :media_reactions, Types::MediaReaction.connection_type, null: false do
+    description 'Media reactions written by this user'
 
-  def media_reactions
+    argument :sort, [Types::Input::MediaReaction::Sort], required: false
+  end
+
+  def media_reactions(sort: nil)
     AssociationLoader.for(object.class, :media_reactions).scope(object)
   end
 
-  field :favorites, Types::Favorite.connection_type,
-    null: false,
-    description: 'Favorite media, characters, and people'
+  field :favorites, Types::Favorite.connection_type, null: false do
+    description 'Favorite media, characters, and people'
 
-  def favorites
+    argument :sort, [Types::Input::Favorite::Sort], required: false
+  end
+
+  def favorites(sort: nil)
     AssociationLoader.for(object.class, :favorites).scope(object)
   end
 end
