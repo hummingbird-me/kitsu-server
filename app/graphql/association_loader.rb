@@ -13,9 +13,11 @@ class AssociationLoader < GraphQL::Batch::Loader
     validate
   end
 
-  def scope(record)
+  def scope(record, sort: nil)
     load(record).then do |associations|
-      Promise.resolve(policy_klass.new(token, associations).resolve)
+      Promise.resolve(policy_klass.new(token, associations).resolve).then do |results|
+        sort_association_results(results, sort)
+      end
     end
   end
 
@@ -63,5 +65,16 @@ class AssociationLoader < GraphQL::Batch::Loader
 
   def association_loaded?(record)
     record.association(@association_name).loaded?
+  end
+
+  def sort_association_results(results, sorts)
+    return results if sorts.blank?
+
+    formatted_sort = sorts.each_with_object({}) do |sort, hash|
+      hash[sort.field] = sort.direction
+      hash
+    end
+
+    results.order(**formatted_sort)
   end
 end
