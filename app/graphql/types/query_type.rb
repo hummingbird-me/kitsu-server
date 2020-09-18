@@ -34,7 +34,8 @@ class Types::QueryType < Types::BaseObject
   end
 
   def search_anime_by_title(title:)
-    AlgoliaMediaIndex.search(title, filters: 'kind:anime')
+    service = AlgoliaGraphqlSearchService.new(::Anime, context[:token])
+    service.search(title, filters: 'kind:anime')
   end
 
   field :manga, Types::Manga.connection_type, null: false do
@@ -72,7 +73,8 @@ class Types::QueryType < Types::BaseObject
   end
 
   def search_manga_by_title(title:)
-    AlgoliaMediaIndex.search(title, filters: 'kind:manga')
+    service = AlgoliaGraphqlSearchService.new(::Manga, context[:token])
+    service.search(title, filters: 'kind:manga')
   end
 
   field :search_media_by_title, Types::Interface::Media.connection_type, null: false do
@@ -84,7 +86,9 @@ class Types::QueryType < Types::BaseObject
   end
 
   def search_media_by_title(title:)
-    AlgoliaMediaIndex.search(title)
+    # Both anime and manga will get the same AlgoliaMediaIndex
+    service = AlgoliaGraphqlSearchService.new(::Anime, context[:token])
+    service.search(title)
   end
 
   field :global_trending, Types::Interface::Media.connection_type, null: false do
