@@ -81,22 +81,19 @@ class Types::QueryType < GraphQL::Schema::Object
 
   field :global_trending, Types::Interface::Media.connection_type, null: false do
     description 'List trending media on Kitsu'
-    argument :medium, String, required: true
+    argument :medium, Types::Enum::MediaTypes, required: true
   end
 
   def global_trending(medium:)
-    raise GraphQL::ExecutionError, 'Unknown medium' unless %w[Anime Manga].include?(medium)
-
     TrendingService.new(medium.safe_constantize, token: context[:token]).get(10)
   end
 
   field :local_trending, Types::Interface::Media.connection_type, null: false do
     description 'List trending media within your network'
-    argument :medium, String, required: true
+    argument :medium, Types::Enum::MediaType, required: true
   end
 
   def local_trending(medium:)
-    raise GraphQL::ExecutionError, 'Unknown medium' unless %w[Anime Manga].include?(medium)
     return [] unless context[:user]
 
     TrendingService.new(medium.safe_constantize, token: context[:token]).get_network(10)
