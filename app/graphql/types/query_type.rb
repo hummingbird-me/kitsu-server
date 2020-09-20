@@ -165,7 +165,7 @@ class Types::QueryType < GraphQL::Schema::Object
 
     User.current.library_entries
         .where(media_type: media_type, status: library_entry_statuses)
-        .order(Arel.sql('RANDOM()')).first.media
+        .order(Arel.sql('RANDOM()')).first&.media
   end
 
   field :global_trending, Types::Interface::Media.connection_type, null: false do
