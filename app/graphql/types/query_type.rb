@@ -119,6 +119,38 @@ class Types::QueryType < GraphQL::Schema::Object
     service.search(title)
   end
 
+  field :random_media, Types::Interface::Media, null: true do
+    description 'Random Safe-for-Work Anime or Manga'
+    argument :media_type, Types::Enum::MediaType, required: true
+    argument :age_ratings, [Types::Enum::AgeRating],
+      required: true,
+      prepare: ->(age_ratings, context) do
+        # No authorization is needed for sfw shows.
+        return age_ratings if age_ratings.exclude?('R18')
+
+        if context[:token].blank?
+          raise GraphQL::ExecutionError, 'You must be authorized to view R18 media'
+        elsif User.current.sfw_filters?
+          raise GraphQL::ExecutionError, 'You must have SFW filters turned off'
+        end
+
+        age_ratings
+      end
+  end
+
+  def random_media(media_type:, age_ratings:)
+    media = nil
+
+    while media.blank?
+      media = media_type.safe_constantize
+                        .from(Arel.sql("#{media_type.downcase} TABLESAMPLE BERNOULLI(1)"))
+                        .where(age_rating: age_ratings)
+                        .order(Arel.sql('RANDOM()')).first
+    end
+
+    media
+  end
+
   field :global_trending, Types::Interface::Media.connection_type, null: false do
     description 'List trending media on Kitsu'
     argument :media_type, Types::Enum::MediaType, required: true
