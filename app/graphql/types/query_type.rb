@@ -119,8 +119,8 @@ class Types::QueryType < GraphQL::Schema::Object
     service.search(title)
   end
 
-  field :random_media, Types::Interface::Media, null: true do
-    description 'Random Safe-for-Work Anime or Manga'
+  field :random_media, Types::Interface::Media, null: false do
+    description 'Random anime or manga'
     argument :media_type, Types::Enum::MediaType, required: true
     argument :age_ratings, [Types::Enum::AgeRating],
       required: true,
@@ -141,6 +141,8 @@ class Types::QueryType < GraphQL::Schema::Object
   def random_media(media_type:, age_ratings:)
     media = nil
 
+    # Most cases should find a media first time, but there is a chance
+    # due to TABLESAMPLE one won't be found.
     while media.blank?
       media = media_type.safe_constantize
                         .from(Arel.sql("#{media_type.downcase} TABLESAMPLE BERNOULLI(1)"))
@@ -149,6 +151,21 @@ class Types::QueryType < GraphQL::Schema::Object
     end
 
     media
+  end
+
+  field :random_user_media, Types::Interface::Media, null: true do
+    description 'Random anime or manga from your library'
+
+    argument :media_type, Types::Enum::MediaType, required: true
+    argument :library_entry_statuses, [Types::Enum::LibraryEntryStatus], required: true
+  end
+
+  def random_user_media(media_type:, library_entry_statuses:)
+    raise GraphQL::ExecutionError, 'You must be authorized' if context[:token].blank?
+
+    User.current.library_entries
+        .where(media_type: media_type, status: library_entry_statuses)
+        .order(Arel.sql('RANDOM()')).first.media
   end
 
   field :global_trending, Types::Interface::Media.connection_type, null: false do
