@@ -15,4 +15,8 @@ class Types::Input::Base < GraphQL::Schema::InputObject
       "#{super}Input"
     end
   end
+
+  def to_model
+    to_h
+  end
 end
