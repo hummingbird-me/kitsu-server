@@ -167,7 +167,7 @@ class Types::QueryType < GraphQL::Schema::Object
 
   def search_profile_by_slug(slug:)
     service = AlgoliaGraphqlSearchService.new(::User, context[:token])
-    service.search(slug)
+    service.search(slug, restrictSearchableAttributes: %w[slug])
   end
 
   field :find_character_by_id, Types::Character, null: true do
