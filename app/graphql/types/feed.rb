@@ -1,11 +1,9 @@
 class Types::Feed < Types::BaseObject
-  description ''
-
   field :activities, Types::Union::FeedItem.connection_type,
     null: true,
     connection: false,
     extensions: [FeedConnectionExtension],
-    description: ''
+    description: 'Feed activities based on the type supplied.'
 
   def activities(first:, after: nil)
     Connections::FeedItemUnionConnection.new(

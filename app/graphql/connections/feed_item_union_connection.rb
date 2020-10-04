@@ -13,7 +13,7 @@ class Connections::FeedItemUnionConnection < Connections::BaseConnection
   end
 
   def has_next_page
-    @has_next_page
+    @has_next_page = nodes.count == first
   end
 
   # There is no backwards check for feeds.
@@ -22,10 +22,7 @@ class Connections::FeedItemUnionConnection < Connections::BaseConnection
   end
 
   def cursor_for(item)
-  end
-
-  def page_info
-
+    item&.id
   end
 
   private

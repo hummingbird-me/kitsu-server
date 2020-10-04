@@ -23,7 +23,7 @@ class Types::Anime < Types::BaseObject
 
   field :feed, Types::Feed,
     null: false,
-    description: ''
+    description: 'The feed for an anime'
 
   def feed
     AnimeFeed.new(object.id)
