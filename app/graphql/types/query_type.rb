@@ -157,6 +157,19 @@ class Types::QueryType < GraphQL::Schema::Object
     ::User.find_by(slug: slug)
   end
 
+  field :search_profile_by_slug, Types::Profile.connection_type, null: true do
+    description <<~DESCRIPTION.squish
+      Search for User by slug using Algolia.
+      The most relevant results will be at the top.
+    DESCRIPTION
+    argument :slug, String, required: true
+  end
+
+  def search_profile_by_slug(slug:)
+    service = AlgoliaGraphqlSearchService.new(::User, context[:token])
+    service.search(slug)
+  end
+
   field :find_character_by_id, Types::Character, null: true do
     description 'Find a single Character by ID'
     argument :id, ID, required: true
