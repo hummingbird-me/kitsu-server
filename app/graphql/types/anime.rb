@@ -20,4 +20,12 @@ class Types::Anime < Types::BaseObject
   def streaming_links
     AssociationLoader.for(object.class, :streaming_links).scope(object)
   end
+
+  field :feed, Types::Feed,
+    null: false,
+    description: ''
+
+  def feed
+    AnimeFeed.new(object.id)
+  end
 end
