@@ -233,7 +233,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_person_by_id(id:)
-    ::Person.find_by(id: id)
+    RecordLoader.for(::Person).load(id)
   end
 
   field :find_person_by_slug, Types::Person, null: true do
@@ -242,7 +242,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_person_by_slug(slug:)
-    ::Person.find_by(slug: slug)
+    RecordLoader.for(::Person, column: :slug).load(slug)
   end
 
   field :find_library_entry_by_id, Types::LibraryEntry, null: true do
