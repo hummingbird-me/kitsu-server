@@ -2,7 +2,7 @@ class Types::Library < Types::BaseObject
   description 'The user library filterable by media_type and status'
 
   field :random_media, Types::Interface::Media, null: true do
-    description 'Random anime or manga from your library'
+    description 'Random anime or manga from this library'
 
     argument :media_type, Types::Enum::MediaType, required: true
     argument :status, [Types::Enum::LibraryEntryStatus], required: true
