@@ -251,7 +251,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_library_entry_by_id(id:)
-    ::LibraryEntry.find_by(id: id)
+    RecordLoader.for(::LibraryEntry).load(id)
   end
 
   field :library_entries_by_media_type, Types::LibraryEntry.connection_type, null: true do
