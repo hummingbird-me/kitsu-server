@@ -163,7 +163,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_character_by_id(id:)
-    ::Character.find_by(id: id)
+    RecordLoader.for(::Character).load(id)
   end
 
   field :find_character_by_slug, Types::Character, null: true do
@@ -172,7 +172,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_character_by_slug(slug:)
-    ::Character.find_by(slug: slug)
+    RecordLoader.for(::Character, column: :slug).load(slug)
   end
 
   field :session, Types::Session,
