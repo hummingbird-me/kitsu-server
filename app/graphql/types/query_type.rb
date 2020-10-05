@@ -80,7 +80,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_manga_by_id(id:)
-    ::Manga.find_by(id: id)
+    RecordLoader.for(::Manga).load(id)
   end
 
   field :find_manga_by_slug, Types::Manga, null: true do
@@ -89,7 +89,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_manga_by_slug(slug:)
-    ::Manga.find_by(slug: slug)
+    RecordLoader.for(::Manga, column: :slug).load(slug)
   end
 
   field :search_manga_by_title, Types::Manga.connection_type, null: false do
