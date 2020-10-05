@@ -7,7 +7,7 @@ class AlgoliaGraphqlSearchService
 
   def search(query, restrict_searchable_attributes: nil, filters: nil, **opts)
     opts[:filters] = scoped_filters(filters)
-    opts[:restrictSearchableAttributes] = restrict_searchable_attributes
+    opts[:restrict_searchable_attributes] = format_attributes(restrict_searchable_attributes)
 
     @index.search(query, opts.compact)
   end
@@ -28,5 +28,9 @@ class AlgoliaGraphqlSearchService
     return scope if filters.blank?
 
     "#{filters} AND #{scope}"
+  end
+
+  def format_attributes(attributes)
+    attributes.map { |attribute| attribute.camelize(:lower) }
   end
 end
