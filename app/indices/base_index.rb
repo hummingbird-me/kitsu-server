@@ -61,7 +61,9 @@ class BaseIndex
     end
 
     def search(query, opts = {})
-      hits = index.search(query, opts)['hits']
+      formatted_opts = opts.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+
+      hits = index.search(query, formatted_opts)['hits']
       result_ids = hits.each_with_object({}) do |value, acc|
         acc[value['kind']] ||= []
         acc[value['kind']] << value['id']
