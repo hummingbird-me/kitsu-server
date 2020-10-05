@@ -1,6 +1,19 @@
 class Types::Library < Types::BaseObject
   description 'The user library filterable by media_type and status'
 
+  field :random_media, Types::Interface::Media, null: true do
+    description 'Random anime or manga from your library'
+
+    argument :media_type, Types::Enum::MediaType, required: true
+    argument :status, [Types::Enum::LibraryEntryStatus], required: true
+  end
+
+  def random_media(media_type:, status:)
+    library_entries(media_type: media_type, status: status).then do |library_entries|
+      library_entries.order(Arel.sql('RANDOM()')).first&.media
+    end
+  end
+
   field :all, Types::LibraryEntry.connection_type, null: false do
     description 'All Library Entries for a specific Media'
     argument :media_type, Types::Enum::MediaType, required: true

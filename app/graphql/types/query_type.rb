@@ -153,21 +153,6 @@ class Types::QueryType < GraphQL::Schema::Object
     media
   end
 
-  field :random_user_media, Types::Interface::Media, null: true do
-    description 'Random anime or manga from your library'
-
-    argument :media_type, Types::Enum::MediaType, required: true
-    argument :library_entry_statuses, [Types::Enum::LibraryEntryStatus], required: true
-  end
-
-  def random_user_media(media_type:, library_entry_statuses:)
-    raise GraphQL::ExecutionError, 'You must be authorized' if context[:token].blank?
-
-    User.current.library_entries
-        .where(media_type: media_type, status: library_entry_statuses)
-        .order(Arel.sql('RANDOM()')).first&.media
-  end
-
   field :global_trending, Types::Interface::Media.connection_type, null: false do
     description 'List trending media on Kitsu'
     argument :media_type, Types::Enum::MediaType, required: true
