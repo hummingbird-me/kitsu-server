@@ -5,10 +5,11 @@ class AlgoliaGraphqlSearchService
     @token = token
   end
 
-  def search(query, **opts)
-    opts[:filters] = scoped_filters(opts[:filters])
+  def search(query, restrict_searchable_attributes: nil, filters: nil, **opts)
+    opts[:filters] = scoped_filters(filters)
+    opts[:restrictSearchableAttributes] = restrict_searchable_attributes
 
-    @index.search(query, opts)
+    @index.search(query, opts.compact)
   end
 
   def scope
