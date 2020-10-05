@@ -205,7 +205,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_category_by_id(id:)
-    ::Category.find_by(id: id)
+    RecordLoader.for(::Category).load(id)
   end
 
   field :find_category_by_slug, Types::Category, null: true do
@@ -214,7 +214,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_category_by_slug(slug:)
-    ::Category.find_by(slug: slug)
+    RecordLoader.for(::Category, column: :slug).load(slug)
   end
 
   field :lookup_mapping, Types::Union::MappingItem, null: true do
