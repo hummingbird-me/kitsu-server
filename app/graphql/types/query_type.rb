@@ -280,6 +280,6 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_library_event_by_id(id:)
-    ::LibraryEvent.find_by(id: id)
+    RecordLoader.for(::LibraryEvent).load(id)
   end
 end
