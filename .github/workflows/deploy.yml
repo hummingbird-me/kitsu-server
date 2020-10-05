@@ -96,7 +96,6 @@ jobs:
         ref: kubernetes
 
     - name: Configure Git
-      uses: actions/checkout@v2
       run: |
         git config user.name "Senko-san"
         git config user.email "developers@kitsu.io"
@@ -105,5 +104,4 @@ jobs:
       run: ./kubernetes/apps/kitsu-api/update.sh staging ${GITHUB_SHA::8}
 
     - name: Push to Github
-      uses: actions/checkout@v2
       run: git push
