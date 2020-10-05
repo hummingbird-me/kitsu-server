@@ -94,14 +94,18 @@ jobs:
         token: ${{ secrets.DEPLOY_TOKEN }}
         repository: hummingbird-me/kitsu-ops
         ref: kubernetes
+        path: ops
 
     - name: Configure Git
+      working-directory: ops
       run: |
         git config user.name "Senko-san"
         git config user.email "developers@kitsu.io"
 
     - name: Update Image Version
+      working-directory: ops
       run: ./kubernetes/apps/kitsu-api/update.sh staging ${GITHUB_SHA::8}
 
     - name: Push to Github
+      working-directory: ops
       run: git push
