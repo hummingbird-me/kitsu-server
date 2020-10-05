@@ -89,7 +89,7 @@ jobs:
 
     steps:
     - name: Install Dependencies
-      run: snap install yq
+      run: sudo snap install yq
 
     - name: Checkout Repository
       uses: actions/checkout@v2
