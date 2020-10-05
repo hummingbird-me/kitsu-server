@@ -145,7 +145,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_profile_by_id(id: nil)
-    ::User.find_by(id: id)
+    RecordLoader.for(::User).load(id)
   end
 
   field :find_profile_by_slug, Types::Profile, null: true do
@@ -154,7 +154,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_profile_by_slug(slug:)
-    ::User.find_by(slug: slug)
+    RecordLoader.for(::User, column: :slug).load(slug)
   end
 
   field :find_character_by_id, Types::Character, null: true do
