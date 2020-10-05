@@ -8,7 +8,8 @@ env:
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
 
 jobs:
-  Deploy:
+  build:
+    name: Build Docker Image
     runs-on: ubuntu-latest
 
     steps:
@@ -80,3 +81,29 @@ jobs:
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
         GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.DEPLOY_TOKEN }}
+        repository: hummingbird-me/kitsu-ops
+        ref: kubernetes
+
+    - name: Configure Git
+      uses: actions/checkout@v2
+      run: |
+        git config user.name "Senko-san"
+        git config user.email "developers@kitsu.io"
+
+    - name: Update Image Version
+      run: ./kubernetes/apps/kitsu-api/update.sh staging ${GITHUB_SHA::8}
+
+    - name: Push to Github
+      uses: actions/checkout@v2
+      run: git push

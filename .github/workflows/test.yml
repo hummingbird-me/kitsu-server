@@ -10,7 +10,8 @@ env:
   LOG_LEVEL: warn
 
 jobs:
-  build:
+  test:
+    name: RSpec Test Suite
     runs-on: ubuntu-latest
 
     services:
