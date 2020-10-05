@@ -88,6 +88,9 @@ jobs:
     needs: build
 
     steps:
+    - name: Install Dependencies
+      run: sudo apt-get -yqq install yq
+
     - name: Checkout Repository
       uses: actions/checkout@v2
       with:
