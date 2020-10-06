@@ -8,6 +8,10 @@ class RecordLoader < GraphQL::Batch::Loader
     @token = token
   end
 
+  def load(key)
+    super(@column_type.cast(key))
+  end
+
   def perform(keys)
     query(keys).each { |record| fulfill(record.public_send(@column), record) }
 
@@ -19,10 +23,6 @@ class RecordLoader < GraphQL::Batch::Loader
     scope = scope.where(@where) if @where
 
     policy_klass.new(token, scope.where(@column => keys)).resolve
-  end
-
-  def load(key)
-    super(@column_type.cast(key))
   end
 
   private
