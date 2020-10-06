@@ -57,7 +57,7 @@ class Types::QueryType < GraphQL::Schema::Object
     service.search(
       title,
       filters: 'kind:anime',
-      restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title slug]
+      restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title]
     )
   end
 
@@ -109,7 +109,7 @@ class Types::QueryType < GraphQL::Schema::Object
     service.search(
       title,
       filters: 'kind:manga',
-      restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title slug]
+      restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title]
     )
   end
 
@@ -126,7 +126,7 @@ class Types::QueryType < GraphQL::Schema::Object
     service = AlgoliaGraphqlSearchService.new(::Anime, context[:token])
     service.search(
       title,
-      restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title slug]
+      restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title]
     )
   end
 
