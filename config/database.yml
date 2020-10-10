@@ -36,3 +36,9 @@ test:
 production:
   <<: *default
   database: kitsu_production
+
+staging:
+  <<: *default
+  prepared_statements: false
+  advisory_locks: false
+  database: kitsu_staging
