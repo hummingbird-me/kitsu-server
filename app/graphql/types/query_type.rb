@@ -32,7 +32,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_anime_by_id(id:)
-    RecordLoader.for(::Anime).load(id)
+    RecordLoader.for(::Anime, token: context[:token]).load(id)
   end
 
   field :find_anime_by_slug, Types::Anime, null: true do
@@ -41,7 +41,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_anime_by_slug(slug:)
-    RecordLoader.for(::Anime, column: :slug).load(slug)
+    RecordLoader.for(::Anime, column: :slug, token: context[:token]).load(slug)
   end
 
   field :search_anime_by_title, Types::Anime.connection_type, null: false do
