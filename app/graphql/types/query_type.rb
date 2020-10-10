@@ -139,18 +139,10 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def random_media(media_type:, age_ratings:)
-    media = nil
-
-    # Most cases should find a media first time, but there is a chance
-    # due to TABLESAMPLE one won't be found.
-    while media.blank?
-      media = media_type.safe_constantize
-                        .from(Arel.sql("#{media_type.downcase} TABLESAMPLE BERNOULLI(1)"))
-                        .where(age_rating: age_ratings)
-                        .order(Arel.sql('RANDOM()')).first
-    end
-
-    media
+    media_type.safe_constantize
+              .where(age_rating: age_ratings)
+              .where(Arel.sql('random() <= 0.01'))
+              .limit(1).first
   end
 
   field :global_trending, Types::Interface::Media.connection_type, null: false do
