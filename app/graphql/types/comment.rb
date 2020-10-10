@@ -32,7 +32,7 @@ class Types::Comment < Types::BaseObject
 
   def likes
     AssociationLoader.for(object.class, :likes, policy: :comment_like).scope(object).then do |likes|
-      RecordLoader.for(User).load_many(likes.pluck(:user_id))
+      RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
     end
   end
 

@@ -46,7 +46,7 @@ class Types::Post < Types::BaseObject
 
   def likes
     AssociationLoader.for(object.class, :post_likes).scope(object).then do |likes|
-      RecordLoader.for(User).load_many(likes.pluck(:user_id))
+      RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
     end
   end
 
@@ -56,7 +56,7 @@ class Types::Post < Types::BaseObject
 
   def follows
     AssociationLoader.for(object.class, :post_follows).scope(object).then do |follows|
-      RecordLoader.for(User).load_many(follows.pluck(:user_id))
+      RecordLoader.for(User, token: context[:token]).load_many(follows.pluck(:user_id))
     end
   end
 end
