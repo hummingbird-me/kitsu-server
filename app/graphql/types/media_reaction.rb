@@ -33,7 +33,7 @@ class Types::MediaReaction < Types::BaseObject
   def likes
     AssociationLoader.for(object.class, :votes, policy: :media_reaction_vote)
                      .scope(object).then do |likes|
-      RecordLoader.for(User).load_many(likes.pluck(:user_id))
+      RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
     end
   end
 end
