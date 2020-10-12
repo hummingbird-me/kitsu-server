@@ -56,11 +56,11 @@ production:
     # Once a day
     cron: '0 0 0 * * *'
   'BufferedStreamClient::FollowBufferFlushWorker':
-    # Every 3 seconds
-    cron: '*/3 * * * * *'
+    # Every 10 seconds
+    cron: '*/10 * * * * *'
   'BufferedStreamClient::UnfollowBufferFlushWorker':
-    # Every second
-    cron: '*/1 * * * * *'
+    # Every 5 seconds
+    cron: '*/5 * * * * *'
   AiringNotificationScheduleWorker:
     # Once a week
     cron: '0 0 0 * * SUN'

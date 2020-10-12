@@ -2,7 +2,7 @@ class BufferedStreamClient
   class UnfollowBuffer < RedisBuffer
     # The numbers below are slightly below the max rate limit just for safety
     # We can send 250 unfollow requests per 60 seconds
-    RATE_LIMIT = 60.seconds / 240
+    RATE_LIMIT = 240 / 60 * 5
     # Match a valid feed name
     VALID_FEED = /\A[\w-]+:[\w-]+\z/i
 
@@ -19,7 +19,7 @@ class BufferedStreamClient
 
     def flush_batch
       # TODO: switch to unfollow-many
-      unfollows = next_batch_for(size: 3)
+      unfollows = next_batch_for(size: RATE_LIMIT)
       return if unfollows.blank?
       begin
         unfollows.each do |unfollow|
