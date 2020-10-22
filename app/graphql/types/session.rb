@@ -23,7 +23,7 @@ class Types::Session < Types::BaseObject
 
   def nolt_token
     user = context[:user]
-    raise GraphQL::ExecutionError, "You must be logged in to do that" if user.blank?
+    raise GraphQL::ExecutionError, 'You must be logged in to do that' if user.blank?
 
     Accounts::GenerateNoltToken.call(user: user).token
   end
