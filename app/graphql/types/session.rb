@@ -16,4 +16,15 @@ class Types::Session < Types::BaseObject
   def profile
     object unless object.blank?
   end
+
+  field :nolt_token, String,
+    null: false,
+    description: 'Single sign-on token for Nolt'
+
+  def nolt_token
+    user = context[:user]
+    raise GraphQL::ExecutionError, "You must be logged in to do that" if user.blank?
+
+    Accounts::GenerateNoltToken.call(user: user).token
+  end
 end
