@@ -106,9 +106,6 @@ GEM
     algoliasearch-rails (1.24.1)
       algoliasearch (>= 1.26.0, < 2.0.0)
       json (>= 1.5.1)
-    annotate (3.1.1)
-      activerecord (>= 3.2, < 7.0)
-      rake (>= 10.4, < 14.0)
     apollo_upload_server (2.0.1)
       graphql (>= 1.8)
       rails (>= 4.2)
@@ -671,7 +668,6 @@ DEPENDENCIES
   activerecord-import
   addressable
   algoliasearch-rails
-  annotate
   apollo_upload_server
   attr_encrypted (~> 3.1.0)
   aws-sdk (< 3.0)

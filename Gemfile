@@ -114,7 +114,6 @@ gem 'rails_admin'
 gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
-  gem 'annotate' # Schema annotations inside model-related files
   gem 'dotenv-rails' # Load default ENV
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
