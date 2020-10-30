@@ -19,7 +19,13 @@ class CommentPolicy < ApplicationPolicy
       return false if banned_from_group?
       return false if group.closed? && !member?
     end
-    is_owner?
+
+    # admins are allowed to create comments on locked posts
+    if record.post.locked_by.present?
+      is_owner? && is_admin?
+    else
+      is_owner?
+    end
   end
 
   def destroy?
