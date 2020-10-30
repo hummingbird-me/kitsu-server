@@ -1,9 +1,12 @@
 class PostResource < BaseResource
   caching
+  IMMUTABLE_FIELDS = %i[locked_by locked_at lock_reason unlocked_by unlocked_at].freeze
 
   attributes :content, :content_formatted, :comments_count, :post_likes_count,
     :spoiler, :nsfw, :blocked, :deleted_at, :top_level_comments_count,
     :edited_at, :target_interest, :embed, :embed_url
+
+  attributes(*IMMUTABLE_FIELDS)
 
   has_one :user
   has_one :target_user
@@ -15,11 +18,19 @@ class PostResource < BaseResource
   has_many :comments
   has_many :uploads
 
+  def self.creatable_fields(context)
+    super - IMMUTABLE_FIELDS
+  end
+
+  def self.updatable_fields(context)
+    super - IMMUTABLE_FIELDS
+  end
+
   def target_interest=(val)
     _model.target_interest = val.underscore.classify
   end
 
   def target_interest
-    _model.target_interest.underscore.dasherize if _model.target_interest
+    _model&.target_interest&.underscore&.dasherize
   end
 end
