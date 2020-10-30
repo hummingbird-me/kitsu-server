@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe QuotePolicy do
   let(:other) { token_for build(:user) }
   let(:database_mod) { token_for create(:user, permissions: %i[database_mod]) }
-  let(:quote) { build(:quote, user: admin.resource_owner) }
+  let(:quote) { build(:quote, user: database_mod.resource_owner) }
   subject { described_class }
 
   permissions :create?, :update?, :destroy? do
