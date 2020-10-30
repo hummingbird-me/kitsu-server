@@ -12,6 +12,13 @@ RSpec.describe PostPolicy do
     it('should allow community mod') { should permit(community_mod, post) }
     it('should not allow other users') { should_not permit(other, post) }
     it('should not allow anons') { should_not permit(nil, post) }
+
+    context 'when post is locked' do
+      let(:post) { build(:post, :locked, user: owner.resource_owner) }
+
+      it('should not allow regular user') { should_not permit(owner, post) }
+      it('should allow admin') { should permit(admin, post) }
+    end
   end
 
   permissions :create? do

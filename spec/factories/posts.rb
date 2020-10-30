@@ -46,5 +46,11 @@ FactoryBot.define do
   factory :post do
     user
     content { Faker::Lorem.sentence }
+
+    trait :locked do
+      locked_by { user.id }
+      locked_at { DateTime.now }
+      lock_reason { 0 }
+    end
   end
 end
