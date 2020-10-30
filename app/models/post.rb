@@ -51,6 +51,7 @@ class Post < ApplicationRecord
   update_algolia 'AlgoliaPostsIndex'
   embed_links_in :content, to: :embed
 
+  enum lock_reason: { SPAM: 0, TOO_HEATED: 1 }
   belongs_to :user, required: true
   belongs_to :edited_by, class_name: 'User'
   belongs_to :target_user, class_name: 'User'
