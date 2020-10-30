@@ -108,11 +108,7 @@ FactoryBot.define do
     password { Faker::Internet.password }
 
     trait :admin do
-      after(:create) { |user| user.add_role(:admin) }
-    end
-
-    trait :anime_admin do
-      after(:create) { |user| user.add_role(:admin, Anime) }
+      permissions { [:admin] }
     end
 
     trait :banned do

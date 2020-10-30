@@ -8,6 +8,6 @@ class CommunityRecommendationFollowPolicy < ApplicationPolicy
   end
 
   def destroy?
-    is_owner? || is_admin?
+    is_owner? || can_administrate?
   end
 end

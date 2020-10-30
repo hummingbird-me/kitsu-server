@@ -1,10 +1,11 @@
 class PostPolicy < ApplicationPolicy
+  administrated_by :community_mod
   include GroupPermissionsHelpers
 
   def update?
     return false unless user
     return false if user.has_role?(:banned)
-    return true if is_admin?
+    return true if can_administrate?
     return true if group && has_group_permission?(:content)
     is_owner?
   end
@@ -24,7 +25,7 @@ class PostPolicy < ApplicationPolicy
 
   def destroy?
     return true if group && has_group_permission?(:content)
-    is_owner? || is_admin?
+    is_owner? || can_administrate?
   end
 
   def editable_attributes(all)
@@ -37,7 +38,7 @@ class PostPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope if is_admin?
+      return scope if can_administrate?
       visible = scope.visible_for(user).where.not(user_id: blocked_users)
       return visible.sfw unless see_nsfw?
       visible

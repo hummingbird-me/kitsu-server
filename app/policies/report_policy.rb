@@ -1,8 +1,10 @@
 class ReportPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   alias_method :create?, :is_owner?
 
   def update?
-    is_owner? || is_admin?(record.naughty)
+    is_owner? || can_administrate?
   end
 
   def destroy?
@@ -11,23 +13,11 @@ class ReportPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      if is_global_admin?
+      if can_administrate?
         scope
-      elsif admin_scopes
-        scope.where(naughty_type: admin_scopes)
       else
         scope.where(user: user)
       end
-    end
-
-    def admin_scopes
-      if user
-        user.roles.where(name: 'admin', resource_id: nil).pluck(:resource_type)
-      end
-    end
-
-    def is_global_admin?
-      user&.has_role?(:admin) || user&.has_role?(:mod)
     end
   end
 end

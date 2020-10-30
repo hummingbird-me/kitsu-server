@@ -1,10 +1,12 @@
 class UserRolePolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def update?
     false
   end
 
   def create?
-    is_admin?
+    can_administrate?
   end
   alias_method :destroy?, :create?
 end

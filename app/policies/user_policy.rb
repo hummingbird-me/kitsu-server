@@ -1,10 +1,12 @@
 class UserPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def create?
     true
   end
 
   def update?
-    user == record || is_admin?
+    user == record || can_administrate?
   end
   alias_method :destroy?, :update?
 

@@ -3,27 +3,27 @@ require 'rails_helper'
 RSpec.describe PostPolicy do
   let(:owner) { token_for build(:user, id: 1) }
   let(:other) { token_for build(:user, id: 2) }
-  let(:admin) { token_for create(:user, :admin) }
+  let(:community_mod) { token_for create(:user, permissions: %i[community_mod]) }
   let(:post) { build(:post, user: owner.resource_owner) }
   subject { described_class }
 
   permissions :update? do
     it('should allow owner') { should permit(owner, post) }
-    it('should allow admin') { should permit(admin, post) }
+    it('should allow community mod') { should permit(community_mod, post) }
     it('should not allow other users') { should_not permit(other, post) }
     it('should not allow anons') { should_not permit(nil, post) }
   end
 
   permissions :create? do
     it('should allow owner') { should permit(owner, post) }
-    it('should not allow admin') { should_not permit(admin, post) }
+    it('should not allow community mod') { should_not permit(community_mod, post) }
     it('should not allow random dude') { should_not permit(other, post) }
     it('should not allow anon') { should_not permit(nil, post) }
   end
 
   permissions :destroy? do
     it('should allow owner') { should permit(owner, post) }
-    it('should allow admin') { should permit(admin, post) }
+    it('should allow community mod') { should permit(community_mod, post) }
     it('should now allow random dude') { should_not permit(other, post) }
     it('should not allow anon') { should_not permit(nil, post) }
   end
