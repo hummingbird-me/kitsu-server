@@ -1,6 +1,6 @@
 class PostResource < BaseResource
   caching
-  IMMUTABLE_FIELDS = %i[locked_by locked_at lock_reason unlocked_by unlocked_at].freeze
+  IMMUTABLE_FIELDS = %i[locked_by locked_at lock_reason].freeze
 
   attributes :content, :content_formatted, :comments_count, :post_likes_count,
     :spoiler, :nsfw, :blocked, :deleted_at, :top_level_comments_count,
