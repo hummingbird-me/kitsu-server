@@ -50,7 +50,7 @@ FactoryBot.define do
     trait :locked do
       locked_by { user.id }
       locked_at { DateTime.now }
-      lock_reason { 0 }
+      lock_reason { :SPAM }
     end
   end
 end
