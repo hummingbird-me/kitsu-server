@@ -126,6 +126,7 @@ class User < ApplicationRecord
   enum email_status: %i[email_unconfirmed email_confirmed email_bounced]
   enum title_language_preference: %i[canonical romanized localized]
 
+  rolify
   flag :permissions, %i[admin community_mod database_mod]
   has_secure_password validations: false
   update_index('users#user') { self }
