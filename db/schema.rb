@@ -1219,8 +1219,6 @@ ActiveRecord::Schema.define(version: 20201030020815) do
     t.integer "locked_by"
     t.datetime "locked_at"
     t.integer "lock_reason"
-    t.integer "unlocked_by"
-    t.datetime "unlocked_at"
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"
@@ -1228,7 +1226,6 @@ ActiveRecord::Schema.define(version: 20201030020815) do
     t.index ["media_type", "media_id"], name: "posts_media_type_media_id_idx"
     t.index ["target_group_id"], name: "posts_target_group_id_idx"
     t.index ["target_user_id"], name: "posts_target_user_id_idx"
-    t.index ["unlocked_by"], name: "index_posts_on_unlocked_by"
     t.index ["user_id"], name: "posts_user_id_idx"
   end
 
