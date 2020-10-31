@@ -137,6 +137,10 @@ class Post < ApplicationRecord
     User.where(id: processed_content[:mentioned_users])
   end
 
+  def locked?
+    locked_by.present?
+  end
+
   before_save do
     # Always check if the media is NSFW and try to force into NSFWness
     self.nsfw = media.try(:nsfw?) || false unless nsfw

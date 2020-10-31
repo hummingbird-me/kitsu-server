@@ -6,6 +6,7 @@ class PostPolicy < ApplicationPolicy
     return false unless user
     return false if user.has_role?(:banned)
     return true if can_administrate?
+    return false if record.locked?
     return true if group && has_group_permission?(:content)
     is_owner?
   end
