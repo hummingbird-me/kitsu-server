@@ -59,6 +59,7 @@ class Post < ApplicationRecord
   belongs_to :media, polymorphic: true
   belongs_to :spoiled_unit, polymorphic: true
   belongs_to :community_recommendation
+  belongs_to :locked_by, class_name: 'User'
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
   has_many :comments, dependent: :destroy
