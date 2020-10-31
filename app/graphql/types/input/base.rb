@@ -19,4 +19,8 @@ class Types::Input::Base < GraphQL::Schema::InputObject
   def to_model
     to_h
   end
+
+  def current_user
+    User.current
+  end
 end
