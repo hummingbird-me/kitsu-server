@@ -347,9 +347,9 @@ class User < ApplicationRecord
 
   def update_title
     if permissions.admin?
-      update(title: 'Staff')
+      self.title = 'Staff'
     elsif permissions.database_mod? || permissions.community_mod?
-      update(title: 'Mod')
+      self.title = 'Mod'
     end
   end
 
