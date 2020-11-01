@@ -37,6 +37,13 @@ class PostPolicy < ApplicationPolicy
     record.target_group
   end
 
+  def update_lock?
+    return true if is_admin?
+    return true if group && has_group_permission(:content)
+
+    false
+  end
+
   class Scope < Scope
     def resolve
       return scope if can_administrate?
