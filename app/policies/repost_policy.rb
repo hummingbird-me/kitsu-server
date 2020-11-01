@@ -1,4 +1,6 @@
 class RepostPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def create?
     is_owner?
   end
@@ -8,6 +10,6 @@ class RepostPolicy < ApplicationPolicy
   end
 
   def destroy?
-    is_owner? || is_admin?
+    is_owner? || can_administrate?
   end
 end

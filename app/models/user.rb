@@ -126,7 +126,8 @@ class User < ApplicationRecord
   enum email_status: %i[email_unconfirmed email_confirmed email_bounced]
   enum title_language_preference: %i[canonical romanized localized]
 
-  rolify after_add: :update_title, after_remove: :update_title
+  rolify
+  flag :permissions, %i[admin community_mod database_mod]
   has_secure_password validations: false
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
@@ -344,16 +345,16 @@ class User < ApplicationRecord
     alts.sort_by { |_, v| v }.reverse
   end
 
-  def update_title(_role)
-    if has_role?(:admin)
+  def update_title
+    if permissions.admin?
       update(title: 'Staff')
-    elsif has_role?(:admin, Anime) || has_role?(:mod)
+    elsif permissions.database_mod? || permissions.community_mod?
       update(title: 'Mod')
     end
   end
 
   def admin?
-    title == 'Staff' || title == 'Mod'
+    permissions.admin? || permissions.database_mod? || permissions.community_mod?
   end
 
   def profile_feed
@@ -430,6 +431,7 @@ class User < ApplicationRecord
     end
     self.previous_email = nil if confirmed_at_changed?
     self.previous_email = email_was if email_changed?
+    update_title
     update_profile_completed
     update_feed_completed
   end

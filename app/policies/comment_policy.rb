@@ -1,10 +1,11 @@
 class CommentPolicy < ApplicationPolicy
+  administrated_by :community_mod
   include GroupPermissionsHelpers
 
   def update?
     return false unless user
     return false if user.has_role?(:banned)
-    return true if is_admin?
+    return true if can_administrate?
     return true if group && has_group_permission?(:content)
     is_owner?
   end
@@ -23,7 +24,7 @@ class CommentPolicy < ApplicationPolicy
 
   def destroy?
     return true if group && has_group_permission?(:content)
-    is_owner? || is_admin?
+    is_owner? || can_administrate?
   end
 
   def editable_attributes(all)

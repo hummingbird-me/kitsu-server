@@ -1,6 +1,8 @@
 class CommunityRecommendationRequestPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def update?
-    is_owner? || is_admin?
+    is_owner? || can_administrate?
   end
 
   def create?
@@ -8,6 +10,6 @@ class CommunityRecommendationRequestPolicy < ApplicationPolicy
   end
 
   def destroy?
-    is_owner? || is_admin?
+    is_owner? || can_administrate?
   end
 end

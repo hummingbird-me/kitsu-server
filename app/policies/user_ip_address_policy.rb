@@ -1,4 +1,6 @@
 class UserIpAddressPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def update?
     false
   end
@@ -7,7 +9,7 @@ class UserIpAddressPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      is_admin? ? scope : scope.none
+      can_administrate? ? scope : scope.none
     end
   end
 end

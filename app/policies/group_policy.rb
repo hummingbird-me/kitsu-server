@@ -1,4 +1,5 @@
 class GroupPolicy < ApplicationPolicy
+  administrated_by :community_mod
   include GroupPermissionsHelpers
 
   def create?
@@ -14,12 +15,12 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def editable_attributes(all)
-    return all if is_admin?
+    return all if can_administrate?
     all - %i[members_count leaders_count neighbors_count rules_formatted featured name]
   end
 
   def creatable_attributes(all)
-    return all if is_admin?
+    return all if can_administrate?
     all - %i[members_count leaders_count neighbors_count rules_formatted featured]
   end
 
@@ -29,7 +30,7 @@ class GroupPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope if user&.has_role?(:admin, Group)
+      return scope if can_administrate?
       return scope.visible_for(user) if see_nsfw?
       scope.sfw.visible_for(user)
     end

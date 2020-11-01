@@ -1,6 +1,8 @@
 class ListImportPolicy < ApplicationPolicy
+  administrated_by :admin
+
   def create?
-    record.user == user || is_admin?
+    record.user == user || can_administrate?
   end
 
   def update?

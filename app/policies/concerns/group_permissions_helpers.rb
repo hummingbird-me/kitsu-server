@@ -43,7 +43,7 @@ module GroupPermissionsHelpers
   # @return [Boolean] whether the current member has that permission
   def has_group_permission?(permission)
     return false unless group
-    return true if is_admin?
+    return true if has_permission?(:community_mod)
     member? && member.has_permission?(permission)
   end
 end

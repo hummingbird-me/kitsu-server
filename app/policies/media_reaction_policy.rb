@@ -1,4 +1,6 @@
 class MediaReactionPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def create?
     return false unless user
     return false if user.has_role?(:banned)
@@ -7,7 +9,7 @@ class MediaReactionPolicy < ApplicationPolicy
   alias_method :update?, :create?
 
   def destroy?
-    record.try(:user) == user || is_admin?
+    record.try(:user) == user || can_administrate?
   end
 
   class Scope < Scope

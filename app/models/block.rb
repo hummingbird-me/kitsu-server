@@ -30,8 +30,8 @@ class Block < ApplicationRecord
   validate :not_blocking_admin
   def not_blocking_admin
     return unless blocked
-    errors.add(:blocked, 'You cannot block admins.') if blocked.has_role?(:admin)
-    errors.add(:blocked, 'You cannot block moderators.') if blocked.title == 'Mod'
+    errors.add(:blocked, 'You cannot block admins.') if blocked.permissions.admin?
+    errors.add(:blocked, 'You cannot block moderators.') if blocked.permissions.community_mod?
   end
 
   validate :not_blocking_self

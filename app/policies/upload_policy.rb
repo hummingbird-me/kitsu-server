@@ -1,4 +1,6 @@
 class UploadPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def show?
     true
   end
@@ -12,7 +14,7 @@ class UploadPolicy < ApplicationPolicy
   end
 
   def destroy?
-    is_owner? || is_admin?
+    is_owner? || can_administrate?
   end
 
   class Scope < Scope

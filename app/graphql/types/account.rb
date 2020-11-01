@@ -61,4 +61,9 @@ class Types::Account < Types::BaseObject
   field :country, String,
     null: true,
     description: 'The country this user resides in'
+
+  field :site_permissions, [Types::Enum::SitePermission],
+    null: false,
+    method: :permissions,
+    description: 'The site-wide permissions this user has access to'
 end

@@ -1,4 +1,6 @@
 class AnimeMediaAttributePolicy < ApplicationPolicy
+  administrated_by :database_mod
+
   def create?
     false
   end

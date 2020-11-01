@@ -73,7 +73,7 @@ class LibraryEntry < ApplicationRecord
     scope = user && !user.sfw_filter? ? all : sfw
 
     return scope.privacy(:public) unless user
-    return scope if user.has_role?(:admin)
+    return scope if user.permissions.admin?
 
     scope.privacy(:public).or(
       where(user_id: user).privacy(:private)

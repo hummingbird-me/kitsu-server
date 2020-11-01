@@ -1,10 +1,12 @@
 class ReviewPolicy < ApplicationPolicy
+  administrated_by :community_mod
+
   def create?
     user.registered? && is_owner?
   end
 
   def update?
-    is_owner? || is_admin?
+    is_owner? || can_administrate?
   end
 
   alias_method :destroy?, :update?

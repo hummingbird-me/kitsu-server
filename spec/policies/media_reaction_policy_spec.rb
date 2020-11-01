@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MediaReactionPolicy do
   let(:user) { token_for build(:user) }
-  let(:admin) { token_for create(:user, :admin) }
+  let(:community_mod) { token_for create(:user, permissions: %i[community_mod]) }
   let(:anime) { build(:anime) }
   let(:media_reaction) do
     build(:media_reaction, user: user.resource_owner, anime: anime)
@@ -27,7 +27,7 @@ RSpec.describe MediaReactionPolicy do
   end
 
   permissions :destroy? do
-    it('should allow admin') { should permit(admin, media_reaction) }
+    it('should allow community mod') { should permit(community_mod, media_reaction) }
     it('should allow for yourself') {
       should permit(user, media_reaction)
     }

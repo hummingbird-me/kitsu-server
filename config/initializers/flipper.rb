@@ -9,17 +9,17 @@ Flipper.configure do |config|
 end
 
 Flipper.register(:staff) do |user|
-  user.try(:has_role?, :admin)
+  user&.permissions&.admin?
 end
 
 Flipper.register(:pro) do |user|
-  user.try(:pro?)
+  user&.pro?
 end
 
 Flipper.register(:mod) do |user|
-  user.try(:has_role?, :mod) || user.try(:has_role?, :admin, Anime)
+  user&.permissions&.community_mod? || user&.permissions&.database_mod?
 end
 
 Flipper.register(:aozora) do |user|
-  user.try(:ao_id)
+  user&.ao_id
 end

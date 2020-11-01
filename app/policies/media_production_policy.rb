@@ -1,1 +1,3 @@
-class MediaProductionPolicy < ApplicationPolicy; end
+class MediaProductionPolicy < ApplicationPolicy
+  administrated_by :database_mod
+end

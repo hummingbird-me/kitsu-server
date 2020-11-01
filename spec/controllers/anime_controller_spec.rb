@@ -104,10 +104,10 @@ RSpec.describe AnimeController, type: :controller do
       }
     end
 
-    let(:admin) { create(:user, :admin) }
+    let(:database_mod) { create(:user, permissions: %i[database_mod]) }
 
     before do
-      sign_in admin
+      sign_in database_mod
     end
 
     it 'has status created' do
