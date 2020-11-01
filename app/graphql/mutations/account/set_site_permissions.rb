@@ -4,15 +4,17 @@ class Mutations::Account::SetSitePermissions < Mutations::Base
 
   field :account, Types::Account, null: false
 
-  def authorized?
-    current_user.permissions.admin?
+  def authorized?(input:)
+    super(input.account, :set_site_permissions?)
   end
 
   def resolve(input:)
-    account = User.find(input[:account_id])
-    permissions = input[:permissions].map(&:to_sym)
+    permissions = input.permissions.map(&:to_sym)
 
-    res = Accounts::SetSitePermissions.call(user: account, permissions: permissions)
+    res = Accounts::SetSitePermissions.call(
+      user: input.account,
+      permissions: permissions
+    )
 
     { account: res.user }
   end

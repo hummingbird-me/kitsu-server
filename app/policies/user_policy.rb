@@ -10,6 +10,10 @@ class UserPolicy < ApplicationPolicy
   end
   alias_method :destroy?, :update?
 
+  def set_site_permissions?
+    user.permissions.admin?
+  end
+
   def editable_attributes(all)
     if has_scope?(:email_password_reset, accept_all: false)
       [:password]
