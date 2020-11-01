@@ -1218,7 +1218,7 @@ ActiveRecord::Schema.define(version: 20201030020815) do
     t.integer "edited_by_id"
     t.integer "locked_by_id"
     t.datetime "locked_at"
-    t.integer "lock_reason"
+    t.integer "locked_reason"
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"
