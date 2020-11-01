@@ -143,6 +143,13 @@ class ApplicationPolicy
       @user = token&.resource_owner
     end
 
+    # Check if the user has an administrative permission
+    #
+    # @return [Boolean] whether the user has that permission
+    def has_permission?(permission)
+      user&.permissions&.set?(permission)
+    end
+
     def can_administrate?
       false
     end
