@@ -17,14 +17,14 @@ RSpec.describe PostPolicy do
       let(:post) { build(:post, :locked, user: owner.resource_owner) }
 
       it('should not allow regular user') { should_not permit(owner, post) }
-      it('should allow admin') { should permit(admin, post) }
+      it('should allow community_mod') { should permit(community_mod, post) }
     end
   end
 
   permissions :update_lock? do
     let(:post) { build(:post, :locked, user: owner.resource_owner) }
 
-    it('should allow admin') { should permit(admin, post) }
+    it('should allow community_mod') { should permit(community_mod, post) }
     it('should not allow owner') { should_not permit(owner, post) }
   end
 

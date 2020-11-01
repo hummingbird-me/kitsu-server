@@ -24,7 +24,7 @@ class CommentPolicy < ApplicationPolicy
 
     # admins are allowed to create comments on locked posts
     if record.post.locked?
-      is_owner? && is_admin?
+      is_owner? && can_administrate?
     else
       is_owner?
     end

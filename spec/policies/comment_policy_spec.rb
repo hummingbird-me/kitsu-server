@@ -15,10 +15,10 @@ RSpec.describe CommentPolicy do
 
     context 'when post is locked' do
       let(:post) { build(:post, :locked, user: owner.resource_owner) }
-      let(:comment) { build(:comment, user: admin.resource_owner, post: post) }
+      let(:comment) { build(:comment, user: community_mod.resource_owner, post: post) }
 
       it('should not allow a regular user') { should_not permit(other, comment) }
-      it('should allow an admin') { should permit(admin, comment) }
+      it('should allow a community_mod') { should permit(community_mod, comment) }
     end
   end
 
@@ -30,11 +30,11 @@ RSpec.describe CommentPolicy do
 
     context 'when post is locked' do
       let(:post) { build(:post, :locked, user: owner.resource_owner) }
-      let(:admin_comment) { build(:comment, user: admin.resource_owner, post: post) }
+      let(:community_mod_comment) { build(:comment, user: community_mod.resource_owner, post: post) }
       let(:owner_comment) { build(:comment, user: owner.resource_owner, post: post)  }
 
       it('should not allow regular owner') { should_not permit(owner, owner_comment) }
-      it('should only allow admin owner') { should permit(admin, admin_comment) }
+      it('should only allow community_mod') { should permit(community_mod, community_mod_comment) }
     end
   end
 
