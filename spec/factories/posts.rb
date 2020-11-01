@@ -48,7 +48,7 @@ FactoryBot.define do
     content { Faker::Lorem.sentence }
 
     trait :locked do
-      locked_by { user.id }
+      association :locked_by, factory: :user, strategy: :build
       locked_at { DateTime.now }
       locked_reason { :SPAM }
     end
