@@ -40,7 +40,7 @@ class Types::Post < Types::BaseObject
     null: true,
     description: 'When this post was locked.'
 
-  field :locked_reason, Types::Enum::LockReason,
+  field :locked_reason, Types::Enum::LockedReason,
     null: true,
     description: 'The reason why this post was locked.'
 
