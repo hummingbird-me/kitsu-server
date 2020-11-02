@@ -39,7 +39,7 @@ class PostPolicy < ApplicationPolicy
 
   def update_lock?
     return true if can_administrate?
-    return true if group && has_group_permission(:content)
+    return true if group && has_group_permission?(:content)
 
     false
   end
