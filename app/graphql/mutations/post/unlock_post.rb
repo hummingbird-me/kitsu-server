@@ -14,7 +14,7 @@ class Mutations::Post::UnlockPost < Mutations::Base
   end
 
   def authorized?(post:)
-    super(post, :update_lock?)
+    super(post, :unlock?)
   end
 
   def resolve(post:)

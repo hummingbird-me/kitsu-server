@@ -21,7 +21,14 @@ RSpec.describe PostPolicy do
     end
   end
 
-  permissions :update_lock? do
+  permissions :lock? do
+    let(:post) { build(:post, :locked, user: owner.resource_owner) }
+
+    it('should allow community_mod') { should permit(community_mod, post) }
+    it('should allow owner') { should permit(owner, post) }
+  end
+
+  permissions :unlock? do
     let(:post) { build(:post, :locked, user: owner.resource_owner) }
 
     it('should allow community_mod') { should permit(community_mod, post) }
