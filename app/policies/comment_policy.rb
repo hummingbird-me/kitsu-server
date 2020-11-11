@@ -6,6 +6,8 @@ class CommentPolicy < ApplicationPolicy
     return false unless user
     return false if user.has_role?(:banned)
     return true if can_administrate?
+    # admins are allowed to update comments on locked posts
+    return false if record.post.locked?
     return true if group && has_group_permission?(:content)
     is_owner?
   end
@@ -19,7 +21,13 @@ class CommentPolicy < ApplicationPolicy
       return false if banned_from_group?
       return false if group.closed? && !member?
     end
-    is_owner?
+
+    # admins are allowed to create comments on locked posts
+    if record.post.locked?
+      is_owner? && can_administrate?
+    else
+      is_owner?
+    end
   end
 
   def destroy?

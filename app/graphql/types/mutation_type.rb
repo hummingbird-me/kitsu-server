@@ -4,4 +4,5 @@ class Types::MutationType < Types::BaseObject
   field :episode, Types::Mutations::EpisodeMutation, null: true
   field :library_entry, Types::Mutations::LibraryEntryMutation, null: true
   field :mapping, Types::Mutations::MappingMutation, null: true
+  field :post, Types::Mutations::PostMutation, null: true
 end

@@ -32,6 +32,18 @@ class Types::Post < Types::BaseObject
     null: false,
     description: 'Html formatted content.'
 
+  field :locked_by, Types::Profile,
+    null: true,
+    description: 'The user who locked this post.'
+
+  field :locked_at, GraphQL::Types::ISO8601DateTime,
+    null: true,
+    description: 'When this post was locked.'
+
+  field :locked_reason, Types::Enum::LockedReason,
+    null: true,
+    description: 'The reason why this post was locked.'
+
   field :comments, Types::Comment.connection_type,
     null: false,
     description: 'All comments related to this post.'

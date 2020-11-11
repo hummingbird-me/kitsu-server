@@ -51,6 +51,7 @@ RSpec.describe Post, type: :model do
   it { should belong_to(:target_user).class_name('User') }
   it { should belong_to(:media) }
   it { should belong_to(:spoiled_unit) }
+  it { should belong_to(:locked_by).class_name('User') }
   it { should have_many(:post_likes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
   it { should validate_length_of(:content).is_at_most(9_000) }

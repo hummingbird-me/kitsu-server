@@ -6,6 +6,7 @@ class PostPolicy < ApplicationPolicy
     return false unless user
     return false if user.has_role?(:banned)
     return true if can_administrate?
+    return false if record.locked?
     return true if group && has_group_permission?(:content)
     is_owner?
   end
@@ -34,6 +35,20 @@ class PostPolicy < ApplicationPolicy
 
   def group
     record.target_group
+  end
+
+  def lock?
+    return true if can_administrate? || is_owner?
+    return true if group && has_group_permission?(:content)
+
+    false
+  end
+
+  def unlock?
+    return true if can_administrate?
+    return true if group && has_group_permission?(:content)
+
+    false
   end
 
   class Scope < Scope
