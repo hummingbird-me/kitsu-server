@@ -23,6 +23,8 @@ class Mutations::Post::LockPost < Mutations::Base
     if post.errors.any?
       Errors::RailsModel.graphql_error(post)
     else
+      ModeratorActionLog.generate!(current_user, 'lock', post)
+
       {
         post: post
       }
