@@ -9,7 +9,7 @@
 **<p align="center">This is our server repository. It contains the rails application for Kitsu.<br />Check out the [tools], [web], [mobile] and [api docs] repositories.</p>**
 
 [tools]:https://github.com/hummingbird-me/kitsu-tools
-[web]:https://github.com/hummingbird-me/hummingbird-client
+[web]:https://github.com/hummingbird-me/kitsu-web
 [mobile]:https://github.com/hummingbird-me/kitsu-mobile
 [api docs]:https://github.com/hummingbird-me/api-docs
 
