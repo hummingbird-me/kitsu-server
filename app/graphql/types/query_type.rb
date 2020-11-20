@@ -37,7 +37,7 @@ class Types::QueryType < GraphQL::Schema::Object
 
   field :find_anime_by_slug, Types::Anime, null: true do
     description 'Find a single Anime by Slug'
-    argument :slug, String, required: true
+    argument :slug, String, required: true, prepare: ->(slug, _) { slug.downcase }
   end
 
   def find_anime_by_slug(slug:)
@@ -89,7 +89,7 @@ class Types::QueryType < GraphQL::Schema::Object
 
   field :find_manga_by_slug, Types::Manga, null: true do
     description 'Find a single Manga by Slug'
-    argument :slug, String, required: true
+    argument :slug, String, required: true, prepare: ->(slug, _) { slug.downcase }
   end
 
   def find_manga_by_slug(slug:)
@@ -187,7 +187,7 @@ class Types::QueryType < GraphQL::Schema::Object
 
   field :find_profile_by_slug, Types::Profile, null: true do
     description 'Find a single User by Slug'
-    argument :slug, String, required: true
+    argument :slug, String, required: true, prepare: ->(slug, _) { slug.downcase }
   end
 
   def find_profile_by_slug(slug:)
@@ -218,7 +218,7 @@ class Types::QueryType < GraphQL::Schema::Object
 
   field :find_character_by_slug, Types::Character, null: true do
     description 'Find a single Character by Slug'
-    argument :slug, String, required: true
+    argument :slug, String, required: true, prepare: ->(slug, _) { slug.downcase }
   end
 
   def find_character_by_slug(slug:)
@@ -260,7 +260,7 @@ class Types::QueryType < GraphQL::Schema::Object
 
   field :find_category_by_slug, Types::Category, null: true do
     description 'Find a single Category by Slug'
-    argument :slug, String, required: true
+    argument :slug, String, required: true, prepare: ->(slug, _) { slug.downcase }
   end
 
   def find_category_by_slug(slug:)
@@ -288,7 +288,7 @@ class Types::QueryType < GraphQL::Schema::Object
 
   field :find_person_by_slug, Types::Person, null: true do
     description 'Find a single Person by Slug'
-    argument :slug, String, required: true
+    argument :slug, String, required: true, prepare: ->(slug, _) { slug.downcase }
   end
 
   def find_person_by_slug(slug:)
