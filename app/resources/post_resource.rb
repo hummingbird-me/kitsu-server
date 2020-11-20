@@ -1,12 +1,13 @@
 class PostResource < BaseResource
   caching
-  IMMUTABLE_FIELDS = %i[locked_at locked_reason].freeze
+  IMMUTABLE_ATTRIBUTES = %i[locked_at locked_reason].freeze
+  IMMUTABLE_FIELDS = (IMMUTABLE_ATTRIBUTES + %i[locked_by]).freeze
 
   attributes :content, :content_formatted, :comments_count, :post_likes_count,
     :spoiler, :nsfw, :blocked, :deleted_at, :top_level_comments_count,
     :edited_at, :target_interest, :embed, :embed_url
 
-  attributes(*IMMUTABLE_FIELDS)
+  attributes(*IMMUTABLE_ATTRIBUTES)
 
   has_one :user
   has_one :target_user
@@ -20,11 +21,11 @@ class PostResource < BaseResource
   has_many :uploads
 
   def self.creatable_fields(context)
-    super - (IMMUTABLE_FIELDS + :locked_by)
+    super - IMMUTABLE_FIELDS
   end
 
   def self.updatable_fields(context)
-    super - (IMMUTABLE_FIELDS + :locked_by)
+    super - IMMUTABLE_FIELDS
   end
 
   def target_interest=(val)
