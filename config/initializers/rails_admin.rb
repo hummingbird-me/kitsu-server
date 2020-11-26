@@ -65,6 +65,19 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('Installment') { parent Franchise }
   # Anime
   config.model 'Anime' do
+    list do
+      field :id
+      field :slug
+      field :poster_image
+      field :canonical_title do
+        formatted_value do
+          bindings[:object].titles[value]
+        end
+      end
+      field :subtype
+      field :start_date
+      field :end_date
+    end
     field :id
     field :titles, :localized_string do
       default_value <<~TITLES
@@ -89,6 +102,19 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('AnimeStaff') { parent Anime }
   # Manga
   config.model 'Manga' do
+    list do
+      field :id
+      field :slug
+      field :poster_image
+      field :canonical_title do
+        formatted_value do
+          bindings[:object].titles[value]
+        end
+      end
+      field :subtype
+      field :start_date
+      field :end_date
+    end
     field :id
     field :titles, :localized_string do
       default_value <<~TITLES
