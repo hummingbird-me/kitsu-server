@@ -34,9 +34,10 @@ module RailsAdmin
                 section = line[2..-1].strip
                 obj[section] = ''
               else
-                obj[section] << line.strip
+                obj[section] << line
               end
             end
+            obj.transform_values(&:strip)
           end
 
           def parse_input(params)

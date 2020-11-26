@@ -28,7 +28,7 @@ module RailsAdmin
           def parse_value(value)
             return [] if value.blank?
 
-            value.each_line.to_a
+            value.each_line.map(&:strip).select(&:present?)
           end
 
           def parse_input(params)
