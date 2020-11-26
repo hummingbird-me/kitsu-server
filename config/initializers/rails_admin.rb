@@ -300,4 +300,12 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     fields :image, :slug, :canonical_name
     include_all_fields
   end
+
+  config.model 'Category' do
+    navigation_label 'Media'
+    list do
+      fields :id, :slug, :title, :nsfw, :parent, :children
+    end
+    fields :id, :slug, :title, :description, :nsfw, :parent, :children
+  end
 end
