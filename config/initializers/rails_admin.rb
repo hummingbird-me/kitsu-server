@@ -57,14 +57,23 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.excluded_models += %w[
     LeaderChatMessage LinkedAccount GroupTicketMessage PostLike ProfileLink ReviewLike UserRole Role
     GroupTicket Casting Report CommentLike LinkedAccount::MyAnimeList MediaAttributeVote
-    LinkedAccount::YoutubeChannel UserIpAddress
+    LinkedAccount::YoutubeChannel UserIpAddress Drama AnimeCasting AnimeStaff MangaStaff
+    MangaCharacter AnimeProduction DramaCasting DramaCharacter DramaStaff DramaMediaAttribute
+    QuoteLike Stat Scrape MediaAttribute Hashtag GlobalStat Stat::AnimeActivityHistory
+    Stat::AnimeAmountConsumed Stat::AnimeCategoryBreakdown Stat::AnimeFavoriteYear
+    Stat::MangaActivityHistory Stat::MangaAmountConsumed Stat::MangaCategoryBreakdown
+    Stat::MangaFavoriteYear GlobalStat::AnimeAmountConsumed GlobalStat::MangaAmountConsumed
+    ProfileLinkSites MangaMediaAttribute AnimeMediaAttribute AnimeCharacter
   ]
 
   # Franchise
-  config.model 'Franchise'
+  config.model 'Franchise' do
+    navigation_label 'Media'
+  end
   config.model('Installment') { parent Franchise }
   # Anime
   config.model 'Anime' do
+    navigation_label 'Media'
     list do
       field :id
       field :slug
@@ -92,16 +101,14 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
-      :producers, :average_rating, :cover_image_top_offset, :release_schedule, :posts
-    navigation_label 'Anime'
+      :producers, :average_rating, :cover_image_top_offset, :release_schedule,
+      :posts, :genres, :anime_staff, :anime_castings, :anime_characters,
+      :anime_productions, :anime_media_attributes
     weight(-20)
   end
-  config.model('AnimeCasting') { parent Anime }
-  config.model('AnimeCharacter') { parent Anime }
-  config.model('AnimeProduction') { parent Anime }
-  config.model('AnimeStaff') { parent Anime }
   # Manga
   config.model 'Manga' do
+    navigation_label 'Media'
     list do
       field :id
       field :slug
@@ -129,12 +136,10 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
       :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
-      :average_rating, :cover_image_top_offset, :release_schedule, :posts
-    navigation_label 'Manga'
+      :average_rating, :cover_image_top_offset, :release_schedule, :posts,
+      :genres, :manga_characters, :manga_staff, :manga_media_attributes
     weight(-15)
   end
-  config.model('MangaCharacter') { parent Manga }
-  config.model('MangaStaff') { parent Manga }
   config.model 'Chapter' do
     parent Manga
     fields :id, :manga
@@ -143,23 +148,45 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     fields :canonical_title, :number, :published, :volume_number,
       :length, :thumbnail
     include_all_fields
-    navigation_label 'Chapters'
   end
-  # Drama
-  config.model 'Drama' do
-    field :id
-    field :titles, :localized_string
-    field :abbreviated_titles, :string_list
-    field :description, :localized_text
-    fields :canonical_title, :slug, :subtype, :poster_image,
-      :cover_image, :age_rating, :age_rating_guide
-    include_all_fields
-    navigation_label 'Drama'
-    weight(0)
+  config.model 'Volume' do
+    parent Manga
   end
-  config.model('DramaCasting') { parent Drama }
-  config.model('DramaCharacter') { parent Drama }
-  config.model('DramaStaff') { parent Drama }
+
+  config.model 'MediaCharacter' do
+    label 'Media Characters'
+    navigation_label 'Media'
+    parent Character
+  end
+  config.model 'MediaStaff' do
+    label 'Media Staff'
+    navigation_label 'Media'
+    parent Person
+  end
+  config.model 'MediaProduction' do
+    label 'Media Producers'
+    navigation_label 'Media'
+    parent Producer
+  end
+  config.model 'CharacterVoice' do
+    label 'Character Voices'
+    navigation_label 'Media'
+    parent Character
+  end
+  config.model 'Producer' do
+    label 'Production Companies'
+    navigation_label 'Media'
+  end
+  config.model 'Person' do
+    navigation_label 'Media'
+  end
+  config.model 'Quote' do
+    navigation_label 'Media'
+  end
+  config.model 'Quote Lines' do
+    navigation_label 'Media'
+    parent Quote
+  end
 
   # Groups
   config.model 'Groups' do
@@ -227,6 +254,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('AMASubscriber') { parent AMA }
 
   config.model 'Mapping' do
+    navigation_label 'Media'
     fields :id, :item
     field(:external_id) { label 'External ID' }
     field :external_site, :enum do
@@ -257,6 +285,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
 
   config.model 'Episode' do
+    navigation_label 'Media'
+    parent Anime
     fields :id, :media
     field :titles, :localized_string
     field :description, :localized_text
@@ -272,12 +302,15 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
 
   config.model 'Streamer' do
+    navigation_label 'Media'
     fields :id, :site_name
     include_all_fields
     exclude_fields :videos
   end
 
   config.model 'StreamingLink' do
+    navigation_label 'Media'
+    parent Anime
     fields :id, :media, :streamer, :url
     field(:subs, :serialized) { html_attributes rows: '6', cols: '10' }
     field(:dubs, :serialized) { html_attributes rows: '6', cols: '10' }
@@ -285,6 +318,8 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
 
   config.model 'Video' do
+    navigation_label 'Media'
+    parent Episode
     fields :id, :url
     field(:available_regions, :serialized) { html_attributes rows: '6', cols: '10' }
     field(:embed_data, :serialized) { html_attributes rows: '6', cols: '70' }
@@ -293,6 +328,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   end
 
   config.model 'Character' do
+    navigation_label 'Media'
     field :id
     field :names, :localized_string
     field :other_names, :string_list
