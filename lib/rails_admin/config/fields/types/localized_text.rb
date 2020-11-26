@@ -29,7 +29,7 @@ module RailsAdmin
             return {} if value.blank?
 
             section = 'en'
-            value.each_line.each_with_object({ 'en' => '' }) do |line, obj|
+            texts = value.each_line.each_with_object({ 'en' => '' }) do |line, obj|
               if line.start_with?('==')
                 section = line[2..-1].strip
                 obj[section] = ''
@@ -37,7 +37,7 @@ module RailsAdmin
                 obj[section] << line
               end
             end
-            obj.transform_values(&:strip)
+            texts.transform_values(&:strip)
           end
 
           def parse_input(params)
