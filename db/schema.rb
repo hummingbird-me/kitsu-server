@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201030020815) do
+ActiveRecord::Schema.define(version: 20201126190937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -472,7 +472,7 @@ ActiveRecord::Schema.define(version: 20201030020815) do
     t.string "item_type", limit: 255, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "fav_rank", default: 9999, null: false
+    t.integer "fav_rank"
     t.index ["item_id", "item_type"], name: "index_favorites_on_item_id_and_item_type"
     t.index ["user_id", "item_id", "item_type"], name: "index_favorites_on_user_id_and_item_id_and_item_type", unique: true
     t.index ["user_id", "item_type"], name: "index_favorites_on_user_id_and_item_type"
