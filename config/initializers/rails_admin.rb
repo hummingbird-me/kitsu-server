@@ -95,9 +95,12 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
         ja_jp:
       TITLES
     end
-    field :abbreviated_titles, :string_list
+    field :canonical_title
+    field :abbreviated_titles, :string_list do
+      label 'Alternative Titles'
+    end
     field :description, :localized_text
-    fields :canonical_title, :slug, :subtype, :poster_image, :cover_image,
+    fields :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
@@ -130,9 +133,12 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
         ja_jp:
       TITLES
     end
-    field :abbreviated_titles, :string_list
+    field :canonical_title
+    field :abbreviated_titles, :string_list do
+      label 'Alternative Titles'
+    end
     field :description, :localized_text
-    fields :canonical_title, :slug, :subtype, :poster_image, :cover_image,
+    fields :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
@@ -289,8 +295,9 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     parent Anime
     fields :id, :media
     field :titles, :localized_string
+    field :canonical_title
     field :description, :localized_text
-    fields :canonical_title, :number, :relative_number, :season_number, :airdate,
+    fields :number, :relative_number, :season_number, :airdate,
       :length, :thumbnail
     include_all_fields
     field :media_id do
