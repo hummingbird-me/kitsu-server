@@ -332,4 +332,13 @@ class Types::QueryType < GraphQL::Schema::Object
   def find_library_event_by_id(id:)
     RecordLoader.for(::LibraryEvent, token: context[:token]).load(id)
   end
+
+  field :find_post_by_id, Types::Post, null: true do
+    description 'Find a single Post by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_post_by_id(id:)
+    RecordLoader.for(::Post, token: context[:token]).load(id)
+  end
 end
