@@ -24,11 +24,11 @@ module Types::Interface::BaseEmbed
     null: false,
     description: 'The canonical URL of your object that will be used as its permanent ID in the graph'
 
-  field :image, Types::ImageTagEmbed,
+  field :image, Types::Embed::ImageTagEmbed,
     null: false,
     description: 'An image URL which should represent your object within the graph.'
 
-  field :audio, Types::AudioTagEmbed,
+  field :audio, Types::Embed::AudioTagEmbed,
     null: true,
     description: 'A URL to an audio file to accompany this object.'
 
@@ -46,10 +46,10 @@ module Types::Interface::BaseEmbed
 
   field :locale, String,
     null: true,
-    default_value: 'en_us',
     description: <<~DESCRIPTION.squish
       The locale these tags are marked up in.
       Of the format language_territory.
+      Default is en_us.
     DESCRIPTION
 
   field :locale_alternative, [String],
@@ -63,7 +63,7 @@ module Types::Interface::BaseEmbed
       the name which should be displayed for the overall site.
     DESCRIPTION
 
-  field :video, Types::VideoTagEmbed,
+  field :video, Types::Embed::VideoTagEmbed,
     null: true,
     description: 'A URL to a video file that complements this object.'
 end
