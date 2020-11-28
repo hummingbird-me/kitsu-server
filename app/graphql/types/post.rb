@@ -44,7 +44,7 @@ class Types::Post < Types::BaseObject
     null: true,
     description: 'The reason why this post was locked.'
 
-  field :embed, Types::Union::EmbedItem,
+  field :embed, Types::Interface::BaseEmbed,
     null: true,
     description: ''
 
