@@ -1,5 +1,5 @@
 class Types::Embed::VideoTagEmbed < Types::BaseObject
-  implements Types::Interface::BaseEmbed
+  implements Types::Interface::BaseTagEmbed
 
   description 'Video Properties'
 

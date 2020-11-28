@@ -1,5 +1,5 @@
 class Types::Embed::ImageTagEmbed < Types::BaseObject
-  implements Types::Interface::BaseEmbed
+  implements Types::Interface::BaseTagEmbed
 
   description 'Image Properties'
 
