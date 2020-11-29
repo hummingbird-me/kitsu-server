@@ -16,10 +16,6 @@ module Types::Interface::BaseEmbed
       Depending on the type you specify, other properties may also be required.
     DESCRIPTION
 
-  field :site, String,
-    null: false,
-    description: ''
-
   field :url, String,
     null: false,
     description: 'The canonical URL of your object that will be used as its permanent ID in the graph'
@@ -55,6 +51,10 @@ module Types::Interface::BaseEmbed
   field :locale_alternative, [String],
     null: true,
     description: 'An array of other locales this page is available in.'
+
+  field :site, String,
+    null: true,
+    description: ''
 
   field :site_name, String,
     null: true,

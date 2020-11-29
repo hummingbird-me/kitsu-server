@@ -1,4 +1,4 @@
-module Types::Interface::BaseMediaEmbed
+module Types::Interface::BaseTagEmbed
   include Types::Interface::Base
 
   description 'Similar fields between Image, Audio, Video Tags.'
