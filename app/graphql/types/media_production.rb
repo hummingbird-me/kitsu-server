@@ -6,13 +6,13 @@ class Types::MediaProduction < Types::BaseObject
   # Identifiers
   field :id, ID, null: false
 
-  field :role, String,
+  field :role, Types::Enum::MediaProductionRole,
     null: false,
     description: 'The role this company played'
 
-  field :person, Types::Producer,
+  field :company, Types::Producer,
     null: false,
-    description: 'The producer'
+    description: 'The production company'
 
   field :media, Types::Interface::Media,
     null: false,
