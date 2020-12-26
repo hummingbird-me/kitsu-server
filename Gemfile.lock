@@ -285,7 +285,7 @@ GEM
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     ice_cube (0.16.3)
-    image_optim (0.27.1)
+    image_optim (0.28.0)
       exifr (~> 1.2, >= 1.2.2)
       fspath (~> 3.0)
       image_size (>= 1.5, < 3)
