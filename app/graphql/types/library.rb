@@ -71,7 +71,11 @@ class Types::Library < Types::BaseObject
 
   def library_entries(media_type: nil, status: nil)
     query = { media_type: media_type, status: status }.compact
-    AssociationLoader.for(object.class, :library_entries).scope(object).then do |library_entries|
+    AssociationLoader.for(
+      object.class,
+      :library_entries,
+      token: context[:token]
+    ).scope(object).then do |library_entries|
       library_entries.where(query)
     end
   end
