@@ -38,18 +38,16 @@ jobs:
     - name: Connect to Package Registry
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: "echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin"
+      run: "echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin"
     - name: Build Docker Image
       run: |
         docker build -t release .
     - name: Tag Docker image
       run: |
-        docker tag release docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8}
-        docker tag release docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
+        docker tag release ghcr.io/hummingbird-me/kitsu-server:${GITHUB_SHA::8}
     - name: Push Docker Image
       run: |
-        docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8}
-        docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
+        docker push ghcr.io/hummingbird-me/kitsu-server:${GITHUB_SHA::8}
 
     - name: Finalize Sentry Release
       if: success()
