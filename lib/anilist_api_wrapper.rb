@@ -17,6 +17,6 @@ module AnilistApiWrapper
 
     Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
   rescue StandardError => e
-    Sentry.capture_exception(e)
+    Raven.capture_exception(e)
   end
 end
