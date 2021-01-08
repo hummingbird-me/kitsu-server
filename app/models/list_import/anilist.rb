@@ -55,79 +55,83 @@ class ListImport
       )
     end
 
-    MEDIA_LIST_QUERY = AnilistApiWrapper::Client.parse <<-'GRAPHQL'
-      query($user_name: String) {
-        anime: MediaListCollection(userName: $user_name, type: ANIME) {
-          lists {
-            name
-            entries {
-              score(format: POINT_100)
-              status
-              repeat
-              progress
-              progressVolumes
-              notes
-              startedAt {
-                year
-                month
-                day
-              }
-              completedAt {
-                year
-                month
-                day
-              }
-              media {
-                id
-                idMal
-                episodes
-                chapters
-                title {
-                  romaji
-                  english
-                  native
-                  userPreferred
+    begin
+      MEDIA_LIST_QUERY = AnilistApiWrapper::Client.parse <<-'GRAPHQL'
+        query($user_name: String) {
+          anime: MediaListCollection(userName: $user_name, type: ANIME) {
+            lists {
+              name
+              entries {
+                score(format: POINT_100)
+                status
+                repeat
+                progress
+                progressVolumes
+                notes
+                startedAt {
+                  year
+                  month
+                  day
+                }
+                completedAt {
+                  year
+                  month
+                  day
+                }
+                media {
+                  id
+                  idMal
+                  episodes
+                  chapters
+                  title {
+                    romaji
+                    english
+                    native
+                    userPreferred
+                  }
                 }
               }
             }
-          }
-        },
-        manga: MediaListCollection(userName: $user_name, type: MANGA) {
-          lists {
-            name
-            entries {
-              score(format: POINT_100)
-              status
-              repeat
-              progress
-              progressVolumes
-              notes
-              startedAt {
-                year
-                month
-                day
-              }
-              completedAt {
-                year
-                month
-                day
-              }
-              media {
-                id
-                idMal
-                episodes
-                chapters
-                title {
-                  romaji
-                  english
-                  native
-                  userPreferred
+          },
+          manga: MediaListCollection(userName: $user_name, type: MANGA) {
+            lists {
+              name
+              entries {
+                score(format: POINT_100)
+                status
+                repeat
+                progress
+                progressVolumes
+                notes
+                startedAt {
+                  year
+                  month
+                  day
+                }
+                completedAt {
+                  year
+                  month
+                  day
+                }
+                media {
+                  id
+                  idMal
+                  episodes
+                  chapters
+                  title {
+                    romaji
+                    english
+                    native
+                    userPreferred
+                  }
                 }
               }
             }
           }
         }
-      }
-    GRAPHQL
+      GRAPHQL
+    end
+  rescue StandardError => e
+    Raven.capture_exception(e)
   end
 end
