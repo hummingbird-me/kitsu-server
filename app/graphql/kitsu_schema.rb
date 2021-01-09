@@ -4,6 +4,7 @@ class KitsuSchema < GraphQL::Schema
   use GraphQL::Execution::Interpreter
   use GraphQL::Analysis::AST
   use GraphQL::Execution::Errors
+  use GraphQL::Pagination::Connections
 
   default_max_page_size 100
 
@@ -14,6 +15,9 @@ class KitsuSchema < GraphQL::Schema
   tracer SentryTracing
 
   query_analyzer Analysis::MaxNodeLimit
+
+  # Hook up a custom wrappers
+  connections.add(Types::Union::FeedItem, Connections::FeedItemUnionConnection)
 
   def self.resolve_type(_type, object, _context)
     "Types::#{object.class.name}".safe_constantize

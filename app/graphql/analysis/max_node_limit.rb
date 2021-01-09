@@ -87,7 +87,7 @@ module Analysis
 
     # We are checking if a field is a connection or custom type
     def allowed_type?(node, field_definition)
-      return true if field_definition.connection?
+      return true if connection?(field_definition)
       return false if field_definition.name == 'nodes'
       # I am not sure if there is a better way to identify these.
       # but this will get the custom type
@@ -96,8 +96,18 @@ module Analysis
       false
     end
 
+    def connection?(field_definition)
+      return true if field_definition.connection?
+
+      field_definition.extensions.any? do |extension|
+        # HACK: I am not sure how to handle custom connections
+        # that set connection: false and just use extensions.
+        extension.class.name.downcase.include?('connection')
+      end
+    end
+
     def node_type(node, visitor)
-      prefix = visitor.field_definition.connection? ? 'Connection' : 'Custom'
+      prefix = connection?(visitor.field_definition) ? 'Connection' : 'Custom'
 
       "Analysis::MaxNodeLimit::#{prefix}ScopeType".safe_constantize.new(
         visitor.query,
