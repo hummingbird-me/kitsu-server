@@ -116,18 +116,31 @@ class Types::QueryType < GraphQL::Schema::Object
   field :search_media_by_title, Types::Interface::Media.connection_type, null: false do
     description <<~DESCRIPTION.squish
       Search for any media (Anime, Manga) by title using Algolia.
+      If no media_type is supplied, it will search for both.
       The most relevant results will be at the top.
     DESCRIPTION
     argument :title, String, required: true
+    argument :media_type, Types::Enum::MediaType,
+      required: false,
+      prepare: ->(media_type, _) { media_type&.downcase },
+      description: <<~DESCRIPTION.squish
+        Dynamically choose a specific media_type.
+        If left blank, it will return results for both.
+      DESCRIPTION
   end
 
-  def search_media_by_title(title:)
-    # Both anime and manga will get the same AlgoliaMediaIndex
-    service = AlgoliaGraphqlSearchService.new(::Anime, context[:token])
-    service.search(
-      title,
-      restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title]
-    )
+  def search_media_by_title(title:, media_type: nil)
+    case media_type
+    when 'anime' then search_anime_by_title(title: title)
+    when 'manga' then search_manga_by_title(title: title)
+    else
+      # Both anime and manga will get the same AlgoliaMediaIndex
+      service = AlgoliaGraphqlSearchService.new(::Anime, context[:token])
+      service.search(
+        title,
+        restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title]
+      )
+    end
   end
 
   field :random_media, Types::Interface::Media, null: false do
