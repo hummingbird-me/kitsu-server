@@ -24,7 +24,7 @@ jobs:
         log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SENKO_SAN_KEY }}
     - name: Install Sentry CLI
       run: curl -sL https://sentry.io/get-cli/ | bash
     - name: Report Release to Sentry
@@ -64,7 +64,7 @@ jobs:
         state: success
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SENKO_SAN_KEY }}
     - name: Report Deployment Failure
       uses: octokit/request-action@v2.x
       if: failure()
@@ -78,7 +78,7 @@ jobs:
         state: failure
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SENKO_SAN_KEY }}
 
   deploy:
     name: Deploy to Kubernetes
@@ -92,7 +92,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
       with:
-        token: ${{ secrets.DEPLOY_TOKEN }}
+        token: ${{ secrets.SENKO_SAN_KEY }}
         repository: hummingbird-me/kitsu-ops
         ref: kubernetes
         path: ops
