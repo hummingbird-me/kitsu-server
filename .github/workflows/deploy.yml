@@ -35,10 +35,12 @@ jobs:
 
     - name: Add Commits to Sentry Release
       run: sentry-cli releases set-commits --auto ${GITHUB_SHA::8}
-    - name: Connect to Package Registry
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: "echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin"
+    - name: Connect to Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: Senkosan
+          password: ${{ secrets.SENKO_SAN_KEY }}
     - name: Build Docker Image
       run: |
         docker build -t release .
