@@ -69,10 +69,6 @@ module Types::Interface::Media
     null: false,
     description: 'The current releasing status of this media'
 
-  field :season, Types::Enum::ReleaseSeason,
-    null: true,
-    description: 'The season this was released in'
-
   field :tba,
     String,
     null: true,

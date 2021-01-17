@@ -7,6 +7,10 @@ class Types::Anime < Types::BaseObject
     null: false,
     description: 'A secondary type for categorizing Anime.'
 
+  field :season, Types::Enum::ReleaseSeason,
+    null: true,
+    description: 'The season this was released in'
+
   field :youtube_trailer_video_id,
     String,
     null: true,
