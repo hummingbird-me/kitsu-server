@@ -1,6 +1,8 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  prepared_statements: false
+  advisory_locks: false
 <% if ENV.include?('DATABASE_URL') %>
   url: <%= ENV.fetch('DATABASE_URL') %>
 <% end %>
@@ -39,6 +41,4 @@ production:
 
 staging:
   <<: *default
-  prepared_statements: false
-  advisory_locks: false
   database: kitsu_staging
