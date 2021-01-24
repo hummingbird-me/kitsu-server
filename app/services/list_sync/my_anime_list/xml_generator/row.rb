@@ -2,18 +2,18 @@ module ListSync
   class MyAnimeList
     class XmlGenerator
       class Row
-        attr_reader :entry, :kind, :media, :mapping
+        attr_reader :entry, :kind, :media, :external_id
 
-        def initialize(entry)
+        def initialize(entry, external_id)
           @entry = entry
           @kind = entry.kind
-          @media = entry.media
-          @mapping = media.mapping_for("myanimelist/#{kind}")
+          @media = entry.send(entry.kind)
+          @external_id = external_id
         end
 
         # Generates a Hash with the keys which MyAnimeList's XML export wants
         def to_h
-          return unless mapping
+          return unless external_id
           [
             media_id, progress, notes, volumes_owned, started_at, finished_at, rating, status,
             reconsume_count, update_on_import
@@ -28,7 +28,7 @@ module ListSync
         #     ...
         #   </kind>
         def to_xml
-          return unless mapping
+          return unless external_id
           Nokogiri::XML::Builder.new { |xml|
             xml.public_send(kind) do
               to_h.each { |k, v| xml.public_send(k, v) }
@@ -44,8 +44,8 @@ module ListSync
 
         def media_id
           case kind
-          when :anime then { series_animedb_id: mapping.external_id }
-          when :manga then { manga_mangadb_id: mapping.external_id }
+          when :anime then { series_animedb_id: external_id }
+          when :manga then { manga_mangadb_id: external_id }
           end
         end
 
