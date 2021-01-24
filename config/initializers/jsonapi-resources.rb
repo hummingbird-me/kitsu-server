@@ -1,3 +1,12 @@
+module SilenceIncludeWarnings
+  def get_related(current_path)
+    silence_warnings do
+      super(current_path)
+    end
+  end
+end
+JSONAPI::IncludeDirectives.include(SilenceIncludeWarnings)
+
 JSONAPI.configure do |config|
   # Keying
   config.json_key_format = :camelized_key
