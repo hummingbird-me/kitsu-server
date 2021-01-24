@@ -106,7 +106,7 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :producers, :average_rating, :cover_image_top_offset, :release_schedule,
       :posts, :genres, :anime_staff, :anime_castings, :anime_characters,
-      :anime_productions, :anime_media_attributes
+      :anime_media_attributes
     weight(-20)
   end
   # Manga
