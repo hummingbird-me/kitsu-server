@@ -3,12 +3,10 @@ require 'rails_helper'
 RSpec.describe ListSync::MyAnimeList::XmlGenerator::Row do
   subject { described_class.new(library_entry) }
   let(:library_entry) { build(:library_entry, anime: media, media: media) }
-  let(:mapping) { OpenStruct.new(external_id: '123') }
   let(:media) { build(:anime) }
-  before { allow(media).to receive(:mapping_for).and_return(mapping) }
 
   describe '#to_xml' do
-    subject { Nokogiri::XML(described_class.new(library_entry).to_xml) }
+    subject { Nokogiri::XML(described_class.new(library_entry, '123').to_xml) }
     context 'for an Anime' do
       let(:media) { build(:anime) }
       let(:library_entry) { build(:library_entry, anime: media, media: media) }
