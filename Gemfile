@@ -70,6 +70,7 @@ gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'google-api-client' # Google APIs
 gem 'graphql-client' # make graphql calls
+gem 'health_bit' # Allow Kubernetes to check the health
 gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules
 gem 'lograge' # Non-shitty logging

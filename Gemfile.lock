@@ -263,6 +263,8 @@ GEM
       temple (>= 0.8.0)
       tilt
     hashdiff (1.0.1)
+    health_bit (0.1.8)
+      rack
     heapy (0.2.0)
       thor
     hetchy (1.0.0)
@@ -702,6 +704,7 @@ DEPENDENCIES
   graphql-client
   guard
   guard-rspec
+  health_bit
   hiredis
   html-pipeline
   http
