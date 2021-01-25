@@ -3,6 +3,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   scope '/api' do
+    mount HealthBit.rack => '/_health'
     post '/graphql', to: 'graphql#execute'
     get '/playground', to: 'graphql_playground#show'
     get '/graphiql', to: redirect('/api/playground')
