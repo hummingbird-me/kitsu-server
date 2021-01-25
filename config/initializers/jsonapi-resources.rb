@@ -5,7 +5,7 @@ module SilenceIncludeWarnings
     end
   end
 end
-JSONAPI::IncludeDirectives.include(SilenceIncludeWarnings)
+JSONAPI::IncludeDirectives.prepend(SilenceIncludeWarnings)
 
 JSONAPI.configure do |config|
   # Keying
