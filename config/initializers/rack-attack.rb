@@ -2,7 +2,7 @@ class Rack::Attack
   throttle('logins/ip', limit: 150, period: 60.seconds) do |req|
     if req.path == '/api/oauth/token' && req.post? && req.params['grant_type'] == 'password'
       ip = ActionDispatch::Request.new(req.env).remote_ip
-      Rails.logger.warn "LOGIN FROM #{req.env['HTTP_X_FORWARDED_FOR']} (#{{ip}})"
+      Rails.logger.warn "LOGIN FROM #{req.env['HTTP_X_FORWARDED_FOR']} (#{ip})"
       ip
     end
   end
@@ -10,7 +10,7 @@ class Rack::Attack
   throttle('registrations/ip', limit: 50, period: 1.hour) do |req|
     if req.path == '/api/edge/users' && req.post?
       ip = ActionDispatch::Request.new(req.env).remote_ip
-      Rails.logger.warn "SIGNUP FROM #{req.env['HTTP_X_FORWARDED_FOR']} (#{{ip}})"
+      Rails.logger.warn "SIGNUP FROM #{req.env['HTTP_X_FORWARDED_FOR']} (#{ip})"
       ip
     end
   end
