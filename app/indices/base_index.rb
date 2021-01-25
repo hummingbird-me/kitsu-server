@@ -96,7 +96,7 @@ class BaseIndex
     end
 
     def associated_for(records)
-      fast_associated_for(records).merge(slow_associated_for(records))
+      fast_associated_for(records).deep_merge(slow_associated_for(records))
     end
 
     def missing_associations_for(model)
