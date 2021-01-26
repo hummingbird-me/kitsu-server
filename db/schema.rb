@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201206202624) do
+ActiveRecord::Schema.define(version: 20210126044815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
   end
 
   create_table "anime", id: :serial, force: :cascade do |t|
-    t.string "slug", limit: 255
+    t.citext "slug"
     t.integer "age_rating"
     t.integer "episode_count"
     t.integer "episode_length"
@@ -187,7 +187,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
 
   create_table "categories", id: :serial, force: :cascade do |t|
     t.string "title", null: false
-    t.string "slug", null: false
+    t.citext "slug", null: false
     t.integer "anidb_id"
     t.integer "parent_id"
     t.integer "total_media_count", default: 0, null: false
@@ -266,7 +266,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
     t.string "image_content_type", limit: 255
     t.integer "image_file_size"
     t.datetime "image_updated_at"
-    t.string "slug", limit: 255
+    t.citext "slug"
     t.integer "primary_media_id"
     t.string "primary_media_type"
     t.jsonb "names", default: {}, null: false
@@ -380,7 +380,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
   end
 
   create_table "dramas", id: :serial, force: :cascade do |t|
-    t.string "slug", null: false
+    t.citext "slug", null: false
     t.hstore "titles", default: {}, null: false
     t.string "canonical_title", default: "en_jp", null: false
     t.string "abbreviated_titles", default: [], null: false, array: true
@@ -520,7 +520,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
 
   create_table "genres", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255
-    t.string "slug", limit: 255
+    t.citext "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "description", default: {}, null: false
@@ -565,7 +565,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
 
   create_table "group_categories", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.string "slug", null: false
+    t.citext "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "description", default: {}, null: false
@@ -668,7 +668,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
 
   create_table "groups", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255, null: false
-    t.string "slug", limit: 255, null: false
+    t.citext "slug", null: false
     t.text "about", default: "", null: false
     t.string "avatar_file_name", limit: 255
     t.string "avatar_content_type", limit: 255
@@ -837,7 +837,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
   end
 
   create_table "manga", id: :serial, force: :cascade do |t|
-    t.string "slug", limit: 255
+    t.citext "slug"
     t.string "poster_image_file_name", limit: 255
     t.string "poster_image_content_type", limit: 255
     t.integer "poster_image_file_size"
@@ -1168,7 +1168,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
     t.string "canonical_name", null: false
     t.string "other_names", default: [], null: false, array: true
     t.date "birthday"
-    t.string "slug"
+    t.citext "slug"
     t.jsonb "description", default: {}, null: false
     t.index ["slug"], name: "index_people_on_slug", unique: true
   end
@@ -1259,7 +1259,7 @@ ActiveRecord::Schema.define(version: 20201206202624) do
 
   create_table "producers", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255
-    t.string "slug", limit: 255
+    t.citext "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
