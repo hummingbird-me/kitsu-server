@@ -87,9 +87,9 @@ class BaseIndex
 
     def index!(model)
       return if Rails.env.development?
-      model.find_in_batches do |group|
+      model.in_batches do |group|
         # HACK: Rails 4.x doesn't have an in_batches method which returns scopes
-        associated = associated_for(model.where(id: group.map(&:id)))
+        associated = associated_for(group)
         serialized = group.map { |record| new(record, associated: associated[record.id]).as_json }
         index.add_objects(serialized)
       end
