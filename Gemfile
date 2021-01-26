@@ -21,6 +21,7 @@ gem 'redis-rails' # Redis on Rails
 gem 'bcrypt'
 gem 'doorkeeper'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
+gem 'jwt' # Used for Nolt SSO
 gem 'pundit'
 gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
 gem 'rolify'
