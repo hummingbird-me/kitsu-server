@@ -562,7 +562,7 @@ GEM
       rspec-core (~> 3.0, >= 3.0.0)
       sidekiq (>= 2.4.0)
     rspec-support (3.10.1)
-    ruby-progressbar (1.10.1)
+    ruby-progressbar (1.11.0)
     ruby-statistics (2.1.2)
     ruby2_keywords (0.0.2)
     rufus-scheduler (3.6.0)
