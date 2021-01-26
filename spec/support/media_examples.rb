@@ -9,7 +9,7 @@ RSpec.shared_examples 'media' do
   end
 
   # Columns which are mandatory for all media
-  it { should have_db_column(:slug).of_type(:string) }
+  it { should have_db_column(:slug).of_type(:citext) }
   it { should have_db_column(:abbreviated_titles).of_type(:string) }
   it { should have_db_column(:average_rating).of_type(:decimal) }
   it { should have_db_column(:rating_frequencies).of_type(:hstore) }
