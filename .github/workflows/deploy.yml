@@ -96,7 +96,6 @@ jobs:
       with:
         token: ${{ secrets.SENKO_SAN_KEY }}
         repository: hummingbird-me/kitsu-ops
-        ref: kubernetes
         path: ops
 
     - name: Configure Git
