@@ -214,9 +214,11 @@ module CounterCacheResets
   def execute(sql, title = 'Executing SQL')
     if sql.respond_to?(:each)
       say_with_time(title) do
-        sql.each do |query|
-          say(query.to_s, true)
-          ActiveRecord::Base.connection.execute(query)
+        ActiveRecord::Base.transaction do
+          sql.each do |query|
+            say(query.to_s, true)
+            ActiveRecord::Base.connection.execute(query)
+          end
         end
       end
     else
