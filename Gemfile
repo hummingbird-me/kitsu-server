@@ -76,7 +76,7 @@ gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules
 gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites
-gem 'nokogiri', '~> 1.10.8' # Parse MAL XML shit
+gem 'nokogiri', '~> 1.11.0' # Parse MAL XML shit
 gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.4' # Faux deletion
 gem 'postmark-rails' # Send via Postmark
