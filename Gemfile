@@ -116,6 +116,7 @@ gem 'rails_admin'
 gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
+  gem 'bootsnap'
   gem 'dotenv-rails' # Load default ENV
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
