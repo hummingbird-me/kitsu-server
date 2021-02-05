@@ -25,8 +25,8 @@ class Stat < ApplicationRecord
                             .group(date_trunc)
                             .by_kind(media_kind)
                             .eager_load(media_kind)
-                            .order("#{date_trunc} ASC")
-                            .pluck("#{date_trunc}, sum(#{progress_diff}), sum(#{time_diff})")
+                            .order(Arel.sql("#{date_trunc} ASC"))
+                            .pluck(Arel.sql("#{date_trunc}, sum(#{progress_diff}), sum(#{time_diff})"))
       activity_data = activity_groups.each_with_object({}) do |(date, units, time), out|
         out[date.strftime('%F')] = { units: units, time: time }
       end
