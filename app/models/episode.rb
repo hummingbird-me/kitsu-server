@@ -53,7 +53,7 @@ class Episode < ApplicationRecord
   end
 
   def self.length_mode
-    mode, count = reorder(count: :desc).group(:length).count.first
+    mode, count = reorder(count_all: :desc).group(:length).count.first
     { mode: mode, count: count }
   end
 
