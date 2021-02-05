@@ -88,7 +88,6 @@ class BaseIndex
     def index!(model)
       return if Rails.env.development?
       model.in_batches do |group|
-        # HACK: Rails 4.x doesn't have an in_batches method which returns scopes
         associated = associated_for(group)
         serialized = group.map { |record| new(record, associated: associated[record.id]).as_json }
         index.add_objects(serialized)
@@ -125,10 +124,10 @@ class BaseIndex
       # Generate the joins hash
       joins_hash = joins_hash_for(associations.map { |x| x[:association] })
       # Generate the pluck string
-      plucks = pluck_for_associations(model, associations)
+      plucks = Arel.sql(pluck_for_associations(model, associations))
 
       # Add the joins, group by the ID, pluck the data
-      data = records.eager_load(joins_hash).group("#{model.table_name}.id").pluck(plucks)
+      data = records.eager_load(joins_hash).group(Arel.sql("#{model.table_name}.id")).pluck(plucks)
       # For each row like [id, assoc, assoc, assoc, assoc, ...]
       data.map { |(id, *values)|
         # Zip it up into [id, assoc_name => assoc, assoc_name => assoc, ...] and compact the data
@@ -224,7 +223,7 @@ class BaseIndex
 
   def load_associated
     return if Rails.env.development?
-    
+
     self.class.associated_for(_model.class.where(id: _model.id))[_model.id]
   end
 
