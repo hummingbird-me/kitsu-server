@@ -184,43 +184,6 @@ RSpec.describe LibraryEntry, type: :model do
     end
   end
 
-  describe 'updating rating_frequencies on media after save' do
-    before { skip 'needs to be tested separately as the sidekiq worker tbh' }
-    context 'with a previous value' do
-      it 'should decrement the previous frequency' do
-        Sidekiq::Testing.inline! do
-          library_entry = create(:library_entry, rating: 3)
-          media = library_entry.media
-          expect {
-            library_entry.rating = 4
-            library_entry.save!
-          }.to change { media.reload.rating_frequencies['3'].to_i }.by(-1)
-        end
-      end
-      it 'should increment the new frequency' do
-        Sidekiq::Testing.inline! do
-          library_entry = create(:library_entry, rating: 3)
-          media = library_entry.media
-          expect {
-            library_entry.rating = 4
-            library_entry.save!
-          }.to change { media.reload.rating_frequencies['4'].to_i }.by(1)
-        end
-      end
-    end
-    context 'without a previous value' do
-      it 'should not send any frequencies negative' do
-        library_entry = create(:library_entry, rating: 3)
-        media = library_entry.media
-        library_entry.rating = 4
-        library_entry.save!
-        media.reload
-        freqs = media.rating_frequencies.transform_values(&:to_i)
-        expect(freqs.values).to all(be_positive.or(be_zero))
-      end
-    end
-  end
-
   describe 'synchronizing media and anime/manga/drama_id' do
     it 'should copy media into the new, non-polymorphic association' do
       anime = build(:anime)
