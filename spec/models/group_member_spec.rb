@@ -33,6 +33,8 @@ RSpec.describe GroupMember, type: :model do
   it { should define_enum_for(:rank) }
 
   it 'should send the follow to Stream on save' do
+    subject.user.save!
+    subject.group.save!
     expect(subject.user.timeline).to receive(:follow).with(subject.group.feed)
     subject.save!
   end
