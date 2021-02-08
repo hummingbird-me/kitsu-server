@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuoteLikePolicy do
-  let(:user) { token_for build(:user) }
+  let(:user) { token_for create(:user) }
   let(:like) { build(:quote_like, user: user.resource_owner) }
   let(:other) { build(:quote_like) }
   subject { described_class }

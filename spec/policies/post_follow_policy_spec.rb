@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PostFollowPolicy do
-  let(:user) { token_for build(:user) }
+  let(:user) { token_for create(:user) }
   let(:follow) { build(:post_follow, user: user.resource_owner) }
   let(:other) { build(:post_follow) }
   subject { described_class }

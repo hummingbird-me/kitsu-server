@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PostLikePolicy do
-  let(:user) { token_for build(:user) }
+  let(:user) { token_for create(:user) }
   let(:like) { build(:post_like, user: user.resource_owner) }
   let(:other) { build(:post_like) }
   subject { described_class }

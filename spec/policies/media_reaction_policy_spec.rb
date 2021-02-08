@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MediaReactionPolicy do
-  let(:user) { token_for build(:user) }
+  let(:user) { token_for create(:user) }
   let(:community_mod) { token_for create(:user, permissions: %i[community_mod]) }
   let(:anime) { build(:anime) }
   let(:media_reaction) do

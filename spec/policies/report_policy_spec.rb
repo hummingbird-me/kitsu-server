@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ReportPolicy do
-  let(:user) { token_for build(:user, id: 1) }
-  let(:other) { token_for build(:user, id: 2) }
+  let(:user) { token_for create(:user, id: 1) }
+  let(:other) { token_for create(:user, id: 2) }
   let(:community_mod) { token_for create(:user, permissions: %i[community_mod]) }
   let(:report) { build(:report, user: user.resource_owner) }
   subject { described_class }

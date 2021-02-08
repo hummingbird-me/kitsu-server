@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe MediaReactionVotePolicy do
-  let(:owner) { token_for build(:user) }
-  let(:other) { token_for build(:user, id: 2) }
+  let(:owner) { token_for create(:user) }
+  let(:other) { token_for create(:user, id: 2) }
   let(:media_reaction_vote) do
     build(:media_reaction_vote, user: owner.resource_owner)
   end

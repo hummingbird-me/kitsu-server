@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe FollowPolicy do
   let(:follower) { token_for create(:user) }
   let(:following) { token_for create(:user) }
-  let(:other) { token_for build(:user) }
+  let(:other) { token_for create(:user) }
   let(:banned_user) { token_for create(:user, :banned) }
   let(:follow) do
     build(:follow, follower: follower.resource_owner, followed: following.resource_owner)

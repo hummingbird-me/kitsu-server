@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CommunityRecommendationFollowPolicy do
-  let(:user) { token_for build(:user) }
+  let(:user) { token_for create(:user) }
   let(:follow) { build(:community_recommendation_follow, user: user.resource_owner) }
   let(:other) { build(:community_recommendation_follow) }
   subject { described_class }
