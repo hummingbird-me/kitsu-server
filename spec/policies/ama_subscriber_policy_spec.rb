@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe AMASubscriberPolicy do
-  let(:user) { token_for build(:user, id: 1) }
-  let(:other) { token_for build(:user, id: 2) }
+  let(:user) { token_for create(:user, id: 1) }
+  let(:other) { token_for create(:user, id: 2) }
   let(:ama_subscriber) { build(:ama_subscriber, user: user.resource_owner) }
   subject { described_class }
 

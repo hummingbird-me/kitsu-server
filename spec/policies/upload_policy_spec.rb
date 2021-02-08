@@ -1,6 +1,6 @@
 require 'rails_helper'
 RSpec.describe UploadPolicy do
-  let(:user) { token_for build(:user) }
+  let(:user) { token_for create(:user) }
   let(:community_mod) { token_for create(:user, permissions: %i[community_mod]) }
   let(:upload) { build(:upload, user: user.resource_owner) }
   let(:other) { build(:upload) }

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CommunityRecommendationRequestPolicy do
-  let(:user) { token_for build(:user) }
+  let(:user) { token_for create(:user) }
   let(:community_mod) { token_for create(:user, permissions: %i[community_mod]) }
   let(:request) { build(:community_recommendation_request, user: user.resource_owner) }
   let(:other) { build(:community_recommendation_request) }

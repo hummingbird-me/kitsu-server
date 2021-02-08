@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PostPolicy do
-  let(:owner) { token_for build(:user, id: 1) }
-  let(:other) { token_for build(:user, id: 2) }
+  let(:owner) { token_for create(:user, id: 1) }
+  let(:other) { token_for create(:user, id: 2) }
   let(:community_mod) { token_for create(:user, permissions: %i[community_mod]) }
   let(:post) { build(:post, user: owner.resource_owner) }
   subject { described_class }
