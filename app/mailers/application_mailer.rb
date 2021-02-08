@@ -7,7 +7,7 @@ class ApplicationMailer < ActionMailer::Base
     Net::ProtocolError,
     SocketError,
     IOError,
-    TimeoutError,
+    Timeout::Error,
     Postmark::HttpClientError,
     Postmark::InternalServerError,
     Postmark::TimeoutError

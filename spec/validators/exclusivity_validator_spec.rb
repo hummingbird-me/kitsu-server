@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe ExclusivityValidator do
   context 'with a limit of 1' do
     subject { described_class.new(over: %i[foo bar baz], limit: 1) }
-    ExclusivityRecordClass = Struct.new(:foo, :bar, :baz) do
+    record_class = Struct.new(:foo, :bar, :baz) do
       extend ActiveModel::Naming
       include ActiveModel::Validations
     end
 
     context 'on an invalid record' do
-      let(:record) { ExclusivityRecordClass.new('foo', 'bar') }
+      let(:record) { record_class.new('foo', 'bar') }
       it 'should add an error to each key' do
         subject.validate(record)
         expect(record.errors).to include(:foo, :bar)
@@ -18,7 +18,7 @@ RSpec.describe ExclusivityValidator do
     end
 
     context 'on a valid record' do
-      let(:record) { ExclusivityRecordClass.new('foo') }
+      let(:record) { record_class.new('foo') }
       it 'should have no errors' do
         subject.validate(record)
         expect(record.errors).to be_empty
@@ -28,13 +28,13 @@ RSpec.describe ExclusivityValidator do
 
   context 'with a limit of 3' do
     subject { described_class.new(over: %i[foo bar baz bat fud], limit: 3) }
-    ExclusivityRecordClass = Struct.new(:foo, :bar, :baz, :bat, :fud) do
+    record_class = Struct.new(:foo, :bar, :baz, :bat, :fud) do
       extend ActiveModel::Naming
       include ActiveModel::Validations
     end
 
     context 'on an invalid record' do
-      let(:record) { ExclusivityRecordClass.new('foo', 'bar', 'bat', 'baz') }
+      let(:record) { record_class.new('foo', 'bar', 'bat', 'baz') }
       it 'should add an error to each key' do
         subject.validate(record)
         expect(record.errors).to include(:foo, :bar, :baz, :bat)
@@ -43,7 +43,7 @@ RSpec.describe ExclusivityValidator do
     end
 
     context 'on a valid record' do
-      let(:record) { ExclusivityRecordClass.new('foo') }
+      let(:record) { record_class.new('foo') }
       it 'should have no errors' do
         subject.validate(record)
         expect(record.errors).to be_empty
