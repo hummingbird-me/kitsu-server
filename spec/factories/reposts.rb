@@ -23,7 +23,7 @@
 
 FactoryBot.define do
   factory :repost do
-    association :user, strategy: :build
-    association :post, strategy: :build
+    user
+    post
   end
 end
