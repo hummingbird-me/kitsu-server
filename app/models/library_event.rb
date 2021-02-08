@@ -31,9 +31,9 @@
 class LibraryEvent < ApplicationRecord
   belongs_to :library_entry, required: true
   belongs_to :user, required: true
-  belongs_to :anime
-  belongs_to :manga
-  belongs_to :drama
+  belongs_to :anime, optional: true
+  belongs_to :manga, optional: true
+  belongs_to :drama, optional: true
 
   enum kind: %i[progressed updated reacted rated annotated]
   validates :kind, presence: true

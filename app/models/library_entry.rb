@@ -51,9 +51,9 @@ class LibraryEntry < ApplicationRecord
 
   belongs_to :user
   belongs_to :media, polymorphic: true
-  belongs_to :anime
-  belongs_to :manga
-  belongs_to :drama
+  belongs_to :anime, optional: true
+  belongs_to :manga, optional: true
+  belongs_to :drama, optional: true
   has_one :review, dependent: :destroy
   has_one :media_reaction, dependent: :destroy
   has_many :library_events, dependent: :destroy

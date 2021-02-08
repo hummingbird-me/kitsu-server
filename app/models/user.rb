@@ -132,8 +132,8 @@ class User < ApplicationRecord
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
 
-  belongs_to :waifu, required: false, class_name: 'Character'
-  belongs_to :pinned_post, class_name: 'Post', required: false
+  belongs_to :waifu, optional: true, class_name: 'Character'
+  belongs_to :pinned_post, class_name: 'Post', optional: true
   has_one :pro_subscription, dependent: :destroy, required: false
   has_many :followers, class_name: 'Follow', foreign_key: 'followed_id', inverse_of: :followed
   has_many :following, class_name: 'Follow', foreign_key: 'follower_id', inverse_of: :follower

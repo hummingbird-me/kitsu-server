@@ -32,5 +32,5 @@ class DramaCasting < ApplicationRecord
 
   belongs_to :drama_character, required: true
   belongs_to :person, required: true
-  belongs_to :licensor, class_name: 'Producer'
+  belongs_to :licensor, class_name: 'Producer', optional: true
 end

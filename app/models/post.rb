@@ -53,13 +53,13 @@ class Post < ApplicationRecord
 
   enum locked_reason: { spam: 0, too_heated: 1, closed: 2 }
   belongs_to :user, required: true
-  belongs_to :edited_by, class_name: 'User'
-  belongs_to :target_user, class_name: 'User'
-  belongs_to :target_group, class_name: 'Group'
-  belongs_to :media, polymorphic: true
-  belongs_to :spoiled_unit, polymorphic: true
-  belongs_to :community_recommendation
-  belongs_to :locked_by, class_name: 'User'
+  belongs_to :edited_by, class_name: 'User', optional: true
+  belongs_to :target_user, class_name: 'User', optional: true
+  belongs_to :target_group, class_name: 'Group', optional: true
+  belongs_to :media, polymorphic: true, optional: true
+  belongs_to :spoiled_unit, polymorphic: true, optional: true
+  belongs_to :community_recommendation, optional: true
+  belongs_to :locked_by, class_name: 'User', optional: true
   has_many :post_likes, dependent: :destroy
   has_many :post_follows, dependent: :destroy
   has_many :comments, dependent: :destroy

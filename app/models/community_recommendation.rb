@@ -33,9 +33,9 @@
 class CommunityRecommendation < ApplicationRecord
   include RetrieveMedia
 
-  belongs_to :anime
-  belongs_to :manga
-  belongs_to :drama
+  belongs_to :anime, optional: true
+  belongs_to :manga, optional: true
+  belongs_to :drama, optional: true
   belongs_to :media, polymorphic: true, required: true
   belongs_to :community_recommendation_request, required: true
   has_many :reasons, class_name: 'Post'
