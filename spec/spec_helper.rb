@@ -23,7 +23,7 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
 
   # Be more verbose when running a single test
-  config.default_formatter = 'doc' if config.files_to_run.one?
+  config.default_formatter = 'doc'
 
   # Show the 10 slowest specs
   config.profile_examples = 2
