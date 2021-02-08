@@ -46,7 +46,7 @@ class Comment < ApplicationRecord
 
   belongs_to :user, required: true
   belongs_to :post, required: true, counter_cache: true, touch: true
-  belongs_to :parent, class_name: 'Comment', required: false,
+  belongs_to :parent, class_name: 'Comment', optional: true,
                       counter_cache: 'replies_count', touch: true
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
                      dependent: :destroy

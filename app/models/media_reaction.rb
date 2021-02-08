@@ -45,9 +45,9 @@ class MediaReaction < ApplicationRecord
 
   belongs_to :user, required: true, counter_cache: true
   belongs_to :media, polymorphic: true, required: true
-  belongs_to :anime
-  belongs_to :manga
-  belongs_to :drama
+  belongs_to :anime, optional: true
+  belongs_to :manga, optional: true
+  belongs_to :drama, optional: true
   belongs_to :library_entry, required: true
   has_many :votes, class_name: 'MediaReactionVote', dependent: :destroy
 

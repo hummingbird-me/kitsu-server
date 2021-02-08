@@ -36,7 +36,7 @@ class GroupReport < ApplicationRecord
   belongs_to :group, required: true
   belongs_to :naughty, -> { with_deleted }, polymorphic: true, required: true
   belongs_to :user, required: true
-  belongs_to :moderator, class_name: 'User', required: false
+  belongs_to :moderator, class_name: 'User', optional: true
 
   enum reason: Report.reasons
   enum status: %i[reported resolved declined escalated]

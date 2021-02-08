@@ -1,7 +1,7 @@
 class Scrape < ApplicationRecord
   enum status: %i[queued running failed completed]
-  belongs_to :parent, class_name: 'Scrape', required: false
-  belongs_to :original_ancestor, class_name: 'Scrape', required: false
+  belongs_to :parent, class_name: 'Scrape', optional: true
+  belongs_to :original_ancestor, class_name: 'Scrape', optional: true
   has_many :children, class_name: 'Scrape', foreign_key: 'parent_id', dependent: :destroy
 
   def scraper

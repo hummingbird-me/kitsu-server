@@ -81,7 +81,7 @@ class Group < ApplicationRecord
   has_many :bans, class_name: 'GroupBan', dependent: :destroy
   has_many :action_logs, class_name: 'GroupActionLog', dependent: :destroy
   belongs_to :category, class_name: 'GroupCategory', required: true
-  belongs_to :pinned_post, class_name: 'Post', required: false
+  belongs_to :pinned_post, class_name: 'Post', optional: true
 
   validates :name, presence: true,
                    length: { in: 3..50 },

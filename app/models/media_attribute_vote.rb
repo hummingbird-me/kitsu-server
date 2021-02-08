@@ -30,9 +30,9 @@ class MediaAttributeVote < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :media, polymorphic: true, required: true
 
-  belongs_to :anime_media_attributes, class_name: 'AnimeMediaAttribute'
-  belongs_to :manga_media_attributes, class_name: 'MangaMediaAttribute'
-  belongs_to :dramas_media_attributes, class_name: 'DramasMediaAttribute'
+  belongs_to :anime_media_attributes, class_name: 'AnimeMediaAttribute', optional: true
+  belongs_to :manga_media_attributes, class_name: 'MangaMediaAttribute', optional: true
+  belongs_to :dramas_media_attributes, class_name: 'DramasMediaAttribute', optional: true
 
   counter_culture :anime_media_attributes,
     column_name: proc { |mav|

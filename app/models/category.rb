@@ -49,7 +49,7 @@ class Category < ApplicationRecord
   has_and_belongs_to_many :anime
   has_and_belongs_to_many :manga
   has_and_belongs_to_many :drama
-  belongs_to :parent, class_name: 'Category', required: false,
+  belongs_to :parent, class_name: 'Category', optional: true,
                       touch: true, counter_cache: 'child_count'
   has_many :children, class_name: 'Category',
                       foreign_key: 'parent_id', dependent: :destroy

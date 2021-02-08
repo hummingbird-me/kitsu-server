@@ -32,7 +32,7 @@ class Report < ApplicationRecord
 
   belongs_to :naughty, -> { with_deleted }, polymorphic: true, required: true
   belongs_to :user, required: true
-  belongs_to :moderator, class_name: 'User', required: false
+  belongs_to :moderator, class_name: 'User', optional: true
 
   enum reason: %i[nsfw offensive spoiler bullying other spam]
   enum status: %i[reported resolved declined]

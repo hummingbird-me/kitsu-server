@@ -32,7 +32,7 @@ class Upload < ApplicationRecord
   ranks :upload_order, with_same: %i[owner_type owner_id]
 
   belongs_to :user, required: true
-  belongs_to :owner, polymorphic: true
+  belongs_to :owner, polymorphic: true, optional: true
 
   has_attached_file :content,
     required: true,

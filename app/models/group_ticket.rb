@@ -31,10 +31,10 @@
 class GroupTicket < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :group, required: true
-  belongs_to :assignee, class_name: 'User'
+  belongs_to :assignee, class_name: 'User', optional: true
+  belongs_to :first_message, class_name: 'GroupTicketMessage', optional: true
   has_many :messages, class_name: 'GroupTicketMessage', foreign_key: 'ticket_id',
                       dependent: :destroy
-  belongs_to :first_message, class_name: 'GroupTicketMessage'
 
   enum status: %i[created assigned resolved]
   update_index('group_tickets#group_ticket') { self }
