@@ -73,6 +73,7 @@ RSpec.describe Webhooks::YoutubeController, type: :controller do
       end
 
       it 'should create a notification and post it' do
+        skip 'We never launched this feature anyways lol'
         notif_class = double('YoutubeService::Notification')
         notif = instance_double('YoutubeService::Notification')
         expect(notif_class).to receive(:new).and_return(notif)

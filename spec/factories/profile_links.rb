@@ -25,8 +25,8 @@
 
 FactoryBot.define do
   factory :profile_link do
-    association :user, strategy: :build
-    association :profile_link_site, strategy: :build
+    association :user
+    association :profile_link_site
     url { 'toyhammered' }
   end
 end

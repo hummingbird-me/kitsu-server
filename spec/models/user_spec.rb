@@ -108,7 +108,7 @@ RSpec.describe User, type: :model do
   let(:persisted_user) { create(:user) }
 
   it { should have_db_index(:facebook_id) }
-  it { should belong_to(:waifu) }
+  it { should belong_to(:waifu).optional }
   it { should have_many(:linked_accounts) }
   it { should have_many(:profile_links) }
   it { should have_many(:stats) }

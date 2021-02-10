@@ -31,7 +31,7 @@ class Chapter < ApplicationRecord
   include DescriptionSanitation
 
   belongs_to :manga, required: true
-  belongs_to :volume, counter_cache: true
+  belongs_to :volume, counter_cache: true, optional: true
 
   has_attached_file :thumbnail
 

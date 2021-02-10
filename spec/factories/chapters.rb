@@ -28,7 +28,8 @@
 
 FactoryBot.define do
   factory :chapter do
-    association :manga, factory: :manga, strategy: :build
+    association :manga, factory: :manga
+    association :volume, factory: :volume
     titles { { en_jp: Faker::Name.name } }
     canonical_title { 'en_jp' }
     description { { en: Faker::Lorem.paragraph(4) } }

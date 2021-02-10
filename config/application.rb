@@ -1,13 +1,16 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails'
 # Pick the frameworks you want:
 require 'active_model/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
+require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
+# require 'action_cable/engine'
+require 'sprockets/railtie'
 require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -16,10 +19,8 @@ Bundler.require(*Rails.groups)
 
 module Kitsu
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified
-    # here.  Application configuration should go into files in
-    # config/initializers -- all .rb files in that directory are automatically
-    # loaded.
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.0
 
     # Enable assets (used by rails_admin, emails)
     config.assets.enabled = true
@@ -32,12 +33,12 @@ module Kitsu
     # Include all concern directories in app/*/concerns
     concern_dirs = Dir['app/*/concerns'].map { |d| File.expand_path(d) }
     config.eager_load_paths += concern_dirs
-    config.eager_load_paths += %W[#{Rails.root}/lib]
+    config.eager_load_paths += [Rails.root.join('lib')]
     # Rip out any non-unique entries
     config.eager_load_paths.uniq!
 
     # Allow autoloading any lib files
-    config.autoload_paths << "#{Rails.root}/lib"
+    config.autoload_paths << Rails.root.join('lib')
 
     # Set log level to LOG_LEVEL environment variable
     config.log_level = ENV['LOG_LEVEL'] || :info
