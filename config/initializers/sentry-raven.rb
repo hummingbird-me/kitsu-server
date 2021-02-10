@@ -1,9 +1,17 @@
 Raven.configure do |config|
   config.silence_ready = true
   config.excluded_exceptions += [
-    'Rack::Utils::InvalidParameterError', # Rack was unable to decode a parameter
+    'Rack::Utils::InvalidParameterError' # Rack was unable to decode a parameter
   ]
   config.logger = Rails.logger
+end
+
+ActiveSupport::Deprecation.behavior = %i[stderr notify]
+ActiveSupport::Notifications.subscribe('deprecation.rails') do |_, _, _, _, payload|
+  Raven.capture_message(payload[:message], {
+    level: 'warning',
+    backtrace: payload[:callstack]
+  })
 end
 
 module RavenBreadcrumbs
