@@ -1,10 +1,6 @@
 require_dependency 'custom_errors'
 
 class KitsuSchema < GraphQL::Schema
-  use GraphQL::Execution::Interpreter
-  use GraphQL::Analysis::AST
-  use GraphQL::Execution::Errors
-
   default_max_page_size 100
 
   mutation Types::MutationType
