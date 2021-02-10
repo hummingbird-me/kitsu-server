@@ -39,7 +39,7 @@ class Character < ApplicationRecord
   validates :canonical_name, presence: true
   validates :primary_media, polymorphism: { type: Media }, allow_blank: true
 
-  belongs_to :primary_media, polymorphic: true
+  belongs_to :primary_media, polymorphic: true, optional: true
   has_many :castings
   has_many :media_characters, dependent: :destroy
   has_many :anime_characters, dependent: :destroy

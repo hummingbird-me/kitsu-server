@@ -37,7 +37,7 @@ RSpec.describe Comment, type: :model do
   it { should belong_to(:post).counter_cache(true).required }
   it {
     should belong_to(:parent).class_name('Comment')
-                             .counter_cache('replies_count')
+                             .counter_cache('replies_count').optional
   }
   it { should belong_to(:user).required }
   it { should have_many(:replies).class_name('Comment').dependent(:destroy) }

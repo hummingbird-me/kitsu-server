@@ -16,7 +16,6 @@ require 'rails_helper'
 
 RSpec.describe ProfileLinkSite, type: :model do
   it { should validate_presence_of(:name) }
-  it { should validate_presence_of(:validate_find) }
   it { should validate_presence_of(:validate_replace) }
 
   context 'validate profile_link url' do

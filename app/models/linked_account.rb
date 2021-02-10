@@ -28,7 +28,7 @@
 # rubocop:enable Metrics/LineLength
 
 class LinkedAccount < ApplicationRecord
-  belongs_to :user, required: true
+  belongs_to :user
   has_many :library_entry_logs, dependent: :destroy
   # encyrpt the token
   attr_encrypted :token, key: Base64.decode64(ENV['ATTR_ENCRYPT_KEY'])
@@ -39,7 +39,7 @@ class LinkedAccount < ApplicationRecord
   validate :type_is_subclass
 
   def type_is_subclass
-    return false unless type
+    return false if type.blank?
 
     in_namespace = type.start_with?('LinkedAccount')
     is_descendant = type.safe_constantize <= LinkedAccount
