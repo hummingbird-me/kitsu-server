@@ -64,6 +64,7 @@ gem 'jsonapi-resources', '0.9.0'
 # Miscellaneous Utilities
 gem 'active_flag' # Bitfields!
 gem 'addressable' # Fancy address logic
+gem 'bootsnap' # Faster boots
 gem 'counter_culture' # Fancier counter caches
 gem 'faraday'
 gem 'faraday_middleware'
@@ -116,7 +117,6 @@ gem 'rails_admin'
 gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
-  gem 'bootsnap'
   gem 'dotenv-rails' # Load default ENV
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
