@@ -31,11 +31,10 @@ lowlevel_error_handler do |ex, env|
   Raven.capture_exception(
     ex,
     message: ex.message,
-    extra: { puma: env },
-    culprit: 'Puma'
+    extra: { puma: env, culprit: 'Puma' },
   )
   # note the below is just a Rack response
   [500, {}, [<<-MESSAGE.squish]]
-    An unknown error has occurred. If you continue to have problems, contact josh@kitsu.io\n
+    An unknown error has occurred. If you continue to have problems, contact help@kitsu.io\n
   MESSAGE
 end

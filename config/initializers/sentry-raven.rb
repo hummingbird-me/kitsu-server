@@ -10,7 +10,7 @@ ActiveSupport::Deprecation.behavior = %i[stderr notify]
 ActiveSupport::Notifications.subscribe('deprecation.rails') do |_, _, _, _, payload|
   Raven.capture_message(payload[:message], {
     level: 'warning',
-    backtrace: payload[:callstack]
+    backtrace: payload[:callstack].map(&:to_s)
   })
 end
 
