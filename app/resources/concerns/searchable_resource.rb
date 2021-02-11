@@ -114,7 +114,13 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
         attr_names = attrs.map { |a| a.name.to_s }
         relation.map { |row| row.attributes.values_at(*attr_names) }
       else
-        super
+        conn = relation.connection
+        quoted_attrs = attrs.map do |attr|
+          quoted_table = conn.quote_table_name(attr.relation.table_alias || attr.relation.name)
+          quoted_column = conn.quote_column_name(attr.name)
+          Arel.sql("#{quoted_table}.#{quoted_column}")
+        end
+        relation.pluck(*quoted_attrs)
       end
     end
 
