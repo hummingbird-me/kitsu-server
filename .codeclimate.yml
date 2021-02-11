@@ -2,9 +2,6 @@
 # http://docs.codeclimate.com/article/300-the-codeclimate-platform
 
 engines:
-  rubocop:
-    enabled: true
-    channel: rubocop-0-83
   scsslint:
     enabled: true
   bundler_audit:
