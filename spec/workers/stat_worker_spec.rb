@@ -4,7 +4,9 @@ RSpec.describe StatWorker do
   describe '#perform' do
     it 'should send to the stat class with a wrapper around the model and changes' do
       stub_const('Stat::Test', double)
-      allow(Stat::Test).to receive_message_chain(:for_user, :lock!) { Stat::Test }
+      allow(Stat::Test).to receive(:for_user).and_return(Stat::Test)
+      allow(Stat::Test).to receive(:lock!)
+      allow(Stat::Test).to receive(:save!)
       allow(User).to receive(:exists?).and_return(true)
       stub_const('TestModel', OpenStruct)
 

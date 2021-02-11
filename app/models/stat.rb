@@ -22,7 +22,7 @@
 # rubocop:enable Metrics/LineLength
 
 class Stat < ApplicationRecord
-  belongs_to :user, required: true
+  belongs_to :user
 
   validates :type, presence: true, uniqueness: { scope: :user_id }
 
