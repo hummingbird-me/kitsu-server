@@ -20,7 +20,10 @@ class StatWorker
 
     # Lock the User's stat row so no other workers can update it while we are
     Stat.transaction do
-      stat = stat.constantize.for_user(user_id).lock!
+      stat = stat.constantize.for_user(user_id)
+
+      stat.save!
+      stat.lock!
 
       # If the model data is older than the last stat recalculation, we don't have to do anything
       return if model.updated_at && model.updated_at <= stat.recalculated_at
