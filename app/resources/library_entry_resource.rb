@@ -122,23 +122,23 @@ class LibraryEntryResource < BaseResource
       media, title = TITLE_SORT.match(field.to_s)[1..-1]
       direction = direction.upcase
 
-      records = records.joins(<<-EOF.squish)
+      records = records.joins(Arel.sql(<<-JOINS.squish))
         LEFT JOIN #{media} AS #{media}_sort
         ON #{media}_sort.id = library_entries.#{media}_id
-      EOF
+      JOINS
 
       if title == 'canonical'
-        records = records.order(<<~EOF)
+        records = records.order(Arel.sql(<<~ORDER))
           #{media}_sort.titles->#{media}_sort.canonical_title #{direction}
-        EOF
+        ORDER
       elsif /[a-z]{2}(_[a-z]{2})?/i =~ title
-        records = records.order(<<~EOF.squish)
+        records = records.order(Arel.sql(<<~ORDER.squish))
           COALESCE(
             NULLIF(#{media}_sort.titles->'#{title}', ''),
             NULLIF(#{media}_sort.titles->#{media}_sort.canonical_title, ''),
             NULLIF(#{media}_sort.titles->'en_jp', '')
           ) #{direction}
-        EOF
+        ORDER
       end
     end
 
