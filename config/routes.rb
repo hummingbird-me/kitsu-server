@@ -215,6 +215,7 @@ Rails.application.routes.draw do
 
     root to: 'home#index'
   end
+  match '*any', to: 'error#not_found', via: :all
 end
 
 # == Route Map
