@@ -49,9 +49,6 @@ production:
   TheTvdbWeeklyWorker:
     # Once a week
     cron: '0 0 0 * * SUN'
-  HuluMappingWorker:
-    # Once a day
-    cron: '0 0 0 * * *'
   PostgresSequenceWorker:
     # Once a day
     cron: '0 0 0 * * *'
