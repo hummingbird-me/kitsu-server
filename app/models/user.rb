@@ -227,7 +227,7 @@ class User < ApplicationRecord
   scope :blocking, ->(*users) { where.not(id: users.flatten) }
   scope :followed_first, ->(user) {
     user_id = sanitize_sql(user.id)
-    joins(Arel.sql(<<-SQL.squish)).order('(f.id IS NULL) ASC')
+    joins(Arel.sql(<<-SQL.squish)).order(Arel.sql('(f.id IS NULL) ASC'))
       LEFT OUTER JOIN follows f
       ON f.followed_id = users.id
       AND f.follower_id = #{user_id}
