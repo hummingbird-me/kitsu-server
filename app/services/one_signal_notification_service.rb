@@ -38,7 +38,7 @@ class OneSignalNotificationService
     players = OneSignalPlayer.where(platform: platforms, user: @user)
     return { results: [] } unless players.exists?
     # load players, grouping by platform
-    player_ids = players.group(:platform).pluck(:platform, 'array_agg(player_id)').to_h
+    player_ids = players.group(:platform).pluck(:platform, Arel.sql('array_agg(player_id)')).to_h
     # Remove duplicate IDs and blanks
     player_ids.transform_values! { |v| v.uniq.reject(&:blank?) }
     # Notify them
