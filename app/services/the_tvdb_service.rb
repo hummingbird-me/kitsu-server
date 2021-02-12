@@ -8,7 +8,7 @@ class TheTvdbService
   # @return [ActiveRecord::Relation<Mapping>] a scope of Mappings to shows with missing thumbnails
   def self.missing_thumbnails
     Mapping.where(external_site: 'thetvdb')
-           .joins(<<-SQL)
+           .joins(Arel.sql(<<-SQL))
              LEFT OUTER JOIN episodes
              ON mappings.item_id = episodes.media_id
              AND mappings.item_type = episodes.media_type
@@ -19,7 +19,7 @@ class TheTvdbService
   # @return [ActiveRecord::Relation<Mapping>] a scope of Mappings to shows which are airing
   def self.currently_airing
     Mapping.where(external_site: 'thetvdb')
-           .joins('LEFT OUTER JOIN anime ON mappings.item_id = anime.id')
+           .joins(Arel.sql('LEFT OUTER JOIN anime ON mappings.item_id = anime.id'))
            .merge(Anime.current)
   end
 
@@ -85,7 +85,7 @@ class TheTvdbService
   end
 
   def each_mapping
-    pluck_mappings(@mappings)['Anime'].each do |(anime_id, tvdb_id)|
+    (pluck_mappings(@mappings)['Anime'] || []).each do |(anime_id, tvdb_id)|
       anime = Anime.find(anime_id)
       series_id, season_numbers = parse_identifier(tvdb_id)
 
