@@ -24,6 +24,5 @@ class Mutations::Episode::Update < Mutations::Base
     episode.save!
 
     { episode: episode }
-    end
   end
 end

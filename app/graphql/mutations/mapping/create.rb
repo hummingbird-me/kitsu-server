@@ -22,6 +22,5 @@ class Mutations::Mapping::Create < Mutations::Base
     mapping.save!
 
     { mapping: mapping }
-    end
   end
 end
