@@ -1,4 +1,4 @@
-class Mutations::Pro::SetMessage < Mutations::BaseMutation
+class Mutations::Pro::SetMessage < Mutations::Base
   argument :message, String,
     required: true,
     description: 'The message to set for your Hall of Fame entry'

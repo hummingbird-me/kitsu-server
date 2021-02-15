@@ -1,4 +1,4 @@
-class Mutations::Pro::SetDiscord < Mutations::BaseMutation
+class Mutations::Pro::SetDiscord < Mutations::Base
   argument :discord, String,
     required: true,
     description: 'Your discord tag (Name#1234)'

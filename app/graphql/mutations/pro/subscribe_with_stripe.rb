@@ -1,4 +1,4 @@
-class Mutations::Pro::SubscribeWithStripe < Mutations::BaseMutation
+class Mutations::Pro::SubscribeWithStripe < Mutations::Base
   behind_feature_flag :pro_subscriptions
 
   argument :tier, Types::Enum::ProTier,
