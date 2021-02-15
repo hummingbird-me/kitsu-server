@@ -1,4 +1,6 @@
 class Mutations::LibraryEntry::Delete < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::GenericDelete,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::LibraryEntry::Delete < Mutations::Base
     as: :library_entry
 
   field :library_entry, Types::GenericDelete, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_library_entry(value)
     LibraryEntry.find(value.id)
@@ -16,14 +19,8 @@ class Mutations::LibraryEntry::Delete < Mutations::Base
   end
 
   def resolve(library_entry:)
-    library_entry.destroy
+    library_entry.destroy!
 
-    if library_entry.errors.any?
-      Errors::RailsModel.graphql_error(library_entry)
-    else
-      {
-        library_entry: { id: library_entry.id }
-      }
-    end
+    { library_entry: { id: library_entry.id } }
   end
 end

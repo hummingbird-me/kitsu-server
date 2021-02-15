@@ -1,4 +1,4 @@
-module Types::Interface::Errors::Base
+module Types::Interface::Error
   include Types::Interface::Base
   description 'Generic error fields used by all errors.'
 

@@ -1,9 +1,9 @@
 class Types::Mutations::PostMutation < Types::BaseObject
   field :lock,
-    mutation: ::Mutations::Post::LockPost,
+    mutation: ::Mutations::Post::Lock,
     description: 'Lock a Post.'
 
   field :unlock,
-    mutation: ::Mutations::Post::UnlockPost,
+    mutation: ::Mutations::Post::Unlock,
     description: 'Unlock a Post.'
 end

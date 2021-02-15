@@ -1,4 +1,6 @@
 class Mutations::Episode::Delete < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::GenericDelete,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::Episode::Delete < Mutations::Base
     as: :episode
 
   field :episode, Types::GenericDelete, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_episode(value)
     ::Episode.find(value.id)
@@ -16,14 +19,8 @@ class Mutations::Episode::Delete < Mutations::Base
   end
 
   def resolve(episode:)
-    episode.destroy
+    episode.destroy!
 
-    if episode.errors.any?
-      Errors::RailsModel.graphql_error(episode)
-    else
-      {
-        episode: { id: episode.id }
-      }
-    end
+    { episode: { id: episode.id } }
   end
 end

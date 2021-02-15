@@ -1,6 +1,5 @@
 class Mutations::Base < GraphQL::Schema::Mutation
   include BehindFeatureFlag
-  include CustomPayloadType
 
   def authorized?(record, action)
     return true if Pundit.policy!(context[:token], record).public_send(action)
@@ -10,5 +9,11 @@ class Mutations::Base < GraphQL::Schema::Mutation
 
   def current_user
     User.current
+  end
+
+  def self.default_graphql_name
+    # Mutations::Anime::Create -> AnimeCreate
+    # Mutations::LibraryEntry::UpdateStatusById -> LibraryEntryUpdateStatusById
+    name.split('::')[1..-1].join
   end
 end

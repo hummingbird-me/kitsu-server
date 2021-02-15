@@ -1,4 +1,6 @@
 class Mutations::Manga::Delete < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::GenericDelete,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::Manga::Delete < Mutations::Base
     as: :manga
 
   field :manga, Types::GenericDelete, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_manga(value)
     ::Manga.find(value.id)
@@ -16,14 +19,8 @@ class Mutations::Manga::Delete < Mutations::Base
   end
 
   def resolve(manga:)
-    manga.destroy
+    manga.destroy!
 
-    if manga.errors.any?
-      Errors::RailsModel.graphql_error(manga)
-    else
-      {
-        manga: { id: manga.id }
-      }
-    end
+    { manga: { id: manga.id } }
   end
 end
