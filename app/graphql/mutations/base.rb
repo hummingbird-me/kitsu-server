@@ -4,7 +4,11 @@ class Mutations::Base < GraphQL::Schema::Mutation
   def authorized?(record, action)
     return true if Pundit.policy!(context[:token], record).public_send(action)
 
-    [false, Errors::Pundit::NotAuthorizedError.graphql_error]
+    [false, {
+      errors: [
+        { message: message, code: 'NotAuthorized' }
+      ]
+    }]
   end
 
   def current_user
