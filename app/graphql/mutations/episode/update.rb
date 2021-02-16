@@ -1,4 +1,6 @@
 class Mutations::Episode::Update < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::Episode::Update,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::Episode::Update < Mutations::Base
     as: :episode
 
   field :episode, Types::Episode, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_episode(value)
     episode = ::Episode.find(value.id)
@@ -18,14 +21,8 @@ class Mutations::Episode::Update < Mutations::Base
   end
 
   def resolve(episode:)
-    episode.save
+    episode.save!
 
-    if episode.errors.any?
-      Errors::RailsModel.graphql_error(episode)
-    else
-      {
-        episode: episode
-      }
-    end
+    { episode: episode }
   end
 end

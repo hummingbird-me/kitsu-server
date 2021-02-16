@@ -1,3 +1,3 @@
 class Types::Errors::Generic < Types::BaseObject
-  implements Types::Interface::Errors::Base
+  implements Types::Interface::Error
 end

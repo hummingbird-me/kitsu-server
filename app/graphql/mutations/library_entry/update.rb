@@ -1,4 +1,6 @@
 class Mutations::LibraryEntry::Update < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::LibraryEntry::Update,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::LibraryEntry::Update < Mutations::Base
     as: :library_entry
 
   field :library_entry, Types::LibraryEntry, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   # NOTE: https://github.com/rmosolgo/graphql-ruby/issues/1733
   # NOTE: https://www.rubydoc.info/github/rmosolgo/graphql-ruby/GraphQL/Schema/Resolver#argument-class_method
@@ -23,14 +26,8 @@ class Mutations::LibraryEntry::Update < Mutations::Base
   end
 
   def resolve(library_entry:)
-    library_entry.save
+    library_entry.save!
 
-    if library_entry.errors.any?
-      Errors::RailsModel.graphql_error(library_entry)
-    else
-      {
-        library_entry: library_entry
-      }
-    end
+    { library_entry: library_entry }
   end
 end

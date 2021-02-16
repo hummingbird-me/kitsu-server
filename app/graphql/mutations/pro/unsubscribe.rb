@@ -1,4 +1,4 @@
-class Mutations::Pro::Unsubscribe < Mutations::BaseMutation
+class Mutations::Pro::Unsubscribe < Mutations::Base
   field :expires_at, GraphQL::Types::ISO8601DateTime, null: true
 
   def ready?

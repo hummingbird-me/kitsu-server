@@ -1,4 +1,6 @@
 class Mutations::LibraryEntry::Create < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::LibraryEntry::Create,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::LibraryEntry::Create < Mutations::Base
     as: :library_entry
 
   field :library_entry, Types::LibraryEntry, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_library_entry(value)
     LibraryEntry.new(value.to_h)
@@ -16,14 +19,8 @@ class Mutations::LibraryEntry::Create < Mutations::Base
   end
 
   def resolve(library_entry:)
-    library_entry.save
+    library_entry.save!
 
-    if library_entry.errors.any?
-      Errors::RailsModel.graphql_error(library_entry)
-    else
-      {
-        library_entry: library_entry
-      }
-    end
+    { library_entry: library_entry }
   end
 end

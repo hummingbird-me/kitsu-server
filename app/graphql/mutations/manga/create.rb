@@ -1,4 +1,6 @@
 class Mutations::Manga::Create < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::Manga::Create,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::Manga::Create < Mutations::Base
     as: :manga
 
   field :manga, Types::Manga, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_manga(value)
     ::Manga.new(value.to_h)
@@ -16,14 +19,8 @@ class Mutations::Manga::Create < Mutations::Base
   end
 
   def resolve(manga:)
-    manga.save
+    manga.save!
 
-    if manga.errors.any?
-      Errors::RailsModel.graphql_error(manga)
-    else
-      {
-        manga: manga
-      }
-    end
+    { manga: manga }
   end
 end

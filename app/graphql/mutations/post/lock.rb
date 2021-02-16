@@ -1,4 +1,6 @@
-class Mutations::Post::LockPost < Mutations::Base
+class Mutations::Post::Lock < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::Post::Lock,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::Post::LockPost < Mutations::Base
     as: :post
 
   field :post, Types::Post, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_post(value)
     post = ::Post.find(value.id)
@@ -18,16 +21,9 @@ class Mutations::Post::LockPost < Mutations::Base
   end
 
   def resolve(post:)
-    post.save
+    post.save!
+    ModeratorActionLog.generate!(current_user, 'lock', post)
 
-    if post.errors.any?
-      Errors::RailsModel.graphql_error(post)
-    else
-      ModeratorActionLog.generate!(current_user, 'lock', post)
-
-      {
-        post: post
-      }
-    end
+    { post: post }
   end
 end

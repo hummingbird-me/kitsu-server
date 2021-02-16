@@ -1,8 +1,8 @@
 class Types::MutationType < Types::BaseObject
-  field :pro, Types::Mutations::ProMutation, null: false
-  field :anime, Types::Mutations::AnimeMutation, null: true
-  field :episode, Types::Mutations::EpisodeMutation, null: true
-  field :library_entry, Types::Mutations::LibraryEntryMutation, null: true
-  field :mapping, Types::Mutations::MappingMutation, null: true
-  field :post, Types::Mutations::PostMutation, null: true
+  field :pro, Mutations::Pro, null: false
+  field :anime, Mutations::Anime, null: true
+  field :episode, Mutations::Episode, null: true
+  field :library_entry, Mutations::LibraryEntry, null: true
+  field :mapping, Mutations::Mapping, null: true
+  field :post, Mutations::Post, null: true
 end

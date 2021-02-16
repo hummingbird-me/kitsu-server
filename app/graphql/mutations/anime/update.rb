@@ -1,4 +1,6 @@
 class Mutations::Anime::Update < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::Anime::Update,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::Anime::Update < Mutations::Base
     as: :anime
 
   field :anime, Types::Anime, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_anime(value)
     anime = ::Anime.find(value.id)
@@ -18,14 +21,8 @@ class Mutations::Anime::Update < Mutations::Base
   end
 
   def resolve(anime:)
-    anime.save
+    anime.save!
 
-    if anime.errors.any?
-      Errors::RailsModel.graphql_error(anime)
-    else
-      {
-        anime: anime
-      }
-    end
+    { anime: anime }
   end
 end

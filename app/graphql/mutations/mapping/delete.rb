@@ -1,4 +1,6 @@
 class Mutations::Mapping::Delete < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::GenericDelete,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::Mapping::Delete < Mutations::Base
     as: :mapping
 
   field :mapping, Types::GenericDelete, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_mapping(value)
     ::Mapping.find(value.id)
@@ -16,14 +19,8 @@ class Mutations::Mapping::Delete < Mutations::Base
   end
 
   def resolve(mapping:)
-    mapping.destroy
+    mapping.destroy!
 
-    if mapping.errors.any?
-      Errors::RailsModel.graphql_error(mapping)
-    else
-      {
-        mapping: { id: mapping.id }
-      }
-    end
+    { mapping: { id: mapping.id } }
   end
 end

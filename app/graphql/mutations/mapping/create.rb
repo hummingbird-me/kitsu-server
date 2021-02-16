@@ -1,4 +1,6 @@
 class Mutations::Mapping::Create < Mutations::Base
+  prepend RescueValidationErrors
+
   argument :input,
     Types::Input::Mapping::Create,
     required: true,
@@ -6,6 +8,7 @@ class Mutations::Mapping::Create < Mutations::Base
     as: :mapping
 
   field :mapping, Types::Mapping, null: true
+  field :errors, [Types::Interface::Error], null: true
 
   def load_mapping(value)
     ::Mapping.new(value.to_model)
@@ -16,14 +19,8 @@ class Mutations::Mapping::Create < Mutations::Base
   end
 
   def resolve(mapping:)
-    mapping.save
+    mapping.save!
 
-    if mapping.errors.any?
-      Errors::RailsModel.graphql_error(mapping)
-    else
-      {
-        mapping: mapping
-      }
-    end
+    { mapping: mapping }
   end
 end
