@@ -1,48 +1,34 @@
 class Loaders::FancyLoader < GraphQL::Batch::Loader
-  class_attribute :model
-  class_attribute :sorts
+  include Loaders::FancyLoader::DSL
 
-  class << self
-    def from(model)
-      self.model = model
-    end
 
-    def sort(name, transform: nil, on: -> { model.arel_table[name] })
-      self.sorts ||= {}
-      sorts[name] = {
-        transform: transform,
-        column: on
-      }
-    end
   end
 
-  def initialize(find_by:, limit:, offset: 0, order:, token:)
+  def initialize(find_by:, limit:, offset: 0, sort:, token:)
     @find_by = find_by
     @limit = limit
     @offset = offset
-    @order = order
+    @sort = sort.map(&:to_h)
     @token = token
   end
 
   def perform(keys)
-    # First, we do our ActiveRecord::Relation stuff
-    query = model.where(@find_by => keys)
-    query = scope.new(@token, query).resolve
-
-    # Then we drop down into Arel for the fun part!
+    relation = model.where(@find_by => keys)
+    query = scope.new(@token, relation).resolve
+    # Drop down into Arel so we can have fun
     query_arel = query.arel
     table = query.arel_table
 
     # Apply the transform and column lambdas for the sorting requested
-    query_arel = @order.keys.inject(query_arel) do |arel, key|
-      if sorts[key][:transform]
-        sorts[key][:transform].call(arel)
+    query_arel = @sort.inject(query_arel) do |arel, sort|
+      if sorts[sort[:on]][:transform]
+        sorts[sort[:on]][:transform].call(arel)
       else
         arel
       end
     end
-    orders = @order.map do |key, direction|
-      sorts[key][:column].call.public_send(direction)
+    orders = @sort.map do |sort|
+      sorts[sort[:on]][:column].call.public_send(sort[:direction])
     end
 
     # Build up a window function with the sorting applied
@@ -68,8 +54,6 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
   end
 
   private
-
-
 
   def scope
     @scope ||= Pundit::PolicyFinder.new(model).scope!
