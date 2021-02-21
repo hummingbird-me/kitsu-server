@@ -1,6 +1,8 @@
 module Types::Interface::Error
   include Types::Interface::Base
+
   description 'Generic error fields used by all errors.'
+  orphan_types Types::Errors::Generic
 
   field :message, String,
     null: false,
