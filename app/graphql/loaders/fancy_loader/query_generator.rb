@@ -1,14 +1,15 @@
 # @private
 class Loaders::FancyLoader::QueryGenerator
   # @param model [ActiveRecord::Model] the model to load from
-  # @param find_by [Symbol, String] the key to find by
+  # @param find_by [Symbol, String, Array<Symbol, String>] the key or keys to find by
   # @param limit [Integer] The number of rows to retrieve
   # @param offset [Integer] The offset of the rows to retrieve
   # @param sort [Array<{:column, :transform, :direction => Object}>] The sorts to apply
   # @param token [Doorkeeper::AccessToken] the user's access token
   # @param keys [Array] an array of values to find by
+  # @param where [Hash] a filter to use when querying
   def initialize(
-    model:, find_by:, limit:, offset:, sort:, token:, keys:
+    model:, find_by:, limit:, offset:, sort:, token:, keys:, where: nil
   )
     @model = model
     @find_by = find_by
@@ -17,6 +18,7 @@ class Loaders::FancyLoader::QueryGenerator
     @sort = sort
     @token = token
     @keys = keys
+    @where = where
   end
 
   def query
@@ -31,7 +33,10 @@ class Loaders::FancyLoader::QueryGenerator
     limit = subquery[:row_number].lteq(@offset + @limit)
 
     # Finally, go *back* to the ActiveRecord model, and do the final select
-    @model.select(Arel.star).from(subquery).where(offset.and(limit))
+    @model.select(Arel.star)
+          .from(subquery)
+          .where(offset.and(limit))
+          .order(subquery[:row_number].asc)
   end
 
   private
@@ -70,6 +75,8 @@ class Loaders::FancyLoader::QueryGenerator
   # The "base" query. This is the query that would load everything without pagination or sorting,
   # just auth scoping.
   def base_query
-    scope.new(@token, @model.where(@find_by => @keys)).resolve.arel
+    query = @model.where(@find_by => @keys)
+    query = query.where(@where) unless @where.nil?
+    scope.new(@token, query).resolve.arel
   end
 end
