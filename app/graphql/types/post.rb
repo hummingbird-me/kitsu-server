@@ -44,6 +44,10 @@ class Types::Post < Types::BaseObject
     null: true,
     description: 'The reason why this post was locked.'
 
+  field :embed, Types::Interface::BaseEmbed,
+    null: true,
+    description: ''
+
   field :comments, Types::Comment.connection_type,
     null: false,
     description: 'All comments related to this post.'
