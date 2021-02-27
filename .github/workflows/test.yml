@@ -83,6 +83,11 @@ jobs:
       run: |
         bundle exec rspec
 
+  - name: Publish code coverage
+    uses: paambaati/codeclimate-action@v2.7.5
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+    continue-on-error: true
+
     - name: Deploy
       uses: octokit/request-action@v2.x
       if: success() && github.ref == 'refs/heads/the-future'
