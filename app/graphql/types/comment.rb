@@ -33,7 +33,7 @@ class Types::Comment < Types::BaseObject
 
   def likes(sort: [{ on: :created_at, direction: :desc }])
     Loaders::CommentLikesLoader.connection_for({
-      find_by: :post_id,
+      find_by: :comment_id,
       sort: sort
     }, object.id).then do |likes|
       RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
