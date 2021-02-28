@@ -1,4 +1,4 @@
-class Loaders::PostLikesLoader < FancyLoader
+class Loaders::PostLikesLoader < Loaders::FancyLoader
   from PostLike
   sort :following,
     transform: ->(ast) {
@@ -6,7 +6,7 @@ class Loaders::PostLikesLoader < FancyLoader
       likes = PostLike.arel_table
 
       condition = follows[:followed_id].eq(likes[:user_id]).and(
-        follows[:follower_id].eq(5554)
+        follows[:follower_id].eq(User.current.id)
       )
 
       ast.join(follows, Arel::Nodes::OuterJoin).on(condition)

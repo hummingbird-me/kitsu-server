@@ -52,13 +52,17 @@ class Types::Post < Types::BaseObject
     AssociationLoader.for(object.class, :comments).scope(object)
   end
 
-  field :likes, Types::Profile.connection_type,
-    null: false,
-    description: 'Users that have liked this post.'
+  field :likes, Types::Profile.connection_type, null: false do
+    description 'Users that have liked this post'
+    argument :sort, Loaders::PostLikesLoader.sort_argument, required: false
+  end
 
-  def likes
-    AssociationLoader.for(object.class, :post_likes).scope(object).then do |likes|
-      RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
+  def likes(sort: nil)
+    Loaders::PostLikesLoader.connection_for({
+      find_by: :post_id,
+      sort: sort
+    }, object.id).then do |likes|
+      RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
   end
 
