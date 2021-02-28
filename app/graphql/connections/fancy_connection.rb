@@ -25,21 +25,30 @@ class Connections::FancyConnection < GraphQL::Pagination::RelationConnection
   # @return [Promise<Integer>]
   def total_count
     base_nodes.then do |results|
-      results.first.attributes['total_count']
+      if results.first
+        results.first.attributes['total_count']
+      else 0
+      end
     end
   end
 
   # @return [Promise<Boolean>]
   def has_next_page
     base_nodes.then do |results|
-      results.last.attributes['row_number'] < results.last.attributes['total_count']
+      if results.last
+        results.last.attributes['row_number'] < results.last.attributes['total_count']
+      else false
+      end
     end
   end
 
   # @return [Promise<Boolean>]
   def has_previous_page
     base_nodes.then do |results|
-      results.first.attributes['row_number'] > 1
+      if results.first
+        results.first.attributes['row_number'] > 1
+      else false
+      end
     end
   end
 
@@ -56,7 +65,7 @@ class Connections::FancyConnection < GraphQL::Pagination::RelationConnection
   end
 
   def cursor_for(item)
-    encode(item.attributes['row_number'].to_s)
+    item && encode(item.attributes['row_number'].to_s)
   end
 
   def then(&block)
