@@ -45,7 +45,7 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
   # @param last [Integer] Filter for last N rows
   # @param sort [Array<{:on, :direction => Symbol}>] The sorts to apply while loading
   # @param token [Doorkeeper::AccessToken] the user's access token
-  def initialize(find_by:, sort:, token:, before: nil, after: 0, first: nil, last: nil)
+  def initialize(find_by:, sort:, token:, before: nil, after: 0, first: nil, last: nil, where: nil)
     @find_by = find_by
     @sort = sort.map(&:to_h)
     @token = token
@@ -53,6 +53,7 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
     @after = after
     @first = first
     @last = last
+    @where = where
   end
 
   # Perform the loading. Uses {Loaders::FancyLoader::QueryGenerator} to build a query, then groups
@@ -67,7 +68,8 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
       last: @last,
       sort: sort,
       token: @token,
-      keys: keys
+      keys: keys,
+      where: @where
     ).query
 
     results = query.to_a.group_by { |rec| rec[@find_by] }
