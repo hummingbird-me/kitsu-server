@@ -25,17 +25,29 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
   # the same parameters each time. This means that we can get away with this less-than-ideal
   # batching and still have significant performance gains.
   #
+  # The pagination parameters have some odd interactions to be aware of! They are *intersected*, so
+  # if you pass before and after, you're specifying after < row < before. That's pretty logical,
+  # but first+last are weirder, because when combined they will return the *middle*, due to that
+  # intersection-driven logic. That is, given a set of 10 rows, first=6 & last=6 will return rows
+  # 4, 5, and 6 because they are the only ones in both sets. This isn't a particularly useful
+  # behavior, but the Relay spec is pretty clear that you shouldn't expect good results if you pass
+  # both first and last to the same field.
+  #
   # @param find_by [Symbol, String] the key to find by
-  # @param limit [Integer] The number of rows to retrieve
-  # @param offset [Integer] The offset of the rows to retrieve
+  # @param before [Integer] Filter by rows less than this
+  # @param after [Integer] Filter by rows greater than this
+  # @param first [Integer] Filter for first N rows
+  # @param last [Integer] Filter for last N rows
   # @param sort [Array<{:on, :direction => Symbol}>] The sorts to apply while loading
   # @param token [Doorkeeper::AccessToken] the user's access token
-  def initialize(find_by:, limit:, offset: 0, sort:, token:)
+  def initialize(find_by:, sort:, token:, before: nil, after: 0, first: nil, last: nil)
     @find_by = find_by
-    @limit = limit
-    @offset = offset
     @sort = sort.map(&:to_h)
     @token = token
+    @before = before
+    @after = after
+    @first = first
+    @last = last
   end
 
   # Perform the loading. Uses {Loaders::FancyLoader::QueryGenerator} to build a query, then groups
@@ -44,8 +56,10 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
     query = QueryGenerator.new(
       model: model,
       find_by: @find_by,
-      limit: @limit,
-      offset: @offset,
+      before: @before,
+      after: @after,
+      first: @first,
+      last: @last,
       sort: sort,
       token: @token,
       keys: keys

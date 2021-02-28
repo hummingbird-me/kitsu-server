@@ -2,22 +2,26 @@
 class Loaders::FancyLoader::QueryGenerator
   # @param model [ActiveRecord::Model] the model to load from
   # @param find_by [Symbol, String, Array<Symbol, String>] the key or keys to find by
-  # @param limit [Integer] The number of rows to retrieve
-  # @param offset [Integer] The offset of the rows to retrieve
   # @param sort [Array<{:column, :transform, :direction => Object}>] The sorts to apply
   # @param token [Doorkeeper::AccessToken] the user's access token
   # @param keys [Array] an array of values to find by
+  # @param before [Integer] Filter by rows less than this (one-indexed)
+  # @param after [Integer] Filter by rows greater than this (one-indexed)
+  # @param first [Integer] Filter for first N rows
+  # @param last [Integer] Filter for last N rows
   # @param where [Hash] a filter to use when querying
   def initialize(
-    model:, find_by:, limit:, offset:, sort:, token:, keys:, where: nil
+    model:, find_by:, sort:, token:, keys:, before: nil, after: 0, first: nil, last: nil, where: nil
   )
     @model = model
     @find_by = find_by
-    @limit = limit
-    @offset = offset
     @sort = sort
     @token = token
     @keys = keys
+    @before = before
+    @after = after
+    @first = first
+    @last = last
     @where = where
   end
 
@@ -26,16 +30,12 @@ class Loaders::FancyLoader::QueryGenerator
     subquery = @sort.inject(base_query) do |arel, sort|
       sort[:transform] ? sort[:transform].call(arel) : arel
     end
-    subquery = subquery.project(row_number).as('subquery')
-
-    # Generate conditions to filter for pagination
-    offset = subquery[:row_number].gt(@offset)
-    limit = subquery[:row_number].lteq(@offset + @limit)
+    subquery = subquery.project(row_number).project(count).as('subquery')
 
     # Finally, go *back* to the ActiveRecord model, and do the final select
     @model.select(Arel.star)
           .from(subquery)
-          .where(offset.and(limit))
+          .where(pagination_filter(subquery))
           .order(subquery[:row_number].asc)
   end
 
@@ -70,6 +70,36 @@ class Loaders::FancyLoader::QueryGenerator
   #   ROW_NUMBER() OVER (#{partition})
   def row_number
     Arel::Nodes::NamedFunction.new('ROW_NUMBER', []).over(partition).as('row_number')
+  end
+
+  # A count window function. Omits sort from the partition to get the total count.
+  #
+  #   COUNT(*) OVER (#{partition})
+  def count
+    count_partition = Arel::Nodes::Window.new.partition(table[@find_by])
+    Arel::Nodes::NamedFunction.new('COUNT', [Arel.star]).over(count_partition).as('total_count')
+  end
+
+  def pagination_filter(query)
+    row = query[:row_number]
+    count = query[:total_count]
+    filters = []
+
+    filters << row.gt(@after) if @after
+    filters << row.lt(@before) if @before
+
+    if @first
+      filters << if @after then row.lteq(@after + @first)
+                 else filters << row.lteq(@first)
+                 end
+    end
+    if @last
+      filters << if @before then row.gteq(@before - @last)
+                 else row.gt(Arel::Nodes::Subtraction.new(count, @last))
+                 end
+    end
+
+    filters.inject(&:and)
   end
 
   # The "base" query. This is the query that would load everything without pagination or sorting,
