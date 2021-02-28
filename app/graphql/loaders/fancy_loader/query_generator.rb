@@ -33,7 +33,8 @@ class Loaders::FancyLoader::QueryGenerator
     subquery = subquery.project(row_number).project(count).as('subquery')
 
     # Finally, go *back* to the ActiveRecord model, and do the final select
-    @model.select(Arel.star)
+    @model.unscoped
+          .select(Arel.star)
           .from(subquery)
           .where(pagination_filter(subquery))
           .order(subquery[:row_number].asc)
@@ -90,7 +91,7 @@ class Loaders::FancyLoader::QueryGenerator
 
     if @first
       filters << if @after then row.lteq(@after + @first)
-                 else filters << row.lteq(@first)
+                 else row.lteq(@first)
                  end
     end
     if @last
