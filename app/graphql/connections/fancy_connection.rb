@@ -33,7 +33,7 @@ class Connections::FancyConnection < GraphQL::Pagination::RelationConnection
   end
 
   # @return [Promise<Boolean>]
-  def has_next_page
+  def has_next_page # rubocop:disable Naming/PredicateName
     base_nodes.then do |results|
       if results.last
         results.last.attributes['row_number'] < results.last.attributes['total_count']
@@ -43,7 +43,7 @@ class Connections::FancyConnection < GraphQL::Pagination::RelationConnection
   end
 
   # @return [Promise<Boolean>]
-  def has_previous_page
+  def has_previous_page # rubocop:disable Naming/PredicateName
     base_nodes.then do |results|
       if results.first
         results.first.attributes['row_number'] > 1
