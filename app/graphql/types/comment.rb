@@ -26,21 +26,29 @@ class Types::Comment < Types::BaseObject
     null: true,
     description: 'The parent comment if this comment was a reply to another.'
 
-  field :likes, Types::Profile.connection_type,
-    null: false,
-    description: 'Users who liked this comment.'
+  field :likes, Types::Profile.connection_type, null: false do
+    description 'Users who liked this comment'
+    argument :sort, Loaders::CommentLikesLoader.sort_argument, required: false
+  end
 
-  def likes
-    AssociationLoader.for(object.class, :likes, policy: :comment_like).scope(object).then do |likes|
-      RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
+  def likes(sort: [{ on: :created_at, direction: :desc }])
+    Loaders::CommentLikesLoader.connection_for({
+      find_by: :post_id,
+      sort: sort
+    }, object.id).then do |likes|
+      RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
   end
 
-  field :replies, Types::Comment.connection_type,
-    null: false,
-    description: 'All replies to a specific comment.'
+  field :replies, Types::Comment.connection_type, null: false do
+    description 'Replies to this comment'
+    argument :sort, Loaders::CommentsLoader.sort_argument, required: false
+  end
 
-  def replies
-    AssociationLoader.for(object.class, :replies, policy: :comment).scope(object)
+  def replies(sort: [{ on: :created_at, direction: :asc }])
+    Loaders::CommentsLoader.connection_for({
+      find_by: :parent_id,
+      sort: sort
+    }, object.id)
   end
 end
