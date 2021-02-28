@@ -20,6 +20,11 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
     [group_args, Oj.dump(group_kwargs)]
   end
 
+  # Get a FancyConnection wrapping this Loader
+  def self.connection_for(args, key)
+    Connections::FancyConnection.new(self, args, key)
+  end
+
   # Initialize a FancyLoader. This takes all the keys which are used to batch, which is a *lot* of
   # them. Thanks to the design of GraphQL, however, the frequently-called fields also tend to have
   # the same parameters each time. This means that we can get away with this less-than-ideal
