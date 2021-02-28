@@ -40,7 +40,7 @@ module Types::Interface::Media
 
   field :original_locale, String,
     null: true,
-    description: 'The country in which the media was produced'
+    description: 'The country in which the media was primarily produced'
 
   # Age Rating
   field :age_rating, Types::Enum::AgeRating,
