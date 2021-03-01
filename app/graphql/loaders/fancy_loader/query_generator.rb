@@ -82,25 +82,13 @@ class Loaders::FancyLoader::QueryGenerator
   end
 
   def pagination_filter(query)
-    row = query[:row_number]
-    count = query[:total_count]
-    filters = []
-
-    filters << row.gt(@after) if @after
-    filters << row.lt(@before) if @before
-
-    if @first
-      filters << if @after then row.lteq(@after + @first)
-                 else row.lteq(@first)
-                 end
-    end
-    if @last
-      filters << if @before then row.gteq(@before - @last)
-                 else row.gt(Arel::Nodes::Subtraction.new(count, @last))
-                 end
-    end
-
-    filters.inject(&:and)
+    @pagination_filter ||= Loaders::FancyLoader::PaginationFilter.new(
+      query,
+      before: @before,
+      after: @after,
+      first: @first,
+      last: @last
+    ).arel
   end
 
   # The "base" query. This is the query that would load everything without pagination or sorting,
