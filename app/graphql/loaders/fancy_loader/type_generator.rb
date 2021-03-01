@@ -14,24 +14,29 @@ class Loaders::FancyLoader::TypeGenerator
   end
 
   def sorts_enum
-    sorts = @loader.sorts
-    name = "#{@name}SortEnum"
+    @sorts_enum ||= begin
+      sorts = @loader.sorts
+      name = "#{@name}SortEnum"
 
-    @sorts_enum ||= Class.new(GraphQL::Schema::Enum) do
-      graphql_name name
-      sorts.each_key do |sort_name|
-        value(sort_name.to_s.underscore.upcase, value: sort_name)
+      Class.new(GraphQL::Schema::Enum) do
+        graphql_name name
+        sorts.each_key do |sort_name|
+          value(sort_name.to_s.underscore.upcase, value: sort_name)
+        end
       end
     end
   end
 
   def sorts_option
-    enum = sorts_enum
-    name = "#{@name}SortOption"
-    @sorts_option ||= Class.new(GraphQL::Schema::InputObject) do
-      graphql_name name
-      argument :on, enum, required: true
-      argument :direction, SortDirection, required: true
+    @sorts_option ||= begin
+      enum = sorts_enum
+      name = "#{@name}SortOption"
+
+      Class.new(GraphQL::Schema::InputObject) do
+        graphql_name name
+        argument :on, enum, required: true
+        argument :direction, Types::Enum::SortDirection, required: true
+      end
     end
   end
 
