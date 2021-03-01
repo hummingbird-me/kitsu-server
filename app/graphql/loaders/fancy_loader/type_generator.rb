@@ -1,13 +1,6 @@
 ##
 # Generate parameter types for sorting
 class Loaders::FancyLoader::TypeGenerator
-  class SortDirection < GraphQL::Schema::Enum
-    graphql_name 'SortDirectionEnum'
-
-    value :ASCENDING, value: :asc
-    value :DESCENDING, value: :desc
-  end
-
   def initialize(loader, name: loader.model.name)
     @loader = loader
     @name = name
