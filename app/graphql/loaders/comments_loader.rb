@@ -6,7 +6,7 @@ class Loaders::CommentsLoader < Loaders::FancyLoader
       comment = Comment.arel_table
 
       condition = follows[:followed_id].eq(comment[:user_id]).and(
-        follows[:follower_id].eq(User.current.id)
+        follows[:follower_id].eq(User.current&.id)
       )
 
       ast.join(follows, Arel::Nodes::OuterJoin).on(condition)
