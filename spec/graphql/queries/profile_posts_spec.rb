@@ -89,7 +89,7 @@ RSpec.describe 'query loadProfilePosts' do
               hasNextPage: false,
               hasPreviousPage: false,
               endCursor: String,
-              startCursor: String,
+              startCursor: String
             },
             edges: [{
               cursor: String,
