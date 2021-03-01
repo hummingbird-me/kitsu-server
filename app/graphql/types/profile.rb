@@ -103,12 +103,16 @@ class Types::Profile < Types::BaseObject
     end
   end
 
-  field :posts, Types::Post.connection_type,
-    null: false,
-    description: 'All posts this profile has made.'
+  field :posts, Types::Post.connection_type, null: false do
+    description 'All posts this profile has made.'
+    argument :sort, Loaders::PostsLoader.sort_argument, required: false
+  end
 
-  def posts
-    AssociationLoader.for(object.class, :posts).scope(object)
+  def posts(sort: [{ on: :created_at, direction: :asc }])
+    Connections::FancyConnection.new(Loaders::PostsLoader, {
+      find_by: :user_id,
+      sort: sort
+    }, object.id)
   end
 
   field :comments, Types::Comment.connection_type,

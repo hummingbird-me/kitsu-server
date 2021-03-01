@@ -44,21 +44,30 @@ class Types::Post < Types::BaseObject
     null: true,
     description: 'The reason why this post was locked.'
 
-  field :comments, Types::Comment.connection_type,
-    null: false,
-    description: 'All comments related to this post.'
-
-  def comments
-    AssociationLoader.for(object.class, :comments).scope(object)
+  field :comments, Types::Comment.connection_type, null: false do
+    description 'All comments on this post'
+    argument :sort, Loaders::CommentsLoader.sort_argument, required: false
   end
 
-  field :likes, Types::Profile.connection_type,
-    null: false,
-    description: 'Users that have liked this post.'
+  def comments(sort: [{ on: :created_at, direction: :asc }])
+    Loaders::CommentsLoader.connection_for({
+      find_by: :post_id,
+      sort: sort,
+      where: { parent_id: nil }
+    }, object.id)
+  end
 
-  def likes
-    AssociationLoader.for(object.class, :post_likes).scope(object).then do |likes|
-      RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
+  field :likes, Types::Profile.connection_type, null: false do
+    description 'Users that have liked this post'
+    argument :sort, Loaders::PostLikesLoader.sort_argument, required: false
+  end
+
+  def likes(sort: [{ on: :created_at, direction: :desc }])
+    Loaders::PostLikesLoader.connection_for({
+      find_by: :post_id,
+      sort: sort
+    }, object.id).then do |likes|
+      RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
   end
 
