@@ -27,11 +27,15 @@ class Loaders::FancyLoader::PaginationFilter
   end
 
   def after_filter
-    row.gt(@after) if @after
+    return unless @after
+
+    row.gt(@after)
   end
 
   def before_filter
-    row.lt(@before) if @before
+    return unless @before
+
+    row.lt(@before)
   end
 
   def first_filter
