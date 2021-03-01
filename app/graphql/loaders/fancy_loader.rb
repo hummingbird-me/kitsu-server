@@ -85,8 +85,4 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
       sorts[sort[:on]].merge(direction: sort[:direction])
     end
   end
-
-  def scope
-    @scope ||= Pundit::PolicyFinder.new(model).scope!
-  end
 end
