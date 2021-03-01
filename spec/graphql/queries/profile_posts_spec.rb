@@ -31,29 +31,34 @@ RSpec.describe 'query loadProfilePosts' do
           posts(first: 10) {
             pageInfo {
               hasNextPage
+              hasPreviousPage
               endCursor
+              startCursor
             }
-            nodes {
-              content
-              author { ...userFields }
-              likes(first: 3, sort: [
-                { on: FOLLOWING, direction: DESCENDING },
-                { on: CREATED_AT, direction: ASCENDING }
-              ]) {
-                totalCount
-                nodes { ...userFields }
-              }
-              comments(first: 2, sort: [
-                { on: CREATED_AT, direction: DESCENDING }
-              ]) {
-                totalCount
-                nodes {
-                  ...commentFields
-                  replies(first: 1, sort: [
-                    { on: CREATED_AT, direction: DESCENDING }
-                  ]) {
-                    totalCount
-                    nodes { ...commentFields }
+            edges {
+              cursor
+              node {
+                content
+                author { ...userFields }
+                likes(first: 3, sort: [
+                  { on: FOLLOWING, direction: DESCENDING },
+                  { on: CREATED_AT, direction: ASCENDING }
+                ]) {
+                  totalCount
+                  nodes { ...userFields }
+                }
+                comments(first: 2, sort: [
+                  { on: CREATED_AT, direction: DESCENDING }
+                ]) {
+                  totalCount
+                  nodes {
+                    ...commentFields
+                    replies(first: 1, sort: [
+                      { on: CREATED_AT, direction: DESCENDING }
+                    ]) {
+                      totalCount
+                      nodes { ...commentFields }
+                    }
                   }
                 }
               }
@@ -82,31 +87,36 @@ RSpec.describe 'query loadProfilePosts' do
           posts: {
             pageInfo: {
               hasNextPage: false,
-              endCursor: String
+              hasPreviousPage: false,
+              endCursor: String,
+              startCursor: String,
             },
-            nodes: [{
-              content: post.content,
-              author: { name: user.name },
-              likes: {
-                totalCount: 3,
-                nodes: [{
-                  name: String
-                }]
-              },
-              comments: {
-                totalCount: 3,
-                nodes: [{
-                  author: {
+            edges: [{
+              cursor: String,
+              node: {
+                content: post.content,
+                author: { name: user.name },
+                likes: {
+                  totalCount: 3,
+                  nodes: [{
                     name: String
-                  },
-                  content: String,
-                  likes: {
-                    totalCount: Integer,
-                    nodes: all(match_json_expression({
+                  }]
+                },
+                comments: {
+                  totalCount: 3,
+                  nodes: [{
+                    author: {
                       name: String
-                    }))
-                  }
-                }]
+                    },
+                    content: String,
+                    likes: {
+                      totalCount: Integer,
+                      nodes: all(match_json_expression({
+                        name: String
+                      }))
+                    }
+                  }]
+                }
               }
             }]
           }
