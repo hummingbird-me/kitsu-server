@@ -25,6 +25,8 @@ class SiteAnnouncement < ApplicationRecord
   belongs_to :user
   has_many :views, class_name: 'SiteAnnouncementView', dependent: :delete_all
 
+  scope :visible, -> { where('show_at < ? AND hide_at > ?', [Time.now, Time.now]) }
+
   validates :title, presence: true
 
   def stream_activity
