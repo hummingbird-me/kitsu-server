@@ -26,6 +26,7 @@ module Kitsu
     config.assets.enabled = true
     config.assets.prefix = '/api/assets'
     config.assets.digest = true
+    config.assets.export_concurrent = false
 
     # UTC all the way
     config.time_zone = 'UTC'
