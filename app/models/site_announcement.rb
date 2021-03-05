@@ -22,7 +22,8 @@ class SiteAnnouncement < ApplicationRecord
   include WithActivity
   include DescriptionSanitation
 
-  belongs_to :user, required: true
+  belongs_to :user
+  has_many :views, class_name: 'SiteAnnouncementView', dependent: :delete_all
 
   validates :title, presence: true
 

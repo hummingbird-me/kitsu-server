@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210126044815) do
+ActiveRecord::Schema.define(version: 2021_03_05_230320) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "citext"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "plpgsql"
 
   create_table "ama_subscribers", id: :serial, force: :cascade do |t|
     t.integer "ama_id", null: false
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20210126044815) do
     t.jsonb "description", default: {}, null: false
     t.index ["age_rating"], name: "index_anime_on_age_rating"
     t.index ["average_rating"], name: "anime_average_rating_idx"
-    t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: { average_rating: :desc }
+    t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: :desc
     t.index ["slug"], name: "index_anime_on_slug", unique: true
     t.index ["user_count"], name: "index_anime_on_user_count"
   end
@@ -1408,6 +1408,16 @@ ActiveRecord::Schema.define(version: 20210126044815) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "original_ancestor_id"
+  end
+
+  create_table "site_announcement_views", force: :cascade do |t|
+    t.bigint "site_announcement_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "seen_at"
+    t.datetime "read_at"
+    t.index ["site_announcement_id", "user_id"], name: "index_site_announcements_by_user_id", unique: true
+    t.index ["site_announcement_id"], name: "index_site_announcement_views_on_site_announcement_id"
+    t.index ["user_id"], name: "index_site_announcement_views_on_user_id"
   end
 
   create_table "site_announcements", id: :serial, force: :cascade do |t|
