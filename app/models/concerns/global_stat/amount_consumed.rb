@@ -3,9 +3,7 @@ class GlobalStat < ApplicationRecord
     extend ActiveSupport::Concern
 
     class_methods do
-      def recalculate!
-        first_or_initialize.recalculate!
-      end
+      delegate :recalculate!, to: :first_or_initialize
     end
 
     def recalculate!
@@ -24,11 +22,13 @@ class GlobalStat < ApplicationRecord
     end
 
     def percentiles_for(field)
-      percentiles = (0..1).step(BigDecimal('0.01')).to_a.map(&:to_s)
-      stats_for(field).pluck(<<-SQL).first
-        percentile_disc(array[#{percentiles.join(',')}])
-        WITHIN GROUP (ORDER BY (stats_data->>'#{field}')::integer)
-      SQL
+      query = Arel.sql("percentile_disc(array[#{percentiles.join(',')}])
+        WITHIN GROUP (ORDER BY (stats_data->>'#{field}')::integer)")
+      stats_for(field).pluck(query).first
+    end
+
+    def percentiles
+      @percentiles ||= (0..1).step(BigDecimal('0.01')).to_a.map(&:to_s)
     end
 
     def average_for(field)
@@ -36,7 +36,17 @@ class GlobalStat < ApplicationRecord
     end
 
     def stats_for(field)
-      stat_class.where("(stats_data->>'#{field}')::integer > 0")
+      stat_class.where(stats_query(field))
+    end
+
+    def stats_query(field)
+      return media_query if field == 'media'
+
+      "#{media_query} AND (stats_data->>'#{field}')::integer > 0"
+    end
+
+    def media_query
+      "(stats_data->>'media')::integer > 5"
     end
   end
 end
