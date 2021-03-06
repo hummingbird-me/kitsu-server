@@ -1,8 +1,8 @@
 class SiteAnnouncementView < ApplicationRecord
-  belongs_to :site_announcement
+  belongs_to :announcement, class_name: 'SiteAnnouncement'
   belongs_to :user
 
-  validate :user, uniqueness: { scope: :site_announcement_id }
+  validates :user, uniqueness: { scope: :announcement_id }
 
   # Whether this SiteAnnouncement has been displayed to the user at some point
   def seen?

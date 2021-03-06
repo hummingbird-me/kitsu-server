@@ -1411,12 +1411,12 @@ ActiveRecord::Schema.define(version: 2021_03_05_232334) do
   end
 
   create_table "site_announcement_views", force: :cascade do |t|
-    t.bigint "site_announcement_id", null: false
+    t.bigint "announcement_id", null: false
     t.bigint "user_id", null: false
     t.datetime "seen_at"
     t.datetime "read_at"
-    t.index ["site_announcement_id", "user_id"], name: "index_site_announcements_by_user_id", unique: true
-    t.index ["site_announcement_id"], name: "index_site_announcement_views_on_site_announcement_id"
+    t.index ["announcement_id", "user_id"], name: "index_site_announcements_by_user_id", unique: true
+    t.index ["announcement_id"], name: "index_site_announcement_views_on_announcement_id"
     t.index ["user_id"], name: "index_site_announcement_views_on_user_id"
   end
 
