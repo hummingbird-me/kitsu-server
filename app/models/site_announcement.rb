@@ -25,7 +25,8 @@ class SiteAnnouncement < ApplicationRecord
   belongs_to :user
   has_many :views, class_name: 'SiteAnnouncementView', dependent: :delete_all
 
-  scope :visible, -> { where('show_at < ? AND hide_at > ?', [Time.now, Time.now]) }
+  scope :visible, -> { where('show_at < NOW() AND (hide_at > NOW() OR hide_at IS NULL)') }
+  scope :newest_first, -> { order(show_at: :desc) }
 
   validates :title, presence: true
 
