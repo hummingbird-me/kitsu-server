@@ -19,10 +19,10 @@ GIT
 
 GIT
   remote: https://github.com/gargron/blurhash.git
-  revision: 9084bfa64fbadbaff1ba95c52bda3153efcb3f84
+  revision: 8bb62c8dbd54a504f311db262b785f151e4d3cff
   specs:
     blurhash (0.1.4)
-      ffi (~> 1.10)
+      ffi (~> 1.12)
 
 GIT
   remote: https://github.com/hummingbird-me/pundit-resources.git
@@ -214,7 +214,7 @@ GEM
       faraday (>= 0.7.4, < 1.0)
     fast_blank (1.0.0)
     fastimage (2.2.3)
-    ffi (1.14.2)
+    ffi (1.15.0)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
