@@ -1,5 +1,5 @@
 class KitsuSchema < GraphQL::Schema
-  default_max_page_size 100
+  default_max_page_size 2000
 
   mutation Types::MutationType
   query Types::QueryType
