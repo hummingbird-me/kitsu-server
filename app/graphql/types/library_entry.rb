@@ -13,6 +13,10 @@ class Types::LibraryEntry < Types::BaseObject
     null: false,
     description: 'The media related to this library entry.'
 
+  def media
+    RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
+  end
+
   field :last_unit, Types::Interface::Unit,
     null: true,
     description: 'The last unit consumed',
