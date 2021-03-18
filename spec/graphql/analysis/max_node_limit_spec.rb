@@ -182,7 +182,7 @@ RSpec.describe Analysis::MaxNodeLimit do
           query {
             findProfileById(id: 1) {
               id
-              followers(first: 101) {
+              followers(first: 5001) {
                 nodes {
                   id
                 }
