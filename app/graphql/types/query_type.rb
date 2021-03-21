@@ -1,6 +1,19 @@
 class Types::QueryType < GraphQL::Schema::Object
   connection_type_class(Types::BaseConnection)
 
+  field :site_announcements, Types::SiteAnnouncementView.connection_type, null: false do
+    description 'All the site announcements'
+    argument :mark_seen, Boolean,
+      required: false,
+      description: 'Whether to mark the announcements as having been seen'
+  end
+
+  def site_announcements(mark_seen:)
+    announcements = ::SiteAnnouncementView.for_user(context[:user])
+    announcements.map(&:seen!) if mark_seen
+    announcements
+  end
+
   field :current_account, Types::Account, null: true do
     description 'Kitsu account details. You must supply an Authorization token in header.'
   end

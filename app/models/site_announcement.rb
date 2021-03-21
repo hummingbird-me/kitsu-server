@@ -22,7 +22,11 @@ class SiteAnnouncement < ApplicationRecord
   include WithActivity
   include DescriptionSanitation
 
-  belongs_to :user, required: true
+  belongs_to :user
+  has_many :views, class_name: 'SiteAnnouncementView', dependent: :delete_all
+
+  scope :visible, -> { where('show_at < NOW() AND (hide_at > NOW() OR hide_at IS NULL)') }
+  scope :newest_first, -> { order(show_at: :desc) }
 
   validates :title, presence: true
 
