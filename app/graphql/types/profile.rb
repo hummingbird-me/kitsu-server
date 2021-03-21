@@ -83,23 +83,31 @@ class Types::Profile < Types::BaseObject
     object
   end
 
-  field :followers, Types::Profile.connection_type,
-    null: false,
-    description: 'People that follow the user'
+  field :followers, Types::Profile.connection_type, null: false do
+    description 'People that follow the user'
+    argument :sort, Loaders::FollowsLoader.sort_argument, required: false
+  end
 
-  def followers
-    AssociationLoader.for(object.class, :followers, policy: :follow).scope(object).then do |follows|
-      RecordLoader.for(object.class, token: context[:token]).load_many(follows.pluck(:follower_id))
+  def followers(sort: [{ on: :created_at, direction: :desc }])
+    Loaders::FollowsLoader.connection_for({
+      find_by: :followed_id,
+      sort: sort
+    }, object.id).then do |follows|
+      RecordLoader.for(User, token: context[:token]).load_many(follows.map(&:follower_id))
     end
   end
 
-  field :following, Types::Profile.connection_type,
-    null: false,
-    description: 'People the user is following'
+  field :following, Types::Profile.connection_type, null: false do
+    description 'People the user is following'
+    argument :sort, Loaders::FollowsLoader.sort_argument, required: false
+  end
 
-  def following
-    AssociationLoader.for(object.class, :following, policy: :follow).scope(object).then do |follows|
-      RecordLoader.for(object.class, token: context[:token]).load_many(follows.pluck(:followed_id))
+  def following(sort: [{ on: :created_at, direction: :desc }])
+    Loaders::FollowsLoader.connection_for({
+      find_by: :follower_id,
+      sort: sort
+    }, object.id).then do |follows|
+      RecordLoader.for(User, token: context[:token]).load_many(follows.map(&:followed_id))
     end
   end
 
