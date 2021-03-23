@@ -1,4 +1,4 @@
-# This is a validator which uses thechecker.co to validate an email address before saving
+# This is a validator which uses emailable.com to validate an email address before saving
 class RealEmailValidator < ActiveModel::EachValidator
   def validate_each(record, attr, value)
     return if value.blank?

@@ -1,10 +1,10 @@
 module Accounts
   class PrevalidateEmail < Action
-    class TheCheckerError < StandardError; end
+    class EmailableError < StandardError; end
 
     HTTP_TIMEOUT = 10.seconds
-    API_KEY = ENV['THECHECKER_API_KEY']
-    URL = 'https://api.thechecker.co/v2/verify'.freeze
+    API_KEY = ENV['EMAILABLE_API_KEY']
+    URL = 'https://api.emailable.com/v1/verify'.freeze
     URL_TEMPLATE = Addressable::Template.new("#{URL}?api_key=#{API_KEY}{&email}").freeze
 
     parameter :email, required: true
@@ -20,7 +20,7 @@ module Accounts
     end
 
     def result
-      ActiveSupport::StringInquirer.new(response_data['result'] || '')
+      ActiveSupport::StringInquirer.new(response_data['state'] || '')
     end
 
     def response_data
@@ -32,7 +32,7 @@ module Accounts
       if response.status == 200
         @response_data = response.parse
       else
-        Raven.capture_exception(TheCheckerError.new, extra: {
+        Raven.capture_exception(EmailableError.new, extra: {
           response_status: response.status,
           response_data: response.parse
         })
@@ -45,7 +45,7 @@ module Accounts
 
     def default_unknown_response_for(reason)
       {
-        'result' => 'unknown',
+        'state' => 'unknown',
         'reason' => reason,
         'email' => email
       }

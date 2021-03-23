@@ -4,7 +4,7 @@ RSpec.describe Accounts::PrevalidateEmail do
   before { stub_const('Accounts::PrevalidateEmail::API_KEY', 'fake-api-key') }
 
   context 'when the server times out' do
-    before { stub_request(:any, /api\.thechecker\.co/).to_timeout }
+    before { stub_request(:any, /api\.emailable\.com/).to_timeout }
 
     it 'should return the default unknown response' do
       res = described_class.call(email: 'email')
@@ -15,7 +15,7 @@ RSpec.describe Accounts::PrevalidateEmail do
 
   context 'when it gets an undeliverable email address' do
     before do
-      stub_request(:any, /api\.thechecker\.co/).to_return(
+      stub_request(:any, /api\.emailable\.com/).to_return(
         headers: { 'Content-Type' => 'application/json' },
         body: {
           email: 'email',
@@ -23,7 +23,7 @@ RSpec.describe Accounts::PrevalidateEmail do
           domain: 'domain',
           free: false,
           did_you_mean: 'uuuuser',
-          result: 'undeliverable',
+          state: 'undeliverable',
           reason: 'invalid_email'
         }.to_json
       )
