@@ -21,11 +21,16 @@
 
 class Installment < ApplicationRecord
   include RankedModel
-  ranks :position
+  ranks :release_position
+  ranks :chronological_position
 
-  validates :tag, length: { maximum: 40 }
+  enum tag: {
+    side_story: 0,
+    spinoff: 1
+  }
+
   validates :media, polymorphism: { type: Media }
 
-  belongs_to :franchise, required: true
-  belongs_to :media, polymorphic: true, required: true
+  belongs_to :franchise
+  belongs_to :media, polymorphic: true
 end
