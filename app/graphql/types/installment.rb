@@ -5,11 +5,11 @@ class Types::Installment < Types::BaseObject
 
   field :id, ID, null: false
 
-  field :release_position, Integer,
+  field :release_order, Integer,
     null: true,
     description: ''
 
-  field :chronological_position, Integer,
+  field :chronological_order, Integer,
     null: true,
     description: ''
 
