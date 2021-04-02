@@ -9,9 +9,14 @@ class Types::Franchise < Types::BaseObject
     null: false,
     description: 'The name of this franchise in various languages'
 
-  field :progession_order, Types::Enum::FranchiseProgressionOrder,
-    null: false,
-    description: ''
+  def titles
+    {
+      localized: object.titles,
+      alternatives: object.abbreviated_titles.presence || [],
+      canonical: object.canonical_title,
+      canonical_locale: object.canonical_title_key
+    }
+  end
 
   field :installments, Types::Installment.connection_type, null: true do
     description ''
