@@ -15,9 +15,4 @@ class Franchise < ApplicationRecord
   include Titleable
 
   has_many :installments, dependent: :destroy
-
-  enum progression_order: {
-    release: 0,
-    chronological: 1
-  }
 end
