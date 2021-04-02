@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_02_023220) do
+ActiveRecord::Schema.define(version: 2021_03_31_155010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -493,7 +493,7 @@ ActiveRecord::Schema.define(version: 2021_04_02_023220) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.hstore "titles", default: {}, null: false
-    t.integer "progression_order", default: 0, null: false
+    t.string "canonical_title"
   end
 
   create_table "friendly_id_slugs", id: :serial, force: :cascade do |t|
@@ -714,11 +714,11 @@ ActiveRecord::Schema.define(version: 2021_04_02_023220) do
     t.integer "media_id"
     t.integer "franchise_id"
     t.string "media_type", null: false
-    t.integer "release_position"
+    t.integer "release_order"
     t.string "tag"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "chronological_position"
+    t.integer "chronological_order"
     t.index ["franchise_id"], name: "index_installments_on_franchise_id"
     t.index ["media_type", "media_id"], name: "index_installments_on_media_type_and_media_id"
   end
