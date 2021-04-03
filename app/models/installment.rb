@@ -22,7 +22,7 @@
 class Installment < ApplicationRecord
   include RankedModel
   ranks :release_order
-  ranks :chronological_order
+  ranks :alternative_order
 
   enum tag: {
     side_story: 0,

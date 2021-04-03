@@ -9,7 +9,7 @@ class Types::Installment < Types::BaseObject
     null: true,
     description: ''
 
-  field :chronological_order, Integer,
+  field :alternative_order, Integer,
     null: true,
     description: ''
 
