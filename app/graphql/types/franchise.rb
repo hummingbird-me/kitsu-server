@@ -24,7 +24,7 @@ class Types::Franchise < Types::BaseObject
   end
 
   def installments(sort: [{ on: :release_order, direction: :desc }])
-    Connections::FancyConnection.new(Loaders::InstallmentsLoader, {
+    Loaders::InstallmentsLoader.connection_for({
       find_by: :franchise_id,
       sort: sort
     }, object.id)

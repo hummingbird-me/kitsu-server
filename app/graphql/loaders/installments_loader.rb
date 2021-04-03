@@ -1,6 +1,6 @@
 class Loaders::InstallmentsLoader < Loaders::FancyLoader
   from Installment
 
-  sort :release_position
-  sort :chronological_position
+  sort :release_order
+  sort :alternative_order
 end
