@@ -1,11 +1,11 @@
 # @private
 class Loaders::FancyLoader::RankQueryGenerator
-  # @param key [Symbol] The table row key
-  # @param partition_key [Symbol] The find_by key for the table
+  # @param column [Symbol] The table column
+  # @param partition_by [Symbol] The find_by key for the table
   # @param table [Arel::Table]
-  def initialize(key, partition_key, table)
-    @key = key
-    @partition_key = partition_key
+  def initialize(column:, partition_by:, table:)
+    @column = column
+    @partition_by = partition_by
     @table = table
   end
 
@@ -19,14 +19,14 @@ class Loaders::FancyLoader::RankQueryGenerator
   private
 
   def name
-    "#{@key}_rank"
+    "#{@column}_rank"
   end
 
   def partition
-    @partition ||= Arel::Nodes::Window.new.partition(@table[@partition_key]).order(order)
+    @partition ||= Arel::Nodes::Window.new.partition(@table[@partition_by]).order(order)
   end
 
   def order
-    @table[@key].asc
+    @table[@column].asc
   end
 end

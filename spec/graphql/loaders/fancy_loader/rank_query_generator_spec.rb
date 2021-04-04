@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Loaders::FancyLoader::RankQueryGenerator do
-  subject { described_class.new(key, partition_key, table) }
+  subject { described_class.new(column: column, partition_by: partition_by, table: table) }
 
-  let(:key) { :release_order }
-  let(:partition_key) { :franchise_id }
+  let(:column) { :release_order }
+  let(:partition_by) { :franchise_id }
   let(:table) { Installment.arel_table }
 
   describe '#arel' do
