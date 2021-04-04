@@ -1,17 +1,17 @@
 class Types::Installment < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
-  description ''
+  description 'Individual media that belongs to a franchise'
 
   field :id, ID, null: false
 
   field :release_order, Integer,
     null: true,
-    description: ''
+    description: 'Order based by date released'
 
   field :alternative_order, Integer,
     null: true,
-    description: ''
+    description: 'Order based chronologically'
 
   field :tag, Types::Enum::InstallmentTag,
     null: true,

@@ -1,7 +1,7 @@
 class Types::Franchise < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
-  description ''
+  description 'Related media grouped together'
 
   field :id, ID, null: false
 
@@ -19,7 +19,7 @@ class Types::Franchise < Types::BaseObject
   end
 
   field :installments, Types::Installment.connection_type, null: true do
-    description ''
+    description 'All media related to a franchise'
     argument :sort, Loaders::InstallmentsLoader.sort_argument, required: false
   end
 
