@@ -9,6 +9,7 @@ class Types::Installment < Types::BaseObject
     null: true,
     description: ''
 
+  # Try preloaded rank first, fall back to ranked-model's slower COUNT(*) query
   def release_order
     object.attributes['release_order_rank'] || object.release_order_rank
   end
@@ -17,6 +18,7 @@ class Types::Installment < Types::BaseObject
     null: true,
     description: ''
 
+  # Try preloaded rank first, fall back to ranked-model's slower COUNT(*) query
   def alternative_order
     object.attributes['alternative_order_rank'] || object.alternative_order_rank
   end
