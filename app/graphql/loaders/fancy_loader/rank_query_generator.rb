@@ -1,6 +1,6 @@
 # @private
 class Loaders::FancyLoader::RankQueryGenerator
-  # @param column [Symbol] The table column
+  # @param column [Symbol] The table column to rank by
   # @param partition_by [Symbol] The find_by key for the table
   # @param table [Arel::Table]
   def initialize(column:, partition_by:, table:)
