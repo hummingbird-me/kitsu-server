@@ -229,4 +229,25 @@ RSpec.describe Loaders::FancyLoader::QueryGenerator do
     expect(results.to_sql).to match('"media_type" = \'Anime\'')
     expect(results.to_a).to eq(episodes)
   end
+
+  it 'should modify the query before being executed when given a modify_query:' do
+    query = described_class.new(
+      model: PostLike,
+      find_by: :post_id,
+      first: 10,
+      after: 10,
+      sort: [{
+        column: -> { PostLike.arel_table[:created_at] },
+        direction: :asc
+      }, {
+        column: -> { PostLike.arel_table[:id] },
+        direction: :desc
+      }],
+      token: nil,
+      keys: [50],
+      modify_query: proc { |q| q.project('I am the bone of my sword') }
+    ).query.to_sql
+
+    expect(query).to match('I am the bone of my sword')
+  end
 end
