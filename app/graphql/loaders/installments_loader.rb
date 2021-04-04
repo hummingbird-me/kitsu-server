@@ -2,14 +2,14 @@ class Loaders::InstallmentsLoader < Loaders::FancyLoader
   from Installment
   modify_query ->(query) {
     release_rank = Loaders::FancyLoader::RankQueryGenerator.new(
-      :release_order,
-      @find_by,
-      table
+      column: :release_order,
+      partition_by: @find_by,
+      table: table
     ).arel
     alternative_rank = Loaders::FancyLoader::RankQueryGenerator.new(
-      :alternative_order,
-      @find_by,
-      table
+      column: :alternative_order,
+      partition_by: @find_by,
+      table: table
     ).arel
 
     query.project(release_rank).project(alternative_rank)
