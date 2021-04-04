@@ -15,7 +15,7 @@ class Types::Installment < Types::BaseObject
 
   field :tag, Types::Enum::InstallmentTag,
     null: true,
-    description: ''
+    description: 'Further explains the media relationship corresponding to a franchise'
 
   field :media, Types::Interface::Media,
     null: false,
