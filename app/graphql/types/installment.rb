@@ -9,9 +9,17 @@ class Types::Installment < Types::BaseObject
     null: true,
     description: ''
 
+  def release_order
+    object.attributes['release_order_rank'] || object.release_order_rank
+  end
+
   field :alternative_order, Integer,
     null: true,
     description: ''
+
+  def alternative_order
+    object.attributes['alternative_order_rank'] || object.alternative_order_rank
+  end
 
   field :tag, Types::Enum::InstallmentTag,
     null: true,
