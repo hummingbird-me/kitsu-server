@@ -25,8 +25,12 @@ class Installment < ApplicationRecord
   ranks :alternative_order
 
   enum tag: {
-    side_story: 0,
-    spinoff: 1
+    main_story: 0,
+    side_story: 1,
+    spinoff: 2,
+    main_entry: 3,
+    crossover: 4,
+    alternate_setting: 5
   }
 
   validates :media, polymorphism: { type: Media }
