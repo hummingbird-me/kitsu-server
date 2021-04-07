@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210126044815) do
+ActiveRecord::Schema.define(version: 2021_04_06_023328) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "citext"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "plpgsql"
 
   create_table "ama_subscribers", id: :serial, force: :cascade do |t|
     t.integer "ama_id", null: false
@@ -1685,6 +1685,18 @@ ActiveRecord::Schema.define(version: 20210126044815) do
     t.datetime "updated_at", null: false
     t.index ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true
     t.index ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type"
+  end
+
+  create_table "wiki_submissions", force: :cascade do |t|
+    t.integer "type", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "action", null: false
+    t.jsonb "data", default: {}, null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status", "type"], name: "index_wiki_submissions_on_status_and_type"
+    t.index ["user_id"], name: "index_wiki_submissions_on_user_id"
   end
 
   add_foreign_key "ama_subscribers", "amas"
