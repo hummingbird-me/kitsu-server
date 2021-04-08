@@ -1,10 +1,10 @@
-class Mutations::WikiSubmission::CreateDraft < Mutations::Base
+class Mutations::WikiSubmission::SubmitDraft < Mutations::Base
   prepend RescueValidationErrors
 
   argument :input,
-    Types::Input::WikiSubmission::CreateDraft,
+    Types::Input::WikiSubmission::SubmitDraft,
     required: true,
-    description: 'Create a wiki submission draft.',
+    description: 'Submit a wiki submission draft.',
     as: :wiki_submission
 
   field :wiki_submission, Types::WikiSubmission, null: true
@@ -17,7 +17,7 @@ class Mutations::WikiSubmission::CreateDraft < Mutations::Base
   end
 
   def authorized?(wiki_submission:)
-    super(wiki_submission, :create_draft?)
+    super(wiki_submission, :submit_draft?)
   end
 
   def resolve(wiki_submission:)

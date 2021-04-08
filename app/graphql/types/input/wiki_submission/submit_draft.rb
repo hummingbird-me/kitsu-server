@@ -1,4 +1,4 @@
-class Types::Input::WikiSubmission::CreateDraft < Types::Input::Base
+class Types::Input::WikiSubmission::SubmitDraft < Types::Input::Base
   argument :draft, GraphQL::Types::JSON, required: true
 
   def to_model

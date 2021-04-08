@@ -1,7 +1,7 @@
 class WikiSubmissionPolicy < ApplicationPolicy
   administrated_by :community_mod
 
-  def create_draft?
+  def submit_draft?
     true
   end
 
