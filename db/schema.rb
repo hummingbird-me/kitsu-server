@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 2021_04_06_023328) do
     t.jsonb "description", default: {}, null: false
     t.index ["age_rating"], name: "index_anime_on_age_rating"
     t.index ["average_rating"], name: "anime_average_rating_idx"
-    t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: { average_rating: :desc }
+    t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: :desc
     t.index ["slug"], name: "index_anime_on_slug", unique: true
     t.index ["user_count"], name: "index_anime_on_user_count"
   end
@@ -1688,14 +1688,11 @@ ActiveRecord::Schema.define(version: 2021_04_06_023328) do
   end
 
   create_table "wiki_submissions", force: :cascade do |t|
-    t.integer "type", null: false
     t.integer "status", default: 0, null: false
-    t.integer "action", null: false
-    t.jsonb "data", default: {}, null: false
+    t.jsonb "draft", default: {}, null: false
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["status", "type"], name: "index_wiki_submissions_on_status_and_type"
     t.index ["user_id"], name: "index_wiki_submissions_on_user_id"
   end
 
