@@ -10,8 +10,6 @@ class Mutations::WikiSubmission::SubmitDraft < Mutations::Base
   field :wiki_submission, Types::WikiSubmission, null: true
   field :errors, [Types::Interface::Error], null: true
 
-  # NOTE: we might want to add a check, when data is supplied there should be NO id in the data.
-
   def load_wiki_submission(value)
     ::WikiSubmission.new(value.to_model)
   end
