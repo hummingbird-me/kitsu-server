@@ -354,4 +354,12 @@ class Types::QueryType < GraphQL::Schema::Object
   def find_post_by_id(id:)
     RecordLoader.for(::Post, token: context[:token]).load(id)
   end
+
+  field :wiki_submissions, Types::WikiSubmission.connection_type, null: true do
+    description ''
+  end
+
+  def wiki_submissions
+    ::WikiSubmission.all
+  end
 end
