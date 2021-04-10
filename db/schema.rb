@@ -1687,6 +1687,16 @@ ActiveRecord::Schema.define(version: 2021_04_06_023328) do
     t.index ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type"
   end
 
+  create_table "wiki_submission_logs", force: :cascade do |t|
+    t.integer "status", default: 0, null: false
+    t.bigint "user_id"
+    t.bigint "wiki_submission_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_wiki_submission_logs_on_user_id"
+    t.index ["wiki_submission_id"], name: "index_wiki_submission_logs_on_wiki_submission_id"
+  end
+
   create_table "wiki_submissions", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.jsonb "draft", default: {}, null: false
