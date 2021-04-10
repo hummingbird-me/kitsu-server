@@ -28,9 +28,8 @@ class Installment < ApplicationRecord
     main_story: 0,
     side_story: 1,
     spinoff: 2,
-    main_entry: 3,
-    crossover: 4,
-    alternate_setting: 5
+    crossover: 3,
+    alternate_setting: 4
   }
 
   validates :media, polymorphism: { type: Media }
