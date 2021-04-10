@@ -23,7 +23,7 @@ class Types::Franchise < Types::BaseObject
     argument :sort, Loaders::InstallmentsLoader.sort_argument, required: false
   end
 
-  def installments(sort: [{ on: :release_order, direction: :desc }])
+  def installments(sort: [{ on: :release_order, direction: :asc }])
     Loaders::InstallmentsLoader.connection_for({
       find_by: :franchise_id,
       sort: sort

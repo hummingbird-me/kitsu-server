@@ -9,9 +9,19 @@ class Types::Installment < Types::BaseObject
     null: true,
     description: 'Order based by date released'
 
+  # Try preloaded rank first, fall back to ranked-model's slower COUNT(*) query
+  def release_order
+    object.attributes['release_order_rank'] || object.release_order_rank
+  end
+
   field :alternative_order, Integer,
     null: true,
     description: 'Order based chronologically'
+
+  # Try preloaded rank first, fall back to ranked-model's slower COUNT(*) query
+  def alternative_order
+    object.attributes['alternative_order_rank'] || object.alternative_order_rank
+  end
 
   field :tag, Types::Enum::InstallmentTag,
     null: true,

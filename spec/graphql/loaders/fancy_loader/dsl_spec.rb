@@ -57,4 +57,16 @@ RSpec.describe Loaders::FancyLoader::DSL do
       end
     end
   end
+
+  describe '#modify_query' do
+    it 'should update the modify_query_lambda attribute on the class' do
+      klass = Class.new do
+        include Loaders::FancyLoader::DSL
+        from Anime
+        modify_query ->(query) { query }
+      end
+
+      expect(klass.modify_query_lambda).to be_a(Proc)
+    end
+  end
 end
