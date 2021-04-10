@@ -363,15 +363,11 @@ class Types::QueryType < GraphQL::Schema::Object
     ::Franchise.all
   end
 
-  field :search_franchise_by_title, Types::Franchise.connection_type, null: true do
-    description <<~DESCRIPTION.squish
-      Search for Franchise by title using Algolia.
-      The most relevant results will be at the top.
-    DESCRIPTION
-    argument :title, String, required: true
-  end
-
-  def search_franchise_by_title(title:)
-    # NOTE: add Algolia search to allow for this.
-  end
+  # field :search_franchise_by_title, Types::Franchise.connection_type, null: true do
+  #   description <<~DESCRIPTION.squish
+  #     Search for Franchise by title using Algolia.
+  #     The most relevant results will be at the top.
+  #   DESCRIPTION
+  #   argument :title, String, required: true
+  # end
 end
