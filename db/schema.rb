@@ -1693,6 +1693,7 @@ ActiveRecord::Schema.define(version: 2021_04_06_023328) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "((draft -> 'id'::text)), ((draft -> 'type'::text))", name: "index_wiki_submission_on_draft_id_and_draft_type"
     t.index ["user_id"], name: "index_wiki_submissions_on_user_id"
   end
 

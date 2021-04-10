@@ -8,5 +8,7 @@ class CreateWikiSubmissions < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+
+    add_index :wiki_submissions, "(draft->'id'),(draft->'type')", name: "index_wiki_submission_on_draft_id_and_draft_type"
   end
 end
