@@ -5,6 +5,10 @@ class WikiSubmissionPolicy < ApplicationPolicy
     true
   end
 
+  def update_draft?
+    true
+  end
+
   def submit_draft?
     true
   end
