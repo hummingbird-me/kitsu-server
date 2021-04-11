@@ -1,11 +1,11 @@
 class WikiSubmissionPolicy < ApplicationPolicy
   administrated_by :community_mod
 
-  def submit_draft?
+  def create_draft?
     true
   end
 
-  def approve_draft?
+  def submit_draft?
     true
   end
 end

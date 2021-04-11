@@ -11,7 +11,9 @@ class Mutations::WikiSubmission::SubmitDraft < Mutations::Base
   field :errors, [Types::Interface::Error], null: true
 
   def load_wiki_submission(value)
-    ::WikiSubmission.new(value.to_model)
+    wiki_submission = ::WikiSubmission.find(value.id)
+    wiki_submission.assign_attributes(value.to_model)
+    wiki_submission
   end
 
   def authorized?(wiki_submission:)
