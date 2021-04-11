@@ -69,7 +69,8 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
       sort: sort,
       token: @token,
       keys: keys,
-      where: @where
+      where: @where,
+      modify_query: modify_query_lambda
     ).query
 
     results = query.to_a.group_by { |rec| rec[@find_by] }

@@ -354,4 +354,20 @@ class Types::QueryType < GraphQL::Schema::Object
   def find_post_by_id(id:)
     RecordLoader.for(::Post, token: context[:token]).load(id)
   end
+
+  field :franchises, Types::Franchise.connection_type, null: true do
+    description 'All Franchise in the Kitsu database'
+  end
+
+  def franchises
+    ::Franchise.all
+  end
+
+  # field :search_franchise_by_title, Types::Franchise.connection_type, null: true do
+  #   description <<~DESCRIPTION.squish
+  #     Search for Franchise by title using Algolia.
+  #     The most relevant results will be at the top.
+  #   DESCRIPTION
+  #   argument :title, String, required: true
+  # end
 end
