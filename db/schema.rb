@@ -1698,12 +1698,16 @@ ActiveRecord::Schema.define(version: 2021_04_06_023328) do
   end
 
   create_table "wiki_submissions", force: :cascade do |t|
+    t.string "title"
+    t.text "notes"
     t.integer "status", default: 0, null: false
     t.jsonb "draft", default: {}, null: false
     t.bigint "user_id"
+    t.integer "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index "((draft -> 'id'::text)), ((draft -> 'type'::text))", name: "index_wiki_submission_on_draft_id_and_draft_type"
+    t.index ["parent_id"], name: "index_wiki_submissions_on_parent_id"
     t.index ["user_id"], name: "index_wiki_submissions_on_user_id"
   end
 
