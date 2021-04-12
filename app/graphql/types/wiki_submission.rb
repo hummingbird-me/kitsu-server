@@ -13,6 +13,14 @@ class Types::WikiSubmission < Types::BaseObject
     null: true,
     description: ''
 
+  field :title, String,
+    null: true,
+    description: ''
+
+  field :notes, String,
+    null: true,
+    description: ''
+
   field :author, Types::Profile,
     null: false,
     description: 'The user who created this draft',
