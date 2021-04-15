@@ -176,4 +176,21 @@ class Types::Profile < Types::BaseObject
   def favorites
     AssociationLoader.for(object.class, :favorites).scope(object)
   end
+
+  field :wiki_submissions, Types::WikiSubmission.connection_type, null: false do
+    description 'Wiki submissions created by this user'
+    argument :sort, Loaders::WikiSubmissionsLoader.sort_argument, required: false
+    argument :statuses, [Types::Enum::WikiSubmissionStatus],
+      required: false,
+      default_value: WikiSubmission.statuses.keys.map(&:to_sym),
+      description: 'Will return all if not supplied'
+  end
+
+  def wiki_submissions(statuses: nil, sort: [{ on: :created_at, direction: :asc }])
+    Loaders::WikiSubmissionsLoader.connection_for({
+      find_by: :user_id,
+      sort: sort,
+      where: { status: statuses }
+    }, object.id)
+  end
 end
