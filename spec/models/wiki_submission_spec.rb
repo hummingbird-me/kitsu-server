@@ -11,5 +11,4 @@ RSpec.describe WikiSubmission, type: :model do
     should have_one(:child).inverse_of(:parent).class_name('WikiSubmission')
                            .with_foreign_key(:parent_id).dependent(:destroy)
   end
-
 end
