@@ -117,7 +117,7 @@ class Types::Profile < Types::BaseObject
   end
 
   def posts(sort: [{ on: :created_at, direction: :asc }])
-    Connections::FancyConnection.new(Loaders::PostsLoader, {
+    Loaders::PostsLoader.connection_for({
       find_by: :user_id,
       sort: sort
     }, object.id)

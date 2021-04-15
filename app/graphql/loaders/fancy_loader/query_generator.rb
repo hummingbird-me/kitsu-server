@@ -10,8 +10,12 @@ class Loaders::FancyLoader::QueryGenerator
   # @param first [Integer] Filter for first N rows
   # @param last [Integer] Filter for last N rows
   # @param where [Hash] a filter to use when querying
+  # @param modify_query [Lambda] An escape hatch to FancyLoader to allow modifying
+  #  the base_query before it generates the rest of the query
   def initialize(
-    model:, find_by:, sort:, token:, keys:, before: nil, after: 0, first: nil, last: nil, where: nil
+    model:, find_by:, sort:, token:, keys:,
+    before: nil, after: 0, first: nil, last: nil,
+    where: nil, modify_query: nil
   )
     @model = model
     @find_by = find_by
@@ -23,15 +27,10 @@ class Loaders::FancyLoader::QueryGenerator
     @first = first
     @last = last
     @where = where
+    @modify_query = modify_query
   end
 
   def query
-    # Apply the sort transforms and add the window function to our projection
-    subquery = @sort.inject(base_query) do |arel, sort|
-      sort[:transform] ? sort[:transform].call(arel) : arel
-    end
-    subquery = subquery.project(row_number).project(count).as('subquery')
-
     # Finally, go *back* to the ActiveRecord model, and do the final select
     @model.unscoped
           .select(Arel.star)
@@ -97,5 +96,18 @@ class Loaders::FancyLoader::QueryGenerator
     query = @model.where(@find_by => @keys)
     query = query.where(@where) unless @where.nil?
     scope.new(@token, query).resolve.arel
+  end
+
+  def subquery
+    @subquery ||= begin
+      # Apply the sort transforms and add the window function to our projection
+      subquery = @sort.inject(base_query) do |arel, sort|
+        sort[:transform] ? sort[:transform].call(arel) : arel
+      end
+
+      subquery = subquery.project(row_number).project(count)
+      subquery = instance_exec(subquery, &@modify_query) unless @modify_query.nil?
+      subquery.as('subquery')
+    end
   end
 end

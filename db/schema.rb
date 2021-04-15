@@ -714,10 +714,11 @@ ActiveRecord::Schema.define(version: 2021_04_06_023328) do
     t.integer "media_id"
     t.integer "franchise_id"
     t.string "media_type", null: false
-    t.integer "position"
-    t.string "tag"
+    t.integer "release_order"
+    t.integer "tag"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "alternative_order"
     t.index ["franchise_id"], name: "index_installments_on_franchise_id"
     t.index ["media_type", "media_id"], name: "index_installments_on_media_type_and_media_id"
   end
