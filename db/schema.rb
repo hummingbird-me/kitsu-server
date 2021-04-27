@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_05_030335) do
+ActiveRecord::Schema.define(version: 2021_04_27_225015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -763,7 +763,6 @@ ActiveRecord::Schema.define(version: 2021_04_05_030335) do
     t.index ["manga_id"], name: "index_library_entries_on_manga_id"
     t.index ["user_id", "anime_id"], name: "library_entries_user_id_anime_id_idx"
     t.index ["user_id", "media_type", "media_id"], name: "index_library_entries_on_user_id_and_media_type_and_media_id", unique: true
-    t.index ["user_id", "media_type"], name: "index_library_entries_on_user_id_and_media_type"
     t.index ["user_id", "status"], name: "index_library_entries_on_user_id_and_status"
     t.index ["user_id"], name: "index_library_entries_on_user_id"
   end
@@ -796,10 +795,10 @@ ActiveRecord::Schema.define(version: 2021_04_05_030335) do
     t.jsonb "changed_data", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["anime_id"], name: "index_library_events_on_anime_id"
-    t.index ["drama_id"], name: "index_library_events_on_drama_id"
+    t.index ["anime_id"], name: "index_library_events_on_anime_id", where: "(anime_id IS NOT NULL)"
+    t.index ["drama_id"], name: "index_library_events_on_drama_id", where: "(drama_id IS NOT NULL)"
     t.index ["library_entry_id"], name: "index_library_events_on_library_entry_id"
-    t.index ["manga_id"], name: "index_library_events_on_manga_id"
+    t.index ["manga_id"], name: "index_library_events_on_manga_id", where: "(manga_id IS NOT NULL)"
     t.index ["user_id"], name: "index_library_events_on_user_id"
   end
 
@@ -1488,11 +1487,6 @@ ActiveRecord::Schema.define(version: 2021_04_05_030335) do
     t.hstore "data"
     t.integer "substory_type", default: 0, null: false
     t.datetime "deleted_at"
-    t.index ["created_at"], name: "index_substories_on_created_at"
-    t.index ["deleted_at"], name: "index_substories_on_deleted_at"
-    t.index ["story_id"], name: "index_substories_on_story_id"
-    t.index ["target_id"], name: "index_substories_on_target_id"
-    t.index ["user_id"], name: "index_substories_on_user_id"
   end
 
   create_table "uploads", id: :serial, force: :cascade do |t|
