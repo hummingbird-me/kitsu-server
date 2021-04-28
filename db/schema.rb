@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_27_225015) do
+ActiveRecord::Schema.define(version: 2021_04_27_230857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -760,7 +760,9 @@ ActiveRecord::Schema.define(version: 2021_04_27_225015) do
     t.integer "media_reaction_id"
     t.integer "reaction_skipped", default: 0, null: false
     t.index ["anime_id"], name: "index_library_entries_on_anime_id"
+    t.index ["anime_id"], name: "index_library_entries_on_anime_id_partial", where: "(anime_id IS NOT NULL)"
     t.index ["manga_id"], name: "index_library_entries_on_manga_id"
+    t.index ["manga_id"], name: "index_library_entries_on_manga_id_partial", where: "(manga_id IS NOT NULL)"
     t.index ["user_id", "anime_id"], name: "library_entries_user_id_anime_id_idx"
     t.index ["user_id", "media_type", "media_id"], name: "index_library_entries_on_user_id_and_media_type_and_media_id", unique: true
     t.index ["user_id", "status"], name: "index_library_entries_on_user_id_and_status"
