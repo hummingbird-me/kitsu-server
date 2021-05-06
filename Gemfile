@@ -34,10 +34,12 @@ gem 'blurhash', github: 'gargron/blurhash'
 gem 'delayed_paperclip'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
+gem 'image_processing'
 gem 'mini_magick'
 gem 'paperclip', '~> 6.0.0'
 gem 'paperclip-meta'
 gem 'paperclip-optimizer'
+gem 'shrine'
 
 # Background tasks
 gem 'sidekiq', '~> 5'
