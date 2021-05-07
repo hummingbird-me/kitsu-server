@@ -31,6 +31,7 @@ class ListImport < ApplicationRecord
   enum strategy: %i[greater obliterate]
   enum status: %i[queued running failed completed partially_failed]
   has_attached_file :input_file
+  include PaperclipShrineSynchronization
   alias_attribute :kind, :type
 
   validates :strategy, presence: true
