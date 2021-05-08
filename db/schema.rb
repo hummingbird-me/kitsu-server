@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_27_230857) do
+ActiveRecord::Schema.define(version: 2021_05_06_021756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -836,6 +836,7 @@ ActiveRecord::Schema.define(version: 2021_04_27_230857) do
     t.text "error_trace"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "input_file_data"
   end
 
   create_table "manga", id: :serial, force: :cascade do |t|
