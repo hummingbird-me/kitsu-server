@@ -5,7 +5,7 @@
 module PaperclipShrineSynchronization
   def self.included(model)
     model.before_save do
-      Paperclip::AttachmentRegistry.each_definition do |klass, name, options|
+      Paperclip::AttachmentRegistry.each_definition do |klass, name, _options|
         write_shrine_data(name) if changes.key?(:"#{name}_file_name") && klass == self.class
       end
     end
@@ -39,18 +39,18 @@ module PaperclipShrineSynchronization
   def shrine_attachment_file(attachment)
     location = attachment.path
     # if you're storing files on disk, make sure to subtract the absolute path
-    location = location.sub(%r{^#{storage.prefix}/}, "") if storage.prefix
+    location = location.sub(%r{^#{storage.prefix}/}, '') if storage.prefix
 
     Shrine.uploaded_file(
-      storage:  :store,
-      id:       location,
+      storage: :store,
+      id: location,
       metadata: {
-        "height"    => attachment.height,
-        "width"     => attachment.width,
-        "blurhash"  => attachment.blurhash,
-        "size"      => attachment.size,
-        "filename"  => attachment.original_filename,
-        "mime_type" => attachment.content_type,
+        'height' => attachment.height,
+        'width' => attachment.width,
+        'blurhash' => attachment.blurhash,
+        'size' => attachment.size,
+        'filename' => attachment.original_filename,
+        'mime_type' => attachment.content_type
       }
     )
   end
@@ -61,16 +61,16 @@ module PaperclipShrineSynchronization
   def shrine_style_file(style)
     location = style.attachment.path(style.name)
     # if you're storing files on disk, make sure to subtract the absolute path
-    location = location.sub(%r{^#{storage.prefix}/}, "") if storage.prefix
+    location = location.sub(%r{^#{storage.prefix}/}, '') if storage.prefix
 
     Shrine.uploaded_file(
-      storage:  :store,
-      id:       location,
+      storage: :store,
+      id: location,
       metadata: {
-        "height" => attachment.height(style.name),
-        "width"  => attachment.width(style.name),
+        'height' => attachment.height(style.name),
+        'width' => attachment.width(style.name),
         "size": attachment.size(style.name)
-      },
+      }
     )
   end
 
