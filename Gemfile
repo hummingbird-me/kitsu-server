@@ -123,6 +123,12 @@ group :development, :test do
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 
+  # Rubocop stuff
+  gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+
   # Development+Testing
   gem 'database_cleaner' # Clean the database fully before doing anything
   gem 'factory_bot_rails' # Factories > Fixtures
