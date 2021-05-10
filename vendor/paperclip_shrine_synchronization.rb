@@ -69,7 +69,7 @@ module PaperclipShrineSynchronization
       metadata: {
         'height' => attachment.height(style.name),
         'width' => attachment.width(style.name),
-        "size": attachment.size(style.name)
+        'size' => attachment.size(style.name)
       }
     )
   end

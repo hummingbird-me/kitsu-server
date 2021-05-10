@@ -1,6 +1,9 @@
 require 'shrine/storage/s3'
 require 'paperclip_shrine_synchronization'
 
+Shrine.plugin :activerecord
+Shrine.plugin :derivatives
+
 s3_options = {
   bucket: 'kitsu-media',
   region: 'us-east-1'
