@@ -9,7 +9,7 @@ class ListImportResource < BaseResource
 
   # Parameters
   attributes :input_text, :strategy
-  attribute :input_file, format: :attachment
+  attribute :input_file, format: ShrineAttachmentFormatter
   # Status
   attributes :progress, :status, :total
   # Errors
@@ -18,4 +18,8 @@ class ListImportResource < BaseResource
   has_one :user
 
   filters :user_id
+
+  def input_file=(file)
+    @model.input_file_data_uri = file
+  end
 end
