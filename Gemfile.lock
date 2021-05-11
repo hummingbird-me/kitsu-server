@@ -805,6 +805,7 @@ DEPENDENCIES
   kramdown-parser-gfm
   librato-rails
   lograge
+  marcel
   mechanize
   mini_magick
   mongo

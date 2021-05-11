@@ -35,6 +35,7 @@ gem 'delayed_paperclip'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
 gem 'image_processing'
+gem 'marcel'
 gem 'mini_magick'
 gem 'paperclip', '~> 6.0.0'
 gem 'paperclip-meta'
