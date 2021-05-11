@@ -1,6 +1,7 @@
 class ListImport
   class TaigaXML < ListImport
     validates :input_text, absence: true
+    has_attached_file :input_file
     validates_attachment :input_file, content_type: {
       content_type: %w[application/xml]
     }, presence: true
