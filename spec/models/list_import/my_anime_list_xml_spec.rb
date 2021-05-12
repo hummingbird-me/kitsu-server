@@ -26,19 +26,18 @@ require 'rails_helper'
 
 RSpec.describe ListImport::MyAnimeListXML do
   let(:file) { Fixture.new('list_import/my_anime_list/nuck.xml.gz').to_file }
-  it { should validate_absence_of(:input_text) }
-  it { should have_attached_file(:input_file) }
-  it { should validate_attachment_presence(:input_file) }
-  it do
-    expect(subject).to validate_attachment_content_type(:input_file)
-      .allowing('application/gzip', 'application/xml')
-      .rejecting('application/zip', 'application/x-rar-compressed')
-  end
+
+  it { is_expected.to validate_absence_of(:input_text) }
 
   context 'with a list' do
-    subject do
-      attachment = OpenStruct.new(url: file.path, content_type: 'application/gzip')
-      import = ListImport::MyAnimeListXML.create(
+    let(:import) do
+      attachment = Shrine.upload(file, :store, metadata: false)
+      attachment.metadata.merge!(
+        'size' => File.size(file.path),
+        'mime_type' => 'application/gzip',
+        'filename' => 'test.xml.gz'
+      )
+      import = described_class.create(
         strategy: :greater,
         user: build(:user)
       )
@@ -47,17 +46,17 @@ RSpec.describe ListImport::MyAnimeListXML do
     end
 
     describe '#count' do
-      it 'should return the total number of entries' do
-        expect(subject.count).to eq(109)
+      it 'returns the total number of entries' do
+        expect(import.count).to eq(109)
       end
     end
 
     describe '#each' do
-      it 'should yield at least 100 times' do
+      it 'yields at least 100 times' do
         anime = build(:anime)
         allow(Mapping).to receive(:guess).and_return(anime)
         expect { |b|
-          subject.each(&b)
+          import.each(&b)
         }.to yield_control.at_least(100)
       end
     end
