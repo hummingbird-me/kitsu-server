@@ -12,9 +12,11 @@ Shrine.plugin :determine_mime_type, analyzer: :marcel
 Shrine.plugin :infer_extension
 
 s3_options = {
-  bucket: 'kitsu-media',
+  endpoint: ENV['AWS_ENDPOINT'] || nil,
+  bucket: ENV['AWS_BUCKET'] || 'kitsu-media',
+  force_path_style: true,
   region: 'us-east-1'
-}
+}.compact
 
 Shrine.storages = {
   cache: Shrine::Storage::S3.new(prefix: 'cache', **s3_options),
