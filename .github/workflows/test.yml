@@ -27,7 +27,7 @@ jobs:
         image: bitnami/minio:latest
         ports:
           - 9000/tcp
-        options: --health_cmd "curl -s -o /dev/null -I http://127.0.0.1:9000/minio/index.html" --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd "curl -s -o /dev/null -I http://127.0.0.1:9000/minio/index.html" --health-interval 10s --health-timeout 5s --health-retries 5
         env:
           MINIO_DEFAULT_BUCKETS: kitsu-ugc-test
           MINIO_ACCESS_KEY: test
