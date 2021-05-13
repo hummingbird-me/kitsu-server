@@ -16,6 +16,7 @@ env:
   CC_TEST_REPORTER_ID: 5e2172ea5a30b07e172058a3b33dfe08c6354699808e8f3010acc32b1ef41395
   BUNDLE_GITHUB__HTTPS: true
   LOG_LEVEL: warn
+  AWS_DEFAULT_REGION: us-east-1
 
 jobs:
   test:
@@ -83,8 +84,8 @@ jobs:
         REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
         ELASTICSEARCH_URL: localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
-        bundle exec rake db:create db:schema:load
         aws --endpoint-url $AWS_ENDPOINT s3 mb s3://$AWS_BUCKET
+        bundle exec rake db:create db:schema:load
 
     - name: Run Tests
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
