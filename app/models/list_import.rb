@@ -49,7 +49,7 @@ class ListImport < ApplicationRecord
     Raven.user_context(id: user.id, email: user.email, username: user.name)
     Raven.extra_context(
       input_text: input_text.to_s,
-      input_file: input_file.to_s
+      input_file: input_file_data
     )
 
     total = count
