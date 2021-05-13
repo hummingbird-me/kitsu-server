@@ -24,12 +24,10 @@ jobs:
 
     services:
       minio:
-        image: bitnami/minio:latest
+        image: fclairamb/minio-github-actions
         ports:
           - 9000/tcp
-        options: --health-cmd "curl -s -o /dev/null -I http://127.0.0.1:9000/minio/index.html" --health-interval 10s --health-timeout 5s --health-retries 5
         env:
-          MINIO_DEFAULT_BUCKETS: kitsu-ugc-test
           MINIO_ACCESS_KEY: test
           MINIO_SECRET_KEY: test
       postgres:
@@ -86,6 +84,7 @@ jobs:
         ELASTICSEARCH_URL: localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
         bundle exec rake db:create db:schema:load
+        aws --endpoint-url $AWS_ENDPOINT s3 mb s3://$AWS_BUCKET
 
     - name: Run Tests
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
