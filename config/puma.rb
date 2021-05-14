@@ -21,12 +21,11 @@ before_fork do
   require 'puma_worker_killer'
 
   PumaWorkerKiller.config do |config|
-    config.rolling_restart_frequency = 6.hours
     config.rolling_pre_term = ->(worker) {
       puts "Worker #{worker.inspect} being killed by rolling restart"
     }
   end
-  PumaWorkerKiller.start
+  PumaWorkerKiller.enable_rolling_restart(6.hours)
 end
 
 lowlevel_error_handler do |ex, env|
