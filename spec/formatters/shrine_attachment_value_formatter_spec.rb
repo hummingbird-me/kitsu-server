@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ShrineAttachmentFormatter do
+RSpec.describe ShrineAttachmentValueFormatter do
   let(:attachment) do
     Shrine.upload(Fixture.new('image.png').to_file, :store, metadata: false)
   end
