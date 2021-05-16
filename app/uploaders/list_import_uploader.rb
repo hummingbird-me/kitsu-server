@@ -1,3 +1,0 @@
-class ListImportUploader < Shrine
-
-end
