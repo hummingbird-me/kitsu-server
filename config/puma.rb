@@ -15,6 +15,9 @@ on_worker_boot do
   # See: https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#on-worker-boot
   ActiveRecord::Base.establish_connection
   ActiveRecord::Base.connection.execute("SET statement_timeout = '12s'")
+
+  require 'prometheus_exporter/instrumentation'
+  PrometheusExporter::Instrumentation::Process.start(type: 'web')
 end
 
 before_fork do

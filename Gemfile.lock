@@ -476,6 +476,8 @@ GEM
       actionmailer (>= 3.0.0)
       postmark (>= 1.21.3, < 2.0)
     progress (3.5.2)
+    prometheus_exporter (0.7.0)
+      webrick
     promise.rb (0.7.4)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -822,6 +824,7 @@ DEPENDENCIES
   pg_query
   pghero
   postmark-rails
+  prometheus_exporter
   pry-byebug
   pry-rails
   puma

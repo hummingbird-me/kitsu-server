@@ -108,6 +108,7 @@ gem 'fast_blank' # Faster String#blank?
 gem 'oj' # Blazing-fast JSON parsing
 gem 'oj_mimic_json' # Hook it in place of JSON gem
 gem 'parallel' # Process shit in parallel
+gem 'prometheus_exporter' # Export shit to Prometheus
 gem 'tunemygc' # Tune Garbage Collector
 
 gem 'sentry-raven' # Send error data to Sentry
