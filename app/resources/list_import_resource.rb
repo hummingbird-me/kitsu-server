@@ -9,7 +9,7 @@ class ListImportResource < BaseResource
 
   # Parameters
   attributes :input_text, :strategy
-  attribute :input_file, format: ShrineAttachmentFormatter
+  attribute :input_file, format: :shrine_attachment
   # Status
   attributes :progress, :status, :total
   # Errors
