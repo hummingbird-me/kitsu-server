@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 2021_06_13_042826) do
     t.text "release_schedule"
     t.string "original_locale"
     t.jsonb "description", default: {}, null: false
+    t.jsonb "poster_image_data"
     t.index ["age_rating"], name: "index_anime_on_age_rating"
     t.index ["average_rating"], name: "anime_average_rating_idx"
     t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: :desc
@@ -418,6 +419,7 @@ ActiveRecord::Schema.define(version: 2021_06_13_042826) do
     t.integer "total_length", default: 0, null: false
     t.text "release_schedule"
     t.jsonb "description", default: {}, null: false
+    t.jsonb "poster_image_data"
     t.index ["slug"], name: "index_dramas_on_slug"
   end
 
@@ -878,6 +880,7 @@ ActiveRecord::Schema.define(version: 2021_06_13_042826) do
     t.text "release_schedule"
     t.string "original_locale"
     t.jsonb "description", default: {}, null: false
+    t.jsonb "poster_image_data"
     t.index ["average_rating"], name: "manga_average_rating_idx"
     t.index ["slug"], name: "index_manga_on_slug"
     t.index ["user_count"], name: "manga_user_count_idx"
