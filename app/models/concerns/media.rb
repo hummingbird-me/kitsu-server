@@ -12,6 +12,7 @@ module Media
     include Sluggable
     include Mappable
     include DescriptionSanitation
+    include PosterImageUploader::Attachment(:poster_image)
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
@@ -26,6 +27,7 @@ module Media
       medium: '-quality 70 -strip',
       large: '-quality 60 -strip'
     }
+    include PaperclipShrineSynchronization
 
     update_index("media##{name.underscore}") { self }
     update_algolia('AlgoliaMediaIndex')
