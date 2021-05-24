@@ -42,6 +42,10 @@ class ListImport < ApplicationRecord
     errors.add(:type, 'must be a ListImport class') unless in_namespace && is_descendant
   end
 
+  def input_file
+    nil
+  end
+
   # Apply the ListImport
   def apply
     # Send info to Sentry
