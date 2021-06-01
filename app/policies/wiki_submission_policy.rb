@@ -1,15 +1,7 @@
 class WikiSubmissionPolicy < ApplicationPolicy
   administrated_by :community_mod
 
-  def create_draft?
-    true
-  end
-
-  def update_draft?
-    true
-  end
-
-  def submit_draft?
-    true
-  end
+  alias_method :create_draft?, :is_owner?
+  alias_method :update_draft?, :is_owner?
+  alias_method :submit_draft?, :is_owner?
 end
