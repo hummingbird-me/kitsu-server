@@ -4,7 +4,7 @@ class Mutations::WikiSubmission::SubmitDraft < Mutations::Base
   argument :input,
     Types::Input::WikiSubmission::SubmitDraft,
     required: true,
-    description: 'Submit a wiki submission draft.',
+    description: 'Submit a wiki submission draft. This will change the status to pending.',
     as: :wiki_submission
 
   field :wiki_submission, Types::WikiSubmission, null: true
