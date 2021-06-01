@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_023328) do
+ActiveRecord::Schema.define(version: 2021_04_10_224334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1702,12 +1702,12 @@ ActiveRecord::Schema.define(version: 2021_04_06_023328) do
     t.string "title"
     t.text "notes"
     t.integer "status", default: 0, null: false
-    t.jsonb "draft", default: {}, null: false
+    t.jsonb "data", default: {}, null: false
     t.bigint "user_id"
     t.integer "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index "((draft -> 'id'::text)), ((draft -> 'type'::text))", name: "index_wiki_submission_on_draft_id_and_draft_type"
+    t.index "((data -> 'id'::text)), ((data -> 'type'::text))", name: "index_wiki_submission_on_data_id_and_data_type"
     t.index ["parent_id"], name: "index_wiki_submissions_on_parent_id"
     t.index ["user_id"], name: "index_wiki_submissions_on_user_id"
   end
