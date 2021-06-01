@@ -24,12 +24,11 @@
 
 class ListImport
   class MyAnimeListXML < ListImport
-    # We can only accept files as input right now, not usernames
+    include MALXMLUploader::Attachment(:input_file)
+
+    # We need an input file for XML importing
     validates :input_text, absence: true
-    # Accept .gz or .xml.gz
-    validates_attachment :input_file, content_type: {
-      content_type: %w[application/x-gzip application/gzip application/xml text/xml]
-    }, presence: true
+    validates :input_file, presence: true
 
     def count
       xml.css('anime, manga').count
@@ -45,14 +44,14 @@ class ListImport
     private
 
     def gzipped?
-      input_file.content_type.include? 'gzip'
+      input_file.mime_type.include? 'gzip'
     end
 
     def xml
       return @xml if @xml
 
-      data = open(input_file.url)
-      data = Zlib::GzipReader.new(data) if gzipped?         # Unzip
+      data = input_file
+      data = Zlib::GzipReader.new(data) if gzipped?
       data = data.read
       # We can't fix Xinil, but we can fix his mess.
       data.scrub!                                           # Scrub encoding

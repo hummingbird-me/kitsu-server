@@ -25,6 +25,7 @@
 class ListImport
   class Aozora < ListImport
     validates :input_text, presence: true
+    validates :input_file_data, absence: true
 
     def count
       ::Zorro::DB::AnimeProgress.count(for_user)

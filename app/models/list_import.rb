@@ -30,13 +30,9 @@ class ListImport < ApplicationRecord
 
   enum strategy: %i[greater obliterate]
   enum status: %i[queued running failed completed partially_failed]
-  has_attached_file :input_file
   alias_attribute :kind, :type
 
   validates :strategy, presence: true
-  validates :input_text, presence: { unless: :input_file? }
-  validates_attachment :input_file, presence: { unless: :input_text? }
-  validates_attachment :input_file, content_type: { content_type: %w[] }
 
   validate :type_is_subclass
 
@@ -46,6 +42,10 @@ class ListImport < ApplicationRecord
     errors.add(:type, 'must be a ListImport class') unless in_namespace && is_descendant
   end
 
+  def input_file
+    nil
+  end
+
   # Apply the ListImport
   def apply
     # Send info to Sentry
@@ -53,7 +53,7 @@ class ListImport < ApplicationRecord
     Raven.user_context(id: user.id, email: user.email, username: user.name)
     Raven.extra_context(
       input_text: input_text.to_s,
-      input_file: input_file.to_s
+      input_file: input_file_data
     )
 
     total = count

@@ -1,11 +1,13 @@
-workers Integer(ENV['WEB_CONCURRENCY'] || 2)
-threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 8)
-threads threads_count, threads_count
+workers Integer(ENV['WEB_CONCURRENCY'] || 4)
+threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 6)
+threads 0, threads_count
 
+nakayoshi_fork true
 preload_app!
+quiet
 
 rackup      DefaultRackup
-port        ENV['PORT']     || 3000
+port        ENV['PORT'] || 3000
 environment ENV['RACK_ENV'] || 'development'
 
 on_worker_boot do
@@ -16,22 +18,21 @@ on_worker_boot do
 end
 
 before_fork do
-  unless ENV['RACK_ENV'] == 'development'
-    PumaWorkerKiller.config do |config|
-      config.ram           = 1024  # mb
-      config.frequency     = 60    # seconds
-      config.percent_usage = 0.94
-      config.rolling_restart_frequency = 24 * 3600 # 12 hours in seconds
-    end
-    PumaWorkerKiller.start
+  require 'puma_worker_killer'
+
+  PumaWorkerKiller.config do |config|
+    config.rolling_pre_term = ->(worker) {
+      puts "Worker #{worker.inspect} being killed by rolling restart"
+    }
   end
+  PumaWorkerKiller.enable_rolling_restart(6.hours)
 end
 
 lowlevel_error_handler do |ex, env|
   Raven.capture_exception(
     ex,
     message: ex.message,
-    extra: { puma: env, culprit: 'Puma' },
+    extra: { puma: env, culprit: 'Puma' }
   )
   # note the below is just a Rack response
   [500, {}, [<<-MESSAGE.squish]]

@@ -5,7 +5,6 @@ class BaseResource < JSONAPI::Resource
   include AuthenticatedResource
   include Pundit::Resource
   include SearchableResource
-  include ResourceInheritance
 
   attributes :created_at, :updated_at
 

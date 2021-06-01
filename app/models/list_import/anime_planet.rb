@@ -32,7 +32,7 @@ class ListImport
       maximum: 20
     }, presence: true
     # does not accept file uploads
-    validates :input_file, absence: true
+    validates :input_file_data, absence: true
     validate :ensure_user_exists, on: :create
 
     def ensure_user_exists

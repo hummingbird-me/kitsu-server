@@ -31,7 +31,7 @@ class ListImport
 
     # Only accept usernames, not XML exports
     validates :input_text, presence: true
-    validates :input_file, absence: true
+    validates :input_file_data, absence: true
     validate :ensure_list_is_public, on: :create
 
     def count
