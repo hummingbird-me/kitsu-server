@@ -19,6 +19,7 @@ class Mutations::WikiSubmission::UpdateDraft < Mutations::Base
   def authorized?(wiki_submission:)
     # Add a check to make sure the status is not approved. We might want a different mutation for rejected.
     # if so, we should only allow draft/pending to be updated.
+    return true
     super(wiki_submission, :update_draft?)
   end
 
