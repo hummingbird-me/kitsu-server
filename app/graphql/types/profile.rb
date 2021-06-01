@@ -182,7 +182,7 @@ class Types::Profile < Types::BaseObject
     argument :sort, Loaders::WikiSubmissionsLoader.sort_argument, required: false
     argument :statuses, [Types::Enum::WikiSubmissionStatus],
       required: false,
-      default_value: WikiSubmission.statuses.keys.map(&:to_sym),
+      default_value: WikiSubmission.statuses.keys,
       description: 'Will return all if not supplied'
   end
 
