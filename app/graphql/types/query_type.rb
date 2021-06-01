@@ -365,7 +365,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   field :wiki_submissions_by_statuses, Types::WikiSubmission.connection_type, null: true do
-    description ''
+    description 'Select all Wiki Submissions that match with a supplied status.'
     argument :sort, Loaders::WikiSubmissionsLoader.sort_argument, required: false
     argument :statuses, [Types::Enum::WikiSubmissionStatus],
       required: false,
