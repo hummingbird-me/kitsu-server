@@ -172,7 +172,8 @@ class User < ApplicationRecord
   has_many :ip_addresses, dependent: :delete_all, class_name: 'UserIpAddress'
   has_many :category_favorites, dependent: :delete_all
   has_many :quotes, dependent: :nullify
-  has_many :wiki_submissions, dependent: :nullify
+  has_many :wiki_submissions
+  has_many :wiki_submission_logs
 
   validates :email, format: { with: /\A.+@.+\.[a-z]+\z/, message: 'is not an email' },
                     if: :email_changed?, allow_blank: true
