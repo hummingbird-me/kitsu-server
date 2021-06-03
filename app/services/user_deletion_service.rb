@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 class UserDeletionService
   using UpdateInBatches
+
+  DELETED_USER_ID = -10
 
   attr_reader :user
 
@@ -12,7 +16,7 @@ class UserDeletionService
     delete_following
     delete_likes
     anonymize_mod_stuff
-    Post.unscoped.where(target_user: user).update_all(target_user_id: -10)
+    Post.unscoped.where(target_user: user).update_all(target_user_id: DELETED_USER_ID)
   end
 
   private
@@ -61,10 +65,12 @@ class UserDeletionService
   end
 
   def anonymize_mod_stuff
-    user.reports.update_all(user_id: -10)
-    user.group_reports.update_all(user_id: -10)
-    user.group_reports_as_moderator.update_all(user_id: -10)
-    user.reports_as_moderator.update_all(user_id: -10)
-    user.site_announcements.update_all(user_id: -10)
+    user.reports.update_all(user_id: DELETED_USER_ID)
+    user.group_reports.update_all(user_id: DELETED_USER_ID)
+    user.group_reports_as_moderator.update_all(user_id: DELETED_USER_ID)
+    user.reports_as_moderator.update_all(user_id: DELETED_USER_ID)
+    user.site_announcements.update_all(user_id: DELETED_USER_ID)
+    user.wiki_submissions.update_all(user_id: DELETED_USER_ID)
+    user.wiki_submission_logs.update_all(user_id: DELETED_USER_ID)
   end
 end
