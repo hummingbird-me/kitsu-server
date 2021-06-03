@@ -1764,4 +1764,7 @@ ActiveRecord::Schema.define(version: 2021_05_06_021756) do
   add_foreign_key "site_announcements", "users"
   add_foreign_key "streaming_links", "streamers"
   add_foreign_key "users", "posts", column: "pinned_post_id"
+  add_foreign_key "wiki_submission_logs", "users"
+  add_foreign_key "wiki_submission_logs", "wiki_submissions"
+  add_foreign_key "wiki_submissions", "users"
 end

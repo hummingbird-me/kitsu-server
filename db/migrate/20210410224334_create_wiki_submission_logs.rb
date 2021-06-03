@@ -3,8 +3,8 @@ class CreateWikiSubmissionLogs < ActiveRecord::Migration[5.2]
     create_table :wiki_submission_logs do |t|
       t.integer :status, null: false, default: 0
 
-      t.references :user
-      t.references :wiki_submission
+      t.references :user, foreign_key: true, index: true
+      t.references :wiki_submission, foreign_key: true, index: true
 
       t.timestamps
     end
