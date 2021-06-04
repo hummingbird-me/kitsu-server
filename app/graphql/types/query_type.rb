@@ -355,6 +355,31 @@ class Types::QueryType < GraphQL::Schema::Object
     RecordLoader.for(::Post, token: context[:token]).load(id)
   end
 
+  field :find_wiki_submission_by_id, Types::WikiSubmission, null: true do
+    description 'Find a single Wiki Submission by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_wiki_submission_by_id(id:)
+    RecordLoader.for(::WikiSubmission, token: context[:token]).load(id)
+  end
+
+  field :wiki_submissions_by_statuses, Types::WikiSubmission.connection_type, null: true do
+    description 'Select all Wiki Submissions that match with a supplied status.'
+    argument :sort, Loaders::WikiSubmissionsLoader.sort_argument, required: false
+    argument :statuses, [Types::Enum::WikiSubmissionStatus],
+      required: false,
+      default_value: WikiSubmission.statuses.keys,
+      description: 'Will return all if not supplied'
+  end
+
+  def wiki_submissions_by_statuses(statuses: nil, sort: [{ on: :created_at, direction: :asc }])
+    Loaders::WikiSubmissionsLoader.connection_for({
+      find_by: :status,
+      sort: sort
+    }, statuses)
+  end
+
   field :franchises, Types::Franchise.connection_type, null: true do
     description 'All Franchise in the Kitsu database'
   end

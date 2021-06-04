@@ -157,4 +157,20 @@ module Types::Interface::Media
   def reactions
     AssociationLoader.for(object.class, :media_reactions).scope(object)
   end
+
+  field :my_wiki_submissions, Types::WikiSubmission.connection_type, null: false do
+    description 'A list of your wiki submissions for this media'
+    argument :sort, Loaders::WikiSubmissionsLoader.sort_argument, required: false
+  end
+
+  def my_wiki_submissions(sort: [{ on: :created_at, direction: :asc }])
+    # NOTE: I feel like we want to have some authorized! method we can just shove in here.
+    raise GraphQL::ExecutionError, 'You must be authorized to view your wiki submissions' if context[:token].blank?
+
+    Loaders::WikiSubmissionsLoader.connection_for({
+      find_by: :user_id,
+      sort: sort,
+      where: "draft->>'id' = '#{object.id}' AND draft->>'type' = '#{object.class.name}'"
+    }, User.current.id)
+  end
 end

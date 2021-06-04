@@ -1685,6 +1685,30 @@ ActiveRecord::Schema.define(version: 2021_05_06_021756) do
     t.index ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type"
   end
 
+  create_table "wiki_submission_logs", force: :cascade do |t|
+    t.integer "status", default: 0, null: false
+    t.bigint "user_id"
+    t.bigint "wiki_submission_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_wiki_submission_logs_on_user_id"
+    t.index ["wiki_submission_id"], name: "index_wiki_submission_logs_on_wiki_submission_id"
+  end
+
+  create_table "wiki_submissions", force: :cascade do |t|
+    t.string "title"
+    t.text "notes"
+    t.integer "status", default: 0, null: false
+    t.jsonb "data", default: {}, null: false
+    t.bigint "user_id"
+    t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "((data -> 'id'::text)), ((data -> 'type'::text))", name: "index_wiki_submission_on_data_id_and_data_type"
+    t.index ["parent_id"], name: "index_wiki_submissions_on_parent_id"
+    t.index ["user_id"], name: "index_wiki_submissions_on_user_id"
+  end
+
   add_foreign_key "ama_subscribers", "amas"
   add_foreign_key "amas", "posts", column: "original_post_id"
   add_foreign_key "anime_castings", "anime_characters"
@@ -1740,4 +1764,7 @@ ActiveRecord::Schema.define(version: 2021_05_06_021756) do
   add_foreign_key "site_announcements", "users"
   add_foreign_key "streaming_links", "streamers"
   add_foreign_key "users", "posts", column: "pinned_post_id"
+  add_foreign_key "wiki_submission_logs", "users"
+  add_foreign_key "wiki_submission_logs", "wiki_submissions"
+  add_foreign_key "wiki_submissions", "users"
 end

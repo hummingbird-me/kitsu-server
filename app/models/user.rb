@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: users
@@ -98,8 +97,6 @@
 #
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
-# rubocop:enable Metrics/LineLength
-
 class User < ApplicationRecord
   include WithCoverImage
   include WithAvatar
@@ -112,19 +109,19 @@ class User < ApplicationRecord
     javascript json kitsu sysadmin sysadministrator system unfollow user users
     wiki you staff mod
   ].to_set.freeze
-  CONTROL_CHARACTERS = /\p{Line_Separator}|\p{Paragraph_Separator}|\p{Other}/u
+  CONTROL_CHARACTERS = /\p{Line_Separator}|\p{Paragraph_Separator}|\p{Other}/u.freeze
   BANNED_CHARACTERS = [
     # Swastikas
     "\u534D",
     "\u5350"
   ].join.freeze
 
-  enum rating_system: %i[simple advanced regular]
-  enum status: %i[unregistered registered aozora]
-  enum theme: %i[light dark]
-  enum pro_tier: %i[ao_pro ao_pro_plus pro patron]
-  enum email_status: %i[email_unconfirmed email_confirmed email_bounced]
-  enum title_language_preference: %i[canonical romanized localized]
+  enum rating_system: { simple: 0, advanced: 1, regular: 2 }
+  enum status: { unregistered: 0, registered: 1, aozora: 2 }
+  enum theme: { light: 0, dark: 1 }
+  enum pro_tier: { ao_pro: 0, ao_pro_plus: 1, pro: 2, patron: 3 }
+  enum email_status: { email_unconfirmed: 0, email_confirmed: 1, email_bounced: 2 }
+  enum title_language_preference: { canonical: 0, romanized: 1, localized: 2 }
 
   rolify
   flag :permissions, %i[admin community_mod database_mod]
@@ -175,6 +172,8 @@ class User < ApplicationRecord
   has_many :ip_addresses, dependent: :delete_all, class_name: 'UserIpAddress'
   has_many :category_favorites, dependent: :delete_all
   has_many :quotes, dependent: :nullify
+  has_many :wiki_submissions
+  has_many :wiki_submission_logs
 
   validates :email, format: { with: /\A.+@.+\.[a-z]+\z/, message: 'is not an email' },
                     if: :email_changed?, allow_blank: true
@@ -306,7 +305,7 @@ class User < ApplicationRecord
   end
 
   def blocked?(user)
-    Block.where(user: [self, user], blocked: [self, user]).exists?
+    Block.exists?(user: [self, user], blocked: [self, user])
   end
 
   def confirmed
