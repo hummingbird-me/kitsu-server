@@ -3,7 +3,7 @@ module RescueValidationErrors
 
   def resolve(*args, **kwargs)
     super
-  rescue ActiveRecord::ValidationError => e
+  rescue ActiveRecord::RecordInvalid => e
     errors = e.record.errors.map do |attribute, message|
       {
         code: 'ValidationError',
