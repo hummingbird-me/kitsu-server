@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 # == Schema Information
 #
 # Table name: reports
@@ -25,17 +24,15 @@
 #  fk_rails_c7699d537d  (user_id => users.id)
 #  fk_rails_cfe003e081  (moderator_id => users.id)
 #
-# rubocop:enable Metrics/LineLength
-
 class Report < ApplicationRecord
   include WithActivity
 
   belongs_to :naughty, -> { with_deleted }, polymorphic: true, required: true
-  belongs_to :user, required: true
+  belongs_to :user, optional: false
   belongs_to :moderator, class_name: 'User', optional: true
 
-  enum reason: %i[nsfw offensive spoiler bullying other spam]
-  enum status: %i[reported resolved declined]
+  enum reason: { nsfw: 0, offensive: 1, spoiler: 2, bullying: 3, other: 4, spam: 5 }
+  enum status: { reported: 0, resolved: 1, declined: 2 }
 
   validates :explanation, presence: true, if: :other?
   validates :reason, :status, presence: true
