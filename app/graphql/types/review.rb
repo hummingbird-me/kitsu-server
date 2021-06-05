@@ -52,7 +52,7 @@ class Types::Review < Types::BaseObject
     description: 'Users who liked this reaction'
 
   def likes
-    AssociationLoader.for(object.class, :votes, policy: :media_reaction_vote)
+    AssociationLoader.for(object.class, :likes, policy: :review_like)
                      .scope(object).then do |likes|
       RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
     end
