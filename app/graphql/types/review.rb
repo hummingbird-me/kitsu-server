@@ -20,7 +20,7 @@ class Types::Review < Types::BaseObject
 
   field :progress, Integer,
     null: false,
-    description: 'When this media reaction was written based on media progress.'
+    description: 'When this review was written based on media progress.'
 
   field :rating, Integer,
     null: false,
