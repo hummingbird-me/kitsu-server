@@ -193,4 +193,16 @@ class Types::Profile < Types::BaseObject
       where: { status: statuses }
     }, object.id)
   end
+
+  field :reviews, Types::Review.connection_type, null: true do
+    description 'Reviews created by this user'
+    argument :sort, Loaders::WikiSubmissionsLoader.sort_argument, required: false
+  end
+
+  def reviews(sort: [{ on: :created_at, direction: :asc }])
+    Loaders::ReviewsLoader.connection_for({
+      find_by: :user_id,
+      sort: sort
+    }, object.id)
+  end
 end
