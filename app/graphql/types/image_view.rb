@@ -1,6 +1,4 @@
 class Types::ImageView < Types::BaseObject
-  implements Types::Interface::WithTimestamps
-
   field :name, String,
     null: false,
     description: 'The name of this view of the image'
