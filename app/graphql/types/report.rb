@@ -15,10 +15,7 @@ class Types::Report < Types::BaseObject
 
   field :explanation, String,
     null: true,
-    description: <<~DESCRIPTION.squish
-      Additional information related to why the report was made.
-      The most relevant results will be at the top.
-    DESCRIPTION
+    description: 'Additional information related to why the report was made'
 
   field :reporter, Types::Profile,
     null: false,
@@ -31,5 +28,5 @@ class Types::Report < Types::BaseObject
 
   field :naughty, Types::Union::ReportItem,
     null: false,
-    description: ''
+    description: 'The entity that the report is related to'
 end
