@@ -14,7 +14,9 @@ class MediaReactionPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where.not(user_id: blocked_users)
+      scope
+        .where.not(user_id: blocked_users)
+        .where(hidden_at: nil).or(scope.where(user_id: user).where.not(hidden_at: nil))
     end
   end
 end
