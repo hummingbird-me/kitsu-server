@@ -1,9 +1,10 @@
 class Wordfilter < ApplicationRecord
   flag :locations, %i[post comment reaction]
   enum action: {
-    report: 10,
-    hide: 20,
-    reject: 30
+    censor: 10,
+    report: 20,
+    hide: 30,
+    reject: 40
   }, _prefix: 'action_'
 
   validates :pattern, presence: true
