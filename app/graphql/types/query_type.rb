@@ -401,7 +401,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def reports
-    ReportPolicy::Scope.new(context[:token], ::Report).resolve
+    ReportPolicy::Scope.new(context[:token], ::Report).resolve.order(created_at: :desc)
   end
 
   field :find_report_by_id, Types::Report, null: true do
