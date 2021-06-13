@@ -43,10 +43,6 @@ class Types::Review < Types::BaseObject
     description: 'Does this review contain spoilers from the media',
     method: :spoiler
 
-  field :deleted_at, GraphQL::Types::ISO8601DateTime,
-    null: true,
-    description: 'When this review was deleted'
-
   field :likes, Types::Profile.connection_type,
     null: false,
     description: 'Users who liked this review'
