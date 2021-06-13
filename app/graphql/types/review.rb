@@ -49,7 +49,7 @@ class Types::Review < Types::BaseObject
 
   field :likes, Types::Profile.connection_type,
     null: false,
-    description: 'Users who liked this reaction'
+    description: 'Users who liked this review'
 
   def likes
     AssociationLoader.for(object.class, :likes, policy: :review_like)
