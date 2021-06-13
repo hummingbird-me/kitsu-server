@@ -303,3 +303,5 @@ Rails/HasAndBelongsToMany:
   Enabled: false
 Rails/TimeZone:
   Enabled: false
+RSpec/ExampleLength:
+  Max: 20
