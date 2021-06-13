@@ -395,4 +395,36 @@ class Types::QueryType < GraphQL::Schema::Object
   #   DESCRIPTION
   #   argument :title, String, required: true
   # end
+
+  field :reports, Types::Report.connection_type, null: true do
+    description 'All Reports in the Kitsu database'
+  end
+
+  def reports
+    ReportPolicy::Scope.new(context[:token], ::Report).resolve.order(created_at: :desc)
+  end
+
+  field :find_report_by_id, Types::Report, null: true do
+    description 'Find a single Report by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_report_by_id(id:)
+    RecordLoader.for(::Report, token: context[:token]).load(id)
+  end
+
+  field :reports_by_status, Types::Report.connection_type, null: true do
+    description 'Select all Reports that match with a supplied status.'
+    argument :statuses, [Types::Enum::ReportStatus],
+      required: false,
+      default_value: Report.statuses.keys,
+      description: 'Will return all if not supplied'
+  end
+
+  def reports_by_status(statuses: nil, sort: [{ on: :created_at, direction: :asc }])
+    Loaders::ReportsLoader.connection_for({
+      find_by: :status,
+      sort: sort
+    }, statuses)
+  end
 end
