@@ -89,18 +89,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def profile_strength
-    user = current_user&.resource_owner
-    user_id = params.require(:id).to_i
-    unless user&.id == user_id
-      return render_jsonapi serialize_error(401, 'Not permitted'), status: 401
-    end
-
-    # Get strength from Stream
-    strength = RecommendationsService::Media.new(user).strength
-    render json: strength, status: 200
-  end
-
   def flags
     user = current_user&.resource_owner
     features = Flipper.preload_all

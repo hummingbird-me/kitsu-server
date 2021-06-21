@@ -16,7 +16,6 @@ Rails.application.routes.draw do
       jsonapi_resources :users
       post '/users/_recover', to: 'users#recover'
       post '/users/_confirm', to: 'users#confirm'
-      get '/users/:id/_strength', to: 'users#profile_strength'
       get '/users/:id/_alts', to: 'users#alts'
       post '/users/:id/_ban', to: 'users#ban'
       delete '/users/:id/_ban', to: 'users#unban'
@@ -114,11 +113,6 @@ Rails.application.routes.draw do
       jsonapi_resources :media_reactions
       # Trending
       get '/trending/:namespace', to: 'trending#index'
-      get '/recommendations/:namespace', to: 'recommendations#index'
-      get '/recommendations/:namespace/realtime', to: 'recommendations#realtime'
-
-      get '/category_recommendations/:namespace', to: 'category_recommendations#index'
-      get '/category_recommendations/:namespace/realtime', to: 'category_recommendations#realtime'
 
       # Community recommendations
       jsonapi_resources :community_recommendation_follows

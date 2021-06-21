@@ -29,13 +29,4 @@ class CategoryFavorite < ApplicationRecord
     scope: :category_id,
     message: 'Cannot fave a category multiple times'
   }
-
-  after_save do
-    client = Stream::CustomEndpointClient.new
-    category_favorites = CategoryFavorite.where(user_id: user_id)
-    data = {
-      "User:#{user_id}": { categories: category_favorites.map(&:category_id) }
-    }
-    client.upload_meta(data)
-  end
 end
