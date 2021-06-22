@@ -248,6 +248,37 @@ RailsAdmin.config do |config|
   config.model('Comment') { parent Post }
   config.model('Repost') { parent Post }
   config.model('Upload') { parent Post }
+  config.model('Wordfilter') do
+    weight(-5)
+    navigation_label 'Social'
+    object_label_method { :pattern }
+    field :pattern, :string do
+      help <<~HELP.squish.html_safe
+        <b>Required.</b> The pattern to trigger this action on.<br /><br />
+        <b>If regex is enabled:</b> this is a case-insensitive PCRE (Perl-compatible Regular
+        Expression), not wrapped in slashes.<br /><br />
+        <b>If regex is <i>not</i> enabled:</b> this is an SQL LIKE expression. In this mode,
+        percent sign (%), underscore (_), backslash (\\) have special meaning. Percent sign (%)
+        means "any number of any characters" and underscore (_) means "any one character". If you
+        want to match an actual percent sign, underscore, or backslash, preface them with a
+        backslash (\\) to "escape" them, or ask for help!
+      HELP
+    end
+
+    field :regex_enabled, :boolean
+    field :locations, :flags
+
+    field :action, :enum do
+      help <<~HELP.html_safe
+        Specifies which action to take when this wordfilter matches:<ul>
+        <li><b>Censor</b> - replaces the naughty phrase with "CENSORED"</li>
+        <li><b>Report</b> - automatically creates a Report</li>
+        <li><b>Hide</b> - hides the content from other users, but allows the poster to see it</li>
+        <li><b>Reject</b> - displays an error to the user when they try to submit</li></ul>
+      HELP
+    end
+  end
+
   config.model('Review') { navigation_label 'Social' }
   config.model('MediaReaction') { navigation_label 'Social' }
   config.model('MediaReactionVote') { parent MediaReaction }
