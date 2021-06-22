@@ -2,6 +2,7 @@ require Rails.root.join('lib/rails_admin/config/fields/types/citext')
 require Rails.root.join('lib/rails_admin/config/fields/types/localized_string')
 require Rails.root.join('lib/rails_admin/config/fields/types/localized_text')
 require Rails.root.join('lib/rails_admin/config/fields/types/string_list')
+require Rails.root.join('lib/rails_admin/config/fields/types/flags')
 
 RailsAdmin::ApplicationHelper.module_exec do
   def edit_user_link
@@ -14,7 +15,7 @@ RailsAdmin::ApplicationHelper.module_exec do
   end
 end
 
-RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
+RailsAdmin.config do |config|
   config.parent_controller = '::AdminController'
   config.current_user_method(&:current_user)
 
