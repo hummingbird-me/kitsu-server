@@ -369,7 +369,7 @@ class Types::QueryType < GraphQL::Schema::Object
     argument :sort, Loaders::WikiSubmissionsLoader.sort_argument, required: false
     argument :statuses, [Types::Enum::WikiSubmissionStatus],
       required: false,
-      default_value: WikiSubmission.statuses.keys,
+      default_value: ::WikiSubmission.statuses.keys,
       description: 'Will return all if not supplied'
   end
 
@@ -417,7 +417,7 @@ class Types::QueryType < GraphQL::Schema::Object
     description 'Select all Reports that match with a supplied status.'
     argument :statuses, [Types::Enum::ReportStatus],
       required: false,
-      default_value: Report.statuses.keys,
+      default_value: ::Report.statuses.keys,
       description: 'Will return all if not supplied'
   end
 
