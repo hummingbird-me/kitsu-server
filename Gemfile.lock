@@ -19,10 +19,10 @@ GIT
 
 GIT
   remote: https://github.com/gargron/blurhash.git
-  revision: 9084bfa64fbadbaff1ba95c52bda3153efcb3f84
+  revision: cb529b4c65ad07d5663d8431a8f7746b3641c7ed
   specs:
-    blurhash (0.1.4)
-      ffi (~> 1.10)
+    blurhash (0.1.5)
+      ffi (~> 1.14)
 
 GIT
   remote: https://github.com/hummingbird-me/pundit-resources.git
