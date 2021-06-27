@@ -8,7 +8,7 @@ RailsAdmin::ApplicationHelper.module_exec do
     link_to "/users/#{_current_user.name}" do
       html = []
       html << image_tag(_current_user.avatar.to_s(:small), height: 30, width: 30)
-      html << content_tag(:span, _current_user.name)
+      html << tag(:span, _current_user.name)
       html.join.html_safe
     end
   end
@@ -63,7 +63,11 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     Stat::AnimeAmountConsumed Stat::AnimeCategoryBreakdown Stat::AnimeFavoriteYear
     Stat::MangaActivityHistory Stat::MangaAmountConsumed Stat::MangaCategoryBreakdown
     Stat::MangaFavoriteYear GlobalStat::AnimeAmountConsumed GlobalStat::MangaAmountConsumed
-    ProfileLinkSites MangaMediaAttribute AnimeMediaAttribute AnimeCharacter
+    ProfileLinkSites MangaMediaAttribute AnimeMediaAttribute DramasMediaAttribute AnimeCharacter
+    QuoteLine WikiSubmission WikiSubmissionLog AMA AMASubscriber CommunityRecommendation
+    CommunityRecommendationFollow CommunityRecommendationRequest ProfileLinkSite ProMembershipPlan
+    ProSubscription ProSubscription::AppleSubscription ProSubscription::StripeSubscription
+    ProSubscription::GooglePlaySubscription ProGift GroupCategory
   ]
 
   # Franchise
@@ -189,15 +193,14 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model 'Quote' do
     navigation_label 'Media'
   end
-  config.model 'Quote Lines' do
+  config.model 'MediaRelationship' do
     navigation_label 'Media'
-    parent Quote
   end
 
   # Groups
-  config.model 'Groups' do
-    navigation_label 'Groups'
-    weight(-5)
+  config.model 'Group' do
+    navigation_label 'Social'
+    weight(5)
   end
   config.model('GroupActionLog') { parent Group }
   config.model('GroupBan') { parent Group }
@@ -240,24 +243,17 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
   config.model('CategoryFavorite') { parent User }
 
   # Feed
+  config.model('Post') { navigation_label 'Social' }
   config.model('Comment') { parent Post }
   config.model('Repost') { parent Post }
   config.model('Upload') { parent Post }
-
+  config.model('Review') { navigation_label 'Social' }
+  config.model('MediaReaction') { navigation_label 'Social' }
   config.model('MediaReactionVote') { parent MediaReaction }
 
   config.model('StreamingLink') { parent Streamer }
 
   config.model('Video') { parent Episode }
-
-  config.model('AnimeMediaAttribute') { parent MediaAttribute }
-  config.model('MangaMediaAttribute') { parent MediaAttribute }
-  config.model('DramaMediaAttribute') { parent MediaAttribute }
-
-  config.model('CommunityRecommendationFollow') { parent CommunityRecommendation }
-  config.model('CommunityRecommendationRequest') { parent CommunityRecommendation }
-
-  config.model('AMASubscriber') { parent AMA }
 
   config.model 'Mapping' do
     navigation_label 'Media'
@@ -342,6 +338,10 @@ RailsAdmin.config do |config| # rubocop:disable Metrics/BlockLength
     field :description, :localized_text
     fields :image, :slug, :canonical_name
     include_all_fields
+  end
+
+  config.model 'Genre' do
+    navigation_label 'Media'
   end
 
   config.model 'Category' do
