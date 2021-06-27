@@ -44,6 +44,7 @@ class Post < ApplicationRecord
   include WithActivity
   include ContentProcessable
   include ContentEmbeddable
+  WordfilterCallbacks.hook(self, :post, :content)
 
   acts_as_paranoid
   resourcify

@@ -35,6 +35,7 @@ class Comment < ApplicationRecord
   include WithActivity
   include ContentProcessable
   include ContentEmbeddable
+  WordfilterCallbacks.hook(self, :comment, :content)
 
   acts_as_paranoid
   resourcify
