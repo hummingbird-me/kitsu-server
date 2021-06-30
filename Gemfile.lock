@@ -46,6 +46,14 @@ GIT
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
 
+GIT
+  remote: https://github.com/renchap/shrine-blurhash.git
+  revision: c00cc049319f45ff2782336dccafbe5854ba5894
+  specs:
+    shrine-blurhash (0.0.1)
+      blurhash (~> 0.1.4)
+      shrine (~> 3.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -848,6 +856,7 @@ DEPENDENCIES
   sentry-raven
   shoulda-matchers
   shrine
+  shrine-blurhash!
   sidekiq (~> 5)
   sidekiq-debounce
   sidekiq-scheduler

@@ -41,6 +41,7 @@ gem 'paperclip', '~> 6.0.0'
 gem 'paperclip-meta'
 gem 'paperclip-optimizer'
 gem 'shrine'
+gem 'shrine-blurhash', github: 'renchap/shrine-blurhash'
 
 # Background tasks
 gem 'sidekiq', '~> 5'
