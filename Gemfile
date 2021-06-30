@@ -85,7 +85,6 @@ gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.4' # Faux deletion
 gem 'postmark-rails' # Send via Postmark
 gem 'ranked-model' # Sortables!
-gem 'rbtrace' # Attach to running ruby processes
 gem 'retriable' # Retry when errors happen
 gem 'roadie-rails' # Inline CSS for emails
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
@@ -109,7 +108,6 @@ gem 'fast_blank' # Faster String#blank?
 gem 'oj' # Blazing-fast JSON parsing
 gem 'oj_mimic_json' # Hook it in place of JSON gem
 gem 'parallel' # Process shit in parallel
-gem 'tunemygc' # Tune Garbage Collector
 
 gem 'sentry-raven' # Send error data to Sentry
 
