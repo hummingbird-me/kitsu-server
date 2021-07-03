@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_05_031927) do
+ActiveRecord::Schema.define(version: 2021_06_13_042826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -303,6 +303,7 @@ ActiveRecord::Schema.define(version: 2021_06_05_031927) do
     t.datetime "edited_at"
     t.jsonb "embed"
     t.string "ao_id"
+    t.datetime "hidden_at"
     t.index ["ao_id"], name: "index_comments_on_ao_id", unique: true
     t.index ["deleted_at"], name: "index_comments_on_deleted_at"
     t.index ["parent_id"], name: "index_comments_on_parent_id"
@@ -1010,6 +1011,7 @@ ActiveRecord::Schema.define(version: 2021_06_05_031927) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.datetime "hidden_at"
     t.index ["anime_id"], name: "index_media_reactions_on_anime_id"
     t.index ["deleted_at"], name: "index_media_reactions_on_deleted_at"
     t.index ["drama_id"], name: "index_media_reactions_on_drama_id"
@@ -1222,6 +1224,7 @@ ActiveRecord::Schema.define(version: 2021_06_05_031927) do
     t.integer "locked_by_id"
     t.datetime "locked_at"
     t.integer "locked_reason"
+    t.datetime "hidden_at"
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"
@@ -1707,6 +1710,15 @@ ActiveRecord::Schema.define(version: 2021_06_05_031927) do
     t.index "((data -> 'id'::text)), ((data -> 'type'::text))", name: "index_wiki_submission_on_data_id_and_data_type"
     t.index ["parent_id"], name: "index_wiki_submissions_on_parent_id"
     t.index ["user_id"], name: "index_wiki_submissions_on_user_id"
+  end
+
+  create_table "wordfilters", force: :cascade do |t|
+    t.text "pattern", null: false
+    t.boolean "regex_enabled", default: false, null: false
+    t.integer "locations", default: 0, null: false
+    t.integer "action", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "ama_subscribers", "amas"
