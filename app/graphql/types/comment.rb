@@ -15,11 +15,11 @@ class Types::Comment < Types::BaseObject
     method: :user
 
   field :content, String,
-    null: false,
+    null: true,
     description: 'Unmodified content.'
 
   field :content_formatted, String,
-    null: false,
+    null: true,
     description: 'Html formatted content.'
 
   field :parent, Types::Comment,
