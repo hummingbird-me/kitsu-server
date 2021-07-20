@@ -3,13 +3,10 @@ class UsersController < ApplicationController
 
   def recover
     query = params[:username]
-    reset = PasswordResetService.new(query)
-    reset.send!
+    Accounts::SendPasswordReset.call(email: query)
     render json: { username: query }
-  rescue PasswordResetService::EmailMissingError
-    render_jsonapi_error(400, 'No username provided')
-  rescue PasswordResetService::UserNotFoundError
-    render_jsonapi_error(400, 'No user found')
+  rescue Action::ValidationError
+    render_jsonapi_error(400, 'No email provided')
   end
 
   def confirm
