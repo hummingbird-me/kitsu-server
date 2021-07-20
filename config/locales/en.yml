@@ -31,6 +31,8 @@ en:
       invalid_self_gift: 'Cannot gift to self'
       recipient_is_pro: 'Cannot gift to a user who already has pro'
       invalid_tier: 'That is not a valid tier of pro'
+    strait:
+      rate_limit_exceeded: 'Rate limit exceeded'
   notifications:
     mention:
       post: "%{actor} mentioned you in a post."
