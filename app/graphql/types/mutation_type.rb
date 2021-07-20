@@ -1,5 +1,6 @@
 class Types::MutationType < Types::BaseObject
   field :pro, Mutations::Pro, null: false
+  field :account, Mutations::Account, null: false
   field :anime, Mutations::Anime, null: false
   field :episode, Mutations::Episode, null: false
   field :library_entry, Mutations::LibraryEntry, null: false
