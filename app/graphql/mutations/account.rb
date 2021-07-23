@@ -1,5 +1,5 @@
 class Mutations::Account < Mutations::Namespace
-  field :reset_password,
-    mutation: Mutations::Account::ResetPassword,
+  field :send_password_reset,
+    mutation: Mutations::Account::SendPasswordReset,
     description: 'Send a password reset email'
 end

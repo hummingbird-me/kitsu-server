@@ -1,5 +1,5 @@
 module Accounts
-  class ResetPassword < Action
+  class SendPasswordReset < Action
     parameter :email, required: true
 
     def call

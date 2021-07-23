@@ -1,4 +1,4 @@
-class Mutations::Account::ResetPassword < Mutations::Base
+class Mutations::Account::SendPasswordReset < Mutations::Base
   include PublicMutation
   include RateLimitedMutation
 
@@ -13,7 +13,7 @@ class Mutations::Account::ResetPassword < Mutations::Base
   field :email, String, null: false
 
   def resolve(email:)
-    Accounts::ResetPassword.call(email: email)
+    Accounts::SendPasswordReset.call(email: email)
 
     { email: email }
   end
