@@ -142,15 +142,21 @@ class Types::Profile < Types::BaseObject
   field :library_events, Types::LibraryEvent.connection_type, null: false do
     description 'A list of library events for this user'
 
-    argument :kind, [Types::Enum::LibraryEventKind], required: false
+    argument :sort, Loaders::LibraryEventsLoader.sort_argument, required: false
+    argument :kind, [Types::Enum::LibraryEventKind],
+      required: false,
+      default_value: LibraryEvent.kinds.keys,
+      description: 'Will return all if not supplied'
   end
 
-  def library_events(kind: nil)
+  def library_events(kind: nil, sort: [{ on: :created_at, direction: :asc }])
     filters = { kind: kind }.compact
 
-    AssociationLoader.for(object.class, :library_events).scope(object).then do |library_events|
-      library_events.where(filters)
-    end
+    Loaders::LibraryEventsLoader.connection_for({
+      find_by: :user_id,
+      sort: sort,
+      where: filters
+    }, object.id)
   end
 
   field :site_links, Types::SiteLink.connection_type,
