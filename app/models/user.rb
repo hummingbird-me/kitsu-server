@@ -403,6 +403,12 @@ class User < ApplicationRecord
     update_profile_completed.save!
   end
 
+  def enabled_features
+    features = Flipper.preload_all
+    flags = features.map { |f| [f.name, f.enabled?(self)] }.to_h
+    flags.select { |_, enabled| enabled }.keys
+  end
+
   before_validation if: :email_changed? do
     # Strip the email and downcase it just for good measure
     self.email = email&.strip&.downcase
