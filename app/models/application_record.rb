@@ -39,6 +39,7 @@ class ApplicationRecord < ActiveRecord::Base
   class_attribute :algolia_index
   def self.update_algolia(index_klass)
     self.algolia_index ||= index_klass
-    after_commit { index_klass.safe_constantize.new(self).save! }
+    after_commit(on: %i[create update]) { index_klass.safe_constantize.new(self).save! }
+    after_commit(on: %i[destroy]) { index_klass.safe_constantize.new(self, new: false).save! }
   end
 end

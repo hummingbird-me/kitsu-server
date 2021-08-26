@@ -261,8 +261,8 @@ class BaseIndex
     elsif dirty?
       index.save_object(as_json)
     end
-  rescue Algolia::AlgoliaError
-    false
+  rescue Algolia::AlgoliaError => e
+    Raven.capture_exception(e)
   end
 
   def algolia_id
