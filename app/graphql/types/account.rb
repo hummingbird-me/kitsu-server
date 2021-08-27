@@ -67,7 +67,7 @@ class Types::Account < Types::BaseObject
     method: :permissions,
     description: 'The site-wide permissions this user has access to'
 
-  field :enabled_features, [Types::Enum::FeatureFlag],
+  field :enabled_features, [String],
     null: false,
     description: 'The features this user has access to'
 end
