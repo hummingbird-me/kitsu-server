@@ -158,6 +158,18 @@ module Types::Interface::Media
     AssociationLoader.for(object.class, :media_reactions).scope(object)
   end
 
+  field :posts, Types::Post.connection_type, null: false do
+    description 'All posts that tag this media.'
+    argument :sort, Loaders::PostsLoader.sort_argument, required: false
+  end
+
+  def posts(sort: [{ on: :created_at, direction: :asc }])
+    Loaders::PostsLoader.connection_for({
+      find_by: :media_id,
+      sort: sort
+    }, object.id)
+  end
+
   field :my_wiki_submissions, Types::WikiSubmission.connection_type, null: false do
     description 'A list of your wiki submissions for this media'
     argument :sort, Loaders::WikiSubmissionsLoader.sort_argument, required: false
