@@ -167,12 +167,16 @@ class Types::Profile < Types::BaseObject
     AssociationLoader.for(object.class, :profile_links).scope(object)
   end
 
-  field :media_reactions, Types::MediaReaction.connection_type,
-    null: false,
-    description: 'Media reactions written by this user.'
+  field :media_reactions, Types::MediaReaction.connection_type, null: false do
+    description 'Media reactions written by this user.'
+    argument :sort, Loaders::MediaReactionsLoader.sort_argument, required: false
+  end
 
-  def media_reactions
-    AssociationLoader.for(object.class, :media_reactions).scope(object)
+  def media_reactions(sort: [{ on: :created_at, direction: :asc }])
+    Loaders::MediaReactionsLoader.connection_for({
+      find_by: :user_id,
+      sort: sort
+    }, object.id)
   end
 
   field :favorites, Types::Favorite.connection_type,

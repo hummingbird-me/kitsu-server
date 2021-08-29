@@ -150,12 +150,17 @@ module Types::Interface::Media
     AssociationLoader.for(object.class, :mappings).scope(object)
   end
 
-  field :reactions, Types::MediaReaction.connection_type,
-    null: false,
-    description: 'A list of reactions for this media'
+  field :reactions, Types::MediaReaction.connection_type, null: false do
+    description 'A list of reactions for this media'
+    argument :sort, Loaders::MediaReactionsLoader.sort_argument, required: false
+  end
 
-  def reactions
-    AssociationLoader.for(object.class, :media_reactions).scope(object)
+  def reactions(sort: [{ on: :created_at, direction: :asc }])
+    Loaders::MediaReactionsLoader.connection_for({
+      find_by: :media_id,
+      sort: sort,
+      where: { media_type: type }
+    }, object.id)
   end
 
   field :my_wiki_submissions, Types::WikiSubmission.connection_type, null: false do
@@ -165,7 +170,9 @@ module Types::Interface::Media
 
   def my_wiki_submissions(sort: [{ on: :created_at, direction: :asc }])
     # NOTE: I feel like we want to have some authorized! method we can just shove in here.
-    raise GraphQL::ExecutionError, 'You must be authorized to view your wiki submissions' if context[:token].blank?
+    if context[:token].blank?
+      raise GraphQL::ExecutionError, 'You must be authorized to view your wiki submissions'
+    end
 
     Loaders::WikiSubmissionsLoader.connection_for({
       find_by: :user_id,
