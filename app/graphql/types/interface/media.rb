@@ -166,7 +166,8 @@ module Types::Interface::Media
   def posts(sort: [{ on: :created_at, direction: :asc }])
     Loaders::PostsLoader.connection_for({
       find_by: :media_id,
-      sort: sort
+      sort: sort,
+      where: { media_type: type },
     }, object.id)
   end
 
