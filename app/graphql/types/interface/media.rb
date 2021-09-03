@@ -167,7 +167,7 @@ module Types::Interface::Media
     Loaders::PostsLoader.connection_for({
       find_by: :media_id,
       sort: sort,
-      where: { media_type: type },
+      where: { media_type: type }
     }, object.id)
   end
 
