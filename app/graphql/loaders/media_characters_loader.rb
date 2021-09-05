@@ -3,4 +3,5 @@ class Loaders::MediaCharactersLoader < Loaders::FancyLoader
 
   sort :created_at
   sort :updated_at
+  sort :role
 end
