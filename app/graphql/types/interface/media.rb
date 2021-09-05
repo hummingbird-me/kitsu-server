@@ -102,12 +102,17 @@ module Types::Interface::Media
     description: 'A large banner image for this media'
 
   # Cast
-  field :characters, Types::MediaCharacter.connection_type,
-    null: false,
-    description: 'The characters who starred in this media'
+  field :characters, Types::MediaCharacter.connection_type, null: false do
+    description 'The characters who starred in this media'
+    argument :sort, Loaders::MediaCharactersLoader.sort_argument, required: false
+  end
 
-  def characters
-    AssociationLoader.for(object.class, :characters).scope(object)
+  def characters(sort: [{ on: :created_at, direction: :asc }])
+    Loaders::MediaCharactersLoader.connection_for({
+      find_by: :media_id,
+      sort: sort,
+      where: { media_type: type }
+    }, object.id)
   end
 
   field :staff, Types::MediaStaff.connection_type,
