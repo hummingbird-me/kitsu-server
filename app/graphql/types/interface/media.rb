@@ -101,6 +101,18 @@ module Types::Interface::Media
     null: false,
     description: 'A large banner image for this media'
 
+  field :my_library_entry, Types::LibraryEntry,
+    null: true,
+    description: 'Your library entry related to this media.'
+
+  def my_library_entry
+    if context[:token].blank?
+      raise GraphQL::ExecutionError, 'You must be authorized to view your library entry'
+    end
+
+    RecordLoader.for(LibraryEntry, column: :user_id, where: { media_id: object.id, media_type: type }, token: context[:token]).load(User.current.id)
+  end
+
   # Cast
   field :characters, Types::MediaCharacter.connection_type, null: false do
     description 'The characters who starred in this media'
