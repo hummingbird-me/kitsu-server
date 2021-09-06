@@ -110,7 +110,12 @@ module Types::Interface::Media
       raise GraphQL::ExecutionError, 'You must be authorized to view your library entry'
     end
 
-    RecordLoader.for(LibraryEntry, column: :user_id, where: { media_id: object.id, media_type: type }, token: context[:token]).load(User.current.id)
+    RecordLoader.for(
+      LibraryEntry,
+      column: :user_id,
+      where: { media_id: object.id, media_type: type },
+      token: context[:token]
+    ).load(User.current.id)
   end
 
   # Cast
