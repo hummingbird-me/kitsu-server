@@ -67,9 +67,9 @@ module PaperclipShrineSynchronization
       storage: :store,
       id: location,
       metadata: {
-        'height' => attachment.height(style.name),
-        'width' => attachment.width(style.name),
-        'size' => attachment.size(style.name)
+        'height' => style.attachment.height(style.name),
+        'width' => style.attachment.width(style.name),
+        'size' => style.attachment.size(style.name)
       }
     )
   end
