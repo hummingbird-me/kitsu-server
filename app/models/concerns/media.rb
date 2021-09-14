@@ -8,7 +8,6 @@ module Media
     include Rateable
     include Rankable
     include Trendable
-    include WithCoverImage
     include Sluggable
     include Mappable
     include DescriptionSanitation
@@ -17,18 +16,6 @@ module Media
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
-    has_attached_file :poster_image, styles: {
-      tiny: ['110x156#', :jpg],
-      small: ['284x402#', :jpg],
-      medium: ['390x554#', :jpg],
-      large: ['550x780#', :jpg]
-    }, convert_options: {
-      tiny: '-quality 90 -strip',
-      small: '-quality 75 -strip',
-      medium: '-quality 70 -strip',
-      large: '-quality 60 -strip'
-    }
-    include PaperclipShrineSynchronization
 
     update_index("media##{name.underscore}") { self }
     update_algolia('AlgoliaMediaIndex')
@@ -96,10 +83,6 @@ module Media
       future.where('start_date > ?', Date.today + 3.months)
     end
     scope :tba, -> { where('start_date IS ? AND end_date IS ?', nil, nil) }
-
-    validates_attachment :poster_image, content_type: {
-      content_type: %w[image/jpg image/jpeg image/png]
-    }
 
     after_commit :setup_feed, on: :create
   end

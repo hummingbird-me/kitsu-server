@@ -29,6 +29,7 @@ class PosterImageUploader < Shrine
     y_comp = (x_comp * ratio).floor.clamp(2, 5)
     [x_comp, y_comp]
   }, on_error: ->(error) { Raven.capture_exception(error) }
+  plugin :url_options, store: ->(*, **) { { public: true } }
 
   Attacher.derivatives do |original|
     vips = ImageProcessing::Vips.source(original)
