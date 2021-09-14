@@ -1,6 +1,7 @@
 FROM ruby:2.6
 MAINTAINER Kitsu, Inc.
 
+RUN apt-get update -y && apt-get install -y libvips
 # Install bundler
 RUN gem install bundler -v '~> 2.1'
 
