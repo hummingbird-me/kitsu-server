@@ -93,11 +93,12 @@ module Types::Interface::Media
 
   # Images
   field :poster_image, Types::Image,
+    method: :poster_image_attacher,
     null: false,
     description: 'The poster image of this media'
 
   field :banner_image, Types::Image,
-    method: :cover_image,
+    method: :cover_image_attacher,
     null: false,
     description: 'A large banner image for this media'
 
