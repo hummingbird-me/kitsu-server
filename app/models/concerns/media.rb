@@ -13,6 +13,7 @@ module Media
     include Mappable
     include DescriptionSanitation
     include PosterImageUploader::Attachment(:poster_image)
+    include CoverImageUploader::Attachment(:cover_image)
 
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
