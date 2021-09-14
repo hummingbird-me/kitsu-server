@@ -60,7 +60,7 @@ RailsAdmin.config do |config|
     GroupTicket Casting Report CommentLike LinkedAccount::MyAnimeList MediaAttributeVote
     LinkedAccount::YoutubeChannel UserIpAddress Drama AnimeCasting AnimeStaff MangaStaff
     MangaCharacter AnimeProduction DramaCasting DramaCharacter DramaStaff DramaMediaAttribute
-    QuoteLike Stat Scrape MediaAttribute Hashtag GlobalStat Stat::AnimeActivityHistory
+    QuoteLike Stat MediaAttribute Hashtag GlobalStat Stat::AnimeActivityHistory
     Stat::AnimeAmountConsumed Stat::AnimeCategoryBreakdown Stat::AnimeFavoriteYear
     Stat::MangaActivityHistory Stat::MangaAmountConsumed Stat::MangaCategoryBreakdown
     Stat::MangaFavoriteYear GlobalStat::AnimeAmountConsumed GlobalStat::MangaAmountConsumed
