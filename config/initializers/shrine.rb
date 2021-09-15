@@ -11,6 +11,7 @@ Shrine.plugin :infer_extension
 # Handle derivatives in background
 Shrine.plugin :derivatives
 Shrine.plugin :backgrounding
+Shrine.plugin :url_options, store: { host: 'https://media.kitsu.io' }
 
 s3_options = {
   endpoint: ENV['AWS_ENDPOINT'] || nil,
