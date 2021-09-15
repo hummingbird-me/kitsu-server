@@ -65,7 +65,8 @@ class MediaResource < BaseResource
     # Airing/Publishing Status
     :status, :tba
   # Images
-  attributes :poster_image, :cover_image, format: :shrine_attachment
+  attribute :poster_image, format: :shrine_attachment, delegate: :poster_image_attacher
+  attribute :cover_image, format: :shrine_attachment, delegate: :cover_image_attacher
 
   has_many :genres
   has_many :categories
