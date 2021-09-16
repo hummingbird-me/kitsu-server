@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_024137) do
+ActiveRecord::Schema.define(version: 2021_09_16_050650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -265,6 +265,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_024137) do
     t.string "canonical_name", null: false
     t.string "other_names", default: [], null: false, array: true
     t.jsonb "description", default: {}, null: false
+    t.jsonb "image_data"
     t.index ["mal_id"], name: "character_mal_id", unique: true
     t.index ["mal_id"], name: "index_characters_on_mal_id", unique: true
     t.index ["slug"], name: "index_characters_on_slug"
@@ -1151,6 +1152,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_024137) do
     t.date "birthday"
     t.citext "slug"
     t.jsonb "description", default: {}, null: false
+    t.jsonb "image_data"
     t.index ["slug"], name: "index_people_on_slug", unique: true
   end
 
