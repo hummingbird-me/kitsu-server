@@ -82,9 +82,7 @@ RailsAdmin.config do |config|
     list do
       field :id
       field :slug
-      field :poster_image do
-        thumb_method :small
-      end
+      field :poster_image
       field :canonical_title do
         formatted_value do
           bindings[:object].titles[value]
@@ -122,9 +120,7 @@ RailsAdmin.config do |config|
     list do
       field :id
       field :slug
-      field :poster_image do
-        thumb_method :small
-      end
+      field :poster_image
       field :canonical_title do
         formatted_value do
           bindings[:object].titles[value]
