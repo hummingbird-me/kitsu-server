@@ -61,7 +61,7 @@ class KitsuEmbedder < Embedder
   def image
     case subject
     when User then subject.avatar.url(:medium)
-    when Media then subject.poster_image.url(:medium)
+    when Media then subject.poster_image(:medium).url
     when Post, Comment then subject.user.avatar.url(:medium)
     end
   end
