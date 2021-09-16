@@ -19,7 +19,7 @@ class AlgoliaMediaIndex < BaseIndex
 
   # Display Only
   attribute :slug
-  attribute :poster_image, format: ShrineAttachmentValueFormatter
+  attribute :poster_image, format: ShrineAttachmentValueFormatter, method: :poster_image_attacher
 
   has_many :categories, as: :title
   has_many :people, as: :name, via: 'castings.person'

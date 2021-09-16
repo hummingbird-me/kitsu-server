@@ -3,10 +3,10 @@ class BaseIndex
   attr_reader :_model, :_new, :_associated
 
   class << self
-    def attribute(*names, frequency: nil, format: nil)
+    def attribute(*names, frequency: nil, format: nil, method: nil)
       self._attributes ||= []
       self._attributes += names.map do |name|
-        { name: name.to_s, frequency: frequency, format: format }
+        { name: name.to_s, frequency: frequency, format: format, method: method || name }
       end
     end
     alias_method :attributes, :attribute
@@ -36,7 +36,7 @@ class BaseIndex
     # rubocop:enable Style/PredicateName, Naming/UncommunicativeMethodParamName
 
     def _association_names
-      @_association_names ||= self._associations.map { |assoc| assoc[:name] }
+      @_association_names ||= self._associations.pluck(:name)
       return [] unless self._associations
     end
 
@@ -47,8 +47,8 @@ class BaseIndex
       end
     end
 
-    def _attribute_names
-      @_names ||= self._attributes.map { |attr| attr[:name] }
+    def _attribute_methods
+      @_attribute_methods ||= self._attributes.pluck(:method)
     end
 
     def index_name
@@ -80,7 +80,7 @@ class BaseIndex
 
     def inherited(subclass)
       if subclass.name && !subclass._index
-        self.index_name = subclass.name.sub(/Index\z/, '').underscore
+        self.index_name = subclass.name.delete_suffix('Index').underscore
       end
       super
     end
@@ -227,19 +227,18 @@ class BaseIndex
     self.class.associated_for(_model.class.where(id: _model.id))[_model.id]
   end
 
-  def _attribute_names
-    @_attribute_names ||= self.class._attribute_names.select { |m| _model.respond_to?(m) }
+  def _attribute_methods
+    @_attribute_methods ||= self.class._attribute_methods.select { |m| _model.respond_to?(m) }
   end
 
   def _attributes
-    set = Set.new(_attribute_names)
-    self.class._attributes.select { |attr| set.include?(attr[:name]) }
+    set = Set.new(_attribute_methods)
+    self.class._attributes.select { |attr| set.include?(attr[:method]) }
   end
 
   def dirty?
     _attributes.each do |attr|
-      changed = "#{attr[:name]}_changed?"
-      puts attr[:name]
+      changed = "#{attr[:method]}_changed?"
       dirty = if respond_to?(changed) then send(changed)
               elsif _model.respond_to?(changed) then _model.send(changed)
               else true
@@ -280,7 +279,7 @@ class BaseIndex
 
   def as_json(*)
     res = _attributes.each_with_object({}) do |attr, acc|
-      value = respond_to?(attr[:name]) ? send(attr[:name]) : _model.send(attr[:name])
+      value = respond_to?(attr[:method]) ? send(attr[:method]) : _model.send(attr[:method])
       acc[attr[:name]] = attr[:format] ? attr[:format].format(value) : value
     end
     res.merge!(_associated) if _associated
