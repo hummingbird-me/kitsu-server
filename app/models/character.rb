@@ -28,6 +28,8 @@ class Character < ApplicationRecord
   include LocalizableModel
   include Mappable
   include DescriptionSanitation
+  include PortraitImageUploader::Attachment(:image)
+  include PaperclipShrineSynchronization
   extend FriendlyId
   friendly_id :slug_candidates, use: %i[slugged finders history]
 
