@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_002937) do
+ActiveRecord::Schema.define(version: 2021_09_14_024137) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -50,10 +50,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_002937) do
     t.string "youtube_video_id", limit: 255
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "cover_image_file_name", limit: 255
-    t.string "cover_image_content_type", limit: 255
-    t.integer "cover_image_file_size"
-    t.datetime "cover_image_updated_at"
     t.decimal "average_rating", precision: 5, scale: 2
     t.integer "user_count", default: 0, null: false
     t.string "age_rating_guide", limit: 255
@@ -61,10 +57,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_002937) do
     t.date "start_date"
     t.date "end_date"
     t.hstore "rating_frequencies", default: {}, null: false
-    t.string "poster_image_file_name", limit: 255
-    t.string "poster_image_content_type", limit: 255
-    t.integer "poster_image_file_size"
-    t.datetime "poster_image_updated_at"
     t.integer "cover_image_top_offset", default: 0, null: false
     t.hstore "titles", default: {}, null: false
     t.string "canonical_title", default: "en_jp", null: false
@@ -75,8 +67,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_002937) do
     t.boolean "cover_image_processing"
     t.string "tba"
     t.integer "episode_count_guess"
-    t.text "poster_image_meta"
-    t.text "cover_image_meta"
     t.integer "total_length"
     t.text "release_schedule"
     t.string "original_locale"
@@ -396,14 +386,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_002937) do
     t.date "end_date"
     t.string "youtube_video_id"
     t.string "country", default: "ja", null: false
-    t.string "cover_image_file_name"
-    t.string "cover_image_content_type"
-    t.integer "cover_image_file_size"
-    t.datetime "cover_image_updated_at"
-    t.string "poster_image_file_name"
-    t.string "poster_image_content_type"
-    t.integer "poster_image_file_size"
-    t.datetime "poster_image_updated_at"
     t.integer "cover_image_top_offset", default: 0, null: false
     t.decimal "average_rating", precision: 5, scale: 2
     t.hstore "rating_frequencies", default: {}, null: false
@@ -415,8 +397,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_002937) do
     t.integer "favorites_count", default: 0, null: false
     t.boolean "cover_image_processing"
     t.string "tba"
-    t.text "poster_image_meta"
-    t.text "cover_image_meta"
     t.integer "total_length", default: 0, null: false
     t.text "release_schedule"
     t.jsonb "description", default: {}, null: false
@@ -846,14 +826,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_002937) do
 
   create_table "manga", id: :serial, force: :cascade do |t|
     t.citext "slug"
-    t.string "poster_image_file_name", limit: 255
-    t.string "poster_image_content_type", limit: 255
-    t.integer "poster_image_file_size"
-    t.datetime "poster_image_updated_at"
-    t.string "cover_image_file_name", limit: 255
-    t.string "cover_image_content_type", limit: 255
-    t.integer "cover_image_file_size"
-    t.datetime "cover_image_updated_at"
     t.date "start_date"
     t.date "end_date"
     t.string "serialization", limit: 255
@@ -877,8 +849,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_002937) do
     t.boolean "cover_image_processing"
     t.string "tba"
     t.integer "chapter_count_guess"
-    t.text "poster_image_meta"
-    t.text "cover_image_meta"
     t.text "release_schedule"
     t.string "original_locale"
     t.jsonb "description", default: {}, null: false
