@@ -1,7 +1,8 @@
 class ShrineAttachmentValueFormatter < JSONAPI::ValueFormatter
   def self.format(value)
+    return nil if value.blank?
     raise 'Invalid attachment field' unless value.is_a? Shrine::Attacher
-    return nil if value.blank? || value.file.blank?
+    return nil if value.file.blank?
 
     output = value.derivatives.transform_values(&:url)
     output[:original] = value.file.url
