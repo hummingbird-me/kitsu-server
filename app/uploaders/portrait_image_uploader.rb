@@ -1,8 +1,8 @@
 require 'image_processing/vips'
 
 class PortraitImageUploader < Shrine
-  prepend ImageUploader
-  prepend PublicUploader
+  include ImageUploader
+  include PublicUploader
 
   DERIVATIVES = {
     tiny: ->(vips) {
