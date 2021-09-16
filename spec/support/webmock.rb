@@ -7,6 +7,7 @@ WebMock.disable_net_connect!(allow: [
   'lorempixel.com',
   'localhost',
   'elasticsearch:9200',
+  'minio:9000',
   'oembed.com'
 ])
 
