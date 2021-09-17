@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_17_023903) do
+ActiveRecord::Schema.define(version: 2021_09_17_063653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -227,11 +227,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_023903) do
     t.date "published"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "thumbnail_file_name", limit: 255
-    t.string "thumbnail_content_type", limit: 255
-    t.integer "thumbnail_file_size"
-    t.datetime "thumbnail_updated_at"
-    t.text "thumbnail_meta"
     t.boolean "filler"
     t.integer "volume_id"
     t.jsonb "description", default: {}, null: false
@@ -427,17 +422,12 @@ ActiveRecord::Schema.define(version: 2021_09_17_023903) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "season_number"
-    t.string "thumbnail_file_name", limit: 255
-    t.string "thumbnail_content_type", limit: 255
-    t.integer "thumbnail_file_size"
-    t.datetime "thumbnail_updated_at"
     t.date "airdate"
     t.integer "length"
     t.hstore "titles", default: {}, null: false
     t.string "canonical_title"
     t.string "media_type", null: false
     t.integer "relative_number"
-    t.text "thumbnail_meta"
     t.boolean "filler"
     t.jsonb "description", default: {}, null: false
     t.jsonb "thumbnail_data"
@@ -1637,10 +1627,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_023903) do
     t.jsonb "titles", default: {}, null: false
     t.string "canonical_title"
     t.integer "number", null: false
-    t.string "thumbnail_file_name"
-    t.string "thumbnail_content_type"
-    t.integer "thumbnail_file_size"
-    t.datetime "thumbnail_updated_at"
     t.integer "chapters_count", default: 0, null: false
     t.integer "manga_id", null: false
     t.string "isbn", default: [], null: false, array: true
