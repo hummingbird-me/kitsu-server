@@ -1,6 +1,6 @@
 class PersonResource < BaseResource
   attributes :name, :mal_id, :description
-  attribute :image, format: :attachment
+  attribute :image, format: :shrine_attachment, delegate: :image_attacher
 
   has_many :castings
   has_many :staff

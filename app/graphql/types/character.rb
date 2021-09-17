@@ -31,6 +31,7 @@ class Types::Character < Types::BaseObject
 
   field :image, Types::Image,
     null: true,
+    method: :image_attacher,
     description: 'An image of the character'
 
   field :media, Types::MediaCharacter.connection_type,

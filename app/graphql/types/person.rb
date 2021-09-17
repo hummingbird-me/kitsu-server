@@ -37,6 +37,7 @@ class Types::Person < Types::BaseObject
     description: 'The day when this person was born'
 
   field :image, Types::Image,
+    method: :image_attacher,
     null: true,
     description: 'An image of the person'
 

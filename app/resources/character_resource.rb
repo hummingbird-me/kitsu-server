@@ -1,6 +1,6 @@
 class CharacterResource < BaseResource
   attributes :slug, :names, :canonical_name, :other_names, :name, :mal_id, :description
-  attribute :image, format: :attachment
+  attribute :image, format: :shrine_attachment, delegate: :image_attacher
 
   has_one :primary_media, polymorphic: true
   has_many :castings
