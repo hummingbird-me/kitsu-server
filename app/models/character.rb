@@ -29,15 +29,9 @@ class Character < ApplicationRecord
   include Mappable
   include DescriptionSanitation
   include PortraitImageUploader::Attachment(:image)
-  include PaperclipShrineSynchronization
   extend FriendlyId
   friendly_id :slug_candidates, use: %i[slugged finders history]
 
-  has_attached_file :image
-
-  validates_attachment :image, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png]
-  }
   validates :canonical_name, presence: true
   validates :primary_media, polymorphism: { type: Media }, allow_blank: true
 
