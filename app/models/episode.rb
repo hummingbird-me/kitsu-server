@@ -33,19 +33,13 @@ class Episode < ApplicationRecord
   include Mappable
   include DescriptionSanitation
   include UnitThumbnailUploader::Attachment(:thumbnail)
-  include PaperclipShrineSynchronization
 
   belongs_to :media, polymorphic: true
   has_many :videos
 
-  has_attached_file :thumbnail
-
   validates :media, presence: true, polymorphism: { type: Media }
   validates :number, presence: true
   validates :season_number, presence: true
-  validates_attachment :thumbnail, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png]
-  }
 
   scope :for_progress, ->(progress) do
     reorder(:season_number, :number).limit(progress)

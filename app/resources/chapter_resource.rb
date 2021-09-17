@@ -13,7 +13,7 @@ class ChapterResource < BaseResource
 
   attributes :titles, :canonical_title, :volume_number, :number,
     :published, :length
-  attribute :thumbnail, format: :attachment
+  attribute :thumbnail, format: :shrine_attachment, delegate: :thumbnail_attacher
 
   has_one :manga
 

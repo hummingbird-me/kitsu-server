@@ -25,6 +25,7 @@ module Types::Interface::Unit
     description: 'The sequence number of this unit'
 
   field :thumbnail, Types::Image,
+    method: :thumbnail_attacher,
     null: true,
     description: 'A thumbnail image for the unit'
 end

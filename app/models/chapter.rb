@@ -30,18 +30,12 @@ class Chapter < ApplicationRecord
   include Titleable
   include DescriptionSanitation
   include UnitThumbnailUploader::Attachment(:thumbnail)
-  include PaperclipShrineSynchronization
 
-  belongs_to :manga, required: true
+  belongs_to :manga
   belongs_to :volume, counter_cache: true, optional: true
-
-  has_attached_file :thumbnail
 
   validates :number, presence: true
   validates :volume_number, presence: true
-  validates_attachment :thumbnail, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png]
-  }
 
   scope :for_progress, ->(progress) do
     order(:volume_number, :number).limit(progress)

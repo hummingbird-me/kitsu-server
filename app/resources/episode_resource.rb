@@ -13,7 +13,7 @@ class EpisodeResource < BaseResource
 
   attributes :titles, :canonical_title, :season_number, :number, :relative_number,
     :airdate, :length
-  attribute :thumbnail, format: :attachment
+  attribute :thumbnail, format: :shrine_attachment, delegate: :thumbnail_attacher
 
   has_one :media, polymorphic: true
   has_many :videos
