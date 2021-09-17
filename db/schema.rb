@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_16_050650) do
+ActiveRecord::Schema.define(version: 2021_09_17_003018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -254,10 +254,6 @@ ActiveRecord::Schema.define(version: 2021_09_16_050650) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "mal_id"
-    t.string "image_file_name", limit: 255
-    t.string "image_content_type", limit: 255
-    t.integer "image_file_size"
-    t.datetime "image_updated_at"
     t.citext "slug"
     t.integer "primary_media_id"
     t.string "primary_media_type"
@@ -1142,10 +1138,6 @@ ActiveRecord::Schema.define(version: 2021_09_16_050650) do
     t.string "name", limit: 255
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "image_file_name", limit: 255
-    t.string "image_content_type", limit: 255
-    t.integer "image_file_size"
-    t.datetime "image_updated_at"
     t.jsonb "names", default: {}, null: false
     t.string "canonical_name", null: false
     t.string "other_names", default: [], null: false, array: true
