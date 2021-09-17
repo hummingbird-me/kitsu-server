@@ -32,6 +32,8 @@ class Episode < ApplicationRecord
   include Titleable
   include Mappable
   include DescriptionSanitation
+  include UnitThumbnailUploader::Attachment(:thumbnail)
+  include PaperclipShrineSynchronization
 
   belongs_to :media, polymorphic: true
   has_many :videos

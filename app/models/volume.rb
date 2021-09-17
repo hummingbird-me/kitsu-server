@@ -1,8 +1,10 @@
 class Volume < ApplicationRecord
   include Titleable
+  include UnitThumbnailUploader::Attachment(:thumbnail)
+  include PaperclipShrineSynchronization
 
   has_attached_file :thumbnail
-  belongs_to :manga, required: true
+  belongs_to :manga
   has_many :chapters
 
   validates_attachment :thumbnail, content_type: {

@@ -29,6 +29,8 @@
 class Chapter < ApplicationRecord
   include Titleable
   include DescriptionSanitation
+  include UnitThumbnailUploader::Attachment(:thumbnail)
+  include PaperclipShrineSynchronization
 
   belongs_to :manga, required: true
   belongs_to :volume, counter_cache: true, optional: true
