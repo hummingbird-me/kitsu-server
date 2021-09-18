@@ -1,5 +1,6 @@
 class Fixture
-  attr_accessor :name, :filename, :content
+  attr_accessor :name, :content
+
   @@cache = Hash.new { |h, k| h[k] = {} }
 
   def initialize(name, opts = {})
@@ -15,6 +16,10 @@ class Fixture
     open(filename)
   end
 
+  def filename
+    File.realpath(File.join('spec/fixtures/', name), Rails.root)
+  end
+
   private
 
   def compiled
@@ -27,10 +32,6 @@ class Fixture
   def content
     @@cache[:content][name] ||= open(filename).read
     @@cache[:content][name]
-  end
-
-  def filename
-    File.realpath(File.join('spec/fixtures/', name), Rails.root)
   end
 end
 
