@@ -54,6 +54,13 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v1
 
+    - name: Install ImageMagick 7
+      run: |
+        t=$(mktemp)
+        wget 'https://dist.1-2.dev/imei.sh' -qO "$t"
+        bash "$t"
+        rm "$t"
+
     - name: Restore Cached Dependencies
       uses: actions/cache@v2
       with:
