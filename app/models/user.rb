@@ -98,9 +98,6 @@
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
 class User < ApplicationRecord
-  include WithCoverImage
-  include WithAvatar
-  include PaperclipShrineSynchronization
   include AvatarUploader::Attachment(:avatar)
   include CoverImageUploader::Attachment(:cover_image)
 

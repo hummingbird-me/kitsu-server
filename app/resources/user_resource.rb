@@ -9,7 +9,8 @@ class UserResource < BaseResource
     :likes_given_count, :reviews_count, :likes_received_count, :posts_count, :ratings_count,
     :media_reactions_count, :pro_expires_at, :title, :profile_completed, :feed_completed, :website,
     :pro_tier
-  attributes :avatar, :cover_image, format: :attachment
+  attributes :avatar, format: :shrine_attachment, delegate: :avatar_attacher
+  attributes :cover_image, format: :shrine_attachment, delegate: :cover_image_attacher
   attributes(*PRIVATE_FIELDS)
 
   has_one :waifu

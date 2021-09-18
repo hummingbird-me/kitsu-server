@@ -26,12 +26,12 @@ class Types::Profile < Types::BaseObject
       DESCRIPTION
 
   field :avatar_image, Types::Image,
-    method: :avatar,
+    method: :avatar_attacher,
     null: true,
     description: 'An avatar image to easily identify this profile'
 
   field :banner_image, Types::Image,
-    method: :cover_image,
+    method: :cover_image_attacher,
     null: true,
     description: 'A banner to display at the top of the profile'
 
