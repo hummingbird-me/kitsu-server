@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe CannyToken do
   describe '#user_data' do
-    let(:user) { build(:user) }
+    let(:user) { build(:user, :with_avatar) }
     subject { CannyToken.new(user) }
 
     it 'should contain name' do
