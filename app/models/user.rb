@@ -100,6 +100,9 @@
 class User < ApplicationRecord
   include WithCoverImage
   include WithAvatar
+  include PaperclipShrineSynchronization
+  include AvatarUploader::Attachment(:avatar)
+  include CoverImageUploader::Attachment(:cover_image)
 
   PAST_NAMES_LIMIT = 10
   PAST_IPS_LIMIT = 20
