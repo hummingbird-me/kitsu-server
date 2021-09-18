@@ -123,7 +123,7 @@ FactoryBot.define do
     end
 
     trait :with_avatar do
-      avatar { Faker::Company.logo }
+      avatar { URI.open(Faker::Company.logo) }
     end
 
     trait :subscribed_to_one_signal do
