@@ -9,7 +9,7 @@ module Accounts
         id: user.id,
         email: user.email,
         name: user.name,
-        imageUrl: user.avatar.url(:original)
+        imageUrl: user.avatar(:large)&.url
       }
 
       token = JWT.encode(payload, NOLT_SSO_SECRET, 'HS256')

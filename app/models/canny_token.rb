@@ -13,7 +13,7 @@ class CannyToken
 
   def user_data
     {
-      avatarURL: (user.avatar.present? ? user.avatar.url(:large) : nil),
+      avatarURL: user.avatar(:large)&.url,
       name: user.name,
       id: user.id,
       email: user.email
