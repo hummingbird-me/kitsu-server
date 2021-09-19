@@ -2,6 +2,7 @@ class UserMailer < ApplicationMailer
   include Roadie::Rails::Automatic
 
   def confirmation(user)
+    return nil if user.blank?
     @user = user
     @token = token_for(user, :email_confirm, expires_in: 7.days)
     @confirm_link = client_url_for("/confirm-email?token=#{@token.token}")
@@ -9,6 +10,7 @@ class UserMailer < ApplicationMailer
   end
 
   def password_reset(user)
+    return nil if user.blank?
     @user = user
     @token = token_for(user, :email_password_reset, expires_in: 6.hours)
     @reset_link = client_url_for("/password-reset?token=#{@token.token}")
