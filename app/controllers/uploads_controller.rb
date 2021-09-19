@@ -3,7 +3,10 @@ class UploadsController < ApplicationController
   before_action :authenticate_user!, only: :bulk_create
 
   def bulk_create
-    files_to_upload = params[:files].map { |file| { user: user, content: file } }
+    files_to_upload = params[:files].map do |file|
+      stripped_file = ImageProcessing::MiniMagick.source(file).saver(strip: true).call
+      { user: user, content: stripped_file }
+    end
     uploads = Upload.create!(files_to_upload)
     render json: serialize_entries(uploads)
   end
