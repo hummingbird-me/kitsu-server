@@ -7,7 +7,8 @@ class GroupResource < BaseResource
   attributes :about, :locale, :members_count, :name, :nsfw, :privacy, :rules,
     :rules_formatted, :leaders_count, :neighbors_count, :featured, :tagline,
     :last_activity_at
-  attributes :avatar, :cover_image, format: :attachment
+  attributes :avatar, format: :shrine_attachment
+  attributes :cover_image, format: :shrine_attachment
 
   filter :featured, verify: ->(values, _) {
     # If the values seem falsy, treat them as false.  Otherwise probably true.
@@ -23,6 +24,22 @@ class GroupResource < BaseResource
     privacies = values if privacies.empty?
     records.where(privacy: privacies)
   }
+
+  def cover_image
+    _model.cover_image_attacher
+  end
+
+  def cover_image=(value)
+    _model.cover_image_data_uri = value
+  end
+
+  def avatar
+    _model.avatar_attacher
+  end
+
+  def avatar=(value)
+    _model.avatar_data_uri = value
+  end
 
   has_many :members
   has_many :neighbors

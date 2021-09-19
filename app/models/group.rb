@@ -50,9 +50,6 @@
 class Group < ApplicationRecord
   include AvatarUploader::Attachment(:avatar)
   include CoverImageUploader::Attachment(:cover_image)
-  include PaperclipShrineSynchronization
-  include WithAvatar
-  include WithCoverImage
   include ContentProcessable
   include Sluggable
 
@@ -64,8 +61,8 @@ class Group < ApplicationRecord
   update_index('users#group_member') { members }
   update_algolia('AlgoliaGroupsIndex')
 
-  scope :public_visible, ->() { open.or(restricted) }
-  scope :sfw, ->() { where(nsfw: false).where.not(category_id: 9) }
+  scope :public_visible, -> { open.or(restricted) }
+  scope :sfw, -> { where(nsfw: false).where.not(category_id: 9) }
   scope :visible_for, ->(user) {
     # private == false || is a member
     return public_visible unless user
@@ -74,7 +71,7 @@ class Group < ApplicationRecord
   }
 
   has_many :members, class_name: 'GroupMember', dependent: :destroy
-  has_many :owners, ->() { admin }, class_name: 'GroupMember'
+  has_many :owners, -> { admin }, class_name: 'GroupMember'
   has_many :neighbors, class_name: 'GroupNeighbor', dependent: :destroy,
                        foreign_key: 'source_id'
   has_many :tickets, class_name: 'GroupTicket', dependent: :destroy
