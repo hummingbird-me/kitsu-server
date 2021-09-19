@@ -1,7 +1,7 @@
 FROM ruby:2.6-alpine
 MAINTAINER Kitsu, Inc.
 
-RUN apk add --no-cache vips imagemagick git make gcc postgresql-client postgresql-dev build-base tzdata
+RUN apk add --no-cache vips imagemagick git make gcc postgresql-client postgresql-dev build-base tzdata ffmpeg
 # Install bundler
 RUN gem install bundler -v '~> 2.1'
 
