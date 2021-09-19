@@ -34,8 +34,16 @@ class UserResource < BaseResource
     _model.cover_image_attacher
   end
 
+  def cover_image=(value)
+    _model.cover_image_data_uri = value
+  end
+
   def avatar
     _model.avatar_attacher
+  end
+
+  def avatar=(value)
+    _model.avatar_data_uri = value
   end
 
   # DEPRECATED: this method just hides the fact that website has moved
