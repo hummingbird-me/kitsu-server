@@ -13,6 +13,7 @@ class Types::Image < Types::BaseObject
         height: object.height(:original)
       }
     when Shrine::Attacher
+      return nil unless object.file
       {
         name: 'original',
         url: object.file.url,
