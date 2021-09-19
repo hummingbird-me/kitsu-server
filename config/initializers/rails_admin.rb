@@ -8,7 +8,7 @@ RailsAdmin::ApplicationHelper.module_exec do
   def edit_user_link
     link_to "/users/#{_current_user.name}" do
       html = []
-      html << image_tag(_current_user.avatar.to_s(:small), height: 30, width: 30)
+      html << image_tag(_current_user.avatar(:small).url, height: 30, width: 30)
       html << tag.span(_current_user.name)
       safe_join(html)
     end
