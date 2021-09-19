@@ -4,7 +4,7 @@ class AlgoliaGroupsIndex < BaseIndex
   attributes :name, :about, :locale, :tagline, :privacy, :nsfw, :slug
   attribute :last_activity_at, frequency: 2.5
   attribute :members_count, frequency: 10
-  attribute :avatar, format: AttachmentValueFormatter
+  attribute :avatar, format: ShrineAttachmentValueFormatter, method: :avatar_attacher
 
   has_one :category, as: :name
 end
