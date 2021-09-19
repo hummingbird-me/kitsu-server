@@ -24,6 +24,7 @@ RSpec.describe CannyToken do
     context 'for a user with an avatar' do
       let(:user) { create(:user, :with_avatar) }
       it 'should contain an avatarURL key' do
+        user.avatar_derivatives!
         expect(subject.user_data).to include(:avatarURL)
       end
     end
