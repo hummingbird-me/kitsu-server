@@ -48,6 +48,9 @@
 # rubocop:enable Metrics/LineLength
 
 class Group < ApplicationRecord
+  include AvatarUploader::Attachment(:avatar)
+  include CoverImageUploader::Attachment(:cover_image)
+  include PaperclipShrineSynchronization
   include WithAvatar
   include WithCoverImage
   include ContentProcessable

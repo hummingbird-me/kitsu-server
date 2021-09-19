@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_19_020317) do
+ActiveRecord::Schema.define(version: 2021_09_19_033244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -671,6 +671,8 @@ ActiveRecord::Schema.define(version: 2021_09_19_020317) do
     t.integer "pinned_post_id"
     t.text "avatar_meta"
     t.text "cover_image_meta"
+    t.jsonb "avatar_data"
+    t.jsonb "cover_image_data"
     t.index ["category_id"], name: "index_groups_on_category_id"
     t.index ["slug"], name: "index_groups_on_slug", unique: true
   end
