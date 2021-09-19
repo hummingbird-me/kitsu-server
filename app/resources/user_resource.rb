@@ -31,11 +31,11 @@ class UserResource < BaseResource
   has_many :quotes
 
   def cover_image
-    cover_image_attacher
+    _model.cover_image_attacher
   end
 
   def avatar
-    avatar_attacher
+    _model.avatar_attacher
   end
 
   # DEPRECATED: this method just hides the fact that website has moved
