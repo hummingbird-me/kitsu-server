@@ -13,9 +13,6 @@ class UserResource < BaseResource
   attributes :cover_image, format: :shrine_attachment
   attributes(*PRIVATE_FIELDS)
 
-  alias_method :cover_image, :cover_image_attacher
-  alias_method :avatar, :avatar_attacher
-
   has_one :waifu
   has_one :pinned_post
   has_many :followers
@@ -32,6 +29,14 @@ class UserResource < BaseResource
   has_many :one_signal_players
   has_many :category_favorites
   has_many :quotes
+
+  def cover_image
+    cover_image_attacher
+  end
+
+  def avatar
+    avatar_attacher
+  end
 
   # DEPRECATED: this method just hides the fact that website has moved
   def website
