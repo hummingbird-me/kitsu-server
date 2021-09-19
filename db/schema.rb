@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_17_064233) do
+ActiveRecord::Schema.define(version: 2021_09_19_020317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1493,10 +1493,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_064233) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "recommendations_up_to_date"
-    t.string "avatar_file_name", limit: 255
-    t.string "avatar_content_type", limit: 255
-    t.integer "avatar_file_size"
-    t.datetime "avatar_updated_at"
     t.string "facebook_id", limit: 255
     t.string "bio", limit: 140, default: "", null: false
     t.boolean "sfw_filter", default: true
@@ -1504,16 +1500,11 @@ ActiveRecord::Schema.define(version: 2021_09_17_064233) do
     t.integer "life_spent_on_anime", default: 0, null: false
     t.string "about", limit: 500, default: "", null: false
     t.datetime "confirmed_at"
-    t.string "cover_image_file_name", limit: 255
-    t.string "cover_image_content_type", limit: 255
-    t.integer "cover_image_file_size"
-    t.datetime "cover_image_updated_at"
     t.integer "title_language_preference", default: 0
     t.integer "followers_count", default: 0
     t.integer "following_count", default: 0
     t.boolean "ninja_banned", default: false
     t.datetime "last_recommendations_update"
-    t.boolean "avatar_processing"
     t.boolean "subscribed_to_newsletter", default: true
     t.string "location", limit: 255
     t.string "waifu_or_husbando", limit: 255
@@ -1550,15 +1541,12 @@ ActiveRecord::Schema.define(version: 2021_09_17_064233) do
     t.string "title"
     t.boolean "profile_completed", default: false, null: false
     t.boolean "feed_completed", default: false, null: false
-    t.boolean "cover_image_processing"
     t.integer "rating_system", default: 0, null: false
     t.integer "theme", default: 0, null: false
     t.datetime "deleted_at"
     t.integer "media_reactions_count", default: 0, null: false
     t.integer "status", default: 1, null: false
     t.citext "slug"
-    t.text "avatar_meta"
-    t.text "cover_image_meta"
     t.string "ao_id"
     t.string "ao_password"
     t.string "ao_facebook_id"
