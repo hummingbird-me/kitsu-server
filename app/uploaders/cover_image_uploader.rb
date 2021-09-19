@@ -40,7 +40,7 @@ class CoverImageUploader < Shrine
   }.freeze
 
   Attacher.derivatives do |original|
-    info = ImageInfo.new(original)
+    info = ImageInfo.new(original.name)
     if info.animated?
       vips = ImageProcessing::Vips.source(original)
       DERIVATIVES[:vips].transform_values { |proc| proc.call(vips) }
