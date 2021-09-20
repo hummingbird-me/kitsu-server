@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_19_215315) do
+ActiveRecord::Schema.define(version: 2021_09_19_222140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1460,6 +1460,7 @@ ActiveRecord::Schema.define(version: 2021_09_19_215315) do
     t.datetime "updated_at", null: false
     t.integer "upload_order"
     t.text "content_meta"
+    t.jsonb "content_data"
     t.index ["owner_type", "owner_id"], name: "index_uploads_on_owner_type_and_owner_id"
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
