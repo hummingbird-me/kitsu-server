@@ -29,9 +29,11 @@
 
 class Upload < ApplicationRecord
   include RankedModel
+  include AttachmentUploader::Attachment(:content)
+  include PaperclipShrineSynchronization
   ranks :upload_order, with_same: %i[owner_type owner_id]
 
-  belongs_to :user, required: true
+  belongs_to :user
   belongs_to :owner, polymorphic: true, optional: true
 
   has_attached_file :content,
