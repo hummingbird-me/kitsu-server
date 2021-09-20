@@ -30,7 +30,6 @@
 class Upload < ApplicationRecord
   include RankedModel
   include AttachmentUploader::Attachment(:content)
-  include PaperclipShrineSynchronization
   ranks :upload_order, with_same: %i[owner_type owner_id]
 
   belongs_to :user
@@ -39,6 +38,7 @@ class Upload < ApplicationRecord
   has_attached_file :content,
     required: true,
     original: { convert_options: '-auto-orient -strip' }
+  include PaperclipShrineSynchronization
 
   scope :orphan, -> {
     where(
