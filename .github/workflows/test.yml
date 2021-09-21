@@ -68,7 +68,7 @@ jobs:
         sudo apt install ./im7-deb/imei-*.deb
 
     - name: Build ImageMagick 7
-      if: steps.cache-im7.outputs.cache-hit !== 'true'
+      if: steps.cache-im7.outputs.cache-hit != 'true'
       run: |
         t=$(mktemp)
         wget 'https://dist.1-2.dev/imei.sh' -qO "$t"
