@@ -27,11 +27,9 @@
 #
 # rubocop:enable Metrics/LineLength
 
-include ActionDispatch::TestProcess
-
 FactoryBot.define do
   factory :upload do
     user
-    content { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'image.png'), 'image/png') }
+    content { Fixture.new('image.png').to_file }
   end
 end

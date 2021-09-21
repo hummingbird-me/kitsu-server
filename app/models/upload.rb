@@ -34,11 +34,7 @@ class Upload < ApplicationRecord
 
   belongs_to :user
   belongs_to :owner, polymorphic: true, optional: true
-
-  has_attached_file :content,
-    required: true,
-    original: { convert_options: '-auto-orient -strip' }
-  include PaperclipShrineSynchronization
+  validates :upload_order, presence: true, if: :owner_id?
 
   scope :orphan, -> {
     where(
@@ -48,9 +44,4 @@ class Upload < ApplicationRecord
       ['created_at > ?', 11.hours.ago]
     )
   }
-
-  validates :upload_order, presence: true, if: :owner_id?
-  validates_attachment_content_type :content, content_type: [
-    'image/jpg', 'image/jpeg', 'image/png', 'image/gif'
-  ]
 end
