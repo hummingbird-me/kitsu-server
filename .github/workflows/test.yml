@@ -17,6 +17,7 @@ env:
   BUNDLE_GITHUB__HTTPS: true
   LOG_LEVEL: warn
   AWS_DEFAULT_REGION: us-east-1
+  IMAGEMAGICK_VERSION: 7.1.0-8
 
 jobs:
   test:
@@ -59,7 +60,7 @@ jobs:
       id: cache-im7
       with:
         path: im7-deb/
-        key: ${{ runner.os }}-magick
+        key: ${{ runner.os }}-magick-${{ env.IMAGEMAGICK_VERSION }}
 
     - name: Install Cached ImageMagick 7
       if: steps.cache-im7.outputs.cache-hit == 'true'
@@ -67,10 +68,11 @@ jobs:
         sudo apt install ./im7-deb/imei-*.deb
 
     - name: Build ImageMagick 7
+      if: steps.cache-im7.outputs.cache-hit !== 'true'
       run: |
         t=$(mktemp)
         wget 'https://dist.1-2.dev/imei.sh' -qO "$t"
-        sudo bash "$t" --checkinstall --imagemagick-version
+        sudo bash "$t" --checkinstall --imagemagick-version $IMAGEMAGICK_VERSION
         rm "$t"
         mkdir im7-deb
         cp /usr/local/src/imei-* ./im7-deb/
