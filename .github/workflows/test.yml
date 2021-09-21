@@ -54,23 +54,26 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v1
 
-    - uses: actions/cache@v2
+    - name: Restore Cached ImageMagick 7
+      uses: actions/cache@v2
       id: cache-im7
       with:
-        path: /usr/local/src
-        key: ${{ runner.os }}
+        path: im7-deb/
+        key: ${{ runner.os }}-magick
 
-    - name: Install ImageMagick 7
+    - name: Install Cached ImageMagick 7
       if: steps.cache-im7.outputs.cache-hit == 'true'
       run: |
-        sudo dpkg --install /usr/local/src/imei-*
+        sudo dpkg --install ./im7-deb/imei-*
 
     - name: Build ImageMagick 7
       run: |
         t=$(mktemp)
         wget 'https://dist.1-2.dev/imei.sh' -qO "$t"
-        sudo bash "$t" --checkinstall --imagemagick-version 7.1.0-8
+        sudo bash "$t" --checkinstall --imagemagick-version
         rm "$t"
+        mkdir im7-deb
+        cp /usr/local/src/imei-* ./im7-deb/
 
     - name: Restore Cached Dependencies
       uses: actions/cache@v2
