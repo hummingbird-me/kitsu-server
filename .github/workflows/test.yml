@@ -64,7 +64,7 @@ jobs:
     - name: Install Cached ImageMagick 7
       if: steps.cache-im7.outputs.cache-hit == 'true'
       run: |
-        sudo dpkg --install ./im7-deb/imei-*
+        sudo apt install ./im7-deb/imei-*.deb
 
     - name: Build ImageMagick 7
       run: |
