@@ -60,7 +60,7 @@ jobs:
       id: cache-im7
       with:
         path: im7-deb/
-        key: ${{ runner.os }}-magick-rev2-${{ env.IMAGEMAGICK_VERSION }}
+        key: ${{ runner.os }}-magick-rev3-${{ env.IMAGEMAGICK_VERSION }}
 
     - name: Install Cached ImageMagick 7
       if: steps.cache-im7.outputs.cache-hit == 'true'
@@ -71,6 +71,7 @@ jobs:
     - name: Build ImageMagick 7
       if: steps.cache-im7.outputs.cache-hit != 'true'
       run: |
+        sudo apt remove imagemagick -y
         t=$(mktemp)
         wget 'https://dist.1-2.dev/imei.sh' -qO "$t"
         sudo bash "$t" --checkinstall --imagemagick-version $IMAGEMAGICK_VERSION
