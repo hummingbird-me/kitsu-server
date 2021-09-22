@@ -35,17 +35,6 @@ class Category < ApplicationRecord
   resourcify
 
   has_many :category_favorite, dependent: :destroy
-  has_attached_file :image, styles: {
-    tiny: ['110x156#', :jpg],
-    small: ['284x402#', :jpg],
-    medium: ['390x554#', :jpg],
-    large: ['550x780#', :jpg]
-  }, convert_options: {
-    tiny: '-quality 90 -strip',
-    small: '-quality 75 -strip',
-    medium: '-quality 70 -strip',
-    large: '-quality 60 -strip'
-  }
   has_and_belongs_to_many :anime
   has_and_belongs_to_many :manga
   has_and_belongs_to_many :drama
@@ -54,8 +43,5 @@ class Category < ApplicationRecord
   has_many :children, class_name: 'Category',
                       foreign_key: 'parent_id', dependent: :destroy
 
-  validates_attachment :image, content_type: {
-    content_type: %w[image/jpg image/jpeg image/png]
-  }
   validates :title, presence: true
 end

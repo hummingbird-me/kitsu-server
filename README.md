@@ -48,11 +48,8 @@ you, and we have a `.rubocop.yml` which we develop with.
      devise :database_authenticable, :registerable, :recoverable,
             :validatable, :confirmable
 
-     # then field-type macros such as enum or has_attached_file
+     # then field-type macros such as enums and associations
      enum rating_system: %i[smilies stars]
-     has_attached_file :avatar
-
-     # then associations
      has_many :library_entries
 
      # then validation

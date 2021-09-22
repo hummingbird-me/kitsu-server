@@ -15,14 +15,10 @@
 # rubocop:enable Metrics/LineLength
 
 class Streamer < ApplicationRecord
-  has_attached_file :logo
   has_many :streaming_links
   has_many :videos
 
   validates :site_name, presence: true
-  validates_attachment :logo, content_type: {
-    content_type: %w[image/png]
-  }
 
   def self.find_by_name(name)
     Streamer.where('lower(site_name) = ?', name.downcase).first
