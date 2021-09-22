@@ -76,6 +76,7 @@ jobs:
         sudo bash "$t" --checkinstall --imagemagick-version $IMAGEMAGICK_VERSION
         rm "$t"
         mkdir im7-deb
+        ls -l /usr/local/src/
         cp /usr/local/src/*.deb ./im7-deb/
         ls -l ./im7-deb/
 
