@@ -71,7 +71,7 @@ jobs:
     - name: Build ImageMagick 7
       if: steps.cache-im7.outputs.cache-hit != 'true'
       run: |
-        sudo apt remove imagemagick -y
+        sudo apt remove imagemagick imagemagick-* -y
         t=$(mktemp)
         wget 'https://dist.1-2.dev/imei.sh' -qO "$t"
         sudo bash "$t" --checkinstall --imagemagick-version $IMAGEMAGICK_VERSION
