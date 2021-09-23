@@ -1,7 +1,6 @@
 class CategoryResource < BaseResource
   attributes :title, :description, :total_media_count,
     :slug, :nsfw, :child_count
-  attribute :image, format: :attachment
 
   has_one :parent
   has_many :anime
