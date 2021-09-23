@@ -1,5 +1,4 @@
 require 'shrine/storage/s3'
-require 'paperclip_shrine_synchronization'
 
 Shrine.plugin :activerecord
 Shrine.plugin :pretty_location

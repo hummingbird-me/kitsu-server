@@ -60,14 +60,6 @@ module Kitsu
       end
     end
 
-    # Fancy new URLs for images
-    config.paperclip_defaults = {
-      url: '/system/:class/:attachment/:id/:style.:content_type_extension'
-    }
-    config.delayed_paperclip_defaults = {
-      queue: 'soon'
-    }
-
     # Email Server
     config.action_mailer.perform_deliveries = true
     config.action_mailer.raise_delivery_errors = true

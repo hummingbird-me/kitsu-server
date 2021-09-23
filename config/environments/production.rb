@@ -78,20 +78,6 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_credentials: {
-      bucket: 'kitsu-media',
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    },
-    s3_host_alias: 'media.kitsu.io',
-    s3_protocol: :https,
-    s3_region: 'us-east-1',
-    url: ':s3_alias_url',
-    path: '/:class/:attachment/:id/:style.:content_type_extension'
-  }
-
   config.action_mailer.default_url_options = {
     host: 'kitsu.io'
   }
