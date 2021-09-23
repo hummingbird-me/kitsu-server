@@ -18,6 +18,5 @@
 FactoryBot.define do
   factory :streamer do
     site_name { Faker::Company.name }
-    logo { Faker::Company.logo }
   end
 end
