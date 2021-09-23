@@ -96,7 +96,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        sudo apt-get -yqq install libpq-dev libvips libraqm-dev
+        sudo apt-get -yqq install libpq-dev libvips libraqm-dev ffmpeg
         gem install bundler
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
