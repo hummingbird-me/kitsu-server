@@ -17,6 +17,14 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     services:
+      minio:
+        image: fclairamb/minio-github-actions
+        options: --health-cmd "curl -s -o /dev/null -I http://127.0.0.1:9000/minio/index.html" --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 9000/tcp
+        env:
+          MINIO_ACCESS_KEY: miniotest
+          MINIO_SECRET_KEY: miniotest
       postgres:
         image: postgres:10-alpine
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -63,6 +71,10 @@ jobs:
     - name: Dump GraphQL Schema
       run: bin/rails graphql:dump_schema
       env:
+        AWS_ENDPOINT: http://localhost:${{ job.services.minio.ports[9000] }}
+        AWS_BUCKET: kitsu-ugc-test
+        AWS_ACCESS_KEY_ID: miniotest
+        AWS_SECRET_ACCESS_KEY: miniotest
         DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
         REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
 
