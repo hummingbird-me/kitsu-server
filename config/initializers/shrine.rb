@@ -49,11 +49,13 @@ if Rails.env.production?
 else
   store = Shrine::Storage::S3.new(
     endpoint: ENV['AWS_ENDPOINT'],
+    region: 'us-east-1',
     bucket: ENV['AWS_BUCKET'] || 'kitsu-media',
     force_path_style: true
   )
   cache = Shrine::Storage::S3.new(
     endpoint: ENV['AWS_ENDPOINT'],
+    region: 'us-east-1',
     bucket: ENV['AWS_BUCKET'] || 'kitsu-media',
     prefix: 'cache',
     force_path_style: true
