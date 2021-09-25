@@ -45,7 +45,7 @@ if Rails.env.production?
     cache: cache,
     digitalocean: digitalocean
   }
-  Shrine.plugin :mirroring, mirror: :digitalocean
+  Shrine.plugin :mirroring, mirror: { store: :digitalocean }
 else
   store = Shrine::Storage::S3.new(
     endpoint: ENV['AWS_ENDPOINT'],
