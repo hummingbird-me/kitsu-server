@@ -8,28 +8,28 @@ class AvatarUploader < Shrine
   DERIVATIVES = {
     magick: {
       tiny: ->(magick) {
-        magick.resize_to_fill(40, 40).set('dispose', 'background').convert(:gif).call
+        magick.resize_to_fill(40, 40).convert(:gif).call
       },
       tiny_webp: ->(magick) {
-        magick.resize_to_fill(40, 40).set('dispose', 'background').convert(:webp).call
+        magick.resize_to_fill(40, 40).convert(:webp).call
       },
       small: ->(magick) {
-        magick.resize_to_fill(64, 64).set('dispose', 'background').convert(:gif).call
+        magick.resize_to_fill(64, 64).convert(:gif).call
       },
       small_webp: ->(magick) {
-        magick.resize_to_fill(64, 64).set('dispose', 'background').convert(:webp).call
+        magick.resize_to_fill(64, 64).convert(:webp).call
       },
       medium: ->(magick) {
-        magick.resize_to_fill(100, 100).set('dispose', 'background').convert(:gif).call
+        magick.resize_to_fill(100, 100).convert(:gif).call
       },
       medium_webp: ->(magick) {
-        magick.resize_to_fill(100, 100).set('dispose', 'background').convert(:webp).call
+        magick.resize_to_fill(100, 100).convert(:webp).call
       },
       large: ->(magick) {
-        magick.resize_to_fill(200, 200).set('dispose', 'background').convert(:gif).call
+        magick.resize_to_fill(200, 200).convert(:gif).call
       },
       large_webp: ->(magick) {
-        magick.resize_to_fill(200, 200).set('dispose', 'background').convert(:webp).call
+        magick.resize_to_fill(200, 200).convert(:webp).call
       }
     },
     vips: {
@@ -52,6 +52,8 @@ class AvatarUploader < Shrine
     info = ImageInfo.new(original.path)
     if info.animated?
       magick = ImageProcessing::MiniMagick.source(original).loader(loader: info.type)
+                                          .set('background', 'transparent')
+                                          .set('dispose', 'background')
       DERIVATIVES[:magick].transform_values { |proc| proc.call(magick) }
     else
       vips = ImageProcessing::Vips.source(original)
