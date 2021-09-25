@@ -52,8 +52,7 @@ class AvatarUploader < Shrine
     info = ImageInfo.new(original.path)
     if info.animated?
       magick = ImageProcessing::MiniMagick.source(original).loader(loader: info.type)
-                                          .set('background', 'transparent')
-                                          .set('dispose', 'background')
+                                          .background('transparent').dispose('background')
       DERIVATIVES[:magick].transform_values { |proc| proc.call(magick) }
     else
       vips = ImageProcessing::Vips.source(original)
