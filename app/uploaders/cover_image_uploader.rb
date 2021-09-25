@@ -42,11 +42,11 @@ class CoverImageUploader < Shrine
   Attacher.derivatives do |original|
     info = ImageInfo.new(original.path)
     if info.animated?
-      vips = ImageProcessing::Vips.source(original)
-      DERIVATIVES[:vips].transform_values { |proc| proc.call(vips) }
-    else
       magick = ImageProcessing::MiniMagick.source(original).loader(loader: info.type)
       DERIVATIVES[:magick].transform_values { |proc| proc.call(magick) }
+    else
+      vips = ImageProcessing::Vips.source(original)
+      DERIVATIVES[:vips].transform_values { |proc| proc.call(vips) }
     end
   end
 end
