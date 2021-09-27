@@ -6,6 +6,10 @@ module Types::Interface::Streamable
     null: false,
     description: 'The site that is streaming this media.'
 
+  def streamer
+    RecordLoader.for(Streamer).load(object.streamer_id)
+  end
+
   field :regions, [String],
     null: false,
     description: 'Which regions this video is available in.'
