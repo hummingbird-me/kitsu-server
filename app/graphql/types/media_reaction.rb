@@ -26,14 +26,17 @@ class Types::MediaReaction < Types::BaseObject
     null: false,
     description: 'The reaction text related to a media.'
 
-  field :likes, Types::Profile.connection_type,
-    null: false,
-    description: 'Users who liked this reaction.'
+  field :likes, Types::Profile.connection_type, null: false do
+    description 'Users that have liked this reaction'
+    argument :sort, Loaders::MediaReactionVotesLoader.sort_argument, required: false
+  end
 
-  def likes
-    AssociationLoader.for(object.class, :votes, policy: :media_reaction_vote)
-                     .scope(object).then do |likes|
-      RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
+  def likes(sort: [{ on: :created_at, direction: :desc }])
+    Loaders::MediaReactionVotesLoader.connection_for({
+      find_by: :media_reaction_id,
+      sort: sort
+    }, object.id).then do |likes|
+      RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
   end
 end
