@@ -21,11 +21,14 @@ class Types::MediaCharacter < Types::BaseObject
   field :voices, Types::CharacterVoice.connection_type, null: true do
     description 'The voices of this character'
     argument :locale, [String], required: false
+    argument :sort, Loaders::CharacterVoicesLoader.sort_argument, required: false
   end
 
-  def voices(locale: nil)
-    voices = object.voices
-    voices = voices.where(locale: locale) if locale
-    voices
+  def voices(locale: nil, sort: [{ on: :created_at, direction: :asc }])
+    Loaders::CharacterVoicesLoader.connection_for({
+      find_by: :media_character_id,
+      sort: sort,
+      where: { locale: locale }
+    }, object.id)
   end
 end
