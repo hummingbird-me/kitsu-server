@@ -17,7 +17,7 @@ class Loaders::FancyLoader < GraphQL::Batch::Loader
   #
   # @todo There *must* be a better way to handle this
   def self.loader_key_for(*group_args, **group_kwargs)
-    [group_args, Oj.dump(group_kwargs)]
+    [self, group_args, Oj.dump(group_kwargs)]
   end
 
   # Get a FancyConnection wrapping this Loader
