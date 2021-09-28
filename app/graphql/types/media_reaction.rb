@@ -10,6 +10,10 @@ class Types::MediaReaction < Types::BaseObject
     description: 'The author who wrote this reaction.',
     method: :user
 
+  def author
+    RecordLoader.for(User, token: context[:token]).load(object.user_id)
+  end
+
   field :media, Types::Interface::Media,
     null: false,
     description: 'The media related to this reaction.'
