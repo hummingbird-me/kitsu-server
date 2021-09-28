@@ -15,11 +15,11 @@ gem 'hiredis' # Faster redis
 gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
 gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
-gem 'redis-rails' # Redis on Rails
+gem 'redis-rails' , '>= 5.0.2' # Redis on Rails
 
 # Auth{entication,orization}
 gem 'bcrypt'
-gem 'doorkeeper'
+gem 'doorkeeper', '>= 4.4.3'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'jwt' # Used for Nolt SSO
 gem 'pundit'
@@ -27,14 +27,14 @@ gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
 gem 'rolify'
 
 # Attachments
-gem 'apollo_upload_server'
+gem 'apollo_upload_server', '>= 2.0.5'
 gem 'aws-sdk-s3', '~> 1'
 # released version of blurhash has too-narrow ffi version
 gem 'blurhash', github: 'gargron/blurhash'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
 gem 'image_processing'
-gem 'marcel'
+gem 'marcel', '>= 0.3.3'
 gem 'mini_magick'
 gem 'shrine'
 gem 'shrine-blurhash', github: 'renchap/shrine-blurhash'
@@ -45,11 +45,11 @@ gem 'sidekiq-debounce'
 gem 'sidekiq-scheduler'
 
 # Text pipeline
-gem 'html-pipeline'
+gem 'html-pipeline', '>= 2.14.0'
 gem 'kramdown'
 gem 'kramdown-parser-gfm'
 gem 'rinku'
-gem 'sanitize'
+gem 'sanitize', '>= 5.2.3'
 
 # Feature Flagging
 gem 'flipper'
@@ -75,17 +75,17 @@ gem 'graphql-client' # make graphql calls
 gem 'health_bit' # Allow Kubernetes to check the health
 gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules
-gem 'lograge' # Non-shitty logging
-gem 'mechanize' # Automating interaction with websites
-gem 'nokogiri', '~> 1.11.0' # Parse MAL XML shit
+gem 'lograge' , '>= 0.11.2' # Non-shitty logging
+gem 'mechanize' , '>= 2.8.1' # Automating interaction with websites
+gem 'nokogiri', '~> 1.12.5' # Parse MAL XML shit
 gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.4' # Faux deletion
-gem 'postmark-rails' # Send via Postmark
+gem 'postmark-rails' , '>= 0.21.0' # Send via Postmark
 gem 'ranked-model' # Sortables!
 gem 'retriable' # Retry when errors happen
-gem 'roadie-rails' # Inline CSS for emails
+gem 'roadie-rails' , '>= 2.2.0' # Inline CSS for emails
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
-gem 'sass-rails' # Process SCSS for emails
+gem 'sass-rails' , '>= 6.0.0' # Process SCSS for emails
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'strait' # Rate limiting anything!
 gem 'stream-ruby', '~> 2.10.0' # Feeds
@@ -111,11 +111,11 @@ gem 'sentry-raven' # Send error data to Sentry
 # Admin Panel
 gem 'pg_query' # pghero indexes
 gem 'pghero'
-gem 'rails_admin'
+gem 'rails_admin', '>= 2.1.1'
 gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
-  gem 'dotenv-rails' # Load default ENV
+  gem 'dotenv-rails' , '>= 2.7.6' # Load default ENV
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 
@@ -127,8 +127,8 @@ group :development, :test do
 
   # Development+Testing
   gem 'database_cleaner' # Clean the database fully before doing anything
-  gem 'factory_bot_rails' # Factories > Fixtures
-  gem 'rspec-rails' # Specs > Tests
+  gem 'factory_bot_rails' , '>= 6.2.0' # Factories > Fixtures
+  gem 'rspec-rails' , '>= 5.0.1' # Specs > Tests
 
   # Guard notices filesystem changes and *does things*
   gem 'guard'
@@ -159,7 +159,7 @@ group :test do
 end
 
 group :production, :staging do
-  gem 'librato-rails' # Metrics
+  gem 'librato-rails' , '>= 2.1.0' # Metrics
   gem 'puma_worker_killer'
   gem 'rails_12factor' # Log to stdout, serve assets
 end

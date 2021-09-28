@@ -11,11 +11,11 @@ GIT
 
 GIT
   remote: https://github.com/doorkeeper-gem/doorkeeper-grants_assertion
-  revision: 592fcb22e324d596c53aadb6e762e4d66fae9a3e
+  revision: dbfd1f226e91203f20f253bc32e6ee8ab8c56971
   specs:
-    doorkeeper-grants_assertion (0.1.0)
+    doorkeeper-grants_assertion (0.3.1)
       doorkeeper (>= 4.0)
-      railties (>= 3.1)
+      railties (>= 5.0)
 
 GIT
   remote: https://github.com/gargron/blurhash.git
@@ -111,14 +111,14 @@ GEM
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    aggregate (0.2.2)
+    aggregate (0.2.3)
     algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
       json (>= 1.5.1)
     algoliasearch-rails (1.25.0)
       algoliasearch (>= 1.26.0, < 2.0.0)
       json (>= 1.5.1)
-    apollo_upload_server (2.0.5)
+    apollo_upload_server (2.1.0)
       actionpack (>= 4.2)
       graphql (>= 1.8)
     arel (9.0.0)
@@ -162,7 +162,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    css_parser (1.7.1)
+    css_parser (1.10.0)
       addressable
     dante (0.2.0)
     database_cleaner (2.0.1)
@@ -190,8 +190,8 @@ GEM
     docile (1.3.5)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (4.4.3)
-      railties (>= 4.2)
+    doorkeeper (5.5.3)
+      railties (>= 5)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
@@ -228,7 +228,7 @@ GEM
       faraday (>= 0.7.4, < 1.0)
     fast_blank (1.0.0)
     fastimage (2.2.4)
-    ffi (1.15.0)
+    ffi (1.15.4)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -251,8 +251,8 @@ GEM
     gems (1.2.0)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
-    globalid (0.4.2)
-      activesupport (>= 4.2.0)
+    globalid (0.5.2)
+      activesupport (>= 5.0)
     google-api-client (0.53.0)
       google-apis-core (~> 0.1)
       google-apis-generator (~> 0.1)
@@ -282,7 +282,7 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (~> 0.14)
-    graphql (1.12.9)
+    graphql (1.12.16)
     graphql-batch (0.4.3)
       graphql (>= 1.3, < 2)
       promise.rb (~> 0.7.2)
@@ -303,7 +303,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    haml (5.2.1)
+    haml (5.2.2)
       temple (>= 0.8.0)
       tilt
     hashdiff (1.0.1)
@@ -378,9 +378,9 @@ GEM
     librato-metrics (2.1.2)
       aggregate (~> 0.2.2)
       faraday
-    librato-rack (2.0.3)
+    librato-rack (2.0.5)
       hetchy (~> 1.0)
-      librato-metrics (~> 2.1.0)
+      librato-metrics (~> 2.1, >= 2.1.0)
     librato-rails (2.1.0)
       activesupport (>= 3.0)
       librato-rack (~> 2.0.0)
@@ -393,7 +393,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.10.0)
+    loofah (2.12.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.2.5)
@@ -401,8 +401,8 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
-    mechanize (2.8.1)
-      addressable (~> 2.7)
+    mechanize (2.8.2)
+      addressable (~> 2.8)
       domain_name (~> 0.5, >= 0.5.20190701)
       http-cookie (~> 1.0, >= 1.0.3)
       mime-types (~> 3.0)
@@ -417,14 +417,14 @@ GEM
     method_source (1.0.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2021.0225)
+    mime-types-data (3.2021.0901)
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
     mini_histogram (0.3.1)
     mini_magick (4.11.0)
-    mini_mime (1.0.3)
-    mini_portile2 (2.5.3)
+    mini_mime (1.1.1)
+    mini_portile2 (2.6.1)
     minitest (5.14.4)
     mongo (2.14.0)
       bson (>= 4.8.2, < 5.0.0)
@@ -439,12 +439,10 @@ GEM
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
-    nio4r (2.5.7)
-    nokogiri (1.11.7)
-      mini_portile2 (~> 2.5.0)
+    nio4r (2.5.8)
+    nokogiri (1.12.5)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    nokogumbo (2.0.4)
-      nokogiri (~> 1.8, >= 1.8.4)
     notiffany (0.1.3)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -462,7 +460,7 @@ GEM
       google-protobuf (~> 3.15.5)
     pghero (2.8.1)
       activerecord (>= 5)
-    postmark (1.21.3)
+    postmark (1.22.0)
       json
     postmark-rails (0.21.0)
       actionmailer (>= 3.0.0)
@@ -483,7 +481,7 @@ GEM
     puma_worker_killer (0.3.1)
       get_process_mem (~> 0.2)
       puma (>= 2.7)
-    pundit (2.1.0)
+    pundit (2.1.1)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.5.2)
@@ -515,12 +513,12 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.3.0)
+    rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
-    rails_admin (2.1.1)
+    rails_admin (2.2.1)
       activemodel-serializers-xml (>= 1.0)
       builder (~> 3.1)
       haml (>= 4.0, < 6)
@@ -541,7 +539,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
     rainbow (3.0.0)
-    rake (13.0.3)
+    rake (13.0.6)
     ranked-model (0.4.7)
       activerecord (>= 4.2)
     rb-fsevent (0.10.4)
@@ -552,7 +550,7 @@ GEM
       actionpack (>= 5, < 7)
       redis-rack (>= 2.1.0, < 3)
       redis-store (>= 1.1.0, < 2)
-    redis-activesupport (5.2.0)
+    redis-activesupport (5.2.1)
       activesupport (>= 3, < 7)
       redis-store (>= 1.3, < 2)
     redis-rack (2.1.3)
@@ -594,7 +592,7 @@ GEM
     rspec-mocks (3.10.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
-    rspec-rails (5.0.1)
+    rspec-rails (5.0.2)
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       railties (>= 5.2)
@@ -635,10 +633,9 @@ GEM
     rubyntlm (0.6.3)
     rufus-scheduler (3.7.0)
       fugit (~> 1.1, >= 1.1.6)
-    sanitize (5.2.3)
+    sanitize (6.0.0)
       crass (~> 1.0.2)
-      nokogiri (>= 1.8.0)
-      nokogumbo (~> 2.0)
+      nokogiri (>= 1.12.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -724,7 +721,7 @@ GEM
     uber (0.1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.7)
+    unf_ext (0.0.8)
     unicode-display_width (1.7.0)
     webmock (3.12.2)
       addressable (>= 2.3.6)
@@ -732,7 +729,7 @@ GEM
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.7.0)
     webrobots (0.1.2)
-    websocket-driver (0.7.3)
+    websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
 
@@ -744,7 +741,7 @@ DEPENDENCIES
   activerecord-import
   addressable
   algoliasearch-rails
-  apollo_upload_server
+  apollo_upload_server (>= 2.0.5)
   attr_encrypted (~> 3.1.0)
   aws-sdk-s3 (~> 1)
   bcrypt
@@ -756,10 +753,10 @@ DEPENDENCIES
   counter_culture
   database_cleaner
   derailed_benchmarks
-  doorkeeper
+  doorkeeper (>= 4.4.3)
   doorkeeper-grants_assertion!
-  dotenv-rails
-  factory_bot_rails
+  dotenv-rails (>= 2.7.6)
+  factory_bot_rails (>= 6.2.0)
   faker
   faraday
   faraday_middleware
@@ -777,7 +774,7 @@ DEPENDENCIES
   guard-rspec
   health_bit
   hiredis
-  html-pipeline
+  html-pipeline (>= 2.14.0)
   http
   ice_cube
   image_optim
@@ -788,13 +785,13 @@ DEPENDENCIES
   jwt
   kramdown
   kramdown-parser-gfm
-  librato-rails
-  lograge
-  marcel
-  mechanize
+  librato-rails (>= 2.1.0)
+  lograge (>= 0.11.2)
+  marcel (>= 0.3.3)
+  mechanize (>= 2.8.1)
   mini_magick
   mongo
-  nokogiri (~> 1.11.0)
+  nokogiri (~> 1.12.5)
   oauth2!
   oj
   oj_mimic_json
@@ -804,7 +801,7 @@ DEPENDENCIES
   pg
   pg_query
   pghero
-  postmark-rails
+  postmark-rails (>= 0.21.0)
   pry-byebug
   pry-rails
   puma
@@ -815,23 +812,23 @@ DEPENDENCIES
   rack-cors
   rails (= 5.2.4.4)
   rails_12factor
-  rails_admin
+  rails_admin (>= 2.1.1)
   ranked-model
   redis (> 3.3.0)
-  redis-rails
+  redis-rails (>= 5.0.2)
   retriable
   rinku
-  roadie-rails
+  roadie-rails (>= 2.2.0)
   rolify
-  rspec-rails
+  rspec-rails (>= 5.0.1)
   rspec-sidekiq
   rubocop
   rubocop-performance
   rubocop-rails
   rubocop-rspec
   ruby-progressbar
-  sanitize
-  sass-rails
+  sanitize (>= 5.2.3)
+  sass-rails (>= 6.0.0)
   sentry-raven
   shoulda-matchers
   shrine
