@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_21_231835) do
+ActiveRecord::Schema.define(version: 2021_10_01_223509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -192,6 +192,8 @@ ActiveRecord::Schema.define(version: 2021_09_21_231835) do
     t.datetime "updated_at", null: false
     t.integer "child_count", default: 0, null: false
     t.jsonb "description", default: {}, null: false
+    t.string "ancestry", collation: "POSIX"
+    t.index ["ancestry"], name: "index_categories_on_ancestry", opclass: :text_pattern_ops
     t.index ["anidb_id"], name: "index_categories_on_anidb_id"
     t.index ["parent_id"], name: "index_categories_on_parent_id"
     t.index ["slug"], name: "index_categories_on_slug"

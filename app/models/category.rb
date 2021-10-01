@@ -34,6 +34,7 @@ class Category < ApplicationRecord
   friendly_id :title, use: %i[slugged finders history]
   resourcify
 
+  has_ancestry
   has_many :category_favorite, dependent: :destroy
   has_and_belongs_to_many :anime
   has_and_belongs_to_many :manga
