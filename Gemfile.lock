@@ -746,7 +746,7 @@ DEPENDENCIES
   activerecord-import
   addressable
   algoliasearch-rails
-  ancestry
+  ancestry (>= 3.2.1)
   apollo_upload_server
   attr_encrypted (~> 3.1.0)
   aws-sdk-s3 (~> 1)
