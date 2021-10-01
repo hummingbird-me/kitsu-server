@@ -64,6 +64,7 @@ gem 'jsonapi-resources', '0.9.0'
 # Miscellaneous Utilities
 gem 'active_flag' # Bitfields!
 gem 'addressable' # Fancy address logic
+gem 'ancestry' # Ancestry for categories
 gem 'bootsnap' # Faster boots
 gem 'counter_culture' # Fancier counter caches
 gem 'faraday'
