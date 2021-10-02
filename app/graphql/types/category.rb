@@ -30,6 +30,10 @@ class Types::Category < Types::BaseObject
     null: true,
     description: 'The parent category. Each category can have one parent.'
 
+  field :root, Types::Category,
+    null: true,
+    description: 'The top-level ancestor category'
+
   field :children, Types::Category.connection_type,
     null: true,
     description: 'The child categories.'
