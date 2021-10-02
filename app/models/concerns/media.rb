@@ -22,7 +22,9 @@ module Media
 
     # Genre/Categories/Tags
     has_and_belongs_to_many :genres
-    has_and_belongs_to_many :categories,
+    has_many :media_categories, as: 'media', dependent: :destroy, inverse_of: :media
+    has_many :categories,
+      through: :media_categories,
       before_add: :inc_total_media_count,
       before_remove: :dec_total_media_count
     # Quotes
