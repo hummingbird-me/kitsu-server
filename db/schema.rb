@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_02_180702) do
+ActiveRecord::Schema.define(version: 2021_10_02_202720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -91,12 +91,6 @@ ActiveRecord::Schema.define(version: 2021_10_02_180702) do
     t.index ["anime_character_id", "person_id", "locale"], name: "index_anime_castings_on_character_person_locale", unique: true
     t.index ["anime_character_id"], name: "index_anime_castings_on_anime_character_id"
     t.index ["person_id"], name: "index_anime_castings_on_person_id"
-  end
-
-  create_table "anime_categories", id: false, force: :cascade do |t|
-    t.integer "anime_id", null: false
-    t.integer "category_id", null: false
-    t.index ["anime_id"], name: "anime_categories_anime_id_idx"
   end
 
   create_table "anime_characters", id: :serial, force: :cascade do |t|
@@ -202,12 +196,6 @@ ActiveRecord::Schema.define(version: 2021_10_02_180702) do
   create_table "categories_dramas", id: false, force: :cascade do |t|
     t.integer "category_id", null: false
     t.integer "drama_id", null: false
-  end
-
-  create_table "categories_manga", id: false, force: :cascade do |t|
-    t.integer "category_id", null: false
-    t.integer "manga_id", null: false
-    t.index ["manga_id"], name: "categories_manga_manga_id_idx"
   end
 
   create_table "category_favorites", id: :serial, force: :cascade do |t|
