@@ -157,12 +157,19 @@ module Types::Interface::Media
     AssociationLoader.for(object.class, :quotes).scope(object).then(&:to_a)
   end
 
-  field :categories, Types::Category.connection_type,
-    null: false,
-    description: 'A list of categories for this media'
+  field :categories, Types::Category.connection_type, null: false do
+    description 'A list of categories for this media'
+    argument :sort, Loaders::MediaCategoriesLoader.sort_argument, required: false
+  end
 
-  def categories
-    AssociationLoader.for(object.class, :categories).scope(object)
+  def categories(sort: [{ on: :created_at, direction: :asc }])
+    Loaders::MediaCategoriesLoader.connection_for({
+      find_by: :media_id,
+      sort: sort,
+      where: { media_type: object.class.name }
+    }, object.id).then do |categories|
+      RecordLoader.for(Category, token: context[:token]).load_many(categories.map(&:category_id))
+    end
   end
 
   field :mappings, Types::Mapping.connection_type,
