@@ -36,9 +36,10 @@ class Category < ApplicationRecord
 
   has_ancestry
   has_many :category_favorite, dependent: :destroy
-  has_and_belongs_to_many :anime
-  has_and_belongs_to_many :manga
-  has_and_belongs_to_many :drama
+  has_many :media_categories
+  has_many :media, through: :media_categories
+  has_many :anime, through: :media_categories, source: :media, source_type: 'Anime'
+  has_many :manga, through: :media_categories, source: :media, source_type: 'Manga'
   belongs_to :parent, class_name: 'Category', optional: true,
                       touch: true, counter_cache: 'child_count'
   has_many :children, class_name: 'Category',
