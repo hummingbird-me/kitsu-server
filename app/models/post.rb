@@ -53,7 +53,7 @@ class Post < ApplicationRecord
   embed_links_in :content, to: :embed
 
   enum locked_reason: { spam: 0, too_heated: 1, closed: 2 }
-  belongs_to :user, required: true
+  belongs_to :user
   belongs_to :edited_by, class_name: 'User', optional: true
   belongs_to :target_user, class_name: 'User', optional: true
   belongs_to :target_group, class_name: 'Group', optional: true
@@ -66,6 +66,7 @@ class Post < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :uploads, as: 'owner', dependent: :destroy
   has_one :ama, foreign_key: 'original_post_id'
+  has_one :pinner, class_name: 'User', foreign_key: 'pinned_post_id', dependent: :nullify
   has_many :reposts, dependent: :delete_all
 
   scope :sfw, -> { where(nsfw: false) }
