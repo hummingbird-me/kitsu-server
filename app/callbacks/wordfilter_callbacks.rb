@@ -18,11 +18,12 @@ class WordfilterCallbacks < InstancedCallbacks
   def after_save
     return unless wordfilter.report?
 
-    Report.create!(
+    Report.where(
       user: User.system_user,
-      naughty: record,
+      naughty: record
+    ).first_or_create!(
       reason: :other,
-      explanation: 'Caught by wordfilter'
+      explanation: "Caught by wordfilter on #{wordfilter.report_reasons.join(' ')}"
     )
   end
 

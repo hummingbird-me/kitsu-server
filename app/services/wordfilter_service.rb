@@ -16,6 +16,10 @@ class WordfilterService
     wordfilters[:report].present?
   end
 
+  def report_reasons
+    wordfilters[:report].map(&:pattern)
+  end
+
   def censor?
     wordfilters[:censor].present?
   end
