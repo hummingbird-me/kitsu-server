@@ -253,9 +253,9 @@ class BaseIndex
   def save!
     return if Rails.env.development?
 
-    if _new || model.new_record?
+    if _new || _model.new_record?
       index.add_object(as_json)
-    elsif model.destroyed?
+    elsif _model.destroyed?
       index.delete_object(algolia_id)
     elsif dirty?
       index.save_object(as_json)
