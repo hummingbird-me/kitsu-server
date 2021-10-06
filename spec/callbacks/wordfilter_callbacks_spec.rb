@@ -92,7 +92,7 @@ RSpec.describe WordfilterCallbacks do
         allow(callbacks).to receive(:wordfilter).and_return(wordfilter)
 
         callbacks.after_save
-        expect(report_klass).to have_received(:create!)
+        expect(report_klass).to have_received(:first_or_create!)
       end
     end
   end
