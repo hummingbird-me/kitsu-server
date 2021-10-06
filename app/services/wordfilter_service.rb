@@ -17,7 +17,7 @@ class WordfilterService
   end
 
   def report_reasons
-    wordfilters[:report].map(&:pattern)
+    wordfilters[:report]&.map(&:pattern)
   end
 
   def censor?

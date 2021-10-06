@@ -75,7 +75,13 @@ RSpec.describe WordfilterCallbacks do
   describe '#after_save' do
     context 'with a report wordfilter' do
       let(:wordfilter) do
-        OpenStruct.new(censor?: false, report?: true, hide?: false, reject?: false)
+        OpenStruct.new(
+          censor?: false,
+          report?: true,
+          hide?: false,
+          reject?: false,
+          report_reasons: []
+        )
       end
 
       it 'censors the text in the content field' do
