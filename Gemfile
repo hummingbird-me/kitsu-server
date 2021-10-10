@@ -73,7 +73,6 @@ gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'google-api-client' # Google APIs
 gem 'graphql-client' # make graphql calls
-gem 'health_bit' # Allow Kubernetes to check the health
 gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules
 gem 'lograge' # Non-shitty logging
@@ -107,6 +106,9 @@ gem 'oj' # Blazing-fast JSON parsing
 gem 'oj_mimic_json' # Hook it in place of JSON gem
 gem 'parallel' # Process shit in parallel
 
+# Monitoring
+gem 'health_bit' # Allow Kubernetes to check the health
+gem 'prometheus_exporter' # Shit out metrics over Prometheus
 gem 'sentry-raven' # Send error data to Sentry
 
 # Admin Panel
