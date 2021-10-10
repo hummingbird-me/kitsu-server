@@ -18,11 +18,15 @@ class Types::Manga < Types::BaseObject
     null: true,
     description: 'The number of volumes in this manga.'
 
-  field :chapters, Types::Chapter.connection_type,
-    null: true,
-    description: 'The chapters in the manga.'
+  field :chapters, Types::Chapter.connection_type, null: true do
+    description 'The chapters in the manga.'
+    argument :sort, Loaders::CharacterVoicesLoader.sort_argument, required: false
+  end
 
-  def chapters
-    AssociationLoader.for(object.class, :chapters).scope(object)
+  def chapters(sort: [{ on: :number, direction: :asc }])
+    Loaders::ChaptersLoader.connection_for({
+      find_by: :manga_id,
+      sort: sort
+    }, object.id)
   end
 end
