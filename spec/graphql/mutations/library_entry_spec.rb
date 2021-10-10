@@ -10,10 +10,9 @@ RSpec.describe 'mutation libraryEntry' do
 
   it 'create' do
     query = <<~GRAPHQL
-      mutation createLibraryEntry($userId: ID!, $mediaId: ID!) {
+      mutation createLibraryEntry($mediaId: ID!) {
         libraryEntry {
           create(input: {
-            userId: $userId,
             mediaType: ANIME,
             mediaId: $mediaId,
             status: COMPLETED,
@@ -33,7 +32,7 @@ RSpec.describe 'mutation libraryEntry' do
     GRAPHQL
 
     result = KitsuSchema.execute(query,
-      variables: { userId: user.id, mediaId: media.id },
+      variables: { mediaId: media.id },
       context: context,
       operation_name: 'createLibraryEntry').dig('data', 'libraryEntry', 'create')
     expect(result['errors']).to be_nil

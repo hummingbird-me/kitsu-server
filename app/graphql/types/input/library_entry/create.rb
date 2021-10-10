@@ -14,6 +14,6 @@ class Types::Input::LibraryEntry::Create < Types::Input::Base
   argument :finished_at, GraphQL::Types::ISO8601DateTime, required: false
 
   def to_model
-    to_h.merge({ user_id: User.current.id })
+    to_h.merge({ user_id: current_user&.id })
   end
 end
