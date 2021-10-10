@@ -16,14 +16,15 @@ module Types::Interface::Episodic
 
   field :episodes, Types::Episode.connection_type, null: false do
     description 'Episodes for this media'
-    argument :number, [Integer], required: false
+    argument :number, [Integer], required: false, deprecation_reason: 'This should only grab all episodes. Separate field will be provided for specific episodes'
+    argument :sort, Loaders::EpisodesLoader.sort_argument, required: false
   end
 
-  def episodes(number: nil)
-    if number
-      object.episodes.where(number: number)
-    else
-      AssociationLoader.for(Anime, :episodes).scope(object).then(&:to_a)
-    end
+  def episodes(sort: [{ on: :number, direction: :asc }], number: nil)
+    Loaders::EpisodesLoader.connection_for({
+      find_by: :media_id,
+      sort: sort,
+      where: { media_type: type }
+    }, object.id)
   end
 end
