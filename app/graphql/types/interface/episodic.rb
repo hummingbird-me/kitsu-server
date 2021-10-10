@@ -21,10 +21,12 @@ module Types::Interface::Episodic
   end
 
   def episodes(sort: [{ on: :number, direction: :asc }], number: nil)
+    where = { media_type: type, number: number }.compact
+
     Loaders::EpisodesLoader.connection_for({
       find_by: :media_id,
       sort: sort,
-      where: { media_type: type }
+      where: where
     }, object.id)
   end
 end
