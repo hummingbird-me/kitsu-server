@@ -11,6 +11,6 @@ class Types::Input::Base < GraphQL::Schema::InputObject
   end
 
   def current_user
-    User.current
+    User.current.presence || context[:user]
   end
 end
