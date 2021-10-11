@@ -1,5 +1,4 @@
 class Types::Input::LibraryEntry::Create < Types::Input::Base
-  argument :user_id, ID, required: true
   argument :media_id, ID, required: true
   argument :media_type, Types::Enum::MediaType, required: true
   argument :status, Types::Enum::LibraryEntryStatus, required: true
@@ -13,4 +12,8 @@ class Types::Input::LibraryEntry::Create < Types::Input::Base
   argument :rating, Integer, required: false
   argument :started_at, GraphQL::Types::ISO8601DateTime, required: false
   argument :finished_at, GraphQL::Types::ISO8601DateTime, required: false
+
+  def to_model
+    to_h.merge({ user_id: current_user&.id })
+  end
 end

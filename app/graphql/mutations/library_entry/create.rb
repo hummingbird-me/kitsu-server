@@ -11,7 +11,7 @@ class Mutations::LibraryEntry::Create < Mutations::Base
   field :errors, [Types::Interface::Error], null: true
 
   def load_library_entry(value)
-    LibraryEntry.new(value.to_h)
+    LibraryEntry.new(value.to_model)
   end
 
   def authorized?(library_entry:)
