@@ -11,10 +11,21 @@ port        ENV['PORT'] || 3000
 environment ENV['RACK_ENV'] || 'development'
 
 on_worker_boot do
+  require 'prometheus_exporter/instrumentation'
+
   # Worker specific setup for Rails 4.1+
   # See: https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#on-worker-boot
   ActiveRecord::Base.establish_connection
   ActiveRecord::Base.connection.execute("SET statement_timeout = '12s'")
+  PrometheusExporter::Instrumentation::ActiveRecord.start(
+    custom_labels: { type: 'web' },
+    config_labels: %i[database host]
+  )
+end
+
+after_worker_boot do
+  require 'prometheus_exporter/instrumentation'
+  PrometheusExporter::Instrumentation::Puma.start
 end
 
 before_fork do
@@ -26,6 +37,11 @@ before_fork do
     }
   end
   PumaWorkerKiller.enable_rolling_restart(6.hours)
+end
+
+after_fork do
+  require 'prometheus_exporter/instrumentation'
+  PrometheusExporter::Instrumentation::Process.start(type: 'web')
 end
 
 lowlevel_error_handler do |ex, env|
