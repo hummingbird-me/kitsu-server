@@ -18,9 +18,17 @@ class Types::MediaReaction < Types::BaseObject
     null: false,
     description: 'The media related to this reaction.'
 
+  def media
+    RecordLoader.for(object.media_type.constantize, token: context[:token]).load(object.media_id)
+  end
+
   field :library_entry, Types::LibraryEntry,
     null: false,
     description: 'The library entry related to this reaction.'
+
+  def library_entry
+    RecordLoader.for(LibraryEntry, token: context[:token]).load(object.library_entry_id)
+  end
 
   field :progress, Integer,
     null: false,
