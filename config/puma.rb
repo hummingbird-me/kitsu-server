@@ -17,6 +17,7 @@ on_worker_boot do
   # See: https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#on-worker-boot
   ActiveRecord::Base.establish_connection
   ActiveRecord::Base.connection.execute("SET statement_timeout = '12s'")
+  PrometheusExporter::Instrumentation::Process.start(type: 'web')
   PrometheusExporter::Instrumentation::ActiveRecord.start(
     custom_labels: { type: 'web' },
     config_labels: %i[database host]
@@ -37,11 +38,6 @@ before_fork do
     }
   end
   PumaWorkerKiller.enable_rolling_restart(6.hours)
-end
-
-after_fork do
-  require 'prometheus_exporter/instrumentation'
-  PrometheusExporter::Instrumentation::Process.start(type: 'web')
 end
 
 lowlevel_error_handler do |ex, env|
