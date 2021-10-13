@@ -31,8 +31,6 @@ jobs:
       run: curl -sL https://sentry.io/get-cli/ | bash
     - name: Report Release to Sentry
       run: sentry-cli releases new ${{env.version}}
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
 
     - name: Checkout Repository
       uses: actions/checkout@v1
@@ -45,6 +43,8 @@ jobs:
         registry: ghcr.io
         username: Senkosan
         password: ${{ secrets.SENKO_SAN_KEY }}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
     - name: Build Docker Image
       uses: docker/build-push-action@v2
@@ -52,6 +52,7 @@ jobs:
         context: .
         push: true
         tags: ghcr.io/hummingbird-me/kitsu-server:${{env.version}}
+        cache-to: type=gha,mode=max
 
     - name: Finalize Sentry Release
       if: success()
