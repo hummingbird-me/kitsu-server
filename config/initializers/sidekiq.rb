@@ -14,7 +14,7 @@ Sidekiq.configure_server do |config|
     PrometheusExporter::Instrumentation::Process.start(type: 'worker')
     PrometheusExporter::Instrumentation::ActiveRecord.start(
       custom_labels: { type: 'worker' },
-      config_labels: $i[database host]
+      config_labels: %i[database host]
     )
   end
 
