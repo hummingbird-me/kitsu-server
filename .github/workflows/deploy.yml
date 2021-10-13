@@ -108,7 +108,7 @@ jobs:
 
     - name: Update Image Version
       working-directory: ops
-      run: ./kubernetes/apps/kitsu-api/bin/update.sh staging ${{env.version}}
+      run: ./kubernetes/apps/kitsu-api/bin/update.sh staging ${GITHUB_SHA::8}
 
     - name: Push to Github
       working-directory: ops
