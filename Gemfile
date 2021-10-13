@@ -108,6 +108,9 @@ gem 'parallel' # Process shit in parallel
 
 # Monitoring
 gem 'health_bit' # Allow Kubernetes to check the health
+gem 'opentelemetry-sdk'
+gem 'opentelemetry-instrumentation-all'
+gem 'opentelemetry-exporter-otlp'
 gem 'prometheus_exporter' # Shit out metrics over Prometheus
 gem 'sentry-raven' # Send error data to Sentry
 
