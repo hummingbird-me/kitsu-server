@@ -52,6 +52,7 @@ jobs:
         context: .
         push: true
         tags: ghcr.io/hummingbird-me/kitsu-server:${{env.version}}
+        cache-to: type=gha,mode=max
 
     - name: Finalize Sentry Release
       if: success()
