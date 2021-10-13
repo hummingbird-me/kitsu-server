@@ -2,7 +2,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 source 'https://rubygems.org'
 
 # Core Stuff
-gem 'puma'
+gem 'puma', '>= 5.5.1'
 gem 'rails', '5.2.4.4'
 
 # Database Stuff
@@ -170,6 +170,6 @@ end
 
 group :production, :staging do
   gem 'librato-rails' # Metrics
-  gem 'puma_worker_killer'
+  gem 'puma_worker_killer', '>= 0.3.1'
   gem 'rails_12factor' # Log to stdout, serve assets
 end
