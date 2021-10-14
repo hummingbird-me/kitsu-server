@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_02_202720) do
+ActiveRecord::Schema.define(version: 2021_10_14_051130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -873,6 +873,7 @@ ActiveRecord::Schema.define(version: 2021_10_02_202720) do
     t.datetime "updated_at"
     t.string "issue"
     t.index ["external_site", "external_id", "item_type", "item_id"], name: "index_mappings_on_external_and_item", unique: true
+    t.index ["item_type", "item_id"], name: "index_mappings_on_item_type_and_item_id"
   end
 
   create_table "media_attribute_votes", id: :serial, force: :cascade do |t|
