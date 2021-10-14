@@ -114,6 +114,9 @@ gem 'opentelemetry-instrumentation-action_pack'
 gem 'opentelemetry-instrumentation-active_record'
 gem 'opentelemetry-instrumentation-rails'
 gem 'opentelemetry-instrumentation-graphql'
+gem 'opentelemetry-instrumentation-redis'
+gem 'opentelemetry-instrumentation-faraday'
+gem 'opentelemetry-instrumentation-mongo'
 gem 'opentelemetry-sdk'
 gem 'prometheus_exporter' # Shit out metrics over Prometheus
 gem 'sentry-raven' # Send error data to Sentry
