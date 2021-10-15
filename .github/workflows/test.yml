@@ -18,6 +18,9 @@ env:
   LOG_LEVEL: warn
   AWS_DEFAULT_REGION: us-east-1
   IMAGEMAGICK_VERSION: 7.1.0-8
+  SENTRY_ORG: kitsu
+  SENTRY_PROJECT: server
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
 
 jobs:
   test:
@@ -134,9 +137,54 @@ jobs:
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
       continue-on-error: true
 
-    - name: Deploy
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    if: github.event_name == "push"
+
+    steps:
+    - name: Install Sentry CLI
+      run: curl -sL https://sentry.io/get-cli/ | bash
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Checkout Repository
+      uses: actions/checkout@v1
+    - name: Connect to Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: Senkosan
+        password: ${{ secrets.SENKO_SAN_KEY }}
+
+    - name: Set version
+      run: echo "version=${GITHUB_SHA::8}" >> $GITHUB_ENV
+    - name: Report Release to Sentry
+      run: sentry-cli releases new ${{ env.version }}
+    - name: Add Commits to Sentry Release
+      run: sentry-cli releases set-commits --auto ${{ env.version }}
+
+    - name: Build Docker Image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ghcr.io/hummingbird-me/kitsu-server:${{ env.version }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Finalize Sentry Release
+      if: success()
+      run: sentry-cli releases finalize ${{ env.version }}
+
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [test, build]
+    if: success() && github.ref == 'refs/heads/the-future'
+
+    steps:
+    - name: Trigger Deployment
       uses: octokit/request-action@v2.x
-      if: success() && github.ref == 'refs/heads/the-future'
       with:
         route: POST /repos/:repo/deployments
         repo: ${{ github.repository }}
