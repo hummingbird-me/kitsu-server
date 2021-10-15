@@ -22,6 +22,8 @@ module Kitsu
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
+    config.autoloader = :zeitwerk
+
     # Enable assets (used by rails_admin, emails)
     config.assets.enabled = true
     config.assets.prefix = '/api/assets'
