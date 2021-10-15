@@ -16,7 +16,7 @@ module Pro
       raise ActiveRecord::RecordNotFound if blocked?
       raise ProError::InvalidSelfGift if from == to
       raise ProError::RecipientIsPro if to.pro?
-      raise ProError::InvalidTier unless Pro::PRICES.key?(tier)
+      raise ProError::InvalidTier unless tier.in?(%w[pro patron])
     end
 
     private
