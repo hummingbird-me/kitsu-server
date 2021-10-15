@@ -80,7 +80,11 @@ module Kitsu
     end
 
     # Redis caching
-    config.cache_store = :redis_store, ENV['REDIS_URL'], { expires_in: 1.day }
+    config.cache_store = :redis_cache_store, {
+      driver: :hiredis,
+      url: ENV['REDIS_URL'],
+      expires_in: 1.day
+    }
 
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
