@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'html/pipeline/hashtags_filter'
 
 # The following example specs are reproduced from the twitter/tweet-text library, which is licensed
 # under the Apache 2.0 license.  They have been modified to be usable in RSpec and match our
