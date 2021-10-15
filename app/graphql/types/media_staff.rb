@@ -14,7 +14,15 @@ class Types::MediaStaff < Types::BaseObject
     null: false,
     description: 'The person'
 
+  def person
+    RecordLoader.for(Person).load(object.person_id)
+  end
+
   field :media, Types::Interface::Media,
     null: false,
     description: 'The media'
+
+  def media
+    RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
+  end
 end

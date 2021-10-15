@@ -19,14 +19,26 @@ class Types::Report < Types::BaseObject
 
   field :reporter, Types::Profile,
     null: false,
-    description: 'The user who made this report',
-    method: :user
+    description: 'The user who made this report'
+
+  def reporter
+    RecordLoader.for(User, token: context[:token]).load(object.user_id)
+  end
 
   field :moderator, Types::Profile,
     null: true,
     description: 'The moderator who responded to this report'
 
+  def moderator
+    RecordLoader.for(User, token: context[:token]).load(object.moderator_id)
+  end
+
   field :naughty, Types::Union::ReportItem,
     null: false,
     description: 'The entity that the report is related to'
+
+  def naughty
+    naughty_type = object.naughty_type.safe_constantize
+    RecordLoader.for(naughty_type, token: context[:token]).load(object.naughty_id)
+  end
 end

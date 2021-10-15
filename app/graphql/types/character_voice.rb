@@ -13,6 +13,10 @@ class Types::CharacterVoice < Types::BaseObject
     null: false,
     description: 'The person who voice acted this role'
 
+  def person
+    RecordLoader.for(Person).load(object.person_id)
+  end
+
   field :locale, String,
     null: false,
     description: 'The BCP47 locale tag for the voice acting role'
@@ -20,4 +24,8 @@ class Types::CharacterVoice < Types::BaseObject
   field :licensor, Types::Producer,
     null: true,
     description: 'The company who hired this voice actor to play this role'
+
+  def licensor
+    RecordLoader.for(Producer).load(object.licensor_id)
+  end
 end
