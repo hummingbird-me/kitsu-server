@@ -1,6 +1,6 @@
 module ListSync
   class MyAnimeList
-    class XmlGenerator
+    class XMLGenerator
       class Row
         attr_reader :entry, :kind, :media, :external_id
 

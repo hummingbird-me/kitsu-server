@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ListSync::MyAnimeList::XmlGenerator::Row do
+RSpec.describe ListSync::MyAnimeList::XMLGenerator::Row do
   subject { described_class.new(library_entry) }
   let(:library_entry) { build(:library_entry, anime: media, media: media) }
   let(:media) { build(:anime) }

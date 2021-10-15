@@ -1,5 +1,5 @@
 module MediaAttributesImport
-  class Seed
+  class SeedAttributes
     def initialize
       @init_attributes = %w[Pacing Complexity Tone]
       @init_attributes_titles = {

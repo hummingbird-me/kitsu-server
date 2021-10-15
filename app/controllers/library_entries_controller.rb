@@ -53,7 +53,7 @@ class LibraryEntriesController < ApplicationController
     head 400 unless params[:kind].in?(%w[anime manga])
 
     user = User.current
-    xml = ListSync::MyAnimeList::XmlGenerator.new(user, params[:kind].to_sym).to_xml
+    xml = ListSync::MyAnimeList::XMLGenerator.new(user, params[:kind].to_sym).to_xml
 
     send_data xml, filename: "kitsu-#{user.slug}-#{params[:kind]}.xml"
   end

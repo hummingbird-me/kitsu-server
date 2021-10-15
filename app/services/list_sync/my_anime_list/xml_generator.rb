@@ -1,6 +1,6 @@
 module ListSync
   class MyAnimeList
-    class XmlGenerator
+    class XMLGenerator
       attr_reader :user, :kind
 
       def initialize(user, kind)

@@ -39,7 +39,7 @@ module ListSync
     def export!(kind)
       track_session do
         xml = library_xml_for(kind)
-        ListSync::MyAnimeList::XmlUploader.new(agent, xml).run!
+        ListSync::MyAnimeList::XMLUploader.new(agent, xml).run!
       end
     end
 
@@ -67,11 +67,11 @@ module ListSync
     private
 
     def library_xml_for(kind)
-      ListSync::MyAnimeList::XmlGenerator.new(linked_account.user, kind).to_xml
+      ListSync::MyAnimeList::XMLGenerator.new(linked_account.user, kind).to_xml
     end
 
     def their_xml_for(kind)
-      ListSync::MyAnimeList::XmlDownloader.new(agent, kind).file
+      ListSync::MyAnimeList::XMLDownloader.new(agent, kind).file
     end
 
     def username

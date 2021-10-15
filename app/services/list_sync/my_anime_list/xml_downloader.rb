@@ -1,6 +1,6 @@
 module ListSync
   class MyAnimeList
-    class XmlDownloader
+    class XMLDownloader
       def initialize(agent, kind)
         @agent = agent
         @kind = kind
