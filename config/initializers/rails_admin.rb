@@ -4,17 +4,6 @@ require Rails.root.join('lib/rails_admin/config/fields/types/localized_text')
 require Rails.root.join('lib/rails_admin/config/fields/types/string_list')
 require Rails.root.join('lib/rails_admin/config/fields/types/flags')
 
-RailsAdmin::ApplicationHelper.module_exec do
-  def edit_user_link
-    link_to "/users/#{_current_user.name}" do
-      html = []
-      html << image_tag(_current_user.avatar(:small).url, height: 30, width: 30)
-      html << tag.span(_current_user.name)
-      safe_join(html)
-    end
-  end
-end
-
 RailsAdmin.config do |config|
   config.parent_controller = '::AdminController'
   config.current_user_method(&:current_user)
