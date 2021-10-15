@@ -20,13 +20,16 @@ Bundler.require(*Rails.groups)
 module Kitsu
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.0
+    config.load_defaults 5.2
 
     # Enable assets (used by rails_admin, emails)
     config.assets.enabled = true
     config.assets.prefix = '/api/assets'
     config.assets.digest = true
     config.assets.export_concurrent = false
+
+    # CSRF protection breaks some of our routes, make it opt-in
+    config.action_controller.default_protect_from_forgery = false
 
     # UTC all the way
     config.time_zone = 'UTC'
