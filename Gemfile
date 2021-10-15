@@ -15,7 +15,6 @@ gem 'hiredis' # Faster redis
 gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
 gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
-gem 'redis-rails' # Redis on Rails
 
 # Auth{entication,orization}
 gem 'bcrypt'
