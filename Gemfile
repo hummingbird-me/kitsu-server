@@ -74,7 +74,6 @@ gem 'google-api-client' # Google APIs
 gem 'graphql-client' # make graphql calls
 gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules
-gem 'lograge' # Non-shitty logging
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.11.0' # Parse MAL XML shit
 gem 'one_signal' # Send push notifications
