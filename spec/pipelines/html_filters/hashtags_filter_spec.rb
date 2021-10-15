@@ -11,7 +11,7 @@ require 'html/pipeline/hashtags_filter'
 # rubocop:disable Metrics/LineLength
 # rubocop:disable Style/AsciiComments
 
-RSpec.describe HTML::Pipeline::HashtagsFilter do
+RSpec.describe HTMLFilters::HashtagsFilter do
   def twitter_example(text:, expected:, hashtags: [])
     expected = Nokogiri::HTML.fragment(expected).to_s
     filter = described_class.new(text)

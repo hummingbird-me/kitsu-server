@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'rails_helper'
 
-RSpec.describe HTML::Pipeline::KitsuMentionFilter do
+RSpec.describe HTMLFilters::KitsuMentionFilter do
   def call(text)
     described_class.new(text).call.to_s
   end
