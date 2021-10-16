@@ -166,7 +166,7 @@ group :test do
   gem 'simplecov' # Local coverage
 
   # Libraries used to test our API itself
-  gem 'oauth2', github: 'oauth-xx/oauth2', branch: 'master'
+  gem 'oauth2'
 end
 
 group :production, :staging do
