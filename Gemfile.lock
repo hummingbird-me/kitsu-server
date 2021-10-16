@@ -399,6 +399,9 @@ GEM
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
+    marginalia (1.11.1)
+      actionpack (>= 5.2)
+      activerecord (>= 5.2)
     mechanize (2.8.1)
       addressable (~> 2.7)
       domain_name (~> 0.5, >= 0.5.20190701)
@@ -824,6 +827,7 @@ DEPENDENCIES
   kramdown-parser-gfm
   librato-rails
   marcel
+  marginalia
   mechanize
   mini_magick
   mongo
