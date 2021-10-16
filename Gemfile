@@ -172,5 +172,4 @@ end
 group :production, :staging do
   gem 'librato-rails' # Metrics
   gem 'puma_worker_killer'
-  gem 'rails_12factor' # Log to stdout, serve assets
 end
