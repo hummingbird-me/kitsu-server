@@ -15,6 +15,8 @@ RUN bundle install --jobs=4 --retry=2 --without="development test"
 
 # *NOW* we copy the codebase in
 COPY . .
+# Precompile bootsnap cache
+RUN bundle exec bootsnap precompile --gemfile app/ lib/
 
 ENTRYPOINT ["bundle", "exec"]
 CMD ["puma", "--port=80"]
