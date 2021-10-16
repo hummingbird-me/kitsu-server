@@ -332,7 +332,7 @@ class User < ApplicationRecord
 
   def add_ip(new_ip)
     ip_addresses.where(ip_address: new_ip).first_or_create
-  rescue ActiveRecord::RecordNotUnique # This can happen if two requests run at the same time
+  rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
     ip_addresses.where(ip_address: new_ip).first
   end
 
