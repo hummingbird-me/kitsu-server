@@ -30,7 +30,7 @@ jobs:
     steps:
       - id: check
         run: |
-          echo "::set-output name=SECRETS_AVAILABLE::${{ env.SECRETS_AVAILABLE }}"
+          echo "::set-output name=SECRETS_AVAILABLE::${{ env.SECRETS_AVAILABLE == 'yes' }}"
         env:
           SECRETS_AVAILABLE: ${{ secrets.AVAILABLE }}
 
@@ -152,7 +152,7 @@ jobs:
     needs: [check_secrets]
     name: Build Docker Image
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && needs.check_secrets.outputs.SECRETS_AVAILABLE == 'yes'
+    if: github.event_name == 'push' && needs.check_secrets.outputs.SECRETS_AVAILABLE == 'true'
 
     steps:
     - name: Install Sentry CLI
