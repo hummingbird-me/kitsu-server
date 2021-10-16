@@ -106,7 +106,7 @@ gem 'parallel' # Process shit in parallel
 
 # Monitoring
 gem 'health_bit' # Allow Kubernetes to check the health
-gem 'marginalia' # Scribble in the margins of our queries
+gem 'marginalia' , '>= 1.11.1' # Scribble in the margins of our queries
 gem 'opentelemetry-exporter-otlp'
 gem 'opentelemetry-instrumentation-rack'
 gem 'opentelemetry-instrumentation-action_pack'

@@ -827,7 +827,7 @@ DEPENDENCIES
   kramdown-parser-gfm
   librato-rails
   marcel
-  marginalia
+  marginalia (>= 1.11.1)
   mechanize
   mini_magick
   mongo
