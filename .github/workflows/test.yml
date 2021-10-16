@@ -21,6 +21,7 @@ env:
   SENTRY_ORG: kitsu
   SENTRY_PROJECT: server
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
+  SECRETS_AVAILABLE: ${{ secrets.AVAILABLE }}
 
 jobs:
   test:
@@ -140,7 +141,7 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && env.SECRETS_AVAILABLE != null
 
     steps:
     - name: Install Sentry CLI
