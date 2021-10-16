@@ -20,9 +20,7 @@ Bundler.require(*Rails.groups)
 module Kitsu
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
-
-    config.autoloader = :zeitwerk
+    config.load_defaults 6.0
 
     # Enable assets (used by rails_admin, emails)
     config.assets.enabled = true
