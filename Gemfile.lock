@@ -122,7 +122,7 @@ GEM
       json (>= 1.5.1)
     ancestry (3.2.1)
       activerecord (>= 4.2.0)
-    apollo_upload_server (2.0.5)
+    apollo_upload_server (2.1.0)
       actionpack (>= 4.2)
       graphql (>= 1.8)
     ast (2.4.2)
