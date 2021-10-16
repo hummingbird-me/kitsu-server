@@ -21,9 +21,19 @@ env:
   SENTRY_ORG: kitsu
   SENTRY_PROJECT: server
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
-  SECRETS_AVAILABLE: ${{ secrets.AVAILABLE }}
 
 jobs:
+  check_secrets:
+    runs-on: ubuntu-latest
+    outputs:
+      SECRETS_AVAILABLE: ${{ steps.check.outputs.SECRETS_AVAILABLE }}
+    steps:
+      - id: check
+        run: |
+          echo "::set-output name=SECRETS_AVAILABLE::${{ env.SECRETS_AVAILABLE }}"
+        env:
+          SECRETS_AVAILABLE: ${{ secrets.AVAILABLE }}
+
   test:
     name: RSpec Test Suite
     runs-on: ubuntu-latest
@@ -139,9 +149,10 @@ jobs:
       continue-on-error: true
 
   build:
+    needs: [check_secrets]
     name: Build Docker Image
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && env.SECRETS_AVAILABLE != null
+    if: github.event_name == 'push' && needs.check_secrets.outputs.SECRETS_AVAILABLE == 'yes'
 
     steps:
     - name: Install Sentry CLI
