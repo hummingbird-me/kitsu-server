@@ -123,7 +123,7 @@ gem 'sentry-raven' # Send error data to Sentry
 # Admin Panel
 gem 'pg_query' # pghero indexes
 gem 'pghero'
-gem 'rails_admin'
+gem 'rails_admin', '>= 2.1.1'
 gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
