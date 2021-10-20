@@ -3,6 +3,8 @@ require 'authorization/password'
 
 Doorkeeper.configure do
   orm :active_record
+  # HACK: this idiocy is O(n) so try to avoid choking the database
+  token_lookup_batch_size 500
 
   # => Authentication
   # Check whether the resource owner is authenticated or not.
