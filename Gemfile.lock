@@ -454,7 +454,7 @@ GEM
       rack (>= 1.2, < 3)
     oj (3.12.2)
     oj_mimic_json (1.0.1)
-    one_signal (1.2.0)
+    one_signal (1.2.2)
     opentelemetry-api (1.0.0)
     opentelemetry-common (0.19.2)
       opentelemetry-api (~> 1.0)
