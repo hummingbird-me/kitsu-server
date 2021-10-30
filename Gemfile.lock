@@ -81,7 +81,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_flag (1.5.0)
+    active_flag (1.5.1)
       activerecord (>= 5)
     activejob (6.0.4.1)
       activesupport (= 6.0.4.1)
