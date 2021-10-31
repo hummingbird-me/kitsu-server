@@ -2,7 +2,7 @@ require 'marginalia'
 
 module Marginalia::Comment
   def self.request_path
-    @controller.request.fullpath
+    marginalia_controller.request.fullpath
   rescue StandardError
     nil
   end
