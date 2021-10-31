@@ -1,13 +1,13 @@
-class Loaders::FollowsLoader < Loaders::FancyLoader
+class Loaders::FollowsLoader < GraphQL::FancyLoader
   from Follow
   # Sort by whether you follow the followed person
   sort :following_followed,
-    transform: ->(ast) {
+    transform: ->(ast, context) {
       their_follows = Follow.arel_table
       your_follows = Follow.arel_table.alias('yours')
 
       condition = your_follows[:followed_id].eq(their_follows[:followed_id]).and(
-        your_follows[:follower_id].eq(User.current&.id)
+        your_follows[:follower_id].eq(context[:token]&.id)
       )
 
       ast.join(your_follows, Arel::Nodes::OuterJoin).on(condition)
@@ -20,7 +20,7 @@ class Loaders::FollowsLoader < Loaders::FancyLoader
       your_follows = Follow.arel_table.alias('yours')
 
       condition = your_follows[:followed_id].eq(their_follows[:follower_id]).and(
-        your_follows[:follower_id].eq(User.current&.id)
+        your_follows[:follower_id].eq(context[:token]&.id)
       )
 
       ast.join(your_follows, Arel::Nodes::OuterJoin).on(condition)

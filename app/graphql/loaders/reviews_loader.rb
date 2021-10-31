@@ -1,4 +1,4 @@
-class Loaders::ReviewsLoader < Loaders::FancyLoader
+class Loaders::ReviewsLoader < GraphQL::FancyLoader
   from Review
 
   sort :created_at

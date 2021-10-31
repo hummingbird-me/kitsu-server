@@ -1,4 +1,4 @@
-class Loaders::LibraryEventsLoader < Loaders::FancyLoader
+class Loaders::LibraryEventsLoader < GraphQL::FancyLoader
   from LibraryEvent
 
   sort :created_at

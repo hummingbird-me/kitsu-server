@@ -1,4 +1,4 @@
-class Loaders::ReportsLoader < Loaders::FancyLoader
+class Loaders::ReportsLoader < GraphQL::FancyLoader
   from Report
 
   sort :created_at

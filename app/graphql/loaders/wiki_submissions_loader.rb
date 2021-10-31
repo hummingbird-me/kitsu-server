@@ -1,4 +1,4 @@
-class Loaders::WikiSubmissionsLoader < Loaders::FancyLoader
+class Loaders::WikiSubmissionsLoader < GraphQL::FancyLoader
   from WikiSubmission
 
   sort :created_at

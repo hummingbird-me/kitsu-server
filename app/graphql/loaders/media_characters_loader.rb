@@ -1,4 +1,4 @@
-class Loaders::MediaCharactersLoader < Loaders::FancyLoader
+class Loaders::MediaCharactersLoader < GraphQL::FancyLoader
   from MediaCharacter
 
   sort :created_at

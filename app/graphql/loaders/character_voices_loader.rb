@@ -1,4 +1,4 @@
-class Loaders::CharacterVoicesLoader < Loaders::FancyLoader
+class Loaders::CharacterVoicesLoader < GraphQL::FancyLoader
   from CharacterVoice
 
   sort :created_at

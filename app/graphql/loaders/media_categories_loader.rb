@@ -1,8 +1,8 @@
-class Loaders::MediaCategoriesLoader < Loaders::FancyLoader
+class Loaders::MediaCategoriesLoader < GraphQL::FancyLoader
   from MediaCategory
 
   sort :ancestry,
-    transform: ->(ast) {
+    transform: ->(ast, _context) {
       ac = MediaCategory.arel_table
       c = Category.arel_table
 
