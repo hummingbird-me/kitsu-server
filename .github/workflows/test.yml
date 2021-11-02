@@ -110,26 +110,16 @@ jobs:
         cp /usr/local/src/*.deb ./im7-deb/
         ls -l ./im7-deb/
 
-    - name: Restore Cached Dependencies
-      uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-v1-gem-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-v1-gem-
-
-    - name: Set up Ruby 2.6
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: 2.6.x
-
     - name: Install Dependencies
       run: |
         sudo apt-get update
         sudo apt-get -yqq install libpq-dev libvips libraqm-dev ffmpeg
-        gem install bundler
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
+
+    - name: Set up Ruby (${{ matrix.ruby }})
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
 
     - name: Set up Test Environment
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
