@@ -37,6 +37,21 @@ jobs:
   test:
     name: RSpec Test Suite
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        experimental: [false]
+        ruby:
+          - ruby-2.6
+          - ruby-2.7
+          - ruby-3.0
+          - truffleruby-20
+        include:
+          - ruby: truffleruby-20
+            experimental: true
+          - ruby: ruby-3.0
+            experimental: true
 
     services:
       minio:
