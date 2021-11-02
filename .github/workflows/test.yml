@@ -114,7 +114,7 @@ jobs:
         sudo apt-get -yqq install libpq-dev libvips libraqm-dev ffmpeg
 
     - name: Set up Ruby (${{ matrix.ruby }})
-      uses: actions/setup-ruby@v1
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
