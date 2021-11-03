@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/gargron/blurhash.git
-  revision: cb529b4c65ad07d5663d8431a8f7746b3641c7ed
+  revision: c93c04db039ce03109ec486dbd55211b6b7f3178
   specs:
     blurhash (0.1.5)
       ffi (~> 1.14)
