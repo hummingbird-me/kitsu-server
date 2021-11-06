@@ -17,7 +17,7 @@ env:
   BUNDLE_GITHUB__HTTPS: true
   LOG_LEVEL: warn
   AWS_DEFAULT_REGION: us-east-1
-  IMAGEMAGICK_VERSION: 7.1.0-8
+  IMAGEMAGICK_VERSION: 7.1.0-13
   SENTRY_ORG: kitsu
   SENTRY_PROJECT: server
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
@@ -37,6 +37,19 @@ jobs:
   test:
     name: RSpec Test Suite
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - ruby-2.6
+          - ruby-2.7
+        experimental: [false]
+        include:
+          - ruby: truffleruby-20
+            experimental: true
+          - ruby: ruby-3.0
+            experimental: true
 
     services:
       minio:
@@ -95,26 +108,16 @@ jobs:
         cp /usr/local/src/*.deb ./im7-deb/
         ls -l ./im7-deb/
 
-    - name: Restore Cached Dependencies
-      uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-v1-gem-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-v1-gem-
-
-    - name: Set up Ruby 2.6
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: 2.6.x
-
     - name: Install Dependencies
       run: |
         sudo apt-get update
         sudo apt-get -yqq install libpq-dev libvips libraqm-dev ffmpeg
-        gem install bundler
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
+
+    - name: Set up Ruby (${{ matrix.ruby }})
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
 
     - name: Set up Test Environment
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"

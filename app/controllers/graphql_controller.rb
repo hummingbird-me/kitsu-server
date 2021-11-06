@@ -4,6 +4,8 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = { token: current_user, user: current_user&.resource_owner }
+    rack_span = OpenTelemetry::Instrumentation::Rack.current_span
+    rack_span.name = "graphql##{operation_name}" if operation_name.present?
     result = KitsuSchema.execute(query,
       variables: variables,
       context: context,

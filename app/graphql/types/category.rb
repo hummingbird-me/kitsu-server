@@ -30,9 +30,17 @@ class Types::Category < Types::BaseObject
     null: true,
     description: 'The parent category. Each category can have one parent.'
 
+  def parent
+    RecordLoader.for(Category, token: context[:token]).load(object.parent_id)
+  end
+
   field :root, Types::Category,
     null: true,
     description: 'The top-level ancestor category'
+
+  def root
+    RecordLoader.for(Category, token: context[:token]).load(object.root_id)
+  end
 
   field :children, Types::Category.connection_type,
     null: true,
