@@ -7,7 +7,7 @@ class Loaders::FollowsLoader < GraphQL::FancyLoader
       your_follows = Follow.arel_table.alias('yours')
 
       condition = your_follows[:followed_id].eq(their_follows[:followed_id]).and(
-        your_follows[:follower_id].eq(context[:token]&.id)
+        your_follows[:follower_id].eq(context[:user]&.id)
       )
 
       ast.join(your_follows, Arel::Nodes::OuterJoin).on(condition)
@@ -20,7 +20,7 @@ class Loaders::FollowsLoader < GraphQL::FancyLoader
       your_follows = Follow.arel_table.alias('yours')
 
       condition = your_follows[:followed_id].eq(their_follows[:follower_id]).and(
-        your_follows[:follower_id].eq(context[:token]&.id)
+        your_follows[:follower_id].eq(context[:user]&.id)
       )
 
       ast.join(your_follows, Arel::Nodes::OuterJoin).on(condition)

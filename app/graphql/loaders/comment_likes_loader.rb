@@ -6,7 +6,7 @@ class Loaders::CommentLikesLoader < GraphQL::FancyLoader
       likes = CommentLike.arel_table
 
       condition = follows[:followed_id].eq(likes[:user_id]).and(
-        follows[:follower_id].eq(context[:token]&.id)
+        follows[:follower_id].eq(context[:user]&.id)
       )
 
       ast.join(follows, Arel::Nodes::OuterJoin).on(condition)
