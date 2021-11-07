@@ -1,4 +1,4 @@
-class Loaders::MediaReactionsLoader < Loaders::FancyLoader
+class Loaders::MediaReactionsLoader < GraphQL::FancyLoader
   from MediaReaction
 
   sort :created_at

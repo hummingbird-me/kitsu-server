@@ -58,6 +58,7 @@ gem 'flipper-ui'
 # API Frameworks
 gem 'graphql'
 gem 'graphql-batch'
+gem 'graphql-fancy_loader'
 gem 'jsonapi-resources', '0.9.0'
 
 # Miscellaneous Utilities
@@ -86,9 +87,9 @@ gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sass-rails' # Process SCSS for emails
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'strait' # Rate limiting anything!
-gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'stream_rails', github: 'GetStream/stream-rails',
                     branch: 'feature/subreference-enrichment' # Feed Enrichment
+gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'typhoeus' # Parallelize scraping tasks
 
 # Cash Money
@@ -108,21 +109,21 @@ gem 'parallel' # Process shit in parallel
 gem 'health_bit' # Allow Kubernetes to check the health
 gem 'marginalia' # Scribble in the margins of our queries
 gem 'opentelemetry-exporter-otlp'
-gem 'opentelemetry-instrumentation-rack'
 gem 'opentelemetry-instrumentation-action_pack'
 gem 'opentelemetry-instrumentation-active_record'
-gem 'opentelemetry-instrumentation-rails'
-gem 'opentelemetry-instrumentation-graphql'
-gem 'opentelemetry-instrumentation-redis'
 gem 'opentelemetry-instrumentation-faraday'
+gem 'opentelemetry-instrumentation-graphql'
 gem 'opentelemetry-instrumentation-mongo'
+gem 'opentelemetry-instrumentation-rack'
+gem 'opentelemetry-instrumentation-rails'
+gem 'opentelemetry-instrumentation-redis'
 gem 'opentelemetry-sdk'
 gem 'prometheus_exporter' # Shit out metrics over Prometheus
 gem 'sentry-raven' # Send error data to Sentry
 
 # Admin Panel
-gem 'pg_query' # pghero indexes
 gem 'pghero'
+gem 'pg_query' # pghero indexes
 gem 'rails_admin'
 gem 'sinatra' # used by sidekiq/web
 

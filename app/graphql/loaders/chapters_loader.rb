@@ -1,4 +1,4 @@
-class Loaders::ChaptersLoader < Loaders::FancyLoader
+class Loaders::ChaptersLoader < GraphQL::FancyLoader
   from Chapter
 
   sort :created_at

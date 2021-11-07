@@ -1,4 +1,4 @@
-class Loaders::EpisodesLoader < Loaders::FancyLoader
+class Loaders::EpisodesLoader < GraphQL::FancyLoader
   from Episode
 
   sort :created_at
