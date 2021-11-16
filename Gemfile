@@ -75,6 +75,8 @@ gem 'google-api-client' # Google APIs
 gem 'graphql-client' # make graphql calls
 gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules
+gem 'iso-639' # Language codes
+gem 'iso_country_codes' # Country codes
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.11.0' # Parse MAL XML shit
 gem 'one_signal' # Send push notifications
