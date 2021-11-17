@@ -86,6 +86,9 @@ module Media
     end
     scope :tba, -> { where('start_date IS ? AND end_date IS ?', nil, nil) }
 
+    validates :origin_countries, country_code: true
+    validates :origin_languages, language_code: true
+
     after_commit :setup_feed, on: :create
   end
 
