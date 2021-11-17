@@ -10,10 +10,9 @@ class Wordfilter < ApplicationRecord
   validates :pattern, presence: true
 
   scope :matching, ->(text) {
-    # Match regexes with ~* and create an exact match via ILIKE
-    where("? ~* ('.*' || pattern || '.*')", text).where(regex_enabled: true).or(
-      where("? ILIKE ('%' || pattern || '%')", text).where(regex_enabled: false)
-    )
+    # Match regexes with ~* (replacing \b with \y) and create an exact match via ILIKE
+    where("? ~* ('.*' || replace(pattern, '\\b', '\\y') || '.*')", text).where(regex_enabled: true)
+      .or(where("? ILIKE ('%' || pattern || '%')", text).where(regex_enabled: false))
   }
 
   def self.action_for(location, text)

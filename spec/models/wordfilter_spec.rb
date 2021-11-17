@@ -28,6 +28,13 @@ RSpec.describe Wordfilter do
 
         expect(described_class.matching('fee+t')).to be_empty
       end
+
+      it 'matches word boundaries' do
+        filter = create(:wordfilter, pattern: '\btest\b', regex_enabled: true)
+
+        expect(described_class.matching('this is a test').first).to eq(filter)
+        expect(described_class.matching('thisisatestofthings')).to be_empty
+      end
     end
 
     context 'when regex_enabled = false' do
