@@ -18,7 +18,7 @@ RSpec.describe LanguageCodeValidator do
     end
 
     context 'on a valid record' do
-      let(:record) { record_class.new('us') }
+      let(:record) { record_class.new('en') }
       it 'should have no errors' do
         subject.validate(record)
         expect(record.errors).to be_empty
@@ -31,22 +31,22 @@ RSpec.describe LanguageCodeValidator do
       let(:record) { record_class.new(['**', '__', '&&']) }
       it 'should add an error for each invalid item' do
         subject.validate(record)
-        expect(record.errors).to include(:country)
+        expect(record.errors).to include(:language)
         expect(record.errors.count).to eq(3)
       end
     end
 
     context 'on a partially invalid list' do
-      let(:record) { record_class.new(['us', '&&', 'fr', '__', 'ru']) }
+      let(:record) { record_class.new(['en', '&&', 'fr', '__', 'ru']) }
       it 'should add an error for each invalid item' do
         subject.validate(record)
-        expect(record.errors).to include(:country)
+        expect(record.errors).to include(:language)
         expect(record.errors.count).to eq(2)
       end
     end
 
     context 'on a fully valid list' do
-      let(:record) { record_class.new(['us', 'fr', 'ru']) }
+      let(:record) { record_class.new(['en', 'fr', 'es']) }
       it 'should have no errors' do
         subject.validate(record)
         expect(record.errors).to be_empty

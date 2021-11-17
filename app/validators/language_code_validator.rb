@@ -5,7 +5,7 @@ class LanguageCodeValidator < ActiveModel::EachValidator
         record.errors[attr] << validate_value(v)
       end
     else
-      record.errors[attr] < validate_value(value)
+      record.errors[attr] << validate_value(value)
     end
 
     record.errors[attr].compact!
