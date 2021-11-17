@@ -92,7 +92,7 @@ RailsAdmin.config do |config|
     field :canonical_title
     field :abbreviated_titles, :string_list do
       label 'Alternative Titles'
-      html_attributes rows: 3
+      html_attributes rows: 3, cols: 70
     end
     field :description, :localized_text
     field :origin_countries, :string_list do
@@ -139,7 +139,7 @@ RailsAdmin.config do |config|
     field :canonical_title
     field :abbreviated_titles, :string_list do
       label 'Alternative Titles'
-      html_attributes rows: 3
+      html_attributes rows: 3, cols: 70
     end
     field :description, :localized_text
     field :origin_countries, :string_list do
