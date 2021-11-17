@@ -94,6 +94,12 @@ RailsAdmin.config do |config|
       label 'Alternative Titles'
     end
     field :description, :localized_text
+    field :origin_countries, :string_list do
+      default_value 'JP'
+    end
+    field :origin_languages, :string_list do
+      default_value 'ja'
+    end
     fields :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
     include_all_fields
@@ -132,6 +138,12 @@ RailsAdmin.config do |config|
       label 'Alternative Titles'
     end
     field :description, :localized_text
+    field :origin_countries, :string_list do
+      default_value 'JP'
+    end
+    field :origin_languages, :string_list do
+      default_value 'ja'
+    end
     fields :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
     include_all_fields
