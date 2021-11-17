@@ -92,13 +92,16 @@ RailsAdmin.config do |config|
     field :canonical_title
     field :abbreviated_titles, :string_list do
       label 'Alternative Titles'
+      html_attributes rows: 3
     end
     field :description, :localized_text
     field :origin_countries, :string_list do
       default_value 'JP'
+      html_attributes rows: 2
     end
     field :origin_languages, :string_list do
       default_value 'ja'
+      html_attributes rows: 2
     end
     fields :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
@@ -136,13 +139,16 @@ RailsAdmin.config do |config|
     field :canonical_title
     field :abbreviated_titles, :string_list do
       label 'Alternative Titles'
+      html_attributes rows: 3
     end
     field :description, :localized_text
     field :origin_countries, :string_list do
       default_value 'JP'
+      html_attributes rows: 2
     end
     field :origin_languages, :string_list do
       default_value 'ja'
+      html_attributes rows: 2
     end
     fields :slug, :subtype, :poster_image, :cover_image,
       :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
