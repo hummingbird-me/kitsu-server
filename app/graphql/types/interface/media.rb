@@ -39,8 +39,17 @@ module Types::Interface::Media
     description: 'A brief (mostly spoiler free) summary or description of the media.'
 
   field :original_locale, String,
+    deprecation_reason: 'Replaced with originCountries and originLanguages',
     null: true,
     description: 'The country in which the media was primarily produced'
+
+  field :origin_countries, [String],
+    null: false,
+    description: 'The countries in which the media was originally primarily produced'
+
+  field :origin_languages, [String],
+    null: false,
+    description: 'The languages the media was originally produced in'
 
   # Age Rating
   field :age_rating, Types::Enum::AgeRating,
