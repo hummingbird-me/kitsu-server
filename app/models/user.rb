@@ -330,6 +330,14 @@ class User < ApplicationRecord
     one_signal_players.pluck(:player_id).compact
   end
 
+  def title_preference_list
+    case title_language_preference
+    when :canonical then %i[canonical]
+    when :romanized then %i[romanized localized canonical]
+    when :localized then %i[localized romanized canonical]
+    end
+  end
+
   def add_ip(new_ip)
     ip_addresses.where(ip_address: new_ip).first_or_create
   rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
