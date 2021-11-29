@@ -26,12 +26,20 @@ module Types::Interface::Media
     null: false,
     description: 'The titles for this media in various locales'
 
+  # TODO: we should create a virtual TitlesList model instead of plucking fields like this
   def titles
     {
       localized: object.titles,
       alternatives: object.abbreviated_titles.presence || [],
       canonical: object.canonical_title,
-      canonical_locale: object.canonical_title_key
+      canonical_locale: object.canonical_title_key,
+      translated: object.translated_title,
+      translated_locale: object.translated_title_key,
+      romanized: object.romanized_title,
+      romanized_locale: object.romanized_title_key,
+      original: object.original_title,
+      original_locale: object.original_title_key,
+      preferred: object.first_title_for(context[:user]&.title_preference_list)
     }
   end
 
