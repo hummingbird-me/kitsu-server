@@ -24,24 +24,8 @@ module Types::Interface::Media
   # Localized Titles
   field :titles, Types::TitlesList,
     null: false,
+    method: :titles_list,
     description: 'The titles for this media in various locales'
-
-  # TODO: we should create a virtual TitlesList model instead of plucking fields like this
-  def titles
-    {
-      localized: object.titles,
-      alternatives: object.abbreviated_titles.presence || [],
-      canonical: object.canonical_title,
-      canonical_locale: object.canonical_title_key,
-      translated: object.translated_title,
-      translated_locale: object.translated_title_key,
-      romanized: object.romanized_title,
-      romanized_locale: object.romanized_title_key,
-      original: object.original_title,
-      original_locale: object.original_title_key,
-      preferred: object.first_title_for(context[:user]&.title_preference_list)
-    }
-  end
 
   localized_field :description,
     description: 'A brief (mostly spoiler free) summary or description of the media.'
