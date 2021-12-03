@@ -798,6 +798,7 @@ DEPENDENCIES
   connection_pool
   counter_culture
   database_cleaner
+  dead_end
   derailed_benchmarks
   doorkeeper (~> 5.4.0)
   doorkeeper-grants_assertion!

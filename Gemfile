@@ -131,6 +131,7 @@ gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
   gem 'dotenv-rails' # Load default ENV
+  gem 'dead_end' # Better error messages for missing `end`
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 
