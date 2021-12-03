@@ -305,3 +305,9 @@ Rails/TimeZone:
   Enabled: false
 RSpec/ExampleLength:
   Max: 20
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - staging
+    - development
+    - test
