@@ -1,21 +1,3 @@
-# rubocop:disable Metrics/LineLength
-# == Schema Information
-#
-# Table name: oauth_applications
-#
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  uid          :string           not null
-#  secret       :string           not null
-#  redirect_uri :text             not null
-#  scopes       :string           default(""), not null
-#  created_at   :datetime
-#  updated_at   :datetime
-#  owner_id     :integer
-#  owner_type   :string
-#
-# rubocop:enable Metrics/LineLength
-
 FactoryBot.define do
   factory :oauth_application, class: ::Doorkeeper::Application do
     name { Faker::Internet.user_name }

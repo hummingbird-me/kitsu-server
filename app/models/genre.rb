@@ -1,17 +1,3 @@
-# rubocop:disable Metrics/LineLength
-# == Schema Information
-#
-# Table name: genres
-#
-#  id          :integer          not null, primary key
-#  description :text
-#  name        :string(255)
-#  slug        :string(255)
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#
-# rubocop:enable Metrics/LineLength
-
 class Genre < ApplicationRecord
   include DescriptionSanitation
   extend FriendlyId

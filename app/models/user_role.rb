@@ -1,20 +1,3 @@
-# rubocop:disable Metrics/LineLength
-# == Schema Information
-#
-# Table name: users_roles
-#
-#  id         :integer          not null, primary key
-#  created_at :datetime
-#  updated_at :datetime
-#  role_id    :integer          indexed => [user_id]
-#  user_id    :integer          indexed => [role_id]
-#
-# Indexes
-#
-#  index_users_roles_on_user_id_and_role_id  (user_id,role_id)
-#
-# rubocop:enable Metrics/LineLength
-
 class UserRole < ApplicationRecord
   self.table_name = 'users_roles'
 

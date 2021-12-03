@@ -1,33 +1,3 @@
-# rubocop:disable Metrics/LineLength
-# == Schema Information
-#
-# Table name: episodes
-#
-#  id                     :integer          not null, primary key
-#  airdate                :date
-#  canonical_title        :string           default("en_jp"), not null
-#  length                 :integer
-#  media_type             :string           not null, indexed => [media_id]
-#  number                 :integer
-#  relative_number        :integer
-#  season_number          :integer
-#  synopsis               :text
-#  thumbnail_content_type :string(255)
-#  thumbnail_file_name    :string(255)
-#  thumbnail_file_size    :integer
-#  thumbnail_meta         :text
-#  thumbnail_updated_at   :datetime
-#  titles                 :hstore           default({}), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  media_id               :integer          not null, indexed => [media_type]
-#
-# Indexes
-#
-#  index_episodes_on_media_type_and_media_id  (media_type,media_id)
-#
-# rubocop:enable Metrics/LineLength
-
 FactoryBot.define do
   factory :episode do
     association :media, factory: :anime, strategy: :build

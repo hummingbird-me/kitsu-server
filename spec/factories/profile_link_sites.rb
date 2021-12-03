@@ -1,17 +1,3 @@
-# rubocop:disable Metrics/LineLength
-# == Schema Information
-#
-# Table name: profile_link_sites
-#
-#  id               :integer          not null, primary key
-#  name             :string           not null
-#  validate_find    :string
-#  validate_replace :string
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#
-# rubocop:enable Metrics/LineLength
-
 FactoryBot.define do
   factory :profile_link_site do
     name { Faker::Company.name }

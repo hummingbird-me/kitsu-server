@@ -1,23 +1,3 @@
-# rubocop:disable Metrics/LineLength
-# == Schema Information
-#
-# Table name: media_relationships
-#
-#  id               :integer          not null, primary key
-#  destination_type :string           not null
-#  role             :integer          not null
-#  source_type      :string           not null, indexed => [source_id]
-#  created_at       :datetime
-#  updated_at       :datetime
-#  destination_id   :integer          not null
-#  source_id        :integer          not null, indexed => [source_type]
-#
-# Indexes
-#
-#  index_media_relationships_on_source_type_and_source_id  (source_type,source_id)
-#
-# rubocop:enable Metrics/LineLength
-
 class MediaRelationship < ApplicationRecord
   enum role: {
     sequel: 0,
