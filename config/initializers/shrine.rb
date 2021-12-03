@@ -47,13 +47,13 @@ if Rails.env.production? || Rails.env.staging?
   }
   Shrine.plugin :mirroring, mirror: { store: :digitalocean }
 else
-  store = Shrine::Storage::S3.new({
+  store = Shrine::Storage::S3.new(**{
     endpoint: ENV['AWS_ENDPOINT'],
     region: 'us-east-1',
     bucket: ENV['AWS_BUCKET'] || 'kitsu-media',
     force_path_style: true
   }.compact)
-  cache = Shrine::Storage::S3.new({
+  cache = Shrine::Storage::S3.new(**{
     endpoint: ENV['AWS_ENDPOINT'],
     region: 'us-east-1',
     bucket: ENV['AWS_BUCKET'] || 'kitsu-media',
