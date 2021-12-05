@@ -8,8 +8,18 @@ module Titleable
     end
   end
 
+  def titles_list
+    TitlesList.new(
+      titles: titles,
+      canonical_locale: self[:canonical_title],
+      alternatives: self[:abbreviated_titles] || [],
+      original_languages: self[:original_languages] || [],
+      original_countries: self[:original_countries] || []
+    )
+  end
+
   def canonical_title
-    titles[self[:canonical_title]]
+    titles[canonical_title_key]
   end
 
   def canonical_title_key

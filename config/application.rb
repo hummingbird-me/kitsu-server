@@ -34,6 +34,11 @@ module Kitsu
     # UTC all the way
     config.time_zone = 'UTC'
 
+    # Clients are in charge of localization, so we get out of the way and do our best to help them
+    config.i18n.enforce_available_locales = false
+    config.i18n.default_locale = :en
+    config.i18n.fallbacks = true
+
     # Include all concern directories in app/*/concerns
     concern_dirs = Dir['app/*/concerns'].map { |d| File.expand_path(d) }
     config.eager_load_paths += concern_dirs
