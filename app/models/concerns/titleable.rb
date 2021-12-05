@@ -13,8 +13,8 @@ module Titleable
       titles: titles,
       canonical_locale: self[:canonical_title],
       alternatives: self[:abbreviated_titles] || [],
-      original_languages: self[:original_languages] || [],
-      original_countries: self[:original_countries] || []
+      original_languages: self[:origin_languages] || [],
+      original_countries: self[:origin_countries] || []
     )
   end
 
