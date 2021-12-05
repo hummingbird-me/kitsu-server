@@ -51,6 +51,6 @@ class Types::TitlesList < Types::BaseObject
     description: "The title that best matches the user's preferred settings"
 
   def preferred
-    object.first_title_for(context[:user]&.title_preference_list || %i[canonical])
+    object.first_title_for(current_user&.title_preference_list || %i[canonical])
   end
 end
