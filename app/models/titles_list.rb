@@ -35,19 +35,18 @@ class TitlesList
     # HACK: this should use originalLanguages, but we can't easily use that until we switch to using
     # the en-t-ja style keys.  For now, this is the same bodge from the frontend.
     %i[en_cn en_kr en_jp].find { |key| @titles.key?(key) }
-    if @titles.key?(:en_cn) then :en_cn
-    elsif @titles.key?(:en_kr) then :en_kr
-    elsif @titles.key?(:en_jp) then :en_jp
-    end
   end
 
   # @return [Symbol, nil] the key of the original title of the media in the localized titles hash
   def original_locale
-    # TODO: we should aim to resolve all cases where this is nil or uses the fallback logic
-    preferred_key = "#{@original_languages.first}_#{@original_countries.first}".downcase.to_sym
-    if @titles.key?(preferred_key) then preferred_key
-    elsif @titles.key?(:ja_jp) then :ja_jp
+    # TODO: we should aim to resolve all cases where this is nil or uses the fallback logic and then
+    # add a validation to ensure it moving forward
+    keys = @original_languages.product(@original_countries).map do |(lang, country)|
+      "#{lang}_#{country}".downcase.to_sym
     end
+
+    # ja_jp is the fallback case for now
+    [*keys, :ja_jp].find { |key| @titles.key?(key) }
   end
 
   # @return [Symbol, nil] the key of the best-matching translated title of the media in the
