@@ -44,7 +44,7 @@ class TitlesList
   # @return [Symbol, nil] the key of the original title of the media in the localized titles hash
   def original_locale
     # TODO: we should aim to resolve all cases where this is nil or uses the fallback logic
-    preferred_key = "#{@original_languages.first}_#{@original_countries.first}".to_sym
+    preferred_key = "#{@original_languages.first}_#{@original_countries.first}".downcase.to_sym
     if @titles.key?(preferred_key) then preferred_key
     elsif @titles.key?(:ja_jp) then :ja_jp
     end
