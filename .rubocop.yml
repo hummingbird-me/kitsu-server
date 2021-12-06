@@ -84,6 +84,8 @@ Naming/PredicateName:
     - have_
   ForbiddenPrefixes:
     - is_
+  Exclude:
+    - app/graphql/types/**/*
 Style/RaiseArgs:
   Enabled: true
   EnforcedStyle: exploded
