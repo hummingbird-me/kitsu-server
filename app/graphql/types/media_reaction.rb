@@ -51,4 +51,19 @@ class Types::MediaReaction < Types::BaseObject
       RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
   end
+
+  field :has_liked, Boolean,
+    null: false,
+    description: 'Whether you have liked this media reaction'
+
+  def has_liked
+    return false if current_user.blank?
+
+    RecordLoader.for(
+      MediaReactionVote,
+      column: :media_reaction_id,
+      token: current_token,
+      where: { user_id: current_user&.id }
+    ).load(object.id).then(&:present?)
+  end
 end
