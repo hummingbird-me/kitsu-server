@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 # Core Stuff
 gem 'puma'
-gem 'rails', '6.0.4.1'
+gem 'rails', '6.0.4.2'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
@@ -26,7 +26,7 @@ gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
 gem 'rolify'
 
 # Attachments
-gem 'apollo_upload_server'
+gem 'apollo_upload_server', '>= 2.1.0'
 gem 'aws-sdk-s3', '~> 1'
 # released version of blurhash has too-narrow ffi version
 gem 'blurhash', github: 'gargron/blurhash'
@@ -81,12 +81,12 @@ gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri', '~> 1.11.0' # Parse MAL XML shit
 gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.4' # Faux deletion
-gem 'postmark-rails' # Send via Postmark
+gem 'postmark-rails' , '>= 0.21.0' # Send via Postmark
 gem 'ranked-model' # Sortables!
 gem 'retriable' # Retry when errors happen
-gem 'roadie-rails' # Inline CSS for emails
+gem 'roadie-rails' , '>= 2.2.0' # Inline CSS for emails
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
-gem 'sass-rails' # Process SCSS for emails
+gem 'sass-rails' , '>= 6.0.0' # Process SCSS for emails
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'strait' # Rate limiting anything!
 gem 'stream_rails', github: 'GetStream/stream-rails',
@@ -109,7 +109,7 @@ gem 'parallel' # Process shit in parallel
 
 # Monitoring
 gem 'health_bit' # Allow Kubernetes to check the health
-gem 'marginalia' # Scribble in the margins of our queries
+gem 'marginalia' , '>= 1.11.1' # Scribble in the margins of our queries
 gem 'opentelemetry-exporter-otlp'
 gem 'opentelemetry-instrumentation-action_pack'
 gem 'opentelemetry-instrumentation-active_record'
@@ -126,11 +126,11 @@ gem 'sentry-raven' # Send error data to Sentry
 # Admin Panel
 gem 'pghero'
 gem 'pg_query' # pghero indexes
-gem 'rails_admin'
+gem 'rails_admin', '>= 2.2.1'
 gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
-  gem 'dotenv-rails' # Load default ENV
+  gem 'dotenv-rails' , '>= 2.7.6' # Load default ENV
   gem 'dead_end' # Better error messages for missing `end`
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
@@ -143,8 +143,8 @@ group :development, :test do
 
   # Development+Testing
   gem 'database_cleaner' # Clean the database fully before doing anything
-  gem 'factory_bot_rails' # Factories > Fixtures
-  gem 'rspec-rails' # Specs > Tests
+  gem 'factory_bot_rails' , '>= 6.2.0' # Factories > Fixtures
+  gem 'rspec-rails' , '>= 5.0.2' # Specs > Tests
 
   # Guard notices filesystem changes and *does things*
   gem 'guard'
@@ -175,6 +175,6 @@ group :test do
 end
 
 group :production, :staging do
-  gem 'librato-rails' # Metrics
+  gem 'librato-rails' , '>= 2.1.0' # Metrics
   gem 'puma_worker_killer'
 end
