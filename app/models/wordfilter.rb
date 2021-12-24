@@ -10,7 +10,7 @@ class Wordfilter < ApplicationRecord
   validates :pattern, presence: true
 
   before_validation do
-    self.pattern = pattern.unicode_normalize
+    self.pattern = pattern&.unicode_normalize
   end
 
   scope :matching, ->(text) {
