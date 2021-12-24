@@ -1,6 +1,14 @@
 class UsersController < ApplicationController
   include CustomControllerHelpers
 
+  def create
+    if Flipper.enabled?(:registration)
+      super
+    else
+      render_jsonapi_error(403, 'Registrations are closed')
+    end
+  end
+
   def recover
     query = params[:username]
     Accounts::SendPasswordReset.call(email: query)
