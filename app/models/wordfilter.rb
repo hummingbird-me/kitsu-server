@@ -9,6 +9,10 @@ class Wordfilter < ApplicationRecord
 
   validates :pattern, presence: true
 
+  before_validation do
+    self.pattern = pattern.unicode_normalize
+  end
+
   scope :matching, ->(text) {
     # Match regexes with ~* (replacing \b with \y) and create an exact match via ILIKE
     where("? ~* ('.*' || replace(pattern, '\\b', '\\y') || '.*')", text).where(regex_enabled: true)

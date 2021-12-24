@@ -1,7 +1,7 @@
 class WordfilterService
   def initialize(location, text)
     @location = location
-    @text = text
+    @text = text.unicode_normalize
   end
 
   def reject?
