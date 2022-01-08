@@ -165,7 +165,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    css_parser (1.7.1)
+    css_parser (1.11.0)
       addressable
     dante (0.2.0)
     database_cleaner (2.0.1)
@@ -277,7 +277,7 @@ GEM
       google-apis-core (~> 0.1)
       google-apis-discovery_v1 (~> 0.0)
       thor (>= 0.20, < 2.a)
-    google-protobuf (3.19.1)
+    google-protobuf (3.19.2)
     googleauth (0.15.1)
       faraday (>= 0.17.3, < 2.0)
       jwt (>= 1.4, < 3.0)
@@ -398,7 +398,7 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    loofah (2.12.0)
+    loofah (2.13.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.2.8)
@@ -429,7 +429,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.5.3)
-    minitest (5.14.4)
+    minitest (5.15.0)
     mongo (2.17.0)
       bson (>= 4.8.2, < 5.0.0)
     msgpack (1.4.2)
@@ -619,8 +619,8 @@ GEM
     roadie (4.0.0)
       css_parser (~> 1.4)
       nokogiri (~> 1.8)
-    roadie-rails (2.2.0)
-      railties (>= 5.1, < 6.2)
+    roadie-rails (2.3.0)
+      railties (>= 5.1, < 7.1)
       roadie (>= 3.1, < 5.0)
     rolify (5.3.0)
     rspec (3.10.0)
@@ -752,7 +752,7 @@ GEM
       multi_json (~> 1.0)
       stripe (>= 2.0.3)
     temple (0.8.2)
-    thor (1.1.0)
+    thor (1.2.1)
     thread_safe (0.3.6)
     thwait (0.2.0)
       e2mmap
@@ -776,7 +776,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.5.1)
+    zeitwerk (2.5.3)
 
 PLATFORMS
   ruby
