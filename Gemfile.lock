@@ -277,7 +277,7 @@ GEM
       google-apis-core (~> 0.1)
       google-apis-discovery_v1 (~> 0.0)
       thor (>= 0.20, < 2.a)
-    google-protobuf (3.19.1)
+    google-protobuf (3.19.2)
     googleauth (0.15.1)
       faraday (>= 0.17.3, < 2.0)
       jwt (>= 1.4, < 3.0)
