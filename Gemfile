@@ -39,9 +39,9 @@ gem 'shrine'
 gem 'shrine-blurhash', github: 'renchap/shrine-blurhash'
 
 # Background tasks
-gem 'sidekiq', '~> 5'
-gem 'sidekiq-debounce'
-gem 'sidekiq-scheduler'
+gem 'sidekiq', '~> 6', '>= 6.4.0'
+gem 'sidekiq-debounce', '>= 1.1.0'
+gem 'sidekiq-scheduler', '>= 3.1.0'
 
 # Text pipeline
 gem 'html-pipeline'
@@ -161,7 +161,7 @@ end
 group :test do
   gem 'faker' # Fake data
   gem 'json_expressions' # Test outputted JSON
-  gem 'rspec-sidekiq' # Test Sidekiq jobs
+  gem 'rspec-sidekiq' , '>= 3.1.0' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
   gem 'stripe-ruby-mock', require: 'stripe_mock' # Mock Stripe API
   gem 'timecop' # stop [hammer-]time
