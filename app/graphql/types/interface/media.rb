@@ -85,6 +85,7 @@ module Types::Interface::Media
     description: 'The average rating of this media amongst all Kitsu users'
 
   field :average_rating_rank, Integer,
+    method: :rating_rank,
     null: true,
     description: 'The rank of this media by rating'
 
@@ -93,6 +94,7 @@ module Types::Interface::Media
     description: 'The number of users with this in their library'
 
   field :user_count_rank, Integer,
+    method: :popularity_rank,
     null: true,
     description: 'The rank of this media by popularity'
 
