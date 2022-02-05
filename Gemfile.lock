@@ -333,7 +333,7 @@ GEM
     http-form_data (2.3.0)
     http_signatures (0.2.2)
     httpclient (2.8.3)
-    i18n (1.8.11)
+    i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     ice_cube (0.16.4)
     image_optim (0.31.1)
@@ -513,8 +513,8 @@ GEM
       opentelemetry-api (~> 1.0)
     os (1.1.1)
     parallel (1.21.0)
-    paranoia (2.4.3)
-      activerecord (>= 4.0, < 6.2)
+    paranoia (2.5.2)
+      activerecord (>= 5.1, < 7.1)
     parser (3.0.1.1)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -776,7 +776,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.5.3)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   ruby
