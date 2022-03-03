@@ -32,7 +32,7 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'blurhash', github: 'gargron/blurhash'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
-gem 'image_processing'
+gem 'image_processing', '>= 1.12.2'
 gem 'marcel'
 gem 'mini_magick'
 gem 'shrine'
