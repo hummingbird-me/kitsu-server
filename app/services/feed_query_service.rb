@@ -34,7 +34,10 @@ class FeedQueryService
 
   private
 
-  delegate :sfw_filter?, to: :user, allow_nil: true
+  def sfw_filter?
+    # Enables the SFW filter for SFW media and global feeds (in addition to your settings)
+    user&.sfw_filter? || feed.try(:media).try(:sfw?) || params[:group] == 'global'
+  end
 
   def cursor
     params.dig(:page, :cursor)
