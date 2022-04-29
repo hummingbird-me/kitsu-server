@@ -31,7 +31,7 @@ class Types::Category < Types::BaseObject
     description: 'The parent category. Each category can have one parent.'
 
   def parent
-    RecordLoader.for(Category, token: context[:token]).load(object.parent_id)
+    Loaders::RecordLoader.for(Category, token: context[:token]).load(object.parent_id)
   end
 
   field :root, Types::Category,
@@ -39,7 +39,7 @@ class Types::Category < Types::BaseObject
     description: 'The top-level ancestor category'
 
   def root
-    RecordLoader.for(Category, token: context[:token]).load(object.root_id)
+    Loaders::RecordLoader.for(Category, token: context[:token]).load(object.root_id)
   end
 
   field :children, Types::Category.connection_type,
@@ -47,6 +47,6 @@ class Types::Category < Types::BaseObject
     description: 'The child categories.'
 
   def children
-    AssociationLoader.for(object.class, :children, policy: :category).scope(object)
+    Loaders::AssociationLoader.for(object.class, :children, policy: :category).scope(object)
   end
 end

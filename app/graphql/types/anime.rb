@@ -22,6 +22,6 @@ class Types::Anime < Types::BaseObject
     description: 'The stream links.'
 
   def streaming_links
-    AssociationLoader.for(object.class, :streaming_links).scope(object)
+    Loaders::AssociationLoader.for(object.class, :streaming_links).scope(object)
   end
 end

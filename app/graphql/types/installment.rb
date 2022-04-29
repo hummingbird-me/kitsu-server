@@ -32,7 +32,7 @@ class Types::Installment < Types::BaseObject
     description: 'The media related to this installment'
 
   def media
-    RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
+    Loaders::RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
   end
 
   field :franchise, Types::Franchise,

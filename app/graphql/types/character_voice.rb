@@ -14,7 +14,7 @@ class Types::CharacterVoice < Types::BaseObject
     description: 'The person who voice acted this role'
 
   def person
-    RecordLoader.for(Person).load(object.person_id)
+    Loaders::RecordLoader.for(Person).load(object.person_id)
   end
 
   field :locale, String,
@@ -26,6 +26,6 @@ class Types::CharacterVoice < Types::BaseObject
     description: 'The company who hired this voice actor to play this role'
 
   def licensor
-    RecordLoader.for(Producer).load(object.licensor_id)
+    Loaders::RecordLoader.for(Producer).load(object.licensor_id)
   end
 end

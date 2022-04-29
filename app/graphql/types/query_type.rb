@@ -32,7 +32,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_anime_by_id(id:)
-    RecordLoader.for(::Anime, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::Anime, token: context[:token]).load(id)
   end
 
   field :find_anime_by_slug, Types::Anime, null: true do
@@ -84,7 +84,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_manga_by_id(id:)
-    RecordLoader.for(::Manga, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::Manga, token: context[:token]).load(id)
   end
 
   field :find_manga_by_slug, Types::Manga, null: true do
@@ -195,7 +195,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_profile_by_id(id: nil)
-    RecordLoader.for(::User, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::User, token: context[:token]).load(id)
   end
 
   field :find_profile_by_slug, Types::Profile, null: true do
@@ -226,7 +226,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_character_by_id(id:)
-    RecordLoader.for(::Character, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::Character, token: context[:token]).load(id)
   end
 
   field :find_character_by_slug, Types::Character, null: true do
@@ -268,7 +268,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_category_by_id(id:)
-    RecordLoader.for(::Category, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::Category, token: context[:token]).load(id)
   end
 
   field :find_category_by_slug, Types::Category, null: true do
@@ -296,7 +296,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_person_by_id(id:)
-    RecordLoader.for(::Person, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::Person, token: context[:token]).load(id)
   end
 
   field :find_person_by_slug, Types::Person, null: true do
@@ -314,7 +314,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_library_entry_by_id(id:)
-    RecordLoader.for(::LibraryEntry, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::LibraryEntry, token: context[:token]).load(id)
   end
 
   field :library_entries_by_media_type, Types::LibraryEntry.connection_type, null: true do
@@ -343,7 +343,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_library_event_by_id(id:)
-    RecordLoader.for(::LibraryEvent, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::LibraryEvent, token: context[:token]).load(id)
   end
 
   field :find_post_by_id, Types::Post, null: true do
@@ -352,7 +352,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_post_by_id(id:)
-    RecordLoader.for(::Post, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::Post, token: context[:token]).load(id)
   end
 
   field :find_wiki_submission_by_id, Types::WikiSubmission, null: true do
@@ -361,7 +361,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_wiki_submission_by_id(id:)
-    RecordLoader.for(::WikiSubmission, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::WikiSubmission, token: context[:token]).load(id)
   end
 
   field :wiki_submissions_by_statuses, Types::WikiSubmission.connection_type, null: true do
@@ -410,7 +410,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_report_by_id(id:)
-    RecordLoader.for(::Report, token: context[:token]).load(id)
+    Loaders::RecordLoader.for(::Report, token: context[:token]).load(id)
   end
 
   field :reports_by_status, Types::Report.connection_type, null: true do

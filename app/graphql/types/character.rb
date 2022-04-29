@@ -39,6 +39,6 @@ class Types::Character < Types::BaseObject
     description: 'Media this character appears in.'
 
   def media
-    AssociationLoader.for(object.class, :media_characters).scope(object)
+    Loaders::AssociationLoader.for(object.class, :media_characters).scope(object)
   end
 end

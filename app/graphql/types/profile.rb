@@ -93,7 +93,7 @@ class Types::Profile < Types::BaseObject
       find_by: :followed_id,
       sort: sort
     }, object.id).then do |follows|
-      RecordLoader.for(User, token: context[:token]).load_many(follows.map(&:follower_id))
+      Loaders::RecordLoader.for(User, token: context[:token]).load_many(follows.map(&:follower_id))
     end
   end
 
@@ -107,7 +107,7 @@ class Types::Profile < Types::BaseObject
       find_by: :follower_id,
       sort: sort
     }, object.id).then do |follows|
-      RecordLoader.for(User, token: context[:token]).load_many(follows.map(&:followed_id))
+      Loaders::RecordLoader.for(User, token: context[:token]).load_many(follows.map(&:followed_id))
     end
   end
 
@@ -128,7 +128,7 @@ class Types::Profile < Types::BaseObject
     description: 'All comments to any post this user has made.'
 
   def comments
-    AssociationLoader.for(object.class, :comments).scope(object)
+    Loaders::AssociationLoader.for(object.class, :comments).scope(object)
   end
 
   field :library, Types::Library,
@@ -164,7 +164,7 @@ class Types::Profile < Types::BaseObject
     description: 'Links to the user on other (social media) sites.'
 
   def site_links
-    AssociationLoader.for(object.class, :profile_links).scope(object)
+    Loaders::AssociationLoader.for(object.class, :profile_links).scope(object)
   end
 
   field :media_reactions, Types::MediaReaction.connection_type, null: false do
@@ -184,7 +184,7 @@ class Types::Profile < Types::BaseObject
     description: 'Favorite media, characters, and people'
 
   def favorites
-    AssociationLoader.for(object.class, :favorites).scope(object)
+    Loaders::AssociationLoader.for(object.class, :favorites).scope(object)
   end
 
   field :wiki_submissions, Types::WikiSubmission.connection_type, null: false do

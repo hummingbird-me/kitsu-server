@@ -67,7 +67,7 @@ class Types::Post < Types::BaseObject
       find_by: :post_id,
       sort: sort
     }, object.id).then do |likes|
-      RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
+      Loaders::RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
   end
 
@@ -76,8 +76,8 @@ class Types::Post < Types::BaseObject
     description: 'Users that are watching this post'
 
   def follows
-    AssociationLoader.for(object.class, :post_follows).scope(object).then do |follows|
-      RecordLoader.for(User, token: context[:token]).load_many(follows.pluck(:user_id))
+    Loaders::AssociationLoader.for(object.class, :post_follows).scope(object).then do |follows|
+      Loaders::RecordLoader.for(User, token: context[:token]).load_many(follows.pluck(:user_id))
     end
   end
 end

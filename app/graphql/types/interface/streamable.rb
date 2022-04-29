@@ -7,7 +7,7 @@ module Types::Interface::Streamable
     description: 'The site that is streaming this media.'
 
   def streamer
-    RecordLoader.for(Streamer).load(object.streamer_id)
+    Loaders::RecordLoader.for(Streamer).load(object.streamer_id)
   end
 
   field :regions, [String],

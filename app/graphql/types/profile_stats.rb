@@ -41,7 +41,7 @@ class Types::ProfileStats < Types::BaseObject
   end
 
   def stat(type)
-    AssociationLoader.for(object.class, :stats).scope(object).then do |stats|
+    Loaders::AssociationLoader.for(object.class, :stats).scope(object).then do |stats|
       stats.find_by(type: OPTIONS[type])
     end
   end

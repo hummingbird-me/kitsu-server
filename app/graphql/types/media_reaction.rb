@@ -11,7 +11,7 @@ class Types::MediaReaction < Types::BaseObject
     method: :user
 
   def author
-    RecordLoader.for(User, token: context[:token]).load(object.user_id)
+    Loaders::RecordLoader.for(User, token: context[:token]).load(object.user_id)
   end
 
   field :media, Types::Interface::Media,
@@ -19,7 +19,7 @@ class Types::MediaReaction < Types::BaseObject
     description: 'The media related to this reaction.'
 
   def media
-    RecordLoader.for(object.media_type.constantize, token: context[:token]).load(object.media_id)
+    Loaders::RecordLoader.for(object.media_type.constantize, token: context[:token]).load(object.media_id)
   end
 
   field :library_entry, Types::LibraryEntry,
@@ -27,7 +27,7 @@ class Types::MediaReaction < Types::BaseObject
     description: 'The library entry related to this reaction.'
 
   def library_entry
-    RecordLoader.for(LibraryEntry, token: context[:token]).load(object.library_entry_id)
+    Loaders::RecordLoader.for(LibraryEntry, token: context[:token]).load(object.library_entry_id)
   end
 
   field :progress, Integer,
@@ -48,7 +48,7 @@ class Types::MediaReaction < Types::BaseObject
       find_by: :media_reaction_id,
       sort: sort
     }, object.id).then do |likes|
-      RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
+      Loaders::RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
   end
 
@@ -59,7 +59,7 @@ class Types::MediaReaction < Types::BaseObject
   def has_liked
     return false if current_user.blank?
 
-    RecordLoader.for(
+    Loaders::RecordLoader.for(
       MediaReactionVote,
       column: :media_reaction_id,
       token: current_token,

@@ -36,7 +36,7 @@ class Types::Comment < Types::BaseObject
       find_by: :comment_id,
       sort: sort
     }, object.id).then do |likes|
-      RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
+      Loaders::RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
   end
 

@@ -38,6 +38,6 @@ class Types::Volume < Types::BaseObject
     description: 'The chapters in this volume.'
 
   def chapters
-    AssociationLoader.for(object.class, :chapters).scope(object)
+    Loaders::AssociationLoader.for(object.class, :chapters).scope(object)
   end
 end

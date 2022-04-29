@@ -48,9 +48,9 @@ class Types::Review < Types::BaseObject
     description: 'Users who liked this review'
 
   def likes
-    AssociationLoader.for(object.class, :likes, policy: :review_like)
-                     .scope(object).then do |likes|
-      RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
+    Loaders::AssociationLoader.for(object.class, :likes, policy: :review_like)
+                              .scope(object).then do |likes|
+      Loaders::RecordLoader.for(User, token: context[:token]).load_many(likes.pluck(:user_id))
     end
   end
 end

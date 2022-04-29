@@ -122,7 +122,7 @@ module Types::Interface::Media
       raise GraphQL::ExecutionError, 'You must be authorized to view your library entry'
     end
 
-    RecordLoader.for(
+    Loaders::RecordLoader.for(
       LibraryEntry,
       column: :user_id,
       where: { media_id: object.id, media_type: type },
@@ -149,7 +149,7 @@ module Types::Interface::Media
     description: 'The staff members who worked on this media'
 
   def staff
-    AssociationLoader.for(object.class, :staff, policy: :media_staff).scope(object)
+    Loaders::AssociationLoader.for(object.class, :staff, policy: :media_staff).scope(object)
   end
 
   field :productions, Types::MediaProduction.connection_type,
@@ -157,7 +157,7 @@ module Types::Interface::Media
     description: 'The companies which helped to produce this media'
 
   def productions
-    AssociationLoader.for(object.class, :productions, policy: :media_production).scope(object)
+    Loaders::AssociationLoader.for(object.class, :productions, policy: :media_production).scope(object)
   end
 
   field :quotes, Types::Quote.connection_type,
@@ -165,7 +165,7 @@ module Types::Interface::Media
     description: 'A list of quotes from this media'
 
   def quotes
-    AssociationLoader.for(object.class, :quotes).scope(object).then(&:to_a)
+    Loaders::AssociationLoader.for(object.class, :quotes).scope(object).then(&:to_a)
   end
 
   field :categories, Types::Category.connection_type, null: false do
@@ -179,7 +179,7 @@ module Types::Interface::Media
       sort: sort,
       where: { media_type: object.class.name }
     }, object.id).then do |categories|
-      RecordLoader.for(Category, token: context[:token]).load_many(categories.map(&:category_id))
+      Loaders::RecordLoader.for(Category, token: context[:token]).load_many(categories.map(&:category_id))
     end
   end
 
@@ -188,7 +188,7 @@ module Types::Interface::Media
     description: 'A list of mappings for this media'
 
   def mappings
-    AssociationLoader.for(object.class, :mappings).scope(object)
+    Loaders::AssociationLoader.for(object.class, :mappings).scope(object)
   end
 
   field :reactions, Types::MediaReaction.connection_type, null: false do

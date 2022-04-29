@@ -46,7 +46,7 @@ class Types::Person < Types::BaseObject
     description: 'The voice-acting roles this person has had.'
 
   def voices
-    AssociationLoader.for(object.class, :voices, policy: :character_voice).scope(object)
+    Loaders::AssociationLoader.for(object.class, :voices, policy: :character_voice).scope(object)
   end
 
   field :media_staff, Types::MediaStaff.connection_type,
@@ -54,6 +54,6 @@ class Types::Person < Types::BaseObject
     description: 'Information about the person working on specific media'
 
   def media_staff
-    AssociationLoader.for(object.class, :staff, policy: :media_staff).scope(object)
+    Loaders::AssociationLoader.for(object.class, :staff, policy: :media_staff).scope(object)
   end
 end

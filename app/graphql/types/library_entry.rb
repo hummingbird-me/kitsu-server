@@ -14,7 +14,7 @@ class Types::LibraryEntry < Types::BaseObject
     description: 'The media related to this library entry.'
 
   def media
-    RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
+    Loaders::RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
   end
 
   field :last_unit, Types::Interface::Unit,
@@ -87,7 +87,7 @@ class Types::LibraryEntry < Types::BaseObject
   end
 
   def events(media_types:)
-    AssociationLoader.for(object.class, :library_events).scope(object).then do |library_events|
+    Loaders::AssociationLoader.for(object.class, :library_events).scope(object).then do |library_events|
       library_events.by_kind(*media_types)
     end
   end

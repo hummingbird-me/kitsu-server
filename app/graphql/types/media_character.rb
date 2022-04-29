@@ -15,7 +15,7 @@ class Types::MediaCharacter < Types::BaseObject
     description: 'The character'
 
   def character
-    RecordLoader.for(Character).load(object.character_id)
+    Loaders::RecordLoader.for(Character).load(object.character_id)
   end
 
   field :media, Types::Interface::Media,
@@ -23,7 +23,7 @@ class Types::MediaCharacter < Types::BaseObject
     description: 'The media'
 
   def media
-    RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
+    Loaders::RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
   end
 
   field :voices, Types::CharacterVoice.connection_type, null: true do

@@ -22,7 +22,7 @@ class Types::Report < Types::BaseObject
     description: 'The user who made this report'
 
   def reporter
-    RecordLoader.for(User, token: context[:token]).load(object.user_id)
+    Loaders::RecordLoader.for(User, token: context[:token]).load(object.user_id)
   end
 
   field :moderator, Types::Profile,
@@ -30,7 +30,7 @@ class Types::Report < Types::BaseObject
     description: 'The moderator who responded to this report'
 
   def moderator
-    RecordLoader.for(User, token: context[:token]).load(object.moderator_id)
+    Loaders::RecordLoader.for(User, token: context[:token]).load(object.moderator_id)
   end
 
   field :naughty, Types::Union::ReportItem,
@@ -39,6 +39,6 @@ class Types::Report < Types::BaseObject
 
   def naughty
     naughty_type = object.naughty_type.safe_constantize
-    RecordLoader.for(naughty_type, token: context[:token]).load(object.naughty_id)
+    Loaders::RecordLoader.for(naughty_type, token: context[:token]).load(object.naughty_id)
   end
 end
