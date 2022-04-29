@@ -34,11 +34,11 @@ class Types::Report < Types::BaseObject
   end
 
   field :naughty, Types::Union::ReportItem,
-    null: false,
+    null: true,
     description: 'The entity that the report is related to'
 
   def naughty
     naughty_type = object.naughty_type.safe_constantize
-    Loaders::RecordLoader.for(naughty_type, token: context[:token]).load(object.naughty_id)
+    Loaders::UnscopedRecordLoader.for(naughty_type, token: context[:token]).load(object.naughty_id)
   end
 end
