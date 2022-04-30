@@ -1,4 +1,4 @@
-class Loaders::SlugLoader < RecordLoader
+class Loaders::SlugLoader < Loaders::RecordLoader
   def initialize(model, column: :slug, **args)
     super(model, column: column, **args)
   end
