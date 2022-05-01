@@ -39,6 +39,6 @@ class Types::Report < Types::BaseObject
 
   def naughty
     naughty_type = object.naughty_type.safe_constantize
-    Loaders::UnscopedRecordLoader.for(naughty_type, token: context[:token]).load(object.naughty_id)
+    Loaders::UnscopedRecordLoader.for(naughty_type).load(object.naughty_id)
   end
 end
