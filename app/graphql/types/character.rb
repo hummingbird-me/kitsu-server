@@ -1,5 +1,4 @@
 class Types::Character < Types::BaseObject
-  include HasLocalizedField
   implements Types::Interface::WithTimestamps
 
   description 'Information about a Character in the Kitsu database'

@@ -1,4 +1,6 @@
 class Types::BaseObject < GraphQL::Schema::Object
+  include HasLocalizedField
+
   connection_type_class(Types::BaseConnection)
 
   private

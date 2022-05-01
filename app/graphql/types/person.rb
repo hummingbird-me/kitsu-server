@@ -1,5 +1,4 @@
 class Types::Person < Types::BaseObject
-  include HasLocalizedField
   implements Types::Interface::WithTimestamps
 
   description <<~DESCRIPTION.squish

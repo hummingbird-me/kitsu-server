@@ -1,6 +1,5 @@
 module Types::Interface::Media
   include Types::Interface::Base
-  include HasLocalizedField
 
   orphan_types Types::Manga, Types::Anime
   description 'A media in the Kitsu database'

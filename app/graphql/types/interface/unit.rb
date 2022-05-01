@@ -1,6 +1,5 @@
 module Types::Interface::Unit
   include Types::Interface::Base
-  include HasLocalizedField
 
   description 'Media units such as episodes or chapters'
 
