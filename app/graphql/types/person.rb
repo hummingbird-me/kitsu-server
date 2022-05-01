@@ -35,9 +35,7 @@ class Types::Person < Types::BaseObject
     null: true,
     description: 'The day when this person was born'
 
-  field :image, Types::Image,
-    method: :image_attacher,
-    null: true,
+  image_field :image,
     description: 'An image of the person'
 
   field :voices, Types::CharacterVoice.connection_type,

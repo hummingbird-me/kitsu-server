@@ -28,9 +28,7 @@ class Types::Character < Types::BaseObject
     null: true,
     description: 'The original media this character showed up in'
 
-  field :image, Types::Image,
-    null: true,
-    method: :image_attacher,
+  image_field :image,
     description: 'An image of the character'
 
   field :media, Types::MediaCharacter.connection_type,

@@ -102,14 +102,11 @@ module Types::Interface::Media
     description: 'The number of users with this in their favorites'
 
   # Images
-  field :poster_image, Types::Image,
-    method: :poster_image_attacher,
-    null: true,
+  image_field :poster_image,
     description: 'The poster image of this media'
 
-  field :banner_image, Types::Image,
-    method: :cover_image_attacher,
-    null: true,
+  image_field :banner_image,
+    method: :cover_image,
     description: 'A large banner image for this media'
 
   field :my_library_entry, Types::LibraryEntry,

@@ -23,8 +23,6 @@ module Types::Interface::Unit
     null: false,
     description: 'The sequence number of this unit'
 
-  field :thumbnail, Types::Image,
-    method: :thumbnail_attacher,
-    null: true,
+  image_field :thumbnail,
     description: 'A thumbnail image for the unit'
 end

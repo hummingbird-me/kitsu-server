@@ -25,14 +25,11 @@ class Types::Profile < Types::BaseObject
         Minimum of 3 characters and any valid Unicode character
       DESCRIPTION
 
-  field :avatar_image, Types::Image,
-    method: :avatar_attacher,
-    null: true,
+  image_field :avatar_image,
     description: 'An avatar image to easily identify this profile'
 
-  field :banner_image, Types::Image,
-    method: :cover_image_attacher,
-    null: true,
+  image_field :banner_image,
+    method: :cover_image,
     description: 'A banner to display at the top of the profile'
 
   field :about, String,
