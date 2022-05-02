@@ -26,6 +26,7 @@ class Types::Profile < Types::BaseObject
       DESCRIPTION
 
   image_field :avatar_image,
+    method: :avatar,
     description: 'An avatar image to easily identify this profile'
 
   image_field :banner_image,
