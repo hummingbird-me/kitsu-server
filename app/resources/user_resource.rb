@@ -70,11 +70,11 @@ class UserResource < BaseResource
   end
 
   def sfw_filter
-    _model.sfw_filter_preference.sfw?
+    _model.sfw_filter_preference == 'sfw'
   end
 
   def sfw_filter=(value)
-    _model.sfw_filter_preference = value ? :sfw : :nsfw_sometimes
+    _model.sfw_filter_preference = value ? 'sfw' : 'nsfw_sometimes'
   end
 
   def self.attribute_caching_context(context)

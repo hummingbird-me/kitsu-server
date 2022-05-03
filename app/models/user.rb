@@ -301,7 +301,7 @@ class User < ApplicationRecord
   end
 
   def sfw_filter?
-    sfw_filter_preference.sfw?
+    sfw_filter_preference == 'sfw'
   end
 
   def stripe_customer
