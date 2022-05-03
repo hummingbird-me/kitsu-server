@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_15_073159) do
+ActiveRecord::Schema.define(version: 2022_05_03_045222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1557,6 +1557,7 @@ ActiveRecord::Schema.define(version: 2021_11_15_073159) do
     t.integer "permissions", default: 0, null: false
     t.jsonb "avatar_data"
     t.jsonb "cover_image_data"
+    t.integer "sfw_filter_preference", null: false
     t.index "lower((email)::text)", name: "users_lower_idx"
     t.index ["ao_id"], name: "index_users_on_ao_id", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
