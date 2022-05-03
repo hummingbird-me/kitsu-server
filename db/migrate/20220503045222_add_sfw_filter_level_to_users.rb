@@ -3,6 +3,7 @@ class AddSfwFilterLevelToUsers < ActiveRecord::Migration[6.0]
 
   def up
     add_column :users, :sfw_filter_preference, :integer
+    change_column_default :users, :sfw_filter_preference, 0
 
     # 0 = SFW
     # 1 = NSFW (in NSFW places)

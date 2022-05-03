@@ -1557,7 +1557,7 @@ ActiveRecord::Schema.define(version: 2022_05_03_045222) do
     t.integer "permissions", default: 0, null: false
     t.jsonb "avatar_data"
     t.jsonb "cover_image_data"
-    t.integer "sfw_filter_preference", null: false
+    t.integer "sfw_filter_preference", default: 0, null: false
     t.index "lower((email)::text)", name: "users_lower_idx"
     t.index ["ao_id"], name: "index_users_on_ao_id", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
