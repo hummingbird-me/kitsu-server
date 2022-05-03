@@ -122,6 +122,7 @@ class User < ApplicationRecord
   enum pro_tier: { ao_pro: 0, ao_pro_plus: 1, pro: 2, patron: 3 }
   enum email_status: { email_unconfirmed: 0, email_confirmed: 1, email_bounced: 2 }
   enum title_language_preference: { canonical: 0, romanized: 1, localized: 2 }
+  enum sfw_filter_preference: { sfw: 0, nsfw_sometimes: 1, nsfw_everywhere: 2 }
 
   rolify
   flag :permissions, %i[admin community_mod database_mod]
@@ -297,6 +298,10 @@ class User < ApplicationRecord
     return unless pro_started_at
     streak_end = [Time.now, pro_expires_at].compact.min
     streak_end - pro_started_at
+  end
+
+  def sfw_filter?
+    sfw_filter_preference.sfw?
   end
 
   def stripe_customer

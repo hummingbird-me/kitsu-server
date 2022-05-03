@@ -2,7 +2,7 @@ class UserResource < BaseResource
   PRIVATE_FIELDS = %i[email password confirmed previous_email language time_zone country
                       share_to_global title_language_preference sfw_filter rating_system
                       theme facebook_id has_password status subscribed_to_newsletter ao_pro
-                      permissions].freeze
+                      permissions sfw_filter_preference].freeze
 
   attributes :name, :past_names, :slug, :about, :location, :waifu_or_husbando, :followers_count,
     :following_count, :life_spent_on_anime, :birthday, :gender, :comments_count, :favorites_count,
@@ -67,6 +67,14 @@ class UserResource < BaseResource
 
   def title_language_preference=(value)
     _model.title_language_preference = value == 'english' ? :localized : value.to_sym
+  end
+
+  def sfw_filter
+    _model.sfw_filter_preference.sfw?
+  end
+
+  def sfw_filter=(value)
+    _model.sfw_filter_preference = value ? :sfw : :nsfw_sometimes
   end
 
   def self.attribute_caching_context(context)
