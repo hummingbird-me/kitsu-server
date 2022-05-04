@@ -35,6 +35,7 @@ class FeedQueryService
   private
 
   def sfw_filter?
+    return false if user&.sfw_filter_preference == 'nsfw_everywhere'
     # Enables the SFW filter for SFW media and global feeds (in addition to your settings)
     user&.sfw_filter? || feed.try(:media).try(:sfw?) || params[:group] == 'global'
   end
