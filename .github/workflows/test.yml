@@ -82,7 +82,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v1
 
-    - uses: ./.github/workflows/install-imagemagick.yml
+    - uses: ./.github/actions/install-imagemagick
       with:
         version: ${{ env.IMAGEMAGICK_VERSION }}
 

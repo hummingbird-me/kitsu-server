@@ -1,15 +1,12 @@
-on:
-  workflow_call:
-    inputs:
-      version:
-        required: true
-        type: string
-
-jobs:
-  install_imagemagick:
-    name: Install ImageMagick ${{ inputs.version }}
-    runs-on: ubuntu-latest
-    steps:
+name: 'Setup ImageMagick'
+description: 'Setup a version of ImageMagick in your environment'
+inputs:
+  version:
+    description: 'Version of ImageMagick to install'
+    required: true
+runs:
+  using: "composite"
+  steps:
       - name: Restore Cached ImageMagick ${{ inputs.version }}
         uses: actions/cache@v2
         id: cache-imagemagick
@@ -19,12 +16,14 @@ jobs:
 
       - name: Install Cached ImageMagick ${{ inputs.version }}
         if: steps.cache-imagemagick.outputs.cache-hit == 'true'
+        shell: bash
         run: |
           ls -l ./.imagemagick-deb/
           sudo apt install ./.imagemagick-deb/*.deb
 
       - name: Build ImageMagick ${{ inputs.version }}
         if: steps.cache-imagemagick.outputs.cache-hit != 'true'
+        shell: bash
         run: |
           sudo apt remove imagemagick imagemagick-* -y
           t=$(mktemp)
