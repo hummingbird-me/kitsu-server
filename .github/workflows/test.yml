@@ -127,14 +127,6 @@ jobs:
         name: graphql-schema-${{ matrix.ruby }}
         path: schema.graphql
 
-    - name: Validate Schema Changes
-      if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
-      uses: kamilkisiela/graphql-inspector@master
-      with:
-        fail-on-breaking: false
-        schema: 'schema.graphql'
-        endpoint: 'https://kitsu.io/api/graphql'
-
     - name: Publish code coverage
       uses: paambaati/codeclimate-action@v2.7.5
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
