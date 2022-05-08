@@ -1,0 +1,37 @@
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+
+jobs:
+  install_imagemagick:
+    name: Install ImageMagick ${{ inputs.version }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restore Cached ImageMagick ${{ inputs.version }}
+        uses: actions/cache@v2
+        id: cache-imagemagick
+        with:
+          path: .imagemagick-deb/
+          key: ${{ runner.os }}-magick-rev3-${{ inputs.version }}
+
+      - name: Install Cached ImageMagick ${{ inputs.version }}
+        if: steps.cache-imagemagick.outputs.cache-hit == 'true'
+        run: |
+          ls -l ./.imagemagick-deb/
+          sudo apt install ./.imagemagick-deb/*.deb
+
+      - name: Build ImageMagick ${{ inputs.version }}
+        if: steps.cache-imagemagick.outputs.cache-hit != 'true'
+        run: |
+          sudo apt remove imagemagick imagemagick-* -y
+          t=$(mktemp)
+          wget 'https://dist.1-2.dev/imei.sh' -qO "$t"
+          sudo bash "$t" --checkinstall --imagemagick-version $IMAGEMAGICK_VERSION
+          rm "$t"
+          mkdir .imagemagick-deb
+          ls -l /usr/local/src/
+          cp /usr/local/src/*.deb ./.imagemagick-deb/
+          ls -l ./.imagemagick-deb/

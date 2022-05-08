@@ -82,31 +82,9 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v1
 
-    - name: Restore Cached ImageMagick 7
-      uses: actions/cache@v2
-      id: cache-im7
+    - uses: .github/workflows/install-imagemagick.yml@the-future
       with:
-        path: im7-deb/
-        key: ${{ runner.os }}-magick-rev3-${{ env.IMAGEMAGICK_VERSION }}
-
-    - name: Install Cached ImageMagick 7
-      if: steps.cache-im7.outputs.cache-hit == 'true'
-      run: |
-        ls -l ./im7-deb/
-        sudo apt install ./im7-deb/*.deb
-
-    - name: Build ImageMagick 7
-      if: steps.cache-im7.outputs.cache-hit != 'true'
-      run: |
-        sudo apt remove imagemagick imagemagick-* -y
-        t=$(mktemp)
-        wget 'https://dist.1-2.dev/imei.sh' -qO "$t"
-        sudo bash "$t" --checkinstall --imagemagick-version $IMAGEMAGICK_VERSION
-        rm "$t"
-        mkdir im7-deb
-        ls -l /usr/local/src/
-        cp /usr/local/src/*.deb ./im7-deb/
-        ls -l ./im7-deb/
+        version: ${{ env.IMAGEMAGICK_VERSION }}
 
     - name: Install Dependencies
       run: |
