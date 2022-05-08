@@ -8,7 +8,7 @@ module HasImageField
         null: true
       }.merge(options)
 
-      field(key, **options) do
+      field(key, **options.except(:method)) do
         yield if block_given?
       end
 
