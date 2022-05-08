@@ -601,7 +601,7 @@ GEM
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
     rake (13.0.6)
-    ranked-model (0.4.7)
+    ranked-model (0.4.8)
       activerecord (>= 4.2)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
@@ -776,7 +776,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.5.3)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   ruby
