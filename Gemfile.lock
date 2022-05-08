@@ -738,7 +738,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strait (1.1.0)
+    strait (1.2.0)
       connection_pool (>= 2.0, < 3.0)
       redis (~> 4.0, >= 3.0)
     stream-ruby (2.10.0)
