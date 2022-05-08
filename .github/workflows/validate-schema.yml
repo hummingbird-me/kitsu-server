@@ -1,0 +1,27 @@
+name: Validate Schema Changes
+
+on:
+  workflow_run:
+    workflows: ["Kitsu Test Suite"]
+    types:
+      - completed
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    if: >
+      ${{ github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: graphql-schema-ruby-2.7
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: Validate Schema Changes
+        uses: kamilkisiela/graphql-inspector@master
+        with:
+          schema: 'schema.graphql'
+          endpoint: 'https://kitsu.io/api/graphql'
