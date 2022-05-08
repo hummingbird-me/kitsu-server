@@ -36,8 +36,8 @@ module GroupActionLogger
       self.action_log_target = [keypath].flatten
     end
 
-    def log_verb(verb = nil)
-      self.action_log_verb = block_given? ? Proc.new : -> { verb }
+    def log_verb(verb = nil, &block)
+      self.action_log_verb = block.presence || -> { verb }
     end
   end
 end
