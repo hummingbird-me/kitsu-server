@@ -158,6 +158,10 @@ jobs:
       run: |
         bundle exec rake graphql:dump_schema
 
+    - uses: actions/upload-artifact@v3
+      with:
+        path: schema.graphql
+
     - name: Validate Schema Changes
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
       uses: kamilkisiela/graphql-inspector@master
