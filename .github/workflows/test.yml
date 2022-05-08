@@ -160,6 +160,7 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
+        name: graphql-schema-${{ matrix.ruby }}
         path: schema.graphql
 
     - name: Validate Schema Changes
