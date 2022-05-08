@@ -841,7 +841,7 @@ DEPENDENCIES
   mechanize
   mini_magick
   mongo
-  nokogiri (~> 1.11.0)
+  nokogiri
   oauth2
   oj
   oj_mimic_json
@@ -909,4 +909,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.1.4
+   2.2.22
