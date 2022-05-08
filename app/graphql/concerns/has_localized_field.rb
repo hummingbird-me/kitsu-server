@@ -8,7 +8,7 @@ module HasLocalizedField
         null: false
       }.merge(options)
 
-      field(key, options) do
+      field(key, **options) do
         argument :locales, [String], required: false
 
         yield if block_given?
