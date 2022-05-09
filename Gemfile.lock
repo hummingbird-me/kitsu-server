@@ -98,7 +98,6 @@ GEM
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    aggregate (0.2.2)
     algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
       json (>= 1.5.1)
@@ -305,7 +304,6 @@ GEM
       rack
     heapy (0.2.0)
       thor
-    hetchy (1.0.0)
     hiredis (0.6.3)
     html-pipeline (2.14.0)
       activesupport (>= 2)
@@ -369,16 +367,6 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    librato-metrics (2.1.2)
-      aggregate (~> 0.2.2)
-      faraday
-    librato-rack (2.0.3)
-      hetchy (~> 1.0)
-      librato-metrics (~> 2.1.0)
-    librato-rails (2.1.0)
-      activesupport (>= 3.0)
-      librato-rack (~> 2.0.0)
-      railties (>= 3.0)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -830,7 +818,6 @@ DEPENDENCIES
   jwt
   kramdown
   kramdown-parser-gfm
-  librato-rails
   marcel
   marginalia
   mechanize

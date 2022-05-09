@@ -175,6 +175,5 @@ group :test do
 end
 
 group :production, :staging do
-  gem 'librato-rails' # Metrics
   gem 'puma_worker_killer'
 end

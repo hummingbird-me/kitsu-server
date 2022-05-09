@@ -32,7 +32,6 @@ class BufferedStreamClient
         return_batch_to(unfollows, group: 'default')
         raise
       end
-      increment_metrics(unfollows)
     end
 
     private
@@ -44,17 +43,6 @@ class BufferedStreamClient
 
     def valid_feed?(feed)
       VALID_FEED =~ feed
-    end
-
-    def increment_metrics(unfollows, tags = {})
-      Librato.increment('getstream.unfollow.sync', tags)
-      Librato.measure('getstream.unfollow.batch_size', unfollows.count, tags)
-      unfollows.each do |unfollow|
-        Librato.increment('getstream.unfollow.total', tags: {
-          source_group: unfollow['source']&.split(':')&.first,
-          target_group: unfollow['target']&.split(':')&.first
-        }.merge(tags))
-      end
     end
   end
 end

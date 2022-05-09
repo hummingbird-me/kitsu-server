@@ -39,7 +39,6 @@ class BufferedStreamClient
           return_batch_to(follows, group: group)
           raise
         end
-        increment_metrics(follows)
       end
     end
 
@@ -52,17 +51,6 @@ class BufferedStreamClient
 
     def valid_feed?(feed)
       VALID_FEED =~ feed
-    end
-
-    def increment_metrics(follows, tags = {})
-      Librato.increment('getstream.follow.sync', tags)
-      Librato.measure('getstream.follow.batch_size', follows.count, tags)
-      follows.each do |follow|
-        Librato.increment('getstream.follow.total', tags: {
-          source_group: follow['source']&.split(':')&.first,
-          target_group: follow['target']&.split(':')&.first
-        }.merge(tags))
-      end
     end
   end
 end

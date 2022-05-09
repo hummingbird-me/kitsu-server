@@ -14,10 +14,8 @@ class BufferedStreamClient
         )
       end
       if group && id
-        Librato.increment("getstream.#{method}.total", feed_group: group)
         StreamRails.client.feed(group, id).public_send(method, *parameters)
       else
-        Librato.increment("getstream.#{method}.total")
         StreamRails.client.public_send(method, *parameters)
       end
     end
