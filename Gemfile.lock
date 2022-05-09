@@ -514,7 +514,7 @@ GEM
     pg (1.2.3)
     pg_query (2.1.2)
       google-protobuf (>= 3.17.1)
-    pghero (2.8.2)
+    pghero (2.8.3)
       activerecord (>= 5)
     postmark (1.21.3)
       json
