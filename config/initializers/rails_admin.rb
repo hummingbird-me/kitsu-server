@@ -1,10 +1,10 @@
-require Rails.root.join('lib/rails_admin/config/fields/types/citext')
 require Rails.root.join('lib/rails_admin/config/fields/types/localized_string')
 require Rails.root.join('lib/rails_admin/config/fields/types/localized_text')
 require Rails.root.join('lib/rails_admin/config/fields/types/string_list')
 require Rails.root.join('lib/rails_admin/config/fields/types/flags')
 
 RailsAdmin.config do |config|
+  config.asset_source = :sprockets
   config.parent_controller = '::AdminController'
   config.current_user_method(&:current_user)
 

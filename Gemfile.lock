@@ -853,6 +853,7 @@ DEPENDENCIES
   ruby-progressbar
   sanitize
   sass-rails
+  sassc-rails
   sentry-raven
   shoulda-matchers
   shrine
