@@ -2,7 +2,7 @@ module CustomControllerHelpers
   extend ActiveSupport::Concern
 
   included do
-    include Pundit
+    include Pundit::Authorization
   end
 
   def serialize_error(status, message)
