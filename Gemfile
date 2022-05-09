@@ -29,15 +29,14 @@ gem 'rolify'
 # Attachments
 gem 'apollo_upload_server'
 gem 'aws-sdk-s3', '~> 1'
-# released version of blurhash has too-narrow ffi version
-gem 'blurhash', github: 'gargron/blurhash'
+gem 'blurhash'
 gem 'image_optim', require: false
 gem 'image_optim_pack', require: false
 gem 'image_processing'
 gem 'marcel'
 gem 'mini_magick'
 gem 'shrine'
-gem 'shrine-blurhash', github: 'renchap/shrine-blurhash'
+gem 'shrine-blurhash'
 
 # Background tasks
 gem 'sidekiq', '~> 5'

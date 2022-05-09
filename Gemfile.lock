@@ -18,13 +18,6 @@ GIT
       railties (>= 3.1)
 
 GIT
-  remote: https://github.com/gargron/blurhash.git
-  revision: c93c04db039ce03109ec486dbd55211b6b7f3178
-  specs:
-    blurhash (0.1.5)
-      ffi (~> 1.14)
-
-GIT
   remote: https://github.com/hummingbird-me/pundit-resources.git
   revision: a93c8708a697591bbbf9cac2a5d7a6695d769e61
   specs:
@@ -33,14 +26,6 @@ GIT
       jsonapi-resources
       pundit
       rails (>= 4.2.1)
-
-GIT
-  remote: https://github.com/renchap/shrine-blurhash.git
-  revision: c00cc049319f45ff2782336dccafbe5854ba5894
-  specs:
-    shrine-blurhash (0.0.1)
-      blurhash (~> 0.1.4)
-      shrine (~> 3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -146,6 +131,8 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.16)
     benchmark-ips (2.10.0)
+    blurhash (0.1.6)
+      ffi (~> 1.14)
     bootsnap (1.11.1)
       msgpack (~> 1.2)
     bson (4.12.1)
@@ -199,7 +186,7 @@ GEM
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
       railties (>= 3.2)
-    down (5.2.4)
+    down (5.3.1)
       addressable (~> 2.8)
     e2mmap (0.1.0)
     elasticsearch (5.0.4)
@@ -705,6 +692,9 @@ GEM
     shrine (3.4.0)
       content_disposition (~> 1.0)
       down (~> 5.1)
+    shrine-blurhash (0.1.0)
+      blurhash (~> 0.1.4)
+      shrine (~> 3.0)
     sidekiq (5.2.9)
       connection_pool (~> 2.2, >= 2.2.2)
       rack (~> 2.0)
@@ -799,7 +789,7 @@ DEPENDENCIES
   aws-sdk-s3 (~> 1)
   bcrypt
   benchmark-ips
-  blurhash!
+  blurhash
   bootsnap
   chewy
   connection_pool
@@ -899,7 +889,7 @@ DEPENDENCIES
   sentry-raven
   shoulda-matchers
   shrine
-  shrine-blurhash!
+  shrine-blurhash
   sidekiq (~> 5)
   sidekiq-debounce
   sidekiq-scheduler
