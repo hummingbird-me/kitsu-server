@@ -295,9 +295,6 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    haml (5.2.2)
-      temple (>= 0.8.0)
-      tilt
     hashdiff (1.0.1)
     health_bit (0.1.8)
       rack
@@ -337,12 +334,6 @@ GEM
     iso-639 (0.3.5)
     iso_country_codes (0.7.8)
     jmespath (1.6.1)
-    jquery-rails (4.4.0)
-      rails-dom-testing (>= 1, < 3)
-      railties (>= 4.2.0)
-      thor (>= 0.14, < 2.0)
-    jquery-ui-rails (6.0.1)
-      railties (>= 3.2.16)
     json (2.6.1)
     json_expressions (0.9.0)
     jsonapi-resources (0.9.0)
@@ -350,18 +341,18 @@ GEM
       concurrent-ruby
       railties (>= 4.1)
     jwt (2.3.0)
-    kaminari (1.2.1)
+    kaminari (1.2.2)
       activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.2.1)
-      kaminari-activerecord (= 1.2.1)
-      kaminari-core (= 1.2.1)
-    kaminari-actionview (1.2.1)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
       actionview
-      kaminari-core (= 1.2.1)
-    kaminari-activerecord (1.2.1)
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
       activerecord
-      kaminari-core (= 1.2.1)
-    kaminari-core (1.2.1)
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     kramdown (2.4.0)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -533,9 +524,6 @@ GEM
       rack (>= 1.0, < 3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
-    rack-pjax (1.1.0)
-      nokogiri (~> 1.5)
-      rack (>= 1.1)
     rack-protection (2.0.8.1)
       rack
     rack-test (1.1.0)
@@ -560,18 +548,12 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    rails_admin (2.2.1)
+    rails_admin (3.0.0)
       activemodel-serializers-xml (>= 1.0)
-      builder (~> 3.1)
-      haml (>= 4.0, < 6)
-      jquery-rails (>= 3.0, < 5)
-      jquery-ui-rails (>= 5.0, < 7)
       kaminari (>= 0.14, < 2.0)
       nested_form (~> 0.3)
-      rack-pjax (>= 0.7)
-      rails (>= 5.0, < 7)
-      remotipart (~> 1.3)
-      sassc-rails (>= 1.3, < 3)
+      rails (>= 6.0, < 8)
+      turbo-rails (~> 1.0)
     railties (6.0.4.8)
       actionpack (= 6.0.4.8)
       activesupport (= 6.0.4.8)
@@ -587,7 +569,6 @@ GEM
       ffi (~> 1.0)
     redis (4.5.1)
     regexp_parser (2.1.1)
-    remotipart (1.4.4)
     representable (3.0.4)
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
@@ -730,11 +711,13 @@ GEM
       dante (>= 0.2.0)
       multi_json (~> 1.0)
       stripe (>= 2.0.3)
-    temple (0.8.2)
     thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
     timecop (0.9.5)
+    turbo-rails (1.0.1)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
     tzinfo (1.2.9)
@@ -865,6 +848,7 @@ DEPENDENCIES
   ruby-progressbar
   sanitize
   sass-rails
+  sassc-rails
   sentry-raven
   shoulda-matchers
   shrine
