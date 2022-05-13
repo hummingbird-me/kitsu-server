@@ -18,6 +18,6 @@ class Mutations::Base < GraphQL::Schema::Mutation
   def self.default_graphql_name
     # Mutations::Anime::Create -> AnimeCreate
     # Mutations::LibraryEntry::UpdateStatusById -> LibraryEntryUpdateStatusById
-    name.split('::')[1..-1].join
+    name.split('::')[1..].join
   end
 end
