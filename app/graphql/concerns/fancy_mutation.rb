@@ -19,7 +19,11 @@ module FancyMutation
       union_name = "#{graphql_name}ErrorsUnion"
       union = Class.new(Types::Union::Base) do
         graphql_name union_name
-        possible_types types
+        possible_types(*types)
+
+        def self.resolve_type(object, _context)
+          object.key?(:__type) ? object[:__type] : super
+        end
       end
       field :errors, [union], null: true
     end
