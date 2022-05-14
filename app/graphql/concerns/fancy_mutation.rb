@@ -41,7 +41,7 @@ module FancyMutation
   def resolve_with_support(ignore_warnings: false, **args)
     result = super(**args)
 
-    raise ActiveRecord::Rollback unless warnings.blank? || ignore_warnings
+    raise ActiveRecord::Rollback if warnings.present? && !ignore_warnings
 
     {
       # If the mutation returns the errors list, ignore it (it's not the actual result)
