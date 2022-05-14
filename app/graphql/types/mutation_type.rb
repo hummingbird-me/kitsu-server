@@ -1,4 +1,12 @@
 class Types::MutationType < Types::BaseObject
+  def self.fancy_mutation(
+    klass,
+    name: klass.name.split('::')[1..].join.camelize(:lower)
+  )
+    field name, mutation: klass
+  end
+
+  fancy_mutation Mutations::Account::Create
   field :pro, Mutations::Pro, null: false
   field :account, Mutations::Account, null: false
   field :anime, Mutations::Anime, null: false
