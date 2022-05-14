@@ -43,7 +43,12 @@ module FancyMutation
 
     raise ActiveRecord::Rollback unless warnings.blank? || ignore_warnings
 
-    { result: result, warnings: warnings, errors: errors }
+    {
+      # If the mutation returns the errors list, ignore it (it's not the actual result)
+      result: (result unless result == errors),
+      warnings: warnings,
+      errors: errors
+    }
   end
 
   def errors
