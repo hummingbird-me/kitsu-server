@@ -12,7 +12,11 @@ class Mutations::Base < GraphQL::Schema::Mutation
   end
 
   def current_user
-    User.current.presence || context[:user]
+    context[:user]
+  end
+
+  def current_token
+    context[:token]
   end
 
   def self.default_graphql_name
