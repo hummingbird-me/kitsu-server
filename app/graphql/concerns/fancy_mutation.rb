@@ -48,31 +48,59 @@ module FancyMutation
       argument :input, input, required: true
     end
 
-    # Sets up the union of error types for the mutation
+    # Adds types to the union of error types for the mutation
     # @param types [Array<Class>] The error types this can return
     def errors(*types)
-      union_name = "#{graphql_name}ErrorsUnion"
-      union = Class.new(Types::Union::Base) do
-        graphql_name union_name
-        possible_types(*types)
-
-        def self.resolve_type(object, _context)
-          object.key?(:__type) ? object[:__type] : super
-        end
-      end
-      field :errors, [union], null: true
+      errors_union.possible_types(*types)
     end
 
-    # Sets up the union of warning types for the mutation
+    # Adds types to the union of warning types for the mutation
     # @param types [Array<Class>] The warning types this can return
     def warnings(*types)
-      union_name = "#{graphql_name}WarningsUnion"
-      union = Class.new(Types::Union::Base) do
-        graphql_name union_name
-        possible_types types.flatten
-      end
-      field :errors, [union], null: true
+      warnings_union.possible_types(*types)
     end
+
+    # These two methods are kinda strange. The first time they're called, they create a new union
+    # type, hook it up to the mutation, and return it. When they get called again, they return that
+    # same type, allowing us to add more possible types to the union from different locations. This
+    # is important for utilities which might hook the `#ready?` method, since they can return
+    # errors.
+    def errors_union
+      @errors_union ||= begin
+        union_name = "#{graphql_name}ErrorsUnion"
+        errors_union = Class.new(Types::Union::Base) do
+          graphql_name union_name
+
+          def self.resolve_type(object, _context)
+            object.key?(:__type) ? object[:__type] : super
+          end
+        end
+        field :errors, [errors_union], null: true
+
+        errors_union
+      end
+    end
+
+    def warnings_union
+      @warnings_union ||= begin
+        union_name = "#{graphql_name}WarningsUnion"
+        warnings_union = Class.new(Types::Union::Base) do
+          graphql_name union_name
+
+          def self.resolve_type(object, _context)
+            object.key?(:__type) ? object[:__type] : super
+          end
+        end
+        field :warnings, [warnings_union], null: true
+
+        warnings_union
+      end
+    end
+  end
+
+  included do
+    private_class_method :errors_union
+    private_class_method :warnings_union
   end
 
   # Wraps the resolve method with some support. When ignore_warnings is false or not set, it will
