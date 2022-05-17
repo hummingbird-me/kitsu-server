@@ -30,6 +30,28 @@
 module FancyMutation
   extend ActiveSupport::Concern
 
+  module PrependedMethods
+    # The return-driven approach of #ready? and #authorized? is garbage, so we override it and allow
+    # using the same error system as in #resolve. To achieve this, we prepend a module wrapping the
+    # mutation's #ready? and #authorized? methods, detecting the state of the error object after
+    # execution and changing the result if needed.
+    def ready?(*)
+      ready, result = super
+
+      return [false, { errors: errors }] if errors.present?
+
+      [ready, result]
+    end
+
+    def authorized?(*)
+      ready, result = super
+
+      return [false, { errors: errors }] if errors.present?
+
+      [ready, result]
+    end
+  end
+
   class_methods do
     # Sets the result type
     # @param type [Class] The GraphQL type to use for the result
@@ -99,6 +121,7 @@ module FancyMutation
   end
 
   included do
+    prepend PrependedMethods
     private_class_method :errors_union
     private_class_method :warnings_union
   end
@@ -120,6 +143,21 @@ module FancyMutation
       warnings: warnings,
       errors: errors
     }
+  end
+
+  # Adds an error if there is no current user session.
+  def authenticate!
+    errors << Types::Errors::NotAuthenticated.build if current_user.blank?
+    true
+  end
+
+  # Adds an error if the current user is not authorized to perform the action on the object.
+  # @param object [ActiveRecord::Base] The object to check authorization on
+  # @param action [Symbol] The action to check authorization for
+  def authorize!(object, action, policy: Pundit::PolicyFinder.new(object).policy)
+    authorized = policy.new(current_token, object).public_send(action)
+    errors << Types::Errors::NotAuthorized.build(object: object, action: action) unless authorized
+    true
   end
 
   # A list of errors from the mutation. Push to this list from your resolve method.
