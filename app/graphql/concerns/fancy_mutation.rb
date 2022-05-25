@@ -62,12 +62,7 @@ module FancyMutation
     # Sets up an input type and field for the mutation
     # @param block [Proc] A block defining the input type fields
     def input(&block)
-      input_name = "#{graphql_name}Input"
-      input = Class.new(Types::Input::Base) do
-        graphql_name input_name
-        instance_eval(&block)
-      end
-      argument :input, input, required: true
+      input_type.instance_eval(&block)
     end
 
     # Adds types to the union of error types for the mutation
@@ -82,11 +77,12 @@ module FancyMutation
       warnings_union.possible_types(*types)
     end
 
-    # These two methods are kinda strange. The first time they're called, they create a new union
-    # type, hook it up to the mutation, and return it. When they get called again, they return that
-    # same type, allowing us to add more possible types to the union from different locations. This
-    # is important for utilities which might hook the `#ready?` method, since they can return
-    # errors.
+    ### private_class_methods ###
+
+    # These methods are kinda strange. The first time they're called, they create a new type, hook
+    # it up to the mutation, and return it. When they get called again, they return that same type,
+    # allowing us to modify them repeatedly from different locations. This allows utilities to add
+    # types automatically such as an ignore_warnings argument, or a common error type.
     def errors_union
       @errors_union ||= begin
         union_name = "#{graphql_name}ErrorsUnion"
@@ -118,12 +114,25 @@ module FancyMutation
         warnings_union
       end
     end
+
+    def input_type
+      @input_type ||= begin
+        input_name = "#{graphql_name}Input"
+        input_type = Class.new(Types::Input::Base) do
+          graphql_name input_name
+        end
+        argument :input, input_type, required: true
+
+        input_type
+      end
+    end
   end
 
   included do
     prepend PrependedMethods
     private_class_method :errors_union
     private_class_method :warnings_union
+    private_class_method :input_type
   end
 
   # Wraps the resolve method with some support. When ignore_warnings is false or not set, it will
