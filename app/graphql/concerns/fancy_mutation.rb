@@ -30,6 +30,8 @@
 module FancyMutation
   extend ActiveSupport::Concern
 
+  class WarningsPresent < StandardError; end
+
   module PrependedMethods
     # The return-driven approach of #ready? and #authorized? is garbage, so we override it and allow
     # using the same error system as in #resolve. To achieve this, we prepend a module wrapping the
@@ -111,6 +113,10 @@ module FancyMutation
         end
         field :warnings, [warnings_union], null: true
 
+        # Add the ignore_warnings argument and error type
+        input { argument :ignore_warnings, GraphQL::Types::Boolean, required: false }
+        errors Types::Errors::WarningsPresent
+
         warnings_union
       end
     end
@@ -142,15 +148,24 @@ module FancyMutation
   # as the result type.
   # @param ignore_warnings [Boolean] Whether to ignore warnings or not
   def resolve_with_support(ignore_warnings: false, **args)
-    result = super(**args)
+    # Wrap the mutation in a transaction to allow for rollback if there are warnings
+    ApplicationRecord.transaction(requires_new: true) do
+      result = super(**args)
 
-    raise ActiveRecord::Rollback if warnings.present? && !ignore_warnings
+      # Trigger a rollback but allow us to catch it afterwards and control our response format.
+      raise WarningsPresent if warnings.present? && !ignore_warnings
 
+      {
+        # If the mutation returns the errors list, ignore it (it's not the actual result)
+        result: (result unless result == errors),
+        warnings: warnings,
+        errors: errors
+      }
+    end
+  rescue WarningsPresent
     {
-      # If the mutation returns the errors list, ignore it (it's not the actual result)
-      result: (result unless result == errors),
       warnings: warnings,
-      errors: errors
+      errors: [*errors, Types::Errors::WarningsPresent.build]
     }
   end
 
