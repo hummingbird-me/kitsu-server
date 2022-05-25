@@ -59,3 +59,6 @@ en:
       subject: "Welcome to Kitsu %{tier}"
     cancellation_email:
       subject: "Your Kitsu %{tier} subscription has been cancelled"
+  graphql:
+    errors:
+      warnings_present: "A warning was present and ignore_warnings was not set to true"
