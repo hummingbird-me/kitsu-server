@@ -1,16 +1,6 @@
 class Mutations::Base < GraphQL::Schema::Mutation
   include BehindFeatureFlag
 
-  def authorized?(record, action)
-    return true if Pundit.policy!(context[:token], record).public_send(action)
-
-    [false, {
-      errors: [
-        { message: message, code: 'NotAuthorized' }
-      ]
-    }]
-  end
-
   def current_user
     context[:user]
   end
