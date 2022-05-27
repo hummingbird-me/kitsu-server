@@ -33,6 +33,34 @@ module FancyMutation
   class WarningsPresent < StandardError; end
 
   module PrependedMethods
+    # Wraps the resolve method with some support. When ignore_warnings is false or not set, it will
+    # rollback when there are warnings. In all cases, the return value of the resolve method will be
+    # wrapped as the :result field, so that the mutation always returns the correct structure. When
+    # the return value is the errors list, we ignore it, so that we won't accidentally try to treat
+    # it as the result type.
+    # @param ignore_warnings [Boolean] Whether to ignore warnings or not
+    def resolve(ignore_warnings: false, **args)
+      # Wrap the mutation in a transaction to allow for rollback if there are warnings
+      ApplicationRecord.transaction(requires_new: true) do
+        result = super(**args)
+
+        # Trigger a rollback but allow us to catch it afterwards and control our response format.
+        raise WarningsPresent if warnings.present? && !ignore_warnings
+
+        {
+          # If the mutation returns the errors list, ignore it (it's not the actual result)
+          result: (result unless result == errors),
+          warnings: warnings,
+          errors: errors
+        }
+      end
+    rescue WarningsPresent
+      {
+        warnings: warnings,
+        errors: [*errors, Types::Errors::WarningsPresent.build]
+      }
+    end
+
     # The return-driven approach of #ready? and #authorized? is garbage, so we override it and allow
     # using the same error system as in #resolve. To achieve this, we prepend a module wrapping the
     # mutation's #ready? and #authorized? methods, detecting the state of the error object after
@@ -139,34 +167,6 @@ module FancyMutation
     private_class_method :errors_union
     private_class_method :warnings_union
     private_class_method :input_type
-  end
-
-  # Wraps the resolve method with some support. When ignore_warnings is false or not set, it will
-  # rollback when there are warnings. In all cases, the return value of the resolve method will be
-  # wrapped as the :result field, so that the mutation always returns the correct structure. When
-  # the return value is the errors list, we ignore it, so that we won't accidentally try to treat it
-  # as the result type.
-  # @param ignore_warnings [Boolean] Whether to ignore warnings or not
-  def resolve_with_support(ignore_warnings: false, **args)
-    # Wrap the mutation in a transaction to allow for rollback if there are warnings
-    ApplicationRecord.transaction(requires_new: true) do
-      result = super(**args)
-
-      # Trigger a rollback but allow us to catch it afterwards and control our response format.
-      raise WarningsPresent if warnings.present? && !ignore_warnings
-
-      {
-        # If the mutation returns the errors list, ignore it (it's not the actual result)
-        result: (result unless result == errors),
-        warnings: warnings,
-        errors: errors
-      }
-    end
-  rescue WarningsPresent
-    {
-      warnings: warnings,
-      errors: [*errors, Types::Errors::WarningsPresent.build]
-    }
   end
 
   # Adds an error if there is no current user session.
