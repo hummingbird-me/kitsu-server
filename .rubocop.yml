@@ -3,26 +3,201 @@ require:
   - rubocop-rspec
   - rubocop-performance
 AllCops:
-  NewCops: enable
+  DisplayCopNames: false
+  DisplayStyleGuide: true
   Exclude:
     - db/**/*
     - bin/**/*
     - Guardfile
-  DisplayCopNames: false
-  DisplayStyleGuide: true
+    - _scraps/**/*
+  NewCops: enable
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.7
+
 Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
+Layout/ClosingHeredocIndentation:
+  Enabled: false
+Layout/DotPosition:
+  EnforcedStyle: leading
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+Layout/LeadingCommentSpace:
+  Enabled: true
+Layout/LineLength:
+  AllowURI: true
+  Enabled: true
+  Exclude:
+    - config/routes.rb
+  IgnoreCopDirectives: true
+  Max: 100
+Layout/SpaceAfterColon:
+  Enabled: true
+Layout/SpaceAfterComma:
+  Enabled: true
+Layout/SpaceAfterMethodName:
+  Enabled: true
+Layout/SpaceAfterNot:
+  Enabled: true
+Layout/SpaceAfterSemicolon:
+  Enabled: true
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: true
+  EnforcedStyle: space
+Layout/SpaceAroundKeyword:
+  Enabled: true
+Layout/SpaceAroundOperators:
+  Enabled: true
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+  EnforcedStyle: space
+Layout/SpaceBeforeComma:
+  Enabled: true
+Layout/SpaceBeforeComment:
+  Enabled: true
+Layout/SpaceBeforeFirstArg:
+  Enabled: true
+Layout/SpaceBeforeSemicolon:
+  Enabled: true
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+  EnforcedStyle: space
+  EnforcedStyleForEmptyBraces: no_space
+  SpaceBeforeBlockParameters: true
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+  EnforcedStyle: space
+  EnforcedStyleForEmptyBraces: no_space
+Layout/SpaceInsideParens:
+  Enabled: true
+Layout/SpaceInsideRangeLiteral:
+  Enabled: true
+Layout/TrailingEmptyLines:
+  Enabled: true
+  EnforcedStyle: final_newline
+Layout/TrailingWhitespace:
+  Enabled: true
+
+Lint/AssignmentInCondition:
+  AllowSafeAssignment: true
+  Enabled: true
+Lint/Debugger:
+  Enabled: true
+Lint/DeprecatedClassMethods:
+  Enabled: true
+Lint/FlipFlop:
+  Enabled: true
+Lint/LiteralInInterpolation:
+  Enabled: true
+Lint/Loop:
+  Enabled: true
+Lint/ParenthesesAsGroupedExpression:
+  Enabled: true
+Lint/RequireParentheses:
+  Enabled: false
+Lint/SuppressedException:
+  Enabled: true
+Lint/UnderscorePrefixedVariableName:
+  Enabled: true
+Lint/UselessSetterCall:
+  Enabled: true
+
+# We use Codeclimate and human review for metric analysis
+Metrics:
+  Enabled: false
+Metrics/BlockNesting:
+  Enabled: true
+  Max: 5
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+  Enabled: true
+  Max: 5
+
+Naming/AccessorMethodName:
+  Enabled: true
+Naming/AsciiIdentifiers:
+  Enabled: true
+Naming/FileName:
+  Enabled: true
+  Exclude:
+    - "**/jsonapi-resources.rb"
+    - "config/initializers/**/*.rb"
+    - "spec/support/**/*.rb"
+Naming/PredicateName:
+  Enabled: true
+  Exclude:
+    - app/graphql/types/**/*
+  ForbiddenPrefixes:
+    - is_
+  NamePrefix:
+    - is_
+    - has_
+    - have_
+Naming/VariableName:
+  Enabled: true
+  EnforcedStyle: snake_case
+
+RSpec/ContextWording:
+  Prefixes:
+    - when
+    - with
+    - without
+    - if
+    - unless
+    - for
+    - and
+    - or
+RSpec/ExampleLength:
+  Max: 40
+RSpec/MultipleExpectations:
+  Max: 5
+RSpec/NestedGroups:
+  Max: 4
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+Rails/TimeZone:
+  Enabled: false
+Rails/UnknownEnv:
+  Environments:
+  - production
+  - staging
+  - development
+  - test
+
+Security/Eval:
+  Enabled: true
+
+Style/Alias:
+  Enabled: true
+  EnforcedStyle: prefer_alias_method
+Style/ArrayJoin:
+  Enabled: true
+Style/AsciiComments:
+  Enabled: false
+Style/Attr:
+  Enabled: true
+Style/BlockComments:
+  Enabled: true
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
+Style/ClassAndModuleChildren:
+  Enabled: true
+  Exclude:
+    - app/graphql/**/*
 Style/CollectionMethods:
   PreferredMethods:
     collect: map
     collect!: map!
-    inject: reduce
     detect: find
     find_all: select
+    inject: reduce
+Style/ColonMethodCall:
+  Enabled: true
 Style/CommentAnnotation:
   Enabled: true
   Keywords:
@@ -32,13 +207,12 @@ Style/CommentAnnotation:
     - HACK
     - REVIEW
     - DEPRECATED
-Layout/DotPosition:
-  EnforcedStyle: leading
-Layout/EmptyLineAfterGuardClause:
+Style/Documentation:
   Enabled: false
-Naming/FileName:
+Style/EmptyLiteral:
   Enabled: true
-  Exclude: ['**/jsonapi-resources.rb']
+Style/EvenOdd:
+  Enabled: true
 Style/FormatString:
   Enabled: true
   EnforcedStyle: format
@@ -50,70 +224,82 @@ Style/GlobalVars:
 Style/GuardClause:
   Enabled: true
   MinBodyLength: 3
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 Style/IfUnlessModifier:
   Enabled: true
-Layout/FirstArrayElementIndentation:
-  EnforcedStyle: consistent
-Layout/FirstHashElementIndentation:
-  EnforcedStyle: consistent
+Style/IfWithSemicolon:
+  Enabled: true
+Style/InlineComment:
+  Enabled: false
+Style/Lambda:
+  # HACK: Until Rubocop is released with EnforcedStyle
+  Enabled: true
+  EnforcedStyle: literal
 Style/LambdaCall:
+  Enabled: true
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+Style/MultilineBlockChain:
+  Enabled: true
+Style/MultilineTernaryOperator:
+  Enabled: true
+Style/NegatedIf:
+  Enabled: true
+Style/NestedTernaryOperator:
   Enabled: true
 Style/Next:
   Enabled: true
   MinBodyLength: 3
+Style/NilComparison:
+  Enabled: true
+Style/Not:
+  Enabled: true
 Style/NumericLiterals:
   Enabled: true
   MinDigits: 5
+Style/OneLineConditional:
+  Enabled: true
 Style/PercentLiteralDelimiters:
   Enabled: true
   PreferredDelimiters:
-    '%': '[]'
-    '%i': '[]'
-    '%q': '[]'
-    '%Q': '[]'
-    '%r': '{}'
-    '%s': '()'
-    '%w': '[]'
-    '%W': '[]'
-    '%x': '[]'
-Naming/PredicateName:
+    "%": "[]"
+    "%Q": "[]"
+    "%W": "[]"
+    "%i": "[]"
+    "%q": "[]"
+    "%r": "{}"
+    "%s": "()"
+    "%w": "[]"
+    "%x": "[]"
+Style/PerlBackrefs:
   Enabled: true
-  NamePrefix:
-    - is_
-    - has_
-    - have_
-  ForbiddenPrefixes:
-    - is_
-  Exclude:
-    - app/graphql/types/**/*
 Style/RaiseArgs:
   Enabled: true
   EnforcedStyle: exploded
-Style/SingleLineMethods:
+Style/RedundantBegin:
   Enabled: true
+Style/RedundantSelf:
+  Enabled: true
+Style/RescueModifier:
+  Enabled: true
+Style/SelfAssignment:
+  Enabled: true
+Style/SingleLineMethods:
   AllowIfMethodIsEmpty: true
+  Enabled: true
+Style/SpecialGlobalVars:
+  Enabled: true
 Style/StringLiterals:
   EnforcedStyle: single_quotes
-Layout/SpaceAroundEqualsInParameterDefault:
+Style/SymbolArray:
   Enabled: true
-  EnforcedStyle: space
-Layout/SpaceBeforeBlockBraces:
-  Enabled: true
-  EnforcedStyle: space
-Layout/SpaceInsideBlockBraces:
-  Enabled: true
-  EnforcedStyle: space
-  EnforcedStyleForEmptyBraces: no_space
-  SpaceBeforeBlockParameters: true
-Layout/SpaceInsideHashLiteralBraces:
-  Enabled: true
-  EnforcedStyle: space
-  EnforcedStyleForEmptyBraces: no_space
 Style/SymbolProc:
   Enabled: true
-Layout/TrailingEmptyLines:
-  Enabled: true
-  EnforcedStyle: final_newline
 Style/TrailingCommaInArguments:
   Enabled: true
   EnforcedStyleForMultiline: no_comma
@@ -124,156 +310,7 @@ Style/TrailingCommaInHashLiteral:
   Enabled: true
   EnforcedStyleForMultiline: no_comma
 Style/TrivialAccessors:
-  Enabled: true
   AllowDSLWriters: true
-Naming/VariableName:
-  Enabled: true
-  EnforcedStyle: snake_case
-Style/WordArray:
-  Enabled: true
-  MinSize: 2
-Metrics/AbcSize:
-  Enabled: true
-  Max: 25
-Metrics/BlockNesting:
-  Enabled: true
-  Max: 5
-Metrics/BlockLength:
-  Enabled: false
-Metrics/ClassLength:
-  Enabled: true
-  CountComments: false
-  Max: 500
-Metrics/ModuleLength:
-  Enabled: true
-  CountComments: false
-  Max: 500
-Metrics/CyclomaticComplexity:
-  Enabled: true
-  Max: 10
-Layout/LineLength:
-  Enabled: true
-  Max: 100
-  AllowURI: true
-  IgnoreCopDirectives: true
-  Exclude:
-    - config/routes.rb
-Metrics/MethodLength:
-  Enabled: true
-  CountComments: false
-  Max: 100
-Metrics/ParameterLists:
-  Enabled: true
-  Max: 5
-  CountKeywordArgs: false
-Metrics/PerceivedComplexity:
-  Enabled: true
-  Max: 8
-Lint/AssignmentInCondition:
-  Enabled: true
-  AllowSafeAssignment: true
-Style/InlineComment:
-  Enabled: false
-Style/MethodCalledOnDoEndBlock:
-  Enabled: true
-Style/SymbolArray:
-  Enabled: true
-Naming/AccessorMethodName:
-  Enabled: true
-Style/Alias:
-  Enabled: true
-  EnforcedStyle: prefer_alias_method
-Style/ArrayJoin:
-  Enabled: true
-Style/AsciiComments:
-  Enabled: false
-Naming/AsciiIdentifiers:
-  Enabled: true
-Style/Attr:
-  Enabled: true
-Style/BlockComments:
-  Enabled: true
-Style/ColonMethodCall:
-  Enabled: true
-Style/Documentation:
-  Enabled: false
-Style/EmptyLiteral:
-  Enabled: true
-Style/EvenOdd:
-  Enabled: true
-Lint/FlipFlop:
-  Enabled: true
-Style/IfWithSemicolon:
-  Enabled: true
-Style/Lambda:
-  EnforcedStyle: literal
-  # HACK: Until Rubocop is released with EnforcedStyle
-  Enabled: true
-Layout/LeadingCommentSpace:
-  Enabled: true
-Style/MultilineBlockChain:
-  Enabled: true
-Style/MultilineTernaryOperator:
-  Enabled: true
-Style/NegatedIf:
-  Enabled: true
-Style/NestedTernaryOperator:
-  Enabled: true
-Style/NilComparison:
-  Enabled: true
-Style/Not:
-  Enabled: true
-Style/OneLineConditional:
-  Enabled: true
-Style/PerlBackrefs:
-  Enabled: true
-Style/RedundantBegin:
-  Enabled: true
-Style/RedundantSelf:
-  Enabled: true
-Style/RescueModifier:
-  Enabled: true
-Style/SelfAssignment:
-  Enabled: true
-Style/ClassAndModuleChildren:
-  Enabled: true
-  Exclude:
-    - app/graphql/**/*
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Layout/SpaceBeforeFirstArg:
-  Enabled: true
-Layout/SpaceAfterColon:
-  Enabled: true
-Layout/SpaceAfterComma:
-  Enabled: true
-Layout/SpaceAroundKeyword:
-  Enabled: true
-Layout/SpaceAfterMethodName:
-  Enabled: true
-Layout/SpaceAfterNot:
-  Enabled: true
-Layout/SpaceAfterSemicolon:
-  Enabled: true
-Layout/SpaceBeforeComma:
-  Enabled: true
-Layout/SpaceBeforeComment:
-  Enabled: true
-Layout/SpaceBeforeSemicolon:
-  Enabled: true
-Layout/SpaceAroundOperators:
-  Enabled: true
-Layout/SpaceInsideParens:
-  Enabled: true
-Layout/SpaceInsideRangeLiteral:
-  Enabled: true
-Style/SpecialGlobalVars:
-  Enabled: true
-Layout/TrailingWhitespace:
   Enabled: true
 Style/UnlessElse:
   Enabled: true
@@ -281,35 +318,6 @@ Style/VariableInterpolation:
   Enabled: true
 Style/WhenThen:
   Enabled: true
-Lint/Debugger:
+Style/WordArray:
   Enabled: true
-Lint/DeprecatedClassMethods:
-  Enabled: true
-Security/Eval:
-  Enabled: true
-Lint/SuppressedException:
-  Enabled: true
-Lint/LiteralInInterpolation:
-  Enabled: true
-Lint/Loop:
-  Enabled: true
-Lint/ParenthesesAsGroupedExpression:
-  Enabled: true
-Lint/RequireParentheses:
-  Enabled: false
-Lint/UnderscorePrefixedVariableName:
-  Enabled: true
-Lint/UselessSetterCall:
-  Enabled: true
-Rails/HasAndBelongsToMany:
-  Enabled: false
-Rails/TimeZone:
-  Enabled: false
-RSpec/ExampleLength:
-  Max: 20
-Rails/UnknownEnv:
-  Environments:
-    - production
-    - staging
-    - development
-    - test
+  MinSize: 2
