@@ -502,7 +502,7 @@ GEM
       actionmailer (>= 3.0.0)
       postmark (>= 1.21.3, < 2.0)
     progress (3.6.0)
-    prometheus_exporter (2.0.2)
+    prometheus_exporter (2.0.3)
       webrick
     promise.rb (0.7.4)
     pry (0.13.1)
