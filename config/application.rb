@@ -55,6 +55,12 @@ module Kitsu
     # Normally we wanna be API-only, but we mount some admin panels in, so... :(
     config.api_only = false
 
+    config.ssl_options = {
+      redirect: {
+        exclude: -> (request) { request.path.start_with?('/api/_health') }
+      }
+    }
+
     # Set up Flipper's Memoizer middleware
     config.middleware.insert_before 0, Flipper::Middleware::Memoizer
     # Enable CORS
