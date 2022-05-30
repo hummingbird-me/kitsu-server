@@ -6,7 +6,7 @@ class Types::Session < Types::BaseObject
     description: 'The account associated with this session'
 
   def account
-    object unless object.blank?
+    object.presence
   end
 
   field :profile, Types::Profile,
@@ -14,7 +14,7 @@ class Types::Session < Types::BaseObject
     description: 'The profile associated with this session'
 
   def profile
-    object unless object.blank?
+    object.presence
   end
 
   field :nolt_token, String,

@@ -153,7 +153,8 @@ module Types::Interface::Media
     description: 'The companies which helped to produce this media'
 
   def productions
-    Loaders::AssociationLoader.for(object.class, :productions, policy: :media_production).scope(object)
+    Loaders::AssociationLoader.for(object.class, :productions,
+      policy: :media_production).scope(object)
   end
 
   field :quotes, Types::Quote.connection_type,
@@ -175,7 +176,8 @@ module Types::Interface::Media
       sort: sort,
       where: { media_type: object.class.name }
     }, object.id).then do |categories|
-      Loaders::RecordLoader.for(Category, token: context[:token]).load_many(categories.map(&:category_id))
+      Loaders::RecordLoader.for(Category,
+        token: context[:token]).load_many(categories.map(&:category_id))
     end
   end
 

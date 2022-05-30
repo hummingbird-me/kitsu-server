@@ -60,7 +60,7 @@ class YoutubeService
     end
 
     def self.secret
-      ENV['YOUTUBE_PUBSUB_SECRET']
+      ENV.fetch('YOUTUBE_PUBSUB_SECRET', nil)
     end
 
     def secret

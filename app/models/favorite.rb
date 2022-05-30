@@ -2,8 +2,8 @@ class Favorite < ApplicationRecord
   include RankedModel
   ranks :fav_rank, with_same: %i[user_id item_type]
 
-  belongs_to :user, required: true, counter_cache: true
-  belongs_to :item, polymorphic: true, required: true
+  belongs_to :user, optional: false, counter_cache: true
+  belongs_to :item, polymorphic: true, optional: false
 
   validates :item, polymorphism: { type: [Media, Character, Person] }
   validates :user_id, uniqueness: {

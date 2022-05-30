@@ -12,7 +12,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
   end
 
   context 'with an invalid node name' do
-    it 'should raise an error' do
+    it 'raises an error' do
       expect {
         xml = Nokogiri::XML.fragment('<test></test>').at_css('test')
         described_class.new(xml)
@@ -28,7 +28,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#type' do
-      it 'should return Anime class' do
+      it 'returns Anime class' do
         row = described_class.new(wrap_row(''))
         expect(row.type).to eq(Anime)
       end
@@ -37,152 +37,147 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     describe '#media' do
       context 'with a specific Mapping' do
         let(:mapping) { create_mapping(anime) }
-        let(:xml) { wrap_row <<~EOF }
+        let(:xml) { wrap_row <<~XML }
           <series_animedb_id>
             #{mapping.external_id.split('/').last}
           </series_animedb_id>
           <series_title>#{anime.canonical_title}</series_title>
           <series_type>#{anime.subtype}</series_type>
           <series_episodes>#{anime.episode_count}</series_episodes>
-        EOF
-        it 'should return the Anime instance from the Mapping' do
+        XML
+
+        it 'returns the Anime instance from the Mapping' do
           row = described_class.new(xml)
-          expect(Mapping).to receive(:lookup)
+          allow(Mapping).to receive(:lookup)
             .with('myanimelist/anime', mapping.external_id.to_i)
             .and_return(anime)
           expect(row.media).to eq(anime)
         end
       end
+
       context 'without a specific Mapping' do
-        let(:xml) { wrap_row <<~EOF }
+        let(:xml) { wrap_row <<~XML }
           <series_animedb_id>#{rand(1..50_000)}</series_animedb_id>
           <series_title>#{anime.canonical_title}</series_title>
           <series_type>#{anime.subtype}</series_type>
           <series_episodes>#{anime.episode_count}</series_episodes>
-        EOF
-        it 'should guess the Anime instance using Mapping.guess' do
+        XML
+
+        it 'guesses the Anime instance using Mapping.guess' do
           row = described_class.new(xml)
-          expect(Mapping).to receive(:guess).and_return(anime)
+          allow(Mapping).to receive(:guess).and_return(anime)
           expect(row.media).to eq(anime)
         end
       end
     end
 
     describe '#media_info' do
-      let(:xml) { wrap_row <<~EOF }
+      subject(:row) { described_class.new(xml) }
+
+      let(:xml) { wrap_row <<~XML }
         <series_animedb_id>#{anime.id}</series_animedb_id>
         <series_title><![CDATA[#{anime.canonical_title}]]></series_title>
         <series_type>#{anime.subtype}</series_type>
         <series_episodes>#{anime.episode_count}</series_episodes>
-      EOF
-      subject { described_class.new(xml) }
-      it 'should return the id from series_animedb_id' do
-        expect(subject.media_info[:id]).to eq(anime.id)
+      XML
+
+      it 'returns the id from series_animedb_id' do
+        expect(row.media_info[:id]).to eq(anime.id)
       end
-      it 'should return the title from series_itlte' do
-        expect(subject.media_info[:title]).to eq(anime.canonical_title)
+
+      it 'returns the title from series_itlte' do
+        expect(row.media_info[:title]).to eq(anime.canonical_title)
       end
-      it 'should return the show type from series_type' do
-        expect(subject.media_info[:subtype]).to eq(anime.subtype)
+
+      it 'returns the show type from series_type' do
+        expect(row.media_info[:subtype]).to eq(anime.subtype)
       end
-      it 'should return the episode count from series_episdes' do
-        expect(subject.media_info[:episode_count]).to eq(anime.episode_count)
+
+      it 'returns the episode count from series_episdes' do
+        expect(row.media_info[:episode_count]).to eq(anime.episode_count)
       end
     end
 
     describe '#status' do
       context 'with a textual my_status' do
-        context 'of "Currently Watching"' do
-          it 'should return :current' do
-            xml = wrap_row '<my_status>Currently Watching</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:current)
-          end
+        it 'returns :current for "Currently Watching"' do
+          xml = wrap_row '<my_status>Currently Watching</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:current)
         end
-        context 'of "Plan to Watch"' do
-          it 'should return :planned' do
-            xml = wrap_row '<my_status>Plan to Watch</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:planned)
-          end
+
+        it 'returns :planned for "Plan to Watch"' do
+          xml = wrap_row '<my_status>Plan to Watch</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:planned)
         end
-        context 'of "Completed"' do
-          it 'should return :completed' do
-            xml = wrap_row '<my_status>Completed</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:completed)
-          end
+
+        it 'returns :completed for "Completed"' do
+          xml = wrap_row '<my_status>Completed</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:completed)
         end
-        context 'of "On Hold"' do
-          it 'should return :on_hold' do
-            xml = wrap_row '<my_status>On Hold</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:on_hold)
-          end
+
+        it 'returns :on_hold for "On Hold"' do
+          xml = wrap_row '<my_status>On Hold</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:on_hold)
         end
-        context 'of "On-Hold"' do
-          it 'should return :on_hold' do
-            xml = wrap_row '<my_status>On-Hold</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:on_hold)
-          end
+
+        it 'returns :on_hold for "On-Hold"' do
+          xml = wrap_row '<my_status>On-Hold</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:on_hold)
         end
-        context 'of "Dropped"' do
-          it 'should return :dropped' do
-            xml = wrap_row '<my_status>Dropped</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:dropped)
-          end
+
+        it 'returns :dropped for "Dropped"' do
+          xml = wrap_row '<my_status>Dropped</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:dropped)
         end
       end
+
       context 'with a numeric my_status' do
-        context 'of 1' do
-          it 'should return :current' do
-            xml = wrap_row '<my_status>1</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:current)
-          end
+        it 'returns :current for 1' do
+          xml = wrap_row '<my_status>1</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:current)
         end
-        context 'of 2' do
-          it 'should return :completed' do
-            xml = wrap_row '<my_status>2</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:completed)
-          end
+
+        it 'returns :completed for 2' do
+          xml = wrap_row '<my_status>2</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:completed)
         end
-        context 'of 3' do
-          it 'should return :on_hold' do
-            xml = wrap_row '<my_status>3</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:on_hold)
-          end
+
+        it 'returns :on_hold for 3' do
+          xml = wrap_row '<my_status>3</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:on_hold)
         end
-        context 'of 4' do
-          it 'should return :dropped' do
-            xml = wrap_row '<my_status>4</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:dropped)
-          end
+
+        it 'returns :dropped for 4' do
+          xml = wrap_row '<my_status>4</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:dropped)
         end
-        context 'of 5' do
-          it 'should return nil' do
-            xml = wrap_row '<my_status>5</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to be_nil
-          end
+
+        it 'returns nil for 5' do
+          xml = wrap_row '<my_status>5</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to be_nil
         end
-        context 'of 6' do
-          it 'should return :planned' do
-            xml = wrap_row '<my_status>6</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:planned)
-          end
+
+        it 'returns :planned for 6' do
+          xml = wrap_row '<my_status>6</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:planned)
         end
       end
     end
 
     describe '#progress' do
-      it 'should return the value in my_watched_episodes' do
+      it 'returns the value in my_watched_episodes' do
         xml = wrap_row '<my_watched_episodes>5</my_watched_episodes>'
         row = described_class.new(xml)
         expect(row.progress).to eq(5)
@@ -190,7 +185,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#rating' do
-      it 'should return twice the value in my_score' do
+      it 'returns twice the value in my_score' do
         xml = wrap_row '<my_score>5</my_score>'
         row = described_class.new(xml)
         expect(row.rating).to eq(10)
@@ -198,7 +193,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#reconsume_count' do
-      it 'should return the value in my_times_watched' do
+      it 'returns the value in my_times_watched' do
         xml = wrap_row '<my_times_watched>3</my_times_watched>'
         row = described_class.new(xml)
         expect(row.reconsume_count).to eq(3)
@@ -207,41 +202,44 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
 
     describe '#notes' do
       context 'when my_tags is blank' do
-        it 'should return the value in my_comments' do
-          xml = wrap_row <<~EOF
+        it 'returns the value in my_comments' do
+          xml = wrap_row <<~XML
             <my_comments><![CDATA[Test]]></my_comments>
             <my_tags><![CDATA[]]></my_tags>
-          EOF
+          XML
           row = described_class.new(xml)
           expect(row.notes).to eq('Test')
         end
       end
+
       context 'when my_comments is blank' do
-        it 'should return the value in my_tags with prefix' do
-          xml = wrap_row <<~EOF
+        it 'returns the value in my_tags with prefix' do
+          xml = wrap_row <<~XML
             <my_comments><![CDATA[]]></my_comments>
             <my_tags><![CDATA[Ohai]]></my_tags>
-          EOF
+          XML
           row = described_class.new(xml)
           expect(row.notes).to eq("\n=== MAL Tags ===\nOhai")
         end
       end
+
       context 'when my_comments and my_tags are both blank' do
-        it 'should return an empty string' do
-          xml = wrap_row <<~EOF
+        it 'returns an empty string' do
+          xml = wrap_row <<~XML
             <my_comments><![CDATA[]]></my_comments>
             <my_tags><![CDATA[]]></my_tags>
-          EOF
+          XML
           row = described_class.new(xml)
           expect(row.notes).to be_blank
         end
       end
+
       context 'when my_comments and my_tags are both present' do
-        it 'should return both, separated by the prefix' do
-          xml = wrap_row <<~EOF
+        it 'returns both, separated by the prefix' do
+          xml = wrap_row <<~XML
             <my_comments><![CDATA[Oha]]></my_comments>
             <my_tags><![CDATA[you]]></my_tags>
-          EOF
+          XML
           row = described_class.new(xml)
           expect(row.notes).to eq("Oha\n=== MAL Tags ===\nyou")
         end
@@ -249,7 +247,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#volumes_owned' do
-      it "should return nil because MyAnimeList doesn't have anime volumes" do
+      it "returns nil because MyAnimeList doesn't have anime volumes" do
         row = described_class.new(wrap_row(''))
         expect(row.volumes_owned).to be_nil
       end
@@ -257,21 +255,23 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
 
     describe '#started_at' do
       context 'with my_start_date being empty' do
-        it 'should return nil' do
+        it 'returns nil' do
           xml = wrap_row '<my_start_date></my_start_date>'
           row = described_class.new(xml)
           expect(row.started_at).to be_nil
         end
       end
+
       context 'with an invalid date in my_start_date' do
-        it 'should return nil' do
+        it 'returns nil' do
           xml = wrap_row '<my_start_date>fuckmyanimelist</my_start_date>'
           row = described_class.new(xml)
           expect(row.started_at).to be_nil
         end
       end
+
       context 'with a valid ISO 8601 date in my_start_date' do
-        it 'should return a date object' do
+        it 'returns a date object' do
           xml = wrap_row '<my_start_date>1993-10-11</my_start_date>'
           row = described_class.new(xml)
           expect(row.started_at).to eq(Date.new(1993, 10, 11))
@@ -281,21 +281,23 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
 
     describe '#finished_at' do
       context 'with my_finish_date being empty' do
-        it 'should return nil' do
+        it 'returns nil' do
           xml = wrap_row '<my_finish_date></my_finish_date>'
           row = described_class.new(xml)
           expect(row.finished_at).to be_nil
         end
       end
+
       context 'with an invalid date in my_finish_date' do
-        it 'should return nil' do
+        it 'returns nil' do
           xml = wrap_row '<my_finish_date>fuckmyanimelist</my_finish_date>'
           row = described_class.new(xml)
           expect(row.finished_at).to be_nil
         end
       end
+
       context 'with a valid ISO 8601 date in my_finish_date' do
-        it 'should return a date object' do
+        it 'returns a date object' do
           xml = wrap_row '<my_finish_date>1993-10-11</my_finish_date>'
           row = described_class.new(xml)
           expect(row.finished_at).to eq(Date.new(1993, 10, 11))
@@ -312,7 +314,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#type' do
-      it 'should return Manga class' do
+      it 'returns Manga class' do
         row = described_class.new(wrap_row(''))
         expect(row.type).to eq(Manga)
       end
@@ -321,146 +323,140 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     describe '#media' do
       context 'with a specific Mapping' do
         let(:mapping) { create_mapping(manga) }
-        let(:xml) { wrap_row <<~EOF }
+        let(:xml) { wrap_row <<~XML }
           <manga_mediadb_id>
             #{mapping.external_id.split('/').last}
           </manga_mediadb_id>
           <manga_title>#{manga.canonical_title}</manga_title>
           <manga_chapters>#{manga.chapter_count}</manga_chapters>
-        EOF
-        it 'should return the Manga instance from the Mapping' do
+        XML
+
+        it 'returns the Manga instance from the Mapping' do
           row = described_class.new(xml)
-          expect(Mapping).to receive(:lookup)
+          allow(Mapping).to receive(:lookup)
             .with('myanimelist/manga', mapping.external_id.to_i)
             .and_return(manga)
           expect(row.media).to eq(manga)
         end
       end
+
       context 'without a specific Mapping' do
-        let(:xml) { wrap_row <<~EOF }
+        let(:xml) { wrap_row <<~XML }
           <manga_mediadb_id>#{rand(1..50_000)}</manga_mediadb_id>
           <manga_title>#{manga.canonical_title}</manga_title>
           <manga_chapters>#{manga.chapter_count}</manga_chapters>
-        EOF
-        it 'should guess the Manga instance using Mapping.guess' do
+        XML
+
+        it 'guesses the Manga instance using Mapping.guess' do
           row = described_class.new(xml)
-          expect(Mapping).to receive(:guess).and_return(manga)
+          allow(Mapping).to receive(:guess).and_return(manga)
           expect(row.media).to eq(manga)
         end
       end
     end
 
     describe '#media_info' do
-      let(:xml) { wrap_row <<~EOF }
+      subject(:row) { described_class.new(xml) }
+
+      let(:xml) { wrap_row <<~XML }
         <manga_mediadb_id>#{manga.id}</manga_mediadb_id>
         <manga_title><![CDATA[#{manga.canonical_title}]]></manga_title>
         <manga_chapters>#{manga.chapter_count}</manga_chapters>
-      EOF
-      subject { described_class.new(xml) }
-      it 'should return the id from manga_mediadb_id' do
-        expect(subject.media_info[:id]).to eq(manga.id)
+      XML
+
+      it 'returns the id from manga_mediadb_id' do
+        expect(row.media_info[:id]).to eq(manga.id)
       end
-      it 'should return te title from manga_title' do
-        expect(subject.media_info[:title]).to eq(manga.canonical_title)
+
+      it 'returns te title from manga_title' do
+        expect(row.media_info[:title]).to eq(manga.canonical_title)
       end
-      it 'should return the chapter count from manga_chapters' do
-        expect(subject.media_info[:chapter_count]).to eq(manga.chapter_count)
+
+      it 'returns the chapter count from manga_chapters' do
+        expect(row.media_info[:chapter_count]).to eq(manga.chapter_count)
       end
     end
 
     describe '#status' do
       context 'with a textual my_status' do
-        context 'of "Currently Reading"' do
-          it 'should return :current' do
-            xml = wrap_row '<my_status>Currently Reading</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:current)
-          end
+        it 'returns :current for "Currently Reading"' do
+          xml = wrap_row '<my_status>Currently Reading</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:current)
         end
-        context 'of "Plan to Read"' do
-          it 'should return :planned' do
-            xml = wrap_row '<my_status>Plan to Read</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:planned)
-          end
+
+        it 'returns :planned for "Plan to Read"' do
+          xml = wrap_row '<my_status>Plan to Read</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:planned)
         end
-        context 'of "Completed"' do
-          it 'should return :planned' do
-            xml = wrap_row '<my_status>Completed</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:completed)
-          end
+
+        it 'returns :completed for "Completed"' do
+          xml = wrap_row '<my_status>Completed</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:completed)
         end
-        context 'of "On Hold"' do
-          it 'should return :on_hold' do
-            xml = wrap_row '<my_status>On Hold</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:on_hold)
-          end
+
+        it 'returns :on_hold for "On Hold"' do
+          xml = wrap_row '<my_status>On Hold</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:on_hold)
         end
-        context 'of "On-Hold"' do
-          it 'should return :on_hold' do
-            xml = wrap_row '<my_status>On-Hold</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:on_hold)
-          end
+
+        it 'returns :on_hold for "On-Hold"' do
+          xml = wrap_row '<my_status>On-Hold</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:on_hold)
         end
-        context 'of "Dropped"' do
-          it 'should return :dropped' do
-            xml = wrap_row '<my_status>Dropped</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:dropped)
-          end
+
+        it 'returns :dropped for "Dropped"' do
+          xml = wrap_row '<my_status>Dropped</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:dropped)
         end
       end
+
       context 'with a numeric my_status' do
-        context 'of 1' do
-          it 'should return :current' do
-            xml = wrap_row '<my_status>1</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:current)
-          end
+        it 'returns :current for 1' do
+          xml = wrap_row '<my_status>1</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:current)
         end
-        context 'of 2' do
-          it 'should return :completed' do
-            xml = wrap_row '<my_status>2</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:completed)
-          end
+
+        it 'returns :completed for 2' do
+          xml = wrap_row '<my_status>2</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:completed)
         end
-        context 'of 3' do
-          it 'should return :on_hold' do
-            xml = wrap_row '<my_status>3</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:on_hold)
-          end
+
+        it 'returns :on_hold for 3' do
+          xml = wrap_row '<my_status>3</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:on_hold)
         end
-        context 'of 4' do
-          it 'should return :dropped' do
-            xml = wrap_row '<my_status>4</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:dropped)
-          end
+
+        it 'returns :dropped for 4' do
+          xml = wrap_row '<my_status>4</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:dropped)
         end
-        context 'of 5' do
-          it 'should return nil' do
-            xml = wrap_row '<my_status>5</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to be_nil
-          end
+
+        it 'returns nil for 5' do
+          xml = wrap_row '<my_status>5</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to be_nil
         end
-        context 'of 6' do
-          it 'should return :planned' do
-            xml = wrap_row '<my_status>6</my_status>'
-            row = described_class.new(xml)
-            expect(row.status).to eq(:planned)
-          end
+
+        it 'returns :planned for 6' do
+          xml = wrap_row '<my_status>6</my_status>'
+          row = described_class.new(xml)
+          expect(row.status).to eq(:planned)
         end
       end
     end
 
     describe '#progress' do
-      it 'should return the value in my_read_chapters' do
+      it 'returns the value in my_read_chapters' do
         xml = wrap_row '<my_read_chapters>5</my_read_chapters>'
         row = described_class.new(xml)
         expect(row.progress).to eq(5)
@@ -468,7 +464,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#rating' do
-      it 'should return twice the value in my_score' do
+      it 'returns twice the value in my_score' do
         xml = wrap_row '<my_score>5</my_score>'
         row = described_class.new(xml)
         expect(row.rating).to eq(10.0)
@@ -476,7 +472,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#reconsume_count' do
-      it 'should return the value in my_times_read' do
+      it 'returns the value in my_times_read' do
         xml = wrap_row '<my_times_read>3</my_times_read>'
         row = described_class.new(xml)
         expect(row.reconsume_count).to eq(3)
@@ -485,41 +481,44 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
 
     describe '#notes' do
       context 'when my_tags is blank' do
-        it 'should return the value in my_comments' do
-          xml = wrap_row <<~EOF
+        it 'returns the value in my_comments' do
+          xml = wrap_row <<~XML
             <my_comments><![CDATA[Test]]></my_comments>
             <my_tags><![CDATA[]]></my_tags>
-          EOF
+          XML
           row = described_class.new(xml)
           expect(row.notes).to eq('Test')
         end
       end
+
       context 'when my_comments is blank' do
-        it 'should return the value in my_tags with prefix' do
-          xml = wrap_row <<~EOF
+        it 'returns the value in my_tags with prefix' do
+          xml = wrap_row <<~XML
             <my_comments><![CDATA[]]></my_comments>
             <my_tags><![CDATA[Ohai]]></my_tags>
-          EOF
+          XML
           row = described_class.new(xml)
           expect(row.notes).to eq("\n=== MAL Tags ===\nOhai")
         end
       end
+
       context 'when my_comments and my_tags are both blank' do
-        it 'should return an empty string' do
-          xml = wrap_row <<~EOF
+        it 'returns an empty string' do
+          xml = wrap_row <<~XML
             <my_comments><![CDATA[]]></my_comments>
             <my_tags><![CDATA[]]></my_tags>
-          EOF
+          XML
           row = described_class.new(xml)
           expect(row.notes).to be_blank
         end
       end
+
       context 'when my_comments and my_tags are both present' do
-        it 'should return both, separated by the prefix' do
-          xml = wrap_row <<~EOF
+        it 'returns both, separated by the prefix' do
+          xml = wrap_row <<~XML
             <my_comments><![CDATA[Oha]]></my_comments>
             <my_tags><![CDATA[you]]></my_tags>
-          EOF
+          XML
           row = described_class.new(xml)
           expect(row.notes).to eq("Oha\n=== MAL Tags ===\nyou")
         end
@@ -527,7 +526,7 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
     end
 
     describe '#volumes_owned' do
-      it 'should return the value in my_read_volumes' do
+      it 'returns the value in my_read_volumes' do
         xml = wrap_row '<my_read_volumes>3</my_read_volumes>'
         row = described_class.new(xml)
         expect(row.volumes_owned).to eq(3)
@@ -536,21 +535,23 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
 
     describe '#started_at' do
       context 'with my_start_date being empty' do
-        it 'should return nil' do
+        it 'returns nil' do
           xml = wrap_row '<my_start_date></my_start_date>'
           row = described_class.new(xml)
           expect(row.started_at).to be_nil
         end
       end
+
       context 'with an invalid date in my_start_date' do
-        it 'should return nil' do
+        it 'returns nil' do
           xml = wrap_row '<my_start_date>fuckmyanimelist</my_start_date>'
           row = described_class.new(xml)
           expect(row.started_at).to be_nil
         end
       end
+
       context 'with a valid ISO 8601 date in my_start_date' do
-        it 'should return a date object' do
+        it 'returns a date object' do
           xml = wrap_row '<my_start_date>1993-10-11</my_start_date>'
           row = described_class.new(xml)
           expect(row.started_at).to eq(Date.new(1993, 10, 11))
@@ -560,21 +561,23 @@ RSpec.describe ListImport::MyAnimeListXML::Row do
 
     describe '#finished_at' do
       context 'with my_finish_date being empty' do
-        it 'should return nil' do
+        it 'returns nil' do
           xml = wrap_row '<my_finish_date></my_finish_date>'
           row = described_class.new(xml)
           expect(row.finished_at).to be_nil
         end
       end
+
       context 'with an invalid date in my_finish_date' do
-        it 'should return nil' do
+        it 'returns nil' do
           xml = wrap_row '<my_finish_date>fuckmyanimelist</my_finish_date>'
           row = described_class.new(xml)
           expect(row.finished_at).to be_nil
         end
       end
+
       context 'with a valid ISO 8601 date in my_finish_date' do
-        it 'should return a date object' do
+        it 'returns a date object' do
           xml = wrap_row '<my_finish_date>1993-10-11</my_finish_date>'
           row = described_class.new(xml)
           expect(row.finished_at).to eq(Date.new(1993, 10, 11))

@@ -7,25 +7,25 @@ RSpec.describe Pro::SubscribeWithStripe do
 
   before { stripe_mock.create_plan(id: 'pro-yearly') }
 
-  it 'should change the default payment method for the user' do
+  it 'changes the default payment method for the user' do
     expect {
       Pro::SubscribeWithStripe.call(user: user, tier: 'pro', token: token)
     }.to(change { user.stripe_customer.default_source })
   end
 
-  it 'should create a StripeSubscription object' do
+  it 'creates a StripeSubscription object' do
     expect {
       Pro::SubscribeWithStripe.call(user: user, tier: 'pro', token: token)
     }.to(change { user.pro_subscription })
   end
 
-  it 'should return the subscription instance as `subscription`' do
+  it 'returns the subscription instance as `subscription`' do
     result = Pro::SubscribeWithStripe.call(user: user, tier: 'pro', token: token)
     expect(result.subscription).to be_a(ProSubscription::StripeSubscription)
   end
 
   context 'with an invalid subscription tier' do
-    it 'should raise a ValidationError' do
+    it 'raises a ValidationError' do
       expect {
         Pro::SubscribeWithStripe.call(user: user, tier: 'godly', token: token)
       }.to raise_error(Action::ValidationError)
@@ -33,7 +33,7 @@ RSpec.describe Pro::SubscribeWithStripe do
   end
 
   context 'attempting to subscribe with an Aozora pro tier' do
-    it 'should raise a ValidationError' do
+    it 'raises a ValidationError' do
       expect {
         Pro::SubscribeWithStripe.call(user: user, tier: 'ao_pro', token: token)
       }.to raise_error(Action::ValidationError)
@@ -41,7 +41,7 @@ RSpec.describe Pro::SubscribeWithStripe do
   end
 
   context 'with an invalid stripe token' do
-    it 'should raise a Stripe::CardError' do
+    it 'raises a Stripe::CardError' do
       StripeMock.prepare_card_error(:invalid_number, :update_customer)
       expect {
         Billing::UpdateStripeSource.call(user: user, token: stripe_mock.generate_card_token)

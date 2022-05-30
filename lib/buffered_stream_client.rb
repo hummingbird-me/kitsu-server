@@ -44,9 +44,7 @@ class BufferedStreamClient
   # Asynchronously flush the queues to Sidekiq
   #
   # @return [void]
-  def flush_async
-    activity_buffer.flush_async
-  end
+  delegate :flush_async, to: :activity_buffer
 
   # Generate a realistic timing response hash in case anything depends on that
   #

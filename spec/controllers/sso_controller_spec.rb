@@ -5,7 +5,7 @@ RSpec.describe SSOController, type: :controller do
 
   describe '#canny' do
     context 'when logged in' do
-      it 'should respond with a token' do
+      it 'responds with a token' do
         sign_in user
         get :canny
         expect(response).to have_http_status(:ok)
@@ -14,9 +14,9 @@ RSpec.describe SSOController, type: :controller do
     end
 
     describe 'when logged out' do
-      it 'should respond with an error' do
+      it 'responds with an error' do
         get :canny
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(:forbidden)
         expect(response.body).to match_json_expression(
           errors: [{ status: 403, detail: String }]
         )

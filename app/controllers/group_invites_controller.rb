@@ -6,17 +6,17 @@ class GroupInvitesController < ApplicationController
 
   def accept
     invite.accept!
-    render json: {}, status: 201
+    render json: {}, status: :created
   end
 
   def decline
     invite.decline!
-    render json: {}, status: 200
+    render json: {}, status: :ok
   end
 
   def revoke
     invite.revoke!
-    render json: {}, status: 200
+    render json: {}, status: :ok
   end
 
   private

@@ -1,6 +1,7 @@
 class Feed
   class ActivityList
     attr_accessor :data, :feed, :including, :limit_ratio
+
     delegate :client, to: :feed
 
     %i[limit offset ranking mark_read mark_seen].each do |key|

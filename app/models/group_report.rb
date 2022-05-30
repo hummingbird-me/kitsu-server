@@ -1,13 +1,13 @@
 class GroupReport < ApplicationRecord
   include WithActivity
 
-  belongs_to :group, required: true
-  belongs_to :naughty, -> { with_deleted }, polymorphic: true, required: true
-  belongs_to :user, required: true
+  belongs_to :group, optional: false
+  belongs_to :naughty, -> { with_deleted }, polymorphic: true, optional: false
+  belongs_to :user, optional: false
   belongs_to :moderator, class_name: 'User', optional: true
 
   enum reason: Report.reasons
-  enum status: %i[reported resolved declined escalated]
+  enum status: { reported: 0, resolved: 1, declined: 2, escalated: 3 }
 
   scope :visible_for, ->(user) {
     # user == user || has content priv

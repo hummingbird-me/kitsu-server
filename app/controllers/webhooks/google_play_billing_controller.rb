@@ -2,11 +2,11 @@ module Webhooks
   class GooglePlayBillingController < ApplicationController
     include CustomControllerHelpers
 
-    SECRET = ENV['GOOGLE_PLAY_BILLING_WEBHOOK_SECRET']
+    SECRET = ENV.fetch('GOOGLE_PLAY_BILLING_WEBHOOK_SECRET', nil)
 
     def notify
       GooglePlayNotificationService.new(params).call
-      head 204
+      head :no_content
     end
 
     private

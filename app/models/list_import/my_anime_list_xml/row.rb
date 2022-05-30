@@ -80,7 +80,7 @@ class ListImport
 
       def data
         %i[status progress rating reconsume_count notes volumes_owned
-           started_at finished_at].map { |k| [k, send(k)] }.to_h.compact
+           started_at finished_at].index_with { |k| send(k) }.compact
       end
     end
   end

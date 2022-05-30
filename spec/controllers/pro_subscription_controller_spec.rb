@@ -8,7 +8,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
     include_context 'Stubbed Apple Receipt Verification'
 
     context 'with a valid receipt' do
-      it 'should create an AppleSubscription object for me' do
+      it 'creates an AppleSubscription object for me' do
         sign_in user
         stub_receipt_verification(
           latest_receipt_info: {
@@ -24,21 +24,21 @@ RSpec.describe ProSubscriptionController, type: :controller do
     end
 
     context 'with a malformed receipt' do
-      it 'should give an error message' do
+      it 'gives an error message' do
         sign_in user
         stub_receipt_verification(status: 21002) # rubocop:disable Style/NumericLiterals
         post :ios, params: { receipt: 'TEST_RECEIPT', tier: 'pro' }
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to have_jsonapi_error(status: 400, detail: /malformed/i)
       end
     end
 
     context 'with an internal error from Apple' do
-      it 'should give a bad gateway error' do
+      it 'gives a bad gateway error' do
         sign_in user
         stub_receipt_verification(status: 21150) # rubocop:disable Style/NumericLiterals
         post :ios, params: { receipt: 'TEST_RECEIPT', tier: 'pro' }
-        expect(response).to have_http_status(502)
+        expect(response).to have_http_status(:bad_gateway)
         expect(response.body).to have_jsonapi_error(status: 502, detail: /Failed to connect/i)
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
     include_context 'Stubbed Android Publisher Service'
 
     context 'with a valid token' do
-      it 'should create a GooglePlaySubscription object for me' do
+      it 'creates a GooglePlaySubscription object for me' do
         expect(api).to receive(:get_purchase_subscription)
         sign_in user
         expect {
@@ -56,7 +56,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
         }.to(change { user.pro_subscription })
       end
 
-      it 'should return the subscription in JSON' do
+      it 'returns the subscription in JSON' do
         expect(api).to receive(:get_purchase_subscription)
         sign_in user
         post :google_play, params: { token: 'TEST', tier: 'pro' }
@@ -69,21 +69,21 @@ RSpec.describe ProSubscriptionController, type: :controller do
     end
 
     context 'with a server error' do
-      it 'should return a bad gateway error' do
+      it 'returns a bad gateway error' do
         expect(api).to receive(:get_purchase_subscription).and_raise(Google::Apis::ServerError, '')
         sign_in user
         post :google_play, params: { token: 'TEST', tier: 'pro' }
-        expect(response).to have_http_status(502)
+        expect(response).to have_http_status(:bad_gateway)
         expect(response.body).to have_jsonapi_error(status: 502, detail: /went wrong.*Google Play/i)
       end
     end
 
     context 'with a client error' do
-      it 'should return a 400 error' do
+      it 'returns a 400 error' do
         expect(api).to receive(:get_purchase_subscription).and_raise(Google::Apis::ClientError, '')
         sign_in user
         post :google_play, params: { token: 'TEST', tier: 'pro' }
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to have_jsonapi_error(status: 400, detail: /client error/i)
       end
     end
@@ -91,17 +91,18 @@ RSpec.describe ProSubscriptionController, type: :controller do
 
   describe '#destroy' do
     context 'with an Apple subscription' do
-      it 'should return a 400 error' do
+      it 'returns a 400 error' do
         ProSubscription::AppleSubscription.create!(billing_id: 'TEST', user: user, tier: :pro)
         sign_in user
         delete :destroy
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to have_jsonapi_error(status: 400, detail: /Cannot cancel/i)
       end
     end
 
     context 'with a Stripe subscription' do
       let(:stripe_mock) { StripeMock.create_test_helper }
+
       before do
         stripe_mock.create_plan(id: 'pro-yearly')
         user.stripe_customer.source = stripe_mock.generate_card_token
@@ -110,13 +111,13 @@ RSpec.describe ProSubscriptionController, type: :controller do
         sign_in user
       end
 
-      it 'should return an empty JSON object' do
+      it 'returns an empty JSON object' do
         delete :destroy
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         expect(response.body).to eq('{}')
       end
 
-      it 'should remove my subscription' do
+      it 'removes my subscription' do
         expect {
           delete :destroy
         }.to(change { user.reload.pro_subscription })
@@ -136,14 +137,14 @@ RSpec.describe ProSubscriptionController, type: :controller do
         sign_in user
       end
 
-      it 'should return an empty JSON object' do
+      it 'returns an empty JSON object' do
         expect(api).to receive(:cancel_purchase_subscription)
         delete :destroy
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         expect(response.body).to eq('{}')
       end
 
-      it 'should remove my subscription' do
+      it 'removes my subscription' do
         expect(api).to receive(:cancel_purchase_subscription)
         expect {
           delete :destroy
@@ -155,7 +156,7 @@ RSpec.describe ProSubscriptionController, type: :controller do
 
   describe '#show' do
     context 'with a subscription' do
-      it 'should serialize the subscription into JSON' do
+      it 'serializes the subscription into JSON' do
         ProSubscription::AppleSubscription.create!(user: user, billing_id: 'TEST', tier: :pro)
         sign_in user
         get :show
@@ -168,10 +169,10 @@ RSpec.describe ProSubscriptionController, type: :controller do
     end
 
     context 'with no current subscription' do
-      it 'should return a 404' do
+      it 'returns a 404' do
         sign_in user
         get :show
-        expect(response).to have_http_status(404)
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

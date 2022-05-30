@@ -1,8 +1,8 @@
 class MediaReactionVote < ApplicationRecord
   include WithActivity
 
-  belongs_to :media_reaction, required: true
-  belongs_to :user, required: true
+  belongs_to :media_reaction, optional: false
+  belongs_to :user, optional: false
 
   counter_culture :media_reaction, column_name: 'up_votes_count'
 

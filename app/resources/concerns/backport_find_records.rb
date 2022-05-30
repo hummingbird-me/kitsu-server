@@ -16,9 +16,7 @@ module BackportFindRecords
       order_options = construct_order_options(sort_criteria)
 
       records = sort_records(records, order_options, context)
-      records = apply_pagination(records, options[:paginator], order_options)
-
-      records
+      apply_pagination(records, options[:paginator], order_options)
     end
   end
 end

@@ -1,19 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe CommentLikePolicy do
+  subject { described_class }
+
   let(:user) { token_for create(:user) }
   let(:like) { build(:comment_like, user: user.resource_owner) }
   let(:other) { build(:comment_like) }
-  subject { described_class }
 
   permissions :update? do
-    it('should not allow users') { should_not permit(user, like) }
-    it('should not allow anons') { should_not permit(nil, like) }
+    it('does not allow users') { is_expected.not_to permit(user, like) }
+    it('does not allow anons') { is_expected.not_to permit(nil, like) }
   end
 
   permissions :create?, :destroy? do
-    it('should not allow anons') { should_not permit(nil, like) }
-    it('should allow for yourself') { should permit(user, like) }
-    it('should not allow for others') { should_not permit(user, other) }
+    it('does not allow anons') { is_expected.not_to permit(nil, like) }
+    it('allows for yourself') { is_expected.to permit(user, like) }
+    it('does not allow for others') { is_expected.not_to permit(user, other) }
   end
 end

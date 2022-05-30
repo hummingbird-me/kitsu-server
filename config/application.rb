@@ -50,7 +50,7 @@ module Kitsu
     config.autoload_paths << Rails.root.join('lib')
 
     # Set log level to LOG_LEVEL environment variable
-    config.log_level = ENV['LOG_LEVEL'] || :info
+    config.log_level = ENV.fetch('LOG_LEVEL', :info)
 
     # Normally we wanna be API-only, but we mount some admin panels in, so... :(
     config.api_only = false
@@ -62,9 +62,9 @@ module Kitsu
       allow do
         origins '*'
         resource '*', headers: :any,
-                      methods: :any,
-                      credentials: false,
-                      max_age: 1.hour
+          methods: :any,
+          credentials: false,
+          max_age: 1.hour
       end
     end
 
@@ -80,10 +80,10 @@ module Kitsu
     else
       config.action_mailer.delivery_method = :smtp
       config.action_mailer.smtp_settings = {
-        address: ENV['SMTP_ADDRESS'],
+        address: ENV.fetch('SMTP_ADDRESS', nil),
         port: ENV['SMTP_PORT']&.to_i,
-        user_name: ENV['SMTP_USERNAME'],
-        password: ENV['SMTP_PASSWORD'],
+        user_name: ENV.fetch('SMTP_USERNAME', nil),
+        password: ENV.fetch('SMTP_PASSWORD', nil),
         authentication: ENV['SMTP_AUTHENTICATION']&.to_sym
       }.compact
     end
@@ -91,7 +91,7 @@ module Kitsu
     # Redis caching
     config.cache_store = :redis_cache_store, {
       driver: :hiredis,
-      url: ENV['REDIS_URL'],
+      url: ENV.fetch('REDIS_URL', nil),
       expires_in: 1.day
     }
 

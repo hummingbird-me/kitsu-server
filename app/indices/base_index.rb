@@ -11,7 +11,7 @@ class BaseIndex
     end
     alias_method :attributes, :attribute
 
-    # rubocop:disable Style/PredicateName, Naming/UncommunicativeMethodParamName
+    # rubocop:disable Naming/PredicateName
     def has_many(name, as:, via: name, polymorphic: false)
       self._associations ||= []
       self._associations << {
@@ -33,7 +33,7 @@ class BaseIndex
         polymorphic: polymorphic
       }
     end
-    # rubocop:enable Style/PredicateName, Naming/UncommunicativeMethodParamName
+    # rubocop:enable Naming/PredicateName
 
     def _association_names
       @_association_names ||= self._associations.pluck(:name)
@@ -122,7 +122,7 @@ class BaseIndex
       # Generate the output hash keys
       association_keys = associations.map { |assoc| assoc[:name].to_sym }
       # Generate the joins hash
-      joins_hash = joins_hash_for(associations.map { |x| x[:association] })
+      joins_hash = joins_hash_for(associations.pluck(:association))
       # Generate the pluck string
       plucks = Arel.sql(pluck_for_associations(model, associations))
 
@@ -168,7 +168,7 @@ class BaseIndex
     # through method calls.
     def slow_associated_for(records)
       associations = slow_associations_for(records.model)
-      includes_hash = joins_hash_for(associations.map { |x| x[:association] })
+      includes_hash = joins_hash_for(associations.pluck(:association))
 
       records.includes(includes_hash).each_with_object({}) do |record, out|
         out[record.id] = associations.each_with_object({}) do |assoc, associated|
@@ -241,7 +241,8 @@ class BaseIndex
       changed = "#{attr[:method]}_changed?"
       dirty = if respond_to?(changed) then send(changed)
               elsif _model.respond_to?(changed) then _model.send(changed)
-              else true
+              else
+                true
               end
       dirty &&= rand(100.0) <= attr[:frequency] if attr[:frequency]
       return true if dirty

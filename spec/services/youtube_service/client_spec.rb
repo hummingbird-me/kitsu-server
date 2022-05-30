@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe YoutubeService::Client do
+  subject { described_class.new(token, api_key: api_key) }
+
   let(:api_key) { 'API_KEY' }
   let(:token) { 'TOKEN' }
-
-  subject { described_class.new(token, api_key: api_key) }
 
   describe '#valid?' do
     context 'when aud matches key' do
@@ -14,8 +14,8 @@ RSpec.describe YoutubeService::Client do
           .to_return(status: 200, body: { aud: api_key }.to_json)
       end
 
-      it 'should return true' do
-        expect(subject.valid?).to eq(true)
+      it 'returns true' do
+        expect(subject.valid?).to be(true)
       end
     end
 
@@ -26,8 +26,8 @@ RSpec.describe YoutubeService::Client do
           .to_return(status: 200, body: { aud: 'EVIL_KEY' }.to_json)
       end
 
-      it 'should return false' do
-        expect(subject.valid?).to eq(false)
+      it 'returns false' do
+        expect(subject.valid?).to be(false)
       end
     end
 
@@ -37,14 +37,14 @@ RSpec.describe YoutubeService::Client do
           .to_return(status: 500)
       end
 
-      it 'should return false' do
-        expect(subject.valid?).to eq(false)
+      it 'returns false' do
+        expect(subject.valid?).to be(false)
       end
     end
   end
 
   describe '#channel_id' do
-    it 'should return the channel ID of the user' do
+    it 'returns the channel ID of the user' do
       response = {
         kind: 'youtube#channelListResponse',
         pageInfo: {

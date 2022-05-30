@@ -44,7 +44,7 @@ class GroupMemberResource < BaseResource
     }
   query :query,
     mode: :query,
-    apply: ->(values, _ctx) { # rubocop:disable Metrics/BlockLength
+    apply: ->(values, _ctx) {
       {
         bool: {
           should: [

@@ -17,27 +17,27 @@ if Rails.env.production? || Rails.env.staging?
   backblaze = Shrine::Storage::S3.new(
     endpoint: 'https://s3.us-west-002.backblazeb2.com',
     region: 'us-west-002',
-    bucket: ENV['B2_BUCKET'],
-    access_key_id: ENV['B2_ACCESS_KEY_ID'],
-    secret_access_key: ENV['B2_SECRET_ACCESS_KEY']
+    bucket: ENV.fetch('B2_BUCKET', nil),
+    access_key_id: ENV.fetch('B2_ACCESS_KEY_ID', nil),
+    secret_access_key: ENV.fetch('B2_SECRET_ACCESS_KEY', nil)
   )
 
   # Temporary upload storage
   cache = Shrine::Storage::S3.new(
     endpoint: 'https://s3.us-west-002.backblazeb2.com',
     region: 'us-west-002',
-    bucket: ENV['B2_BUCKET'],
-    access_key_id: ENV['B2_ACCESS_KEY_ID'],
-    secret_access_key: ENV['B2_SECRET_ACCESS_KEY']
+    bucket: ENV.fetch('B2_BUCKET', nil),
+    access_key_id: ENV.fetch('B2_ACCESS_KEY_ID', nil),
+    secret_access_key: ENV.fetch('B2_SECRET_ACCESS_KEY', nil)
   )
 
   # Mirror storage
   digitalocean = Shrine::Storage::S3.new(
     endpoint: 'https://sfo3.digitaloceanspaces.com',
     region: 'sfo3',
-    bucket: ENV['DO_BUCKET'],
-    access_key_id: ENV['DO_ACCESS_KEY_ID'],
-    secret_access_key: ENV['DO_SECRET_ACCESS_KEY']
+    bucket: ENV.fetch('DO_BUCKET', nil),
+    access_key_id: ENV.fetch('DO_ACCESS_KEY_ID', nil),
+    secret_access_key: ENV.fetch('DO_SECRET_ACCESS_KEY', nil)
   )
 
   Shrine.storages = {
@@ -48,15 +48,15 @@ if Rails.env.production? || Rails.env.staging?
   Shrine.plugin :mirroring, mirror: { store: :digitalocean }
 else
   store = Shrine::Storage::S3.new(**{
-    endpoint: ENV['AWS_ENDPOINT'],
+    endpoint: ENV.fetch('AWS_ENDPOINT', nil),
     region: 'us-east-1',
-    bucket: ENV['AWS_BUCKET'] || 'kitsu-media',
+    bucket: ENV.fetch('AWS_BUCKET', 'kitsu-media'),
     force_path_style: true
   }.compact)
   cache = Shrine::Storage::S3.new(**{
-    endpoint: ENV['AWS_ENDPOINT'],
+    endpoint: ENV.fetch('AWS_ENDPOINT', nil),
     region: 'us-east-1',
-    bucket: ENV['AWS_BUCKET'] || 'kitsu-media',
+    bucket: ENV.fetch('AWS_BUCKET', 'kitsu-media'),
     prefix: 'cache',
     force_path_style: true
   }.compact)

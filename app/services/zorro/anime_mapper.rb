@@ -4,9 +4,9 @@ module Zorro
   class AnimeMapper
     include WithProgressBar
 
-    SELECTED_FIELDS = %w[myAnimeListID traktID anilistID tvdbID hashtags].map { |k|
-      [k, true]
-    }.to_h.freeze
+    SELECTED_FIELDS = %w[myAnimeListID traktID anilistID tvdbID hashtags].index_with { |_k|
+      true
+    }.freeze
 
     class << self
       def run!
@@ -32,7 +32,7 @@ module Zorro
       #
       # Probably does too much, frankly, but that's okay.  This code is gonna get deleted once it's
       # been run once.
-      def each_anime # rubocop:disable Metrics/AbcSize
+      def each_anime
         # Build our filter
         filter = { myAnimeListID: { '$exists' => true } }
         # Set up a hash to track our actions for logging purposes

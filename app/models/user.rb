@@ -177,7 +177,7 @@ class User < ApplicationRecord
   has_many :wiki_submission_logs
 
   validates :email, format: { with: /\A.+@.+\.[a-z]+\z/, message: 'is not an email' },
-                    if: :email_changed?, allow_blank: true
+    if: :email_changed?, allow_blank: true
   validates :email, :name, :password, :slug, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false }, if: :email_changed?, allow_blank: true
@@ -204,8 +204,8 @@ class User < ApplicationRecord
   validate :not_reserved_name, if: :name_changed?
   validate :not_taken_on_aozora, on: :create
   validates :name, presence: true,
-                   length: { minimum: 3, maximum: 20 },
-                   if: ->(user) { user.registered? && user.name_changed? }
+    length: { minimum: 3, maximum: 20 },
+    if: ->(user) { user.registered? && user.name_changed? }
   validates :name, format: {
     without: CONTROL_CHARACTERS,
     message: 'cannot contain control characters, you silly haxx0r'

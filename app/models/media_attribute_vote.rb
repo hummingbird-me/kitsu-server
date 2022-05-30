@@ -1,7 +1,7 @@
 class MediaAttributeVote < ApplicationRecord
-  enum vote: %i[unvoted low neutral high]
-  belongs_to :user, required: true
-  belongs_to :media, polymorphic: true, required: true
+  enum vote: { unvoted: 0, low: 1, neutral: 2, high: 3 }
+  belongs_to :user, optional: false
+  belongs_to :media, polymorphic: true, optional: false
 
   belongs_to :anime_media_attributes, class_name: 'AnimeMediaAttribute', optional: true
   belongs_to :manga_media_attributes, class_name: 'MangaMediaAttribute', optional: true

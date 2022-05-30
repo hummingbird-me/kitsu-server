@@ -14,13 +14,11 @@ class MongoProcessor
   def grabber
     @grabber ||= Thread.new do
       loop do
-        begin
-          @batch_size.times { @queue.push(@enum.next) }
-          Thread.stop
-        rescue StopIteration
-          @queue.close
-          Thread.exit
-        end
+        @batch_size.times { @queue.push(@enum.next) }
+        Thread.stop
+      rescue StopIteration
+        @queue.close
+        Thread.exit
       end
     end
   end

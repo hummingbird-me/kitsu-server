@@ -1,7 +1,7 @@
 class ProSubscription < ApplicationRecord
   class NoCancellationError < StandardError; end
 
-  belongs_to :user, required: true
+  belongs_to :user, optional: false
   enum tier: {
     pro: 1,
     patron: 2

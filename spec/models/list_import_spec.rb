@@ -20,18 +20,19 @@ RSpec.describe ListImport do
 
   subject { build(:list_import) }
 
-  it { should define_enum_for(:status) }
-  it { should belong_to(:user).required }
-  it { should define_enum_for(:strategy) }
-  it { should validate_presence_of(:strategy) }
+  it { is_expected.to define_enum_for(:status) }
+  it { is_expected.to belong_to(:user).required }
+  it { is_expected.to define_enum_for(:strategy) }
+  it { is_expected.to validate_presence_of(:strategy) }
 
   describe '#apply!' do
-    let(:user) { create(:user) }
     subject do
       FakeImport.create(user: user, input_text: 'hi', strategy: :obliterate)
     end
 
-    it 'should call #apply and update every 20 rows' do
+    let(:user) { create(:user) }
+
+    it 'calls #apply and update every 20 rows' do
       expect(subject).to receive(:apply) do |&block|
         100.times { |i| block.call(status: :running, progress: i) }
       end
@@ -48,7 +49,7 @@ RSpec.describe ListImport do
         FakeImport.create(user: user, input_text: 'hi', strategy: :greater)
       end
 
-      it 'should yield repeatedly with the status' do
+      it 'yields repeatedly with the status' do
         expect { |b|
           subject.apply(&b)
         }.to yield_successive_args(*Array.new(12, Hash))
@@ -73,7 +74,7 @@ RSpec.describe ListImport do
         ErrorFakeImport.create(user: user, input_text: 'hi', strategy: :greater)
       end
 
-      it 'should yield once for running and once for error' do
+      it 'yields once for running and once for error' do
         expect { |b|
           subject.apply(&b)
         }.to yield_successive_args(

@@ -7,12 +7,12 @@ RSpec.describe Anime, type: :model do
   include_examples 'episodic'
   include_examples 'age_ratings'
 
-  it { should have_many(:anime_characters).dependent(:destroy) }
-  it { should have_many(:anime_staff).dependent(:destroy) }
-  it { should have_many(:anime_productions).dependent(:destroy) }
+  it { is_expected.to have_many(:anime_characters).dependent(:destroy) }
+  it { is_expected.to have_many(:anime_staff).dependent(:destroy) }
+  it { is_expected.to have_many(:anime_productions).dependent(:destroy) }
 
   describe '#season' do
-    it 'should return winter for shows starting in December through February' do
+    it 'returns winter for shows starting in December through February' do
       dec_anime = build(:anime, start_date: Date.new(2015, 12))
       jan_anime = build(:anime, start_date: Date.new(2016, 1))
       feb_anime = build(:anime, start_date: Date.new(2016, 2))
@@ -21,7 +21,7 @@ RSpec.describe Anime, type: :model do
       expect(feb_anime.season).to eq(:winter)
     end
 
-    it 'should return spring for shows starting in March through May' do
+    it 'returns spring for shows starting in March through May' do
       mar_anime = build(:anime, start_date: Date.new(2016, 3))
       apr_anime = build(:anime, start_date: Date.new(2016, 4))
       may_anime = build(:anime, start_date: Date.new(2016, 5))
@@ -30,7 +30,7 @@ RSpec.describe Anime, type: :model do
       expect(may_anime.season).to eq(:spring)
     end
 
-    it 'should return summer for shows starting in June through August' do
+    it 'returns summer for shows starting in June through August' do
       jun_anime = build(:anime, start_date: Date.new(2016, 6))
       jul_anime = build(:anime, start_date: Date.new(2016, 7))
       aug_anime = build(:anime, start_date: Date.new(2016, 8))
@@ -39,7 +39,7 @@ RSpec.describe Anime, type: :model do
       expect(aug_anime.season).to eq(:summer)
     end
 
-    it 'should return fall for shows starting in September through November' do
+    it 'returns fall for shows starting in September through November' do
       sep_anime = build(:anime, start_date: Date.new(2016, 9))
       oct_anime = build(:anime, start_date: Date.new(2016, 10))
       nov_anime = build(:anime, start_date: Date.new(2016, 11))
@@ -50,7 +50,7 @@ RSpec.describe Anime, type: :model do
   end
 
   describe 'sync_episodes' do
-    it 'should create episodes when episode_count is changed' do
+    it 'creates episodes when episode_count is changed' do
       create(:anime, episode_count: 5)
       anime = Anime.last
       expect(anime.episodes.length).to eq(anime.episode_count)

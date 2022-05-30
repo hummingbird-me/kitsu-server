@@ -5,6 +5,7 @@ class Feed
     CLIENT_URL = 'https://kitsu.io/'.freeze
 
     attr_reader :activity, :user
+
     delegate :group, to: :activity
     delegate :id, to: :activity
 
@@ -114,7 +115,8 @@ class Feed
       elsif reply_to_user.id == user.id then %i[comment you] # X replied to your comment
       elsif target.user.id == actor.id then %i[post themself] # X replied to their own post
       elsif target.is_a?(Post) then %i[post author] # X replied to Y's post
-      else %i[post unknown]
+      else
+        %i[post unknown]
       end
     end
 

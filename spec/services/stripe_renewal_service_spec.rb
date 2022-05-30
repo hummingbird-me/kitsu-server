@@ -7,7 +7,7 @@ RSpec.describe StripeRenewalService do
     stripe_mock.create_plan(id: 'pro-yearly')
   end
 
-  it "should update the user's pro subscription for the period of the invoice" do
+  it "updates the user's pro subscription for the period of the invoice" do
     user = create(:user, pro_expires_at: Time.now)
     user.stripe_customer.save(source: stripe_mock.generate_card_token)
     sub = ProSubscription::StripeSubscription.create!(user: user, tier: 'pro')

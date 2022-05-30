@@ -54,7 +54,7 @@ class ListImport
       end
 
       def data
-        %i[status progress rating notes started_at finished_at].map { |k| [k, send(k)] }.to_h
+        %i[status progress rating notes started_at finished_at].index_with { |k| send(k) }
       end
     end
   end

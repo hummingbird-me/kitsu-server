@@ -29,8 +29,8 @@ module MediaAttributesImport
 
       begin
         AnimeMediaAttribute.create!(anime)
-      rescue ActiveRecord::RecordNotUnique => rnu
-        handle_record_not_unique(rnu)
+      rescue ActiveRecord::RecordNotUnique => e
+        handle_record_not_unique(e)
       end
     end
 
@@ -42,8 +42,8 @@ module MediaAttributesImport
 
       begin
         DramasMediaAttribute.create!(dramas)
-      rescue ActiveRecord::RecordNotUnique => rnu
-        handle_record_not_unique(rnu)
+      rescue ActiveRecord::RecordNotUnique => e
+        handle_record_not_unique(e)
       end
     end
 
@@ -55,8 +55,8 @@ module MediaAttributesImport
 
       begin
         MangaMediaAttribute.create!(manga)
-      rescue ActiveRecord::RecordNotUnique => rnu
-        handle_record_not_unique(rnu)
+      rescue ActiveRecord::RecordNotUnique => e
+        handle_record_not_unique(e)
       end
     end
 

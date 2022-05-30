@@ -53,7 +53,7 @@ class LibrarySearchService < SearchService
     @result_entries = load_ids.each_with_object({}) do |(kind, ids), out|
       # Load the entries
       entries = filtered_library_entries.by_kind(kind).where("#{kind}_id" => ids)
-      entries = entries.includes(_includes) unless _includes.blank?
+      entries = entries.includes(_includes) if _includes.present?
       # Add them to our output hash
       out[kind] = entries.group_by(&:"#{kind}_id").transform_values(&:first)
     end

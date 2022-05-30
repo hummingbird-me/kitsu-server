@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe YoutubeService::Subscription do
+  subject { YoutubeService::Subscription.new(linked_account) }
+
   before do
     stub_request(:post, YoutubeService::Subscription::SUBSCRIBE_URL)
       .with(body: hash_including(
@@ -12,14 +14,13 @@ RSpec.describe YoutubeService::Subscription do
   end
 
   let(:linked_account) do
-    instance_double('LinkedAccount::YoutubeChannel',
+    instance_double(LinkedAccount::YoutubeChannel,
       external_user_id: 'CHANNEL_ID',
       id: 'ID')
   end
-  subject { YoutubeService::Subscription.new(linked_account) }
 
   describe '#topic_url' do
-    it 'should return the topic URL for the channel' do
+    it 'returns the topic URL for the channel' do
       expect(subject.topic_url).to eq(
         'https://www.youtube.com/xml/feeds/videos.xml?channel_id=CHANNEL_ID'
       )
@@ -27,7 +28,7 @@ RSpec.describe YoutubeService::Subscription do
   end
 
   describe '#subscribe' do
-    it 'should POST to the subscribe url with hub.mode=subscribe' do
+    it 'POSTS to the subscribe url with hub.mode=subscribe' do
       subject.subscribe
       expect(
         a_request(:post, YoutubeService::Subscription::SUBSCRIBE_URL)
@@ -37,7 +38,7 @@ RSpec.describe YoutubeService::Subscription do
   end
 
   describe '#unsubscribe' do
-    it 'should POST to the subscribe url with hub.mode=unsubscribe' do
+    it 'POSTS to the subscribe url with hub.mode=unsubscribe' do
       subject.unsubscribe
       expect(
         a_request(:post, YoutubeService::Subscription::SUBSCRIBE_URL)
@@ -47,7 +48,7 @@ RSpec.describe YoutubeService::Subscription do
   end
 
   describe '.hmac' do
-    it 'should generate an HMAC digest of the data' do
+    it 'generates an HMAC digest of the data' do
       allow(described_class).to receive(:secret).and_return('SECRET')
       expect(described_class.hmac('hello world')).to eq(
         'd787f3d1bba419806deea7e529800e0f94924434'
@@ -63,16 +64,16 @@ RSpec.describe YoutubeService::Subscription do
     end
 
     context 'with a correct HMAC' do
-      it 'should return true' do
+      it 'returns true' do
         data = 'hello world'
-        expect(described_class.hmac_matches?(data, expected_hmac)).to eq(true)
+        expect(described_class.hmac_matches?(data, expected_hmac)).to be(true)
       end
     end
 
     context 'with an incorrect HMAC' do
-      it 'should return false' do
+      it 'returns false' do
         data = 'i am evil'
-        expect(described_class.hmac_matches?(data, expected_hmac)).to eq(false)
+        expect(described_class.hmac_matches?(data, expected_hmac)).to be(false)
       end
     end
   end

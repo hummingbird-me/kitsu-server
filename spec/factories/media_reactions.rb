@@ -3,7 +3,7 @@ FactoryBot.define do
     reaction { Faker::Lorem.characters(140) }
     association :anime, factory: :anime, strategy: :build
     association :library_entry, factory: :library_entry,
-                                progress: 1, strategy: :build
+      progress: 1, strategy: :build
     association :user, factory: :user, strategy: :build
   end
 end

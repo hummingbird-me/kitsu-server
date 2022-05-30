@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Accounts::SendConfirmationEmail do
   let!(:user) { create(:user) }
 
-  it 'should send an email to the user' do
+  it 'sends an email to the user' do
     expect {
       described_class.call(user: user)
     }.to(change { ActionMailer::Base.deliveries.size }.by(1))
@@ -14,7 +14,7 @@ RSpec.describe Accounts::SendConfirmationEmail do
   end
 
   context 'when a hard bounce occurs' do
-    it 'should catch the error and set the user to bounced' do
+    it 'catches the error and set the user to bounced' do
       expect(UserMailer).to receive(:confirmation).and_raise(MailSendError::HardBounce)
 
       expect {
@@ -24,7 +24,7 @@ RSpec.describe Accounts::SendConfirmationEmail do
   end
 
   context 'when a soft bounce occurs' do
-    it 'should allow the error to bubble' do
+    it 'allows the error to bubble' do
       expect(UserMailer).to receive(:confirmation).and_raise(MailSendError::SoftBounce)
 
       expect {

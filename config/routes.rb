@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/BlockLength
 require 'sidekiq/web'
 
 Rails.application.routes.draw do

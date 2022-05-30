@@ -5,7 +5,7 @@ RSpec.describe Pro::ValidateGift do
   let(:bob) { build(:user) }
 
   context 'when sending to yourself' do
-    it 'should raise ProError::InvalidSelfGift' do
+    it 'raises ProError::InvalidSelfGift' do
       expect {
         Pro::ValidateGift.call(
           from: alice,
@@ -19,9 +19,10 @@ RSpec.describe Pro::ValidateGift do
   context 'when sending to somebody who blocked you' do
     let(:alice) { create(:user) }
     let(:bob) { create(:user) }
+
     before { Block.create!(user: bob, blocked: alice) }
 
-    it 'should raise ActiveRecord::RecordNotFound' do
+    it 'raises ActiveRecord::RecordNotFound' do
       expect {
         Pro::ValidateGift.call(
           from: alice,
@@ -33,7 +34,7 @@ RSpec.describe Pro::ValidateGift do
   end
 
   context 'when the recipient already has pro' do
-    it 'should raise ProError::RecipientIsPro' do
+    it 'raises ProError::RecipientIsPro' do
       bob.pro_expires_at = 1.month.from_now
       bob.pro_tier = :pro
       expect {
@@ -47,7 +48,7 @@ RSpec.describe Pro::ValidateGift do
   end
 
   context 'with an unknown tier' do
-    it 'should raise ProError::InvalidTier' do
+    it 'raises ProError::InvalidTier' do
       expect {
         Pro::ValidateGift.call(
           from: alice,

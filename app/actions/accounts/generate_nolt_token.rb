@@ -1,6 +1,6 @@
 module Accounts
   class GenerateNoltToken < Action
-    NOLT_SSO_SECRET = ENV['NOLT_SSO_SECRET']
+    NOLT_SSO_SECRET = ENV.fetch('NOLT_SSO_SECRET', nil)
 
     parameter :user, load: User, required: true
 

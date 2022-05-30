@@ -4,7 +4,7 @@ RSpec.describe LinkedAccount::MyAnimeList do
   context 'validates' do
     describe '#verify_mal_credentials' do
       context 'with valid login' do
-        it 'should have no errors' do
+        it 'has no errors' do
           list_sync = instance_double(ListSync::MyAnimeList)
           subject = described_class.new(
             type: 'LinkedAccount::MyAnimeList',
@@ -17,8 +17,9 @@ RSpec.describe LinkedAccount::MyAnimeList do
           expect(subject.errors[:token]).to be_empty
         end
       end
+
       context 'with invalid login' do
-        it 'should have an error' do
+        it 'has an error' do
           list_sync = instance_double(ListSync::MyAnimeList)
           subject = described_class.new(
             type: 'LinkedAccount::MyAnimeList',

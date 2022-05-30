@@ -7,16 +7,16 @@ RSpec.describe LibraryEntriesController, type: :controller do
 
   describe '#index' do
     describe 'with filter[user_id]' do
-      it 'should respond with a list of library entries' do
-        3.times { create(:library_entry, user: user) }
+      it 'responds with a list of library entries' do
+        create_list(:library_entry, 3, user: user)
         get :index, params: { filter: { user_id: user } }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
       end
     end
 
     describe 'with filter[media_type] + filter[media_id]' do
-      it 'should respond with a list of library entries' do
-        3.times { create(:library_entry, media: anime) }
+      it 'responds with a list of library entries' do
+        create_list(:library_entry, 3, media: anime)
         get :index, params: {
           filter: { media_id: anime.id, media_type: 'Anime' }
         }
@@ -25,9 +25,9 @@ RSpec.describe LibraryEntriesController, type: :controller do
     end
 
     describe 'with filter[user_id] + filter[media_type] + filter[media_id]' do
-      it 'should respond with a single library entry as an array' do
+      it 'responds with a single library entry as an array' do
         create(:library_entry, user: user, media: anime)
-        3.times { create(:library_entry, user: build(:user), media: anime) }
+        create_list(:library_entry, 3, user: build(:user), media: anime)
         get :index, params: {
           filter: { media_id: anime.id, media_type: 'Anime', user_id: user }
         }
@@ -37,22 +37,20 @@ RSpec.describe LibraryEntriesController, type: :controller do
     end
 
     describe 'with logged in user' do
-      it 'should respond with a single private library entry as an array' do
+      it 'responds with a single private library entry as an array' do
         sign_in(user)
         create(:library_entry, user: user, media: anime, private: true)
-        3.times do
-          create(:library_entry, user: build(:user), media: anime,
-                                 private: true)
-        end
+        create_list(:library_entry, 3, user: build(:user), media: anime,
+          private: true)
         get :index, params: { filter: { user_id: user.id } }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
         expect(JSON.parse(response.body)['data'].count).to eq(1)
       end
 
-      it 'should respond with a list of library entries' do
+      it 'responds with a list of library entries' do
         sign_in(user)
         create(:library_entry, user: user, media: anime, private: true)
-        3.times { create(:library_entry, user: build(:user), media: anime) }
+        create_list(:library_entry, 3, user: build(:user), media: anime)
         get :index, params: { filter: { user_id: user.id } }
         expect(response.body).to have_resources(LIBRARY_ENTRY.dup, 'libraryEntries')
         expect(JSON.parse(response.body)['data'].count).to eq(1)

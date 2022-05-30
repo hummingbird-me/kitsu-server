@@ -2,10 +2,8 @@ module Sidekiq
   module Middleware
     module Server
       class Chewy
-        def call(*)
-          ::Chewy.strategy(:atomic) do
-            yield
-          end
+        def call(*, &block)
+          ::Chewy.strategy(:atomic, &block)
         end
       end
     end

@@ -8,13 +8,13 @@ RSpec.describe ProSubscription::StripeSubscription, type: :model do
   end
 
   describe '#billing_service' do
-    it 'should return :stripe' do
+    it 'returns :stripe' do
       ProSubscription::StripeSubscription.new.billing_service
     end
   end
 
   context 'after destruction' do
-    it 'should cancel the subscription on Stripe' do
+    it 'cancels the subscription on Stripe' do
       user = create(:user)
       user.stripe_customer.save(source: stripe_mock.generate_card_token)
       sub = ProSubscription::StripeSubscription.create!(user: user, tier: 'pro')
@@ -24,7 +24,7 @@ RSpec.describe ProSubscription::StripeSubscription, type: :model do
   end
 
   context 'at creation' do
-    it 'should create the subscription on Stripe' do
+    it 'creates the subscription on Stripe' do
       user = create(:user)
       user.stripe_customer.save(source: stripe_mock.generate_card_token)
       sub = ProSubscription::StripeSubscription.create!(user: user, tier: 'pro')

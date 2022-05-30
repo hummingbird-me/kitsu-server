@@ -1,5 +1,6 @@
 class MediaActivityService
   attr_reader :library_entry
+
   delegate :media, to: :library_entry
   delegate :user, to: :library_entry
 

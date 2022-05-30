@@ -139,7 +139,7 @@ module Analysis
 
     def max_possible_nodes_limit_error
       message = "Your request of #{max_possible_nodes.to_s(:delimited)}" \
-        " nodes exceeds the node limit: #{NODE_LIMIT.to_s(:delimited)}"
+                " nodes exceeds the node limit: #{NODE_LIMIT.to_s(:delimited)}"
       GraphQL::AnalysisError.new(message)
     end
   end

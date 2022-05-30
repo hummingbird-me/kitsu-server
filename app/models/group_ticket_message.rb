@@ -1,8 +1,8 @@
 class GroupTicketMessage < ApplicationRecord
-  belongs_to :ticket, class_name: 'GroupTicket', required: true
-  belongs_to :user, required: true
+  belongs_to :ticket, class_name: 'GroupTicket', optional: false
+  belongs_to :user, optional: false
 
-  enum kind: %i[message mod_note]
+  enum kind: { message: 0, mod_note: 1 }
   update_index('group_tickets#group_ticket') { ticket }
 
   scope :visible_for, ->(user) {

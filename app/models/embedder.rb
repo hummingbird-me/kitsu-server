@@ -1,5 +1,6 @@
 class Embedder
   attr_reader :url, :body
+
   delegate :get, to: :EmbedService
 
   # @return [Integer] the version number of the Embedder class, used for cache busting
@@ -56,7 +57,7 @@ class Embedder
     to_h.as_json(*args)
   end
 
-  def to_json
+  def to_json(*_args)
     as_json.to_json
   end
 

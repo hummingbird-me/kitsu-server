@@ -10,7 +10,7 @@ module Rateable
   end
 
   def calculate_rating_frequencies
-    base = LibraryEntry::VALID_RATINGS.map { |r| [r, 0] }.to_h
+    base = LibraryEntry::VALID_RATINGS.index_with { |_r| 0 }
     freqs = LibraryEntry.where(media: self).group(:rating).count
                         .transform_keys(&:to_i)
                         .slice(*LibraryEntry::VALID_RATINGS)
@@ -81,7 +81,7 @@ module Rateable
           # Bayesian average on scale of 1..19
           raw_score = (media_total + base).to_f / (media_count + MIN_RATINGS)
           # Map to a scale of 5..100
-          percent_score = (4 + (raw_score.to_f / 20) * 95)
+          percent_score = (4 + ((raw_score.to_f / 20) * 95))
 
           media.update_columns(
             average_rating: percent_score,

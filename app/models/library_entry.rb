@@ -66,7 +66,7 @@ class LibraryEntry < ApplicationRecord
   validate :one_media_present
 
   counter_culture :user, column_name: ->(le) { 'ratings_count' if le.rating },
-                         execute_after_commit: true
+    execute_after_commit: true
   scope :rated, -> { where.not(rating: nil) }
   scope :following, ->(user) do
     user_id = user.respond_to?(:id) ? user.id : user
@@ -145,9 +145,9 @@ class LibraryEntry < ApplicationRecord
     # When progress equals total episodes
     self.status = :completed if !status_changed? && progress == media&.progress_limit
 
-    if status_changed? && completed?
+    if status_changed? && completed? && media&.progress_limit
       # update progress to the cap
-      self.progress = media.progress_limit if media&.progress_limit
+      self.progress = media.progress_limit
     end
 
     unless imported

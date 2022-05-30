@@ -17,13 +17,13 @@ class FeedQueryService
     list = list.where_id(*id_query) if id_query
     list = list.mark(mark) if mark
     list = list.sfw if sfw_filter?
-    if Flipper[:feed_following_filter].enabled?(User.current)
-      list = list.only_following(user.id) if only_following?
+    if Flipper[:feed_following_filter].enabled?(User.current) && only_following?
+      list = list.only_following(user.id)
     end
     list = list.blocking(blocked)
     list = list.select(kind_select[:ratio], &kind_select[:proc]) if kind_select
-    if Flipper[:feed_reasons].enabled?(User.current)
-      list = list.map(&method(:annotate_with_reason)) if feed.is_a?(TimelineFeed)
+    if Flipper[:feed_reasons].enabled?(User.current) && feed.is_a?(TimelineFeed)
+      list = list.map(&method(:annotate_with_reason))
     end
     @list = list
   end

@@ -21,9 +21,7 @@ module ListSync
 
         @agent.get('https://myanimelist.net/login.php') do |login_page|
           # Already logged in!
-          if login_page.uri.to_s == 'https://myanimelist.net/'
-            return @signed_in = true
-          end
+          return @signed_in = true if login_page.uri.to_s == 'https://myanimelist.net/'
           login_form = login_page.form_with(name: 'loginForm') do |form|
             form['csrf_token'] = csrf_token_on(login_page)
             form.user_name = @username

@@ -2,11 +2,11 @@ class LinkedAccount < ApplicationRecord
   belongs_to :user
   has_many :library_entry_logs, dependent: :destroy
   # encyrpt the token
-  attr_encrypted :token, key: Base64.decode64(ENV['ATTR_ENCRYPT_KEY'])
+  attr_encrypted :token, key: Base64.decode64(ENV.fetch('ATTR_ENCRYPT_KEY', nil))
   # expose for jsonapi
   alias_attribute :kind, :type
 
-  validates_presence_of :external_user_id, :type
+  validates :external_user_id, :type, presence: true
   validate :type_is_subclass
 
   def type_is_subclass

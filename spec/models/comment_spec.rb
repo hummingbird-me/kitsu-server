@@ -1,22 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-  it { should belong_to(:post).counter_cache(true).required }
-  it {
-    should belong_to(:parent).class_name('Comment')
-                             .counter_cache('replies_count').optional
-  }
-  it { should belong_to(:user).required }
-  it { should have_many(:replies).class_name('Comment').dependent(:destroy) }
-  it { should have_many(:likes).class_name('CommentLike').dependent(:destroy) }
-  it { should validate_length_of(:content).is_at_most(9_000) }
-
   subject { build(:comment, content: nil) }
+
+  it { is_expected.to belong_to(:post).counter_cache(true).required }
+
+  it {
+    is_expected.to belong_to(:parent).class_name('Comment')
+                                     .counter_cache('replies_count').optional
+  }
+
+  it { is_expected.to belong_to(:user).required }
+  it { is_expected.to have_many(:replies).class_name('Comment').dependent(:destroy) }
+  it { is_expected.to have_many(:likes).class_name('CommentLike').dependent(:destroy) }
+  it { is_expected.to validate_length_of(:content).is_at_most(9_000) }
 
   context 'with content' do
     before { subject.content = 'some content' }
 
-    it { should_not validate_presence_of(:uploads).with_message('must exist') }
+    it { is_expected.not_to validate_presence_of(:uploads).with_message('must exist') }
   end
 
   context 'with uploads' do
@@ -25,15 +27,15 @@ RSpec.describe Comment, type: :model do
       subject.content = nil
     end
 
-    it { should_not validate_presence_of(:content) }
+    it { is_expected.not_to validate_presence_of(:content) }
   end
 
-  it 'should convert basic markdown to fill in content_formatted' do
+  it 'converts basic markdown to fill in content_formatted' do
     comment = create(:comment, content: '*Emphasis* is cool!')
     expect(comment.content_formatted).to include('<em>')
   end
 
-  it 'should not allow grandchildren' do
+  it 'does not allow grandchildren' do
     grandparent = build(:comment)
     parent = build(:comment, parent: grandparent)
     comment = build(:comment, parent: parent)
@@ -42,7 +44,7 @@ RSpec.describe Comment, type: :model do
   end
 
   context 'which is on AMA that is closed' do
-    it 'should not be valid' do
+    it 'is not valid' do
       post = create(:post)
       ama = create(:ama, original_post: post)
       ama.start_date = 6.hours.ago

@@ -6,7 +6,7 @@ RSpec.describe Accounts::PrevalidateEmail do
   context 'when the server times out' do
     before { stub_request(:any, /api\.emailable\.com/).to_timeout }
 
-    it 'should return the default unknown response' do
+    it 'returns the default unknown response' do
       res = described_class.call(email: 'email')
       expect(res.result).to be_unknown
       expect(res.reason).to be_timeout
@@ -29,7 +29,7 @@ RSpec.describe Accounts::PrevalidateEmail do
       )
     end
 
-    it 'should return an undeliverable response' do
+    it 'returns an undeliverable response' do
       res = described_class.call(email: 'email')
       expect(res.result).to be_undeliverable
       expect(res.reason).to be_invalid_email

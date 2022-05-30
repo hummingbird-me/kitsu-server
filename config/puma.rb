@@ -1,5 +1,5 @@
-workers Integer(ENV['WEB_CONCURRENCY'] || 4)
-threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 6)
+workers Integer(ENV.fetch('WEB_CONCURRENCY', 4))
+threads_count = Integer(ENV.fetch('RAILS_MAX_THREADS', 6))
 threads 0, threads_count
 
 nakayoshi_fork true
@@ -7,8 +7,8 @@ preload_app!
 quiet
 
 rackup      DefaultRackup
-port        ENV['PORT'] || 3000
-environment ENV['RACK_ENV'] || 'development'
+port        ENV.fetch('PORT', 3000)
+environment ENV.fetch('RACK_ENV', 'development')
 
 on_worker_boot do
   require 'prometheus_exporter/instrumentation'

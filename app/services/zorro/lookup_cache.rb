@@ -8,7 +8,7 @@ module Zorro
       ids = [ids].flatten
       # { 'abcdefjasfasdf' => 'User_abcdefjasfasdf'}
       klass_name = klass.name
-      cache_keys = ids.map { |id| [id, key_for(klass_name, id)] }.to_h
+      cache_keys = ids.index_with { |id| key_for(klass_name, id) }
       # Attempt to load all the keys from the cache
       found = @cache.read_multi(*cache_keys.values) || {}
       # Find the cache misses

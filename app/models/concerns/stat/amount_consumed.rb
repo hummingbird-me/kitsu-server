@@ -83,7 +83,8 @@ class Stat < ApplicationRecord
 
       stats_data['completed'] += if diff.became_uncompleted? then -1
                                  elsif diff.became_completed? then +1
-                                 else 0
+                                 else
+                                   0
                                  end
 
       save_or_recalculate!

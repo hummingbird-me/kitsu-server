@@ -1,6 +1,6 @@
 class MediaIgnore < ApplicationRecord
-  belongs_to :media, polymorphic: true, required: true
-  belongs_to :user, required: true
+  belongs_to :media, polymorphic: true, optional: false
+  belongs_to :user, optional: false
 
   validates :media, polymorphism: { type: Media }
 

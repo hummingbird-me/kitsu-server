@@ -1,7 +1,7 @@
-module SearchableResource # rubocop:disable Metrics/ModuleLength
+module SearchableResource
   extend ActiveSupport::Concern
 
-  class_methods do # rubocop:disable Metrics/BlockLength
+  class_methods do
     attr_reader :_chewy_index, :_query_fields, :_search_service
 
     # Declare the Chewy index to use when searching this resource
@@ -142,14 +142,14 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
       # Pagination
       query = opts[:paginator].apply(query, {}) if opts[:paginator]
       # Sorting
-      if opts[:sort_criteria]
-        query = opts[:sort_criteria].reduce(query) do |scope, sort|
-          field = sort[:field] == 'id' ? '_score' : sort[:field]
-          scope.order(field => sort[:direction])
-        end
-      else
-        query = query.order('_score' => :desc)
-      end
+      query = if opts[:sort_criteria]
+                opts[:sort_criteria].reduce(query) do |scope, sort|
+                  field = sort[:field] == 'id' ? '_score' : sort[:field]
+                  scope.order(field => sort[:direction])
+                end
+              else
+                query.order('_score' => :desc)
+              end
       # Policy Scope
       query = search_policy_scope.new(context[:current_user], query).resolve
       context[:policy_used]&.call

@@ -16,7 +16,8 @@ module Types::Interface::Episodic
 
   field :episodes, Types::Episode.connection_type, null: false do
     description 'Episodes for this media'
-    argument :number, [Integer], required: false, deprecation_reason: 'This should only grab all episodes. Separate field will be provided for specific episodes'
+    argument :number, [Integer], required: false,
+      deprecation_reason: 'This should only grab all episodes. Separate field will be provided for specific episodes'
     argument :sort, Loaders::EpisodesLoader.sort_argument, required: false
   end
 

@@ -51,8 +51,8 @@ module Authorization
       # The UserConflictDetector instance
       def conflict
         @conflict ||= Zorro::UserConflictDetector.new(facebook_id: facebook_id,
-                                                      ao_facebook_id: ao_facebook_id,
-                                                      email: email)
+          ao_facebook_id: ao_facebook_id,
+          email: email)
       end
 
       # @return [String] the Facebook ID for Kitsu
@@ -76,7 +76,7 @@ module Authorization
 
       # @return [Array<String>] the list of friends from this user's facebook
       def friends
-        get('/me/friends', fields: { id: true })[:data].map { |friend| friend[:id] }
+        get('/me/friends', fields: { id: true })[:data].pluck(:id)
       end
 
       # @return [Hash] the raw data retrieved from the Facebook Graph API

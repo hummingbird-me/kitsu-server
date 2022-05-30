@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe AppleReceiptService do
   include_context 'Stubbed Apple Receipt Verification'
 
-  it 'should raise an exception if the verification response status is nonzero' do
+  it 'raises an exception if the verification response status is nonzero' do
     stub_receipt_verification(status: 21100) # rubocop:disable Style/NumericLiterals
     expect { subject }.to raise_exception(AppleReceiptService::Error)
   end
 
   context 'with a valid receipt' do
     describe '#start_date' do
-      it 'should return the purchase_date field from the receipt as a Time object' do
+      it 'returns the purchase_date field from the receipt as a Time object' do
         stub_receipt_verification(latest_receipt_info: {
           purchase_date: '2012-04-30T15:05:55.000+00:00'
         })
@@ -20,7 +20,7 @@ RSpec.describe AppleReceiptService do
     end
 
     describe '#end_date' do
-      it 'should return the expires_date field from the receipt as a Time object' do
+      it 'returns the expires_date field from the receipt as a Time object' do
         stub_receipt_verification(latest_receipt_info: {
           expires_date: '2012-04-30T15:05:55.000+00:00'
         })
@@ -30,7 +30,7 @@ RSpec.describe AppleReceiptService do
     end
 
     describe '#billing_id' do
-      it 'should return the original_transaction_id' do
+      it 'returns the original_transaction_id' do
         stub_receipt_verification(latest_receipt_info: {
           original_transaction_id: '_TEST_'
         })

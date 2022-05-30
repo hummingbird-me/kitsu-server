@@ -32,7 +32,7 @@ module Titleable
     titles.keys.any? { |k| k.start_with?('en') }
   end
 
-  def has_english_title
+  def has_english_title # rubocop:disable Naming/PredicateName
     errors.add(:titles, 'must have at least one english title') unless has_english_title?
   end
 end

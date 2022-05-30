@@ -13,7 +13,7 @@ module StreamLog
     end
   end
 
-  def follow_many(follows, backlog)
+  def follow_many(follows, _backlog)
     return false unless ENV['STREAMLOG_REDIS_URL']
     follow_keys = follows.map do |follow|
       source = follow[:source].split(':')
@@ -57,8 +57,8 @@ module StreamLog
   end
 
   def redis_pool
-    @redis_pool ||= ConnectionPool.new(size: ENV['RAILS_MAX_THREADS'] || 5) do
-      Redis.new(url: ENV['STREAMLOG_REDIS_URL'])
+    @redis_pool ||= ConnectionPool.new(size: ENV.fetch('RAILS_MAX_THREADS', 5)) do
+      Redis.new(url: ENV.fetch('STREAMLOG_REDIS_URL', nil))
     end
   end
 end

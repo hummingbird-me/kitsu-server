@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Manga, type: :model do
   subject { build(:manga) }
+
   include_examples 'media'
 
-  context '#default_progress_limit' do
-    it 'should return 5000' do
+  describe '#default_progress_limit' do
+    it 'returns 5000' do
       subject.start_date = nil
       subject.end_date = nil
       expect(subject.default_progress_limit).to eq(5000)
@@ -13,7 +14,7 @@ RSpec.describe Manga, type: :model do
   end
 
   describe 'sync_chapters' do
-    it 'should create chapters when chapter_count is changed' do
+    it 'creates chapters when chapter_count is changed' do
       create(:manga, chapter_count: 5)
       manga = Manga.last
       expect(manga.chapters.length).to eq(manga.chapter_count)

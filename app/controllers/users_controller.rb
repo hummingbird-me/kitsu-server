@@ -99,6 +99,6 @@ class UsersController < ApplicationController
     features = Flipper.preload_all
     flags = features.map { |f| [f.name, f.enabled?(user)] }.to_h
     enabled_flags = flags.select { |_, enabled| enabled }
-    render json: enabled_flags, status: 200
+    render json: enabled_flags, status: :ok
   end
 end

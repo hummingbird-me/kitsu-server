@@ -4,12 +4,12 @@ class MediaReaction < ApplicationRecord
 
   acts_as_paranoid
 
-  belongs_to :user, required: true, counter_cache: true
-  belongs_to :media, polymorphic: true, required: true
+  belongs_to :user, optional: false, counter_cache: true
+  belongs_to :media, polymorphic: true, optional: false
   belongs_to :anime, optional: true
   belongs_to :manga, optional: true
   belongs_to :drama, optional: true
-  belongs_to :library_entry, required: true
+  belongs_to :library_entry, optional: false
   has_many :votes, class_name: 'MediaReactionVote', dependent: :destroy
 
   validates :media_id, uniqueness: { scope: %i[user_id media_type] }, unless: :deleted?

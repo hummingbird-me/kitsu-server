@@ -107,7 +107,7 @@ class TheTvdbService
     Enumerator.new do |y|
       page = 1
       template = Addressable::Template.new('/series/{series_id}/episodes/query{?query*}')
-      season_number = season_numbers if /\A\d+\z/ =~ season_number
+      season_number = season_numbers if /\A\d+\z/.match?(season_number)
 
       loop do
         url = template.expand(series_id: series_id, query: {

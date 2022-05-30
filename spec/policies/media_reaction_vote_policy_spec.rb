@@ -1,26 +1,29 @@
 require 'rails_helper'
 
 RSpec.describe MediaReactionVotePolicy do
+  subject { described_class }
+
   let(:owner) { token_for create(:user) }
   let(:other) { token_for create(:user, id: 2) }
   let(:media_reaction_vote) do
     build(:media_reaction_vote, user: owner.resource_owner)
   end
-  subject { described_class }
 
   permissions :update? do
-    it('should not allow users') {
-      should_not permit(owner, media_reaction_vote)
+    it('does not allow users') {
+      is_expected.not_to permit(owner, media_reaction_vote)
     }
-    it('should not allow anons') {
-      should_not permit(nil, media_reaction_vote)
+
+    it('does not allow anons') {
+      is_expected.not_to permit(nil, media_reaction_vote)
     }
   end
 
   permissions :create?, :destroy? do
-    it('should allow owner') { should permit(owner, media_reaction_vote) }
-    it('should not allow other') {
-      should_not permit(other, media_reaction_vote)
+    it('allows owner') { is_expected.to permit(owner, media_reaction_vote) }
+
+    it('does not allow other') {
+      is_expected.not_to permit(other, media_reaction_vote)
     }
   end
 end

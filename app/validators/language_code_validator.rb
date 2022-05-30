@@ -12,8 +12,6 @@ class LanguageCodeValidator < ActiveModel::EachValidator
   end
 
   def validate_value(value)
-    unless ISO_639.find(value).present?
-      "#{value} is not a known ISO 639-1 language code"
-    end
+    "#{value} is not a known ISO 639-1 language code" unless ISO_639.find(value).present?
   end
 end

@@ -1,4 +1,4 @@
-task :stats => "kitsu:stats_setup"
+task stats: 'kitsu:stats_setup'
 
 namespace :kitsu do
   task :stats_setup do

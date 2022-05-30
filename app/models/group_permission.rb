@@ -1,5 +1,5 @@
 class GroupPermission < ApplicationRecord
-  belongs_to :group_member, required: true
+  belongs_to :group_member, optional: false
 
   validates :permission, uniqueness: { scope: %i[group_member_id] }
 
@@ -15,7 +15,8 @@ class GroupPermission < ApplicationRecord
   #
   # @!attribute [rw] permission
   # @return [owner tickets members leaders community content]
-  enum permission: %i[owner tickets members leaders community content]
+  enum permission: { owner: 0, tickets: 1, members: 2, leaders: 3, community: 4,
+                     content: 5 }
 
   scope :for_permission, ->(perm) { send(perm).or(owner) }
   scope :visible_for, ->(user) {

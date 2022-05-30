@@ -1,3 +1,4 @@
+# rubocop:disable Lint/MissingCopEnableDirective, Layout/LineLength
 FactoryBot.define do
   factory :profile_link_site do
     name { Faker::Company.name }
@@ -177,6 +178,5 @@ FactoryBot.define do
       validate_find { '(?<protocol>https?://)(www.)?(?<url>(.)+\.(.)+)' }
       validate_replace { '\k<protocol\k<url>' }
     end
-    # rubocop:enable Metrics/LineLength
   end
 end

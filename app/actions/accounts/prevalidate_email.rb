@@ -3,7 +3,7 @@ module Accounts
     class EmailableError < StandardError; end
 
     HTTP_TIMEOUT = 10.seconds
-    API_KEY = ENV['EMAILABLE_API_KEY']
+    API_KEY = ENV.fetch('EMAILABLE_API_KEY', nil)
     URL = 'https://api.emailable.com/v1/verify'.freeze
     URL_TEMPLATE = Addressable::Template.new("#{URL}?api_key=#{API_KEY}{&email}").freeze
 

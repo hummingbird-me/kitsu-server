@@ -1,6 +1,6 @@
 class ListImport
   class AnimePlanet < ListImport
-    ANIME_PLANET_HOST = "http://#{ENV['ANIME_PLANET_PROXY_HOST']}/users/".freeze
+    ANIME_PLANET_HOST = "http://#{ENV.fetch('ANIME_PLANET_PROXY_HOST', nil)}/users/".freeze
 
     # accepts a username as input
     validates :input_text, length: {
@@ -52,11 +52,10 @@ class ListImport
       request = Typhoeus::Request.get(url, {
         cookiefile: '/tmp/anime-planet-cookies',
         cookiejar: '/tmp/anime-planet-cookies',
-        userpwd: ENV['ANIME_PLANET_PROXY_AUTH'],
+        userpwd: ENV.fetch('ANIME_PLANET_PROXY_AUTH', nil),
         followlocation: true
       }.merge(opts).compact)
-      html = Nokogiri::HTML(request.body)
-      html
+      Nokogiri::HTML(request.body)
     end
 
     def build_url(path, page)

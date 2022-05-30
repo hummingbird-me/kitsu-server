@@ -1,6 +1,6 @@
 class PostFollow < ApplicationRecord
-  belongs_to :user, required: true
-  belongs_to :post, required: true
+  belongs_to :user, optional: false
+  belongs_to :post, optional: false
 
   validates :post, uniqueness: { scope: :user_id }
   validates :post, active_ama: {

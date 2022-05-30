@@ -1,9 +1,9 @@
 class GroupBan < ApplicationRecord
   include ContentProcessable
 
-  belongs_to :group, required: true
-  belongs_to :user, required: true
-  belongs_to :moderator, class_name: 'User', required: true
+  belongs_to :group, optional: false
+  belongs_to :user, optional: false
+  belongs_to :moderator, class_name: 'User', optional: false
 
   processable :notes, InlinePipeline
 

@@ -4,8 +4,8 @@ class CommunityRecommendation < ApplicationRecord
   belongs_to :anime, optional: true
   belongs_to :manga, optional: true
   belongs_to :drama, optional: true
-  belongs_to :media, polymorphic: true, required: true
-  belongs_to :community_recommendation_request, required: true
+  belongs_to :media, polymorphic: true, optional: false
+  belongs_to :community_recommendation_request, optional: false
   has_many :reasons, class_name: 'Post'
 
   def send_community_recommendation(reason)

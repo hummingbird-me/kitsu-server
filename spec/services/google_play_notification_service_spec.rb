@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe GooglePlayNotificationService do
   context 'with a renewal' do
+    subject { described_class.new(notif) }
+
     let(:notif) do
       {
         'message' => {
@@ -9,22 +11,23 @@ RSpec.describe GooglePlayNotificationService do
         }
       }
     end
-    subject { described_class.new(notif) }
 
     describe '#token' do
-      it 'should return the value in subscriptionNotification.purchaseToken in the data payload' do
+      it 'returns the value in subscriptionNotification.purchaseToken in the data payload' do
         expect(subject.token).to eq('PURCHASE_TOKEN')
       end
     end
 
     describe '#event' do
-      it 'should return :renewed' do
+      it 'returns :renewed' do
         expect(subject.event).to eq(:renewed)
       end
     end
   end
 
   context 'with a cancellation' do
+    subject { described_class.new(notif) }
+
     let(:notif) do
       {
         'message' => {
@@ -32,11 +35,10 @@ RSpec.describe GooglePlayNotificationService do
         }
       }
     end
-    subject { described_class.new(notif) }
 
     describe '#call' do
-      it 'should destroy the subscription' do
-        subscription = instance_double('ProSubscription::GooglePlaySubscription')
+      it 'destroys the subscription' do
+        subscription = instance_double(ProSubscription::GooglePlaySubscription)
         allow(subject).to receive(:subscription).and_return(subscription)
         expect(subscription).to receive(:destroy!).once
         subject.call

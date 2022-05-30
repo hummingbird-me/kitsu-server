@@ -34,7 +34,7 @@ class YoutubeService
     private
 
     def api_key
-      @api_key || ENV['YOUTUBE_API_KEY']
+      @api_key || ENV.fetch('YOUTUBE_API_KEY', nil)
     end
   end
 end

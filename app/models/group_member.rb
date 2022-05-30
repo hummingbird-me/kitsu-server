@@ -1,6 +1,6 @@
 class GroupMember < ApplicationRecord
-  belongs_to :group, required: true, counter_cache: 'members_count', touch: true
-  belongs_to :user, required: true
+  belongs_to :group, optional: false, counter_cache: 'members_count', touch: true
+  belongs_to :user, optional: false
   has_many :permissions, class_name: 'GroupPermission', dependent: :destroy
   has_many :notes, class_name: 'GroupMemberNote', dependent: :destroy
 
@@ -8,7 +8,7 @@ class GroupMember < ApplicationRecord
     model.pleb? ? nil : 'leaders_count'
   }
   update_index('users#group_member') { self }
-  enum rank: %i[pleb mod admin]
+  enum rank: { pleb: 0, mod: 1, admin: 2 }
   scope :with_permission, ->(perm) {
     joins(:permissions).merge(GroupPermission.for_permission(perm))
   }
@@ -18,7 +18,7 @@ class GroupMember < ApplicationRecord
   scope :leaders, -> { where.not(rank: 'pleb') }
   scope :blocking, ->(users) { where.not(user_id: users) }
   scope :visible_for, ->(u) { joins(:group).merge(Group.visible_for(u)) }
-  scope :sfw, ->() { joins(:group).merge(Group.sfw) }
+  scope :sfw, -> { joins(:group).merge(Group.sfw) }
 
   def has_permission?(perm)
     permissions.for_permission(perm).exists? || permissions.for_permission(:owner).exists?

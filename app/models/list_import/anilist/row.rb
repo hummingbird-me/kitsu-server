@@ -25,7 +25,7 @@ class ListImport
       end
 
       def data
-        fields.map { |field| [field, send(field)] }.to_h.compact
+        fields.index_with { |field| send(field) }.compact
       end
 
       private

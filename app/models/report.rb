@@ -27,7 +27,7 @@
 class Report < ApplicationRecord
   include WithActivity
 
-  belongs_to :naughty, -> { with_deleted }, polymorphic: true, required: true
+  belongs_to :naughty, -> { with_deleted }, polymorphic: true, optional: false
   belongs_to :user, optional: false
   belongs_to :moderator, class_name: 'User', optional: true
 

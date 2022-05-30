@@ -12,27 +12,29 @@ RSpec.describe DoorkeeperHelpers do
   end
   let(:instance) { controller.new }
 
-  context '#current_user' do
-    it 'should return the token when there is a user logged in' do
+  describe '#current_user' do
+    it 'returns the token when there is a user logged in' do
       user = build(:user)
       token = token_for(user)
       allow(instance).to receive(:doorkeeper_token) { token }
       expect(instance.current_user).to eq(token)
     end
-    it 'should return nil when there is nobody logged in' do
-      allow(instance).to receive(:doorkeeper_token) { nil }
+
+    it 'returns nil when there is nobody logged in' do
+      allow(instance).to receive(:doorkeeper_token).and_return(nil)
       expect(instance.current_user).to be_nil
     end
   end
 
-  context '#signed_in?' do
-    it 'should return true if logged in' do
+  describe '#signed_in?' do
+    it 'returns true if logged in' do
       user = build(:user)
       allow(instance).to receive(:current_user) { token_for(user) }
       expect(instance.signed_in?).to be true
     end
-    it 'should return false if not logged in' do
-      allow(instance).to receive(:current_user) { nil }
+
+    it 'returns false if not logged in' do
+      allow(instance).to receive(:current_user).and_return(nil)
       expect(instance.signed_in?).to be false
     end
   end

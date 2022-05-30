@@ -1,3 +1,4 @@
+# rubocop:disable Lint/MissingCopEnableDirective, Naming/PredicateName
 require 'json_expressions/rspec'
 
 JsonExpressions::Matcher.assume_strict_arrays = false

@@ -28,7 +28,7 @@ module DoorkeeperHelpers
         errors: [
           { title: 'Invalid token', status: '401' }
         ]
-      }, status: 401
+      }, status: :unauthorized
     end
   end
 

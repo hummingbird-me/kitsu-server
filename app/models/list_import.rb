@@ -2,10 +2,10 @@ class ListImport < ApplicationRecord
   include Enumerable
   include WithActivity
 
-  belongs_to :user, required: true
+  belongs_to :user, optional: false
 
-  enum strategy: %i[greater obliterate]
-  enum status: %i[queued running failed completed partially_failed]
+  enum strategy: { greater: 0, obliterate: 1 }
+  enum status: { queued: 0, running: 1, failed: 2, completed: 3, partially_failed: 4 }
   alias_attribute :kind, :type
 
   validates :strategy, presence: true

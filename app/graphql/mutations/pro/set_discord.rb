@@ -19,7 +19,7 @@ class Mutations::Pro::SetDiscord < Mutations::Base
     )
 
     { discord: discord }
-  rescue NotAuthorizedError => ex
-    raise GraphQL::ExecutionError, ErrorI18n.t(ex)
+  rescue NotAuthorizedError => e
+    raise GraphQL::ExecutionError, ErrorI18n.t(e)
   end
 end

@@ -1,12 +1,12 @@
 class GroupTicket < ApplicationRecord
-  belongs_to :user, required: true
-  belongs_to :group, required: true
+  belongs_to :user, optional: false
+  belongs_to :group, optional: false
   belongs_to :assignee, class_name: 'User', optional: true
   belongs_to :first_message, class_name: 'GroupTicketMessage', optional: true
   has_many :messages, class_name: 'GroupTicketMessage', foreign_key: 'ticket_id',
-                      dependent: :destroy
+    dependent: :destroy
 
-  enum status: %i[created assigned resolved]
+  enum status: { created: 0, assigned: 1, resolved: 2 }
   update_index('group_tickets#group_ticket') { self }
 
   scope :visible_for, ->(user) {

@@ -37,7 +37,7 @@ class LibraryEntriesController < ApplicationController
     else
       operation_scope.destroy_all
     end
-    head 204
+    head :no_content
   end
 
   def bulk_update
@@ -48,9 +48,9 @@ class LibraryEntriesController < ApplicationController
   end
 
   def download_xml
-    head 404 unless User.current.present?
-    head 404 unless Flipper[:xml_download].enabled?(User.current)
-    head 400 unless params[:kind].in?(%w[anime manga])
+    head :not_found unless User.current.present?
+    head :not_found unless Flipper[:xml_download].enabled?(User.current)
+    head :bad_request unless params[:kind].in?(%w[anime manga])
 
     user = User.current
     xml = ListSync::MyAnimeList::XMLGenerator.new(user, params[:kind].to_sym).to_xml

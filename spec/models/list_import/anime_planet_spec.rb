@@ -25,8 +25,8 @@ RSpec.describe ListImport::AnimePlanet do
   describe 'validations' do
     before { stub_request(:get, %r{.*/anime.*}) }
 
-    it { should validate_presence_of(:input_text) }
-    it { should validate_length_of(:input_text).is_at_least(3).is_at_most(20) }
+    it { is_expected.to validate_presence_of(:input_text) }
+    it { is_expected.to validate_length_of(:input_text).is_at_least(3).is_at_most(20) }
   end
 
   context 'with a list' do
@@ -38,13 +38,13 @@ RSpec.describe ListImport::AnimePlanet do
     end
 
     describe '#count' do
-      it 'should return the total number of entries' do
+      it 'returns the total number of entries' do
         expect(subject.count).to eq(676)
       end
     end
 
     describe '#each' do
-      it 'should yield exactly 47 times' do
+      it 'yields exactly 47 times' do
         anime = build(:anime)
         allow(Mapping).to receive(:guess).and_return(anime)
         subject = ListImport::AnimePlanet.create(

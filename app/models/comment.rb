@@ -12,12 +12,12 @@ class Comment < ApplicationRecord
   processable :content, LongPipeline
   embed_links_in :content, to: :embed
 
-  belongs_to :user, required: true
-  belongs_to :post, required: true, counter_cache: true, touch: true
+  belongs_to :user, optional: false
+  belongs_to :post, optional: false, counter_cache: true, touch: true
   belongs_to :parent, class_name: 'Comment', optional: true,
-                      counter_cache: 'replies_count', touch: true
+    counter_cache: 'replies_count', touch: true
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
-                     dependent: :destroy
+    dependent: :destroy
   has_many :likes, class_name: 'CommentLike', dependent: :destroy
   has_many :uploads, as: 'owner', dependent: :destroy
 

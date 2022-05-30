@@ -14,13 +14,13 @@ RSpec.describe 'OAuth2', type: :request do
   end
 
   context 'with Resource Owner Password flow' do
-    it 'should work if given the email and right password' do
+    it 'works if given the email and right password' do
       expect {
         client.password.get_token(user.email, user.password)
       }.not_to raise_error
     end
 
-    it 'should not work if given the wrong password' do
+    it 'does not work if given the wrong password' do
       expect {
         client.password.get_token(user.email, '123')
       }.to raise_error(OAuth2::Error)

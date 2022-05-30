@@ -4,7 +4,7 @@ RSpec.describe Billing::UpdateStripeSource do
   let(:user) { create(:user) }
   let(:stripe_mock) { StripeMock.create_test_helper }
 
-  it 'should change the default payment method for the user' do
+  it 'changes the default payment method for the user' do
     token = stripe_mock.generate_card_token
 
     expect {
@@ -13,7 +13,7 @@ RSpec.describe Billing::UpdateStripeSource do
   end
 
   context 'with an invalid stripe token' do
-    it 'should raise a Stripe::CardError' do
+    it 'raises a Stripe::CardError' do
       StripeMock.prepare_card_error(:invalid_number, :update_customer)
       expect {
         Billing::UpdateStripeSource.call(user: user, token: stripe_mock.generate_card_token)

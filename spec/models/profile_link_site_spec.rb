@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ProfileLinkSite, type: :model do
-  it { should validate_presence_of(:name) }
-  it { should validate_presence_of(:validate_replace) }
+  it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:validate_replace) }
 
-  context 'validate profile_link url' do
+  describe 'validating profile_link url' do
     # Twitter
     describe 'Twitter' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             twitter.com/@toyhammered
             https://www.twitter.com/@toyhammered
@@ -29,8 +29,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Facebook
     describe 'Facebook' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             facebook.com/toyhammered
             https://www.facebook.com/toyhammered
@@ -49,8 +49,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Youtube
     describe 'Youtube' do
-      context 'success' do
-        it 'should work with /channel (unique) channel' do
+      context 'for success' do
+        it 'works with /channel (unique) channel' do
           urls = %w[
             youtube.com/channel/UC_-Zt4dWU1bT52tG-DHGftg
             https://www.youtube.com/channel/UC_-Zt4dWU1bT52tG-DHGftg
@@ -64,7 +64,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           end
         end
 
-        it 'should work with /c (custom) channel' do
+        it 'works with /c (custom) channel' do
           url = 'youtube.com/c/toyhammered'
           site = build(:profile_link_site, :youtube)
 
@@ -73,16 +73,16 @@ RSpec.describe ProfileLinkSite, type: :model do
           expect(temp[:username]).to eq('toyhammered')
         end
 
-        it 'should work with blank channel' do
+        it 'works with blank channel' do
           url = 'youtube.com/toyhammered'
           site = build(:profile_link_site, :youtube)
 
           temp = site.validate_find.match(url)
-          expect(temp[:channel]).to eq(nil)
+          expect(temp[:channel]).to be_nil
           expect(temp[:username]).to eq('toyhammered')
         end
 
-        it 'should work with /user channel' do
+        it 'works with /user channel' do
           url = 'youtube.com/user/toyhammered'
           site = build(:profile_link_site, :youtube)
 
@@ -96,8 +96,8 @@ RSpec.describe ProfileLinkSite, type: :model do
     # TODO: figure out how to deal with custom url (having +)
     # Google+
     describe 'Google+' do
-      context 'success' do
-        it 'should work without custom url' do
+      context 'for success' do
+        it 'works without custom url' do
           urls = %w[
             https://plus.google.com/115819863396302953172
             plus.google.com/115819863396302953172
@@ -110,7 +110,8 @@ RSpec.describe ProfileLinkSite, type: :model do
             expect(temp[:username]).to eq('115819863396302953172')
           end
         end
-        it 'should work with custom url' do
+
+        it 'works with custom url' do
           urls = %w[
             https://plus.google.com/+toyhammered
             plus.google.com/+toyhammered
@@ -128,8 +129,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Instagram
     describe 'Instagram' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             instagram.com/rassiner
             https://www.instagram.com/rassiner
@@ -148,8 +149,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Twitch
     describe 'Twitch' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             twitch.tv/toyhammered
             https://www.twitch.tv/toyhammered
@@ -170,8 +171,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Vimeo
     describe 'Vimeo' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             vimeo.com/toyhammered
             https://www.vimeo.com/toyhammered
@@ -190,8 +191,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Github
     describe 'Github' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             github.com/toyhammered
             https://www.github.com/toyhammered
@@ -212,10 +213,10 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Battlenet
     describe 'Battlenet' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           url = 'toyhammered#0718'
-          site = build(:profile_link_site, :discord)
+          site = build(:profile_link_site, :battlenet)
 
           temp = site.validate_find.match(url)
           expect(temp[1]).to eq('toyhammered#0718')
@@ -225,8 +226,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Steam
     describe 'Steam' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             steamcommunity.com/id/toyhammered
             http://steamcommunity.com/id/toyhammered
@@ -246,8 +247,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Raptr
     describe 'Raptr' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             raptr.com/toyhammered
             http://raptr.com/toyhammered
@@ -267,8 +268,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Discord
     describe 'Discord' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           url = 'toyhammered#0718'
           site = build(:profile_link_site, :discord)
 
@@ -280,8 +281,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Tumblr
     describe 'tumblr' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             https://toyhammered.tumblr.com
             http://toyhammered.tumblr.com
@@ -298,7 +299,7 @@ RSpec.describe ProfileLinkSite, type: :model do
           end
         end
 
-        it 'should work with special characters - and _' do
+        it 'works with special characters - and _' do
           urls = %w[
             toy-is-sexy
             toy_is_cooler_than_nuck
@@ -316,8 +317,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # SoundCloud
     describe 'soundcloud' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             soundcloud.com/toy-hamme_red
             https://www.soundcloud.com/toy-hamme_red
@@ -336,8 +337,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Dailymotion
     describe 'Dailymotion' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             dailymotion.com/toyhammered
             https://www.dailymotion.com/toyhammered
@@ -356,8 +357,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Kickstarter
     describe 'Kickstarter' do
-      context 'success' do
-        it 'should work with a custom username' do
+      context 'for success' do
+        it 'works with a custom username' do
           urls = %w[
             kickstarter.com/profile/toyhammered
             https://www.kickstarter.com/profile/toyhammered
@@ -371,7 +372,8 @@ RSpec.describe ProfileLinkSite, type: :model do
             expect(temp[:username]).to eq('toyhammered')
           end
         end
-        it 'should work with a non-custom username' do
+
+        it 'works with a non-custom username' do
           urls = %w[
             kickstarter.com/profile/111759513
             https://www.kickstarter.com/profile/111759513
@@ -390,8 +392,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Mobcrush
     describe 'Mobcrush' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             mobcrush.com/toyhammered
             https://www.mobcrush.com/toyhammered
@@ -410,8 +412,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Osu!
     describe 'Osu!' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             https://osu.ppy.sh/u/1234567
             https://www.osu.ppy.sh/u/1234567
@@ -430,8 +432,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Patreon
     describe 'Patreon' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             patreon.com/toyhammered
             https://www.patreon.com/toyhammered
@@ -450,8 +452,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # DeviantArt
     describe 'DeviantArt' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             matthewdias.deviantart.com
             http://www.matthewdias.deviantart.com
@@ -470,8 +472,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Dribbble
     describe 'Dribbble' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             dribbble.com/matthewdias
             https://www.dribbble.com/matthewdias
@@ -490,8 +492,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # IMDb
     describe 'IMDb' do
-      context 'success' do
-        it 'should return an id' do
+      context 'for success' do
+        it 'returns an id' do
           urls = %w[
             imdb.com/ur33598229
             https://www.imdb.com/user/ur33598229
@@ -512,8 +514,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Last.fm
     describe 'Last.fm' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             last.fm/matthewdias
             https://www.last.fm/user/matthewdias
@@ -532,8 +534,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Letterboxd
     describe 'Letterboxd' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             letterboxd.com/matthewdias
             https://www.letterboxd.com/matthewdias
@@ -552,8 +554,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Medium
     describe 'Medium' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             medium.com/matthewdias
             medium.com/@matthewdias
@@ -574,8 +576,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Player.me
     describe 'Player.me' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             player.me/matthewdias
             https://www.player.me/matthewdias
@@ -594,8 +596,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Reddit
     describe 'Reddit' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             reddit.com/matthewdias
             reddit.com/u/matthewdias
@@ -617,8 +619,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Trakt
     describe 'Trakt' do
-      context 'success' do
-        it 'should return a username' do
+      context 'for success' do
+        it 'returns a username' do
           urls = %w[
             trakt.tv/matthewdias
             https://www.trakt.tv/users/matthewdias
@@ -637,8 +639,8 @@ RSpec.describe ProfileLinkSite, type: :model do
 
     # Website
     describe 'Website' do
-      context 'success' do
-        it 'should work with http' do
+      context 'for success' do
+        it 'works with http' do
           urls = %w[
             http://drassiner.com
             http://www.drassiner.com
@@ -651,7 +653,8 @@ RSpec.describe ProfileLinkSite, type: :model do
             expect(temp[:url]).to eq('drassiner.com')
           end
         end
-        it 'should work with https' do
+
+        it 'works with https' do
           urls = %w[
             https://drassiner.com
             https://www.drassiner.com
@@ -666,5 +669,5 @@ RSpec.describe ProfileLinkSite, type: :model do
         end
       end
     end
-  end # end of validate context
+  end
 end

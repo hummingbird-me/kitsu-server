@@ -43,7 +43,7 @@ class EmbedService
   end
 
   # @return [String] the JSON string for the embedded URL, using cache
-  def to_json
+  def to_json(*_args)
     as_json.to_json
   end
 

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe StatWorker do
   describe '#perform' do
-    it 'should send to the stat class with a wrapper around the model and changes' do
+    it 'sends to the stat class with a wrapper around the model and changes' do
       stub_const('Stat::Test', double)
       allow(Stat::Test).to receive(:for_user).and_return(Stat::Test)
       allow(Stat::Test).to receive(:lock!)

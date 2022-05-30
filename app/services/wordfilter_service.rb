@@ -28,7 +28,8 @@ class WordfilterService
     wordfilters[:censor].inject(@text) do |text, wordfilter|
       # Convert SQL LIKE roughly into Regex
       pattern = if wordfilter.regex_enabled? then wordfilter.pattern
-                else wordfilter.pattern.gsub('.', '\.').gsub('%', '.*').tr('_', '.')
+                else
+                  wordfilter.pattern.gsub('.', '\.').gsub('%', '.*').tr('_', '.')
                 end
       pattern = Regexp.new(pattern, Regexp::IGNORECASE)
 

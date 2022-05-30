@@ -11,8 +11,8 @@ class GraphqlController < ApplicationController
       context: context,
       operation_name: operation_name)
     render json: result
-  rescue StandardError => error
-    handle_error(error)
+  rescue StandardError => e
+    handle_error(e)
   end
 
   private
@@ -47,6 +47,6 @@ class GraphqlController < ApplicationController
         backtrace: (exception.backtrace if Rails.env.development?)
       }.compact,
       data: {}
-    }, status: 500
+    }, status: :internal_server_error
   end
 end

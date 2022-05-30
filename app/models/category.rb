@@ -12,9 +12,9 @@ class Category < ApplicationRecord
   has_many :anime, through: :media_categories, source: :media, source_type: 'Anime'
   has_many :manga, through: :media_categories, source: :media, source_type: 'Manga'
   belongs_to :parent, class_name: 'Category', optional: true,
-                      touch: true, counter_cache: 'child_count'
+    touch: true, counter_cache: 'child_count'
   has_many :children, class_name: 'Category',
-                      foreign_key: 'parent_id', dependent: :destroy
+    foreign_key: 'parent_id', dependent: :destroy
 
   validates :title, presence: true
 end

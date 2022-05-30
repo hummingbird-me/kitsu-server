@@ -11,7 +11,7 @@ class FollowPolicy < ApplicationPolicy
   alias_method :editable_attributes, :visible_attributes
 
   # Override to user follower instead of user
-  def is_owner? # rubocop:disable Style/PredicateName
+  def is_owner? # rubocop:disable Naming/PredicateName
     return false unless user && record.follower_id == user.id
     return false if record.follower_id_was && record.follower_id_was != user.id
 

@@ -10,15 +10,15 @@ class FeedSerializerService
 
     def foreign_key_value(source, relationship)
       related_resource_id = if source.preloaded_fragments.has_key?(format_key(relationship.name))
-        source.preloaded_fragments[format_key(relationship.name)].values.first.try(:id)
-      elsif source._model.respond_to?("#{relationship.name}_id")
-        # If you have direct access to the underlying id, you don't have to load the relationship
-        # which can save quite a lot of time when loading a lot of data.
-        # This does not apply to e.g. has_one :through relationships.
-        source._model.public_send("#{relationship.name}_id")
-      else
-        source.public_send(relationship.name).try(:id)
-      end
+                              source.preloaded_fragments[format_key(relationship.name)].values.first.try(:id)
+                            elsif source._model.respond_to?("#{relationship.name}_id")
+                              # If you have direct access to the underlying id, you don't have to load the relationship
+                              # which can save quite a lot of time when loading a lot of data.
+                              # This does not apply to e.g. has_one :through relationships.
+                              source._model.public_send("#{relationship.name}_id")
+                            else
+                              source.public_send(relationship.name).try(:id)
+                            end
       return nil unless related_resource_id
       @id_formatter.format(related_resource_id)
     end
@@ -39,7 +39,7 @@ class FeedSerializerService
   attr_reader :activity_list, :including, :fields, :context, :stream_feed,
     :base_url
 
-  def initialize(list, including: nil, fields: nil, context: nil, feed:, base_url:)
+  def initialize(list, feed:, base_url:, including: nil, fields: nil, context: nil)
     @including = including || []
     @fields = fields || {}
     @context = context || {}
@@ -93,7 +93,7 @@ class FeedSerializerService
     @including.each_with_object([]) do |inc, includes|
       field, reference = inc.split('.')
 
-      if (field == 'subject' || field == 'target') && !reference.nil?
+      if %w[subject target].include?(field) && !reference.nil?
         includes.push(*non_polymorphic_references(reference))
       else
         includes << field
@@ -113,9 +113,7 @@ class FeedSerializerService
     end
   end
 
-  def feed
-    activity_list.feed
-  end
+  delegate :feed, to: :activity_list
 
   private
 

@@ -1,9 +1,9 @@
 class GroupInvite < ApplicationRecord
   include WithActivity
 
-  belongs_to :group, required: true
-  belongs_to :user, required: true
-  belongs_to :sender, class_name: 'User', required: true
+  belongs_to :group, optional: false
+  belongs_to :user, optional: false
+  belongs_to :sender, class_name: 'User', optional: false
 
   # Limit to one pending invite per user per group
   validates :user, uniqueness: {

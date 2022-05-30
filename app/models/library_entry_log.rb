@@ -1,11 +1,11 @@
 class LibraryEntryLog < ApplicationRecord
-  belongs_to :linked_account, required: true
-  belongs_to :media, polymorphic: true, required: true
+  belongs_to :linked_account, optional: false
+  belongs_to :media, polymorphic: true, optional: false
 
-  enum sync_status: %i[pending success error]
+  enum sync_status: { pending: 0, success: 1, error: 2 }
   enum status: LibraryEntry.statuses
 
-  validates_presence_of :action_performed, :sync_status
+  validates :action_performed, :sync_status, presence: true
 
   def self.create_for(method, library_entry, linked_account_id)
     LibraryEntryLog.create!(

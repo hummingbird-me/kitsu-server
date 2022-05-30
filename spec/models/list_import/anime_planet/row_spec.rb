@@ -4,8 +4,8 @@ RSpec.describe ListImport::AnimePlanet::Row do
   let(:anime) { fixture('list_import/anime_planet/toy-anime.html') }
   let(:manga) { fixture('list_import/anime_planet/toy-manga.html') }
 
-  context 'Anime' do
-    subject do
+  context 'for Anime' do
+    subject(:row) do
       described_class.new(
         Nokogiri::HTML(anime).css('.cardDeck .card').first,
         'anime'
@@ -13,15 +13,15 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#media' do
-      it 'should work for lookup' do
-        expect(Mapping).to receive(:lookup)
+      it 'works for lookup' do
+        allow(Mapping).to receive(:lookup)
           .with('animeplanet', 'anime/2353')
           .and_return('hello')
 
-        subject.media
+        expect(row.media).to eq('hello')
       end
 
-      it 'should work for guess' do
+      it 'works for guess' do
         allow(Mapping).to receive(:lookup).and_return(nil)
         args = {
           id: 2353,
@@ -29,138 +29,128 @@ RSpec.describe ListImport::AnimePlanet::Row do
           subtype: 'TV',
           episode_count: 25
         }
-        expect(Mapping).to receive(:guess).with(Anime, args).and_return('hello')
+        allow(Mapping).to receive(:guess).with(Anime, args).and_return('hello')
 
-        subject.media
+        expect(row.media).to eq('hello')
       end
     end
 
     describe '#media_info' do
-      it 'should return the id' do
-        expect(subject.media_info[:id]).to eq(2353)
-      end
-      it 'should return the title' do
-        expect(subject.media_info[:title]).to eq('07-Ghost')
+      it 'returns the id' do
+        expect(row.media_info[:id]).to eq(2353)
       end
 
-      it 'should return subtype' do
-        expect(subject.media_info[:subtype]).to eq('TV')
+      it 'returns the title' do
+        expect(row.media_info[:title]).to eq('07-Ghost')
       end
 
-      it 'should return total episodes' do
-        expect(subject.media_info[:episode_count]).to eq(25)
+      it 'returns subtype' do
+        expect(row.media_info[:subtype]).to eq('TV')
       end
 
-      it 'should not return total amount of chapters' do
-        expect(subject.media_info[:chapter_count]).to eq(nil)
+      it 'returns total episodes' do
+        expect(row.media_info[:episode_count]).to eq(25)
+      end
+
+      it 'does not return total amount of chapters' do
+        expect(row.media_info[:chapter_count]).to be_nil
       end
     end
 
     describe '#status' do
-      context 'of "Watched"' do
-        it 'should return :completed' do
-          expect(subject.status).to eq(:completed)
-        end
+      it 'returns :completed for "Watched"' do
+        expect(row.status).to eq(:completed)
       end
-      context 'of "Watching"' do
-        it 'should return :current' do
-          subject = described_class.new(
-            Nokogiri::HTML(anime).css('.cardDeck .card')[1],
-            'anime'
-          )
 
-          expect(subject.status).to eq(:current)
-        end
+      it 'returns :current for "Watching"' do
+        row = described_class.new(
+          Nokogiri::HTML(anime).css('.cardDeck .card')[1],
+          'anime'
+        )
+
+        expect(row.status).to eq(:current)
       end
-      context 'of "Want to Watch"' do
-        it 'should return :planned' do
-          subject = described_class.new(
-            Nokogiri::HTML(anime).css('.cardDeck .card')[2],
-            'anime'
-          )
 
-          expect(subject.status).to eq(:planned)
-        end
+      it 'returns :planned for "Want to Watch"' do
+        row = described_class.new(
+          Nokogiri::HTML(anime).css('.cardDeck .card')[2],
+          'anime'
+        )
+
+        expect(row.status).to eq(:planned)
       end
-      context 'of "Stalled"' do
-        it 'should return :on_hold' do
-          subject = described_class.new(
-            Nokogiri::HTML(anime).css('.cardDeck .card')[3],
-            'anime'
-          )
 
-          expect(subject.status).to eq(:on_hold)
-        end
+      it 'returns :on_hold for "Stalled"' do
+        row = described_class.new(
+          Nokogiri::HTML(anime).css('.cardDeck .card')[3],
+          'anime'
+        )
+
+        expect(row.status).to eq(:on_hold)
       end
-      context 'of "Dropped"' do
-        it 'should return :dropped' do
-          subject = described_class.new(
-            Nokogiri::HTML(anime).css('.cardDeck .card')[4],
-            'anime'
-          )
 
-          expect(subject.status).to eq(:dropped)
-        end
+      it 'returns :dropped for "Dropped"' do
+        row = described_class.new(
+          Nokogiri::HTML(anime).css('.cardDeck .card')[4],
+          'anime'
+        )
+
+        expect(row.status).to eq(:dropped)
       end
-      context 'of "Wont Watch"' do
-        it 'should be ignored' do
-          subject = described_class.new(
-            Nokogiri::HTML(anime).css('.cardDeck .card')[5],
-            'anime'
-          )
 
-          expect(subject.status).to eq(nil)
-        end
+      it 'is ignored for "Wont Watch"' do
+        row = described_class.new(
+          Nokogiri::HTML(anime).css('.cardDeck .card')[5],
+          'anime'
+        )
+
+        expect(row.status).to be_nil
       end
     end
 
     describe '#progress' do
-      context 'Watched' do
-        it 'should return total episodes' do
-          expect(subject.progress).to eq(25)
-        end
+      it 'returns total episodes for "Watched"' do
+        expect(row.progress).to eq(25)
       end
-      context 'Watching' do
-        it 'should return episodes watched' do
-          subject = described_class.new(
-            Nokogiri::HTML(anime).css('.cardDeck .card')[1],
-            'anime'
-          )
-          expect(subject.progress).to eq(1)
-        end
+
+      it 'returns episodes watched for "Watching"' do
+        row = described_class.new(
+          Nokogiri::HTML(anime).css('.cardDeck .card')[1],
+          'anime'
+        )
+        expect(row.progress).to eq(1)
       end
-      context 'Want to Watch' do
-        it 'should always return 0 episodes' do
-          subject = described_class.new(
-            Nokogiri::HTML(anime).css('.cardDeck .card')[2],
-            'anime'
-          )
-          expect(subject.progress).to eq(0)
-        end
+
+      it 'always returns 0 episodes for "Want to Watch"' do
+        row = described_class.new(
+          Nokogiri::HTML(anime).css('.cardDeck .card')[2],
+          'anime'
+        )
+        expect(row.progress).to eq(0)
       end
     end
 
     describe '#volumes' do
-      it 'should not exist' do
-        expect(subject.volumes).to eq(nil)
+      it 'does not exist' do
+        expect(row.volumes).to be_nil
       end
     end
 
     describe '#rating' do
-      it 'should return number quadrupled to match our 20-point scale' do
-        expect(subject.rating).to eq(20)
+      it 'returns number quadrupled to match our 20-point scale' do
+        expect(row.rating).to eq(20)
       end
     end
 
     describe '#reconsume_count' do
-      it 'should return amount of times watched' do
-        expect(subject.reconsume_count).to eq(1)
+      it 'returns amount of times watched' do
+        expect(row.reconsume_count).to eq(1)
       end
     end
   end
 
-  context 'Manga' do
-    subject do
+  context 'for Manga' do
+    subject(:row) do
       described_class.new(
         Nokogiri::HTML(manga).css('.cardDeck .card').first,
         'manga'
@@ -168,173 +158,161 @@ RSpec.describe ListImport::AnimePlanet::Row do
     end
 
     describe '#media' do
-      it 'should work for lookup' do
-        expect(Mapping).to receive(:lookup)
+      it 'works for lookup' do
+        allow(Mapping).to receive(:lookup)
           .with('animeplanet', 'manga/1854')
           .and_return('hello')
 
-        subject.media
+        expect(row.media).to eq('hello')
       end
 
-      it 'should work for guess' do
+      it 'works for guess' do
         allow(Mapping).to receive(:lookup).and_return(nil)
         args = {
           id: 1854,
           title: '1/2 Prince',
           chapter_count: 76
         }
-        expect(Mapping).to receive(:guess).with(Manga, args).and_return('hello')
+        allow(Mapping).to receive(:guess).with(Manga, args).and_return('hello')
 
-        subject.media
+        expect(row.media).to eq('hello')
       end
     end
 
     describe '#media_info' do
-      it 'should return the id' do
-        expect(subject.media_info[:id]).to eq(1854)
-      end
-      it 'should return the title' do
-        expect(subject.media_info[:title]).to eq('1/2 Prince')
+      it 'returns the id' do
+        expect(row.media_info[:id]).to eq(1854)
       end
 
-      it 'should return subtype' do
-        expect(subject.media_info[:subtype]).to eq(nil)
+      it 'returns the title' do
+        expect(row.media_info[:title]).to eq('1/2 Prince')
       end
 
-      it 'should not return total amount of episodes' do
-        expect(subject.media_info[:episode_count]).to eq(nil)
+      it 'returns subtype' do
+        expect(row.media_info[:subtype]).to be_nil
       end
 
-      context 'total chapters' do
-        it 'should return an integer' do
-          expect(subject.media_info[:chapter_count]).to eq(76)
+      it 'does not return total amount of episodes' do
+        expect(row.media_info[:episode_count]).to be_nil
+      end
+
+      describe '[:chapter_count]' do
+        it 'returns an integer' do
+          expect(row.media_info[:chapter_count]).to eq(76)
         end
 
-        it 'should return 0 if no chapters present' do
-          subject = described_class.new(
+        it 'returns 0 if no chapters present' do
+          row = described_class.new(
             Nokogiri::HTML(manga).css('.cardDeck .card').last,
             'manga'
           )
 
-          expect(subject.media_info[:chapter_count]).to eq(0)
+          expect(row.media_info[:chapter_count]).to eq(0)
         end
       end
     end
 
     describe '#status' do
-      context 'of "Read"' do
-        it 'should return :completed' do
-          subject = described_class.new(
-            Nokogiri::HTML(manga).css('.cardDeck .card')[3],
-            'manga'
-          )
+      it 'returns :completed for "Read"' do
+        row = described_class.new(
+          Nokogiri::HTML(manga).css('.cardDeck .card')[3],
+          'manga'
+        )
 
-          expect(subject.status).to eq(:completed)
-        end
+        expect(row.status).to eq(:completed)
       end
-      context 'of "Reading"' do
-        it 'should return :current' do
-          expect(subject.status).to eq(:current)
-        end
-      end
-      context 'of "Want to Read"' do
-        it 'should return :planned' do
-          subject = described_class.new(
-            Nokogiri::HTML(manga).css('.cardDeck .card')[1],
-            'manga'
-          )
 
-          expect(subject.status).to eq(:planned)
-        end
+      it 'returns :current for "Reading"' do
+        expect(row.status).to eq(:current)
       end
-      context 'of "Stalled"' do
-        it 'should return :on_hold' do
-          subject = described_class.new(
-            Nokogiri::HTML(manga).css('.cardDeck .card')[2],
-            'manga'
-          )
 
-          expect(subject.status).to eq(:on_hold)
-        end
+      it 'returns :planned for "Want to Read"' do
+        row = described_class.new(
+          Nokogiri::HTML(manga).css('.cardDeck .card')[1],
+          'manga'
+        )
+
+        expect(row.status).to eq(:planned)
       end
-      context 'of "Dropped"' do
-        it 'should return :dropped' do
-          subject = described_class.new(
-            Nokogiri::HTML(manga).css('.cardDeck .card')[4],
-            'manga'
-          )
 
-          expect(subject.status).to eq(:dropped)
-        end
+      it 'returns :on_hold for "Stalled"' do
+        row = described_class.new(
+          Nokogiri::HTML(manga).css('.cardDeck .card')[2],
+          'manga'
+        )
+
+        expect(row.status).to eq(:on_hold)
       end
-      context 'of "Wont Read"' do
-        it 'should be ignored' do
-          subject = described_class.new(
-            Nokogiri::HTML(manga).css('.cardDeck .card')[5],
-            'manga'
-          )
 
-          expect(subject.status).to eq(nil)
-        end
+      it 'returns :dropped for "Dropped"' do
+        row = described_class.new(
+          Nokogiri::HTML(manga).css('.cardDeck .card')[4],
+          'manga'
+        )
+
+        expect(row.status).to eq(:dropped)
+      end
+
+      it 'is ignored for "Wont Read"' do
+        row = described_class.new(
+          Nokogiri::HTML(manga).css('.cardDeck .card')[5],
+          'manga'
+        )
+
+        expect(row.status).to be_nil
       end
     end
 
     describe '#progress' do
-      context 'Stored as Volumes' do
-        it 'should always return 0' do
-          expect(subject.progress).to eq(0)
+      context 'when stored as volumes' do
+        it 'always returns 0' do
+          expect(row.progress).to eq(0)
         end
       end
-      context 'Stored as Chapters' do
-        context 'Read' do
-          it 'should return all chapters' do
-            subject = described_class.new(
-              Nokogiri::HTML(manga).css('.cardDeck .card')[3],
-              'manga'
-            )
-            expect(subject.progress).to eq(357)
-          end
+
+      context 'when stored as chapters' do
+        it 'returns all chapters when "Read"' do
+          row = described_class.new(
+            Nokogiri::HTML(manga).css('.cardDeck .card')[3],
+            'manga'
+          )
+          expect(row.progress).to eq(357)
         end
 
-        context 'Reading' do
-          it 'should return chapters read' do
-            subject = described_class.new(
-              Nokogiri::HTML(manga).css('.cardDeck .card')[2],
-              'manga'
-            )
-            expect(subject.progress).to eq(13)
-          end
+        it 'returns chapters read when "Reading"' do
+          row = described_class.new(
+            Nokogiri::HTML(manga).css('.cardDeck .card')[2],
+            'manga'
+          )
+          expect(row.progress).to eq(13)
         end
       end
     end
 
     describe '#volumes' do
-      context 'Read' do
-        it 'should return all volumes' do
-          subject = described_class.new(
-            Nokogiri::HTML(manga).css('.cardDeck .card')[3],
-            'manga'
-          )
+      it 'returns all volumes when "Read"' do
+        row = described_class.new(
+          Nokogiri::HTML(manga).css('.cardDeck .card')[3],
+          'manga'
+        )
 
-          expect(subject.volumes).to eq(37)
-        end
+        expect(row.volumes).to eq(37)
       end
-      context 'Reading' do
-        it 'should return number of volumes read' do
-          expect(subject.volumes).to eq(11)
-        end
+
+      it 'returns number of volumes read when "Reading"' do
+        expect(row.volumes).to eq(11)
       end
     end
 
     describe '#rating' do
-      it 'should return number quadrupled' do
-        expect(subject.rating).to eq(10)
+      it 'returns number quadrupled' do
+        expect(row.rating).to eq(10)
       end
     end
 
     describe '#reconsume_count' do
-      it 'should not exist' do
-        expect(subject.reconsume_count).to eq(nil)
+      it 'does not exist' do
+        expect(row.reconsume_count).to be_nil
       end
     end
   end

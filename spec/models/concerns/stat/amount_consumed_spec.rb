@@ -11,17 +11,17 @@ RSpec.describe Stat::AmountConsumed do
   end
 
   describe '#default_data' do
-    it 'should have a media count' do
+    it 'has a media count' do
       expect(stat.default_data).to have_key('media')
       expect(stat.default_data['media']).to be_an(Integer)
     end
 
-    it 'should have a count of units' do
+    it 'has a count of units' do
       expect(stat.default_data).to have_key('units')
       expect(stat.default_data['units']).to be_an(Integer)
     end
 
-    it 'should have a count of time' do
+    it 'has a count of time' do
       expect(stat.default_data).to have_key('time')
       expect(stat.default_data['time']).to be_an(Integer)
     end
@@ -35,7 +35,7 @@ RSpec.describe Stat::AmountConsumed do
       stat.recalculate!
     end
 
-    it 'should have the counts filled' do
+    it 'has the counts filled' do
       expect(stat.stats_data['media']).to eq(3)
       expect(stat.stats_data['units']).to eq(15)
       expect(stat.stats_data['time']).to be_a(Integer)
@@ -46,19 +46,19 @@ RSpec.describe Stat::AmountConsumed do
   describe '#on_create' do
     let(:entry) { build(:library_entry, user: user, media: anime, progress: 3) }
 
-    it 'should increase the media count' do
+    it 'increases the media count' do
       expect {
         stat.on_create(entry)
       }.to change { stat.stats_data['media'] }.by(1)
     end
 
-    it 'should increase the units count' do
+    it 'increases the units count' do
       expect {
         stat.on_create(entry)
       }.to change { stat.stats_data['units'] }.by(entry.progress)
     end
 
-    it 'should increase the time' do
+    it 'increases the time' do
       expect {
         stat.on_create(entry)
       }.to change { stat.stats_data['time'] }.by_at_least(1)
@@ -77,25 +77,25 @@ RSpec.describe Stat::AmountConsumed do
 
     before do
       stat.stats_data = {
-        'media': 50,
-        'units': 600,
-        'time': 20000
+        media: 50,
+        units: 600,
+        time: 20_000
       }
     end
 
-    it 'should decrease the media count' do
+    it 'decreases the media count' do
       expect {
         stat.on_destroy(entry)
       }.to change { stat.stats_data['media'] }.by(-1)
     end
 
-    it 'should decrease the units count' do
+    it 'decreases the units count' do
       expect {
         stat.on_destroy(entry)
       }.to change { stat.stats_data['units'] }.by(-entry.progress)
     end
 
-    it 'should decrease the time' do
+    it 'decreases the time' do
       expect {
         stat.on_destroy(entry)
       }.to change { stat.stats_data['time'] }.by_at_most(-1)

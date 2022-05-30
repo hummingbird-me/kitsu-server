@@ -29,7 +29,7 @@ class UserMailer < ApplicationMailer
   def token_for(user, scopes, expires_in:)
     scopes = scopes.join(' ') if scopes.is_a?(Array)
     Doorkeeper::AccessToken.create(resource_owner: user, refresh_token: nil,
-                                   expires_in: expires_in, scopes: scopes.to_s)
+      expires_in: expires_in, scopes: scopes.to_s)
   end
 
   def client_url_for(path)

@@ -18,8 +18,8 @@ class Mutations::Pro::SubscribeWithStripe < Mutations::Base
 
   def resolve(tier:, token:)
     Pro::SubscribeWithStripe.call(user: user, tier: tier, token: token).subscription
-  rescue Stripe::StripeError => ex
-    raise GraphQL::ExecutionError, ErrorI18n.t(ex)
+  rescue Stripe::StripeError => e
+    raise GraphQL::ExecutionError, ErrorI18n.t(e)
   end
 
   private

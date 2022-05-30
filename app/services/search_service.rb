@@ -16,17 +16,13 @@ class SearchService
   # Returns the total number of matching results for the query and filters
   #
   # @return [Integer] the total number of results
-  def total_count
-    query_results.total_count
-  end
+  delegate :total_count, to: :query_results
 
   # Collapse the waveform, run the filters and queries, and return the result
   # as an array.
   #
   # @return [Array<ActiveModel>] the results of the search, in ActiveModel form
-  def to_a
-    query_results.to_a
-  end
+  delegate :to_a, to: :query_results
 
   private
 

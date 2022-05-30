@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe RealEmailValidator do
   subject { described_class.new(attributes: %i[email]) }
+
   RealEmailRecordClass = Struct.new(:email, :name) do
     extend ActiveModel::Naming
     include ActiveModel::Validations
@@ -9,6 +10,7 @@ RSpec.describe RealEmailValidator do
 
   context 'with an undeliverable email address' do
     let(:record) { RealEmailRecordClass.new(email: 'invalid@fake.fake') }
+
     before do
       allow(Accounts::PrevalidateEmail).to receive(:call).and_return(
         OpenStruct.new(
@@ -18,7 +20,7 @@ RSpec.describe RealEmailValidator do
       )
     end
 
-    it 'should add an error to each key' do
+    it 'adds an error to each key' do
       subject.validate(record)
       expect(record.errors).to include(:email)
       expect(record.errors.count).to eq(1)
@@ -27,6 +29,7 @@ RSpec.describe RealEmailValidator do
 
   context 'with an unknown email' do
     let(:record) { RealEmailRecordClass.new('valid@gmail.com') }
+
     before do
       allow(Accounts::PrevalidateEmail).to receive(:call).and_return(
         OpenStruct.new(
@@ -36,7 +39,7 @@ RSpec.describe RealEmailValidator do
       )
     end
 
-    it 'should have no errors' do
+    it 'has no errors' do
       subject.validate(record)
       expect(record.errors).to be_empty
     end
@@ -44,6 +47,7 @@ RSpec.describe RealEmailValidator do
 
   context 'with a deliverable email' do
     let(:record) { RealEmailRecordClass.new('valid@gmail.com') }
+
     before do
       allow(Accounts::PrevalidateEmail).to receive(:call).and_return(
         OpenStruct.new(
@@ -53,7 +57,7 @@ RSpec.describe RealEmailValidator do
       )
     end
 
-    it 'should have no errors' do
+    it 'has no errors' do
       subject.validate(record)
       expect(record.errors).to be_empty
     end

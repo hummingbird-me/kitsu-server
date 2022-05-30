@@ -12,7 +12,7 @@
 if ENV['STREAM_API_KEY']
   StreamRails.configure do |config|
     config.api_key = ENV['STREAM_API_KEY']
-    config.api_secret = ENV['STREAM_API_SECRET']
+    config.api_secret = ENV.fetch('STREAM_API_SECRET', nil)
   end
 end
 

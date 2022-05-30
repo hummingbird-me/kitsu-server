@@ -5,6 +5,7 @@ RSpec.describe 'FactoryBot' do
     DatabaseCleaner.allow_remote_database_url = true
     DatabaseCleaner.start
   end
+
   after(:all) { DatabaseCleaner.clean }
 
   FactoryBot.factories.each do |factory|

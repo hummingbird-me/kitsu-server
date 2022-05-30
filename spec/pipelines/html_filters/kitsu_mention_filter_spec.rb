@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'rails_helper'
 
 RSpec.describe HTMLFilters::KitsuMentionFilter do
@@ -6,7 +5,7 @@ RSpec.describe HTMLFilters::KitsuMentionFilter do
     described_class.new(text).call.to_s
   end
 
-  it 'should not do anything fancy for @mention mentions' do
+  it 'does not do anything fancy for @mention mentions' do
     filter = described_class.new('@mention')
     expect(filter.call.to_s).not_to include('<a')
   end
@@ -16,16 +15,16 @@ RSpec.describe HTMLFilters::KitsuMentionFilter do
       let!(:user) { create(:user, slug: 'makoto', name: '菊地真') }
       let(:filter) { described_class.new('@makoto') }
 
-      it 'should linkify mentions' do
+      it 'linkifies mentions' do
         expect(filter.call.to_s).to include('<a')
       end
 
-      it 'should add user ID to mentioned_user list' do
+      it 'adds user ID to mentioned_user list' do
         filter.call
         expect(filter.result[:mentioned_users]).to include(user.id)
       end
 
-      it 'should insert the username into the link' do
+      it 'inserts the username into the link' do
         expect(filter.call.to_s).to include(user.name)
       end
     end
@@ -34,16 +33,16 @@ RSpec.describe HTMLFilters::KitsuMentionFilter do
       let!(:user) { create(:user, name: 'Mizuki') }
       let(:filter) { described_class.new("@#{user.id}") }
 
-      it 'should linkify mentions' do
+      it 'linkifies mentions' do
         expect(filter.call.to_s).to include('<a')
       end
 
-      it 'should add User ID to mentioned_users list' do
+      it 'adds User ID to mentioned_users list' do
         filter.call
         expect(filter.result[:mentioned_users])
       end
 
-      it 'should insert the username into the link' do
+      it 'inserts the username into the link' do
         expect(filter.call.to_s).to include(user.name)
       end
     end
@@ -52,11 +51,11 @@ RSpec.describe HTMLFilters::KitsuMentionFilter do
   context 'with nonexistent user' do
     let(:filter) { described_class.new('@fakename') }
 
-    it 'should not linkify mentions' do
+    it 'does not linkify mentions' do
       expect(filter.call.to_s).not_to include('<a')
     end
 
-    it 'should not add to mentioned_usernames list' do
+    it 'does not add to mentioned_usernames list' do
       filter.result[:mentioned_users] = []
       expect {
         filter.call

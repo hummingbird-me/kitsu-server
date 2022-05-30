@@ -75,9 +75,9 @@ class ListImport
       end
 
       def data
-        %i[status progress rating reconsume_count].map { |k|
-          [k, send(k)]
-        }.to_h.compact
+        %i[status progress rating reconsume_count].index_with { |k|
+          send(k)
+        }.compact
       end
 
       private

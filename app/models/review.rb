@@ -5,9 +5,9 @@ class Review < ApplicationRecord
   acts_as_paranoid
 
   has_many :likes, class_name: 'ReviewLike', dependent: :destroy
-  belongs_to :media, polymorphic: true, required: true
-  belongs_to :user, required: true, counter_cache: true
-  belongs_to :library_entry, required: true
+  belongs_to :media, polymorphic: true, optional: false
+  belongs_to :user, optional: false, counter_cache: true
+  belongs_to :library_entry, optional: false
 
   validates :content, presence: true
   validates :rating, presence: true

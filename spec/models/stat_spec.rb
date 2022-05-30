@@ -3,12 +3,13 @@ require 'rails_helper'
 RSpec.describe Stat, type: :model do
   subject { build(:stat) }
 
-  it { should belong_to(:user).required }
-  it { should validate_presence_of(:type) }
-  it { should validate_uniqueness_of(:type).scoped_to(:user_id) }
+  it { is_expected.to belong_to(:user).required }
+  it { is_expected.to validate_presence_of(:type) }
+  it { is_expected.to validate_uniqueness_of(:type).scoped_to(:user_id) }
 
   class TestStat < Stat
     attr_reader :recalculated
+
     def recalculate!
       @recalculated = true
     end
@@ -18,7 +19,7 @@ RSpec.describe Stat, type: :model do
     let(:user) { create(:user) }
 
     context 'with no existing row' do
-      it 'should create an instance and call recalculate!' do
+      it 'creates an instance and call recalculate!' do
         stat = TestStat.for_user(user)
         expect(stat.user).to eq(user)
         expect(stat.recalculated).to be_truthy
@@ -28,7 +29,7 @@ RSpec.describe Stat, type: :model do
     context 'with an existing row' do
       let!(:row) { TestStat.create!(user: user) }
 
-      it 'should return the existing instance without calling recalculate!' do
+      it 'returns the existing instance without calling recalculate!' do
         stat = TestStat.for_user(user)
         expect(stat).to eq(row)
         expect(stat.recalculated).to be_falsy

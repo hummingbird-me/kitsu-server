@@ -12,10 +12,10 @@ module Webhooks
       if !linked_account && mode == 'unsubscribe' # deleted linked-account
         render plain: challenge
       elsif linked_account && mode == 'subscribe' # created linked-account
-        return head 404 unless topic == linked_account.topic_url
+        return head :not_found unless topic == linked_account.topic_url
         render plain: challenge
       else
-        head 404
+        head :not_found
       end
     end
 
@@ -28,7 +28,7 @@ module Webhooks
         YoutubeService::Notification.new(body).post!(linked_account.user)
       end
 
-      head 200
+      head :ok
     end
 
     private
@@ -40,7 +40,10 @@ module Webhooks
     end
 
     def check_linked_account_param
-      render status: 400, plain: 'Missing linked_account' unless params.include?(:linked_account)
+      unless params.include?(:linked_account)
+        render status: :bad_request,
+          plain: 'Missing linked_account'
+      end
     end
   end
 end

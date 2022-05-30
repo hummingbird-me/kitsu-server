@@ -2,9 +2,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 source 'https://rubygems.org'
 
 # Core Stuff
+gem 'i18n', '1.8.11'
 gem 'puma'
 gem 'rails', '6.0.4.8'
-gem 'i18n', '1.8.11'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
@@ -90,7 +90,7 @@ gem 'sass-rails' # Process SCSS for emails
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'strait' # Rate limiting anything!
 gem 'stream_rails', github: 'GetStream/stream-rails',
-                    branch: 'feature/subreference-enrichment' # Feed Enrichment
+  branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'typhoeus' # Parallelize scraping tasks
 
@@ -131,8 +131,8 @@ gem 'sassc-rails' # used by rails admin
 gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
-  gem 'dotenv-rails' # Load default ENV
   gem 'dead_end' # Better error messages for missing `end`
+  gem 'dotenv-rails' # Load default ENV
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 

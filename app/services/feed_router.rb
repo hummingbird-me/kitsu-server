@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/CyclomaticComplexity, Style/PerlBackrefs
+# rubocop:disable Style/PerlBackrefs
 class FeedRouter
   def self.route(group, id)
     case group

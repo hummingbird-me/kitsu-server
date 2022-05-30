@@ -4,6 +4,6 @@ class DestructionWorker
 
   def perform(klass, id)
     klass.constantize.unscoped.find(id).destroy!
-  rescue ActiveRecord::RecordNotFound # rubocop:disable Lint/HandleExceptions
+  rescue ActiveRecord::RecordNotFound
   end
 end

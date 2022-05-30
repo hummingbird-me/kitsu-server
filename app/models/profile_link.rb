@@ -15,6 +15,6 @@ class ProfileLink < ApplicationRecord
   end
 
   def url_formatted
-    errors.add(:url, 'is invalid') unless profile_link_site.validate_find =~ url
+    errors.add(:url, 'is invalid') unless profile_link_site.validate_find&.match?(url)
   end
 end

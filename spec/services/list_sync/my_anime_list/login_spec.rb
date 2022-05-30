@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe ListSync::MyAnimeList::Login do
-  let(:agent) { Mechanize.new }
   subject { described_class.new(agent, 'user', 'pass') }
+
+  let(:agent) { Mechanize.new }
 
   before do
     stub_request(:get, 'https://myanimelist.net/login.php')
@@ -20,11 +21,11 @@ RSpec.describe ListSync::MyAnimeList::Login do
           })
       end
 
-      it 'should return true' do
+      it 'returns true' do
         expect(subject.success?).to be true
       end
 
-      it 'should result in a nil error_message' do
+      it 'results in a nil error_message' do
         subject.success?
         expect(subject.error_message).to be_nil
       end
@@ -36,11 +37,11 @@ RSpec.describe ListSync::MyAnimeList::Login do
           .to_return(fixture('my_anime_list/sync/login_failed.html'))
       end
 
-      it 'should return false' do
+      it 'returns false' do
         expect(subject.success?).to be false
       end
 
-      it 'should result in an error_message from the page' do
+      it 'results in an error_message from the page' do
         subject.success?
         expect(subject.error_message).to include('password is incorrect')
       end

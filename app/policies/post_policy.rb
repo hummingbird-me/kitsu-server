@@ -11,7 +11,7 @@ class PostPolicy < ApplicationPolicy
     is_owner?
   end
 
-  def create? # rubocop:disable Metrics/PerceivedComplexity
+  def create?
     return false unless user
     return false if user.unregistered?
     return false if user.blocked?(record.target_user)

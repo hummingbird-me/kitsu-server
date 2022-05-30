@@ -1,6 +1,6 @@
 class MangaCharacter < ApplicationRecord
-  enum role: %i[main supporting]
+  enum role: { main: 0, supporting: 1 }
 
-  belongs_to :manga, required: true
-  belongs_to :character, required: true
+  belongs_to :manga, optional: false
+  belongs_to :character, optional: false
 end

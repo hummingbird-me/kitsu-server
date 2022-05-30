@@ -1,6 +1,6 @@
 class CategoryFavorite < ApplicationRecord
-  belongs_to :user, required: true
-  belongs_to :category, required: true
+  belongs_to :user, optional: false
+  belongs_to :category, optional: false
 
   validates :user_id, uniqueness: {
     scope: :category_id,

@@ -1,5 +1,5 @@
 RSpec.configure do |config|
-  config.before(:each) do |example|
+  config.before do |example|
     unless example.metadata[:stream_api]
       stub_request(:any, %r{https://api.stream-io-api.com/api/v1.0/})
         .and_return(status: 200, body: '{}')

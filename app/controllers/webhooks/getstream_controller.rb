@@ -2,8 +2,8 @@ module Webhooks
   class GetstreamController < ApplicationController
     include CustomControllerHelpers
 
-    http_basic_authenticate_with name: ENV['STREAM_WEBHOOK_USER'],
-                                 password: ENV['STREAM_WEBHOOK_PASS']
+    http_basic_authenticate_with name: ENV.fetch('STREAM_WEBHOOK_USER', nil),
+      password: ENV.fetch('STREAM_WEBHOOK_PASS', nil)
 
     def verify
       render plain: StreamRails.client.api_key
@@ -16,7 +16,7 @@ module Webhooks
         GetstreamEventWorker.perform_async(feed, event, activity)
       end
 
-      head 200
+      head :ok
     end
   end
 end

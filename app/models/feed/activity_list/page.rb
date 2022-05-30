@@ -19,14 +19,13 @@ class Feed
         return [] unless data
         res = apply_selects(res, opts[:fast_selects] || [])
         res = strip_unused(res)
-        unless opts[:includes].blank?
+        if opts[:includes].present?
           res = enrich(res, opts[:includes])
           res = strip_unenriched(res, opts[:includes])
         end
         res = apply_selects(res, opts[:slow_selects] || [])
         res = apply_maps(res, opts[:maps] || [])
-        res = wrap(res)
-        res
+        wrap(res)
       end
 
       private

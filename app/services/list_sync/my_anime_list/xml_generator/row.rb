@@ -76,7 +76,7 @@ module ListSync
         end
 
         def rating
-          { my_score: (entry.rating && entry.rating / 2) }
+          { my_score: (entry.rating && (entry.rating / 2)) }
         end
 
         def status

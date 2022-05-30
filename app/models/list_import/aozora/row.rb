@@ -43,9 +43,9 @@ class ListImport
       end
 
       def data
-        %i[status progress rating started_at finished_at volumes_owned].map { |k|
-          [k, send(k)]
-        }.to_h
+        %i[status progress rating started_at finished_at volumes_owned].index_with do |k|
+          send(k)
+        end
       end
     end
   end

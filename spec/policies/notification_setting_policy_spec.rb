@@ -1,19 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe NotificationSettingPolicy do
+  subject { described_class }
+
   let(:user) { token_for create(:user) }
   let(:setting) { build(:notification_setting, user: user.resource_owner) }
   let(:other) { build(:notification_setting) }
-  subject { described_class }
 
   permissions :update? do
-    it('should allow users') { should permit(user, setting) }
-    it('should not allow anons') { should_not permit(nil, setting) }
+    it('allows users') { is_expected.to permit(user, setting) }
+    it('does not allow anons') { is_expected.not_to permit(nil, setting) }
   end
 
   permissions :create?, :destroy? do
-    it('should not allow anons') { should_not permit(nil, setting) }
-    it('should not allow for yourself') { should_not permit(user, setting) }
-    it('should not allow for others') { should_not permit(user, other) }
+    it('does not allow anons') { is_expected.not_to permit(nil, setting) }
+    it('does not allow for yourself') { is_expected.not_to permit(user, setting) }
+    it('does not allow for others') { is_expected.not_to permit(user, other) }
   end
 end

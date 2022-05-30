@@ -83,8 +83,8 @@ RSpec.describe Analysis::MaxNodeLimit do
       end
       let(:variables) do
         {
-          "profileId": 1,
-          "followersLimit": 10
+          profileId: 1,
+          followersLimit: 10
         }
       end
 
@@ -128,10 +128,10 @@ RSpec.describe Analysis::MaxNodeLimit do
 
       let(:variables) do
         {
-          "profileId": 1,
-          "followersLimit": 10,
-          "postsLimit": 10,
-          "commentsLimit": 10
+          profileId: 1,
+          followersLimit: 10,
+          postsLimit: 10,
+          commentsLimit: 10
         }
       end
 

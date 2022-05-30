@@ -1,6 +1,6 @@
 class AppleReceiptService
-  VERIFICATION_URL = ENV['APPLE_VERIFICATION_URL']
-  SECRET = ENV['APPLE_VERIFICATION_SECRET']
+  VERIFICATION_URL = ENV.fetch('APPLE_VERIFICATION_URL', nil)
+  SECRET = ENV.fetch('APPLE_VERIFICATION_SECRET', nil)
 
   def initialize(receipt)
     @receipt = receipt
@@ -8,11 +8,11 @@ class AppleReceiptService
   end
 
   def start_date
-    DateTime.rfc3339(latest_receipt_info['purchase_date']).to_time # rubocop:disable Style/DateTime
+    DateTime.rfc3339(latest_receipt_info['purchase_date']).to_time
   end
 
   def end_date
-    DateTime.rfc3339(latest_receipt_info['expires_date']).to_time # rubocop:disable Style/DateTime
+    DateTime.rfc3339(latest_receipt_info['expires_date']).to_time
   end
 
   def billing_id

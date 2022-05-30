@@ -22,7 +22,7 @@ class GroupsController < ApplicationController
 
   def read
     member&.mark_read!
-    render json: {}, status: 200
+    render json: {}, status: :ok
   end
 
   def group

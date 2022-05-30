@@ -21,7 +21,8 @@ module HasLocalizedField
                    object.public_send(key)
                  elsif object.respond_to?(:key?) && object.key?(key)
                    object[key]
-                 else super
+                 else
+                   super
                  end
         titles = titles.slice(*locales) if locales
         titles

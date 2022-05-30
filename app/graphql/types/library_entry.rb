@@ -87,7 +87,8 @@ class Types::LibraryEntry < Types::BaseObject
   end
 
   def events(media_types:)
-    Loaders::AssociationLoader.for(object.class, :library_events).scope(object).then do |library_events|
+    Loaders::AssociationLoader.for(object.class,
+      :library_events).scope(object).then do |library_events|
       library_events.by_kind(*media_types)
     end
   end

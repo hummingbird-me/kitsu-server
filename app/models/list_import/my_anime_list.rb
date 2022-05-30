@@ -70,8 +70,8 @@ class ListImport
 
     def get(list, page)
       res = Typhoeus::Request.get(build_url(list, page))
-      raise RateLimitedError.new(res.status_message) if res.code == 429
-      raise ResponseError.new(res.status_message) unless res.success?
+      raise RateLimitedError, res.status_message if res.code == 429
+      raise ResponseError, res.status_message unless res.success?
       JSON.parse(res.body)
     end
 

@@ -1,7 +1,7 @@
 class GroupActionLog < ApplicationRecord
-  belongs_to :target, required: true, polymorphic: true
-  belongs_to :group, required: true
-  belongs_to :user, required: true
+  belongs_to :target, optional: false, polymorphic: true
+  belongs_to :group, optional: false
+  belongs_to :user, optional: false
 
   validates :verb, presence: true
 

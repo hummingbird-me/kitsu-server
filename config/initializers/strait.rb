@@ -1,4 +1,4 @@
 Strait.configuration = {
-  redis: { url: ENV['REDIS_URL'] },
-  pool: { size: (ENV['RAILS_MAX_THREADS'] || 5).to_i }
+  redis: { url: ENV.fetch('REDIS_URL', nil) },
+  pool: { size: ENV.fetch('RAILS_MAX_THREADS', 5).to_i }
 }

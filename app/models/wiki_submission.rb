@@ -3,9 +3,9 @@ class WikiSubmission < ApplicationRecord
   has_many :logs, class_name: 'WikiSubmissionLog', dependent: :destroy
 
   belongs_to :parent, inverse_of: :child, class_name: 'WikiSubmission',
-                      optional: true
+    optional: true
   has_one :child, inverse_of: :parent, class_name: 'WikiSubmission', foreign_key: :parent_id,
-                  dependent: :destroy
+    dependent: :destroy
 
   enum status: {
     draft: 0,

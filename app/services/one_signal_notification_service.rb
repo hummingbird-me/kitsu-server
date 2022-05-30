@@ -83,10 +83,10 @@ class OneSignalNotificationService
   end
 
   def app_id
-    ENV['ONE_SIGNAL_APP_ID']
+    ENV.fetch('ONE_SIGNAL_APP_ID', nil)
   end
 
   def api_key
-    ENV['ONE_SIGNAL_API_KEY']
+    ENV.fetch('ONE_SIGNAL_API_KEY', nil)
   end
 end

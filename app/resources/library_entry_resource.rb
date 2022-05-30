@@ -1,5 +1,5 @@
 class LibraryEntryResource < BaseResource
-  TITLE_SORT = /\A([^\.]+)\.titles\.([^\.]+)\z/
+  TITLE_SORT = /\A([^.]+)\.titles\.([^.]+)\z/
 
   class TitleSortableFields
     def initialize(whitelist)
@@ -14,7 +14,7 @@ class LibraryEntryResource < BaseResource
       media, title = match[1..-1]
       return false unless %w[anime manga drama].include?(media.downcase)
       return true if title.casecmp('canonical')
-      return false unless /[a-z]{2}(_[a-z]{2})?/ =~ title
+      return false unless /[a-z]{2}(_[a-z]{2})?/.match?(title)
       true
     end
   end
@@ -98,7 +98,7 @@ class LibraryEntryResource < BaseResource
   def self.apply_sort(records, order_options, context = {})
     # For each requested sort option, decide whether to use the title sort logic
     order_options = order_options.map do |field, dir|
-      [(TITLE_SORT =~ field ? :title : :other), field, dir]
+      [(TITLE_SORT.match?(field) ? :title : :other), field, dir]
     end
     # Combine consecutive sort options of the same type into lists
     order_options = order_options.each_with_object([]) do |curr, acc|
@@ -131,7 +131,7 @@ class LibraryEntryResource < BaseResource
         records = records.order(Arel.sql(<<~ORDER))
           #{media}_sort.titles->#{media}_sort.canonical_title #{direction}
         ORDER
-      elsif /[a-z]{2}(_[a-z]{2})?/i =~ title
+      elsif /[a-z]{2}(_[a-z]{2})?/i.match?(title)
         records = records.order(Arel.sql(<<~ORDER.squish))
           COALESCE(
             NULLIF(#{media}_sort.titles->'#{title}', ''),

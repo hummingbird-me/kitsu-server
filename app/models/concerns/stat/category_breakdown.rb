@@ -51,7 +51,8 @@ class Stat < ApplicationRecord
       diff = LibraryEntryDiff.new(entry)
       change = if diff.became_completed? then +1
                elsif diff.became_uncompleted? then -1
-               else 0
+               else
+                 0
                end
 
       stats_data['total'] += change

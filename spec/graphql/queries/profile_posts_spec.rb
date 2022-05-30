@@ -8,7 +8,7 @@ RSpec.describe 'query loadProfilePosts' do
   let(:token) { token_for(user) }
   let(:context) { { token: token, user: user } }
 
-  it 'should work' do
+  it 'works' do
     query = <<~GRAPHQL
       fragment userFields on Profile {
         name

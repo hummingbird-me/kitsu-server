@@ -18,7 +18,7 @@ module Sluggable
 
       value = slug.is_a?(Array) ? slug.first : slug
       where(id: friendly.find(value).id)
-    rescue
+    rescue StandardError
       none
     end
 

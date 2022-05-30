@@ -36,6 +36,6 @@ class CannyToken
   end
 
   def cipher_key
-    Digest::MD5.digest(ENV['CANNY_SSO_KEY'])
+    Digest::MD5.digest(ENV.fetch('CANNY_SSO_KEY', nil))
   end
 end

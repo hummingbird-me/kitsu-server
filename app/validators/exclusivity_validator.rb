@@ -8,7 +8,7 @@ class ExclusivityValidator < ActiveModel::Validator
   end
 
   def validate(record)
-    values = attrs.map { |a| [a, record.public_send(a)] }.to_h
+    values = attrs.index_with { |a| record.public_send(a) }
     present = values.select { |_, v| v.present? }.keys
 
     return if present.count <= limit

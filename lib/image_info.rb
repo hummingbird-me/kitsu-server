@@ -6,7 +6,8 @@ class ImageInfo
   def type
     if fastimage.type == :png && animated?
       :apng
-    else fastimage.type
+    else
+      fastimage.type
     end
   end
 

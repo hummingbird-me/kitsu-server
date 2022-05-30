@@ -1,5 +1,5 @@
 module ImgixPurgeService
-  API_KEY = ENV['IMGIX_API_KEY']
+  API_KEY = ENV.fetch('IMGIX_API_KEY', nil)
   API_HOST = 'https://api.imgix.com/'
   PURGE_ENDPOINT = "#{API_HOST}v2/image/purger".freeze
 

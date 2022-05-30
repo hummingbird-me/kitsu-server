@@ -26,7 +26,8 @@ RSpec.describe Titleable do
     expect(klass.new(titles: {
       'en' => 'March comes in like a lion'
     }, canonical_title: 'en')).to be_valid
-    expect(klass.new(titles: { 'en_jp' => '3-gatsu no Lion' }, canonical_title: 'en_jp')).to be_valid
+    expect(klass.new(titles: { 'en_jp' => '3-gatsu no Lion' },
+      canonical_title: 'en_jp')).to be_valid
     expect(klass.new(titles: { 'ja_jp' => '3月のライオン' }, canonical_title: 'ja_jp')).not_to be_valid
   end
 

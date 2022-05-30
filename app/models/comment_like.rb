@@ -1,8 +1,8 @@
 class CommentLike < ApplicationRecord
   include WithActivity
 
-  belongs_to :user, required: true
-  belongs_to :comment, required: true, counter_cache: :likes_count, touch: true
+  belongs_to :user, optional: false
+  belongs_to :comment, optional: false, counter_cache: :likes_count, touch: true
 
   validates :comment, uniqueness: { scope: :user_id }
   validates :comment, active_ama: {

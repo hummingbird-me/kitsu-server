@@ -1,10 +1,10 @@
 class Follow < ApplicationRecord
   include WithActivity
 
-  belongs_to :follower, class_name: 'User', required: true, inverse_of: :following,
-                        counter_cache: :following_count, touch: true
-  belongs_to :followed, class_name: 'User', required: true, inverse_of: :followers,
-                        counter_cache: :followers_count, touch: true
+  belongs_to :follower, class_name: 'User', optional: false, inverse_of: :following,
+    counter_cache: :following_count, touch: true
+  belongs_to :followed, class_name: 'User', optional: false, inverse_of: :followers,
+    counter_cache: :followers_count, touch: true
 
   validates :followed, uniqueness: { scope: :follower_id }
 

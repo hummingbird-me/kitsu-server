@@ -48,7 +48,7 @@ class Action
 
   # @return [Hash] the context of this action
   def context
-    attribute_names.map { |k| [k, public_send(k)] }.to_h
+    attribute_names.index_with { |k| public_send(k) }
   end
   # Alias for ActiveModel
   alias_method :attributes, :context

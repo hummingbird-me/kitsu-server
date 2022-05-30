@@ -1,8 +1,8 @@
 class Repost < ApplicationRecord
   include WithActivity
 
-  belongs_to :user, required: true
-  belongs_to :post, required: true
+  belongs_to :user, optional: false
+  belongs_to :post, optional: false
 
   def stream_activity
     user.profile_feed.activities.new(

@@ -1,6 +1,6 @@
 class AMASubscriber < ApplicationRecord
-  belongs_to :user, required: true
-  belongs_to :ama, required: true, counter_cache: true
+  belongs_to :user, optional: false
+  belongs_to :ama, optional: false, counter_cache: true
 
   validates :ama_id, uniqueness: { scope: :user_id }
   validates :ama, active_ama: {

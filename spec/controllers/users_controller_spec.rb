@@ -7,19 +7,21 @@ RSpec.describe UsersController, type: :controller do
 
   describe '#index' do
     describe 'with filter[self]' do
-      it 'should respond with a user when authenticated' do
+      it 'responds with a user when authenticated' do
         sign_in user
         get :index, params: { filter: { self: 'yes' } }
         expect(response.body).to have_resources(CURRENT_USER.dup, 'users')
         expect(response).to have_http_status(:ok)
       end
-      it 'should respond with an empty list when unauthenticated' do
+
+      it 'responds with an empty list when unauthenticated' do
         get :index, params: { filter: { self: 'yes' } }
         expect(response.body).to have_empty_resource
       end
     end
+
     describe 'with filter[name]' do
-      it 'should find by username' do
+      it 'finds by username' do
         get :index, params: { filter: { name: user.name } }
         user_json = USER.merge(name: user.name)
         expect(response.body).to have_resources(user_json, 'users')
@@ -28,17 +30,18 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe '#show' do
-    it 'should respond with a user' do
+    it 'responds with a user' do
       get :show, params: { id: user.id }
       expect(response.body).to have_resource(USER.dup, 'users')
     end
+
     it 'has status ok' do
       get :show, params: { id: user.id }
       expect(response).to have_http_status(:ok)
     end
 
     context 'without authentication' do
-      it 'should not return the password or email' do
+      it 'does not return the password or email' do
         get :show, params: { id: user.id }
         expect(response.body).not_to have_resource({
           password: String,
@@ -67,12 +70,14 @@ RSpec.describe UsersController, type: :controller do
       create_user
       expect(response).to have_http_status(:created)
     end
-    it 'should have one more user than before' do
+
+    it 'has one more user than before' do
       expect {
         create_user
       }.to change { User.count }.by(1)
     end
-    it 'should respond with a user' do
+
+    it 'responds with a user' do
       create_user
       expect(response.body).to have_resource(USER.dup, 'users', singular: true)
     end
@@ -80,6 +85,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe '#update' do
     let(:user) { create(:user) }
+
     def update_user
       sign_in user
       post :update, params: {
@@ -98,12 +104,14 @@ RSpec.describe UsersController, type: :controller do
       update_user
       expect(response).to have_http_status(:ok)
     end
-    it 'should update the user' do
+
+    it 'updates the user' do
       update_user
       user.reload
       expect(user.name).to eq 'crab'
     end
-    it 'should respond with a user' do
+
+    it 'responds with a user' do
       update_user
       expect(response.body).to have_resource(USER.dup, 'users', singular: true)
     end

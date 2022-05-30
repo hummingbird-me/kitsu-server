@@ -1,6 +1,6 @@
 class MediaProduction < ApplicationRecord
-  enum role: %i[producer licensor studio serialization]
+  enum role: { producer: 0, licensor: 1, studio: 2, serialization: 3 }
 
-  belongs_to :media, polymorphic: true, required: true
-  belongs_to :company, class_name: 'Producer', required: true
+  belongs_to :media, polymorphic: true, optional: false
+  belongs_to :company, class_name: 'Producer', optional: false
 end

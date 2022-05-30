@@ -13,8 +13,8 @@ class HTMLFilters::UnembedFilter < HTML::Pipeline::Filter
 
   def to_href(url)
     case url
-    when %r{https?://.*\.youtube.com/embed/([^\?]+).*}
-      "https://youtu.be/#{$1}"
+    when %r{https?://.*\.youtube.com/embed/([^?]+).*}
+      "https://youtu.be/#{Regexp.last_match(1)}"
     else url
     end
   end

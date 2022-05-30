@@ -1,8 +1,8 @@
 class AMA < ApplicationRecord
   include DescriptionSanitation
 
-  belongs_to :author, required: true, class_name: 'User'
-  belongs_to :original_post, required: true, class_name: 'Post'
+  belongs_to :author, optional: false, class_name: 'User'
+  belongs_to :original_post, optional: false, class_name: 'Post'
   has_many :ama_subscribers, dependent: :destroy
 
   scope :for_original_post, ->(post) { where(original_post: post) }

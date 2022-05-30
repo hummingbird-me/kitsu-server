@@ -54,14 +54,14 @@ class ProSubscriptionController < ApplicationController
     if user.pro_subscription.present?
       render json: user.pro_subscription
     else
-      render status: 404, json: {}
+      render status: :not_found, json: {}
     end
   end
 
   private
 
   def check_feature_flag!
-    render status: 404, json: {} unless Flipper[:pro_subscriptions].enabled?(user)
+    render status: :not_found, json: {} unless Flipper[:pro_subscriptions].enabled?(user)
   end
 
   def user

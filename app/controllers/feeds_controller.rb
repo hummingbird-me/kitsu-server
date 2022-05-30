@@ -20,15 +20,15 @@ class FeedsController < ApplicationController
 
   def destroy_activity
     activity = feed.activities.includes(:subject).find(params[:uuid])
-    return head 404 unless activity
+    return head :not_found unless activity
 
     subject_enriched = !activity.subject.is_a?(String)
     can_destroy = subject_enriched && policy_for(activity.subject).destroy?
     if can_destroy || feed_owner?(activity.origin)
       activity.destroy_original
-      return head 204
+      return head :no_content
     end
-    head 401
+    head :unauthorized
   end
 
   private

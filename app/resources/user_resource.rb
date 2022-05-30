@@ -55,7 +55,7 @@ class UserResource < BaseResource
     _model.profile_links.where(profile_link_site_id: 29).update(url: value)
   end
 
-  def has_password # rubocop:disable Style/PredicateName
+  def has_password # rubocop:disable Naming/PredicateName
     _model.password_digest.present?
   end
 

@@ -6,7 +6,7 @@ class Group < ApplicationRecord
 
   friendly_id :name, use: %i[slugged finders history]
   processable :rules, RulesPipeline
-  enum privacy: %i[open closed restricted]
+  enum privacy: { open: 0, closed: 1, restricted: 2 }
 
   update_index('groups#group') { self }
   update_index('users#group_member') { members }
@@ -24,19 +24,19 @@ class Group < ApplicationRecord
   has_many :members, class_name: 'GroupMember', dependent: :destroy
   has_many :owners, -> { admin }, class_name: 'GroupMember'
   has_many :neighbors, class_name: 'GroupNeighbor', dependent: :destroy,
-                       foreign_key: 'source_id'
+    foreign_key: 'source_id'
   has_many :tickets, class_name: 'GroupTicket', dependent: :destroy
   has_many :invites, class_name: 'GroupInvite', dependent: :destroy
   has_many :reports, class_name: 'GroupReport', dependent: :destroy
   has_many :leader_chat_messages, dependent: :destroy
   has_many :bans, class_name: 'GroupBan', dependent: :destroy
   has_many :action_logs, class_name: 'GroupActionLog', dependent: :destroy
-  belongs_to :category, class_name: 'GroupCategory', required: true
+  belongs_to :category, class_name: 'GroupCategory', optional: false
   belongs_to :pinned_post, class_name: 'Post', optional: true
 
   validates :name, presence: true,
-                   length: { in: 3..50 },
-                   uniqueness: { case_sensitive: false }
+    length: { in: 3..50 },
+    uniqueness: { case_sensitive: false }
   validates :tagline, length: { maximum: 60 }, allow_blank: true
   validates :privacy, inclusion: {
     in: %w[closed],

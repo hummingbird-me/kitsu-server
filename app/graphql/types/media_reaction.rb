@@ -19,7 +19,8 @@ class Types::MediaReaction < Types::BaseObject
     description: 'The media related to this reaction.'
 
   def media
-    Loaders::RecordLoader.for(object.media_type.constantize, token: context[:token]).load(object.media_id)
+    Loaders::RecordLoader.for(object.media_type.constantize,
+      token: context[:token]).load(object.media_id)
   end
 
   field :library_entry, Types::LibraryEntry,

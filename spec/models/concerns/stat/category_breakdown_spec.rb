@@ -7,11 +7,11 @@ RSpec.describe Stat::CategoryBreakdown do
   let!(:stat) { Stat::AnimeCategoryBreakdown.for_user(user) }
 
   describe '#default_data' do
-    it 'should have a total key' do
+    it 'has a total key' do
       expect(stat.default_data).to have_key('total')
     end
 
-    it 'should have a categories key' do
+    it 'has a categories key' do
       expect(stat.default_data).to have_key('categories')
     end
   end
@@ -24,24 +24,24 @@ RSpec.describe Stat::CategoryBreakdown do
       stat.recalculate!
     end
 
-    it 'should return a list of categories with counts' do
+    it 'returns a list of categories with counts' do
       expect(stat.stats_data).to have_key('categories')
       expect(stat.stats_data['categories'].values).to all(be_a(Integer))
     end
 
-    it 'should return the count of all applicable entries' do
+    it 'returns the count of all applicable entries' do
       expect(stat.stats_data['total']).to eq(3)
     end
   end
 
   describe '#on_create' do
-    it 'should increase the total' do
+    it 'increases the total' do
       expect {
         stat.on_create(entry)
       }.to change { stat.stats_data['total'] }.by(1)
     end
 
-    it 'should increment each category for the media' do
+    it 'increments each category for the media' do
       category_count = anime.categories.count
       expect {
         stat.on_create(entry)
@@ -50,13 +50,13 @@ RSpec.describe Stat::CategoryBreakdown do
   end
 
   describe '#on_destroy' do
-    it 'should decrease the total' do
+    it 'decreases the total' do
       expect {
         stat.on_destroy(entry)
       }.to change { stat.stats_data['total'] }.by(-1)
     end
 
-    it 'should decrement each category for the media' do
+    it 'decrements each category for the media' do
       category_count = anime.categories.count
       anime.categories.each do |category|
         stat.stats_data['categories'][category.id.to_s] = 10
@@ -69,7 +69,7 @@ RSpec.describe Stat::CategoryBreakdown do
   end
 
   describe '#enriched_stats_data' do
-    it 'should replace the keys in the categories hash with their titles' do
+    it 'replaces the keys in the categories hash with their titles' do
       expect(stat.enriched_stats_data['categories'].keys).to all(be_a(String))
     end
   end

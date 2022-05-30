@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Accounts::GenerateNoltToken do
   let!(:user) { create(:user, :with_avatar) }
 
-  it 'should correctly sign the JWT' do
+  it 'correctlies sign the JWT' do
     stub_const('Accounts::GenerateNoltToken::NOLT_SSO_SECRET', 'boo')
     token = described_class.call(user: user).token
 
@@ -12,7 +12,7 @@ RSpec.describe Accounts::GenerateNoltToken do
     }.not_to raise_error
   end
 
-  it 'should have the user email, id, name, and avatar' do
+  it 'has the user email, id, name, and avatar' do
     stub_const('Accounts::GenerateNoltToken::NOLT_SSO_SECRET', 'boo')
     token = described_class.call(user: user).token
     contents = JWT.decode(token, 'boo', true, { algorithm: 'HS256' })[0]

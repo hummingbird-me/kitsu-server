@@ -22,7 +22,7 @@ class AlgoliaKeyService
   end
 
   def self.search_key
-    @search_key ||= ENV['ALGOLIA_SEARCH_KEY']
+    @search_key ||= ENV.fetch('ALGOLIA_SEARCH_KEY', nil)
   end
   delegate :search_key, to: :class
   cattr_writer :search_key

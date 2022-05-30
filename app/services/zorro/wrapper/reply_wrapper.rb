@@ -2,9 +2,7 @@ module Zorro
   class Wrapper
     class ReplyWrapper < BasePost
       # @return [Post] the post that this is replying to
-      def post
-        comment.post
-      end
+      delegate :post, to: :comment
 
       # @return [Comment] the comment that this is replying to
       def comment

@@ -2,7 +2,8 @@ class Manga < ApplicationRecord
   include Media
   include AgeRatings
 
-  enum subtype: %i[manga novel manhua oneshot doujin manhwa oel]
+  enum subtype: { manga: 0, novel: 1, manhua: 2, oneshot: 3, doujin: 4, manhwa: 5,
+                  oel: 6 }
   alias_attribute :progress_limit, :chapter_count
   alias_attribute :manga_type, :subtype
 

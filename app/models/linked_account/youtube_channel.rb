@@ -14,9 +14,7 @@ class LinkedAccount
     end
 
     validate do
-      if token_changed?
-        errors.add(:token, 'could not be verified') unless client.valid?
-      end
+      errors.add(:token, 'could not be verified') if token_changed? && !client.valid?
     end
 
     after_commit(on: %i[create update]) do

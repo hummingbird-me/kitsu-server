@@ -14,12 +14,12 @@ module HasImageField
 
       define_method(key) do
         attacher = if options[:method] && object.respond_to?(:"#{options[:method]}_attacher")
-          object.public_send(:"#{options[:method]}_attacher")
-        elsif options[:method]
-          object.public_send(options[:method])
-        else
-          object.public_send(:"#{key}_attacher")
-        end
+                     object.public_send(:"#{options[:method]}_attacher")
+                   elsif options[:method]
+                     object.public_send(options[:method])
+                   else
+                     object.public_send(:"#{key}_attacher")
+                   end
 
         attacher if attacher.file.present?
       end
