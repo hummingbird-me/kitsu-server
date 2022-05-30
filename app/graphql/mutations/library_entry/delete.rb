@@ -15,7 +15,13 @@ class Mutations::LibraryEntry::Delete < Mutations::Base
   end
 
   def authorized?(library_entry:)
-    super(library_entry, :destroy?)
+    return true if LibraryEntryPolicy.new(context[:token], library_entry).destroy?
+
+    [false, {
+      errors: [
+        { message: 'Not Authorized', code: 'NotAuthorized' }
+      ]
+    }]
   end
 
   def resolve(library_entry:)

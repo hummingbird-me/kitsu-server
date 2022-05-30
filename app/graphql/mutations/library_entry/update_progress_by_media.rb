@@ -21,7 +21,13 @@ class Mutations::LibraryEntry::UpdateProgressByMedia < Mutations::Base
   end
 
   def authorized?(library_entry:)
-    super(library_entry, :update?)
+    return true if LibraryEntryPolicy.new(context[:token], library_entry).update?
+
+    [false, {
+      errors: [
+        { message: 'Not Authorized', code: 'NotAuthorized' }
+      ]
+    }]
   end
 
   def resolve(library_entry:)

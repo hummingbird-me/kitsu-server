@@ -15,7 +15,13 @@ class Mutations::LibraryEntry::Create < Mutations::Base
   end
 
   def authorized?(library_entry:)
-    super(library_entry, :create?)
+    return true if LibraryEntryPolicy.new(context[:token], library_entry).create?
+
+    [false, {
+      errors: [
+        { message: 'Not Authorized', code: 'NotAuthorized' }
+      ]
+    }]
   end
 
   def resolve(library_entry:)
