@@ -9,11 +9,14 @@ class ImageDimensionsValidator < ActiveModel::EachValidator
     width = options[:width]
     aspect = options[:aspect_ratio]
 
-    record.errors[attr] << validate_value('height', actual.height, height)
-    record.errors[attr] << validate_value('width', actual.width, width)
-    record.errors[attr] << validate_value('aspect ratio', actual.aspect, aspect)
-
-    record.errors[attr].compact!
+    errors = [
+      validate_value('height', actual.height, height),
+      validate_value('width', actual.width, width),
+      validate_value('aspect ratio', actual.aspect, aspect)
+    ].compact
+    errors.each do |error|
+      record.errors.add(attr, error)
+    end
   end
 
   def dimensions_for(attachment)

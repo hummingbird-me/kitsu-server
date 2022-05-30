@@ -2,13 +2,13 @@ class LanguageCodeValidator < ActiveModel::EachValidator
   def validate_each(record, attr, value)
     if value.respond_to?(:each)
       value.each do |v|
-        record.errors[attr] << validate_value(v)
+        error = validate_value(v)
+        record.errors.add(attr, message: error) if error
       end
     else
-      record.errors[attr] << validate_value(value)
+      error = validate_value(value)
+      record.errors.add(attr, message: error) if error
     end
-
-    record.errors[attr].compact!
   end
 
   def validate_value(value)

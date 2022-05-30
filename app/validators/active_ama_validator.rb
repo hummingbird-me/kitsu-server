@@ -10,6 +10,6 @@ class ActiveAMAValidator < ActiveModel::EachValidator
     return unless ama
     return if ama.author == options[:user]
     return if ama.open?
-    record.errors[attribute] << options[:message]
+    record.errors.add(attribute, message: options[:message])
   end
 end

@@ -5,6 +5,6 @@ class RealEmailValidator < ActiveModel::EachValidator
 
     response = Accounts::PrevalidateEmail.call(email: value)
 
-    record.errors[attr] << 'could not be delivered to' if response.result.undeliverable?
+    record.errors.add(attr, message: 'could not be delivered to') if response.result.undeliverable?
   end
 end
