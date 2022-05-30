@@ -10,9 +10,6 @@ RailsAdmin.config do |config|
 
   config.authorize_with :pundit
 
-  ## == PaperTrail ==
-  config.audit_with :history
-
   config.actions do
     dashboard do                  # mandatory
       statistics false
