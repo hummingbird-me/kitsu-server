@@ -6,7 +6,7 @@ FactoryBot.define do
     subtype { Anime.subtypes.keys.sample }
     age_rating { 'G' }
     episode_length { 24 }
-    start_date { Faker::Date.backward(10_000) }
+    start_date { Faker::Date.backward(days: 10_000) }
 
     trait :nsfw do
       age_rating { 'R18' }
