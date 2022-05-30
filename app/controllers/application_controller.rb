@@ -15,8 +15,6 @@ class ApplicationController < JSONAPI::ResourceController
   around_action :store_region_on_thread
   around_action :flush_buffered_feeds
 
-  force_ssl if Rails.env.production?
-
   def flush_buffered_feeds
     yield
   ensure
