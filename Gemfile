@@ -59,7 +59,7 @@ gem 'flipper-ui'
 gem 'graphql'
 gem 'graphql-batch'
 gem 'graphql-fancy_loader'
-gem 'jsonapi-resources', '0.9.6'
+gem 'jsonapi-resources', '0.9.9'
 
 # Miscellaneous Utilities
 gem 'active_flag' # Bitfields!
