@@ -1,3 +1,5 @@
+require Rails.root.join('vendor/link_builder')
+
 module FixIncludeErrors
   def get_related(current_path)
     current = @include_directives_hash
