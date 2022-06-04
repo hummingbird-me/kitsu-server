@@ -338,7 +338,7 @@ GEM
     jmespath (1.6.1)
     json (2.6.1)
     json_expressions (0.9.0)
-    jsonapi-resources (0.9.8)
+    jsonapi-resources (0.9.7)
       activerecord (>= 4.1)
       concurrent-ruby
       railties (>= 4.1)
@@ -796,7 +796,7 @@ DEPENDENCIES
   iso-639
   iso_country_codes
   json_expressions
-  jsonapi-resources (= 0.9.8)
+  jsonapi-resources (= 0.9.7)
   jwt
   kramdown
   kramdown-parser-gfm
