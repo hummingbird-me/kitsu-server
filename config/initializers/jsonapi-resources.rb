@@ -1,4 +1,4 @@
-require Rails.root.join('vendor/link_builder')
+require Rails.root.join('vendor/resource_serializer')
 
 module FixIncludeErrors
   def get_related(current_path)
