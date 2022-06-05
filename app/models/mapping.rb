@@ -1,5 +1,5 @@
 class Mapping < ApplicationRecord
-  belongs_to :item, polymorphic: true, required: true
+  belongs_to :item, polymorphic: true, required: true, inverse_of: :mappings
 
   validates :external_site, :external_id, presence: true
   # Right now, we want to ensure only one external id per item per site
