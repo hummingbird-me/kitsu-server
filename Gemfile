@@ -126,7 +126,7 @@ gem 'sentry-raven' # Send error data to Sentry
 # Admin Panel
 gem 'pghero'
 gem 'pg_query' # pghero indexes
-gem 'rails_admin'
+gem 'rails_admin', github: 'railsadminteam/rails_admin'
 gem 'sassc-rails' # used by rails admin
 gem 'sinatra' # used by sidekiq/web
 

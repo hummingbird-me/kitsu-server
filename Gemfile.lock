@@ -27,6 +27,17 @@ GIT
       pundit
       rails (>= 4.2.1)
 
+GIT
+  remote: https://github.com/railsadminteam/rails_admin.git
+  revision: 652418c2f1eb3cea1006e8625be6e5116b59b852
+  specs:
+    rails_admin (3.0.0)
+      activemodel-serializers-xml (>= 1.0)
+      kaminari (>= 0.14, < 2.0)
+      nested_form (~> 0.3)
+      rails (>= 6.0, < 8)
+      turbo-rails (~> 1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -556,12 +567,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    rails_admin (3.0.0)
-      activemodel-serializers-xml (>= 1.0)
-      kaminari (>= 0.14, < 2.0)
-      nested_form (~> 0.3)
-      rails (>= 6.0, < 8)
-      turbo-rails (~> 1.0)
     railties (6.1.6)
       actionpack (= 6.1.6)
       activesupport (= 6.1.6)
@@ -722,8 +727,9 @@ GEM
     thor (1.2.1)
     tilt (2.0.10)
     timecop (0.9.5)
-    turbo-rails (1.0.1)
+    turbo-rails (1.1.1)
       actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
       railties (>= 6.0.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
@@ -839,7 +845,7 @@ DEPENDENCIES
   rack-attack
   rack-cors
   rails (= 6.1.6)
-  rails_admin
+  rails_admin!
   ranked-model
   redis (> 3.3.0)
   retriable
