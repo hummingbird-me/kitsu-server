@@ -1,0 +1,2 @@
+class MediaCastingPolicy < ApplicationPolicy
+end
