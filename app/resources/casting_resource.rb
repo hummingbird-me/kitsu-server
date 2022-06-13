@@ -9,4 +9,11 @@ class CastingResource < BaseResource
   filter :is_character, apply: ->(records, _v, _o) {
     records.where.not(character_id: nil)
   }
+
+  def self._model_name
+    if Flipper[:media_castings].enabled?(User.current)
+      'MediaCasting'
+    else super
+    end
+  end
 end
