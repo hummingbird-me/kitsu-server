@@ -16,4 +16,11 @@ class CastingResource < BaseResource
     else super
     end
   end
+
+  def self._model_class
+    if Flipper[:media_castings].enabled?(User.current)
+      MediaCasting
+    else super
+    end
+  end
 end
