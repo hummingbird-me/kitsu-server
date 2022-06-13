@@ -662,6 +662,9 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    scenic (1.6.0)
+      activerecord (>= 4.0.0)
+      railties (>= 4.0.0)
     sentry-raven (2.13.0)
       faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
@@ -862,6 +865,7 @@ DEPENDENCIES
   sanitize
   sass-rails
   sassc-rails
+  scenic
   sentry-raven
   shoulda-matchers
   shrine
