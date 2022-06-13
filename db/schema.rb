@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_13_032400) do
+ActiveRecord::Schema.define(version: 2022_06_13_043858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1724,7 +1724,7 @@ ActiveRecord::Schema.define(version: 2022_06_13_032400) do
   add_foreign_key "wiki_submission_logs", "wiki_submissions"
   add_foreign_key "wiki_submissions", "users"
 
-  create_view "media_castings", materialized: true, sql_definition: <<-SQL
+  create_view "media_castings", sql_definition: <<-SQL
       SELECT concat('c', mc.id, 'v', cv.id) AS id,
       mc.media_type,
       mc.media_id,
@@ -1784,8 +1784,4 @@ ActiveRecord::Schema.define(version: 2022_06_13_032400) do
       ms.updated_at
      FROM media_staff ms;
   SQL
-  add_index "media_castings", ["character_id"], name: "index_media_castings_on_character_id"
-  add_index "media_castings", ["media_type", "media_id"], name: "index_media_castings_on_media_type_and_media_id"
-  add_index "media_castings", ["person_id"], name: "index_media_castings_on_person_id"
-
 end
