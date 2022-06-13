@@ -1,5 +1,6 @@
 class CastingResource < BaseResource
   attributes :role, :voice_actor, :featured, :language
+  model_hint model: MediaCasting, resource: :casting
 
   has_one :media, polymorphic: true
   has_one :character
