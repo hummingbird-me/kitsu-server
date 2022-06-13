@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_03_045222) do
+ActiveRecord::Schema.define(version: 2022_06_13_032400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1723,4 +1723,69 @@ ActiveRecord::Schema.define(version: 2022_05_03_045222) do
   add_foreign_key "wiki_submission_logs", "users"
   add_foreign_key "wiki_submission_logs", "wiki_submissions"
   add_foreign_key "wiki_submissions", "users"
+
+  create_view "media_castings", materialized: true, sql_definition: <<-SQL
+      SELECT concat('c', mc.id, 'v', cv.id) AS id,
+      mc.media_type,
+      mc.media_id,
+      cv.person_id,
+      mc.character_id,
+          CASE cv.locale
+              WHEN 'fr'::text THEN 'French'::text
+              WHEN 'he'::text THEN 'Hebrew'::text
+              WHEN 'ja_jp'::text THEN 'Japanese'::text
+              WHEN 'hu'::text THEN 'Hungarian'::text
+              WHEN 'jp'::text THEN 'Japanese'::text
+              WHEN 'pt_br'::text THEN 'Brazilian'::text
+              WHEN 'ko'::text THEN 'Korean'::text
+              WHEN 'it'::text THEN 'Italian'::text
+              WHEN 'en'::text THEN 'English'::text
+              WHEN 'us'::text THEN 'English'::text
+              WHEN 'es'::text THEN 'Spanish'::text
+              WHEN 'de'::text THEN 'German'::text
+              ELSE NULL::text
+          END AS language,
+      (mc.role = 0) AS featured,
+      row_number() OVER (PARTITION BY mc.media_type, mc.media_id ORDER BY mc.role, mc.id) AS "order",
+      'Voice Actor'::text AS role,
+      true AS voice_actor,
+      LEAST(mc.created_at, cv.created_at) AS created_at,
+      GREATEST(mc.updated_at, cv.updated_at) AS updated_at
+     FROM (media_characters mc
+       JOIN character_voices cv ON ((mc.id = cv.media_character_id)))
+  UNION
+   SELECT concat('c', mc.id) AS id,
+      mc.media_type,
+      mc.media_id,
+      NULL::integer AS person_id,
+      mc.character_id,
+      NULL::text AS language,
+      (mc.role = 0) AS featured,
+      row_number() OVER (PARTITION BY mc.media_type, mc.media_id ORDER BY mc.role, mc.id) AS "order",
+      NULL::text AS role,
+      false AS voice_actor,
+      mc.created_at,
+      mc.updated_at
+     FROM (media_characters mc
+       LEFT JOIN character_voices cv ON ((mc.id = cv.media_character_id)))
+    WHERE (cv.id IS NULL)
+  UNION
+   SELECT concat('s', ms.id) AS id,
+      ms.media_type,
+      ms.media_id,
+      ms.person_id,
+      NULL::integer AS character_id,
+      NULL::text AS language,
+      false AS featured,
+      row_number() OVER (PARTITION BY ms.media_type, ms.media_id ORDER BY ms.id) AS "order",
+      ms.role,
+      false AS voice_actor,
+      ms.created_at,
+      ms.updated_at
+     FROM media_staff ms;
+  SQL
+  add_index "media_castings", ["character_id"], name: "index_media_castings_on_character_id"
+  add_index "media_castings", ["media_type", "media_id"], name: "index_media_castings_on_media_type_and_media_id"
+  add_index "media_castings", ["person_id"], name: "index_media_castings_on_person_id"
+
 end
