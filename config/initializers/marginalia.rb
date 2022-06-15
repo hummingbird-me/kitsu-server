@@ -8,4 +8,4 @@ module Marginalia::Comment
   end
 end
 
-Marginalia::Comment.components = %i[controller_with_namespace action request_path]
+Marginalia::Comment.components = %i[request_path controller_with_namespace action]
