@@ -9,7 +9,6 @@ RSpec.shared_examples 'streamable' do
   it { should belong_to(:streamer).required }
 
   it { should validate_presence_of(:streamer) }
-  it { should validate_presence_of(:subs) }
   it { should validate_presence_of(:dubs) }
 
   it { should respond_to(:available_in?) }
