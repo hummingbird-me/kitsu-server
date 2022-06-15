@@ -29,6 +29,7 @@ module Media
       before_remove: :dec_total_media_count
     # Quotes
     has_many :quotes, as: 'media', dependent: :destroy, inverse_of: :media
+    accepts_nested_attributes_for :quotes, allow_destroy: true
     # Cast Info
     has_many :castings, as: 'media'
     has_many :characters,
@@ -36,14 +37,19 @@ module Media
       as: 'media',
       dependent: :destroy,
       inverse_of: :media
+    accepts_nested_attributes_for :characters, allow_destroy: true
     has_many :staff,
       class_name: 'MediaStaff',
       as: 'media',
       dependent: :destroy,
       inverse_of: :media
-    has_many :productions, class_name: 'MediaProduction', as: 'media', dependent: :destroy
+    accepts_nested_attributes_for :staff, allow_destroy: true
+    has_many :productions, class_name: 'MediaProduction', as: 'media', dependent: :destroy,
+      inverse_of: :media
+    accepts_nested_attributes_for :productions, allow_destroy: true
     # Franchise Info
     has_many :installments, as: 'media', dependent: :destroy
+    accepts_nested_attributes_for :installments, allow_destroy: true
     has_many :franchises, through: :installments
     # User-generated content
     has_many :library_entries,
@@ -58,11 +64,15 @@ module Media
     has_many :media_relationships,
       class_name: 'MediaRelationship',
       as: 'source',
-      dependent: :destroy
+      dependent: :destroy,
+      inverse_of: :source
+    accepts_nested_attributes_for :media_relationships, allow_destroy: true
     has_many :inverse_media_relationships,
       class_name: 'MediaRelationship',
       as: 'destination',
-      dependent: :destroy
+      dependent: :destroy,
+      inverse_of: :destination
+    accepts_nested_attributes_for :inverse_media_relationships, allow_destroy: true
 
     delegate :year, to: :start_date, allow_nil: true
     serialize :release_schedule, IceCube::Schedule

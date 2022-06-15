@@ -3,8 +3,8 @@ class Chapter < ApplicationRecord
   include DescriptionSanitation
   include UnitThumbnailUploader::Attachment(:thumbnail)
 
-  belongs_to :manga
-  belongs_to :volume, counter_cache: true, optional: true
+  belongs_to :manga, inverse_of: :chapters
+  belongs_to :volume, counter_cache: true, optional: true, inverse_of: :chapters
 
   validates :number, presence: true
   validates :volume_number, presence: true
@@ -26,4 +26,8 @@ class Chapter < ApplicationRecord
   end
 
   after_commit(on: :create) { feed.setup! }
+
+  def rails_admin_label
+    "V#{volume_number}C#{number} #{canonical_title}"
+  end
 end

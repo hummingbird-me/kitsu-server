@@ -4,8 +4,9 @@ class Episode < ApplicationRecord
   include DescriptionSanitation
   include UnitThumbnailUploader::Attachment(:thumbnail)
 
-  belongs_to :media, polymorphic: true
+  belongs_to :media, polymorphic: true, inverse_of: :episodes
   has_many :videos
+  accepts_nested_attributes_for :videos, allow_destroy: true
 
   validates :media, presence: true, polymorphism: { type: Media }
   validates :number, presence: true
@@ -41,6 +42,10 @@ class Episode < ApplicationRecord
 
   def feed
     EpisodeFeed.new(id)
+  end
+
+  def rails_admin_label
+    "S#{season_number}E#{number} #{canonical_title}"
   end
 
   MediaTotalLengthCallbacks.hook(self)

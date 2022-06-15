@@ -2,6 +2,7 @@ require Rails.root.join('lib/rails_admin/config/fields/types/localized_string')
 require Rails.root.join('lib/rails_admin/config/fields/types/localized_text')
 require Rails.root.join('lib/rails_admin/config/fields/types/string_list')
 require Rails.root.join('lib/rails_admin/config/fields/types/flags')
+require Rails.root.join('lib/rails_admin/config/fields/types/duration')
 
 RailsAdmin.config do |config|
   config.asset_source = :sprockets
@@ -35,6 +36,7 @@ RailsAdmin.config do |config|
   end
 
   # Display canonical_title for label on media
+  config.label_methods.unshift(:rails_admin_label)
   config.label_methods += %i[canonical_title site_name]
 
   # Omitted for security reasons (and Casting is deprecated)
@@ -61,8 +63,21 @@ RailsAdmin.config do |config|
   config.model('Installment') { parent Franchise }
   # Anime
   config.model 'Anime' do
+    scope do
+      Anime.includes(
+        media_relationships: [:destination],
+        inverse_media_relationships: [:source],
+        episodes: { videos: [:streamer], mappings: [] },
+        characters: { character: [], voices: [:person] },
+        staff: [:person],
+        productions: [:company],
+        mappings: [],
+        quotes: [:lines, :user]
+      )
+    end
     navigation_label 'Media'
     list do
+      search_by :rails_admin_search
       field :id
       field :slug
       field :poster_image
@@ -75,41 +90,82 @@ RailsAdmin.config do |config|
       field :start_date
       field :end_date
     end
-    field :id
-    field :titles, :localized_string do
-      default_value <<~TITLES
-        en:
-        en_jp:
-        ja_jp:
-      TITLES
+    group :default do
+      field :id
+      field :titles, :localized_string do
+        default_value <<~TITLES
+          en:
+          en_jp:
+          ja_jp:
+        TITLES
+      end
+      field :canonical_title
+      field :abbreviated_titles, :string_list do
+        label 'Alternative Titles'
+        html_attributes rows: 3, cols: 70
+      end
+      field :description, :localized_text
+      field :origin_countries, :string_list do
+        default_value 'JP'
+        html_attributes rows: 2
+      end
+      field :origin_languages, :string_list do
+        default_value 'ja'
+        html_attributes rows: 2
+      end
+      field :slug, :string
+      field :subtype
+      field :poster_image
+      field :cover_image
+      field :age_rating
+      field :age_rating_guide
     end
-    field :canonical_title
-    field :abbreviated_titles, :string_list do
-      label 'Alternative Titles'
-      html_attributes rows: 3, cols: 70
+    group 'Relationships' do
+      field :media_relationships
+      field :inverse_media_relationships
+      field :installments
     end
-    field :description, :localized_text
-    field :origin_countries, :string_list do
-      default_value 'JP'
-      html_attributes rows: 2
+    group 'External Site Data' do
+      field :mappings
+      field :streaming_links
     end
-    field :origin_languages, :string_list do
-      default_value 'ja'
-      html_attributes rows: 2
+    group 'Episodes' do
+      field :episode_count
+      field :episode_count_guess
+      field :total_length, :duration
+      field :episode_length, :duration
+      field :episodes
     end
-    fields :slug, :subtype, :poster_image, :cover_image,
-      :age_rating, :age_rating_guide, :episode_count, :episode_count_guess
+    group 'Cast and Crew' do
+      field :characters
+      field :staff
+      field :productions
+    end
     include_all_fields
-    exclude_fields :library_entries, :inverse_media_relationships, :favorites,
+    exclude_fields :library_entries, :favorites,
       :producers, :average_rating, :cover_image_top_offset, :release_schedule,
       :posts, :genres, :anime_staff, :anime_castings, :anime_characters,
-      :anime_media_attributes
+      :anime_media_attributes, :media_categories, :reviews, :media_reactions, :franchises,
+      :original_locale
     weight(-20)
   end
   # Manga
   config.model 'Manga' do
     navigation_label 'Media'
+    scope do
+      Manga.includes(
+        media_relationships: [:destination],
+        inverse_media_relationships: [:source],
+        chapters: [],
+        characters: { character: [], voices: [:person] },
+        staff: [:person],
+        productions: [:company],
+        mappings: [],
+        quotes: [:lines, :user]
+      )
+    end
     list do
+      search_by :rails_admin_search
       field :id
       field :slug
       field :poster_image
@@ -144,12 +200,37 @@ RailsAdmin.config do |config|
       default_value 'ja'
       html_attributes rows: 2
     end
-    fields :slug, :subtype, :poster_image, :cover_image,
-      :age_rating, :age_rating_guide, :chapter_count, :chapter_count_guess, :volume_count
+    field :slug
+    field :subtype
+    field :poster_image
+    field :cover_image
+    field :age_rating
+    field :age_rating_guide
+    group 'Relationships' do
+      field :media_relationships
+      field :inverse_media_relationships
+      field :installments
+    end
+    group 'External Site Data' do
+      field :mappings
+    end
+    group 'Chapters' do
+      field :chapter_count
+      field :volume_count
+      field :chapter_count_guess
+      field :volumes
+      field :chapters
+    end
+    group 'Characters and Crew' do
+      field :characters
+      field :staff
+      field :productions
+    end
     include_all_fields
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :average_rating, :cover_image_top_offset, :release_schedule, :posts,
-      :genres, :manga_characters, :manga_staff, :manga_media_attributes
+      :genres, :manga_characters, :manga_staff, :manga_media_attributes, :reviews, :media_reactions,
+      :media_categories, :franchises, :original_locale
     weight(-15)
   end
   config.model 'Chapter' do
@@ -184,6 +265,10 @@ RailsAdmin.config do |config|
     label 'Character Voices'
     navigation_label 'Media'
     parent Character
+    field :media_character
+    field :person
+    field :licensor
+    field :locale
   end
   config.model 'Producer' do
     label 'Production Companies'
@@ -194,6 +279,16 @@ RailsAdmin.config do |config|
   end
   config.model 'Quote' do
     navigation_label 'Media'
+    field :media
+    field :user
+    field :lines
+  end
+  config.model 'QuoteLine' do
+    visible false
+    field :character
+    field :quote
+    field :order
+    field :content
   end
   config.model 'MediaRelationship' do
     navigation_label 'Media'
@@ -284,13 +379,21 @@ RailsAdmin.config do |config|
   config.model('MediaReaction') { navigation_label 'Social' }
   config.model('MediaReactionVote') { parent MediaReaction }
 
-  config.model('StreamingLink') { parent Streamer }
+  config.model('StreamingLink') do
+    navigation_label 'Media'
+    parent Anime
+    fields :id, :media, :streamer, :url
+    field :subs, :string_list
+    field :dubs, :string_list
+    include_all_fields
+  end
 
   config.model('Video') { parent Episode }
 
   config.model 'Mapping' do
     navigation_label 'Media'
     fields :id, :item
+    object_label_method { :external_site }
     field(:external_id) { label 'External ID' }
     field :external_site, :enum do
       enum do
@@ -326,15 +429,9 @@ RailsAdmin.config do |config|
     field :titles, :localized_string
     field :canonical_title
     field :description, :localized_text
-    fields :number, :relative_number, :season_number, :airdate,
-      :length, :thumbnail
+    fields :number, :relative_number, :season_number, :airdate, :thumbnail
+    field :length, :duration
     include_all_fields
-    field :media_id do
-      filterable true
-    end
-    field :media_type do
-      filterable true
-    end
   end
 
   config.model 'Streamer' do
@@ -344,32 +441,31 @@ RailsAdmin.config do |config|
     exclude_fields :videos
   end
 
-  config.model 'StreamingLink' do
-    navigation_label 'Media'
-    parent Anime
-    fields :id, :media, :streamer, :url
-    field(:subs, :serialized) { html_attributes rows: '6', cols: '10' }
-    field(:dubs, :serialized) { html_attributes rows: '6', cols: '10' }
-    include_all_fields
-  end
-
   config.model 'Video' do
     navigation_label 'Media'
     parent Episode
     fields :id, :url
-    field(:available_regions, :serialized) { html_attributes rows: '6', cols: '10' }
+    field :regions, :string_list
     field(:embed_data, :serialized) { html_attributes rows: '6', cols: '70' }
-    fields :episode, :streamer, :sub_lang, :dub_lang
+    fields :episode, :streamer
+    field :subs, :string_list
+    field :dubs, :string_list
     include_all_fields
   end
 
   config.model 'Character' do
     navigation_label 'Media'
+    list do
+      search_by :rails_admin_search
+    end
     field :id
     field :names, :localized_string
+    field :canonical_name
     field :other_names, :string_list
     field :description, :localized_text
-    fields :image, :slug, :canonical_name
+    field :primary_media
+    field :media_characters
+    fields :image, :slug
     include_all_fields
   end
 
@@ -383,5 +479,32 @@ RailsAdmin.config do |config|
       fields :id, :slug, :title, :nsfw, :parent, :children
     end
     fields :id, :slug, :title, :description, :nsfw, :parent, :children
+  end
+
+  config.model 'MediaStaff' do
+    visible false
+    field :person
+    field :role
+  end
+
+  config.model 'MediaCharacter' do
+    visible false
+    field :character
+    field :media
+    field :voices
+    field :role, :enum
+  end
+
+  config.model 'MediaProduction' do
+    visible false
+    field :company
+    field :role, :enum
+  end
+
+  config.model 'MediaRelationship' do
+    visible false
+    field :source
+    field :destination
+    field :role, :enum
   end
 end

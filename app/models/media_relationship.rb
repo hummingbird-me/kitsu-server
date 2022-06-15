@@ -14,9 +14,13 @@ class MediaRelationship < ApplicationRecord
     other: 11
   }
 
-  belongs_to :source, polymorphic: true
-  belongs_to :destination, polymorphic: true
+  belongs_to :source, polymorphic: true, inverse_of: :media_relationships
+  belongs_to :destination, polymorphic: true, inverse_of: :inverse_media_relationships
 
   validates :source, polymorphism: { type: Media }
   validates :destination, polymorphism: { type: Media }
+
+  def rails_admin_label
+    "#{source.canonical_title} -(#{role})-> #{destination.canonical_title}"
+  end
 end

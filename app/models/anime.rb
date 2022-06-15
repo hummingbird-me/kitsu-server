@@ -6,13 +6,14 @@ class Anime < ApplicationRecord
   include Episodic
 
   enum subtype: %i[TV special OVA ONA movie music]
-  has_many :streaming_links, as: 'media', dependent: :destroy
+  has_many :streaming_links, as: 'media', dependent: :destroy, inverse_of: :media
   has_many :producers, through: :anime_productions
   has_many :anime_productions, dependent: :destroy
   has_many :anime_characters, dependent: :destroy
   has_many :anime_staff, dependent: :destroy
   has_many :anime_media_attributes
   has_many :media_attributes, through: :anime_media_attributes
+  accepts_nested_attributes_for :streaming_links
   alias_attribute :show_type, :subtype
 
   rails_admin { fields :episode_count }
@@ -78,6 +79,10 @@ class Anime < ApplicationRecord
       max_expansions: 15,
       prefix_length: 2
     }).preload.first
+  end
+
+  def self.rails_admin_search(keyword)
+    where(id: AlgoliaMediaIndex.search(keyword, filters: 'kind:anime').map(&:id))
   end
 
   before_save do

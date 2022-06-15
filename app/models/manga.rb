@@ -8,7 +8,9 @@ class Manga < ApplicationRecord
 
   rails_admin { fields :chapter_count, :volume_count }
 
-  has_many :chapters
+  has_many :volumes, dependent: :destroy, inverse_of: :manga
+  has_many :chapters, dependent: :destroy, inverse_of: :manga
+  accepts_nested_attributes_for :chapters, allow_destroy: true
   has_many :manga_characters, dependent: :destroy
   has_many :manga_staff, dependent: :destroy
   has_many :manga_media_attributes
@@ -40,6 +42,10 @@ class Manga < ApplicationRecord
 
   def self.unit_class
     Chapter
+  end
+
+  def self.rails_admin_search(keyword)
+    where(id: AlgoliaMediaIndex.search(keyword, filters: 'kind:manga').map(&:id))
   end
 
   before_save do
