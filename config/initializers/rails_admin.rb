@@ -467,6 +467,7 @@ RailsAdmin.config do |config|
     field :media_characters
     fields :image, :slug
     include_all_fields
+    exclude_fields :mal_id
   end
 
   config.model 'Genre' do
