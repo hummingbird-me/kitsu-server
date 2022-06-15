@@ -5,7 +5,7 @@ module Streamable
     belongs_to :streamer, optional: false
 
     validates :streamer, presence: true
-    validates :subs, :dubs, presence: true
+    validates :dubs, presence: true
     validates :regions, length: { minimum: 1 }
 
     scope :dubbed, ->(langs) { where('dubs @> ARRAY[?]::varchar[]', langs) }
