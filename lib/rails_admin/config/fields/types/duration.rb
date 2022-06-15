@@ -32,13 +32,14 @@ module RailsAdmin
             return if value.blank?
 
             # Split between the a-z and 0-9 characters using lookaheads+behinds
-            part_values = value.split(/(?<=[a-z])(?=\d)/i).map { |part|
+            value.split(/(?<=[a-z])(?=\d)/i).sum do |part|
               # Split between the 0-9 and a-z characters using lookaheads+behinds
               number, unit = part.split(/(?<=\d)(?=[a-z])/i)
               # Look up the first letter of the unit string (d/h/m/s) to get the unit method
-              unit = STR_TO_UNITS[unit[0]]
-              number.try(unit)&.to_i || 0
-            }.sum
+              unit = unit ? STR_TO_UNITS[unit[0]] : :seconds
+              # Convert to seconds
+              number.to_i.try(unit)&.to_i || 0
+            end
           end
 
           def parse_input(params)
