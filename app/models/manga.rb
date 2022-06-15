@@ -10,7 +10,6 @@ class Manga < ApplicationRecord
 
   has_many :volumes, dependent: :destroy, inverse_of: :manga
   has_many :chapters, dependent: :destroy, inverse_of: :manga
-  accepts_nested_attributes_for :chapters, allow_destroy: true
   has_many :manga_characters, dependent: :destroy
   has_many :manga_staff, dependent: :destroy
   has_many :manga_media_attributes
