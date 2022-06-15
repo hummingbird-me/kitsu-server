@@ -9,7 +9,7 @@ class Character < ApplicationRecord
   validates :canonical_name, presence: true
   validates :primary_media, polymorphism: { type: Media }, allow_blank: true
 
-  belongs_to :primary_media, polymorphic: true, optional: true
+  belongs_to :primary_media, polymorphic: true, optional: true, inverse_of: :primary_characters
   has_many :castings
   has_many :media_characters, dependent: :destroy, inverse_of: :character
   accepts_nested_attributes_for :media_characters

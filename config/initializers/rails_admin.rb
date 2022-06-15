@@ -146,7 +146,7 @@ RailsAdmin.config do |config|
       :producers, :average_rating, :cover_image_top_offset, :release_schedule,
       :posts, :genres, :anime_staff, :anime_castings, :anime_characters,
       :anime_media_attributes, :media_categories, :reviews, :media_reactions, :franchises,
-      :original_locale
+      :original_locale, :primary_characters
     weight(-20)
   end
   # Manga
@@ -230,7 +230,7 @@ RailsAdmin.config do |config|
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :average_rating, :cover_image_top_offset, :release_schedule, :posts,
       :genres, :manga_characters, :manga_staff, :manga_media_attributes, :reviews, :media_reactions,
-      :media_categories, :franchises, :original_locale
+      :media_categories, :franchises, :original_locale, :primary_characters
     weight(-15)
   end
   config.model 'Chapter' do

@@ -32,6 +32,11 @@ module Media
     accepts_nested_attributes_for :quotes, allow_destroy: true
     # Cast Info
     has_many :castings, as: 'media'
+    has_many :primary_characters,
+      class_name: 'Character',
+      as: 'primary_media',
+      dependent: :nullify,
+      inverse_of: :primary_media
     has_many :characters,
       class_name: 'MediaCharacter',
       as: 'media',
@@ -44,7 +49,10 @@ module Media
       dependent: :destroy,
       inverse_of: :media
     accepts_nested_attributes_for :staff, allow_destroy: true
-    has_many :productions, class_name: 'MediaProduction', as: 'media', dependent: :destroy,
+    has_many :productions,
+      class_name: 'MediaProduction',
+      as: 'media',
+      dependent: :destroy,
       inverse_of: :media
     accepts_nested_attributes_for :productions, allow_destroy: true
     # Franchise Info
