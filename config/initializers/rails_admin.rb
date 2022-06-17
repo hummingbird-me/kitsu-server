@@ -120,6 +120,13 @@ RailsAdmin.config do |config|
       field :age_rating
       field :age_rating_guide
     end
+    group 'Episodes' do
+      field :episode_count
+      field :episode_count_guess
+      field :total_length, :duration
+      field :episode_length, :duration
+      field :episodes
+    end
     group 'Relationships' do
       field :media_relationships
       field :inverse_media_relationships
@@ -128,13 +135,6 @@ RailsAdmin.config do |config|
     group 'External Site Data' do
       field :mappings
       field :streaming_links
-    end
-    group 'Episodes' do
-      field :episode_count
-      field :episode_count_guess
-      field :total_length, :duration
-      field :episode_length, :duration
-      field :episodes
     end
     group 'Cast and Crew' do
       field :characters
@@ -206,6 +206,13 @@ RailsAdmin.config do |config|
     field :cover_image
     field :age_rating
     field :age_rating_guide
+    group 'Chapters' do
+      field :chapter_count
+      field :volume_count
+      field :chapter_count_guess
+      field :volumes
+      field :chapters
+    end
     group 'Relationships' do
       field :media_relationships
       field :inverse_media_relationships
@@ -213,13 +220,6 @@ RailsAdmin.config do |config|
     end
     group 'External Site Data' do
       field :mappings
-    end
-    group 'Chapters' do
-      field :chapter_count
-      field :volume_count
-      field :chapter_count_guess
-      field :volumes
-      field :chapters
     end
     group 'Characters and Crew' do
       field :characters
