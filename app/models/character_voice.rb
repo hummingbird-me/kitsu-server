@@ -1,7 +1,7 @@
 class CharacterVoice < ApplicationRecord
-  belongs_to :media_character
-  belongs_to :person
-  belongs_to :licensor, class_name: 'Producer'
+  belongs_to :media_character, inverse_of: :voices
+  belongs_to :person, inverse_of: :voices
+  belongs_to :licensor, class_name: 'Producer', optional: true
 
   validates :locale, presence: true
 
