@@ -20,6 +20,10 @@ module RailsAdmin
             default_value if bindings[:object].new_record?
           end
 
+          def length
+            nil
+          end
+
           def formatted_value
             return nil if value.blank?
 
