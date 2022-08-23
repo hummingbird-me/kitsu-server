@@ -14,7 +14,7 @@ class Types::Profile < Types::BaseObject
     description: 'A fully qualified URL to the profile'
 
   def url
-    "https://kitsu/users/#{object.slug || object.id}"
+    "https://kitsu.io/users/#{object.slug || object.id}"
   end
 
   field :name, String,
