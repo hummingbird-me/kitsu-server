@@ -10,7 +10,10 @@ class Types::SiteLink < Types::BaseObject
     description: 'The actual linked website.'
 
   def site
-    Loaders::RecordLoader.for(::ProfileLinkSite, token: context[:token]).load(object.profile_link_site_id)
+    Loaders::RecordLoader.for(
+      ::ProfileLinkSite,
+      token: context[:token]
+    ).load(object.profile_link_site_id)
   end
 
   field :url, String,

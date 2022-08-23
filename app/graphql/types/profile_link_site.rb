@@ -1,6 +1,6 @@
 class Types::ProfileLinkSite < Types::BaseObject
   implements Types::Interface::WithTimestamps
-  
+
   field :id, ID, null: false
 
   field :name, String,
