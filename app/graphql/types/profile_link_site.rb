@@ -1,0 +1,15 @@
+class Types::ProfileLinkSite < Types::BaseObject
+  implements Types::Interface::WithTimestamps
+  
+  field :id, ID, null: false
+
+  field :name, String,
+    null: false,
+    description: 'Name of the external profile website.'
+
+  field :validate_find, String,
+    description: 'Regex pattern used to validate the profile link.'
+
+  field :validate_replace, String,
+    description: 'Pattern to be replaced after validation.'
+end
