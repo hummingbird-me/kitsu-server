@@ -1,6 +1,8 @@
 class Types::ProfileLinkSite < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
+  description 'An external site that can be linked to a user.'
+
   field :id, ID, null: false
 
   field :name, String,
