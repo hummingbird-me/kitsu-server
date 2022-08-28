@@ -17,7 +17,7 @@ class Types::Chapter < Types::BaseObject
     null: false,
     description: 'The manga this chapter is in.'
 
-    field :length, Int,
+  field :length, Int,
     null: true,
     description: 'Number of pages in chapter.'
 end
