@@ -1,0 +1,7 @@
+class Types::Input::Account::UpdateProfile < Types::Input::Base
+  argument :about, String, required: false
+  argument :waifu_or_husbando, Types::Enum::WaifuOrHusbando, required: false
+  argument :waifu_id, ID, required: false
+  argument :gender, String, required: false
+  argument :birthday, Types::Date, required: false
+end
