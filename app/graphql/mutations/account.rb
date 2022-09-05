@@ -10,8 +10,4 @@ class Mutations::Account < Mutations::Namespace
   field :update_account,
     mutation: Mutations::Account::UpdateAccount,
     description: 'Update the account of the current user.'
-
-  field :update_profile,
-    mutation: Mutations::Account::UpdateProfile,
-    description: 'Update the profile of the current user.'
 end

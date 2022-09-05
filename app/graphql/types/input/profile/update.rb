@@ -1,4 +1,4 @@
-class Types::Input::Account::UpdateProfile < Types::Input::Base
+class Types::Input::Profile::Update < Types::Input::Base
   argument :id, ID, required: false
   argument :about, String, required: false
   argument :waifu_or_husbando, Types::Enum::WaifuOrHusbando, required: false

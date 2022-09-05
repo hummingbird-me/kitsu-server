@@ -1,10 +1,10 @@
-class Mutations::Account::UpdateProfile < Mutations::Base
+class Mutations::Profile::Update < Mutations::Base
   prepend RescueValidationErrors
 
   description 'Update profile'
 
   argument :input,
-    Types::Input::Account::UpdateProfile,
+    Types::Input::Profile::Update,
     required: true,
     description: 'Update profile',
     as: :profile
@@ -32,7 +32,7 @@ class Mutations::Account::UpdateProfile < Mutations::Base
     if current_user.admin? || profile.id == current_user.id
       return true
     end
-    raise GraphQL::ExecutionError, 'You must be a moderator to edit someone else profile.'
+    raise GraphQL::ExecutionError, 'You must be authorized to edit someone else profile.'
   end
 
   def resolve(profile:)

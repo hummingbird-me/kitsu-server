@@ -9,6 +9,7 @@ class Types::MutationType < Types::BaseObject
   fancy_mutation Mutations::Account::Create
   field :pro, Mutations::Pro, null: false
   field :account, Mutations::Account, null: false
+  field :profile, Mutations::Profile, null: false
   field :anime, Mutations::Anime, null: false
   field :episode, Mutations::Episode, null: false
   field :library_entry, Mutations::LibraryEntry, null: false
