@@ -1,9 +1,15 @@
 class ReportPolicy < ApplicationPolicy
   administrated_by :community_mod
 
-  alias_method :create?, :is_owner?
+  def create?
+    return false unless user
+    return false if user.has_role?(:banned)
+    is_owner?
+  end
 
   def update?
+    return false unless user
+    return false if user.has_role?(:banned)
     is_owner? || can_administrate?
   end
 
