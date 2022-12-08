@@ -124,6 +124,9 @@ GEM
     apollo_upload_server (2.1.0)
       actionpack (>= 4.2)
       graphql (>= 1.8)
+    apple_auth (1.0.0)
+      jwt (~> 2.2)
+      oauth2 (~> 1.4)
     ast (2.4.2)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
@@ -764,6 +767,7 @@ DEPENDENCIES
   algoliasearch-rails
   ancestry
   apollo_upload_server
+  apple_auth
   attr_encrypted (~> 3.1.0)
   aws-sdk-s3 (~> 1)
   bcrypt

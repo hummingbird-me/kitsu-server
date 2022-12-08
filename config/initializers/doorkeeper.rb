@@ -1,4 +1,5 @@
 require 'authorization/assertion/facebook'
+require 'authorization/assertion/apple'
 require 'authorization/password'
 
 Doorkeeper.configure do
@@ -21,6 +22,8 @@ Doorkeeper.configure do
     case params[:provider]
     when 'facebook'
       Authorization::Assertion::Facebook.new(params[:assertion]).user!
+    when 'apple'
+      Authorization::Assertion::Apple.new(params[:assertion]).user!
     end
   end
   # Restrict access to the web interface for adding oauth applications

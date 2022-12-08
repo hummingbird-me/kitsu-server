@@ -26,6 +26,7 @@ gem 'jwt' # Used for Nolt SSO
 gem 'pundit'
 gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
 gem 'rolify'
+gem 'apple_auth'
 
 # Attachments
 gem 'apollo_upload_server'
