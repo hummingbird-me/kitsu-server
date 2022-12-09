@@ -17,7 +17,7 @@ module Authorization
       end
 
       def email
-        data.[:email]
+        data[:email]
       end
 
       def apple_id
