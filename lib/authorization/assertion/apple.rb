@@ -1,7 +1,7 @@
 module Authorization
   module Assertion
     class Apple
-      
+
       def initialize(jwt)
         @jwt = jwt
       end
