@@ -9,6 +9,14 @@ class Types::QueryType < GraphQL::Schema::Object
     User.current
   end
 
+  field :current_profile, Types::Profile, null: true do
+    description 'Kitsu account details. You must supply an Authorization token in header.'
+  end
+
+  def current_profile
+    User.current
+  end
+
   field :anime, Types::Anime.connection_type, null: false do
     description 'All Anime in the Kitsu database'
   end
