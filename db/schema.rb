@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_13_043858) do
+ActiveRecord::Schema.define(version: 2022_12_04_041942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2022_06_13_043858) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
-    t.index ["age_rating"], name: "index_anime_on_age_rating"
+    t.index ["age_rating"], name: "index_anime_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["average_rating"], name: "anime_average_rating_idx"
     t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: :desc
     t.index ["slug"], name: "index_anime_on_slug", unique: true
@@ -389,6 +389,7 @@ ActiveRecord::Schema.define(version: 2022_06_13_043858) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
+    t.index ["age_rating"], name: "index_dramas_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["slug"], name: "index_dramas_on_slug"
   end
 
@@ -718,8 +719,11 @@ ActiveRecord::Schema.define(version: 2022_06_13_043858) do
     t.datetime "progressed_at"
     t.integer "media_reaction_id"
     t.integer "reaction_skipped", default: 0, null: false
+    t.index ["anime_id", "id"], name: "index_library_entries_on_anime_id_and_id", where: "(anime_id IS NOT NULL)", comment: "Prevent pkey scans on small limits"
     t.index ["anime_id"], name: "index_library_entries_on_anime_id"
     t.index ["anime_id"], name: "index_library_entries_on_anime_id_partial", where: "(anime_id IS NOT NULL)"
+    t.index ["drama_id", "id"], name: "index_library_entries_on_drama_id_and_id", where: "(drama_id IS NOT NULL)", comment: "Prevent pkey scans on small limits"
+    t.index ["manga_id", "id"], name: "index_library_entries_on_manga_id_and_id", where: "(manga_id IS NOT NULL)", comment: "Prevent pkey scans on small limits"
     t.index ["manga_id"], name: "index_library_entries_on_manga_id"
     t.index ["manga_id"], name: "index_library_entries_on_manga_id_partial", where: "(manga_id IS NOT NULL)"
     t.index ["user_id", "anime_id"], name: "library_entries_user_id_anime_id_idx"
@@ -830,6 +834,7 @@ ActiveRecord::Schema.define(version: 2022_06_13_043858) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
+    t.index ["age_rating"], name: "index_manga_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["average_rating"], name: "manga_average_rating_idx"
     t.index ["slug"], name: "index_manga_on_slug"
     t.index ["user_count"], name: "manga_user_count_idx"
@@ -1559,6 +1564,7 @@ ActiveRecord::Schema.define(version: 2022_06_13_043858) do
     t.jsonb "cover_image_data"
     t.integer "sfw_filter_preference", default: 0, null: false
     t.index "lower((email)::text)", name: "users_lower_idx"
+    t.index "lower((name)::text), id", name: "index_users_on_lower_name_and_id", comment: "Unknown who is querying this, but it is painfully slow without this index"
     t.index ["ao_id"], name: "index_users_on_ao_id", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["facebook_id"], name: "index_users_on_facebook_id", unique: true

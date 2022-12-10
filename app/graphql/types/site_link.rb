@@ -5,6 +5,17 @@ class Types::SiteLink < Types::BaseObject
 
   field :id, ID, null: false
 
+  field :site, Types::ProfileLinkSite,
+    null: false,
+    description: 'The actual linked website.'
+
+  def site
+    Loaders::RecordLoader.for(
+      ::ProfileLinkSite,
+      token: context[:token]
+    ).load(object.profile_link_site_id)
+  end
+
   field :url, String,
     null: false,
     description: 'A fully qualified URL of the user profile on an external site.'
