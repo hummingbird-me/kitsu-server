@@ -6,7 +6,7 @@ class Mutations::ProfileLink::Delete < Mutations::Base
 		description: 'Remove a profile link',
 		as: :profile_link
 	
-	field :site_link, Types::SiteLink, null: true
+	field :site_link, Types::GenericDelete, null: true
 
 	def load_profile_link(value)
 		ProfileLink.find(value.id)
