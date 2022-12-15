@@ -12,26 +12,20 @@ class Mutations::Profile::Update < Mutations::Base
   field :profile, Types::Profile, null: true
 
   def ready?(profile:)
-    if current_token.blank?
-      raise GraphQL::ExecutionError, 'You must be authorized.'
-    end
+    raise GraphQL::ExecutionError, 'You must be authorized.' if current_token.blank?
     true
   end
 
   def load_profile(value)
     userid = value.id
-    if userid.nil?
-      userid = current_user.id
-    end
+    userid = current_user.id if userid.nil?
     profile = ::User.find(userid)
     profile.assign_attributes(value.to_h)
     profile
   end
 
   def authorized?(profile:)
-    if current_user.admin? || profile.id == current_user.id
-      return true
-    end
+    return true if current_user.admin? || profile.id == current_user.id
     raise GraphQL::ExecutionError, 'You must be authorized to edit someone else profile.'
   end
 

@@ -452,5 +452,4 @@ class Types::QueryType < GraphQL::Schema::Object
   def blocks
     BlockPolicy::Scope.new(context[:token], ::Block).resolve.order(created_at: :desc)
   end
-
 end

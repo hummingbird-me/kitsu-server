@@ -1,11 +1,12 @@
 class Mutations::Block::Delete < Mutations::Base
+  prepend RescueValidationErrors
 
   argument :input,
     Types::Input::GenericDelete,
     required: true,
     description: 'Remove a block entry.',
     as: :block
-  
+
   field :block, Types::GenericDelete, null: true
 
   def load_block(value)
@@ -15,11 +16,11 @@ class Mutations::Block::Delete < Mutations::Base
   def authorized?(block:)
     return true if BlockPolicy.new(context[:token], block).destroy?
 
-  [false, {
-    errors: [
-      { message: 'Not Authorized', code: 'NotAuthorized' }
-    ]
-  }]
+    [false, {
+      errors: [
+        { message: 'Not Authorized', code: 'NotAuthorized' }
+      ]
+    }]
   end
 
   def resolve(block:)
