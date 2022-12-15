@@ -9,7 +9,7 @@ class Types::Block < Types::BaseObject
     null: false,
     description: 'User who blocked.',
     method: :user
-  
+
   field :blocked_user, Types::Profile,
     null: false,
     description: 'User who got blocked.'
