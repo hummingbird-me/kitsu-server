@@ -15,9 +15,8 @@ class Mutations::Account::Update < Mutations::Base
   def ready?(profile:)
     if current_token.blank?
       raise GraphQL::ExecutionError, 'You must be authorized to edit account settings.'
-    else
-      true
     end
+    true
   end
 
   def load_profile(value)
@@ -29,6 +28,6 @@ class Mutations::Account::Update < Mutations::Base
   def resolve(profile:)
     profile.save!
 
-    { profile: profile , account: profile }
+    { profile: profile, account: profile }
   end
 end
