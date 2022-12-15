@@ -12,7 +12,7 @@ class Mutations::Account::UpdateAccount < Mutations::Base
   field :account, Types::Account, null: true
 
   def load_account(value)
-    if current_token&.blank?
+    if current_token.blank?
       raise GraphQL::ExecutionError, 'You must be authorized to edit account settings.'
     end
     account = ::User.find(current_user.id)
