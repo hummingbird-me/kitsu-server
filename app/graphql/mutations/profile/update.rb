@@ -12,7 +12,7 @@ class Mutations::Profile::Update < Mutations::Base
   field :profile, Types::Profile, null: true
 
   def ready?(profile:)
-    if current_token.blank?
+    if current_token&.blank?
       raise GraphQL::ExecutionError, 'You must be authorized.'
     end
     true
