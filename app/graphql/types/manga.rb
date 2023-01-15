@@ -18,6 +18,10 @@ class Types::Manga < Types::BaseObject
     null: true,
     description: 'The number of volumes in this manga.'
 
+  field :serialization, String,
+    null: true,
+    description: "The serialization of this manga."
+
   field :chapters, Types::Chapter.connection_type, null: true do
     description 'The chapters in the manga.'
     argument :sort, Loaders::CharacterVoicesLoader.sort_argument, required: false
