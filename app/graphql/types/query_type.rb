@@ -330,8 +330,6 @@ class Types::QueryType < GraphQL::Schema::Object
     Loaders::RecordLoader.for(::LibraryEntry, token: context[:token]).load(id)
   end
 
-  # find_library_entry_by_media(media_id:, media_type:)
-
   field :library_entries_by_media_type, Types::LibraryEntry.connection_type, null: true do
     description 'List of Library Entries by MediaType'
     argument :media_type, Types::Enum::MediaType, required: true
