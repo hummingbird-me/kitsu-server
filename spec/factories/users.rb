@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    name { Faker::Internet.user_name(nil, ['_'])[0..15] + rand(1000).to_s }
+    name { Faker::Name.name[0..19] }
     email { Faker::Internet.email }
     password { Faker::Internet.password }
 
