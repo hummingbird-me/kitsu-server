@@ -143,6 +143,19 @@ class Types::QueryType < GraphQL::Schema::Object
     end
   end
 
+  field :find_media_by_id_and_type, Types::Interface::Media, null: true do
+    description 'Find a single Media by ID and Type'
+    argument :id, ID, required: true
+    argument :media_type, Types::Enum::MediaType, required: true
+  end
+
+  def find_media_by_id_and_type(id:, media_type:)
+    case media_type
+    when 'anime' then find_anime_by_id(id: id)
+    when 'manga' then find_manga_by_id(id: id)
+    end
+  end
+
   field :random_media, Types::Interface::Media, null: false do
     description 'Random anime or manga'
     argument :media_type, Types::Enum::MediaType, required: true
