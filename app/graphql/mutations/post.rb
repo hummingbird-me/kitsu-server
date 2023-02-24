@@ -6,4 +6,8 @@ class Mutations::Post < Mutations::Namespace
   field :unlock,
     mutation: Mutations::Post::Unlock,
     description: 'Unlock a Post.'
+
+  field :create,
+    mutation: Mutations::Post::Create,
+    description: 'Create a Post.'
 end
