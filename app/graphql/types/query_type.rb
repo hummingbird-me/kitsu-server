@@ -146,7 +146,9 @@ class Types::QueryType < GraphQL::Schema::Object
   field :find_media_by_id_and_type, Types::Interface::Media, null: true do
     description 'Find a single Media by ID and Type'
     argument :id, ID, required: true
-    argument :media_type, Types::Enum::MediaType, required: true
+    argument :media_type, Types::Enum::MediaType,
+      required: true,
+      prepare: ->(media_type, _) { media_type.downcase }
   end
 
   def find_media_by_id_and_type(id:, media_type:)
