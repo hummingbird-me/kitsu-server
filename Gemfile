@@ -19,6 +19,7 @@ gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'scenic'
 
 # Auth{entication,orization}
+gem 'apple_auth'
 gem 'bcrypt'
 gem 'doorkeeper', '~> 5.4.0'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
