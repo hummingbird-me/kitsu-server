@@ -165,7 +165,8 @@ group :test do
   gem 'json_expressions' # Test outputted JSON
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
-  gem 'stripe-ruby-mock', require: 'stripe_mock' # Mock Stripe API
+  gem 'stripe-ruby-mock', github: "stripe-ruby-mock/stripe-ruby-mock",
+                          require: 'stripe_mock' # Mock Stripe API
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
 
