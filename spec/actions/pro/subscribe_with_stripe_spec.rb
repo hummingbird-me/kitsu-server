@@ -4,44 +4,45 @@ RSpec.describe Pro::SubscribeWithStripe do
   let(:user) { create(:user) }
   let(:stripe_mock) { StripeMock.create_test_helper }
   let(:token) { stripe_mock.generate_card_token }
+  let!(:product) { stripe_mock.create_product(name: 'Pro Yearly') }
 
-  before { stripe_mock.create_plan(id: 'pro-yearly') }
+  before { stripe_mock.create_plan(id: 'pro-yearly', product: product.id) }
 
-  it 'should change the default payment method for the user' do
+  it 'changes the default payment method for the user' do
     expect {
-      Pro::SubscribeWithStripe.call(user: user, tier: 'pro', token: token)
+      described_class.call(user: user, tier: 'pro', token: token)
     }.to(change { user.stripe_customer.default_source })
   end
 
-  it 'should create a StripeSubscription object' do
+  it 'creates a StripeSubscription object' do
     expect {
-      Pro::SubscribeWithStripe.call(user: user, tier: 'pro', token: token)
-    }.to(change { user.pro_subscription })
+      described_class.call(user: user, tier: 'pro', token: token)
+    }.to change(user, :pro_subscription)
   end
 
-  it 'should return the subscription instance as `subscription`' do
-    result = Pro::SubscribeWithStripe.call(user: user, tier: 'pro', token: token)
+  it 'returns the subscription instance as `subscription`' do
+    result = described_class.call(user: user, tier: 'pro', token: token)
     expect(result.subscription).to be_a(ProSubscription::StripeSubscription)
   end
 
   context 'with an invalid subscription tier' do
-    it 'should raise a ValidationError' do
+    it 'raises a ValidationError' do
       expect {
-        Pro::SubscribeWithStripe.call(user: user, tier: 'godly', token: token)
+        described_class.call(user: user, tier: 'godly', token: token)
       }.to raise_error(Action::ValidationError)
     end
   end
 
-  context 'attempting to subscribe with an Aozora pro tier' do
-    it 'should raise a ValidationError' do
+  context 'when attempting to subscribe with an Aozora pro tier' do
+    it 'raises a ValidationError' do
       expect {
-        Pro::SubscribeWithStripe.call(user: user, tier: 'ao_pro', token: token)
+        described_class.call(user: user, tier: 'ao_pro', token: token)
       }.to raise_error(Action::ValidationError)
     end
   end
 
   context 'with an invalid stripe token' do
-    it 'should raise a Stripe::CardError' do
+    it 'raises a Stripe::CardError' do
       StripeMock.prepare_card_error(:invalid_number, :update_customer)
       expect {
         Billing::UpdateStripeSource.call(user: user, token: stripe_mock.generate_card_token)
