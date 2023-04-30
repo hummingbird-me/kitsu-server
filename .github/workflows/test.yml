@@ -30,7 +30,7 @@ jobs:
     steps:
       - id: check
         run: |
-          echo "::set-output name=SECRETS_AVAILABLE::${{ env.SECRETS_AVAILABLE == 'yes' }}"
+          echo "name=SECRETS_AVAILABLE::${{ env.SECRETS_AVAILABLE == 'yes' }}" >> $GITHUB_OUTPUT
         env:
           SECRETS_AVAILABLE: ${{ secrets.AVAILABLE }}
 
