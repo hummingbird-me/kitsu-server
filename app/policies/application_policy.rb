@@ -93,6 +93,13 @@ class ApplicationPolicy
     true
   end
 
+  # Check whether there's a block between two users (in either direction)
+  #
+  # @return [Boolean] Whether there's a block between the two users
+  def is_blocked?(user_a, user_b) # rubocop:disable Style/PredicateName
+    Block.between(user_a, user_b).exists?
+  end
+
   # Check if the user has an administrative permission
   #
   # @return [Boolean] whether the user has that permission
