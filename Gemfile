@@ -9,7 +9,7 @@ gem 'i18n', '1.8.11'
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
 gem 'algoliasearch-rails' # Future Search
-gem 'attr_encrypted', '~>3.1.0' # encrypt linked_profile tokens
+gem 'attr_encrypted' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis

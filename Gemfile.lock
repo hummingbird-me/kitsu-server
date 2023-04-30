@@ -134,7 +134,7 @@ GEM
       actionpack (>= 4.2)
       graphql (>= 1.8)
     ast (2.4.2)
-    attr_encrypted (3.1.0)
+    attr_encrypted (4.0.0)
       encryptor (~> 3.0.0)
     aws-eventstream (1.2.0)
     aws-partitions (1.586.0)
@@ -782,7 +782,7 @@ DEPENDENCIES
   algoliasearch-rails
   ancestry
   apollo_upload_server
-  attr_encrypted (~> 3.1.0)
+  attr_encrypted
   aws-sdk-s3 (~> 1)
   bcrypt
   benchmark-ips
