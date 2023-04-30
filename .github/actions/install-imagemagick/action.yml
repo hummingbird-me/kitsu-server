@@ -8,7 +8,7 @@ runs:
   using: "composite"
   steps:
       - name: Restore Cached ImageMagick ${{ inputs.version }}
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-imagemagick
         with:
           path: .imagemagick-deb/
