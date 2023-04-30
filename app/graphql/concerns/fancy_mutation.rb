@@ -39,10 +39,10 @@ module FancyMutation
     # the return value is the errors list, we ignore it, so that we won't accidentally try to treat
     # it as the result type.
     # @param ignore_warnings [Boolean] Whether to ignore warnings or not
-    def resolve(ignore_warnings: false, **args)
+    def resolve(ignore_warnings: false, **kwargs)
       # Wrap the mutation in a transaction to allow for rollback if there are warnings
       ApplicationRecord.transaction(requires_new: true) do
-        result = super(**args)
+        result = super(**kwargs)
 
         # Trigger a rollback but allow us to catch it afterwards and control our response format.
         raise WarningsPresent if warnings.present? && !ignore_warnings
@@ -65,16 +65,16 @@ module FancyMutation
     # using the same error system as in #resolve. To achieve this, we prepend a module wrapping the
     # mutation's #ready? and #authorized? methods, detecting the state of the error object after
     # execution and changing the result if needed.
-    def ready?(*)
-      ready, result = super
+    def ready?(...)
+      ready, result = super(...)
 
       return [false, { errors: errors }] if errors.present?
 
       [ready, result]
     end
 
-    def authorized?(*)
-      ready, result = super
+    def authorized?(...)
+      ready, result = super(...)
 
       return [false, { errors: errors }] if errors.present?
 

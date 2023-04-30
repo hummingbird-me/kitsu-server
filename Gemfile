@@ -9,7 +9,7 @@ gem 'i18n', '1.8.11'
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
 gem 'algoliasearch-rails' # Future Search
-gem 'attr_encrypted', '~>3.1.0' # encrypt linked_profile tokens
+gem 'attr_encrypted' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
@@ -20,7 +20,7 @@ gem 'scenic'
 
 # Auth{entication,orization}
 gem 'bcrypt'
-gem 'doorkeeper', '~> 5.4.0'
+gem 'doorkeeper', '~> 5.5.0'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'jwt' # Used for Nolt SSO
 gem 'pundit'
@@ -165,7 +165,8 @@ group :test do
   gem 'json_expressions' # Test outputted JSON
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
-  gem 'stripe-ruby-mock', require: 'stripe_mock' # Mock Stripe API
+  gem 'stripe-ruby-mock', github: "stripe-ruby-mock/stripe-ruby-mock",
+                          require: 'stripe_mock' # Mock Stripe API
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
 
