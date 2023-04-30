@@ -13,6 +13,7 @@ Doorkeeper.configure do
     User.find(doorkeeper_token[:resource_owner_id]) || error!
   end
   # Authenticate in Resource Owner Password flow
+  skip_client_authentication_for_password_grant true
   resource_owner_from_credentials do
     Authorization::Password.new(params[:username], params[:password]).user!
   end
