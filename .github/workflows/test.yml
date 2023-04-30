@@ -45,8 +45,6 @@ jobs:
           - ruby-2.7
         experimental: [false]
         include:
-          - ruby: truffleruby-22
-            experimental: true
           - ruby: ruby-3.0
             experimental: true
           - ruby: ruby-3.1
