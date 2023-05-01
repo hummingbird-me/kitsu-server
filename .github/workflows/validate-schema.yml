@@ -22,7 +22,7 @@ jobs:
           workflow: "Kitsu Test Suite"
           workflow_conclusion: success
           run_id: ${{github.event.workflow_run.id}}
-          name: graphql-schema-ruby-2.7
+          name: graphql-schema-ruby-3.0
 
       - name: Display structure of downloaded files
         run: ls -R
