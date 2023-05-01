@@ -557,6 +557,8 @@ GEM
       puma (>= 2.7)
     pundit (2.2.0)
       activesupport (>= 3.0.0)
+    pundit-matchers (2.1.0)
+      rspec-rails (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.2)
     rack (2.2.6.2)
@@ -861,6 +863,7 @@ DEPENDENCIES
   puma
   puma_worker_killer
   pundit
+  pundit-matchers
   pundit-resources!
   rack-attack
   rack-cors

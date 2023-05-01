@@ -163,6 +163,7 @@ end
 group :test do
   gem 'faker' # Fake data
   gem 'json_expressions' # Test outputted JSON
+  gem 'pundit-matchers' # Test pundit policies
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
   gem 'stripe-ruby-mock', github: "stripe-ruby-mock/stripe-ruby-mock",
