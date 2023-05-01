@@ -307,6 +307,9 @@ Rails/TimeZone:
   Enabled: false
 RSpec/ExampleLength:
   Max: 20
+RSpec/ImplicitSubject:
+  EnforcedStyle: single_statement_only
+  Enabled: true
 Rails/UnknownEnv:
   Environments:
     - production
