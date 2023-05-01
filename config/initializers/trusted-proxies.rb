@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 if Rails.env.production? || Rails.env.staging?
   cloudflare_ips = %w[
     https://www.cloudflare.com/ips-v4
     https://www.cloudflare.com/ips-v6
-  ].map { |url| open(url).read.split("\n") }.flatten
+  ].map { |url| URI.parse(url).open.read.split("\n") }.flatten
 
   env_ips = ENV['TRUSTED_PROXIES']&.split(',') || []
 
