@@ -1,18 +1,21 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
 RSpec.describe Review, type: :model do
-  let(:user) { build(:user, id: 1) }
-
   subject { build(:review, user: user) }
-  it { should have_many(:likes).class_name('ReviewLike') }
-  it { should belong_to(:media).required }
-  it 'should validate uniqueness per media and user' do
+
+  let(:user) { create(:user) }
+
+  it { is_expected.to have_many(:likes).class_name('ReviewLike') }
+  it { is_expected.to belong_to(:media).required }
+
+  it 'validates uniqueness per media and user' do
     subject.save!
     expect(subject).to validate_uniqueness_of(:media_id).scoped_to(:user_id)
   end
-  it { should belong_to(:user).counter_cache(true).required }
-  it { should belong_to(:library_entry).required }
-  it { should validate_presence_of(:content) }
+
+  it { is_expected.to belong_to(:user).counter_cache(true).required }
+  it { is_expected.to belong_to(:library_entry).required }
+  it { is_expected.to validate_presence_of(:content) }
 
   describe '#steam_activity' do
     it 'publishes the activity to the user\'s media feed' do
