@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'authorization/assertion/facebook'
 require 'authorization/password'
 
@@ -77,6 +79,8 @@ Doorkeeper.configure do
   realm 'Kitsu'
 end
 
-Doorkeeper::AccessToken.class_eval do
-  belongs_to :resource_owner, class_name: 'User'
+ActiveSupport.on_load(:active_record) do
+  Doorkeeper::AccessToken.class_eval do
+    belongs_to :resource_owner, class_name: 'User'
+  end
 end
