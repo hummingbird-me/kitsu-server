@@ -12,6 +12,7 @@ class Types::MutationType < Types::BaseObject
   field :anime, Mutations::Anime, null: false
   field :episode, Mutations::Episode, null: false
   field :library_entry, Mutations::LibraryEntry, null: false
+  field :media_reaction, Mutations::MediaReaction, null: false
   field :mapping, Mutations::Mapping, null: false
   field :post, Mutations::Post, null: false
   field :wiki_submission, Mutations::WikiSubmission, null: false
