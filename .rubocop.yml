@@ -42,9 +42,9 @@ Naming/FileName:
 Style/FormatString:
   Enabled: true
   EnforcedStyle: format
-# TODO: enable this and transition to immutable strings
 Style/FrozenStringLiteralComment:
-  Enabled: false
+  SafeAutoCorrect: true
+  Enabled: true
 Style/GlobalVars:
   Enabled: false
 Style/GuardClause:
