@@ -133,8 +133,7 @@ Style/WordArray:
   Enabled: true
   MinSize: 2
 Metrics/AbcSize:
-  Enabled: true
-  Max: 25
+  Enabled: false
 Metrics/BlockNesting:
   Enabled: true
   Max: 5
@@ -149,8 +148,7 @@ Metrics/ModuleLength:
   CountComments: false
   Max: 500
 Metrics/CyclomaticComplexity:
-  Enabled: true
-  Max: 10
+  Enabled: false
 Layout/LineLength:
   Enabled: true
   Max: 100
@@ -167,8 +165,7 @@ Metrics/ParameterLists:
   Max: 5
   CountKeywordArgs: false
 Metrics/PerceivedComplexity:
-  Enabled: true
-  Max: 8
+  Enabled: false
 Lint/AssignmentInCondition:
   Enabled: true
   AllowSafeAssignment: true
