@@ -1,11 +1,17 @@
+# frozen_string_literal: true
+
 class Types::Errors::Validation < Types::Errors::Base
-  def self.for_record(record, transform_path:)
-    record.errors.flat_map do |key, message|
-      path = transform_path.nil? ? [key.to_s] : transform_path.call([key.to_s])
-      build({
-        path: path,
-        message: message
-      })
+  def self.for_record(record, transform_path: nil, prefix: nil)
+    record.errors.map do |error|
+      path = [error.attribute.to_s]
+      message = error.message
+      path = [prefix, *path] if prefix
+      path = transform_path.nil? ? path : transform_path.call(path)
+      build(path:, message:)
     end
+  end
+
+  def message
+    object[:message]
   end
 end
