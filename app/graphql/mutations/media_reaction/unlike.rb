@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mutations::MediaReaction::Unlike < Mutations::Base
   include FancyMutation
 
@@ -13,19 +15,19 @@ class Mutations::MediaReaction::Unlike < Mutations::Base
     Types::Errors::NotAuthorized,
     Types::Errors::NotFound
 
-  def ready?(input:)
+  def ready?(media_reaction_id:)
     authenticate!
-    reaction = MediaReaction.find_by(id: input[:media_reaction_id])
+    reaction = MediaReaction.find_by(id: media_reaction_id)
     return errors << Types::Errors::NotFound.build if reaction.nil?
     true
   end
 
-  def resolve(input:)
+  def resolve(media_reaction_id:)
     MediaReactionVote.find_by(
       user_id: current_user.id,
-      media_reaction_id: input[:media_reaction_id]
+      media_reaction_id:
     )&.destroy!
 
-    MediaReaction.find(input[:media_reaction_id])
+    MediaReaction.find(media_reaction_id)
   end
 end

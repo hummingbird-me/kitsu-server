@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mutations::MediaReaction::Like < Mutations::Base
   include RateLimitedMutation
   include FancyMutation
@@ -18,18 +20,18 @@ class Mutations::MediaReaction::Like < Mutations::Base
     Types::Errors::NotAuthorized,
     Types::Errors::NotFound
 
-  def ready?(input:)
+  def ready?(media_reaction_id:)
     authenticate!
-    reaction = MediaReaction.find_by(id: input[:media_reaction_id])
+    reaction = MediaReaction.find_by(id: media_reaction_id)
     return errors << Types::Errors::NotFound.build if reaction.nil?
     authorize!(reaction, :like?)
     true
   end
 
-  def resolve(input:)
+  def resolve(media_reaction_id:)
     MediaReactionVote.find_or_create_by!(
       user_id: current_user.id,
-      media_reaction_id: input[:media_reaction_id]
+      media_reaction_id:
     ).media_reaction
   end
 end

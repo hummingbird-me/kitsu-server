@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mutations::Account::Create < Mutations::Base
   include PublicMutation
   include RateLimitedMutation
@@ -30,7 +32,7 @@ class Mutations::Account::Create < Mutations::Base
   result Types::Account
   errors Types::Errors::Validation
 
-  def resolve(input:)
+  def resolve(**input)
     AccountMutator.create(**input)
   rescue ActiveRecord::RecordInvalid => e
     validation_errors = Types::Errors::Validation.for_record(e.record, transform_path: ->(path) {

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides a bunch of helpers for our standard mutation structure, making consistency easy!
 #
 # @example
@@ -39,10 +41,10 @@ module FancyMutation
     # the return value is the errors list, we ignore it, so that we won't accidentally try to treat
     # it as the result type.
     # @param ignore_warnings [Boolean] Whether to ignore warnings or not
-    def resolve(ignore_warnings: false, **kwargs)
+    def resolve(input:, ignore_warnings: false)
       # Wrap the mutation in a transaction to allow for rollback if there are warnings
       ApplicationRecord.transaction(requires_new: true) do
-        result = super(**kwargs)
+        result = super(**input)
 
         # Trigger a rollback but allow us to catch it afterwards and control our response format.
         raise WarningsPresent if warnings.present? && !ignore_warnings
@@ -65,16 +67,16 @@ module FancyMutation
     # using the same error system as in #resolve. To achieve this, we prepend a module wrapping the
     # mutation's #ready? and #authorized? methods, detecting the state of the error object after
     # execution and changing the result if needed.
-    def ready?(...)
-      ready, result = super(...)
+    def ready?(input:)
+      ready, result = super(**input)
 
       return [false, { errors: errors }] if errors.present?
 
       [ready, result]
     end
 
-    def authorized?(...)
-      ready, result = super(...)
+    def authorized(input:)
+      ready, result = super(**input)
 
       return [false, { errors: errors }] if errors.present?
 
