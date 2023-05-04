@@ -14,7 +14,6 @@ class Types::MutationType < Types::BaseObject
   field :anime, Mutations::Anime, null: false
   field :episode, Mutations::Episode, null: false
   field :library_entry, Mutations::LibraryEntry, null: false
-  field :change_password, mutation: Mutations::Account::ChangePassword
   field :favorite, Mutations::Favorite, null: false
   field :media_reaction, Mutations::MediaReaction, null: false
   field :mapping, Mutations::Mapping, null: false
