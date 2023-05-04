@@ -20,7 +20,7 @@ RSpec.describe FancyMutation do
           end
         end
 
-        result = mutation.new.ready?
+        result = mutation.new.ready?(input: {})
         expect(result).to eq([true, 'test'])
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe FancyMutation do
           end
         end
 
-        result = mutation.new.ready?
+        result = mutation.new.ready?(input: {})
         expect(result).to eq([false, { errors: ['test'] }])
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe FancyMutation do
           end
         end
 
-        result = mutation.new.authorized?
+        result = mutation.new.authorized?(input: {})
         expect(result).to eq([true, 'test'])
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe FancyMutation do
           end
         end
 
-        result = mutation.new.authorized?
+        result = mutation.new.authorized?(input: {})
         expect(result).to eq([false, { errors: ['test'] }])
       end
     end
