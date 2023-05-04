@@ -22,16 +22,17 @@ class Mutations::MediaReaction::Like < Mutations::Base
 
   def ready?(media_reaction_id:)
     authenticate!
-    reaction = MediaReaction.find_by(id: media_reaction_id)
-    return errors << Types::Errors::NotFound.build if reaction.nil?
-    authorize!(reaction, :like?)
+    @reaction = MediaReaction.find_by(id: media_reaction_id)
+    return errors << Types::Errors::NotFound.build if @reaction.nil?
+    authorize!(@reaction, :like?)
     true
   end
 
-  def resolve(media_reaction_id:)
+  def resolve(**)
     MediaReactionVote.find_or_create_by!(
-      user_id: current_user.id,
-      media_reaction_id:
-    ).media_reaction
+      user: current_user,
+      media_reaction: @reaction
+    )
+    @reaction
   end
 end

@@ -17,17 +17,17 @@ class Mutations::MediaReaction::Unlike < Mutations::Base
 
   def ready?(media_reaction_id:)
     authenticate!
-    reaction = MediaReaction.find_by(id: media_reaction_id)
-    return errors << Types::Errors::NotFound.build if reaction.nil?
+    @reaction = MediaReaction.find_by(id: media_reaction_id)
+    return errors << Types::Errors::NotFound.build if @reaction.nil?
     true
   end
 
-  def resolve(media_reaction_id:)
+  def resolve(**)
     MediaReactionVote.find_by(
-      user_id: current_user.id,
-      media_reaction_id:
+      user: current_user,
+      media_reaction: @reaction
     )&.destroy!
 
-    MediaReaction.find(media_reaction_id)
+    @reaction
   end
 end

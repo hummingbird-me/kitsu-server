@@ -19,22 +19,23 @@ class Mutations::MediaReaction::Create < Mutations::Base
     Types::Errors::NotFound,
     Types::Errors::Validation
 
-  def ready?(...)
+  def ready?(library_entry_id:, **)
     authenticate!
-    true
-  end
 
-  def resolve(reaction:, library_entry_id:)
-    library_entry = current_user.library_entries.find_by(id: library_entry_id)
-    if library_entry.nil?
+    @library_entry = current_user.library_entries.find_by(id: library_entry_id)
+    if @library_entry.nil?
       return errors << Types::Errors::NotFound.build(path: %w[input
                                                               library_entry_id])
     end
 
+    true
+  end
+
+  def resolve(reaction:, **)
     reaction = MediaReaction.new(
-      "#{library_entry.media_type.underscore}_id": library_entry.media_id,
+      "#{@library_entry.media_type.underscore}_id": @library_entry.media_id,
       user_id: current_user.id,
-      library_entry:,
+      library_entry: @library_entry,
       reaction:
     )
     authorize!(reaction, :create?)
