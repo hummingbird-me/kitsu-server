@@ -75,7 +75,7 @@ module FancyMutation
       [ready, result]
     end
 
-    def authorized(input:)
+    def authorized?(input:)
       ready, result = super(**input)
 
       return [false, { errors: }] if errors.present?
