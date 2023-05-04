@@ -28,6 +28,12 @@ GIT
       rails (>= 4.2.1)
 
 GIT
+  remote: https://github.com/ice-cube-ruby/ice_cube.git
+  revision: 10ae8dc1c64ea23c9461f2b046cf7ee4513050b9
+  specs:
+    ice_cube (0.16.4)
+
+GIT
   remote: https://github.com/railsadminteam/rails_admin.git
   revision: 652418c2f1eb3cea1006e8625be6e5116b59b852
   specs:
@@ -342,7 +348,6 @@ GEM
     httpclient (2.8.3)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    ice_cube (0.16.4)
     image_optim (0.31.1)
       exifr (~> 1.2, >= 1.2.2)
       fspath (~> 3.0)
@@ -821,7 +826,7 @@ DEPENDENCIES
   html-pipeline
   http
   i18n (= 1.8.11)
-  ice_cube
+  ice_cube!
   image_optim
   image_optim_pack
   image_processing
