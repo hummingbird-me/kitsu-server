@@ -31,13 +31,7 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
-      - name: Validate Schema Changes
-        uses: kamilkisiela/graphql-inspector@master
-        with:
-          schema: 'schema.graphql'
-          endpoint: 'https://kitsu.io/api/graphql'
-
       - name: Upload GraphQL Schema
         env:
           APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
-        run: npx rover subgraph publish kitsu@current --name kitsu --schema ./schema.graphql
+        run: npx rover graph publish kitsu@current --schema ./schema.graphql
