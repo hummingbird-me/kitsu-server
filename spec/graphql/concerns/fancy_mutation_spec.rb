@@ -1,4 +1,4 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
 RSpec.describe FancyMutation do
   it 'does not expose the private class methods' do
@@ -15,7 +15,7 @@ RSpec.describe FancyMutation do
         mutation = Class.new do
           include FancyMutation
 
-          def ready?(*)
+          def ready?(**)
             [true, 'test']
           end
         end
@@ -30,7 +30,7 @@ RSpec.describe FancyMutation do
         mutation = Class.new do
           include FancyMutation
 
-          def ready?(*)
+          def ready?(**)
             errors << 'test'
           end
         end
@@ -47,7 +47,7 @@ RSpec.describe FancyMutation do
         mutation = Class.new do
           include FancyMutation
 
-          def authorized?(*)
+          def authorized?(**)
             [true, 'test']
           end
         end
@@ -62,7 +62,7 @@ RSpec.describe FancyMutation do
         mutation = Class.new do
           include FancyMutation
 
-          def authorized?(*)
+          def authorized?(**)
             errors << 'test'
           end
         end
@@ -303,7 +303,7 @@ RSpec.describe FancyMutation do
       mutation = self.mutation
       Class.new(Types::BaseObject) do
         graphql_name 'TestMutationSchema'
-        field :test, mutation: mutation
+        field :test, mutation:
       end
     end
     let(:schema) do
