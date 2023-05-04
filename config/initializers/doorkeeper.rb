@@ -81,6 +81,6 @@ end
 
 ActiveSupport.on_load(:active_record) do
   Doorkeeper::AccessToken.class_eval do
-    belongs_to :resource_owner, class_name: 'User'
+    belongs_to :resource_owner, class_name: 'User', optional: true
   end
 end
