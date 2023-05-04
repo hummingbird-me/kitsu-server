@@ -19,6 +19,7 @@ runs:
         shell: bash
         run: |
           ls -l ./.imagemagick-deb/
+          sudo apt-get install -y libraqm-dev
           sudo apt install ./.imagemagick-deb/*.deb
 
       - name: Build ImageMagick ${{ inputs.version }}
