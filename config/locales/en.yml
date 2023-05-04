@@ -67,3 +67,4 @@ en:
       not_authenticated: "You must be logged in to perform this action"
       not_found: "The resource you were looking for could not be found"
       generic: "An unknown error occurred"
+      password_incorrect: "The provided password was incorrect"
