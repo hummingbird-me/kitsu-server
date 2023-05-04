@@ -34,7 +34,3 @@ runs:
           ls -l /usr/local/src/
           cp /usr/local/src/*.deb ./.imagemagick-deb/
           ls -l ./.imagemagick-deb/
-
-      - name: Log ImageMagick Version
-        shell: bash
-        run: magick -version
