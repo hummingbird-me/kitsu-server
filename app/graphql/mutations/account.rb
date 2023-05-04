@@ -10,4 +10,5 @@ class Mutations::Account < Mutations::Namespace
   field :update_account,
     mutation: Mutations::Account::UpdateAccount,
     description: 'Update the account of the current user.'
+  field :change_password, mutation: Mutations::Account::ChangePassword
 end
