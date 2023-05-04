@@ -1,35 +1,46 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe MediaReactionPolicy do
-  let(:user) { token_for create(:user) }
-  let(:community_mod) { token_for create(:user, permissions: %i[community_mod]) }
-  let(:anime) { build(:anime) }
-  let(:media_reaction) do
-    build(:media_reaction, user: user.resource_owner, anime: anime)
-  end
-  let(:other) { build(:media_reaction) }
-  subject { described_class }
+  subject { described_class.new(user, media_reaction) }
 
-  permissions :update? do
-    it('should not allow anons') {
-      should_not permit(nil, media_reaction)
-    }
+  let(:community_mod) { create(:user, permissions: %i[community_mod]) }
+  let(:database_mod) { create(:user, permissions: %i[database_mod]) }
+  let(:owner) { create(:user) }
+  let(:media_reaction) { build(:media_reaction, user: owner) }
+
+  context 'with visitors' do
+    let(:user) { nil }
+
+    it { is_expected.to forbid_actions(%i[create update destroy like]) }
   end
 
-  permissions :create? do
-    it('should not allow anons') {
-      should_not permit(nil, media_reaction)
-    }
-    it('should not allow for others') { should_not permit(user, other) }
-    it('should allow for yourself') {
-      should permit(user, media_reaction)
-    }
+  context 'with other user' do
+    let(:user) { token_for create(:user) }
+
+    it { is_expected.to permit_action(:like) }
+    it { is_expected.to forbid_actions(%i[create update destroy]) }
   end
 
-  permissions :destroy? do
-    it('should allow community mod') { should permit(community_mod, media_reaction) }
-    it('should allow for yourself') {
-      should permit(user, media_reaction)
-    }
+  context 'with owner' do
+    let(:user) { token_for owner }
+
+    it { is_expected.to permit_actions(%i[create update destroy]) }
+    it { is_expected.to forbid_action(:like) }
+  end
+
+  context 'with community mod' do
+    let(:user) { token_for community_mod }
+
+    it { is_expected.to permit_actions(%i[destroy like]) }
+    it { is_expected.to forbid_actions(%i[create update]) }
+  end
+
+  context 'with database mod' do
+    let(:user) { token_for database_mod }
+
+    it { is_expected.to permit_action(:like) }
+    it { is_expected.to forbid_actions(%i[create update destroy]) }
   end
 end

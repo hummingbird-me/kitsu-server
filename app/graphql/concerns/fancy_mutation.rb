@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides a bunch of helpers for our standard mutation structure, making consistency easy!
 #
 # @example
@@ -39,10 +41,10 @@ module FancyMutation
     # the return value is the errors list, we ignore it, so that we won't accidentally try to treat
     # it as the result type.
     # @param ignore_warnings [Boolean] Whether to ignore warnings or not
-    def resolve(ignore_warnings: false, **args)
+    def resolve(input:, ignore_warnings: false)
       # Wrap the mutation in a transaction to allow for rollback if there are warnings
       ApplicationRecord.transaction(requires_new: true) do
-        result = super(**args)
+        result = super(**input)
 
         # Trigger a rollback but allow us to catch it afterwards and control our response format.
         raise WarningsPresent if warnings.present? && !ignore_warnings
@@ -50,13 +52,13 @@ module FancyMutation
         {
           # If the mutation returns the errors list, ignore it (it's not the actual result)
           result: (result unless result == errors),
-          warnings: warnings,
-          errors: errors
+          warnings:,
+          errors:
         }
       end
     rescue WarningsPresent
       {
-        warnings: warnings,
+        warnings:,
         errors: [*errors, Types::Errors::WarningsPresent.build]
       }
     end
@@ -65,18 +67,18 @@ module FancyMutation
     # using the same error system as in #resolve. To achieve this, we prepend a module wrapping the
     # mutation's #ready? and #authorized? methods, detecting the state of the error object after
     # execution and changing the result if needed.
-    def ready?(*)
-      ready, result = super
+    def ready?(input:)
+      ready, result = super(**input)
 
-      return [false, { errors: errors }] if errors.present?
+      return [false, { errors: }] if errors.present?
 
       [ready, result]
     end
 
-    def authorized?(*)
-      ready, result = super
+    def authorized?(input:)
+      ready, result = super(**input)
 
-      return [false, { errors: errors }] if errors.present?
+      return [false, { errors: }] if errors.present?
 
       [ready, result]
     end
@@ -91,8 +93,8 @@ module FancyMutation
 
     # Sets up an input type and field for the mutation
     # @param block [Proc] A block defining the input type fields
-    def input(&block)
-      input_type.instance_eval(&block)
+    def input(&)
+      input_type.instance_eval(&)
     end
 
     # Adds types to the union of error types for the mutation
@@ -180,7 +182,7 @@ module FancyMutation
   # @param action [Symbol] The action to check authorization for
   def authorize!(object, action, policy: Pundit::PolicyFinder.new(object).policy)
     authorized = policy.new(current_token, object).public_send(action)
-    errors << Types::Errors::NotAuthorized.build(object: object, action: action) unless authorized
+    errors << Types::Errors::NotAuthorized.build(object:, action:) unless authorized
     true
   end
 

@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 class Feed
   # Encapsulates the generation of text from a Stream notification
   class NotificationPresenter
     # The base URL used when constructing links to notifications
-    CLIENT_URL = 'https://kitsu.io/'.freeze
+    CLIENT_URL = 'https://kitsu.io/'
 
     attr_reader :activity, :user
+
     delegate :group, to: :activity
     delegate :id, to: :activity
 
@@ -101,7 +104,7 @@ class Feed
     def reference_for(obj)
       type = obj.class.name.underscore.pluralize.dasherize
       id = obj.id
-      { type: type, id: id }
+      { type:, id: }
     end
 
     # For a reply, figure out what *kind* of reply it is.  This code sucks, but we don't have a
@@ -114,7 +117,8 @@ class Feed
       elsif reply_to_user.id == user.id then %i[comment you] # X replied to your comment
       elsif target.user.id == actor.id then %i[post themself] # X replied to their own post
       elsif target.is_a?(Post) then %i[post author] # X replied to Y's post
-      else %i[post unknown]
+      else
+        %i[post unknown]
       end
     end
 
@@ -128,7 +132,7 @@ class Feed
     # @return [ActiveRecord::Base] the record this reference names
     def load_ref(ref)
       type, id = split_ref(ref)
-      type.safe_constantize&.find_by(id: id)
+      type.safe_constantize&.find_by(id:)
     end
 
     # @return [ActiveRecord::Base] the target of the activity
@@ -147,10 +151,9 @@ class Feed
     end
 
     # @return [String] the translated string
-    def translate(*args)
-      opts = args.last.is_a?(Hash) ? args.pop.dup : {}
-      opts[:scope] ||= %i[notifications]
-      I18n.t(*args, opts)
+    def translate(*args, **kwargs)
+      kwargs[:scope] ||= %i[notifications]
+      I18n.t(*args, **kwargs)
     end
   end
 end

@@ -2,10 +2,9 @@ require 'rails_helper'
 
 RSpec.describe ProSubscription::StripeSubscription, type: :model do
   let(:stripe_mock) { StripeMock.create_test_helper }
+  let!(:product) { stripe_mock.create_product(name: 'Pro Yearly') }
 
-  before do
-    stripe_mock.create_plan(id: 'pro-yearly')
-  end
+  before { stripe_mock.create_plan(id: 'pro-yearly', product: product.id) }
 
   describe '#billing_service' do
     it 'should return :stripe' do

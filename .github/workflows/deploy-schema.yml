@@ -1,6 +1,10 @@
 name: Apollo Studio Schema Changes
 
-on: [deployment]
+on:
+  workflow_run:
+    workflows: ["Kitsu Test Suite"]
+    types:
+      - completed
 
 env:
   BUNDLE_GITHUB__HTTPS: true
@@ -8,75 +12,31 @@ env:
 
 jobs:
   apollo-studio:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node_version: [14]
-        ruby_version: [2.6.x]
-
-    runs-on: ${{ matrix.os }}
-
-    services:
-      minio:
-        image: fclairamb/minio-github-actions
-        options: --health-cmd "curl -s -o /dev/null -I http://127.0.0.1:9000/minio/index.html" --health-interval 10s --health-timeout 5s --health-retries 5
-        ports:
-          - 9000/tcp
-        env:
-          MINIO_ACCESS_KEY: miniotest
-          MINIO_SECRET_KEY: miniotest
-      postgres:
-        image: postgres:10-alpine
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: kitsu_test
-        ports:
-          - 5432/tcp
-      redis:
-        image: redis:alpine
-        ports:
-          - 6379/tcp
-
+    runs-on: ubuntu-latest
+    if: >
+      ${{ github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' }}
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v1
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Restore Cached Dependencies
-      uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gem-
+      - name: Install Rover
+        run: |
+          curl -sSL https://rover.apollo.dev/nix/v0.14.0 | sh
+          echo "$HOME/.rover/bin" >> $GITHUB_PATH
 
-    - name: Setup Ruby
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby_version }}
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: "Kitsu Test Suite"
+          workflow_conclusion: success
+          run_id: ${{github.event.workflow_run.id}}
+          name: graphql-schema-ruby-3.1
 
-    - name: Setup Node
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node_version }}
+      - name: Display structure of downloaded files
+        run: ls -R
 
-    - name: Install Dependencies
-      run: |
-        sudo apt-get -yqq install libpq-dev libvips
-        gem install bundler
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
-
-    - name: Dump GraphQL Schema
-      run: bin/rails graphql:dump_schema
-      env:
-        AWS_ENDPOINT: http://localhost:${{ job.services.minio.ports[9000] }}
-        AWS_BUCKET: kitsu-ugc-test
-        AWS_ACCESS_KEY_ID: miniotest
-        AWS_SECRET_ACCESS_KEY: miniotest
-        DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/kitsu_test
-        REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
-
-    - name: Upload GraphQL Schema
-      run: npx apollo service:push --graph=kitsu --key=${{ secrets.APOLLO_KEY }} --variant=current --localSchemaFile=./schema.graphql
+      - name: Upload GraphQL Schema
+        env:
+          APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
+        run: rover graph publish kitsu@current --schema ./schema.graphql

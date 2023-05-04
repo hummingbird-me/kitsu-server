@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mutations::Account < Mutations::Namespace
   field :send_password_reset,
     mutation: Mutations::Account::SendPasswordReset,

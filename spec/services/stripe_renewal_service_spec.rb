@@ -2,12 +2,11 @@ require 'rails_helper'
 
 RSpec.describe StripeRenewalService do
   let(:stripe_mock) { StripeMock.create_test_helper }
+  let!(:product) { stripe_mock.create_product(name: 'Pro Yearly') }
 
-  before do
-    stripe_mock.create_plan(id: 'pro-yearly')
-  end
+  before { stripe_mock.create_plan(id: 'pro-yearly', product: product.id) }
 
-  it "should update the user's pro subscription for the period of the invoice" do
+  it "updates the user's pro subscription for the period of the invoice" do
     user = create(:user, pro_expires_at: Time.now)
     user.stripe_customer.save(source: stripe_mock.generate_card_token)
     sub = ProSubscription::StripeSubscription.create!(user: user, tier: 'pro')
@@ -17,7 +16,7 @@ RSpec.describe StripeRenewalService do
       period_end: 30.days.from_now
     )
     expect {
-      StripeRenewalService.new(invoice).call
+      described_class.new(invoice).call
     }.to(change { user.reload.pro_expires_at })
     expect(user.reload.pro_expires_at).to be > 29.days.from_now
   end

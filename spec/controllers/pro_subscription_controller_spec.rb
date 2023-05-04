@@ -102,8 +102,10 @@ RSpec.describe ProSubscriptionController, type: :controller do
 
     context 'with a Stripe subscription' do
       let(:stripe_mock) { StripeMock.create_test_helper }
+
       before do
-        stripe_mock.create_plan(id: 'pro-yearly')
+        product = stripe_mock.create_product(name: 'Pro Yearly')
+        stripe_mock.create_plan(id: 'pro-yearly', product: product.id)
         user.stripe_customer.source = stripe_mock.generate_card_token
         user.stripe_customer.save
         ProSubscription::StripeSubscription.create!(user: user, tier: :pro)

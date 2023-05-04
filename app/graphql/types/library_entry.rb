@@ -14,7 +14,10 @@ class Types::LibraryEntry < Types::BaseObject
     description: 'The media related to this library entry.'
 
   def media
-    Loaders::RecordLoader.for(object.media_type.safe_constantize).load(object.media_id)
+    Loaders::RecordLoader.for(
+      object.media_type.safe_constantize,
+      token: context[:token]
+    ).load(object.media_id)
   end
 
   field :last_unit, Types::Interface::Unit,

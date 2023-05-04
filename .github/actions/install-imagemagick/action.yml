@@ -8,7 +8,7 @@ runs:
   using: "composite"
   steps:
       - name: Restore Cached ImageMagick ${{ inputs.version }}
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-imagemagick
         with:
           path: .imagemagick-deb/
@@ -19,6 +19,7 @@ runs:
         shell: bash
         run: |
           ls -l ./.imagemagick-deb/
+          sudo apt-get install -y libraqm-dev
           sudo apt install ./.imagemagick-deb/*.deb
 
       - name: Build ImageMagick ${{ inputs.version }}
@@ -34,3 +35,7 @@ runs:
           ls -l /usr/local/src/
           cp /usr/local/src/*.deb ./.imagemagick-deb/
           ls -l ./.imagemagick-deb/
+
+      - name: Log ImageMagick Version
+        shell: bash
+        run: magick -version

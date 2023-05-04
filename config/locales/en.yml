@@ -62,3 +62,9 @@ en:
   graphql:
     errors:
       warnings_present: "A warning was present and ignore_warnings was not set to true"
+      validation: "An input was not valid"
+      not_authorized: "You are not authorized to perform this action"
+      not_authenticated: "You must be logged in to perform this action"
+      not_found: "The resource you were looking for could not be found"
+      generic: "An unknown error occurred"
+      password_incorrect: "The provided password was incorrect"

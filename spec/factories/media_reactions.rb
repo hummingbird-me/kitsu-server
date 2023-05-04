@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :media_reaction do
-    reaction { Faker::Lorem.characters(140) }
+    reaction { Faker::Lorem.paragraph_by_chars(number: 140) }
     association :anime, factory: :anime, strategy: :build
     association :library_entry, factory: :library_entry,
                                 progress: 1, strategy: :build

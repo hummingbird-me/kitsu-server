@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 source 'https://rubygems.org'
 
 # Core Stuff
-gem 'puma'
-gem 'rails', '6.1.6'
 gem 'i18n', '1.8.11'
+gem 'puma'
+gem 'rails', '6.1.7.2'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
 gem 'algoliasearch-rails' # Future Search
-gem 'attr_encrypted', '~>3.1.0' # encrypt linked_profile tokens
+gem 'attr_encrypted' # encrypt linked_profile tokens
 gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
@@ -20,7 +22,7 @@ gem 'scenic'
 
 # Auth{entication,orization}
 gem 'bcrypt'
-gem 'doorkeeper', '~> 5.4.0'
+gem 'doorkeeper', '~> 5.5.0'
 gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
 gem 'jwt' # Used for Nolt SSO
 gem 'pundit'
@@ -75,7 +77,7 @@ gem 'friendly_id' # slug-urls-are-cool
 gem 'google-api-client' # Google APIs
 gem 'graphql-client' # make graphql calls
 gem 'http' # Pewpew HTTP calls easier
-gem 'ice_cube' # Episode release schedules
+gem 'ice_cube', github: 'ice-cube-ruby/ice_cube' # Episode release schedules
 gem 'iso-639' # Language codes
 gem 'iso_country_codes' # Country codes
 gem 'mechanize' # Automating interaction with websites
@@ -91,7 +93,7 @@ gem 'sass-rails' # Process SCSS for emails
 gem 'sitemap_generator' # Generate Sitemaps
 gem 'strait' # Rate limiting anything!
 gem 'stream_rails', github: 'GetStream/stream-rails',
-                    branch: 'feature/subreference-enrichment' # Feed Enrichment
+  branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'stream-ruby', '~> 2.10.0' # Feeds
 gem 'typhoeus' # Parallelize scraping tasks
 
@@ -132,8 +134,8 @@ gem 'sassc-rails' # used by rails admin
 gem 'sinatra' # used by sidekiq/web
 
 group :development, :test do
-  gem 'dotenv-rails' # Load default ENV
   gem 'dead_end' # Better error messages for missing `end`
+  gem 'dotenv-rails' # Load default ENV
   gem 'pry-rails' # Better Console
   gem 'spring' # Faster CLI
 
@@ -163,9 +165,11 @@ end
 group :test do
   gem 'faker' # Fake data
   gem 'json_expressions' # Test outputted JSON
+  gem 'pundit-matchers' # Test pundit policies
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
-  gem 'stripe-ruby-mock', require: 'stripe_mock' # Mock Stripe API
+  gem 'stripe-ruby-mock', github: 'stripe-ruby-mock/stripe-ruby-mock',
+    require: 'stripe_mock' # Mock Stripe API
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
 

@@ -8,6 +8,15 @@ class MediaReactionPolicy < ApplicationPolicy
   end
   alias_method :update?, :create?
 
+  def like?
+    return false unless user
+    return false if user == record.user
+    return false if user.has_role?(:banned)
+    return false if is_blocked?(user, record.user)
+
+    true
+  end
+
   def destroy?
     record.try(:user) == user || can_administrate?
   end

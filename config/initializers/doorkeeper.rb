@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'authorization/assertion/facebook'
 require 'authorization/password'
 
@@ -13,6 +15,7 @@ Doorkeeper.configure do
     User.find(doorkeeper_token[:resource_owner_id]) || error!
   end
   # Authenticate in Resource Owner Password flow
+  skip_client_authentication_for_password_grant true
   resource_owner_from_credentials do
     Authorization::Password.new(params[:username], params[:password]).user!
   end
@@ -76,6 +79,8 @@ Doorkeeper.configure do
   realm 'Kitsu'
 end
 
-Doorkeeper::AccessToken.class_eval do
-  belongs_to :resource_owner, class_name: 'User'
+ActiveSupport.on_load(:active_record) do
+  Doorkeeper::AccessToken.class_eval do
+    belongs_to :resource_owner, class_name: 'User', optional: true
+  end
 end

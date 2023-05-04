@@ -1,6 +1,11 @@
 class Block < ApplicationRecord
-  belongs_to :user, required: true
-  belongs_to :blocked, class_name: 'User', required: true
+  belongs_to :user
+  belongs_to :blocked, class_name: 'User'
+
+  scope :between, ->(user_a, user_b) {
+    Block.where(user_id: user_a, blocked_id: user_b)
+         .or(Block.where(user_id: user_b, blocked_id: user_a))
+  }
 
   validates :blocked, uniqueness: { scope: :user_id }
 
