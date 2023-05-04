@@ -20,6 +20,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Install Rover
+        run: |
+          curl -sSL https://rover.apollo.dev/nix/v0.14.0 | sh
+          echo "$HOME/.rover/bin" >> $GITHUB_PATH
+
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -34,4 +39,4 @@ jobs:
       - name: Upload GraphQL Schema
         env:
           APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
-        run: npx rover graph publish kitsu@current --schema ./schema.graphql
+        run: rover graph publish kitsu@current --schema ./schema.graphql
