@@ -1,0 +1,31 @@
+name: reviewdog
+
+on:
+  push:
+    branches: [the-future]
+  pull_request:
+
+jobs:
+  reviewdog:
+    name: reviewdog
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
+
+      - name: Run reviewdog
+        uses: reviewdog/action-rubocop@v2
+        with:
+          level: warning
+          reporter: github-check
+          filter_mode: diff_context
+          rubocop_version: gemfile
+          rubocop_extensions: |
+            rubocop-rails:gemfile
+            rubocop-rspec:gemfile
