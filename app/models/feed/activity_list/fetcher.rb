@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Feed
   class ActivityList
     class Fetcher
@@ -83,7 +85,7 @@ class Feed
         stream_options[:limit] || 25
       end
 
-      def get_page! # rubocop:disable Style/AccessorMethodName
+      def get_page! # rubocop:disable Naming/AccessorMethodName
         @pages += 1
         # Generate the page size
         page_size = page_size_for(@pages)

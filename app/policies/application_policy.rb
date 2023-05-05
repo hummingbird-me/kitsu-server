@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Base class for all policies.  Provides a bunch of useful shortcuts for checks
 # that we use frequently, such as checking for admin-ness, lewd goggles, or
 # token scopes.
@@ -86,7 +88,7 @@ class ApplicationPolicy
   # Check the record.user association to see if it's owned by the current user.
   #
   # @return [Boolean] Whether the current user is the owner of the record
-  def is_owner? # rubocop:disable Style/PredicateName
+  def is_owner? # rubocop:disable Naming/PredicateName
     return false unless user && record.respond_to?(:user)
     return false unless record.user_id == user.id
     return false if record.user_id_was && record.user_id_was != user.id
@@ -96,7 +98,7 @@ class ApplicationPolicy
   # Check whether there's a block between two users (in either direction)
   #
   # @return [Boolean] Whether there's a block between the two users
-  def is_blocked?(user_a, user_b) # rubocop:disable Style/PredicateName
+  def is_blocked?(user_a, user_b) # rubocop:disable Naming/PredicateName
     Block.between(user_a, user_b).exists?
   end
 

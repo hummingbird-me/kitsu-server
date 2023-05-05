@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
+  # rubocop:disable Layout/LineLength
   factory :profile_link_site do
     name { Faker::Company.name }
     validate_find { '\A(https?://)?(www.)?(twitter.com/)?(@)?(?<username>[a-zA-Z0-9_]+)\z' }
@@ -177,6 +180,6 @@ FactoryBot.define do
       validate_find { '(?<protocol>https?://)(www.)?(?<url>(.)+\.(.)+)' }
       validate_replace { '\k<protocol\k<url>' }
     end
-    # rubocop:enable Metrics/LineLength
+    # rubocop:enable Layout/LineLength
   end
 end

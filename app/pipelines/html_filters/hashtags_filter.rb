@@ -1,4 +1,6 @@
-class HTMLFilters::HashtagsFilter < HTML::Pipeline:: Filter
+# frozen_string_literal: true
+
+class HTMLFilters::HashtagsFilter < HTML::Pipeline::Filter
   # These regexex are reproduced from the twitter/tweet-text library, which is licensed under
   # the Apache 2.0 license.  The originals can be found at the following URL:
   #
@@ -10,8 +12,8 @@ class HTMLFilters::HashtagsFilter < HTML::Pipeline:: Filter
   # Twitter has kindly documented that here:
   #
   # https://github.com/twitter/twitter-text/blob/master/unicode_regex/README
-  HASHTAG_LETTERS_AND_MARKS = '\p{L}\p{M}'.freeze
-  HASHTAG_NUMERALS = '\p{Nd}'.freeze
+  HASHTAG_LETTERS_AND_MARKS = '\p{L}\p{M}'
+  HASHTAG_NUMERALS = '\p{Nd}'
   HASHTAG_SPECIAL_CHARS = (
     '_' +      # underscore
     '\u200c' + # ZERO WIDTH NON-JOINER
@@ -32,12 +34,12 @@ class HTMLFilters::HashtagsFilter < HTML::Pipeline:: Filter
     '\u00b7'   # MIDDLE DOT
   ).freeze
   HASHTAG_LETTERS_NUMERALS = HASHTAG_LETTERS_AND_MARKS +
-                              HASHTAG_NUMERALS +
-                              HASHTAG_SPECIAL_CHARS
+                             HASHTAG_NUMERALS +
+                             HASHTAG_SPECIAL_CHARS
   HASHTAG_LETTERS_SET = "[#{HASHTAG_LETTERS_AND_MARKS}]".freeze
   HASHTAG_LETTERS_NUMERALS_SET = "[#{HASHTAG_LETTERS_NUMERALS}]".freeze
 
-  VALID_HASHTAG = /(^|\uFE0E|[^&#{HASHTAG_LETTERS_NUMERALS}])(#|\uFF03)(?!\uFE0F|\u20E3)(#{HASHTAG_LETTERS_NUMERALS_SET}*#{HASHTAG_LETTERS_SET}#{HASHTAG_LETTERS_NUMERALS_SET}*)/i # rubocop:disable Metrics/LineLength
+  VALID_HASHTAG = /(^|\uFE0E|[^&#{HASHTAG_LETTERS_NUMERALS}])(#|\uFF03)(?!\uFE0F|\u20E3)(#{HASHTAG_LETTERS_NUMERALS_SET}*#{HASHTAG_LETTERS_SET}#{HASHTAG_LETTERS_NUMERALS_SET}*)/i # rubocop:disable Layout/LineLength
 
   def call
     result[:hashtags] ||= []

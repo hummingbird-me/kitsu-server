@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserResource < BaseResource
   PRIVATE_FIELDS = %i[email password confirmed previous_email language time_zone country
                       share_to_global title_language_preference sfw_filter rating_system
@@ -55,7 +57,7 @@ class UserResource < BaseResource
     _model.profile_links.where(profile_link_site_id: 29).update(url: value)
   end
 
-  def has_password # rubocop:disable Style/PredicateName
+  def has_password # rubocop:disable Naming/PredicateName
     _model.password_digest.present?
   end
 
