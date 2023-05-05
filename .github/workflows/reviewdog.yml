@@ -29,3 +29,4 @@ jobs:
           rubocop_extensions: |
             rubocop-rails:gemfile
             rubocop-rspec:gemfile
+            rubocop-performance:gemfile
