@@ -24,6 +24,7 @@ jobs:
           level: warning
           reporter: github-check
           filter_mode: diff_context
+          reviewdog_flags: -tee
           rubocop_version: gemfile
           rubocop_extensions: |
             rubocop-rails:gemfile
