@@ -1,5 +1,13 @@
+# frozen_string_literal: true
+
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
+
+  connects_to database: {
+    writing: :primary,
+    reading: :primary,
+    bypass_bouncer: :bypass_bouncer
+  }
 
   WHITELISTED_ADMIN_FIELDS = %w[episode_count chapter_count volume_count].freeze
 

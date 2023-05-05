@@ -28,17 +28,44 @@ default: &default
 <% end %>
 
 development:
-  <<: *default
-  database: kitsu_development
+  primary:
+    <<: *default
+    database: kitsu_development
+    database_tasks: false
+  bypass_bouncer:
+    <<: *default
+    database: kitsu_development
 
 test:
-  <<: *default
-  database: kitsu_test
+  primary:
+    <<: *default
+    database: kitsu_test
+    database_tasks: false
+  bypass_bouncer:
+    <<: *default
+    database: kitsu_test
 
 production:
-  <<: *default
-  database: kitsu_production
+  primary:
+    <<: *default
+    database: kitsu_production
+    database_tasks: false
+  bypass_bouncer:
+    <<: *default
+    database: kitsu_production
+    url: <%= ENV.fetch('DATABASE_URL_BYPASS_BOUNCER') %>
+    variables:
+      statement_timeout: '0'
+
 
 staging:
-  <<: *default
-  database: kitsu_staging
+  primary:
+    <<: *default
+    database: kitsu_staging
+    database_tasks: false
+  bypass_bouncer:
+    <<: *default
+    database: kitsu_staging
+    url: <%= ENV.fetch('DATABASE_URL_BYPASS_BOUNCER') %>
+    variables:
+      statement_timeout: '0'
