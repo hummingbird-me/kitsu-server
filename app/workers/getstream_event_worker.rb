@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GetstreamEventWorker
   include Sidekiq::Worker
   sidekiq_options queue: 'soon'
@@ -10,7 +12,7 @@ class GetstreamEventWorker
     when 'new'
       activity = Feed::Activity.new(feed, activity)
       if group == 'notifications'
-        user = User.find_by(id: id)
+        user = User.find_by(id:)
         return unless user
         OneSignalNotificationService.new(user, activity).run!
       end

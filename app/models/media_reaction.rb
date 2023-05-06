@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 class MediaReaction < ApplicationRecord
   include WithActivity
   WordfilterCallbacks.hook(self, :reaction, :reaction)
 
   acts_as_paranoid
 
-  belongs_to :user, required: true, counter_cache: true
-  belongs_to :media, polymorphic: true, required: true
+  belongs_to :user, counter_cache: true
+  belongs_to :media, polymorphic: true
   belongs_to :anime, optional: true
   belongs_to :manga, optional: true
   belongs_to :drama, optional: true
-  belongs_to :library_entry, required: true
+  belongs_to :library_entry
   has_many :votes, class_name: 'MediaReactionVote', dependent: :destroy
 
   validates :media_id, uniqueness: { scope: %i[user_id media_type] }, unless: :deleted?
@@ -29,9 +31,9 @@ class MediaReaction < ApplicationRecord
 
   def stream_activity
     user.profile_feed.activities.new(
-      progress: progress,
-      updated_at: updated_at,
-      up_votes_count: up_votes_count,
+      progress:,
+      updated_at:,
+      up_votes_count:,
       to: [media.feed, GlobalFeed.new]
     )
   end

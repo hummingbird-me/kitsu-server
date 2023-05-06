@@ -48,7 +48,7 @@ class Feed
       when :mention
         translate('mention.comment', actor: actor_name)
       when :reply
-        author_name = target.user.name
+        author_name = target&.user&.name
         translate("reply.#{reply_type.join('.')}", actor: actor_name, author: author_name)
       end
     end
