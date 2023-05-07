@@ -85,6 +85,7 @@ gem 'nokogiri' # Parse MAL XML shit
 gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.4' # Faux deletion
 gem 'postmark-rails' # Send via Postmark
+gem 'preferred_locale' # Process Accept-Language headers
 gem 'ranked-model' # Sortables!
 gem 'retriable' # Retry when errors happen
 gem 'roadie-rails' # Inline CSS for emails
