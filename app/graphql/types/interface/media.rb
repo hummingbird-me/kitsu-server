@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types::Interface::Media
   include Types::Interface::Base
 
@@ -26,7 +28,8 @@ module Types::Interface::Media
     method: :titles_list,
     description: 'The titles for this media in various locales'
 
-  localized_field :description,
+  field :description,
+    resolver: Resolvers::LocalizedField,
     description: 'A brief (mostly spoiler free) summary or description of the media.'
 
   field :original_locale, String,
@@ -135,7 +138,7 @@ module Types::Interface::Media
   def characters(sort: [{ on: :created_at, direction: :asc }])
     Loaders::MediaCharactersLoader.connection_for({
       find_by: :media_id,
-      sort: sort,
+      sort:,
       where: { media_type: type }
     }, object.id)
   end
@@ -153,7 +156,8 @@ module Types::Interface::Media
     description: 'The companies which helped to produce this media'
 
   def productions
-    Loaders::AssociationLoader.for(object.class, :productions, policy: :media_production).scope(object)
+    Loaders::AssociationLoader.for(object.class, :productions,
+      policy: :media_production).scope(object)
   end
 
   field :quotes, Types::Quote.connection_type,
@@ -172,10 +176,11 @@ module Types::Interface::Media
   def categories(sort: [{ on: :created_at, direction: :asc }])
     Loaders::MediaCategoriesLoader.connection_for({
       find_by: :media_id,
-      sort: sort,
+      sort:,
       where: { media_type: object.class.name }
     }, object.id).then do |categories|
-      Loaders::RecordLoader.for(Category, token: context[:token]).load_many(categories.map(&:category_id))
+      Loaders::RecordLoader.for(Category,
+        token: context[:token]).load_many(categories.map(&:category_id))
     end
   end
 
@@ -195,7 +200,7 @@ module Types::Interface::Media
   def reactions(sort: [{ on: :created_at, direction: :asc }])
     Loaders::MediaReactionsLoader.connection_for({
       find_by: :media_id,
-      sort: sort,
+      sort:,
       where: { media_type: type }
     }, object.id)
   end
@@ -208,7 +213,7 @@ module Types::Interface::Media
   def posts(sort: [{ on: :created_at, direction: :asc }])
     Loaders::PostsLoader.connection_for({
       find_by: :media_id,
-      sort: sort,
+      sort:,
       where: { media_type: type }
     }, object.id)
   end
@@ -226,7 +231,7 @@ module Types::Interface::Media
 
     Loaders::WikiSubmissionsLoader.connection_for({
       find_by: :user_id,
-      sort: sort,
+      sort:,
       where: "draft->>'id' = '#{object.id}' AND draft->>'type' = '#{object.class.name}'"
     }, User.current.id)
   end
