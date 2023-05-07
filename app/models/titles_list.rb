@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Encapsulates the title logic for a Media, making it much easier to work with.
 class TitlesList
   # @param titles [{Symbol, String => String}] the titles in various locales
@@ -12,8 +14,8 @@ class TitlesList
     original_languages: [],
     original_countries: []
   )
-    @titles = titles.symbolize_keys
-    @canonical_locale = canonical_locale.to_sym
+    @titles = titles
+    @canonical_locale = canonical_locale
     @alternatives = alternatives
     @original_languages = original_languages
     @original_countries = original_countries
@@ -21,20 +23,22 @@ class TitlesList
 
   # @return [{Symbol => String}] the titles keyed by locale
   def localized
-    @titles
+    @localized ||= @titles.transform_keys { |key| fix_locale_code(key) }
   end
 
   # @return [<String>] the list of alternative titles
   attr_reader :alternatives
 
   # @return [Symbol] the key of the canonical title in the localized titles hash
-  attr_reader :canonical_locale
+  def canonical_locale
+    fix_locale_code(@canonical_locale)
+  end
 
   # @return [Symbol, nil] the key of the romanized/romaji title in the localized titles hash
   def romanized_locale
     # HACK: this should use originalLanguages, but we can't easily use that until we switch to using
     # the en-t-ja style keys.  For now, this is the same bodge from the frontend.
-    %i[en_cn en_kr en_jp].find { |key| @titles.key?(key) }
+    fix_locale_code(%w[en_cn en_kr en_jp].find { |key| @titles.key?(key) })
   end
 
   # @return [Symbol, nil] the key of the original title of the media in the localized titles hash
@@ -42,17 +46,17 @@ class TitlesList
     # TODO: we should aim to resolve all cases where this is nil or uses the fallback logic and then
     # add a validation to ensure it moving forward
     keys = @original_languages.product(@original_countries).map do |(lang, country)|
-      "#{lang}_#{country}".downcase.to_sym
+      "#{lang}_#{country}".downcase
     end
 
     # ja_jp is the fallback case for now
-    [*keys, :ja_jp].find { |key| @titles.key?(key) }
+    fix_locale_code([*keys, 'ja_jp'].find { |key| @titles.key?(key) })
   end
 
   # @return [Symbol, nil] the key of the best-matching translated title of the media in the
   #   localized titles hash based on `I18n.fallbacks[I18n.locale]`
   def translated_locale
-    I18n.fallbacks[I18n.locale].find { |locale| @titles.key?(locale) }
+    fix_locale_code(I18n.fallbacks[I18n.locale].find { |locale| @titles.key?(locale.to_s) }&.to_s)
   end
 
   # Apply a title preference and get the first present title from it. Pass in an array of title
@@ -73,21 +77,39 @@ class TitlesList
 
   # @return [String] the canonical title (whatever we judge to be the "common" title)
   def canonical
-    @titles[canonical_locale]
+    localized[canonical_locale]
   end
 
   # @return [String, nil] the romanized/romaji/transliterated title
   def romanized
-    @titles[romanized_locale]
+    localized[romanized_locale]
   end
 
   # @return [String, nil] the original title of the media
   def original
-    @titles[original_locale]
+    localized[original_locale]
   end
 
   # @return [String, nil] the title of the media, translated into your current locale
   def translated
-    @titles[translated_locale]
+    localized[translated_locale]
+  end
+
+  private
+
+  # HACK: we store with old shitty keys, so we need to convert them to the new ones for output
+  def fix_locale_code(key)
+    locale = key&.tr('_', '-')
+    case locale
+    when 'en-cn', 'en-ch' then 'en-t-zh'
+    when 'en-kr', 'en-kn' then 'en-t-ko'
+    when 'en-th' then 'en-t-th'
+    when 'en-jp' then 'en-t-ja'
+    else locale
+    end
+  end
+
+  def available_locales
+    @available_locales ||= PreferredLocale.new(available: localized.keys)
   end
 end
