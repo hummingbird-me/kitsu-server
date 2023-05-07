@@ -18,6 +18,7 @@ runs:
         name: Install Cached ImageMagick ${{ inputs.version }}
         if: steps.cache-imagemagick.outputs.cache-hit == 'true'
         with:
+          timeout_minutes: 5
           max_attempts: 3
           shell: bash
           command: |
