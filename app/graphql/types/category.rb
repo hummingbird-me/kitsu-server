@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::Category < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
@@ -5,7 +7,8 @@ class Types::Category < Types::BaseObject
 
   field :id, ID, null: false
 
-  localized_field :title,
+  field :title,
+    resolver: Resolvers::LocalizedField,
     null: false,
     description: 'The name of the category.'
 
@@ -13,7 +16,8 @@ class Types::Category < Types::BaseObject
     { en: object.title } if object.title
   end
 
-  localized_field :description,
+  field :description,
+    resolver: Resolvers::LocalizedField,
     description: 'A brief summary or description of the catgory.'
 
   field :slug, String,

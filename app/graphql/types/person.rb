@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::Person < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
@@ -28,7 +30,8 @@ class Types::Person < Types::BaseObject
     }
   end
 
-  localized_field :description,
+  field :description,
+    resolver: Resolvers::LocalizedField,
     description: 'A brief biography or description of the person.'
 
   field :birthday, Types::Date,
