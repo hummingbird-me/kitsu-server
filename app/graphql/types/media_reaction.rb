@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::MediaReaction < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
@@ -19,7 +21,8 @@ class Types::MediaReaction < Types::BaseObject
     description: 'The media related to this reaction.'
 
   def media
-    Loaders::RecordLoader.for(object.media_type.constantize, token: context[:token]).load(object.media_id)
+    Loaders::RecordLoader.for(object.media_type.constantize,
+      token: context[:token]).load(object.media_id)
   end
 
   field :library_entry, Types::LibraryEntry,
@@ -46,7 +49,7 @@ class Types::MediaReaction < Types::BaseObject
   def likes(sort: [{ on: :created_at, direction: :desc }])
     Loaders::MediaReactionVotesLoader.connection_for({
       find_by: :media_reaction_id,
-      sort: sort
+      sort:
     }, object.id).then do |likes|
       Loaders::RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
@@ -58,6 +61,7 @@ class Types::MediaReaction < Types::BaseObject
 
   def has_liked
     return false if current_user.blank?
+    return true if current_user.id == object.user_id
 
     Loaders::RecordLoader.for(
       MediaReactionVote,
