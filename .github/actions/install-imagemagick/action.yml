@@ -14,6 +14,14 @@ runs:
           path: .imagemagick-deb/
           key: ${{ runner.os }}-magick-rev3-${{ inputs.version }}
 
+      - name: List Packages
+        shell: bash
+        run: ls -l ./.imagemagick-deb/
+
+      - name: Install Dependencies
+        shell: bash
+        run: sudo apt-get install -y libraqm-dev
+
       - uses: nick-fields/retry@v2
         name: Install Cached ImageMagick ${{ inputs.version }}
         if: steps.cache-imagemagick.outputs.cache-hit == 'true'
@@ -22,11 +30,7 @@ runs:
           max_attempts: 3
           shell: bash
           on_retry_command: for PPP in ./.imagemagick-deb/*.deb; do; sudo dpkg -r $(dpkg -f "$PPP" Package); done
-          command: |
-            ls -l ./.imagemagick-deb/
-            sudo apt-get install -y libraqm-dev
-            sudo apt install ./.imagemagick-deb/*.deb
-            magick -v
+          command: sudo apt install ./.imagemagick-deb/*.deb && magick -v
 
       - name: Build ImageMagick ${{ inputs.version }}
         if: steps.cache-imagemagick.outputs.cache-hit != 'true'
