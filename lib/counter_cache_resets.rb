@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CounterCacheResets
   module_function
 
@@ -76,7 +78,7 @@ module CounterCacheResets
     [
       "DROP TABLE IF EXISTS #{temp_table}",
       <<-SQL.squish,
-        CREATE TEMP TABLE #{temp_table} AS
+        CREATE TABLE #{temp_table} AS
         SELECT le.#{foreign_key}, rating, count(*)
         FROM library_entries le
         WHERE le.#{foreign_key} IS NOT NULL
@@ -120,7 +122,7 @@ module CounterCacheResets
     [
       "DROP TABLE IF EXISTS #{temp_table}",
       <<-SQL.squish,
-        CREATE TEMP TABLE #{temp_table} AS
+        CREATE TABLE #{temp_table} AS
         SELECT #{model.table_name}.id, count(concat_tables.#{association.foreign_key}) AS count
         FROM #{model.table_name}
         LEFT JOIN (
@@ -150,7 +152,7 @@ module CounterCacheResets
     [
       "DROP TABLE IF EXISTS #{temp_table}",
       <<-SQL.squish,
-        CREATE TEMP TABLE #{temp_table} AS
+        CREATE TABLE #{temp_table} AS
         SELECT #{association.foreign_key}, count(id) AS count
         FROM #{model.table_name}
         WHERE #{association.foreign_key} IS NOT NULL
@@ -183,7 +185,7 @@ module CounterCacheResets
     [
       "DROP TABLE IF EXISTS #{temp_table}",
       <<-SQL.squish,
-        CREATE TEMP TABLE #{temp_table} AS
+        CREATE TABLE #{temp_table} AS
         SELECT #{is_polymorphic && "#{inverse.foreign_type}, "}
                #{association.foreign_key}, count(*) AS count
         FROM #{association.table_name}
@@ -214,11 +216,9 @@ module CounterCacheResets
   def execute(sql, title = 'Executing SQL')
     if sql.respond_to?(:each)
       say_with_time(title) do
-        ActiveRecord::Base.transaction do
-          sql.each do |query|
-            say(query.to_s, true)
-            ActiveRecord::Base.connection.execute(query)
-          end
+        sql.each do |query|
+          say(query.to_s, true)
+          ActiveRecord::Base.connection.execute(query)
         end
       end
     else
@@ -245,7 +245,7 @@ module CounterCacheResets
 
   def progress_bar(title, count)
     ProgressBar.create(
-      title: title,
+      title:,
       total: count,
       output: STDERR,
       format: '%a (%p%%) |%B| %E %t'
