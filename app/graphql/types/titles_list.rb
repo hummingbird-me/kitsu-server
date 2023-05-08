@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class Types::TitlesList < Types::BaseObject
-  localized_field :localized,
+  field :localized,
+    resolver: Resolvers::LocalizedField,
     description: 'The list of localized titles keyed by locale'
 
   field :alternatives,

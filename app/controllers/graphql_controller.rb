@@ -1,21 +1,31 @@
+# frozen_string_literal: true
+
 class GraphqlController < ApplicationController
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    context = { token: current_user, user: current_user&.resource_owner }
+    context = {
+      token: current_user,
+      user: current_user&.resource_owner,
+      accept_languages:
+    }
     rack_span = OpenTelemetry::Instrumentation::Rack.current_span
     rack_span.name = "graphql##{operation_name}" if operation_name.present?
     result = KitsuSchema.execute(query,
-      variables: variables,
-      context: context,
-      operation_name: operation_name)
+      variables:,
+      context:,
+      operation_name:)
     render json: result
-  rescue StandardError => error
-    handle_error(error)
+  rescue StandardError => e
+    handle_error(e)
   end
 
   private
+
+  def accept_languages
+    PreferredLocale::HeaderParser.new(request.env['HTTP_ACCEPT_LANGUAGE']).preferred_locales
+  end
 
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)
@@ -47,6 +57,6 @@ class GraphqlController < ApplicationController
         backtrace: (exception.backtrace if Rails.env.development?)
       }.compact,
       data: {}
-    }, status: 500
+    }, status: :internal_server_error
   end
 end

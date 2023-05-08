@@ -542,6 +542,7 @@ GEM
     postmark-rails (0.22.0)
       actionmailer (>= 3.0.0)
       postmark (>= 1.21.3, < 2.0)
+    preferred_locale (1.1.0)
     progress (3.6.0)
     prometheus_exporter (2.0.8)
       webrick
@@ -863,6 +864,7 @@ DEPENDENCIES
   pg_query
   pghero
   postmark-rails
+  preferred_locale
   prometheus_exporter
   pry-byebug
   pry-rails

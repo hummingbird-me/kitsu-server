@@ -242,6 +242,9 @@ Style/HashTransformKeys:
   Enabled: true
 Style/HashTransformValues:
   Enabled: true
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+  Enabled: true
 Layout/SpaceBeforeFirstArg:
   Enabled: true
 Layout/SpaceAfterColon:

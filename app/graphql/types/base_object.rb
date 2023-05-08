@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class Types::BaseObject < GraphQL::Schema::Object
   include HasImageField
-  include HasLocalizedField
 
   connection_type_class(Types::BaseConnection)
 

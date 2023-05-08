@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails'
@@ -57,20 +59,18 @@ module Kitsu
 
     config.ssl_options = {
       redirect: {
-        exclude: -> (request) { request.path.start_with?('/api/_health') }
+        exclude: ->(request) { request.path.start_with?('/api/_health') }
       }
     }
 
-    # Set up Flipper's Memoizer middleware
-    config.middleware.insert_before 0, Flipper::Middleware::Memoizer
     # Enable CORS
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
         resource '*', headers: :any,
-                      methods: :any,
-                      credentials: false,
-                      max_age: 1.hour
+          methods: :any,
+          credentials: false,
+          max_age: 1.hour
       end
     end
 
@@ -86,10 +86,10 @@ module Kitsu
     else
       config.action_mailer.delivery_method = :smtp
       config.action_mailer.smtp_settings = {
-        address: ENV['SMTP_ADDRESS'],
+        address: ENV.fetch('SMTP_ADDRESS', nil),
         port: ENV['SMTP_PORT']&.to_i,
-        user_name: ENV['SMTP_USERNAME'],
-        password: ENV['SMTP_PASSWORD'],
+        user_name: ENV.fetch('SMTP_USERNAME', nil),
+        password: ENV.fetch('SMTP_PASSWORD', nil),
         authentication: ENV['SMTP_AUTHENTICATION']&.to_sym
       }.compact
     end
@@ -97,7 +97,7 @@ module Kitsu
     # Redis caching
     config.cache_store = :redis_cache_store, {
       driver: :hiredis,
-      url: ENV['REDIS_URL'],
+      url: ENV.fetch('REDIS_URL', nil),
       expires_in: 1.day
     }
 

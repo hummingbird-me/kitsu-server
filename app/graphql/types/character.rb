@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::Character < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
@@ -21,7 +23,8 @@ class Types::Character < Types::BaseObject
     }
   end
 
-  localized_field :description,
+  field :description,
+    resolver: Resolvers::LocalizedField,
     description: 'A brief summary or description of the character.'
 
   field :primary_media, Types::Interface::Media,

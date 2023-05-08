@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types::Interface::Unit
   include Types::Interface::Base
 
@@ -16,7 +18,8 @@ module Types::Interface::Unit
     }
   end
 
-  localized_field :description,
+  field :description,
+    resolver: Resolvers::LocalizedField,
     description: 'A brief summary or description of the unit'
 
   field :number, Integer,

@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class ApplicationController < JSONAPI::ResourceController
+  include PreferredLocale::AutoLocale
   include DoorkeeperHelpers
   include Pundit::ResourceController
   include MaintainIpAddresses
@@ -31,7 +34,7 @@ class ApplicationController < JSONAPI::ResourceController
   end
 
   rescue_from Strait::RateLimitExceeded do
-    render status: 429, json: {
+    render status: :too_many_requests, json: {
       errors: [{
         status: 429,
         title: 'Rate Limit Exceeded'
