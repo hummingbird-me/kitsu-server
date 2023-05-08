@@ -88,7 +88,6 @@ module CounterCacheResets
       <<-SQL.squish,
         CREATE INDEX ON #{temp_table} (#{foreign_key}, rating)
       SQL
-      "VACUUM #{temp_table}",
       <<-SQL.squish,
         UPDATE #{model.table_name}
         SET rating_frequencies = ARRAY[#{
@@ -133,7 +132,6 @@ module CounterCacheResets
       <<-SQL.squish,
         CREATE INDEX ON #{temp_table} (id)
       SQL
-      "VACUUM #{temp_table}",
       <<-SQL.squish,
         UPDATE #{model.table_name}
         SET #{counter_cache_column} = COALESCE((
@@ -161,7 +159,6 @@ module CounterCacheResets
       <<-SQL.squish,
         CREATE INDEX ON #{temp_table} (#{association.foreign_key})
       SQL
-      "VACUUM #{temp_table}",
       <<-SQL.squish,
         UPDATE #{model.table_name}
         SET #{counter_cache_column} = COALESCE((
@@ -199,7 +196,6 @@ module CounterCacheResets
           #{association.foreign_key}
         )
       SQL
-      "VACUUM #{temp_table}",
       <<-SQL.squish,
         UPDATE #{model.table_name}
         SET #{counter_cache_column} = COALESCE((
@@ -218,7 +214,10 @@ module CounterCacheResets
       say_with_time(title) do
         sql.each do |query|
           say(query.to_s, true)
-          ActiveRecord::Base.connection.execute(query)
+          ActiveRecord::Base.transaction do
+            ActiveRecord::Base.connection.execute('SET LOCAL statement_timeout = 0')
+            ActiveRecord::Base.connection.execute(query)
+          end
         end
       end
     else
