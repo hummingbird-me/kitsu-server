@@ -5,6 +5,16 @@ class Resolvers::LocalizedField < Resolvers::Base
 
   argument :locales, [String], required: false
 
+  class << self
+    attr_accessor :field_method
+  end
+
+  def self.from(field_method)
+    Class.new(self) do
+      self.field_method = field_method
+    end
+  end
+
   def resolve(locales: nil)
     if locales.present?
       if locales.include?('*')
@@ -33,14 +43,24 @@ class Resolvers::LocalizedField < Resolvers::Base
   end
 
   def localized_strings
-    @localized_strings ||= if object.is_a?(Hash)
-      object[field.method_sym]
-    elsif object.respond_to?(field.method_sym)
-      object.public_send(field.method_sym)
-    else
-      raise <<~ERR
-        Failed to implement localized field for #{field.owner.graphql_name}##{field.name}
-      ERR
+    @localized_strings ||= begin
+      value = if object.is_a?(Hash)
+        object[field.method_sym]
+      elsif object.respond_to?(field.method_sym)
+        object.public_send(field.method_sym)
+      else
+        raise <<~ERR
+          Failed to implement localized field for #{field.owner.graphql_name}##{field.name}
+        ERR
+      end
+
+      if self.class.field_method.respond_to?(:call)
+        self.class.field_method.call(object, value)
+      elsif self.class.field_method.is_a?(Symbol)
+        object.public_send(self.class.field_method)
+      else
+        value
+      end
     end.transform_keys { |k| k.to_s.tr('_', '-') }
   end
 end

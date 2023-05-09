@@ -8,13 +8,9 @@ class Types::Category < Types::BaseObject
   field :id, ID, null: false
 
   field :title,
-    resolver: Resolvers::LocalizedField,
+    resolver: Resolvers::LocalizedField.from(:titles),
     null: false,
     description: 'The name of the category.'
-
-  def title
-    { en: object.title } if object.title
-  end
 
   field :description,
     resolver: Resolvers::LocalizedField,
