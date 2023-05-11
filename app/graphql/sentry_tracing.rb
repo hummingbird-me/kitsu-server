@@ -14,7 +14,10 @@ class SentryTracing
       end
 
       Sentry.with_scope do
-        Sentry.set_transaction_name("GraphQL/#{op_type}.#{op_name}")
+        Sentry.configure_scope do |scope|
+          scope.set_transaction_name("GraphQL/#{op_type}.#{op_name}")
+        end
+
         yield
       end
     else
