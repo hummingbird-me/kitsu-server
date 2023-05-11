@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Chewy.settings = {
   sidekiq: {
     queue: 'later'

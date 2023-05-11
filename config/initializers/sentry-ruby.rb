@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Sentry.configure do |config|
+Sentry.init do |config|
   config.traces_sample_rate = 0.2
   config.profiles_sample_rate = 0.5
   config.breadcrumbs_logger = %i[sentry_logger http_logger active_support_logger]
