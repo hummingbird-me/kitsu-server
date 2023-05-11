@@ -3,6 +3,12 @@
 Chewy.settings = {
   sidekiq: {
     queue: 'later'
+  },
+  transport_options: {
+    request: {
+      open_timeout: 2,
+      timeout: 15
+    }
   }
 }
 
