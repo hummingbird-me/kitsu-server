@@ -30,7 +30,7 @@ class ListImport < ApplicationRecord
     Sentry.set_user(id: user.id, email: user.email, username: user.name)
     Sentry.set_tags(
       input_text: input_text.to_s,
-      input_file: input_file.url
+      input_file: input_file&.url
     )
 
     total = count
