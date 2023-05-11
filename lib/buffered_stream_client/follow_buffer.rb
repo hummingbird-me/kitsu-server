@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BufferedStreamClient
   class FollowBuffer < RedisBuffer
     # The numbers below are slightly below the max rate limit just for safety
@@ -17,7 +19,7 @@ class BufferedStreamClient
     def push(scrollback, *follows)
       follows = follows.select do |follow|
         valid = valid_follow?(follow)
-        Raven.capture_message('Invalid Follow', level: 'error', extra: follow) unless valid
+        Sentry.capture_message('Invalid Follow', level: 'error', extra: follow) unless valid
         valid
       end
       super(*follows, group: scrollback) unless follows.empty?
@@ -26,7 +28,7 @@ class BufferedStreamClient
     def flush_batch
       groups = longest_groups(GROUPS_PER_BATCH)
       groups.each do |group|
-        follows = next_batch_for(group: group, size: BATCH_SIZE)
+        follows = next_batch_for(group:, size: BATCH_SIZE)
         next if follows.empty?
 
         begin
@@ -36,7 +38,7 @@ class BufferedStreamClient
           end
           StreamRails.client.follow_many(follows, group.to_i)
         rescue StandardError
-          return_batch_to(follows, group: group)
+          return_batch_to(follows, group:)
           raise
         end
       end

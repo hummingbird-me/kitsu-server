@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EmbedService
   # User-Agent to use for the HTTP request.  We list facebookexternalhit and Twitterbot as
   # compatible to ensure we get served a version with the correct meta tags
@@ -38,12 +40,12 @@ class EmbedService
       embedder.as_json(*args)
     end
   rescue StandardError => e
-    Raven.capture_exception(e)
+    Sentry.capture_exception(e)
     {}
   end
 
   # @return [String] the JSON string for the embedded URL, using cache
-  def to_json
+  def to_json(*_args)
     as_json.to_json
   end
 

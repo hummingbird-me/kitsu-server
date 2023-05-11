@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class TheTvdbService
   class NotFound < StandardError; end
   class MappingError < StandardError; end
 
-  BASE_URL = 'https://api.thetvdb.com'.freeze
+  BASE_URL = 'https://api.thetvdb.com'
   API_KEY = ENV['THE_TVDB_API_KEY'].freeze
 
   # @return [ActiveRecord::Relation<Mapping>] a scope of Mappings to shows with missing thumbnails
@@ -107,12 +109,12 @@ class TheTvdbService
     Enumerator.new do |y|
       page = 1
       template = Addressable::Template.new('/series/{series_id}/episodes/query{?query*}')
-      season_number = season_numbers if /\A\d+\z/ =~ season_number
+      season_number = season_numbers if /\A\d+\z/.match?(season_number)
 
       loop do
-        url = template.expand(series_id: series_id, query: {
+        url = template.expand(series_id:, query: {
           airedSeason: season_number,
-          page: page
+          page:
         }.compact)
         response = get(url)
         response['data'].each do |row|
@@ -143,7 +145,7 @@ class TheTvdbService
     schedule = parse_schedule(media, series['airsDayOfWeek'], series['airsTime'])
     media.update!(release_schedule: schedule)
   rescue StandardError => e
-    Raven.capture_exception(e)
+    Sentry.capture_exception(e)
   end
 
   private
@@ -170,12 +172,12 @@ class TheTvdbService
     start_date = media.start_date.in_time_zone('Japan') - 23.hours
     duration = media.episode_length&.minutes || 23
 
-    IceCube::Schedule.new(start_date, duration: duration) do |s|
+    IceCube::Schedule.new(start_date, duration:) do |s|
       recurrence = if day_of_week.casecmp('daily').zero?
-                     IceCube::Rule.daily
-                   else
-                     IceCube::Rule.weekly.day(day_of_week.downcase.to_sym)
-                   end
+        IceCube::Rule.daily
+      else
+        IceCube::Rule.weekly.day(day_of_week.downcase.to_sym)
+      end
       time = Time.parse(time)
       recurrence = recurrence.hour_of_day(time.hour).minute_of_hour(time.min)
       recurrence = recurrence.count(media.episode_count) if media.episode_count

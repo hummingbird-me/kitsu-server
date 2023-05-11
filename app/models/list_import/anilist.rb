@@ -55,8 +55,7 @@ class ListImport
       )
     end
 
-    begin
-      MEDIA_LIST_QUERY = AnilistApiWrapper::Client.parse <<-'GRAPHQL'
+    MEDIA_LIST_QUERY = AnilistApiWrapper::Client.parse <<-GRAPHQL
         query($user_name: String) {
           anime: MediaListCollection(userName: $user_name, type: ANIME) {
             lists {
@@ -129,9 +128,9 @@ class ListImport
             }
           }
         }
-      GRAPHQL
-    end
+    GRAPHQL
+
   rescue StandardError => e
-    Raven.capture_exception(e)
+    Sentry.capture_exception(e)
   end
 end

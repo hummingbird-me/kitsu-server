@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sidekiq
   module Middleware
     module Server
@@ -7,8 +9,8 @@ module Sidekiq
           user = User.find_by(id: job['current_user'])
           # Save it onto the thread
           Thread.current[:current_user] = user
-          # Send it to Raven
-          Raven.user_context(id: user.id, name: user.name) if user
+          # Send it to Sentry
+          Sentry.set_user(id: user.id, name: user.name, email: user.email) if user
           # Run Sidekiq job
           yield
         ensure

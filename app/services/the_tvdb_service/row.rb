@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TheTvdbService
   class Row < TheTvdbService
     attr_reader :media, :data, :tvdb_episode_id, :tvdb_series_id
@@ -11,7 +13,7 @@ class TheTvdbService
     end
 
     def update_episode
-      return unless number.present?
+      return if number.blank?
 
       episode.titles = titles.merge(episode.titles)
       episode.canonical_title ||= 'en_us'
@@ -24,7 +26,7 @@ class TheTvdbService
       episode.save!
       episode
     rescue StandardError => e
-      Raven.capture_exception(e)
+      Sentry.capture_exception(e)
     end
 
     def titles
@@ -63,8 +65,8 @@ class TheTvdbService
 
     def episode
       @episode ||= Episode.where(
-        media: media,
-        number: number
+        media:,
+        number:
       ).first_or_initialize
     end
 

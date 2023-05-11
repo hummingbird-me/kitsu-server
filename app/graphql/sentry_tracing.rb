@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SentryTracing
   def self.trace(key, data)
     if key.start_with?('execute_query')
@@ -11,11 +13,9 @@ class SentryTracing
         op_name = 'anonymous'
       end
 
-      begin
-        Raven.context.transaction.push("GraphQL/#{op_type}.#{op_name}")
+      Sentry.with_scope do
+        Sentry.set_transaction_name("GraphQL/#{op_type}.#{op_name}")
         yield
-      ensure
-        Raven.context.transaction.pop
       end
     else
       yield

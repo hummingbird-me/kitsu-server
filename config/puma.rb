@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 workers Integer(ENV['WEB_CONCURRENCY'] || 4)
 threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 6)
 threads 0, threads_count
@@ -41,7 +43,7 @@ before_fork do
 end
 
 lowlevel_error_handler do |ex, env|
-  Raven.capture_exception(
+  Sentry.capture_exception(
     ex,
     message: ex.message,
     extra: { puma: env, culprit: 'Puma' }

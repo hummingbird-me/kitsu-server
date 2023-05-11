@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'typhoeus'
 
 Ethon.logger = Logger.new(nil)
@@ -5,18 +7,19 @@ Ethon.logger = Logger.new(nil)
 module Typhoeus
   class Request
     def finish(response, bypass_memoization = nil)
-      Raven.breadcrumbs.record do |crumb|
-        crumb.category = 'requests'
-        crumb.type = 'http'
-        crumb.data = {
-          url: url,
+      crumb = Sentry::Breadcrumb.new(
+        category: 'requests',
+        type: 'http',
+        data: {
+          url:,
           method: options[:method],
           status_code: response.code,
           redirect_count: response.redirect_count,
           total_time: response.total_time
-        }
-        crumb.level = :debug
-      end
+        },
+        level: :debug
+      )
+      Sentry.add_breadcrumb(crumb)
     ensure
       super(response, bypass_memoization)
     end

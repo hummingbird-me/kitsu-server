@@ -125,7 +125,10 @@ gem 'opentelemetry-instrumentation-rails'
 gem 'opentelemetry-instrumentation-redis'
 gem 'opentelemetry-sdk'
 gem 'prometheus_exporter' # Shit out metrics over Prometheus
-gem 'sentry-raven' # Send error data to Sentry
+gem 'sentry-rails'
+gem 'sentry-ruby'
+gem 'sentry-sidekiq'
+gem 'stackprof'
 
 # Admin Panel
 gem 'pghero'

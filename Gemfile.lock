@@ -695,8 +695,14 @@ GEM
     scenic (1.6.0)
       activerecord (>= 4.0.0)
       railties (>= 4.0.0)
-    sentry-raven (2.13.0)
-      faraday (>= 0.7.6, < 1.0)
+    sentry-rails (5.9.0)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.9.0)
+    sentry-ruby (5.9.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+    sentry-sidekiq (5.9.0)
+      sentry-ruby (~> 5.9.0)
+      sidekiq (>= 3.0)
     shellany (0.0.1)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
@@ -744,6 +750,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    stackprof (0.2.25)
     strait (1.2.0)
       connection_pool (>= 2.0, < 3.0)
       redis (~> 4.0, >= 3.0)
@@ -894,7 +901,9 @@ DEPENDENCIES
   sass-rails
   sassc-rails
   scenic
-  sentry-raven
+  sentry-rails
+  sentry-ruby
+  sentry-sidekiq
   shoulda-matchers
   shrine
   shrine-blurhash
@@ -905,6 +914,7 @@ DEPENDENCIES
   sinatra
   sitemap_generator
   spring
+  stackprof
   strait
   stream-ruby (~> 2.10.0)
   stream_rails!

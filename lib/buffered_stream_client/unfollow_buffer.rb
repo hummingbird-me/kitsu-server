@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BufferedStreamClient
   class UnfollowBuffer < RedisBuffer
     # The numbers below are slightly below the max rate limit just for safety
@@ -12,7 +14,7 @@ class BufferedStreamClient
 
     def push(*unfollows)
       unless unfollows.all? { |f| valid_follow?(f) }
-        return Raven.capture_message('Invalid Unfollow', level: 'error', extra: f)
+        return Sentry.capture_message('Invalid Unfollow', level: 'error', extra: f)
       end
       super(*unfollows, group: 'default')
     end

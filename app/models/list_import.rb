@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class ListImport < ApplicationRecord
   include Enumerable
   include WithActivity
 
-  belongs_to :user, required: true
+  belongs_to :user, optional: false
 
-  enum strategy: %i[greater obliterate]
-  enum status: %i[queued running failed completed partially_failed]
+  enum strategy: { greater: 0, obliterate: 1 }
+  enum status: { queued: 0, running: 1, failed: 2, completed: 3, partially_failed: 4 }
   alias_attribute :kind, :type
 
   validates :strategy, presence: true
@@ -25,11 +27,10 @@ class ListImport < ApplicationRecord
   # Apply the ListImport
   def apply
     # Send info to Sentry
-    Raven.context.transaction.push type
-    Raven.user_context(id: user.id, email: user.email, username: user.name)
-    Raven.extra_context(
+    Sentry.set_user(id: user.id, email: user.email, username: user.name)
+    Sentry.set_tags(
       input_text: input_text.to_s,
-      input_file: input_file_data
+      input_file: input_file.url
     )
 
     total = count
@@ -37,18 +38,18 @@ class ListImport < ApplicationRecord
     # Last-ditch check for validity
     raise 'Import is invalid' unless valid?(:create)
 
-    yield({ status: :running, total: total, progress: 0 })
+    yield({ status: :running, total:, progress: 0 })
     Chewy.strategy(:atomic) do
       each_with_index do |(media, data), index|
-        next unless media.present?
+        next if media.blank?
         # Merge the library entries
-        le = LibraryEntry.where(user_id: user.id, media: media).first_or_initialize
+        le = LibraryEntry.where(user_id: user.id, media:).first_or_initialize
         le.imported = true
         le = merged_entry(le, data)
         le.save! unless le.status.nil?
-        yield({ status: :running, total: total, progress: index + 1 })
+        yield({ status: :running, total:, progress: index + 1 })
       rescue StandardError => e
-        Raven.capture_exception(e)
+        Sentry.capture_exception(e)
         yield({
           status: :partially_failed,
           error_message: e.message,
@@ -56,9 +57,9 @@ class ListImport < ApplicationRecord
         })
       end
     end
-    yield({ status: :completed, total: total, progress: total })
+    yield({ status: :completed, total:, progress: total })
   rescue StandardError => e
-    Raven.capture_exception(e)
+    Sentry.capture_exception(e)
     yield({
       status: :failed,
       error_message: e.message,
@@ -88,12 +89,12 @@ class ListImport < ApplicationRecord
   end
 
   def apply_async!(queue: 'now')
-    ListImportWorker.perform_async(id, queue: queue) unless running?
+    ListImportWorker.perform_async(id, queue:) unless running?
   end
 
   def retry_async!(queue: 'eventually')
     update!(status: :queued)
-    ListImportWorker.perform_async(id, queue: queue)
+    ListImportWorker.perform_async(id, queue:)
   end
 
   def merged_entry(entry, data)
@@ -120,7 +121,7 @@ class ListImport < ApplicationRecord
     user.notifications.activities.new(
       verb: 'imported',
       kind: self.class.name,
-      status: status
+      status:
     )
   end
 

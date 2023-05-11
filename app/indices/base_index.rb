@@ -183,10 +183,10 @@ class BaseIndex
             end
           end
           value = if value.respond_to?(assoc[:attr])
-                    value.send(assoc[:attr])
-                  elsif value.respond_to?(:map)
-                    value.map { |x| x.send(assoc[:attr]) }
-                  end
+            value.send(assoc[:attr])
+          elsif value.respond_to?(:map)
+            value.map { |x| x.send(assoc[:attr]) }
+          end
           associated[assoc[:name]] = value
         end
       end
@@ -242,10 +242,10 @@ class BaseIndex
     _attributes.each do |attr|
       changed = "#{attr[:method]}_changed?"
       dirty = if respond_to?(changed) then send(changed)
-              elsif _model.respond_to?(changed) then _model.send(changed)
-              else
-                true
-              end
+      elsif _model.respond_to?(changed) then _model.send(changed)
+      else
+        true
+      end
       dirty &&= rand(100.0) <= attr[:frequency] if attr[:frequency]
       return true if dirty
     end
@@ -264,7 +264,7 @@ class BaseIndex
       index.save_object(as_json)
     end
   rescue Algolia::AlgoliaError => e
-    Raven.capture_exception(e)
+    Sentry.capture_exception(e)
   end
 
   def algolia_id

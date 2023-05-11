@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EmbedLinkCallbacks < Callbacks
   # @param klass [Class] the class to hook the callbacks for
   def self.hook(klass)
@@ -19,7 +21,7 @@ class EmbedLinkCallbacks < Callbacks
   def embed
     EmbedService.new(embed_url).as_json if embed_url
   rescue StandardError => e
-    Raven.capture_exception(e)
+    Sentry.capture_exception(e)
     nil
   end
 

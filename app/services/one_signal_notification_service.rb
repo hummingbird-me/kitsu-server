@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OneSignalNotificationService
   class OneSignalError < StandardError; end
 
@@ -9,11 +11,12 @@ class OneSignalNotificationService
   def run!
     notification = notify!
     invalid_players = notification[:results].map do |res|
-      Raven.breadcrumbs.record(
+      crumb = Sentry::Breadcrumb.new(
         data: res,
         category: 'onesignal',
-        message: "Notified #{@user.name}"
+        message: "Notified #{@user}"
       )
+      sentry.add_breadcrumb(crumb)
       if res['errors'].is_a?(Hash)
         res&.dig('errors', 'invalid_player_ids')
       elsif Array.wrap(res['errors']).include?('All included players are not subscribed')
@@ -21,7 +24,7 @@ class OneSignalNotificationService
       else
         Array.wrap(res['errors']).each do |message|
           ex = OneSignalError.new(message)
-          Raven.capture_exception(ex)
+          Sentry.capture_exception(ex)
         end
         []
       end
@@ -45,20 +48,20 @@ class OneSignalNotificationService
     results = player_ids.map { |platform, ids| notify_players(platform, ids) }
     # Return things
     {
-      player_ids: player_ids,
-      results: results
+      player_ids:,
+      results:
     }
   end
 
   def notify_players(platform, players)
     params = params_for(platform).merge(include_player_ids: players)
-    res = OneSignal::Notification.create(params: params)
+    res = OneSignal::Notification.create(params:)
     JSON.parse(res.body)
   end
 
   def params_for(platform)
     params = {
-      app_id: app_id,
+      app_id:,
       contents: { en: notification.message },
       external_id: external_id_for(platform)
     }
@@ -83,10 +86,10 @@ class OneSignalNotificationService
   end
 
   def app_id
-    ENV['ONE_SIGNAL_APP_ID']
+    ENV.fetch('ONE_SIGNAL_APP_ID', nil)
   end
 
   def api_key
-    ENV['ONE_SIGNAL_API_KEY']
+    ENV.fetch('ONE_SIGNAL_API_KEY', nil)
   end
 end

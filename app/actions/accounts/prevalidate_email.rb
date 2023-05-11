@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 module Accounts
   class PrevalidateEmail < Action
     class EmailableError < StandardError; end
 
     HTTP_TIMEOUT = 10.seconds
-    API_KEY = ENV['EMAILABLE_API_KEY']
-    URL = 'https://api.emailable.com/v1/verify'.freeze
+    API_KEY = ENV.fetch('EMAILABLE_API_KEY', nil)
+    URL = 'https://api.emailable.com/v1/verify'
     URL_TEMPLATE = Addressable::Template.new("#{URL}?api_key=#{API_KEY}{&email}").freeze
 
     parameter :email, required: true
 
     def call
-      { result: result, reason: reason }
+      { result:, reason: }
     end
 
     private
@@ -32,14 +34,14 @@ module Accounts
       if response.status == 200
         @response_data = response.parse
       else
-        Raven.capture_exception(EmailableError.new, extra: {
+        Sentry.capture_exception(EmailableError.new, extra: {
           response_status: response.status,
           response_data: response.parse
         })
         @response_data = default_unknown_response_for('bad_gateway')
       end
     rescue HTTP::TimeoutError => e
-      Raven.capture_exception(e)
+      Sentry.capture_exception(e)
       @response_data = default_unknown_response_for('timeout')
     end
 
@@ -52,7 +54,7 @@ module Accounts
     end
 
     def url
-      @url ||= URL_TEMPLATE.expand(email: email)
+      @url ||= URL_TEMPLATE.expand(email:)
     end
   end
 end

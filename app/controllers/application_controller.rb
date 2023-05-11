@@ -42,7 +42,7 @@ class ApplicationController < JSONAPI::ResourceController
     }
   end
 
-  if Raven.configuration.capture_allowed?
+  if Sentry.configuration.sending_allowed?
     on_server_error do |error|
       extra = {}
       begin
@@ -53,7 +53,7 @@ class ApplicationController < JSONAPI::ResourceController
           extra[:fingerprint] = [error.original_exception.class.name, *trace]
         end
       ensure
-        Raven.capture_exception(error, extra)
+        Sentry.capture_exception(error, extra)
       end
     end
 
@@ -61,8 +61,11 @@ class ApplicationController < JSONAPI::ResourceController
 
     def tag_sentry_context
       user = current_user&.resource_owner
-      Raven.user_context(id: user.id, name: user.name) if user
-      Raven.extra_context(url: request.url)
+      Sentry.set_user(
+        id: user&.id,
+        name: user&.name,
+        ip_address: request.remote_ip
+      )
     end
   end
 end

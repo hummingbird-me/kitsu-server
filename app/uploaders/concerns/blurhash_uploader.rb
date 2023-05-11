@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlurhashUploader
   extend ActiveSupport::Concern
 
@@ -12,6 +14,6 @@ module BlurhashUploader
       x_comp = Math.sqrt(15.to_f / ratio).floor.clamp(2, 5)
       y_comp = (x_comp * ratio).floor.clamp(2, 5)
       [x_comp, y_comp]
-    }, on_error: ->(error) { Raven.capture_exception(error) }
+    }, on_error: ->(error) { Sentry.capture_exception(error) }
   end
 end
