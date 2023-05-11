@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GlobalStat < ApplicationRecord
   module AmountConsumed
     extend ActiveSupport::Concern
@@ -22,9 +24,13 @@ class GlobalStat < ApplicationRecord
     end
 
     def percentiles_for(field)
-      query = Arel.sql("percentile_disc(array[#{percentiles.join(',')}])
+      ActiveRecord::Base.transaction do
+        ActiveRecord::Base.connection.execute('SET LOCAL statement_timeout = 0')
+
+        query = Arel.sql("percentile_disc(array[#{percentiles.join(',')}])
         WITHIN GROUP (ORDER BY (stats_data->>'#{field}')::integer)")
-      stats_for(field).pluck(query).first
+        stats_for(field).pick(query)
+      end
     end
 
     def percentiles
@@ -36,7 +42,11 @@ class GlobalStat < ApplicationRecord
     end
 
     def stats_for(field)
-      stat_class.where(stats_query(field))
+      ActiveRecord::Base.transaction do
+        ActiveRecord::Base.connection.execute('SET LOCAL statement_timeout = 0')
+
+        stat_class.where(stats_query(field))
+      end
     end
 
     def stats_query(field)
