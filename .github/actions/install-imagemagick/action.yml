@@ -31,7 +31,9 @@ runs:
           shell: bash
           on_retry_command:
             for PPP in ./.imagemagick-deb/*.deb; do; sudo dpkg -r $(dpkg -f "$PPP" Package); done
-          command: sudo apt install ./.imagemagick-deb/*.deb && magick -version
+          command: |
+            sudo apt install ./.imagemagick-deb/*.deb
+            magick -version
 
       - name: Build ImageMagick ${{ inputs.version }}
         if: steps.cache-imagemagick.outputs.cache-hit != 'true'
