@@ -16,7 +16,7 @@ class OneSignalNotificationService
         category: 'onesignal',
         message: "Notified #{@user}"
       )
-      sentry.add_breadcrumb(crumb)
+      Sentry.add_breadcrumb(crumb)
       if res['errors'].is_a?(Hash)
         res&.dig('errors', 'invalid_player_ids')
       elsif Array.wrap(res['errors']).include?('All included players are not subscribed')
