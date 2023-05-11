@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StatWorker
   include Sidekiq::Worker
 
@@ -25,11 +27,11 @@ class StatWorker
       stat.save!
       stat.lock!
 
-      # If the model data is older than the last stat recalculation, we don't have to do anything
-      return if model.updated_at && model.updated_at <= stat.recalculated_at
-
-      # Call down to the stat to run the action
-      stat.public_send("on_#{action}", wrapper) if stat.respond_to?("on_#{action}")
+      # If the model data is newer than the last stat recalculation, inform it of the change
+      if model.updated_at > stat.recalculated_at && stat.respond_to?("on_#{action}")
+        # Call down to the stat to run the action
+        stat.public_send("on_#{action}", wrapper)
+      end
     end
   end
 
@@ -39,6 +41,6 @@ class StatWorker
     # Destruction doesn't set the update time which we need to account for recalculation
     attributes['updated_at'] = Time.now if action.to_s == 'destroy'
     changes = model.saved_changes
-    super(stat, user.id, action, { class: model.class.name, attributes: attributes }, changes)
+    super(stat, user.id, action, { class: model.class.name, attributes: }, changes)
   end
 end
