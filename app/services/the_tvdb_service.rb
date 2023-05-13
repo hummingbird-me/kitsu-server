@@ -10,12 +10,12 @@ class TheTvdbService
   # @return [ActiveRecord::Relation<Mapping>] a scope of Mappings to shows with missing thumbnails
   def self.missing_thumbnails
     Mapping.where(external_site: 'thetvdb')
-           .joins(Arel.sql(<<-SQL))
+           .joins(Arel.sql(<<-SQL.squish))
              LEFT OUTER JOIN episodes
              ON mappings.item_id = episodes.media_id
              AND mappings.item_type = episodes.media_type
            SQL
-           .where(episodes: { thumbnail_file_name: nil }).distinct
+           .where(episodes: { thumbnail_data: nil }).distinct
   end
 
   # @return [ActiveRecord::Relation<Mapping>] a scope of Mappings to shows which are airing
