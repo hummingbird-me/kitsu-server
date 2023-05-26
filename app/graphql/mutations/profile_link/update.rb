@@ -1,36 +1,39 @@
+# frozen_string_literal: true
+
 class Mutations::ProfileLink::Update < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  argument :input,
-    Types::Input::ProfileLink::Update,
-    required: true,
-    description: 'Add a profile link',
-    as: :profile_link
+  description 'Update profile links'
 
-  field :site_link, Types::SiteLink, null: true
+  input do
+    argument :url, String,
+      required: true,
+      description: 'The url of the profile link',
+      as: :profile_link_url
+    argument :profile_link_site,
+      Types::Enum::ProfileLinksSites,
+      required: true,
+      description: 'The website.'
+  end
+  result Types::SiteLink
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotAuthorized,
+    Types::Errors::NotFound
 
-  def load_profile_link(value)
-    profile_link = ProfileLink.find_by!(
-      user_id: current_user.id,
-      profile_link_site_id: value.profile_link_site_id
+  def ready?(profile_link_site:, **)
+    authenticate!
+    return errors << Types::Errors::NotAuthenticated.build if current_user.nil?
+    @profile_link = ProfileLink.find_by!(
+      profile_link_site_id: profile_link_site,
+      user_id: current_user.id
     )
-    profile_link.assign_attributes(value.to_h)
-    profile_link
+    # return errors << Types::Errors::NotFound.build if @profile_link.nil?
+    authorize!(@profile_link, :update?)
+    true
   end
 
-  def authorized?(profile_link:)
-    return true if ProfileLinkPolicy.new(context[:token], profile_link).update?
-
-    [false, {
-      errors: [
-        { message: 'Not Authorized', code: 'NotAuthorized' }
-      ]
-    }]
-  end
-
-  def resolve(profile_link:)
-    profile_link.save!
-
-    { site_link: profile_link }
+  def resolve(profile_link_url:, **)
+    @profile_link.update!(url: profile_link_url)
+    @profile_link.tap(&:save!)
   end
 end

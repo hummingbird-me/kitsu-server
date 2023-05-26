@@ -1,32 +1,35 @@
+# frozen_string_literal: true
+
 class Mutations::Favorite::Create < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  argument :input,
-    Types::Input::Favorite::Create,
-    required: true,
-    description: 'Create a Favorite Entry',
-    as: :favorite
+  description 'Add a favorite entry.'
 
-  field :favorite, Types::Favorite, null: true
-  field :errors, [Types::Interface::Error], null: true
+  input do
+    argument :item_id, ID,
+      required: true,
+      description: 'The id of the entry'
+    argument :item_type,
+      Types::Enum::FavoriteItem,
+      required: true,
+      description: 'The type of the entry.'
+  end
+  result Types::Favorite
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotFound
 
-  def load_favorite(value)
-    Favorite.new(value.to_model)
+  def ready?(**)
+    authenticate!
+    true
   end
 
-  def authorized?(favorite:)
-    return true if FavoritePolicy.new(context[:token], favorite).create?
-
-    [false, {
-      errors: [
-        { message: 'Not Authorized', code: 'NotAuthorized' }
-      ]
-    }]
-  end
-
-  def resolve(favorite:)
-    favorite.save!
-
-    { favorite: favorite }
+  def resolve(item_id:, item_type:, **)
+    @favorite = Favorite.new(
+      item_type:,
+      item_id:,
+      user_id: current_user.id
+    )
+    authorize!(@favorite, :create?)
+    @favorite.tap(&:save!)
   end
 end

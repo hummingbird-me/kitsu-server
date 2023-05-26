@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::MutationType < Types::BaseObject
   def self.fancy_mutation(
     klass,

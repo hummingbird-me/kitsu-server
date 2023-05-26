@@ -1,31 +1,30 @@
+# frozen_string_literal: true
+
 class Mutations::ProfileLink::Delete < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  argument :input,
-    Types::Input::GenericDelete,
-    required: true,
-    description: 'Remove a profile link',
-    as: :profile_link
+  description 'Delete a profile link'
 
-  field :site_link, Types::GenericDelete, null: true
+  input do
+    argument :profile_link_id, ID,
+      required: true,
+      description: 'The profile link to delete'
+  end
+  result Types::SiteLink
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotAuthorized,
+    Types::Errors::NotFound
 
-  def load_profile_link(value)
-    ProfileLink.find(value.id)
+  def ready?(profile_link_id:)
+    authenticate!
+    @profile_link = ProfileLink.find_by(id: profile_link_id)
+    return errors << Types::Errors::NotFound.build if @profile_link.nil?
+    authorize!(@profile_link, :destroy?)
+    true
   end
 
-  def authorized?(profile_link:)
-    return true if ProfileLinkPolicy.new(context[:token], profile_link).destroy?
-
-    [false, {
-      errors: [
-        { message: 'Not Authorized', code: 'NotAuthorized' }
-      ]
-    }]
-  end
-
-  def resolve(profile_link:)
-    profile_link.destroy!
-
-    { site_link: { id: profile_link.id } }
+  def resolve(**)
+    @profile_link.destroy!
+    @profile_link
   end
 end

@@ -1,31 +1,30 @@
+# frozen_string_literal: true
+
 class Mutations::Block::Create < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  argument :input,
-    Types::Input::Block::Create,
-    required: true,
-    description: 'Block a user.',
-    as: :block
+  description 'Block a user'
 
-  field :block, Types::Block, null: true
+  input do
+    argument :blocked_id, ID,
+      required: true,
+      description: 'The id of the user to block.'
+  end
+  result Types::Block
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotFound
 
-  def load_block(value)
-    Block.new(value.to_model)
+  def ready?(**)
+    authenticate!
+    true
   end
 
-  def authorized?(block:)
-    return true if BlockPolicy.new(context[:token], block).create?
-
-    [false, {
-      errors: [
-        { message: 'Not Authorized', code: 'NotAuthorized' }
-      ]
-    }]
-  end
-
-  def resolve(block:)
-    block.save!
-
-    { block: block }
+  def resolve(blocked_id:, **)
+    @block = Block.new(
+      user_id: current_user.id,
+      blocked_id:
+    )
+    authorize!(@block, :create?)
+    @block.tap(&:save!)
   end
 end

@@ -1,31 +1,28 @@
+# frozen_string_literal: true
+
 class Mutations::Block::Delete < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  argument :input,
-    Types::Input::GenericDelete,
-    required: true,
-    description: 'Remove a block entry.',
-    as: :block
+  description 'Unblock a user'
 
-  field :block, Types::GenericDelete, null: true
+  input do
+    argument :block_id, ID,
+      required: true,
+      description: 'The id of the block.'
+  end
+  result Types::Block
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotFound
 
-  def load_block(value)
-    Block.find(value.id)
+  def ready?(block_id:, **)
+    authenticate!
+    @block = Block.find(block_id)
+    authorize!(@block, :destroy?)
+    true
   end
 
-  def authorized?(block:)
-    return true if BlockPolicy.new(context[:token], block).destroy?
-
-    [false, {
-      errors: [
-        { message: 'Not Authorized', code: 'NotAuthorized' }
-      ]
-    }]
-  end
-
-  def resolve(block:)
-    block.destroy!
-
-    { block: { id: block.id } }
+  def resolve(**)
+    @block.destroy!
+    @block
   end
 end

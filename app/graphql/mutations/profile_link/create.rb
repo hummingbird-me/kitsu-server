@@ -1,31 +1,42 @@
+# frozen_string_literal: true
+
 class Mutations::ProfileLink::Create < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  argument :input,
-    Types::Input::ProfileLink::Create,
-    required: true,
-    description: 'Add a profile link',
-    as: :profile_link
+  description 'Create a profile link'
 
-  field :site_link, Types::SiteLink, null: true
+  input do
+    argument :url, String,
+      required: true,
+      description: 'The url of the profile link',
+      as: :profile_link_url
+    argument :profile_link_site,
+      Types::Enum::ProfileLinksSites,
+      required: true,
+      description: 'The website.'
+  end
+  result Types::SiteLink
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotAuthorized,
+    Types::Errors::NotFound
 
-  def load_profile_link(value)
-    ProfileLink.new(value.to_model)
+  def ready?(**)
+    authenticate!
+    profile_link = ProfileLink.find_by(
+      profile_link_site_id: profile_link,
+      user_id: current_user.id
+    )
+    raise GraphQL::ExecutionError, 'You already have this profile link.' if profile_link
+    true
   end
 
-  def authorized?(profile_link:)
-    return true if ProfileLinkPolicy.new(context[:token], profile_link).create?
-
-    [false, {
-      errors: [
-        { message: 'Not Authorized', code: 'NotAuthorized' }
-      ]
-    }]
-  end
-
-  def resolve(profile_link:)
-    profile_link.save!
-
-    { site_link: profile_link }
+  def resolve(profile_link_url:, profile_link_site:, **)
+    @profile_link = ProfileLink.new(
+      url: profile_link_url,
+      profile_link_site_id: profile_link_site,
+      user_id: current_user.id
+    )
+    authorize!(@profile_link, :create?)
+    @profile_link.tap(&:save!)
   end
 end

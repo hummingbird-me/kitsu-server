@@ -1,31 +1,58 @@
+# frozen_string_literal: true
+
 class Mutations::Account::Update < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  description 'Update profile and account'
+  description 'Update account'
 
-  argument :input,
-    Types::Input::Account::Update,
-    required: true,
-    description: 'Update profile and account',
-    as: :profile
+  input do
+    argument :name,
+      String,
+      required: false,
+      description: 'The display name of the user'
+    argument :slug,
+      String,
+      required: false,
+      description: 'The slug (@username) of the user'
+    argument :sfw_filter_preference,
+      Types::Enum::SfwFilterPreference,
+      required: false,
+      description: 'The SFW Filter setting'
+    argument :country,
+      String,
+      required: false,
+      description: 'The country of the user'
+    argument :site_theme,
+      Types::Enum::SiteTheme,
+      required: false,
+      description: 'The theme displayed on Kitsu'
+    argument :rating_system,
+      Types::Enum::RatingSystem,
+      required: false,
+      description: 'The preferred rating system'
+    argument :preferred_title_language,
+      Types::Enum::TitleLanguagePreference,
+      required: false,
+      description: 'How media titles will get visualized'
+    argument :time_zone,
+      String,
+      required: false,
+      description: 'The time zone of the user'
+  end
+  result Types::Account
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotAuthorized,
+    Types::Errors::NotFound
 
-  field :profile, Types::Profile, null: true
-  field :account, Types::Account, null: true
-
-  def ready?(profile:)
-    raise GraphQL::ExecutionError, 'You must be authorized.' if current_token.blank?
+  def ready?(**)
+    authenticate!
+    return errors << Types::Errors::NotAuthenticated.build if current_user.nil?
+    authorize!(current_user, :update?)
     true
   end
 
-  def load_profile(value)
-    profile = ::User.find(current_user.id)
-    profile.assign_attributes(value.to_h)
-    profile
-  end
-
-  def resolve(profile:)
-    profile.save!
-
-    { profile: profile, account: profile }
+  def resolve(**input)
+    current_user.update!(**input)
+    current_user
   end
 end
