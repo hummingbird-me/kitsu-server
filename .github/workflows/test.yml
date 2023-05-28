@@ -88,10 +88,13 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Install ImageMagick (${{ env.IMAGEMAGICK_VERSION }})
-      uses: ./.github/actions/install-imagemagick
-      with:
-        version: ${{ env.IMAGEMAGICK_VERSION }}
+    - name: Install ImageMagick
+      run: |
+        mkdir -p "$HOME/.local/bin"
+        curl -O 'https://download.imagemagick.org/ImageMagick/download/binaries/magick'
+        chmod u+x magick
+        mv magick "$HOME/.local/bin"
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
     - name: Install Dependencies
       run: |
