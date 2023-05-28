@@ -91,7 +91,7 @@ jobs:
     - name: Install ImageMagick
       run: |
         mkdir -p "$HOME/.local/bin"
-        curl -O 'https://download.imagemagick.org/ImageMagick/download/binaries/magick'
+        curl -O 'https://download.imagemagick.org/archive/binaries/magick'
         chmod u+x magick
         mv magick "$HOME/.local/bin"
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
