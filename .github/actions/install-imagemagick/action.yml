@@ -14,10 +14,6 @@ runs:
           path: .imagemagick-deb/
           key: ${{ runner.os }}-magick-rev3-${{ inputs.version }}
 
-      - name: List Packages
-        shell: bash
-        run: "[ -d ./.imagemagick-deb/ ] && ls -l ./.imagemagick-deb/"
-
       - name: Install Dependencies
         shell: bash
         run: sudo apt-get install -y libraqm-dev
@@ -32,6 +28,7 @@ runs:
           on_retry_command:
             for PPP in ./.imagemagick-deb/*.deb; do; sudo dpkg -r $(dpkg -f "$PPP" Package); done
           command: |
+            ls -l ./.imagemagick-deb/
             sudo apt install ./.imagemagick-deb/*.deb
             magick -version
 
