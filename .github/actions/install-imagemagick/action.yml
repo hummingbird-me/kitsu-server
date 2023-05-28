@@ -46,6 +46,12 @@ runs:
           cp /usr/local/src/*.deb ./.imagemagick-deb/
           ls -l ./.imagemagick-deb/
 
+      - name: Output IMEI Failure Log
+        if: steps.build-imagemagick.result == 'failure'
+        shell: bash
+        run: |
+          cat /var/log/imei.log
+
       - name: Log ImageMagick Version
         shell: bash
         run: magick -version
