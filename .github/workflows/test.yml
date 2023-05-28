@@ -88,6 +88,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
+    - name: Install Dependencies
+      run: |
+        sudo add-apt-repository universe
+        sudo apt-get update
+        sudo apt-get -yqq install libpq-dev libvips libraqm-dev ffmpeg libfuse2
+
     - name: Install ImageMagick
       run: |
         mkdir -p "$HOME/.local/bin"
@@ -96,10 +102,9 @@ jobs:
         mv magick "$HOME/.local/bin"
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-    - name: Install Dependencies
+    - name: Test ImageMagick
       run: |
-        sudo apt-get update
-        sudo apt-get -yqq install libpq-dev libvips libraqm-dev ffmpeg
+        magick -version
 
     - name: Set up Ruby (${{ matrix.ruby }})
       uses: ruby/setup-ruby@v1
