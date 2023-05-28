@@ -6,8 +6,8 @@ Chewy.settings = {
   },
   transport_options: {
     request: {
-      open_timeout: 15,
-      timeout: 30
+      open_timeout: 10,
+      timeout: 15
     }
   }
 }
