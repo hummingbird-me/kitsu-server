@@ -16,7 +16,7 @@ runs:
 
       - name: List Packages
         shell: bash
-        run: ls -l ./.imagemagick-deb/
+        run: "[ -d ./.imagemagick-deb/ ] && ls -l ./.imagemagick-deb/"
 
       - name: Install Dependencies
         shell: bash
