@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Authorization
   module Assertion
     class Facebook
       # The Aozora Facebook App ID
-      AOZORA_FACEBOOK_APP_ID = '1467094533604194'.freeze
+      AOZORA_FACEBOOK_APP_ID = '1467094533604194'
       # Facebook URL stuff
-      API_VERSION = 'v6.0'.freeze
+      API_VERSION = 'v17.0'
       URL_PREFIX = "https://graph.facebook.com/#{API_VERSION}".freeze
       URL_TEMPLATE = Addressable::Template.new("#{URL_PREFIX}/{+path*}{?query*}").freeze
       # The data to load from Facebook
@@ -29,10 +31,10 @@ module Authorization
       # @return [User] the user to log into, given the facebook assertion
       def user!
         @user ||= if Flipper.enabled?(:aozora)
-                    conflict.user!
-                  else
-                    User.where(facebook_id: facebook_id).first
-                  end
+          conflict.user!
+        else
+          User.where(facebook_id:).first
+        end
       end
 
       # @return [Array<Follow>] the list of follows created based on your facebook friends list
@@ -50,9 +52,9 @@ module Authorization
 
       # The UserConflictDetector instance
       def conflict
-        @conflict ||= Zorro::UserConflictDetector.new(facebook_id: facebook_id,
-                                                      ao_facebook_id: ao_facebook_id,
-                                                      email: email)
+        @conflict ||= Zorro::UserConflictDetector.new(facebook_id:,
+          ao_facebook_id:,
+          email:)
       end
 
       # @return [String] the Facebook ID for Kitsu
@@ -76,7 +78,7 @@ module Authorization
 
       # @return [Array<String>] the list of friends from this user's facebook
       def friends
-        get('/me/friends', fields: { id: true })[:data].map { |friend| friend[:id] }
+        get('/me/friends', fields: { id: true })[:data].pluck(:id)
       end
 
       # @return [Hash] the raw data retrieved from the Facebook Graph API
@@ -103,9 +105,9 @@ module Authorization
       # Build a URL to make a request to Facebook's Graph API
       # @param path [String] the path of the API request to make
       def build_url(path, params = {})
-        path = path.sub(%r{\A/}, '')
+        path = path.delete_prefix('/')
         params = params.merge(access_token: @access_token)
-        URL_TEMPLATE.expand(path: path, query: params)
+        URL_TEMPLATE.expand(path:, query: params)
       end
 
       # Hit the Facebook Graph API
