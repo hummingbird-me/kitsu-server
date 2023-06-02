@@ -24,7 +24,7 @@ class Mutations::ProfileLink::Update < Mutations::Base
   def ready?(profile_link_site:, **)
     authenticate!
     return errors << Types::Errors::NotAuthenticated.build if current_user.nil?
-    @profile_link = ProfileLink.find_by!(
+    @profile_link = ProfileLink.find_by(
       profile_link_site_id: profile_link_site,
       user_id: current_user.id
     )
