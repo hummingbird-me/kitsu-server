@@ -16,7 +16,8 @@ class Mutations::Block::Delete < Mutations::Base
 
   def ready?(block_id:, **)
     authenticate!
-    @block = Block.find(block_id)
+    @block = Block.find(id: block_id)
+    return errors << Types::Errors::NotFound.build if @block.nil?
     authorize!(@block, :destroy?)
     true
   end

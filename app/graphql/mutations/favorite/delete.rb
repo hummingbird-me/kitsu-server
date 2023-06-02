@@ -16,7 +16,8 @@ class Mutations::Favorite::Delete < Mutations::Base
 
   def ready?(favorite_id:, **)
     authenticate!
-    @favorite = Favorite.find(favorite_id)
+    @favorite = Favorite.find_by(id: favorite_id)
+    return errors << Types::Errors::NotFound.build if @favorite.nil?
     authorize!(@favorite, :destroy?)
     true
   end

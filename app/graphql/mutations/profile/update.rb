@@ -34,7 +34,7 @@ class Mutations::Profile::Update < Mutations::Base
   def ready?(id:, **)
     authenticate!
     return errors << Types::Errors::NotAuthenticated.build if current_user.nil?
-    @profile = ::User.find(id)
+    @profile = ::User.find_by(id:)
     return errors << Types::Errors::NotFound.build if @profile.nil?
     authorize!(@profile, :update?)
     true

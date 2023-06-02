@@ -27,7 +27,7 @@ class Mutations::ProfileLink::Update < Mutations::Base
       profile_link_site_id: profile_link_site,
       user_id: current_user.id
     )
-    # return errors << Types::Errors::NotFound.build if @profile_link.nil?
+    return errors << Types::Errors::NotFound.build if @profile_link.nil?
     authorize!(@profile_link, :update?)
     true
   end
