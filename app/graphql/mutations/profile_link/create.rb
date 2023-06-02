@@ -18,7 +18,8 @@ class Mutations::ProfileLink::Create < Mutations::Base
   result Types::SiteLink
   errors Types::Errors::NotAuthenticated,
     Types::Errors::NotAuthorized,
-    Types::Errors::NotFound
+    Types::Errors::NotFound,
+    Types::Errors::Validation
 
   def ready?(**)
     authenticate!
@@ -38,5 +39,7 @@ class Mutations::ProfileLink::Create < Mutations::Base
     )
     authorize!(@profile_link, :create?)
     @profile_link.tap(&:save!)
+  rescue ActiveRecord::RecordInvalid => e
+    errors.push(*Types::Errors::Validation.for_record(e.record, prefix: 'input'))
   end
 end

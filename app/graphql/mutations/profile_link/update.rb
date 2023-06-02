@@ -18,7 +18,8 @@ class Mutations::ProfileLink::Update < Mutations::Base
   result Types::SiteLink
   errors Types::Errors::NotAuthenticated,
     Types::Errors::NotAuthorized,
-    Types::Errors::NotFound
+    Types::Errors::NotFound,
+    Types::Errors::Validation
 
   def ready?(profile_link_site:, **)
     authenticate!
@@ -35,5 +36,7 @@ class Mutations::ProfileLink::Update < Mutations::Base
   def resolve(profile_link_url:, **)
     @profile_link.update!(url: profile_link_url)
     @profile_link.tap(&:save!)
+  rescue ActiveRecord::RecordInvalid => e
+    errors.push(*Types::Errors::Validation.for_record(e.record, prefix: 'input'))
   end
 end
