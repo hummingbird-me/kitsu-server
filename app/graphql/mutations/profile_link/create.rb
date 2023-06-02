@@ -23,6 +23,7 @@ class Mutations::ProfileLink::Create < Mutations::Base
 
   def ready?(**)
     authenticate!
+    return errors << Types::Errors::NotAuthenticated.build if current_user.nil?
     profile_link = ProfileLink.find_by(
       profile_link_site_id: profile_link,
       user_id: current_user.id
