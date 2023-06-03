@@ -18,8 +18,19 @@ class Mutations::Favorite::Create < Mutations::Base
   errors Types::Errors::NotAuthenticated,
     Types::Errors::NotFound
 
-  def ready?(**)
+  def ready?(item_type:, item_id:, **)
     authenticate!
+    case item_type
+    when 'Anime'
+      @item = Anime.find_by(id: item_id)
+    when 'Manga'
+      @item = Manga.find_by(id: item_id)
+    when 'Character'
+      @item = Character.find_by(id: item_id)
+    when 'Person'
+      @item = Person.find_by(id: item_id)
+    end
+    return errors << Types::Errors::NotFound.build(path: %w[input item_id]) if @item.nil?
     true
   end
 

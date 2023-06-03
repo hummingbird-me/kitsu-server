@@ -14,8 +14,10 @@ class Mutations::Block::Create < Mutations::Base
   errors Types::Errors::NotAuthenticated,
     Types::Errors::NotFound
 
-  def ready?(**)
+  def ready?(blocked_id:, **)
     authenticate!
+    @block_user = User.find_by(id: blocked_id)
+    return errors << Types::Errors::NotFound.build(path: %w[input blocked_id]) if @block_user.nil?
     true
   end
 

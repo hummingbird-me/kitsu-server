@@ -12,7 +12,8 @@ class Mutations::Favorite::Delete < Mutations::Base
   end
   result Types::Favorite
   errors Types::Errors::NotAuthenticated,
-    Types::Errors::NotFound
+    Types::Errors::NotFound,
+    Types::Errors::NotAuthorized
 
   def ready?(favorite_id:, **)
     authenticate!
