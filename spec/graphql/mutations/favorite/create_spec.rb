@@ -32,16 +32,16 @@ RSpec.describe Mutations::Favorite::Create do
     it 'creates a new favorite entry' do
       expect {
         execute_query(query, input: {
-          itemId: media.id,
-          itemType: 'MANGA'
+          id: media.id,
+          type: 'MANGA'
         })
       }.to change(Favorite, :count).by(1)
     end
 
     it 'returns the new favorite entry' do
       response = execute_query(query, input: {
-        itemId: media.id,
-        itemType: 'MANGA'
+        id: media.id,
+        type: 'MANGA'
       })
 
       expect(response.dig('data', 'favorite', 'create', 'result')).to match(
@@ -58,8 +58,8 @@ RSpec.describe Mutations::Favorite::Create do
 
     it 'returns a NotAuthenticated error' do
       response = execute_query(query, input: {
-        itemId: media.id,
-        itemType: 'MANGA'
+        id: media.id,
+        type: 'MANGA'
       })
       expect(response.dig('data', 'favorite', 'create', 'errors')).to include(
         an_object_matching('__typename' => 'NotAuthenticatedError')
@@ -70,8 +70,8 @@ RSpec.describe Mutations::Favorite::Create do
   context 'with a non existent media' do
     it 'returns a NotFoundError' do
       response = execute_query(query, input: {
-        itemId: -1,
-        itemType: 'MANGA'
+        id: -1,
+        type: 'MANGA'
       })
       expect(response.dig('data', 'favorite', 'create', 'errors')).to include(
         an_object_matching('__typename' => 'NotFoundError')

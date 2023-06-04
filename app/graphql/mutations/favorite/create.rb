@@ -6,41 +6,43 @@ class Mutations::Favorite::Create < Mutations::Base
   description 'Add a favorite entry.'
 
   input do
-    argument :item_id, ID,
+    argument :id, ID,
       required: true,
       description: 'The id of the entry'
-    argument :item_type,
-      Types::Enum::FavoriteItem,
+    argument :type,
+      Types::Enum::FavoriteType,
       required: true,
       description: 'The type of the entry.'
   end
   result Types::Favorite
   errors Types::Errors::NotAuthenticated,
-    Types::Errors::NotFound
+    Types::Errors::NotFound,
+    Types::Errors::NotAuthorized
 
-  def ready?(item_type:, item_id:, **)
+  def ready?(type:, id:, **)
     authenticate!
-    case item_type
+    return errors << Types::Errors::NotAuthenticated.build if current_user.nil?
+    case type
     when 'Anime'
-      @item = Anime.find_by(id: item_id)
+      @item = Anime.find_by(id:)
     when 'Manga'
-      @item = Manga.find_by(id: item_id)
+      @item = Manga.find_by(id:)
     when 'Character'
-      @item = Character.find_by(id: item_id)
+      @item = Character.find_by(id:)
     when 'Person'
-      @item = Person.find_by(id: item_id)
+      @item = Person.find_by(id:)
     end
-    return errors << Types::Errors::NotFound.build(path: %w[input item_id]) if @item.nil?
-    true
-  end
-
-  def resolve(item_id:, item_type:, **)
+    return errors << Types::Errors::NotFound.build(path: %w[input id]) if @item.nil?
     @favorite = Favorite.new(
-      item_type:,
-      item_id:,
+      item_type: type,
+      item_id: id,
       user_id: current_user.id
     )
     authorize!(@favorite, :create?)
+    true
+  end
+
+  def resolve(**)
     @favorite.tap(&:save!)
   end
 end
