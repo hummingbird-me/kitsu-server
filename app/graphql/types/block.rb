@@ -7,8 +7,11 @@ class Types::Block < Types::BaseObject
 
   field :user, Types::Profile,
     null: false,
-    description: 'User who blocked.',
-    method: :user
+    description: 'User who blocked.'
+
+  def user
+    Loaders::RecordLoader.for(User).load(object.user_id)
+  end
 
   field :blocked_user, Types::Profile,
     null: false,
