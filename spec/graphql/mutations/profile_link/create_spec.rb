@@ -78,4 +78,19 @@ RSpec.describe Mutations::ProfileLink::Create do
       )
     end
   end
+
+  context 'with an already existing profile link' do
+    let!(:profile_link_site) { ProfileLinkSite.find(8) }
+    let!(:profile_link) { create(:profile_link, user:, profile_link_site:) }
+
+    it 'returns a ValidationError' do
+      response = execute_query(query, input: {
+        profileLinkSite: 'GITHUB',
+        url: 'https://github.com/hummingbird-me'
+      })
+      expect(response.dig('data', 'profileLink', 'create', 'errors')).to include(
+        an_object_matching('__typename' => 'ValidationError')
+      )
+    end
+  end
 end
