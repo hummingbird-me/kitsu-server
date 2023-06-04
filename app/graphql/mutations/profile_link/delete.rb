@@ -6,7 +6,8 @@ class Mutations::ProfileLink::Delete < Mutations::Base
   description 'Delete a profile link'
 
   input do
-    argument :profile_link_id, ID,
+    argument :profile_link,
+      Types::Enum::ProfileLinksSites,
       required: true,
       description: 'The profile link to delete'
   end
@@ -15,9 +16,12 @@ class Mutations::ProfileLink::Delete < Mutations::Base
     Types::Errors::NotAuthorized,
     Types::Errors::NotFound
 
-  def ready?(profile_link_id:)
+  def ready?(profile_link:)
     authenticate!
-    @profile_link = ProfileLink.find_by(id: profile_link_id)
+    @profile_link = ProfileLink.find_by(
+      profile_link_site_id: profile_link,
+      user_id: current_user.id
+    )
     return errors << Types::Errors::NotFound.build if @profile_link.nil?
     authorize!(@profile_link, :destroy?)
     true
