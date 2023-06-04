@@ -7,7 +7,7 @@ class Mutations::Profile::Update < Mutations::Base
 
   input do
     argument :id, ID,
-      required: true,
+      required: false,
       description: 'Your ID or the one of another user.'
     argument :about, String,
       required: false,
@@ -31,10 +31,14 @@ class Mutations::Profile::Update < Mutations::Base
     Types::Errors::NotAuthorized,
     Types::Errors::NotFound
 
-  def ready?(id:, **)
+  def ready?(**input)
     authenticate!
     return errors << Types::Errors::NotAuthenticated.build if current_user.nil?
-    @profile = ::User.find_by(id:)
+    @profile = if input[:id]
+      ::User.find_by(id: input[:id])
+    else
+      current_user
+    end
     return errors << Types::Errors::NotFound.build if @profile.nil?
     authorize!(@profile, :update?)
     true

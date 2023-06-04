@@ -27,12 +27,10 @@ RSpec.describe Mutations::Profile::Update do
   context 'with a valid input' do
     it 'updates the user profile' do
       response = execute_query(query, input: {
-        id: user.id,
         gender: 'not specified'
       })
       expect(response.dig('data', 'profile', 'update', 'result')).to match(
         a_hash_including(
-          'id' => an_instance_of(String),
           'gender' => 'not specified'
         )
       )
@@ -96,7 +94,6 @@ RSpec.describe Mutations::Profile::Update do
 
     it 'returns a NotAuthenticated error' do
       response = execute_query(query, input: {
-        id: user.id,
         gender: 'not specified'
       })
       expect(response.dig('data', 'profile', 'update', 'errors')).to include(
