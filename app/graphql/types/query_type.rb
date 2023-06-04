@@ -10,7 +10,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   field :current_profile, Types::Profile, null: true do
-    description 'Kitsu account details. You must supply an Authorization token in header.'
+    description 'Your Kitsu profile. You must supply an Authorization token in header.'
   end
 
   def current_profile
