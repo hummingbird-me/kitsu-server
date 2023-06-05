@@ -15,10 +15,7 @@ RSpec.describe Mutations::Account::Update do
           }
           result {
             id
-            profile {
-              id
-              slug
-            }
+            country
           }
         }
       }
@@ -28,12 +25,12 @@ RSpec.describe Mutations::Account::Update do
   context 'with a valid input' do
     it 'updates the user account' do
       response = execute_query(query, input: {
-        slug: 'newslug'
+        country: 'us'
       })
-      expect(response.dig('data', 'account', 'update', 'result', 'profile')).to match(
+      expect(response.dig('data', 'account', 'update', 'result')).to match(
         a_hash_including(
           'id' => an_instance_of(String),
-          'slug' => 'newslug'
+          'country' => 'us'
         )
       )
     end
@@ -44,7 +41,7 @@ RSpec.describe Mutations::Account::Update do
 
     it 'returns a NotAuthenticated error' do
       response = execute_query(query, input: {
-        slug: 'newslug'
+        country: 'us'
       })
       expect(response.dig('data', 'account', 'update', 'errors')).to include(
         an_object_matching('__typename' => 'NotAuthenticatedError')

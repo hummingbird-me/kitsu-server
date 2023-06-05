@@ -9,6 +9,14 @@ class Mutations::Profile::Update < Mutations::Base
     argument :id, ID,
       required: false,
       description: 'Your ID or the one of another user.'
+    argument :name,
+      String,
+      required: false,
+      description: 'The display name of the user'
+    argument :slug,
+      String,
+      required: false,
+      description: 'The slug (@username) of the user'
     argument :about, String,
       required: false,
       description: 'About section of the profile.'

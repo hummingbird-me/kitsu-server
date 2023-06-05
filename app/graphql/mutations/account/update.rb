@@ -6,14 +6,6 @@ class Mutations::Account::Update < Mutations::Base
   description 'Update account'
 
   input do
-    argument :name,
-      String,
-      required: false,
-      description: 'The display name of the user'
-    argument :slug,
-      String,
-      required: false,
-      description: 'The slug (@username) of the user'
     argument :sfw_filter_preference,
       Types::Enum::SfwFilterPreference,
       required: false,
