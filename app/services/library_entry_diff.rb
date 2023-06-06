@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LibraryEntryDiff
   # @param entry [LibraryEntry] the library entry to give difference methods on
   def initialize(entry)
@@ -43,10 +45,10 @@ class LibraryEntryDiff
 
     progress_was = @entry.progress_was || 0
     action, range = if progress_diff.positive?
-                      [:+, ((progress_was + 1)..@entry.progress)]
-                    elsif progress_diff.negative?
-                      [:-, ((@entry.progress + 1)..@entry.progress_was)]
-                    end
+      [:+, ((progress_was + 1)..@entry.progress)]
+    elsif progress_diff.negative?
+      [:-, ((@entry.progress + 1)..@entry.progress_was)]
+    end
     # Set the sign
     0.send(action, @entry.media.episodes.for_range(range).sum(:length))
   end
@@ -55,6 +57,6 @@ class LibraryEntryDiff
   def reconsume_time_diff
     return 0 if reconsume_diff.zero? || !@entry.media.respond_to?(:episodes)
 
-    reconsume_diff * @entry.media.total_length
+    reconsume_diff * (@entry.media.total_length || 0)
   end
 end
