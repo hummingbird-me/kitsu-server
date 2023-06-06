@@ -92,7 +92,7 @@ jobs:
       run: |
         sudo add-apt-repository universe
         sudo apt-get update
-        sudo apt-get -yqq install libpq-dev libvips libraqm-dev ffmpeg libfuse2
+        sudo apt-get -yqq install libpq-dev libvips libraqm-dev ffmpeg libfuse2 libglib2.0-0
 
     - name: Install ImageMagick
       run: |
