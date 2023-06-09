@@ -80,4 +80,12 @@ class Types::Post < Types::BaseObject
       Loaders::RecordLoader.for(User, token: context[:token]).load_many(follows.pluck(:user_id))
     end
   end
+
+  field :target_user, Types::Profile,
+    null: false,
+    description: 'The profile of the target user of the post.'
+
+  def target_user
+    Loaders::RecordLoader.for(User).load(object.target_user_id)
+  end
 end
