@@ -22,8 +22,8 @@ gem 'scenic'
 
 # Auth{entication,orization}
 gem 'bcrypt'
-gem 'doorkeeper', '~> 5.5.0'
-gem 'doorkeeper-grants_assertion', git: 'https://github.com/doorkeeper-gem/doorkeeper-grants_assertion'
+gem 'doorkeeper'
+gem 'doorkeeper-grants_assertion'
 gem 'jwt' # Used for Nolt SSO
 gem 'pundit'
 gem 'pundit-resources', github: 'hummingbird-me/pundit-resources'
