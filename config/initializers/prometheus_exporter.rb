@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'prometheus_exporter/client'
 require 'prometheus_exporter/middleware'
 
@@ -12,3 +14,5 @@ if Rails.env.development? || Rails.env.test?
 
   PrometheusExporter::Client.default = NullClient.new
 end
+
+$prometheus = PrometheusExporter::Client.default

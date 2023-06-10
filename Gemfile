@@ -113,6 +113,7 @@ gem 'oj_mimic_json' # Hook it in place of JSON gem
 gem 'parallel' # Process shit in parallel
 
 # Monitoring
+gem 'graphql-metrics'
 gem 'health_bit' # Allow Kubernetes to check the health
 gem 'marginalia' # Scribble in the margins of our queries
 gem 'opentelemetry-exporter-otlp'

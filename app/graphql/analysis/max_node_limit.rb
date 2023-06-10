@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 module Analysis
+  # Unlike Graphql-ruby's default complexity analysis, this only counts objects, not individual
+  # fields.
   class MaxNodeLimit < GraphQL::Analysis::AST::Analyzer
+    GRAPHQL_QUERY_NODE_AMOUNT = $prometheus.register(
+      :summary,
+      'graphql_query_node_amount',
+      'number of nodes requested in a query'
+    )
     NODE_LIMIT = 500_000
 
     def initialize(query)
@@ -13,6 +20,8 @@ module Analysis
 
     # @return [Array<GraqhQL::AnalysisError>, GraqhQL::AnalysisError, nil]
     def result
+      GRAPHQL_QUERY_NODE_AMOUNT.observe(max_possible_nodes)
+
       return @errors.uniq if @errors.present?
       return max_possible_nodes_limit_error if max_possible_nodes > NODE_LIMIT
 
@@ -101,7 +110,7 @@ module Analysis
 
       "Analysis::MaxNodeLimit::#{prefix}ScopeType".safe_constantize.new(
         visitor.query,
-        node: node,
+        node:,
         field_definition: visitor.field_definition
       )
     end
@@ -138,8 +147,8 @@ module Analysis
     end
 
     def max_possible_nodes_limit_error
-      message = "Your request of #{max_possible_nodes.to_s(:delimited)}" \
-        " nodes exceeds the node limit: #{NODE_LIMIT.to_s(:delimited)}"
+      message = "Your request of #{max_possible_nodes.to_s(:delimited)} " \
+                "nodes exceeds the node limit: #{NODE_LIMIT.to_s(:delimited)}"
       GraphQL::AnalysisError.new(message)
     end
   end

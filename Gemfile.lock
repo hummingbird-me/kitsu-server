@@ -308,6 +308,9 @@ GEM
       activesupport (>= 5.0, < 7.0)
       graphql (>= 1.3, < 2)
       graphql-batch (>= 0.4.3, < 1)
+    graphql-metrics (5.0.7)
+      concurrent-ruby (>= 1.1.0)
+      graphql (>= 1.12.10)
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -824,6 +827,7 @@ DEPENDENCIES
   graphql-batch
   graphql-client
   graphql-fancy_loader
+  graphql-metrics
   guard
   guard-rspec
   health_bit
