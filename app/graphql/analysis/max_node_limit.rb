@@ -20,9 +20,10 @@ module Analysis
 
     # @return [Array<GraqhQL::AnalysisError>, GraqhQL::AnalysisError, nil]
     def result
+      return @errors.uniq if @errors.present?
+
       GRAPHQL_QUERY_NODE_AMOUNT.observe(max_possible_nodes)
 
-      return @errors.uniq if @errors.present?
       return max_possible_nodes_limit_error if max_possible_nodes > NODE_LIMIT
 
       max_possible_nodes
