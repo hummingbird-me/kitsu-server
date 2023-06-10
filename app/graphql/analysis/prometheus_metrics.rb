@@ -2,7 +2,7 @@
 
 require 'graphql/metrics'
 
-module Analyzer
+module Analysis
   class PrometheusMetrics < GraphQL::Metrics::Analyzer
     # graphql_query_duration_seconds{operation_type,operation_name}
     GRAPHQL_QUERY_DURATION_SECONDS = $prometheus.register(
