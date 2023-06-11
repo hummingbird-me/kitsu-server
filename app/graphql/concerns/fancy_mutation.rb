@@ -34,6 +34,15 @@ module FancyMutation
 
   class WarningsPresent < StandardError; end
 
+  class ErrorWrapper < StandardError
+    attr_reader :error
+
+    def initialize(error)
+      super
+      @error = error
+    end
+  end
+
   module PrependedMethods
     # Wraps the resolve method with some support. When ignore_warnings is false or not set, it will
     # rollback when there are warnings. In all cases, the return value of the resolve method will be
@@ -61,6 +70,8 @@ module FancyMutation
         warnings:,
         errors: [*errors, Types::Errors::WarningsPresent.build]
       }
+    rescue ErrorWrapper => e
+      { errors: [*errors, e.error] }
     end
 
     # The return-driven approach of #ready? and #authorized? is garbage, so we override it and allow
@@ -73,6 +84,8 @@ module FancyMutation
       return [false, { errors: }] if errors.present?
 
       [ready, result]
+    rescue ErrorWrapper => e
+      [false, { errors: [*errors, e.error] }]
     end
 
     def authorized?(input:)
@@ -81,6 +94,8 @@ module FancyMutation
       return [false, { errors: }] if errors.present?
 
       [ready, result]
+    rescue ErrorWrapper => e
+      [false, { errors: [*errors, e.error] }]
     end
   end
 
@@ -171,18 +186,18 @@ module FancyMutation
     private_class_method :input_type
   end
 
-  # Adds an error if there is no current user session.
+  # Raises an error if there is no current user session.
   def authenticate!
-    errors << Types::Errors::NotAuthenticated.build if current_user.blank?
+    raise Types::Errors::NotAuthenticated if current_user.blank?
     true
   end
 
-  # Adds an error if the current user is not authorized to perform the action on the object.
+  # Raises an error if the current user is not authorized to perform the action on the object.
   # @param object [ActiveRecord::Base] The object to check authorization on
   # @param action [Symbol] The action to check authorization for
   def authorize!(object, action, policy: Pundit::PolicyFinder.new(object).policy)
     authorized = policy.new(current_token, object).public_send(action)
-    errors << Types::Errors::NotAuthorized.build(object:, action:) unless authorized
+    raise Types::Errors::NotAuthorized, { object:, action: } unless authorized
     true
   end
 

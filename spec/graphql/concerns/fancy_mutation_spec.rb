@@ -39,6 +39,24 @@ RSpec.describe FancyMutation do
         expect(result).to eq([false, { errors: ['test'] }])
       end
     end
+
+    context 'with a raised exception' do
+      it 'returns the error' do
+        mutation = Class.new do
+          include FancyMutation
+
+          def ready?(**)
+            raise Types::Errors::Base
+          end
+        end
+
+        result = mutation.new.ready?(input: {})
+        expect(result).to eq([
+          false,
+          { errors: [{ __type: Types::Errors::Base }] }
+        ])
+      end
+    end
   end
 
   describe '#authorized?' do
@@ -69,6 +87,24 @@ RSpec.describe FancyMutation do
 
         result = mutation.new.authorized?(input: {})
         expect(result).to eq([false, { errors: ['test'] }])
+      end
+    end
+
+    context 'with a raised exception' do
+      it 'returns the error' do
+        mutation = Class.new do
+          include FancyMutation
+
+          def authorized?(**)
+            raise Types::Errors::Base
+          end
+        end
+
+        result = mutation.new.authorized?(input: {})
+        expect(result).to eq([
+          false,
+          { errors: [{ __type: Types::Errors::Base }] }
+        ])
       end
     end
   end
@@ -409,22 +445,26 @@ RSpec.describe FancyMutation do
   end
 
   describe '#authenticate!' do
-    it 'adds a NotAuthenticated error if the user is not authenticated' do
+    it 'raises an ErrorWrapper<NotAuthenticated> if the user is not authenticated' do
       mutation = Struct.new(:current_user) do
         include FancyMutation
       end
 
       instance = mutation.new(nil)
-      instance.authenticate!
-      expect(instance.errors).to include(Types::Errors::NotAuthenticated.build)
+      expect {
+        instance.authenticate!
+      }.to raise_error(satisfying do |error|
+        expect(error).to be_a(FancyMutation::ErrorWrapper)
+        expect(error.error).to include(Types::Errors::NotAuthenticated.build)
+      end)
     end
 
-    it 'returns true' do
+    it 'returns true otherwise' do
       mutation = Struct.new(:current_user) do
         include FancyMutation
       end
 
-      result = mutation.new(nil).authenticate!
+      result = mutation.new(true).authenticate!
       expect(result).to eq(true)
     end
   end
@@ -445,7 +485,7 @@ RSpec.describe FancyMutation do
     end
 
     context 'with an explicit policy' do
-      it 'adds a NotAuthorized error if the policy rejects it' do
+      it 'raises an ErrorWrapper<NotAuthorized> error if the policy rejects it' do
         policy = instance_double('AnimePolicy', create?: false)
         policy_class = class_double('AnimePolicyClass', new: policy)
         mutation = Struct.new(:current_token) do
@@ -453,8 +493,31 @@ RSpec.describe FancyMutation do
         end
 
         instance = mutation.new(nil)
-        instance.authorize!(Anime.new, :create?, policy: policy_class)
-        expect(instance.errors).to include(include(Types::Errors::NotAuthorized.build))
+        expect {
+          instance.authorize!(Anime.new, :create?, policy: policy_class)
+        }.to raise_error(satisfying do |error|
+          expect(error).to be_a(FancyMutation::ErrorWrapper)
+          expect(error.error).to include(Types::Errors::NotAuthorized.build)
+        end)
+      end
+    end
+  end
+
+  describe '#resolve' do
+    context 'with a raised exception' do
+      it 'returns the error' do
+        mutation = Class.new do
+          include FancyMutation
+
+          def resolve(**)
+            raise Types::Errors::Base
+          end
+        end
+
+        result = mutation.new.resolve(input: {})
+        expect(result).to eq({
+          errors: [{ __type: Types::Errors::Base }]
+        })
       end
     end
   end
