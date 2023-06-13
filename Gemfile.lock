@@ -100,7 +100,7 @@ GEM
     activerecord (6.1.7.2)
       activemodel (= 6.1.7.2)
       activesupport (= 6.1.7.2)
-    activerecord-import (1.4.0)
+    activerecord-import (1.4.1)
       activerecord (>= 4.2)
     activestorage (6.1.7.2)
       actionpack (= 6.1.7.2)
