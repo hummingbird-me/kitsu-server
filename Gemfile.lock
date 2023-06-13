@@ -701,7 +701,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scenic (1.6.0)
+    scenic (1.7.0)
       activerecord (>= 4.0.0)
       railties (>= 4.0.0)
     sentry-rails (5.9.0)
