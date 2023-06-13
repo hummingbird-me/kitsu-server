@@ -335,7 +335,7 @@ GEM
     html-pipeline (2.14.1)
       activesupport (>= 2)
       nokogiri (>= 1.4)
-    http (5.0.4)
+    http (5.1.1)
       addressable (~> 2.8)
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
