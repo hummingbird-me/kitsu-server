@@ -27,9 +27,9 @@ GIT
 
 GIT
   remote: https://github.com/railsadminteam/rails_admin.git
-  revision: 652418c2f1eb3cea1006e8625be6e5116b59b852
+  revision: 5a958e46e8620fba320e04347d326d058c07d396
   specs:
-    rails_admin (3.0.0)
+    rails_admin (3.1.2)
       activemodel-serializers-xml (>= 1.0)
       kaminari (>= 0.14, < 2.0)
       nested_form (~> 0.3)
@@ -451,7 +451,7 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    nio4r (2.5.8)
+    nio4r (2.5.9)
     nokogiri (1.15.2)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -775,7 +775,7 @@ GEM
     tilt (2.2.0)
     timecop (0.9.6)
     timeout (0.3.2)
-    turbo-rails (1.1.1)
+    turbo-rails (1.4.0)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
