@@ -54,6 +54,6 @@ class Mutations::Profile::Update < Mutations::Base
 
   def resolve(**input)
     @profile.update!(**input)
-    @profile.tap(&:save!)
+    @profile
   end
 end
