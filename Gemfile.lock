@@ -305,9 +305,9 @@ GEM
     graphql-client (0.18.0)
       activesupport (>= 3.0)
       graphql
-    graphql-fancy_loader (0.1.4)
-      activesupport (>= 5.0, < 7.0)
-      graphql (>= 1.3, < 2)
+    graphql-fancy_loader (0.1.5)
+      activesupport (>= 5.0, < 8.0)
+      graphql (>= 1.3, < 3)
       graphql-batch (>= 0.4.3, < 1)
     graphql-metrics (5.0.7)
       concurrent-ruby (>= 1.1.0)
