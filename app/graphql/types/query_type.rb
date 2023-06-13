@@ -451,15 +451,6 @@ class Types::QueryType < GraphQL::Schema::Object
     }, statuses)
   end
 
-  field :find_block_by_id, Types::Block, null: true do
-    description 'Find a single Block by ID'
-    argument :id, ID, required: true
-  end
-
-  def find_block_by_id(id:)
-    Loaders::RecordLoader.for(::Block, token: context[:token]).load(id)
-  end
-
   field :blocks, Types::Block.connection_type, null: true do
     description 'All blocked user of the current account.'
   end
