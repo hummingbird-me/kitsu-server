@@ -35,7 +35,7 @@ class Mutations::ProfileLink::Update < Mutations::Base
 
   def resolve(profile_link_url:, **)
     @profile_link.update!(url: profile_link_url)
-    @profile_link.tap(&:save!)
+    @profile_link
   rescue ActiveRecord::RecordInvalid => e
     errors.push(*Types::Errors::Validation.for_record(e.record, prefix: 'input'))
   end
