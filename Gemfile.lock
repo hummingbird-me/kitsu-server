@@ -564,7 +564,7 @@ GEM
       puma (>= 2.7)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
-    pundit-matchers (2.1.0)
+    pundit-matchers (2.3.0)
       rspec-rails (>= 3.0.0)
     raabro (1.4.0)
     racc (1.7.0)
