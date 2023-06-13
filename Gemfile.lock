@@ -710,7 +710,7 @@ GEM
       sentry-ruby (~> 5.9.0)
       sidekiq (>= 3.0)
     shellany (0.0.1)
-    shoulda-matchers (5.1.0)
+    shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
     shrine (3.4.0)
       content_disposition (~> 1.0)
