@@ -332,7 +332,7 @@ GEM
     heapy (0.2.0)
       thor
     hiredis (0.6.3)
-    html-pipeline (2.14.1)
+    html-pipeline (2.14.3)
       activesupport (>= 2)
       nokogiri (>= 1.4)
     http (5.1.1)
