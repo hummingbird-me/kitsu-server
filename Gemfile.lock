@@ -772,7 +772,7 @@ GEM
     stripe (5.55.0)
     thor (1.2.2)
     tilt (2.2.0)
-    timecop (0.9.5)
+    timecop (0.9.6)
     timeout (0.3.1)
     turbo-rails (1.1.1)
       actionpack (>= 6.0.0)
