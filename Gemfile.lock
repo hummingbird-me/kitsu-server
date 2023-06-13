@@ -327,7 +327,7 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     hashdiff (1.0.1)
-    health_bit (0.1.8)
+    health_bit (0.2.0)
       rack
     heapy (0.2.0)
       thor
