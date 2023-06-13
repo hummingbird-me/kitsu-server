@@ -126,7 +126,7 @@ GEM
     algoliasearch-rails (1.25.0)
       algoliasearch (>= 1.26.0, < 2.0.0)
       json (>= 1.5.1)
-    ancestry (4.1.0)
+    ancestry (4.3.3)
       activerecord (>= 5.2.6)
     apollo_upload_server (2.1.0)
       actionpack (>= 4.2)
