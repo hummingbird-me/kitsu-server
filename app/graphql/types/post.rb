@@ -81,11 +81,11 @@ class Types::Post < Types::BaseObject
     end
   end
 
-  field :target_user, Types::Profile,
+  field :target_profile, Types::Profile,
     null: false,
     description: 'The profile of the target user of the post.'
 
-  def target_user
+  def target_profile
     Loaders::RecordLoader.for(User).load(object.target_user_id)
   end
 end
