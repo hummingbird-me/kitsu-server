@@ -4,6 +4,7 @@ class ProfileLink < ApplicationRecord
 
   validates :url, presence: true
   validate :url_formatted, if: -> { profile_link_site.present? && url.present? }
+  validates :profile_link_site, uniqueness: { scope: :user }
 
   before_validation if: -> { profile_link_site.present? && url.present? } do
     # updates the url to the expected output

@@ -9,6 +9,14 @@ class Types::QueryType < GraphQL::Schema::Object
     User.current
   end
 
+  field :current_profile, Types::Profile, null: true do
+    description 'Your Kitsu profile. You must supply an Authorization token in header.'
+  end
+
+  def current_profile
+    User.current
+  end
+
   field :anime, Types::Anime.connection_type, null: false do
     description 'All Anime in the Kitsu database'
   end
@@ -441,5 +449,13 @@ class Types::QueryType < GraphQL::Schema::Object
       find_by: :status,
       sort: sort
     }, statuses)
+  end
+
+  field :blocks, Types::Block.connection_type, null: true do
+    description 'All blocked user of the current account.'
+  end
+
+  def blocks
+    BlockPolicy::Scope.new(context[:token], ::Block).resolve.order(created_at: :desc)
   end
 end

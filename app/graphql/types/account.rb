@@ -42,6 +42,10 @@ class Types::Account < Types::BaseObject
     null: true,
     description: 'Whether Not Safe For Work content is accessible'
 
+  field :sfw_filter_preference, Types::Enum::SfwFilterPreference,
+    null: true,
+    description: 'The level of the SFW Filter'
+
   field :language, String,
     null: true,
     description: 'Primary language for the account'
