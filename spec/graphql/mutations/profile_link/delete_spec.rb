@@ -4,6 +4,10 @@ RSpec.describe Mutations::ProfileLink::Delete do
   include_context 'with authenticated user'
   include_context 'with graphql helpers'
 
+  before do
+    SeedFile.new(Rails.root.join('db/seeds/profile_link_sites.yml')).import!
+  end
+
   let!(:profile_link_site) { ProfileLinkSite.find(1) }
   let!(:profile_link) { create(:profile_link, user:, profile_link_site:) }
 

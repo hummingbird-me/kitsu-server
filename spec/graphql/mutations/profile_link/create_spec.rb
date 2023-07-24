@@ -4,6 +4,10 @@ RSpec.describe Mutations::ProfileLink::Create do
   include_context 'with authenticated user'
   include_context 'with graphql helpers'
 
+  before do
+    SeedFile.new(Rails.root.join('db/seeds/profile_link_sites.yml')).import!
+  end
+
   query = <<~GRAPHQL
     mutation createProfileLink($input: ProfileLinkCreateInput!) {
       profileLink {

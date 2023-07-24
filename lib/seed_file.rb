@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SeedFile
   MAX_ID = 2_147_483_647 # Yoinked from Postgres docs
 
@@ -14,7 +16,7 @@ class SeedFile
       row_data, label = label, nil unless row_data
       # rubocop:enable Style/ParallelAssignment
       row = Row.new(row_data, model, label).import!
-      yield (label || row.try(:name) || row[row.primary_key])
+      yield (label || row.try(:name) || row[row.primary_key]) if block_given?
     end
   end
 
@@ -34,7 +36,7 @@ class SeedFile
     end
 
     def import!
-      instance = model.where(id: id).first_or_initialize
+      instance = model.where(id:).first_or_initialize
       instance.assign_attributes(data)
       instance.save!
       instance
