@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::Enum::ProfileLinksSites < Types::Enum::Base
   value 'TWITTER', value: 1
   value 'FACEBOOK', value: 2
