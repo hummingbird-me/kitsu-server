@@ -310,6 +310,8 @@ RSpec/ExampleLength:
 RSpec/ImplicitSubject:
   EnforcedStyle: single_statement_only
   Enabled: true
+RSpec/Focus:
+  AutoCorrect: false
 Rails/UnknownEnv:
   Environments:
     - production
