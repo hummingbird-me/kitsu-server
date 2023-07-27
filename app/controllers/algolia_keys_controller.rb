@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 class AlgoliaKeysController < ApplicationController
   include CustomControllerHelpers
 
   def all
     render json: {
       users: json_for(User),
-      posts: json_for(Post),
       media: json_for(Anime),
       groups: json_for(Group),
       characters: json_for(Character)
@@ -13,10 +14,6 @@ class AlgoliaKeysController < ApplicationController
 
   def user
     render json: { users: json_for(User) }
-  end
-
-  def posts
-    render json: { posts: json_for(Post) }
   end
 
   def media

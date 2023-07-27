@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Post < ApplicationRecord
   include WithActivity
   include ContentProcessable
@@ -7,7 +9,6 @@ class Post < ApplicationRecord
   acts_as_paranoid
   resourcify
   processable :content, LongPipeline
-  update_algolia 'AlgoliaPostsIndex'
   embed_links_in :content, to: :embed
 
   enum locked_reason: { spam: 0, too_heated: 1, closed: 2 }
@@ -88,10 +89,10 @@ class Post < ApplicationRecord
   def stream_activity
     target_feed.activities.new(
       post_id: id,
-      updated_at: updated_at,
-      post_likes_count: post_likes_count,
-      comments_count: comments_count,
-      nsfw: nsfw,
+      updated_at:,
+      post_likes_count:,
+      comments_count:,
+      nsfw:,
       mentioned_users: mentioned_users.pluck(:id),
       to: other_feeds + notified_feeds + target_timelines
     )
