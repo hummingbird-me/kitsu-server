@@ -213,8 +213,8 @@ GEM
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
-    ethon (0.12.0)
-      ffi (>= 1.3.0)
+    ethon (0.16.0)
+      ffi (>= 1.15.0)
     exifr (1.4.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -418,7 +418,7 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.4)
-    minitest (5.18.1)
+    minitest (5.19.0)
     mongo (2.19.0)
       bson (>= 4.14.1, < 5.0.0)
     msgpack (1.6.0)
@@ -455,7 +455,7 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    oj (3.15.0)
+    oj (3.16.0)
     oj_mimic_json (1.0.1)
     one_signal (1.2.2)
     opentelemetry-api (1.0.2)
@@ -518,6 +518,7 @@ GEM
     opentelemetry-semantic_conventions (1.8.0)
       opentelemetry-api (~> 1.0)
     os (1.1.1)
+    paint (2.3.0)
     parallel (1.23.0)
     paranoia (2.6.2)
       activerecord (>= 5.1, < 7.1)
@@ -777,6 +778,13 @@ GEM
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
+    typesense (0.15.0)
+      oj (~> 3.11)
+      typhoeus (~> 1.4)
+    typesensual (0.3.1)
+      activesupport (>= 6.1.5)
+      paint (>= 2.0.0)
+      typesense (>= 0.13.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
     tzinfo (2.0.6)
@@ -796,7 +804,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.11)
 
 PLATFORMS
   ruby
@@ -934,6 +942,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock!
   timecop
+  typesensual
   typhoeus
   webmock
 

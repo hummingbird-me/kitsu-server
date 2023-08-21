@@ -10,15 +10,18 @@ gem 'rails', '6.1.7.2'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
-gem 'algoliasearch-rails' # Future Search
 gem 'attr_encrypted' # encrypt linked_profile tokens
-gem 'chewy' # ElasticSearch (TODO: remove this once we switch to Algolia)
 gem 'connection_pool' # Pool our Redises
 gem 'hiredis' # Faster redis
 gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
 gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
 gem 'scenic'
+
+# Search
+gem 'algoliasearch-rails' # what we tried to switch to (algolia)
+gem 'chewy' # the original search (elasticsearch)
+gem 'typesensual' # what we're doing now (typesense)
 
 # Auth{entication,orization}
 gem 'bcrypt'
