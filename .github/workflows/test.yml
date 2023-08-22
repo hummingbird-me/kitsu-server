@@ -74,6 +74,14 @@ jobs:
         image: elasticsearch:2-alpine
         ports:
           - 9200:9200
+      typesense:
+        image: typesense/typesense:0.25.0
+        ports:
+          - 8108:8108
+        env:
+          TYPESENSE_DATA_DIR: /data
+          TYPESENSE_API_KEY: xyz
+
 
     env:
       AWS_ENDPOINT: http://localhost:9000
@@ -83,6 +91,8 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/kitsu_test
       REDIS_URL: redis://localhost:6379/1
       ELASTICSEARCH_URL: localhost:9200
+      TYPESENSUAL_API_KEY: xyz
+      TYPESENSUAL_NODES: http://localhost:8108/
 
     steps:
     - name: Checkout Repository
