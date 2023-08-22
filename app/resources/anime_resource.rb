@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AnimeResource < MediaResource
   include EpisodicResource
 
@@ -15,6 +17,10 @@ class AnimeResource < MediaResource
   query :season_year, NUMERIC_QUERY
   query :streamers, valid: ->(value, _ctx) { Streamer.find_by_name(value) }
   query :age_rating, valid: ->(value, _ctx) { Anime.age_ratings.key?(value) }
+
+  def self._search_service
+    AnimeSearchService if Flipper[:typesense_search].enabled?(User.current)
+  end
 
   def self.updatable_fields(context)
     super - [:nsfw]
