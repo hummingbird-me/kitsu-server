@@ -1,7 +1,9 @@
-module SearchableResource # rubocop:disable Metrics/ModuleLength
+# frozen_string_literal: true
+
+module SearchableResource
   extend ActiveSupport::Concern
 
-  class_methods do # rubocop:disable Metrics/BlockLength
+  class_methods do
     attr_reader :_chewy_index, :_query_fields, :_search_service
 
     # Declare the Chewy index to use when searching this resource
@@ -69,13 +71,13 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
     def load_query_records(query, opts = {})
       include_directives = opts[:include_directives]
       unless include_directives
-        return @_search_service ? query.to_a : query.load.to_a
+        return _search_service ? query.to_a : query.load.to_a
       end
 
       model_includes = resolve_relationship_names_to_relations(self,
         include_directives.model_includes, opts)
 
-      if @_search_service
+      if _search_service
         query.includes(model_includes).to_a
       else
         query.load(scope: -> { includes(model_includes) }).to_a
@@ -126,12 +128,12 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
 
     def apply_scopes(filters, opts = {})
       context = opts[:context]
-      if @_search_service
+      if _search_service
         # Separate queries from filters
         queries = filters.select { |f| @_query_fields.include?(f) }
         filters = filters.reject { |f| @_query_fields.include?(f) }
         # Set up the search service
-        query = @_search_service.new(queries, filters)
+        query = _search_service.new(queries, filters)
       else
         # Generate query
         query = generate_query(filters)
@@ -142,13 +144,13 @@ module SearchableResource # rubocop:disable Metrics/ModuleLength
       # Pagination
       query = opts[:paginator].apply(query, {}) if opts[:paginator]
       # Sorting
-      if opts[:sort_criteria]
-        query = opts[:sort_criteria].reduce(query) do |scope, sort|
+      query = if opts[:sort_criteria]
+        opts[:sort_criteria].reduce(query) do |scope, sort|
           field = sort[:field] == 'id' ? '_score' : sort[:field]
           scope.order(field => sort[:direction])
         end
       else
-        query = query.order('_score' => :desc)
+        query.order('_score' => :desc)
       end
       # Policy Scope
       query = search_policy_scope.new(context[:current_user], query).resolve
