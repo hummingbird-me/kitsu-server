@@ -79,7 +79,7 @@ jobs:
         ports:
           - 8108:8108
         env:
-          TYPESENSE_DATA_DIR: /data
+          TYPESENSE_DATA_DIR: /tmp
           TYPESENSE_API_KEY: xyz
 
 
