@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe AnimeController, type: :controller do
+RSpec.describe AnimeController do
   ANIME ||= {
     titles: { en_jp: String },
     canonicalTitle: String
@@ -9,14 +11,14 @@ RSpec.describe AnimeController, type: :controller do
 
   describe '#index' do
     describe 'with filter[slug]' do
-      it 'should respond with an anime' do
+      it 'responds with an anime' do
         get :index, params: { filter: { slug: anime.slug } }
         expect(response.body).to have_resources(ANIME.dup, 'anime')
       end
     end
 
-    describe 'with filter[text]', elasticsearch: true do
-      it 'should respond with an anime' do
+    describe 'with filter[text]' do
+      it 'responds with an anime' do
         anime.save!
         get :index, params: { filter: { text: anime.canonical_title } }
         expect(response.body).to have_resources(ANIME.dup, 'anime')
@@ -25,10 +27,11 @@ RSpec.describe AnimeController, type: :controller do
   end
 
   describe '#show' do
-    it 'should respond with an anime' do
+    it 'responds with an anime' do
       get :show, params: { id: anime.id }
       expect(response.body).to have_resource(ANIME.dup, 'anime')
     end
+
     it 'has status ok' do
       get :show, params: { id: anime.id }
       expect(response).to have_http_status(:ok)
@@ -63,12 +66,14 @@ RSpec.describe AnimeController, type: :controller do
       create_anime
       expect(response).to have_http_status(:created)
     end
-    it 'should have one more anime than before' do
+
+    it 'has one more anime than before' do
       expect {
         create_anime
-      }.to change { Anime.count }.by(1)
+      }.to change(Anime, :count).by(1)
     end
-    it 'should respond with an anime' do
+
+    it 'responds with an anime' do
       create_anime
       expect(response.body).to have_resource(ANIME.dup, 'anime')
     end
