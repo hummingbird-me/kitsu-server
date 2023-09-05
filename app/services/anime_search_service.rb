@@ -69,11 +69,11 @@ class AnimeSearchService < TypesenseSearchService
   def apply_order_to(scope)
     return scope unless orders
 
-    # Replace _text_match with _text_match(buckets: 8),user_count in the same direction
+    # Replace _text_match with _text_match(buckets: 6),user_count in the same direction
     # This generally gives significantly better results for media searches
     improved_orders = orders.flat_map do |field, direction|
       if field == '_text_match'
-        [['_text_match(buckets: 8)', direction], ['user_count', direction]]
+        [['_text_match(buckets: 6)', direction], ['user_count', direction]]
       else
         [field, direction]
       end
