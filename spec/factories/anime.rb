@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :anime do
     titles { { en_jp: Faker::Name.name } }
@@ -7,6 +9,7 @@ FactoryBot.define do
     age_rating { 'G' }
     episode_length { 24 }
     start_date { Faker::Date.backward(days: 10_000) }
+    description { { 'en' => Faker::Lorem.paragraph } }
 
     trait :nsfw do
       age_rating { 'R18' }
