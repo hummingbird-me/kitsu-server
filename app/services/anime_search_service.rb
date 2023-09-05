@@ -33,7 +33,7 @@ class AnimeSearchService < TypesenseSearchService
   def query
     @query ||= begin
       query = TypesenseAnimeIndex.search(
-        query: filters[:text].join(' '),
+        query: filters[:text]&.join(' '),
         query_by: {
           'canonical_title' => 100,
           'titles.*' => 90,
