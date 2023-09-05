@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 
 class TypesenseAnimeIndex < TypesenseBaseIndex
+  SAVE_FREQUENCIES = {
+    'id' => 1,
+    'titles' => 1,
+    'canonical_title' => 1,
+    'abbrevated_titles' => 1,
+    'description' => 1,
+    'total_length' => 1,
+    'episode_count' => 1,
+    'episode_length' => 1,
+    'age_rating' => 1,
+    'subtype' => 1,
+    'start_date' => 1,
+    'end_date' => 1,
+    'user_count' => 0.1,
+    'favorites_count' => 0.1,
+    'average_rating' => 0.1
+  }.freeze
   include TypesenseMediaIndex
 
   index_name 'anime'
@@ -23,6 +40,10 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
     # field 'streaming.dubs', type: 'string[]', facet: true, optional: true
     # field 'streaming.subs', type: 'string[]', facet: true, optional: true
     # field 'streaming.regions', type: 'string[]', facet: true, optional: true
+  end
+
+  def self.should_sync?(changes)
+    [*SAVE_FREQUENCIES.values_at(*changes.keys), 0].compact.max >= rand
   end
 
   def index(ids)

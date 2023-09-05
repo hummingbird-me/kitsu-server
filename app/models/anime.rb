@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Anime < ApplicationRecord
   SEASONS = %w[winter spring summer fall].freeze
 
@@ -5,7 +7,7 @@ class Anime < ApplicationRecord
   include AgeRatings
   include Episodic
 
-  enum subtype: %i[TV special OVA ONA movie music]
+  enum subtype: { TV: 0, special: 1, OVA: 2, ONA: 3, movie: 4, music: 5 }
   has_many :streaming_links, as: 'media', dependent: :destroy, inverse_of: :media
   has_many :producers, through: :anime_productions
   has_many :anime_productions, dependent: :destroy
@@ -92,6 +94,14 @@ class Anime < ApplicationRecord
       self.start_date = end_date if start_date.nil? && !end_date.nil?
       self.end_date = start_date if end_date.nil? && !start_date.nil?
     end
+  end
+
+  after_commit(on: %i[create update]) do
+    TypesenseAnimeIndex.index_one(id) if TypesenseAnimeIndex.should_sync?(saved_changes)
+  end
+
+  after_commit(on: :destroy) do
+    TypesenseAnimeIndex.remove_one(id)
   end
 
   after_save do
