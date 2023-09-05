@@ -21,7 +21,13 @@ class TypesenseSearchService < SearchService
   def auto_query_for(field, value)
     case value
     when Range
-      { field => "[#{value.min}..#{value.max}]" }
+      if value.begin.nil?
+        { field => "<#{value.max}" }
+      elsif value.end.nil?
+        { field => ">=#{value.min}" }
+      else
+        { field => "[#{value.min}..#{value.max}]" }
+      end
     when Array
       { field => "=[#{value.join(',')}]" }
     when Date
