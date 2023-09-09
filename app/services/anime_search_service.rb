@@ -33,7 +33,7 @@ class AnimeSearchService < TypesenseSearchService
   def query
     @query ||= begin
       query = TypesenseAnimeIndex.search(
-        query: filters[:text]&.join(' '),
+        query: filters[:text]&.join(' ') || '',
         query_by: {
           'canonical_title' => 100,
           'titles.*' => 90,
@@ -75,7 +75,7 @@ class AnimeSearchService < TypesenseSearchService
       if field == '_text_match'
         [['_text_match(buckets: 6)', direction], ['user_count', direction]]
       else
-        [field, direction]
+        [[field, direction]]
       end
     end
     scope.sort(improved_orders.to_h)
