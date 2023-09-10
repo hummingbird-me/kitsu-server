@@ -781,7 +781,7 @@ GEM
     typesense (0.15.0)
       oj (~> 3.11)
       typhoeus (~> 1.4)
-    typesensual (0.5.0)
+    typesensual (0.5.1)
       activesupport (>= 6.1.5)
       paint (>= 2.0.0)
       typesense (>= 0.13.0)
