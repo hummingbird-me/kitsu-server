@@ -72,8 +72,11 @@ class AnimeSearchService < TypesenseSearchService
     # Replace _text_match with _text_match(buckets: 6),user_count in the same direction
     # This generally gives significantly better results for media searches
     improved_orders = orders.flat_map do |field, direction|
-      if field == '_text_match'
+      case field
+      when '_text_match'
         [['_text_match(buckets: 6)', direction], ['user_count', direction]]
+      when 'start_date', 'created_at'
+        [["#{field}.timestamp", direction]]
       else
         [[field, direction]]
       end
