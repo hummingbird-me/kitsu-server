@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 Sentry.init do |config|
-  config.traces_sample_rate = 0.2
-  config.profiles_sample_rate = 0.5
+  config.traces_sample_rate = 0.0
+  config.profiles_sample_rate = 0.0
   config.breadcrumbs_logger = %i[sentry_logger http_logger active_support_logger]
   config.excluded_exceptions += [
     'Rack::Utils::InvalidParameterError' # Rack was unable to decode a parameter
