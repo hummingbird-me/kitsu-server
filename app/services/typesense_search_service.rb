@@ -24,6 +24,8 @@ class TypesenseSearchService < SearchService
   end
 
   def auto_query_for(field, value)
+    value = value.first if value.is_a?(Array) && value&.count == 1
+
     case value
     when Range
       if value.begin.nil?
