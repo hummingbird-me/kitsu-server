@@ -4,6 +4,11 @@
 #
 # @abstract
 class TypesenseSearchService < SearchService
+  # This regex accepts a numerical range or single number
+  # $1 = start, $2 = dot representing closed/open, $3 = end
+  NUMBER = /(\d+(?:\.\d+)?)/
+  NUMERIC_RANGE = /\A#{NUMBER}?(\.{2,3})?#{NUMBER}?\z/
+
   def total_count
     query_results.count
   end
@@ -37,6 +42,15 @@ class TypesenseSearchService < SearchService
     end
   end
 
+  def apply_numeric_filter_for(scope, field, filter_param: field)
+    if filters[filter_param]
+      value = parse_range(filters[filter_param].first)
+      scope.filter(auto_query_for(field, value))
+    else
+      scope
+    end
+  end
+
   def apply_order_to(scope)
     scope.sort(orders)
   end
@@ -51,6 +65,25 @@ class TypesenseSearchService < SearchService
     return scope unless _offset
 
     scope.page((_offset / _limit).floor)
+  end
+
+  def parse_range(value)
+    matches = NUMERIC_RANGE.match(value)
+    return if matches.nil?
+    # You gotta provide at least *one* number
+    return if matches[1].blank? && matches[3].blank?
+    inclusive = matches[2] == '..'
+
+    if matches[2] # Range
+      Range.new(parse_number(matches[1]), parse_number(matches[3]), !inclusive)
+    else # Scalar
+      parse_number(matches[1])
+    end
+  end
+
+  def parse_number(value)
+    return if value.nil?
+    value.include?('.') ? value.to_f : value.to_i
   end
 
   def orders
