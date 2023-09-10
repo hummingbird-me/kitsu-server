@@ -4,6 +4,12 @@ class TypesenseBaseIndex < Typesensual::Index
   schema do
     enable_nested_fields
 
+    field 'created_at', type: 'object'
+    field 'created_at.year', type: 'int32', facet: true, optional: true
+    field 'created_at.month', type: 'int32', facet: true, optional: true
+    field 'created_at.day', type: 'int32', facet: true, optional: true
+    field 'created_at.timestamp', type: 'int64', optional: true
+
     # Locale-specific strings
     # Pulled from https://typesense.org/docs/0.24.0/api/collections.html#schema-parameters
     field '.*\.ja-.*', type: 'string*', locale: 'ja'

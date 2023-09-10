@@ -21,10 +21,12 @@ module TypesenseMediaIndex
       field 'start_date.year', type: 'int32', facet: true, optional: true
       field 'start_date.month', type: 'int32', facet: true, optional: true
       field 'start_date.day', type: 'int32', facet: true, optional: true
+      field 'start_date.timestamp', type: 'int64', optional: true
       field 'end_date', type: 'object', optional: true
       field 'end_date.year', type: 'int32', facet: true, optional: true
       field 'end_date.month', type: 'int32', facet: true, optional: true
       field 'end_date.day', type: 'int32', facet: true, optional: true
+      field 'end_date.timestamp', type: 'int64', optional: true
 
       field 'age_rating', type: 'string', facet: true, optional: true
       field 'subtype', type: 'string', facet: true

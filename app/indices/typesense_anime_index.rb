@@ -74,7 +74,8 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
         streaming_sites: anime.streaming_links.map(&:streamer_id),
         episode_count: anime.episode_count,
         episode_length: anime.episode_length,
-        total_length: anime.total_length
+        total_length: anime.total_length,
+        created_at: format_date(anime.created_at)
       }.compact)
     end
   end
