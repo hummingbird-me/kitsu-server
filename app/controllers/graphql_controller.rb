@@ -10,8 +10,6 @@ class GraphqlController < ApplicationController
       user: current_user&.resource_owner,
       accept_languages:
     }
-    rack_span = OpenTelemetry::Instrumentation::Rack.current_span
-    rack_span.name = "graphql##{operation_name}" if operation_name.present?
     result = KitsuSchema.execute(query,
       variables:,
       context:,

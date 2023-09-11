@@ -119,16 +119,6 @@ gem 'parallel' # Process shit in parallel
 gem 'graphql-metrics'
 gem 'health_bit' # Allow Kubernetes to check the health
 gem 'marginalia' # Scribble in the margins of our queries
-gem 'opentelemetry-exporter-otlp'
-gem 'opentelemetry-instrumentation-action_pack'
-gem 'opentelemetry-instrumentation-active_record'
-gem 'opentelemetry-instrumentation-faraday'
-gem 'opentelemetry-instrumentation-graphql'
-gem 'opentelemetry-instrumentation-mongo'
-gem 'opentelemetry-instrumentation-rack'
-gem 'opentelemetry-instrumentation-rails'
-gem 'opentelemetry-instrumentation-redis'
-gem 'opentelemetry-sdk'
 gem 'prometheus_exporter' # Shit out metrics over Prometheus
 gem 'sentry-rails'
 gem 'sentry-ruby'
