@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Sentry.init do |config|
+  config.release = Rails.root.join('.version').read.strip if Rails.root.join('.version').exist?
   config.traces_sample_rate = 0.0
   config.profiles_sample_rate = 0.0
   config.breadcrumbs_logger = %i[sentry_logger http_logger active_support_logger]
