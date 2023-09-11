@@ -165,7 +165,9 @@ jobs:
         password: ${{ secrets.SENKO_SAN_KEY }}
 
     - name: Set version
-      run: echo "version=${GITHUB_SHA::8}" >> $GITHUB_ENV
+      run: |
+        echo "version=${GITHUB_SHA::8}" >> $GITHUB_ENV
+        echo "${GITHUB_SHA::8}" > .version
     - name: Report Release to Sentry
       run: sentry-cli releases new ${{ env.version }}
     - name: Add Commits to Sentry Release
