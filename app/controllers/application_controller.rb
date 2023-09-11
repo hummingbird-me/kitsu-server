@@ -70,6 +70,12 @@ class ApplicationController < JSONAPI::ResourceController
         name: user&.name,
         ip_address: request.remote_ip
       )
+      Sentry.configure_scope do |scope|
+        scope.set_context(
+          'feature flags',
+          Flipper.preload_all.to_h { |f| [f.name, f.enabled?(user)] }
+        )
+      end
     end
   end
 end
