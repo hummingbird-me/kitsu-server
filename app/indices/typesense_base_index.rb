@@ -26,8 +26,9 @@ class TypesenseBaseIndex < Typesensual::Index
   private
 
   def format_date(date)
-    return unless date
+    return { is_null: true } unless date
     {
+      is_null: false,
       year: date.year,
       month: date.month,
       day: date.day,
