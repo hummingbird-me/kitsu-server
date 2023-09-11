@@ -57,6 +57,10 @@ class ApplicationController < JSONAPI::ResourceController
       end
     end
 
+    rescue_from StandardError do |error|
+      Sentry.capture_exception(error)
+    end
+
     before_action :tag_sentry_context
 
     def tag_sentry_context
