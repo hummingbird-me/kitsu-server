@@ -54,7 +54,7 @@ class AnimeSearchService < TypesenseSearchService
     scope = apply_numeric_filter_for(scope, :average_rating)
     scope = apply_numeric_filter_for(scope, :user_count)
     scope = apply_auto_filter_for(scope, :subtype)
-    scope = apply_auto_filter_for(scope, :status)
+    scope = apply_status_filter_for(scope)
     scope = apply_numeric_filter_for(scope, :episode_count)
     scope = apply_numeric_filter_for(scope, :episode_length)
     scope = apply_auto_filter_for(scope, :age_rating)
@@ -88,6 +88,29 @@ class AnimeSearchService < TypesenseSearchService
     return scope unless @sfw
 
     scope.filter('age_rating:=[G,PG,R]')
+  end
+
+  def apply_status_filter_for(scope)
+    return scope if filters[:status].blank?
+
+    filters[:status].reduce(scope) do |sc, status|
+      case status
+      when 'past'
+        sc.filter("start_date.timestamp:<=#{Time.now.to_i}")
+      when 'finished'
+        sc.filter("end_date.timestamp:<=#{Time.now.to_i}")
+      when 'current'
+        sc.filter("(start_date.timestamp:>=#{Time.now.to_i} || end_date.is_null:true)")
+      when 'future'
+        sc.filter("start_date.timestamp:>#{Time.now.to_i}")
+      when 'upcoming'
+        sc.filter("start_date.timestamp:<=#{3.months.from_now.to_i}")
+      when 'unreleased'
+        sc.filter("start_date.timestamp:>#{3.months.from_now.to_i}")
+      when 'tba'
+        sc.filter('(start_date.is_null:true && end_date.is_null:true)')
+      end
+    end
   end
 
   def apply_genres_filter_for(scope)
