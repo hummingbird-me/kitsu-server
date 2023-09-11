@@ -98,13 +98,22 @@ class AnimeSearchService < TypesenseSearchService
       when 'past'
         sc.filter("start_date.timestamp:<=#{Time.now.to_i}")
       when 'finished'
-        sc.filter("end_date.timestamp:<=#{Time.now.to_i}")
+        sc.filter(<<~FILTERS.squish)
+          start_date.timestamp:<=#{Time.now.to_i} &&
+          end_date.timestamp:<#{Time.now.to_i}
+        FILTERS
       when 'current'
-        sc.filter("(start_date.timestamp:>=#{Time.now.to_i} || end_date.is_null:true)")
+        sc.filter(<<~FILTERS.squish)
+          start_date.timestamp:<=#{Time.now.to_i} &&
+          (end_date.timestamp:>=#{Time.now.to_i} || end_date.is_null:true)
+        FILTERS
       when 'future'
         sc.filter("start_date.timestamp:>#{Time.now.to_i}")
       when 'upcoming'
-        sc.filter("start_date.timestamp:<=#{3.months.from_now.to_i}")
+        sc.filter(<<~FILTERS.squish)
+          start_date.timestamp:>#{Time.now.to_i} &&
+          start_date.timestamp:<=#{3.months.from_now.to_i}
+        FILTERS
       when 'unreleased'
         sc.filter("start_date.timestamp:>#{3.months.from_now.to_i}")
       when 'tba'
