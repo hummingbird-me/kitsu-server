@@ -42,23 +42,19 @@ class ApplicationController < JSONAPI::ResourceController
     }
   end
 
-  if Sentry.configuration.sending_allowed?
-    on_server_error do |error|
-      extra = {}
-      begin
-        if error.is_a?(ActiveRecord::StatementInvalid)
-          # Clean the stack trace and use that for the fingerprint.
-          trace = Rails.backtrace_cleaner.clean(error.backtrace)
-          trace = trace.map { |line| line.split(/:\d+:/).first }
-          extra[:fingerprint] = [error.original_exception.class.name, *trace]
-        end
-      ensure
-        Sentry.capture_exception(error, extra)
+  on_server_error do |error|
+    next unless Sentry.configuration.sending_allowed?
+    extra = {}
+    begin
+      if error.is_a?(ActiveRecord::StatementInvalid)
+        # Clean the stack trace and use that for the fingerprint.
+        trace = Rails.backtrace_cleaner.clean(error.backtrace)
+        trace = trace.map { |line| line.split(/:\d+:/).first }
+        extra[:fingerprint] = [error.original_exception.class.name, *trace]
       end
-    end
-
-    rescue_from StandardError do |error|
-      Sentry.capture_exception(error)
+    ensure
+      e = Sentry.capture_exception(error, extra)
+      puts { event_id: e.event_id }.to_json
     end
 
     before_action :tag_sentry_context
