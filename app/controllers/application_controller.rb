@@ -54,7 +54,7 @@ class ApplicationController < JSONAPI::ResourceController
       end
     ensure
       e = Sentry.capture_exception(error, extra)
-      puts { event_id: e.event_id }.to_json
+      puts Oj.dump({ event_id: e.event_id })
     end
 
     before_action :tag_sentry_context
