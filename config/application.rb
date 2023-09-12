@@ -53,6 +53,8 @@ module Kitsu
 
     # Set log level to LOG_LEVEL environment variable
     config.log_level = ENV['LOG_LEVEL'] || :info
+    config.lograge.enabled = true
+    config.lograge.formatter = Lograge::Formatters::Json.new
 
     # Normally we wanna be API-only, but we mount some admin panels in, so... :(
     config.api_only = false

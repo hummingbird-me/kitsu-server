@@ -83,6 +83,7 @@ gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube', github: 'ice-cube-ruby/ice_cube' # Episode release schedules
 gem 'iso-639' # Language codes
 gem 'iso_country_codes' # Country codes
+gem 'lograge' # Better logging
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri' # Parse MAL XML shit
 gem 'one_signal' # Send push notifications

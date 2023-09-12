@@ -382,6 +382,11 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
+    lograge (0.13.0)
+      actionpack (>= 4)
+      activesupport (>= 4)
+      railties (>= 4)
+      request_store (~> 1.0)
     loofah (2.21.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -556,6 +561,8 @@ GEM
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
       uber (< 0.2.0)
+    request_store (1.5.1)
+      rack (>= 1.4)
     retriable (3.1.2)
     rexml (3.2.5)
     rinku (2.0.6)
@@ -804,6 +811,7 @@ DEPENDENCIES
   jwt
   kramdown
   kramdown-parser-gfm
+  lograge
   marcel
   marginalia
   mechanize
