@@ -7,7 +7,7 @@ require 'rails'
 require 'active_model/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
-require 'active_storage/engine'
+# require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
@@ -44,19 +44,22 @@ module Kitsu
     # Include all concern directories in app/*/concerns
     concern_dirs = Dir['app/*/concerns'].map { |d| File.expand_path(d) }
     config.eager_load_paths += concern_dirs
-    # config.eager_load_paths += [Rails.root.join('lib')]
     # Rip out any non-unique entries
     config.eager_load_paths.uniq!
 
     # Allow autoloading any lib files
     config.autoload_paths << Rails.root.join('lib')
 
-    # Set log level to LOG_LEVEL environment variable
+    # Set up logging
+    config.logger = Logger.new($stdout)
     config.log_level = ENV['LOG_LEVEL'] || :info
     config.lograge.enabled = true
     config.lograge.formatter = Lograge::Formatters::Json.new
     config.lograge.custom_options = ->(event) do
-      { params: event.payload[:request].query_parameters }
+      {
+        params: event.payload[:request].query_parameters,
+        request_id: event.payload[:headers]['action_dispatch.request_id']
+      }
     end
 
     # Normally we wanna be API-only, but we mount some admin panels in, so... :(
@@ -83,6 +86,7 @@ module Kitsu
     config.action_mailer.perform_deliveries = true
     config.action_mailer.raise_delivery_errors = true
     config.action_mailer.deliver_later_queue_name = 'soon'
+    config.action_mailer.perform_caching = false
     if ENV['POSTMARK_API_TOKEN']
       config.action_mailer.delivery_method = :postmark
       config.action_mailer.postmark_settings = {
