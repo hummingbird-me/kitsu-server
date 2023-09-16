@@ -93,33 +93,35 @@ class AnimeSearchService < TypesenseSearchService
   def apply_status_filter_for(scope)
     return scope if filters[:status].blank?
 
-    filters[:status].reduce(scope) do |sc, status|
+    statuses = filters[:status].map do |status|
       case status
       when 'past'
-        sc.filter("start_date.timestamp:<=#{Time.now.to_i}")
+        "(start_date.timestamp:<=#{Time.now.to_i})"
       when 'finished'
-        sc.filter(<<~FILTERS.squish)
-          start_date.timestamp:<=#{Time.now.to_i} &&
-          end_date.timestamp:<#{Time.now.to_i}
+        <<~FILTERS.squish
+          (start_date.timestamp:<=#{Time.now.to_i} &&
+          end_date.timestamp:<#{Time.now.to_i})
         FILTERS
       when 'current'
-        sc.filter(<<~FILTERS.squish)
-          start_date.timestamp:<=#{Time.now.to_i} &&
-          (end_date.timestamp:>=#{Time.now.to_i} || end_date.is_null:true)
+        <<~FILTERS.squish
+          (start_date.timestamp:<=#{Time.now.to_i} &&
+          (end_date.timestamp:>=#{Time.now.to_i} || end_date.is_null:true))
         FILTERS
       when 'future'
-        sc.filter("start_date.timestamp:>#{Time.now.to_i}")
+        "(start_date.timestamp:>#{Time.now.to_i})"
       when 'upcoming'
-        sc.filter(<<~FILTERS.squish)
-          start_date.timestamp:>#{Time.now.to_i} &&
-          start_date.timestamp:<=#{3.months.from_now.to_i}
+        <<~FILTERS.squish
+          (start_date.timestamp:>#{Time.now.to_i} &&
+          start_date.timestamp:<=#{3.months.from_now.to_i})
         FILTERS
       when 'unreleased'
-        sc.filter("start_date.timestamp:>#{3.months.from_now.to_i}")
+        "(start_date.timestamp:>#{3.months.from_now.to_i})"
       when 'tba'
-        sc.filter('(start_date.is_null:true && end_date.is_null:true)')
+        '(start_date.is_null:true && end_date.is_null:true)'
       end
     end
+
+    scope.filter(statuses.join(' || '))
   end
 
   def apply_genres_filter_for(scope)
