@@ -35,6 +35,7 @@ module TypesenseMediaIndex
       field 'average_rating', type: 'float', facet: true, optional: true
 
       field 'categories', type: 'int32[]', facet: true
+      field 'genres', type: 'int32[]', facet: true
     end
   end
 end

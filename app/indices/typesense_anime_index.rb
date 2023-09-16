@@ -71,6 +71,7 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
         favorites_count: anime.favorites_count,
         average_rating: anime.average_rating,
         categories: anime.media_categories.map(&:category_id),
+        genres: anime.genres.ids,
         streaming_sites: anime.streaming_links.map(&:streamer_id),
         episode_count: anime.episode_count,
         episode_length: anime.episode_length,

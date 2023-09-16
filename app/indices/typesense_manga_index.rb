@@ -32,6 +32,7 @@ class TypesenseMangaIndex < TypesenseBaseIndex
         favorites_count: manga.favorites_count,
         average_rating: manga.average_rating,
         categories: manga.media_categories.map(&:category_id),
+        genres: manga.genres.ids,
         chapter_count: manga.chapter_count,
         volume_count: manga.volume_count
       }.compact)
