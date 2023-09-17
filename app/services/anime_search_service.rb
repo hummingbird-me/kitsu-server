@@ -77,6 +77,12 @@ class AnimeSearchService < TypesenseSearchService
         [['_text_match(buckets: 6)', direction], ['user_count', direction]]
       when 'start_date', 'created_at'
         [["#{field}.timestamp", direction]]
+      when 'popularity_rank'
+        # Invert the direction for popularity_rank
+        [['user_count', direction == :desc ? :asc : :desc]]
+      when 'rating_rank'
+        # Invert the direction for rating_rank
+        [['average_rating', direction == :desc ? :asc : :desc]]
       else
         [[field, direction]]
       end
