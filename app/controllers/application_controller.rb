@@ -53,25 +53,29 @@ class ApplicationController < JSONAPI::ResourceController
         extra[:fingerprint] = [error.original_exception.class.name, *trace]
       end
     ensure
-      e = Sentry.capture_exception(error, extra)
-      puts Oj.dump({ event_id: e.event_id })
+      @sentry_event = Sentry.capture_exception(error, **extra)
     end
+  end
 
-    before_action :tag_sentry_context
+  before_action :tag_sentry_context
 
-    def tag_sentry_context
-      user = current_user&.resource_owner
-      Sentry.set_user(
-        id: user&.id,
-        name: user&.name,
-        ip_address: request.remote_ip
+  def tag_sentry_context
+    user = current_user&.resource_owner
+    Sentry.set_user(
+      id: user&.id,
+      name: user&.name,
+      ip_address: request.remote_ip
+    )
+    Sentry.configure_scope do |scope|
+      scope.set_context(
+        'feature flags',
+        Flipper.preload_all.to_h { |f| [f.name, f.enabled?(user)] }
       )
-      Sentry.configure_scope do |scope|
-        scope.set_context(
-          'feature flags',
-          Flipper.preload_all.to_h { |f| [f.name, f.enabled?(user)] }
-        )
-      end
     end
+  end
+
+  def append_info_to_payload(payload)
+    super
+    payload[:sentry_event] = @sentry_event
   end
 end

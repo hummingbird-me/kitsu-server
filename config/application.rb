@@ -58,8 +58,9 @@ module Kitsu
     config.lograge.custom_options = ->(event) do
       {
         params: event.payload[:request].query_parameters,
-        request_id: event.payload[:headers]['action_dispatch.request_id']
-      }
+        request_id: event.payload[:headers]['action_dispatch.request_id'],
+        sentry_event_id: event.payload[:sentry_event]&.event_id
+      }.compact
     end
 
     # Normally we wanna be API-only, but we mount some admin panels in, so... :(
