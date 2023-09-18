@@ -8,6 +8,10 @@ Sentry.init do |config|
   config.excluded_exceptions += [
     'Rack::Utils::InvalidParameterError' # Rack was unable to decode a parameter
   ]
+  config.before_send_transaction = ->(event, _hint) do
+    duration = event.timestamp - event.start_timestamp
+    event if duration > 5.seconds
+  end
 end
 
 ActiveSupport::Deprecation.behavior = %i[stderr notify]
