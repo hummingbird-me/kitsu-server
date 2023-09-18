@@ -53,7 +53,7 @@ class ApplicationController < JSONAPI::ResourceController
         extra[:fingerprint] = [error.original_exception.class.name, *trace]
       end
     ensure
-      @sentry_event = Sentry.capture_exception(error, **extra)
+      Sentry.capture_exception(error, **extra)
     end
   end
 
@@ -72,10 +72,5 @@ class ApplicationController < JSONAPI::ResourceController
         Flipper.preload_all.to_h { |f| [f.name, f.enabled?(user)] }
       )
     end
-  end
-
-  def append_info_to_payload(payload)
-    super
-    payload[:sentry_event] = @sentry_event
   end
 end
