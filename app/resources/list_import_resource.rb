@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ListImportResource < BaseResource
   include STIResource
 
@@ -9,7 +11,7 @@ class ListImportResource < BaseResource
 
   # Parameters
   attributes :input_text, :strategy
-  attribute :input_file, format: :shrine_attachment
+  attribute :input_file, format: :shrine_attachment, delegate: :input_file_attacher
   # Status
   attributes :progress, :status, :total
   # Errors
