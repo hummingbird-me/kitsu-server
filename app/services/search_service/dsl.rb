@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides the DSL-like interactive query methods for SearchServices
 class SearchService
   module DSL
@@ -15,7 +17,7 @@ class SearchService
     #   @return [Integer] the offset for pagination
     # @!attribute [r] _limit
     #   @return [Integer] the number of items to return on this page
-    attr_reader :_queries, :_filters, :_includes, :_order, :_offset, :_limit
+    attr_reader :_queries, :_filters, :_includes, :_order, :_offset, :_limit, :_page, :_per
 
     # Set up a Search with queries and filters to be applied to the request
     #
@@ -58,6 +60,22 @@ class SearchService
     # @param [Integer] the number of items to return on this page
     def limit(limit)
       @_limit = limit
+      self
+    end
+
+    # Set the page number to return
+    #
+    # @param [Integer] the page number to return
+    def page(page)
+      @_page = page
+      self
+    end
+
+    # Set the number of items to return on each page
+    #
+    # @param [Integer] the number of items to return on each page
+    def per(per)
+      @_per = per
       self
     end
   end
