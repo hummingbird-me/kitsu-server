@@ -93,7 +93,7 @@ class AnimeSearchService < TypesenseSearchService
   def apply_sfw_filter_for(scope)
     return scope unless @sfw
 
-    scope.filter('age_rating:=[G,PG,R]')
+    scope.filter('age_rating:!=[R18]')
   end
 
   def apply_status_filter_for(scope)
