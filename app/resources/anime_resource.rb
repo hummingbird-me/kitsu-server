@@ -22,6 +22,14 @@ class AnimeResource < MediaResource
     AnimeSearchService if Flipper[:typesense_search].enabled?(User.current)
   end
 
+  def self._paginator
+    if Flipper[:typesense_search].enabled?(User.current)
+      :universal
+    else
+      JSONAPI.configuration.default_paginator
+    end
+  end
+
   def self.updatable_fields(context)
     super - [:nsfw]
   end
