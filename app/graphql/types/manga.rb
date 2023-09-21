@@ -22,7 +22,7 @@ class Types::Manga < Types::BaseObject
 
   field :chapters, Types::Chapter.connection_type, null: true do
     description 'The chapters in the manga.'
-    argument :sort, Loaders::ChapterLoader.sort_argument, required: false
+    argument :sort, Loaders::ChaptersLoader.sort_argument, required: false
   end
 
   def chapters(sort: [{ on: :number, direction: :asc }])
