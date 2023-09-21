@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::Manga < Types::BaseObject
   implements Types::Interface::Media
   implements Types::Interface::WithTimestamps
@@ -20,13 +22,27 @@ class Types::Manga < Types::BaseObject
 
   field :chapters, Types::Chapter.connection_type, null: true do
     description 'The chapters in the manga.'
-    argument :sort, Loaders::CharacterVoicesLoader.sort_argument, required: false
+    argument :sort, Loaders::ChapterLoader.sort_argument, required: false
   end
 
   def chapters(sort: [{ on: :number, direction: :asc }])
     Loaders::ChaptersLoader.connection_for({
       find_by: :manga_id,
-      sort: sort
+      sort:
     }, object.id)
+  end
+
+  field :chapter, Types::Chapter, null: true do
+    description 'Get a specific chapter of the manga.'
+    argument :number, Integer, required: true
+  end
+
+  def chapter(number:)
+    Loaders::RecordLoader.for(
+      Chapter,
+      where: { manga_id: object.id },
+      token: context[:token],
+      column: :number
+    ).load(number)
   end
 end
