@@ -43,8 +43,8 @@ class AnimeSearchService < TypesenseSearchService
       )
       query = apply_filters_to(query)
       query = apply_order_to(query)
-      query = apply_limit_to(query)
-      query = apply_offset_to(query)
+      query = apply_page_to(query)
+      query = apply_per_to(query)
       query
     end
   end

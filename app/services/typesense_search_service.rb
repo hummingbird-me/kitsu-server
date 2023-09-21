@@ -57,16 +57,16 @@ class TypesenseSearchService < SearchService
     scope.sort(orders)
   end
 
-  def apply_limit_to(scope)
-    return scope unless _limit
+  def apply_per_to(scope)
+    return scope unless _per
 
-    scope.per(_limit)
+    scope.per(_per)
   end
 
-  def apply_offset_to(scope)
-    return scope unless _offset
+  def apply_page_to(scope)
+    return scope unless _page
 
-    scope.page((_offset / _limit).floor)
+    scope.page(_page)
   end
 
   def parse_range(value)
@@ -98,5 +98,21 @@ class TypesenseSearchService < SearchService
   # Combine the queries and filters into a single hash
   def filters
     @filters ||= _filters.merge(_queries)
+  end
+
+  def _per
+    if @_per
+      @_per
+    elsif @_limit
+      @_per = @_limit
+    end
+  end
+
+  def _page
+    if @_page
+      @_page
+    elsif @_offset && @_limit
+      @_page = (@_offset / @_limit).floor
+    end
   end
 end
