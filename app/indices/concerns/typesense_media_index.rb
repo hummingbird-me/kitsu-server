@@ -5,6 +5,8 @@ module TypesenseMediaIndex
 
   included do
     schema do
+      token_separators(*%w[/ - ( ) +])
+
       # Titles
       field 'canonical_title', type: 'string'
       field 'romanized_title', type: 'string', optional: true
