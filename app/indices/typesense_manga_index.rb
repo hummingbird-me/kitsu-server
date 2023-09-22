@@ -11,7 +11,7 @@ class TypesenseMangaIndex < TypesenseBaseIndex
   end
 
   def index(ids)
-    Manga.where(id: ids).includes(:media_categories).find_each do |manga|
+    Manga.where(id: ids).includes(:media_categories, :genres).find_each do |manga|
       titles = manga.titles_list
 
       yield({

@@ -47,7 +47,7 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
   end
 
   def index(ids)
-    Anime.where(id: ids).includes(:media_categories, :streaming_links).find_each do |anime|
+    Anime.where(id: ids).includes(:media_categories, :streaming_links, :genres).find_each do |anime|
       titles = anime.titles_list
 
       yield({
