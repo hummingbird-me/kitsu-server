@@ -42,7 +42,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_anime_by_id(id:)
-    Loaders::RecordLoader.for(::Anime, token: context[:token]).load(id)
+    Loaders::UnscopedRecordLoader.for(::Anime).load(id)
   end
 
   field :find_anime_by_slug, Types::Anime, null: true do
@@ -51,7 +51,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_anime_by_slug(slug:)
-    Loaders::SlugLoader.for(::Anime, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Anime).load(slug)
   end
 
   field :search_anime_by_title, Types::Anime.connection_type, null: false do
@@ -94,7 +94,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_manga_by_id(id:)
-    Loaders::UnscopedRecordLoader.for(::Manga, token: context[:token]).load(id)
+    Loaders::UnscopedRecordLoader.for(::Manga).load(id)
   end
 
   field :find_manga_by_slug, Types::Manga, null: true do
@@ -103,7 +103,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_manga_by_slug(slug:)
-    Loaders::SlugLoader.for(::Manga, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Manga).load(slug)
   end
 
   field :search_manga_by_title, Types::Manga.connection_type, null: false do
@@ -220,7 +220,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_profile_by_id(id: nil)
-    Loaders::UnscopedRecordLoader.for(::User, token: context[:token]).load(id)
+    Loaders::UnscopedRecordLoader.for(::User).load(id)
   end
 
   field :find_profile_by_slug, Types::Profile, null: true do
@@ -229,7 +229,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_profile_by_slug(slug:)
-    Loaders::SlugLoader.for(::User, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::User).load(slug)
   end
 
   field :search_profile_by_username, Types::Profile.connection_type, null: true do
@@ -260,7 +260,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_character_by_slug(slug:)
-    Loaders::SlugLoader.for(::Character, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Character).load(slug)
   end
 
   field :session, Types::Session,
@@ -302,7 +302,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_category_by_slug(slug:)
-    Loaders::SlugLoader.for(::Category, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Category).load(slug)
   end
 
   field :lookup_mapping, Types::Union::MappingItem, null: true do
@@ -330,7 +330,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_person_by_slug(slug:)
-    Loaders::SlugLoader.for(::Person, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Person).load(slug)
   end
 
   field :find_library_entry_by_id, Types::LibraryEntry, null: true do
