@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::QueryType < GraphQL::Schema::Object
   connection_type_class(Types::BaseConnection)
 
@@ -92,7 +94,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_manga_by_id(id:)
-    Loaders::RecordLoader.for(::Manga, token: context[:token]).load(id)
+    Loaders::UnscopedRecordLoader.for(::Manga, token: context[:token]).load(id)
   end
 
   field :find_manga_by_slug, Types::Manga, null: true do
@@ -139,8 +141,8 @@ class Types::QueryType < GraphQL::Schema::Object
 
   def search_media_by_title(title:, media_type: nil)
     case media_type
-    when 'anime' then search_anime_by_title(title: title)
-    when 'manga' then search_manga_by_title(title: title)
+    when 'anime' then search_anime_by_title(title:)
+    when 'manga' then search_manga_by_title(title:)
     else
       # Both anime and manga will get the same AlgoliaMediaIndex
       service = AlgoliaGraphqlSearchService.new(::Anime, context[:token])
@@ -161,8 +163,8 @@ class Types::QueryType < GraphQL::Schema::Object
 
   def find_media_by_id_and_type(id:, media_type:)
     case media_type
-    when 'anime' then find_anime_by_id(id: id)
-    when 'manga' then find_manga_by_id(id: id)
+    when 'anime' then find_anime_by_id(id:)
+    when 'manga' then find_manga_by_id(id:)
     end
   end
 
@@ -218,7 +220,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_profile_by_id(id: nil)
-    Loaders::RecordLoader.for(::User, token: context[:token]).load(id)
+    Loaders::UnscopedRecordLoader.for(::User, token: context[:token]).load(id)
   end
 
   field :find_profile_by_slug, Types::Profile, null: true do
@@ -346,7 +348,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def library_entries_by_media_type(media_type:)
-    ::LibraryEntry.where(media_type: media_type)
+    ::LibraryEntry.where(media_type:)
   end
 
   field :library_entries_by_media, Types::LibraryEntry.connection_type, null: true do
@@ -357,7 +359,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def library_entries_by_media(media_type:, media_id:)
-    ::LibraryEntry.where(media_type: media_type, media_id: media_id)
+    ::LibraryEntry.where(media_type:, media_id:)
   end
 
   field :find_library_event_by_id, Types::LibraryEvent, null: true do
@@ -399,7 +401,7 @@ class Types::QueryType < GraphQL::Schema::Object
   def wiki_submissions_by_statuses(statuses: nil, sort: [{ on: :created_at, direction: :asc }])
     Loaders::WikiSubmissionsLoader.connection_for({
       find_by: :status,
-      sort: sort
+      sort:
     }, statuses)
   end
 
@@ -447,7 +449,7 @@ class Types::QueryType < GraphQL::Schema::Object
   def reports_by_status(statuses: nil, sort: [{ on: :created_at, direction: :asc }])
     Loaders::ReportsLoader.connection_for({
       find_by: :status,
-      sort: sort
+      sort:
     }, statuses)
   end
 
