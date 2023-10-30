@@ -123,6 +123,15 @@ class Types::QueryType < GraphQL::Schema::Object
     )
   end
 
+  field :find_chapter_by_id, Types::Chapter, null: true do
+    description 'Find a single Manga Chapter by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_chapter_by_id(id:)
+    Loaders::UnscopedRecordLoader.for(::Chapter).load(id)
+  end
+
   field :search_media_by_title, Types::Interface::Media.connection_type, null: false do
     description <<~DESCRIPTION.squish
       Search for any media (Anime, Manga) by title using Algolia.
