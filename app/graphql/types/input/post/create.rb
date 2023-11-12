@@ -7,6 +7,7 @@ class Types::Input::Post::Create < Types::Input::Base
   argument :is_nsfw, Boolean, required: false, default_value: false, as: :nsfw
   argument :spoiled_unit_id, ID, required: false
   argument :spoiled_unit_type, String, required: false
+  argument :target_user_id, ID, required: false
 
   def to_model
     to_h.merge({ user_id: current_user&.id })
