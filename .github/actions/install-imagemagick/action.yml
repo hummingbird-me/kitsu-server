@@ -53,11 +53,10 @@ runs:
         run: |
           cat /var/log/imei-*.log
 
-      - name: Store IMEI Failure Log as Artifact
-        if: steps.build-imagemagick.conclusion == 'failure'
+      - name: Store IMEI Log as Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: imei-failure-log
+          name: imei-log
           path: /var/log/imei-*.log
 
       - name: Log ImageMagick Version
