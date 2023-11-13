@@ -102,16 +102,12 @@ jobs:
       run: |
         sudo add-apt-repository universe
         sudo apt-get update
-        sudo apt-get -yqq install libpq-dev libfuse2
+        sudo apt-get -yqq install libpq-dev libfuse2 libvips libvips-dev libraqm-dev ffmpeg
 
-    - name: Install ImageMagick (${{ env.IMAGEMAGICK_VERSION }})
-      uses: ./.github/actions/install-imagemagick
-      with:
-        version: ${{ env.IMAGEMAGICK_VERSION }}
-
-    - name: Install libvips
+    - name: Install ImageMagick
       run: |
-        sudo apt-get -yqq install libvips libvips-dev libraqm-dev ffmpeg
+        curl -L -o /usr/local/bin/magick 'https://download.imagemagick.org/ImageMagick/download/binaries/magick'
+        chmod oug+x /usr/local/bin/magick
 
     - name: Set up Ruby (${{ matrix.ruby }})
       uses: ruby/setup-ruby@v1
