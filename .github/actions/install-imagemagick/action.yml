@@ -32,6 +32,13 @@ runs:
             sudo apt install ./.imagemagick-deb/*.deb
             magick -version
 
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+        with:
+          limit-access-to-actor: true
+          limit-access-to-users: NuckChorris
+          wait-timeout-minutes: 5
+
       - name: Build ImageMagick ${{ inputs.version }}
         id: build-imagemagick
         if: steps.cache-imagemagick.outputs.cache-hit != 'true'
