@@ -43,14 +43,6 @@ class Types::Post < Types::BaseObject
   field :locked_reason, Types::Enum::LockedReason,
     null: true,
     description: 'The reason why this post was locked.'
-  
-  field :target_profile, Types::Profile,
-    null: false,
-    description: 'The profile of the user in which the post is directed to.'
-
-  def target_profile
-    Loaders::RecordLoader.for(User).load(object.target_user_id)
-  end
 
   field :comments, Types::Comment.connection_type, null: false do
     description 'All comments on this post'
@@ -88,7 +80,7 @@ class Types::Post < Types::BaseObject
       Loaders::RecordLoader.for(User, token: context[:token]).load_many(follows.pluck(:user_id))
     end
   end
-
+  
   field :attachments, Types::Attachment.connection_type, null: true do
     description 'The attachments of this post.'
     argument :sort, Loaders::AttachmentsLoader.sort_argument, required: false
@@ -135,5 +127,12 @@ class Types::Post < Types::BaseObject
           true
         end
       end
+
+  field :target_profile, Types::Profile,
+    null: false,
+    description: 'The profile of the target user of the post.'
+
+  def target_profile
+    Loaders::RecordLoader.for(User).load(object.target_user_id)
   end
 end

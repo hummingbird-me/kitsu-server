@@ -16,7 +16,7 @@ runs:
 
       - name: Install Dependencies
         shell: bash
-        run: sudo apt-get install -y libraqm-dev
+        run: sudo apt-get install -y libraqm-dev webp
 
       - uses: nick-fields/retry@v2
         name: Install Cached ImageMagick ${{ inputs.version }}
@@ -48,10 +48,16 @@ runs:
           ls -l ./.imagemagick-deb/
 
       - name: Output IMEI Failure Log
-        if: steps.build-imagemagick.result == 'failure'
+        if: steps.build-imagemagick.conclusion == 'failure'
         shell: bash
         run: |
-          cat /var/log/imei.log
+          cat /var/log/imei-*.log
+
+      - name: Store IMEI Log as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: imei-log
+          path: /var/log/imei-*.log
 
       - name: Log ImageMagick Version
         shell: bash

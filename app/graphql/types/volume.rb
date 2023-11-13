@@ -1,24 +1,8 @@
 class Types::Volume < Types::BaseObject
+  implements Types::Interface::Unit
   implements Types::Interface::WithTimestamps
 
   description 'A manga volume which can contain multiple chapters.'
-
-  field :id, ID, null: false
-
-  field :titles, Types::TitlesList,
-    null: false,
-    description: 'The titles for this chapter in various locales'
-
-  def titles
-    {
-      localized: object.titles,
-      canonical: object.canonical_title
-    }
-  end
-
-  field :number, Integer,
-    null: false,
-    description: 'The volume number.'
 
   field :published, GraphQL::Types::ISO8601Date,
     null: true,
@@ -32,6 +16,10 @@ class Types::Volume < Types::BaseObject
   field :isbn, [String],
     null: false,
     description: 'The isbn number of this volume.'
+
+  field :chapters_count, Integer,
+    null: true,
+    description: 'The number of chapters in this volume.'
 
   field :chapters, Types::Chapter.connection_type,
     null: true,

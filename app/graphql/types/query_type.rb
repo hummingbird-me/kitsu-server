@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::QueryType < GraphQL::Schema::Object
   connection_type_class(Types::BaseConnection)
 
@@ -40,7 +42,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_anime_by_id(id:)
-    Loaders::RecordLoader.for(::Anime, token: context[:token]).load(id)
+    Loaders::UnscopedRecordLoader.for(::Anime).load(id)
   end
 
   field :find_anime_by_slug, Types::Anime, null: true do
@@ -49,7 +51,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_anime_by_slug(slug:)
-    Loaders::SlugLoader.for(::Anime, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Anime).load(slug)
   end
 
   field :search_anime_by_title, Types::Anime.connection_type, null: false do
@@ -92,7 +94,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_manga_by_id(id:)
-    Loaders::RecordLoader.for(::Manga, token: context[:token]).load(id)
+    Loaders::UnscopedRecordLoader.for(::Manga).load(id)
   end
 
   field :find_manga_by_slug, Types::Manga, null: true do
@@ -101,7 +103,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_manga_by_slug(slug:)
-    Loaders::SlugLoader.for(::Manga, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Manga).load(slug)
   end
 
   field :search_manga_by_title, Types::Manga.connection_type, null: false do
@@ -119,6 +121,15 @@ class Types::QueryType < GraphQL::Schema::Object
       filters: 'kind:manga',
       restrict_searchable_attributes: %w[titles abbreviated_titles canonical_title]
     )
+  end
+
+  field :find_chapter_by_id, Types::Chapter, null: true do
+    description 'Find a single Manga Chapter by ID'
+    argument :id, ID, required: true
+  end
+
+  def find_chapter_by_id(id:)
+    Loaders::UnscopedRecordLoader.for(::Chapter).load(id)
   end
 
   field :search_media_by_title, Types::Interface::Media.connection_type, null: false do
@@ -139,8 +150,8 @@ class Types::QueryType < GraphQL::Schema::Object
 
   def search_media_by_title(title:, media_type: nil)
     case media_type
-    when 'anime' then search_anime_by_title(title: title)
-    when 'manga' then search_manga_by_title(title: title)
+    when 'anime' then search_anime_by_title(title:)
+    when 'manga' then search_manga_by_title(title:)
     else
       # Both anime and manga will get the same AlgoliaMediaIndex
       service = AlgoliaGraphqlSearchService.new(::Anime, context[:token])
@@ -161,8 +172,8 @@ class Types::QueryType < GraphQL::Schema::Object
 
   def find_media_by_id_and_type(id:, media_type:)
     case media_type
-    when 'anime' then find_anime_by_id(id: id)
-    when 'manga' then find_manga_by_id(id: id)
+    when 'anime' then find_anime_by_id(id:)
+    when 'manga' then find_manga_by_id(id:)
     end
   end
 
@@ -218,7 +229,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_profile_by_id(id: nil)
-    Loaders::RecordLoader.for(::User, token: context[:token]).load(id)
+    Loaders::UnscopedRecordLoader.for(::User).load(id)
   end
 
   field :find_profile_by_slug, Types::Profile, null: true do
@@ -227,7 +238,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_profile_by_slug(slug:)
-    Loaders::SlugLoader.for(::User, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::User).load(slug)
   end
 
   field :search_profile_by_username, Types::Profile.connection_type, null: true do
@@ -258,7 +269,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_character_by_slug(slug:)
-    Loaders::SlugLoader.for(::Character, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Character).load(slug)
   end
 
   field :session, Types::Session,
@@ -300,7 +311,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_category_by_slug(slug:)
-    Loaders::SlugLoader.for(::Category, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Category).load(slug)
   end
 
   field :lookup_mapping, Types::Union::MappingItem, null: true do
@@ -328,7 +339,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def find_person_by_slug(slug:)
-    Loaders::SlugLoader.for(::Person, token: context[:token]).load(slug)
+    Loaders::SlugLoader.for(::Person).load(slug)
   end
 
   field :find_library_entry_by_id, Types::LibraryEntry, null: true do
@@ -346,7 +357,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def library_entries_by_media_type(media_type:)
-    ::LibraryEntry.where(media_type: media_type)
+    ::LibraryEntry.where(media_type:)
   end
 
   field :library_entries_by_media, Types::LibraryEntry.connection_type, null: true do
@@ -357,7 +368,7 @@ class Types::QueryType < GraphQL::Schema::Object
   end
 
   def library_entries_by_media(media_type:, media_id:)
-    ::LibraryEntry.where(media_type: media_type, media_id: media_id)
+    ::LibraryEntry.where(media_type:, media_id:)
   end
 
   field :find_library_event_by_id, Types::LibraryEvent, null: true do
@@ -399,7 +410,7 @@ class Types::QueryType < GraphQL::Schema::Object
   def wiki_submissions_by_statuses(statuses: nil, sort: [{ on: :created_at, direction: :asc }])
     Loaders::WikiSubmissionsLoader.connection_for({
       find_by: :status,
-      sort: sort
+      sort:
     }, statuses)
   end
 
@@ -447,7 +458,7 @@ class Types::QueryType < GraphQL::Schema::Object
   def reports_by_status(statuses: nil, sort: [{ on: :created_at, direction: :asc }])
     Loaders::ReportsLoader.connection_for({
       find_by: :status,
-      sort: sort
+      sort:
     }, statuses)
   end
 
