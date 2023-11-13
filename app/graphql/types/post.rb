@@ -43,6 +43,14 @@ class Types::Post < Types::BaseObject
   field :locked_reason, Types::Enum::LockedReason,
     null: true,
     description: 'The reason why this post was locked.'
+  
+  field :target_profile, Types::Profile,
+    null: false,
+    description: 'The profile of the user in which the post is directed to.'
+
+  def target_profile
+    Loaders::RecordLoader.for(User).load(object.target_user_id)
+  end
 
   field :comments, Types::Comment.connection_type, null: false do
     description 'All comments on this post'
@@ -79,5 +87,53 @@ class Types::Post < Types::BaseObject
     Loaders::AssociationLoader.for(object.class, :post_follows).scope(object).then do |follows|
       Loaders::RecordLoader.for(User, token: context[:token]).load_many(follows.pluck(:user_id))
     end
+  end
+
+  field :attachments, Types::Attachment.connection_type, null: true do
+    description 'The attachments of this post.'
+    argument :sort, Loaders::AttachmentsLoader.sort_argument, required: false
+  end
+
+  def attachments(sort: [{ on: :upload_order, direction: :asc}])
+    Loaders::AttachmentsLoader.connection_for({
+      find_by: :owner_id,
+      sort: sort,
+      where: { owner_type: object.class.name }
+    }, object.id)
+  end
+
+  field :spoiled_unit, Types::Interface::Unit,
+    null: true,
+    description: 'The referred episode or chapter in this post.'
+  
+  def spoiled_unit
+    return nil unless object.spoiled_unit_type
+    case object.spoiled_unit_type
+    when 'Episode' then Loaders::UnscopedRecordLoader.for(Episode).load(object.spoiled_unit_id)
+    when 'Chapter' then Loaders::UnscopedRecordLoader.for(Chapter).load(object.spoiled_unit_id)
+    end
+  end
+
+  field :embeds, Types::Embed,
+    null: true
+
+  def embeds
+    object.embed
+  end
+
+  field :has_liked, Boolean,
+    null: false,
+    description: 'If the current user has liked this post.'
+  
+  def has_liked
+    Loaders::RecordLoader.for(PostLike, token: context[:token],
+      column: :post_id, # Use the post id as the main column sort
+      where: { user_id: current_user.id }).load(object.id).then do |like|
+        if like.nil?
+          false
+        else
+          true
+        end
+      end
   end
 end
