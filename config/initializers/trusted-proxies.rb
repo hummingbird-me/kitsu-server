@@ -3,7 +3,7 @@
 Sentry.with_scope do |scope|
   scope.set_transaction_name('initializers/trusted-proxies')
 
-  if true || Rails.env.production? || Rails.env.staging?
+  if Rails.env.production? || Rails.env.staging?
     cloudflare_ips = begin
       # Grab Cloudflare IPs
       %w[
