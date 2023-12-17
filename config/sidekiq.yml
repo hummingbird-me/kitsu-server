@@ -8,58 +8,59 @@ production:
   - [later, 2] # Within an hour
   - [eventually, 1] # Within a few hours
   - [mailers, 1] # TODO: delete me
-:schedule:
-  # Cron is *pattern matching times*, with the following format:
-  #  - fields: seconds minutes hours date month weekday
-  #  - a,b,c means "whenever this field equals a or b or c"
-  #  - */15 means "whenever it's divisible by 15"
-  #  - hour is 0..23
-  #  - weekday is 0..6
-  #  - date is 1..31
-  #  - month is 1..12
-  #
-  # Alternatively you can use "every: 6h" but that apparently runs it once on each worker server
-  anime_rating_update:
-    class: AverageRatingUpdateWorker
-    args: Anime
-    # Every 6 hours
-    cron: '0 0 */6 * * *'
-  manga_rating_update:
-    class: AverageRatingUpdateWorker
-    args: Manga
-    # Every 6 hours
-    cron: '0 0 */6 * * *'
-  CounterCacheResetWorker:
-    # Once a day
-    cron: '0 0 0 * * *'
-  RankingUpdateWorker:
-    # Every 6 hours, 5 minutes into the hour (so ratings get updated first)
-    cron: '0 5 */6 * * *'
-  GlobalStatRecalculationWorker:
-    # Once a day
-    cron: '0 0 0 * * *'
-  LibraryEntryLogRemovalWorker:
-    # Once a day
-    cron: '0 0 0 * * *'
-  UploadRemovalWorker:
-    # Twice a day
-    cron: '0 0 */12 * * *'
-  TheTvdbDailyWorker:
-    # Once a day
-    cron: '0 0 0 * * *'
-  TheTvdbWeeklyWorker:
-    # Once a week
-    cron: '0 0 0 * * SUN'
-  PostgresSequenceWorker:
-    # Once a day
-    cron: '0 0 0 * * *'
-  'BufferedStreamClient::FollowBufferFlushWorker':
-    # Every 10 seconds
-    cron: '*/10 * * * * *'
-  'BufferedStreamClient::UnfollowBufferFlushWorker':
-    # Every 5 seconds
-    cron: '*/5 * * * * *'
-  AiringNotificationScheduleWorker:
-    # Once a week
-    cron: '0 0 0 * * SUN'
+:scheduler:
+  :schedule:
+    # Cron is *pattern matching times*, with the following format:
+    #  - fields: seconds minutes hours date month weekday
+    #  - a,b,c means "whenever this field equals a or b or c"
+    #  - */15 means "whenever it's divisible by 15"
+    #  - hour is 0..23
+    #  - weekday is 0..6
+    #  - date is 1..31
+    #  - month is 1..12
+    #
+    # Alternatively you can use "every: 6h" but that apparently runs it once on each worker server
+    anime_rating_update:
+      class: AverageRatingUpdateWorker
+      args: Anime
+      # Every 6 hours
+      cron: '0 0 */6 * * *'
+    manga_rating_update:
+      class: AverageRatingUpdateWorker
+      args: Manga
+      # Every 6 hours
+      cron: '0 0 */6 * * *'
+    CounterCacheResetWorker:
+      # Once a day
+      cron: '0 0 0 * * *'
+    RankingUpdateWorker:
+      # Every 6 hours, 5 minutes into the hour (so ratings get updated first)
+      cron: '0 5 */6 * * *'
+    GlobalStatRecalculationWorker:
+      # Once a day
+      cron: '0 0 0 * * *'
+    LibraryEntryLogRemovalWorker:
+      # Once a day
+      cron: '0 0 0 * * *'
+    UploadRemovalWorker:
+      # Twice a day
+      cron: '0 0 */12 * * *'
+    TheTvdbDailyWorker:
+      # Once a day
+      cron: '0 0 0 * * *'
+    TheTvdbWeeklyWorker:
+      # Once a week
+      cron: '0 0 0 * * SUN'
+    PostgresSequenceWorker:
+      # Once a day
+      cron: '0 0 0 * * *'
+    'BufferedStreamClient::FollowBufferFlushWorker':
+      # Every 10 seconds
+      cron: '*/10 * * * * *'
+    'BufferedStreamClient::UnfollowBufferFlushWorker':
+      # Every 5 seconds
+      cron: '*/5 * * * * *'
+    AiringNotificationScheduleWorker:
+      # Once a week
+      cron: '0 0 0 * * SUN'
     args: Anime
