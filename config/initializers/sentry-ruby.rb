@@ -2,7 +2,7 @@
 
 Sentry.init do |config|
   config.release = Rails.root.join('.version').read.strip if Rails.root.join('.version').exist?
-  config.traces_sample_rate = 0.5
+  config.traces_sample_rate = 0.0
   config.profiles_sample_rate = 1.0
   config.breadcrumbs_logger = %i[sentry_logger http_logger active_support_logger]
   config.excluded_exceptions += [
