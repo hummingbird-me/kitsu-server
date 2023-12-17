@@ -19,8 +19,6 @@ class LibraryEntryResource < BaseResource
     end
   end
 
-  caching
-
   attributes :status, :progress, :volumes_owned, :reconsuming, :reconsume_count,
     :notes, :private, :reaction_skipped, :progressed_at, :started_at, :finished_at
 
