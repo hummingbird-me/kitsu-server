@@ -10,7 +10,7 @@ Sentry.init do |config|
   ]
   config.before_send_transaction = ->(event, _hint) do
     duration = event.timestamp - event.start_timestamp
-    event if duration > 20.seconds
+    event if duration > 25.seconds
   end
 end
 
