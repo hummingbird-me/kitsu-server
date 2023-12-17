@@ -1,4 +1,5 @@
 require Rails.root.join('vendor/resource_serializer')
+require Rails.root.join('lib/instrumented_processor')
 
 module FixIncludeErrors
   def get_related(current_path)
