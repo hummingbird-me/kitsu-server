@@ -8,8 +8,8 @@ class ShrineAttachmentValueFormatter < JSONAPI::ValueFormatter
 
     Sentry.with_child_span(op: 'jsonapi.format_value',
       description: 'ShrineAttachmentValueFormatter') do |span|
-      span.set_data(:record, value&.record&.to_global_id&.to_s)
-      span.set_data(:name, value&.name&.to_s)
+      span&.set_data(:record, value&.record&.to_global_id&.to_s)
+      span&.set_data(:name, value&.name&.to_s)
 
       output = value.derivatives.transform_values(&:url)
       output[:original] = value.file.url
