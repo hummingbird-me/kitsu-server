@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Sentry.init do |config|
+  config.enabled_patches += [:sidekiq_scheduler]
   config.release = Rails.root.join('.version').read.strip if Rails.root.join('.version').exist?
   config.traces_sample_rate = 0.0
   config.profiles_sample_rate = 1.0
