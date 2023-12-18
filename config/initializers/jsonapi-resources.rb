@@ -1,5 +1,18 @@
 require Rails.root.join('vendor/resource_serializer')
 require Rails.root.join('lib/instrumented_processor')
+require_relative 'prometheus_exporter'
+
+JSONAPI_RESOURCES_CACHE_HITS_TOTAL = $prometheus.register(
+  :counter,
+  'jsonapi_resources_cache_hits_total',
+  'Number of cache hits for JSONAPI::Resources'
+)
+
+JSONAPI_RESOURCES_CACHE_MISSES_TOTAL = $prometheus.register(
+  :counter,
+  'jsonapi_resources_cache_misses_total',
+  'Number of cache misses for JSONAPI::Resources'
+)
 
 module FixIncludeErrors
   def get_related(current_path)
@@ -41,4 +54,8 @@ JSONAPI.configure do |config|
 
   # Instrumentation
   config.default_processor_klass = InstrumentedProcessor
+  config.resource_cache_usage_report_function = lambda do |resource, hits, misses|
+    JSONAPI_RESOURCES_CACHE_HITS_TOTAL.observe(hits, resource: resource)
+    JSONAPI_RESOURCES_CACHE_MISSES_TOTAL.observe(misses, resource: resource)
+  end
 end
