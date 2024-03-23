@@ -251,6 +251,9 @@ GEM
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
+    fx (0.8.0)
+      activerecord (>= 6.0.0)
+      railties (>= 6.0.0)
     gems (1.2.0)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
@@ -787,6 +790,7 @@ DEPENDENCIES
   flipper-redis
   flipper-ui
   friendly_id
+  fx
   google-api-client
   graphql
   graphql-batch

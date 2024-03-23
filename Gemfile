@@ -12,11 +12,12 @@ gem 'rails', '6.1.7.6'
 gem 'activerecord-import' # Run bulk imports quicker
 gem 'attr_encrypted' # encrypt linked_profile tokens
 gem 'connection_pool' # Pool our Redises
+gem 'fx' # Database functions
 gem 'hiredis' # Faster redis
 gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
 gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
-gem 'scenic'
+gem 'scenic' # Database views
 
 # Search
 gem 'algoliasearch-rails' # what we tried to switch to (algolia)
