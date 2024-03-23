@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 require Rails.root.join('vendor/resource_serializer')
 require Rails.root.join('lib/instrumented_processor')
-require_relative 'prometheus_exporter'
 
 JSONAPI_RESOURCES_CACHE_HITS_TOTAL = $prometheus.register(
   :counter,
@@ -28,7 +29,8 @@ module FixIncludeErrors
 
       include_in_join = @force_eager_load || !current_relationship || current_relationship.eager_load_on_include
 
-      current[:include_related][fragment] ||= { include: false, include_related: {}, include_in_join: include_in_join }
+      current[:include_related][fragment] ||= { include: false, include_related: {},
+                                                include_in_join: }
       current = current[:include_related][fragment]
     end
     current
@@ -54,8 +56,8 @@ JSONAPI.configure do |config|
 
   # Instrumentation
   config.default_processor_klass = InstrumentedProcessor
-  config.resource_cache_usage_report_function = lambda do |resource, hits, misses|
-    JSONAPI_RESOURCES_CACHE_HITS_TOTAL.observe(hits, resource: resource)
-    JSONAPI_RESOURCES_CACHE_MISSES_TOTAL.observe(misses, resource: resource)
+  config.resource_cache_usage_report_function = ->(resource, hits, misses) do
+    JSONAPI_RESOURCES_CACHE_HITS_TOTAL.observe(hits, resource:)
+    JSONAPI_RESOURCES_CACHE_MISSES_TOTAL.observe(misses, resource:)
   end
 end
