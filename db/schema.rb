@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_28_222209) do
+ActiveRecord::Schema.define(version: 2024_03_23_060429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -693,6 +693,37 @@ ActiveRecord::Schema.define(version: 2023_10_28_222209) do
     t.datetime "edited_at"
     t.index ["group_id"], name: "index_leader_chat_messages_on_group_id"
     t.index ["user_id"], name: "index_leader_chat_messages_on_user_id"
+  end
+
+  create_table "legacy_stories", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.hstore "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "story_type", limit: 255
+    t.integer "target_id"
+    t.string "target_type", limit: 255
+    t.integer "library_entry_id"
+    t.boolean "adult", default: false
+    t.integer "total_votes", default: 0, null: false
+    t.integer "group_id"
+    t.datetime "deleted_at"
+    t.index ["created_at"], name: "index_legacy_stories_on_created_at"
+    t.index ["deleted_at"], name: "index_legacy_stories_on_deleted_at"
+    t.index ["group_id"], name: "index_legacy_stories_on_group_id"
+    t.index ["user_id"], name: "index_legacy_stories_on_user_id"
+  end
+
+  create_table "legacy_substories", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "story_id"
+    t.integer "target_id"
+    t.string "target_type", limit: 255
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.hstore "data"
+    t.integer "substory_type", default: 0, null: false
+    t.datetime "deleted_at"
   end
 
   create_table "library_entries", id: :serial, force: :cascade do |t|
@@ -1403,25 +1434,6 @@ ActiveRecord::Schema.define(version: 2023_10_28_222209) do
     t.index ["user_id"], name: "index_stats_on_user_id"
   end
 
-  create_table "stories", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.hstore "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "story_type", limit: 255
-    t.integer "target_id"
-    t.string "target_type", limit: 255
-    t.integer "library_entry_id"
-    t.boolean "adult", default: false
-    t.integer "total_votes", default: 0, null: false
-    t.integer "group_id"
-    t.datetime "deleted_at"
-    t.index ["created_at"], name: "index_stories_on_created_at"
-    t.index ["deleted_at"], name: "index_stories_on_deleted_at"
-    t.index ["group_id"], name: "index_stories_on_group_id"
-    t.index ["user_id"], name: "index_stories_on_user_id"
-  end
-
   create_table "streamers", id: :serial, force: :cascade do |t|
     t.string "site_name", limit: 255, null: false
     t.string "logo_file_name"
@@ -1446,18 +1458,6 @@ ActiveRecord::Schema.define(version: 2023_10_28_222209) do
     t.index ["media_type", "media_id"], name: "index_streaming_links_on_media_type_and_media_id"
     t.index ["regions"], name: "index_streaming_links_on_regions", using: :gin
     t.index ["streamer_id"], name: "index_streaming_links_on_streamer_id"
-  end
-
-  create_table "substories", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "story_id"
-    t.integer "target_id"
-    t.string "target_type", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.hstore "data"
-    t.integer "substory_type", default: 0, null: false
-    t.datetime "deleted_at"
   end
 
   create_table "uploads", id: :serial, force: :cascade do |t|
