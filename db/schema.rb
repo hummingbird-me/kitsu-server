@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_24_025519) do
+ActiveRecord::Schema.define(version: 2024_03_24_072956) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2024_03_24_025519) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
+    t.bigint "feed_id"
     t.index ["age_rating"], name: "index_anime_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["average_rating"], name: "anime_average_rating_idx"
     t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: :desc
@@ -225,6 +226,7 @@ ActiveRecord::Schema.define(version: 2024_03_24_025519) do
     t.integer "volume_id"
     t.jsonb "description", default: {}, null: false
     t.jsonb "thumbnail_data"
+    t.bigint "feed_id"
     t.index ["manga_id"], name: "index_chapters_on_manga_id"
   end
 
@@ -391,6 +393,7 @@ ActiveRecord::Schema.define(version: 2024_03_24_025519) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
+    t.bigint "feed_id"
     t.index ["age_rating"], name: "index_dramas_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["slug"], name: "index_dramas_on_slug"
   end
@@ -428,6 +431,7 @@ ActiveRecord::Schema.define(version: 2024_03_24_025519) do
     t.boolean "filler"
     t.jsonb "description", default: {}, null: false
     t.jsonb "thumbnail_data"
+    t.bigint "feed_id"
     t.index ["media_type", "media_id"], name: "index_episodes_on_media_type_and_media_id"
   end
 
@@ -664,6 +668,7 @@ ActiveRecord::Schema.define(version: 2024_03_24_025519) do
     t.integer "pinned_post_id"
     t.jsonb "avatar_data"
     t.jsonb "cover_image_data"
+    t.bigint "feed_id"
     t.index ["category_id"], name: "index_groups_on_category_id"
     t.index ["slug"], name: "index_groups_on_slug", unique: true
   end
@@ -872,6 +877,7 @@ ActiveRecord::Schema.define(version: 2024_03_24_025519) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
+    t.bigint "feed_id"
     t.index ["age_rating"], name: "index_manga_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["average_rating"], name: "manga_average_rating_idx"
     t.index ["slug"], name: "index_manga_on_slug"
@@ -1577,6 +1583,7 @@ ActiveRecord::Schema.define(version: 2024_03_24_025519) do
     t.jsonb "avatar_data"
     t.jsonb "cover_image_data"
     t.integer "sfw_filter_preference", default: 0, null: false
+    t.bigint "feed_id"
     t.index "lower((email)::text)", name: "users_lower_idx"
     t.index "lower((name)::text), id", name: "index_users_on_lower_name_and_id", comment: "Unknown who is querying this, but it is painfully slow without this index"
     t.index ["ao_id"], name: "index_users_on_ao_id", unique: true
