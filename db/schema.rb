@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_23_212918) do
+ActiveRecord::Schema.define(version: 2024_03_24_013929) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -1434,6 +1434,13 @@ ActiveRecord::Schema.define(version: 2024_03_23_212918) do
     t.index "((stats_data ->> 'time'::text))", name: "stats_expr_idx"
     t.index ["type", "user_id"], name: "index_stats_on_type_and_user_id", unique: true
     t.index ["user_id"], name: "index_stats_on_user_id"
+  end
+
+  create_table "stories", id: :bigint, default: -> { "generate_snowflake()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "bumped_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.integer "type", limit: 2, null: false
+    t.jsonb "data", default: {}, null: false
   end
 
   create_table "streamers", id: :serial, force: :cascade do |t|
