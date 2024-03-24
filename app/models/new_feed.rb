@@ -7,5 +7,5 @@
 # This is named NewFeed because the original Feed class is used for legacy GetStream-backed feeds.
 # Once those are removed, this will be renamed to Feed.
 class NewFeed < ApplicationRecord
-  self.table_name = 'feed'
+  self.table_name = 'feeds'
 end
