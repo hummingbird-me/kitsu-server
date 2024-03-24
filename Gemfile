@@ -9,15 +9,19 @@ gem 'puma'
 gem 'rails', '6.1.7.6'
 
 # Database Stuff
-gem 'activerecord-import' # Run bulk imports quicker
-gem 'attr_encrypted' # encrypt linked_profile tokens
-gem 'connection_pool' # Pool our Redises
-gem 'fx' # Database functions
-gem 'hiredis' # Faster redis
-gem 'mongo' # MongoDB for Aozora
-gem 'pg' # Postgres
-gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
-gem 'scenic' # Database views
+gem 'mongo' # Used for Aozora stuff
+# Redis
+gem 'connection_pool'
+gem 'hiredis' # Native client
+gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis']
+# Postgres
+gem 'activerecord-import' # Bulk imports
+gem 'ar-sequence', # Sequences
+  github: 'kitsu-io-forks/ar-sequence',
+  branch: 'nuck/add-min-max-support'
+gem 'fx' # Functions
+gem 'pg' # Postgres itself
+gem 'scenic' # Views
 
 # Search
 gem 'algoliasearch-rails' # what we tried to switch to (algolia)
@@ -44,6 +48,8 @@ gem 'marcel'
 gem 'mini_magick'
 gem 'shrine'
 gem 'shrine-blurhash'
+# Encrypted fields (RAILS-7: Replace me)
+gem 'attr_encrypted'
 
 # Background tasks
 gem 'sidekiq', '~> 7'

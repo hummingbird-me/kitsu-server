@@ -26,6 +26,14 @@ GIT
     ice_cube (0.16.4)
 
 GIT
+  remote: https://github.com/kitsu-io-forks/ar-sequence.git
+  revision: fe24ac895914939f9167ee61ec922dd460cf2cdd
+  branch: nuck/add-min-max-support
+  specs:
+    ar-sequence (0.2.1)
+      activerecord
+
+GIT
   remote: https://github.com/stripe-ruby-mock/stripe-ruby-mock.git
   revision: 3c7a5db6a5dde3203d387dde0255611e508022f0
   specs:
@@ -775,6 +783,7 @@ DEPENDENCIES
   algoliasearch-rails
   ancestry
   apollo_upload_server
+  ar-sequence!
   attr_encrypted
   aws-sdk-s3 (~> 1)
   bcrypt
