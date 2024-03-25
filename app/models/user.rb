@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -98,6 +100,7 @@
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
 class User < ApplicationRecord
+  include WithNewFeed
   include AvatarUploader::Attachment(:avatar)
   include CoverImageUploader::Attachment(:cover_image)
 
@@ -109,7 +112,7 @@ class User < ApplicationRecord
     javascript json kitsu sysadmin sysadministrator system unfollow user users
     wiki you staff mod
   ].to_set.freeze
-  CONTROL_CHARACTERS = /\p{Line_Separator}|\p{Paragraph_Separator}|\p{Other}/u.freeze
+  CONTROL_CHARACTERS = /\p{Line_Separator}|\p{Paragraph_Separator}|\p{Other}/u
   BANNED_CHARACTERS = [
     # Swastikas
     "\u534D",
@@ -142,7 +145,6 @@ class User < ApplicationRecord
   has_many :linked_accounts, dependent: :delete_all
   has_many :profile_links, dependent: :delete_all
   has_many :user_roles, dependent: :delete_all
-  has_many :library_events, dependent: :delete_all
   has_many :library_entries, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :reviews, dependent: :destroy
@@ -177,7 +179,7 @@ class User < ApplicationRecord
   has_many :wiki_submission_logs
 
   validates :email, format: { with: /\A.+@.+\.[a-z]+\z/, message: 'is not an email' },
-                    if: :email_changed?, allow_blank: true
+    if: :email_changed?, allow_blank: true
   validates :email, :name, :password, :slug, absence: true, if: :unregistered?
   validates :email, :name, :password_digest, presence: true, if: :registered?
   validates :email, uniqueness: { case_sensitive: false }, if: :email_changed?, allow_blank: true
@@ -204,8 +206,8 @@ class User < ApplicationRecord
   validate :not_reserved_name, if: :name_changed?
   validate :not_taken_on_aozora, on: :create
   validates :name, presence: true,
-                   length: { minimum: 3, maximum: 20 },
-                   if: ->(user) { user.registered? && user.name_changed? }
+    length: { minimum: 3, maximum: 20 },
+    if: ->(user) { user.registered? && user.name_changed? }
   validates :name, format: {
     without: CONTROL_CHARACTERS,
     message: 'cannot contain control characters, you silly haxx0r'
@@ -306,12 +308,12 @@ class User < ApplicationRecord
 
   def stripe_customer
     @stripe_customer ||= if stripe_customer_id
-                           Stripe::Customer.retrieve(stripe_customer_id)
-                         else
-                           customer = Stripe::Customer.create(email: email)
-                           self.stripe_customer_id = customer.id
-                           customer
-                         end
+      Stripe::Customer.retrieve(stripe_customer_id)
+    else
+      customer = Stripe::Customer.create(email:)
+      self.stripe_customer_id = customer.id
+      customer
+    end
   end
 
   def blocked?(user)
@@ -461,7 +463,7 @@ class User < ApplicationRecord
 
   after_commit on: :update do
     # Update email on Stripe
-    stripe_customer.save(email: email) if previous_changes['email']
+    stripe_customer.save(email:) if previous_changes['email']
   end
 
   after_commit if: ->(u) { u.previous_changes['email'] && !Rails.env.staging? } do

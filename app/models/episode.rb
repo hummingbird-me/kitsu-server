@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class Episode < ApplicationRecord
+  include WithNewFeed
   include Titleable
   include Mappable
   include DescriptionSanitation
@@ -21,7 +24,7 @@ class Episode < ApplicationRecord
 
   def self.length_mode
     mode, count = reorder(count_all: :desc).group(:length).count.first
-    { mode: mode, count: count }
+    { mode:, count: }
   end
 
   def self.length_average

@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module Media
   extend ActiveSupport::Concern
 
   STATUSES = %w[tba unreleased upcoming current finished].freeze
 
   included do
+    include WithNewFeed
     include Titleable
     include Rateable
     include Rankable
@@ -142,7 +145,7 @@ module Media
     return :finished if end_date&.past?
     return :current if start_date&.past? || start_date&.today?
     return :upcoming if start_date && start_date <= Date.today + 3.months
-    return :unreleased if start_date&.future?
+    :unreleased if start_date&.future?
   end
 
   def next_release

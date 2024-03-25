@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class Chapter < ApplicationRecord
+  include WithNewFeed
   include Titleable
   include DescriptionSanitation
   include UnitThumbnailUploader::Attachment(:thumbnail)
