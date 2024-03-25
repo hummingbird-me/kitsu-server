@@ -2,7 +2,7 @@
 
 class Story < ApplicationRecord
   enum type: {
-    post: 1,
+    'Story::PostStory' => 1,
     follow: 2,
     media_reaction: 3
   }
