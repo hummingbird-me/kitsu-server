@@ -13,7 +13,6 @@ class Types::MutationType < Types::BaseObject
   field :account, Mutations::Account, null: false
   field :profile, Mutations::Profile, null: false
   field :block, Mutations::Block, null: false
-  field :anime, Mutations::Anime, null: false
   field :episode, Mutations::Episode, null: false
   field :library_entry, Mutations::LibraryEntry, null: false
   field :favorite, Mutations::Favorite, null: false

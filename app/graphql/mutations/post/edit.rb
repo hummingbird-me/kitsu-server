@@ -32,7 +32,8 @@ class Mutations::Post::Edit < Mutations::Base
 		argument :spoiled_unit_id, ID,
 			required: false,
 			description: 'The ID of the related unit (chapter/episode)'
-		argument :spoiled_unit_type, String,
+		argument :spoiled_unit_type,
+			Types::Enum::UnitType,
 			required: false,
 			description: 'The Type of the related unit (chapter/episode)'
 		argument :embed,
@@ -68,7 +69,7 @@ class Mutations::Post::Edit < Mutations::Base
 		unless input[:spoiled_unit_id].nil? ^ input[:spoiled_unit_type].nil?      
 			case input[:spoiled_unit_type]
 				when 'Episode' then @unit = Episode.find_by(id: input[:spoiled_unit_id], media_id: input[:media_id])
-				when 'Chapter' then @unit = Chapter.find_by(id: input[:spoiled_unit_id], media_id: input[:media_id])
+				when 'Chapter' then @unit = Chapter.find_by(id: input[:spoiled_unit_id], manga_id: input[:media_id])
 				else @unit = nil
 			end
 			return errors << Types::Errors::NotFound.build(path: %w[input 
@@ -81,8 +82,7 @@ class Mutations::Post::Edit < Mutations::Base
 
 		# Find the post
 		@post = Post.find_by(id:)
-		return errors << Types::Errors::NotFound.build(path: %w[input id]
-			) if @post.nil? 
+		return errors << Types::Errors::NotFound.build(path: %w[input id]) if @post.nil? 
 
 		# Authorize it with the policy
 		authorize!(@post, :update?)
