@@ -8,8 +8,8 @@ class Types::Image < Types::BaseObject
     {
       name: 'original',
       url: object.file.url,
-      width: object.file.url,
-      height: object.file.url
+      width: object.file.width,
+      height: object.file.height
     }
   end
 

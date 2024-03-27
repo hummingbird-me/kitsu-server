@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_04_041942) do
+ActiveRecord::Schema.define(version: 2023_10_28_222209) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1625,6 +1625,7 @@ ActiveRecord::Schema.define(version: 2022_12_04_041942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "thumbnail_data"
+    t.jsonb "description", default: {}, null: false
   end
 
   create_table "votes", id: :serial, force: :cascade do |t|

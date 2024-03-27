@@ -20,6 +20,18 @@ class Types::Manga < Types::BaseObject
     null: true,
     description: 'The number of volumes in this manga.'
 
+  field :volumes, Types::Volume.connection_type, null: true do
+    description 'The volumes in the manga.'
+    argument :sort, Loaders::VolumesLoader.sort_argument, required: false
+  end
+
+  def volumes(sort: [{ on: :number, direction: :asc }])
+    Loaders::VolumesLoader.connection_for({
+      find_by: :manga_id,
+      sort:
+    }, object.id)
+  end
+
   field :chapters, Types::Chapter.connection_type, null: true do
     description 'The chapters in the manga.'
     argument :sort, Loaders::ChaptersLoader.sort_argument, required: false
