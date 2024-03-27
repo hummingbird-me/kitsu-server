@@ -1,29 +1,38 @@
 class Mutations::Post::Lock < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  argument :input,
-    Types::Input::Post::Lock,
-    required: true,
-    description: 'Lock a Post.',
-    as: :post
+  description 'Lock a post'
 
-  field :post, Types::Post, null: true
-  field :errors, [Types::Interface::Error], null: true
-
-  def load_post(value)
-    post = ::Post.find(value.id)
-    post.assign_attributes(value.to_model)
-    post
+  input do
+    argument :id, ID,
+      required: true
+    argument :locked_reason,
+      Types::Enum::LockedReason,
+      required: true,
+      description: 'The reason why this post got locked.'
   end
 
-  def authorized?(post:)
-    super(post, :lock?)
+  result Types::Post
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotAuthorized,
+    Types::Errors::NotFound
+  
+  def ready?(id:, locked_reason:, **)
+    authenticate!
+    @post = Post.find_by(id:)
+    return errors << Types::Errors::NotFound.build if @post.nil?
+    @post.assign_attributes(
+      locked_at: DateTime.current,
+      locked_reason:,
+      locked_by: current_user
+    )
+    authorize!(@post, :lock?)
+    true
   end
 
-  def resolve(post:)
-    post.save!
-    ModeratorActionLog.generate!(current_user, 'lock', post)
-
-    { post: post }
+  def resolve(**)
+    @post.tap(&:save!)
+    ModeratorActionLog.generate!(current_user, 'lock', @post)
+    @post
   end
 end

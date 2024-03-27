@@ -13,7 +13,6 @@ class Types::MutationType < Types::BaseObject
   field :account, Mutations::Account, null: false
   field :profile, Mutations::Profile, null: false
   field :block, Mutations::Block, null: false
-  field :anime, Mutations::Anime, null: false
   field :episode, Mutations::Episode, null: false
   field :library_entry, Mutations::LibraryEntry, null: false
   field :favorite, Mutations::Favorite, null: false
@@ -22,6 +21,7 @@ class Types::MutationType < Types::BaseObject
   field :post, Mutations::Post, null: false
   field :wiki_submission, Mutations::WikiSubmission, null: false
   field :profile_link, Mutations::ProfileLink, null: false
+  field :comment, Mutations::Comment, null: false
 
   # HACK: The GraphQL runtime gets confused by the nil objects in mutations. So we override the
   # object method to just return a hash with all fields being hashes.
