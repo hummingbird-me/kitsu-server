@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_24_073526) do
+ActiveRecord::Schema.define(version: 2024_03_25_042204) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -452,6 +452,13 @@ ActiveRecord::Schema.define(version: 2024_03_24_073526) do
     t.index ["user_id", "item_id", "item_type"], name: "index_favorites_on_user_id_and_item_id_and_item_type", unique: true
     t.index ["user_id", "item_type"], name: "index_favorites_on_user_id_and_item_type"
     t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
+  create_table "feed_stories", primary_key: ["feed_id", "story_id"], force: :cascade do |t|
+    t.bigint "feed_id", null: false
+    t.bigint "story_id", null: false
+    t.datetime "bumped_at", null: false
+    t.index ["bumped_at"], name: "index_feed_stories_on_bumped_at"
   end
 
   create_table "feeds", force: :cascade do |t|
