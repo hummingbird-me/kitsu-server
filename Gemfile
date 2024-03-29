@@ -19,6 +19,7 @@ gem 'activerecord-import' # Bulk imports
 gem 'ar-sequence', # Sequences
   github: 'kitsu-io-forks/ar-sequence',
   branch: 'nuck/add-min-max-support'
+gem 'composite_primary_keys', '~> 13.0.0' # Composite keys, remove in 7.1
 gem 'fx' # Functions
 gem 'pg' # Postgres itself
 gem 'scenic' # Views

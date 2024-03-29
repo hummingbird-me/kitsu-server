@@ -161,6 +161,8 @@ GEM
       activesupport (>= 3.2)
       elasticsearch (>= 1.0.0)
     coderay (1.1.3)
+    composite_primary_keys (13.0.8)
+      activerecord (~> 6.1.0)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
     content_disposition (1.0.0)
@@ -793,6 +795,7 @@ DEPENDENCIES
   blurhash
   bootsnap
   chewy
+  composite_primary_keys (~> 13.0.0)
   connection_pool
   counter_culture
   database_cleaner
