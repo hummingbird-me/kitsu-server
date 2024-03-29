@@ -8,4 +8,8 @@ class Story < ApplicationRecord
   }
 
   has_many :feed_stories, inverse_of: :story, dependent: :delete_all
+
+  before_create do
+    self.bumped_at = created_at
+  end
 end
