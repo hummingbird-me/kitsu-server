@@ -8,4 +8,6 @@
 # Once those are removed, this will be renamed to Feed.
 class NewFeed < ApplicationRecord
   self.table_name = 'feeds'
+
+  has_many :feed_stories, inverse_of: :feed, dependent: :delete_all
 end
