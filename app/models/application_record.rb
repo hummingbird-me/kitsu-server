@@ -13,6 +13,8 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.inherited(subclass)
     super(subclass)
+    return if Rails.env.test?
+
     subclass.rails_admin do
       edit do
         exclude_fields do |field|
