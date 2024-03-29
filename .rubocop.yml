@@ -318,3 +318,6 @@ Rails/UnknownEnv:
     - staging
     - development
     - test
+RSpec/DescribedClass:
+  Enabled: true
+  SkipBlocks: true
