@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_25_042204) do
+ActiveRecord::Schema.define(version: 2024_03_25_042940) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -472,6 +472,7 @@ ActiveRecord::Schema.define(version: 2024_03_25_042204) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "hidden", default: false, null: false
+    t.bigint "story_id"
     t.index ["followed_id", "follower_id"], name: "index_follows_on_followed_id_and_follower_id", unique: true
     t.index ["follower_id"], name: "index_follows_on_followed_id"
   end
@@ -1031,6 +1032,7 @@ ActiveRecord::Schema.define(version: 2024_03_25_042204) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.datetime "hidden_at"
+    t.bigint "story_id"
     t.index ["anime_id"], name: "index_media_reactions_on_anime_id"
     t.index ["deleted_at"], name: "index_media_reactions_on_deleted_at"
     t.index ["drama_id"], name: "index_media_reactions_on_drama_id"
@@ -1241,6 +1243,7 @@ ActiveRecord::Schema.define(version: 2024_03_25_042204) do
     t.datetime "locked_at"
     t.integer "locked_reason"
     t.datetime "hidden_at"
+    t.bigint "story_id"
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"
