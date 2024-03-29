@@ -12,6 +12,10 @@ module WithNewFeed
       self.feed_id = NewFeed.create!.id if feed_id.nil?
     end
 
+    before_destroy do
+      new_feed&.destroy!
+    end
+
     validates :feed_id, presence: true
   end
 end
