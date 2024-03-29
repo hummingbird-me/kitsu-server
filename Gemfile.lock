@@ -771,6 +771,8 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    with_model (2.1.7)
+      activerecord (>= 6.0)
     zeitwerk (2.6.13)
 
 PLATFORMS
@@ -905,6 +907,7 @@ DEPENDENCIES
   typesensual
   typhoeus
   webmock
+  with_model
 
 BUNDLED WITH
    2.3.13

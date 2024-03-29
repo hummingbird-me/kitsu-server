@@ -179,6 +179,7 @@ group :test do
     require: 'stripe_mock' # Mock Stripe API
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
+  gem 'with_model' # Create temporary models
 
   # Coverage
   gem 'simplecov' # Local coverage
