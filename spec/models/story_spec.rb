@@ -8,4 +8,27 @@ RSpec.describe Story do
   end
 
   it { is_expected.to have_many(:feed_stories).dependent(:delete_all) }
+
+  describe '#bump!' do
+    it 'updates the bumped_at timestamp on the story' do
+      story = described_class.new(type: 1)
+      story.save!
+      Timecop.freeze(Time.now) do
+        story.bump!
+        expect(story.bumped_at).to eq(Time.now)
+      end
+    end
+
+    it 'updates the bumped_at timestamp on the feed_stories' do
+      story = described_class.create!(type: 1)
+      feed = NewFeed.create!
+      feed_story = FeedStory.create!(story:, feed:, bumped_at: 6.days.ago)
+
+      time = Time.now
+
+      expect {
+        story.bump!(time)
+      }.to change { feed_story.reload.bumped_at }.to(time)
+    end
+  end
 end
