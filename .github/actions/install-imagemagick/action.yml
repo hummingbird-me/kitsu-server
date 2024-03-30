@@ -18,6 +18,9 @@ runs:
         shell: bash
         run: sudo apt-get install -y libraqm-dev webp
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
       - uses: nick-fields/retry@v2
         name: Install Cached ImageMagick ${{ inputs.version }}
         if: steps.cache-imagemagick.outputs.cache-hit == 'true'
