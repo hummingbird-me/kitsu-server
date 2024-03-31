@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImageInfo
   def initialize(file_path)
     @file_path = file_path
@@ -6,20 +8,13 @@ class ImageInfo
   def type
     if fastimage.type == :png && animated?
       :apng
-    else fastimage.type
+    else
+      fastimage.type
     end
   end
 
   def animated?
-    frames = MiniMagick::Tool::Identify.new do |magick|
-      magick.format '%N'
-      magick << if MiniMagick.imagemagick7? && fastimage.type == :png
-                  "apng:#{@file_path}"
-                else
-                  @file_path
-                end
-    end
-    frames.to_i > 1
+    FastImage.animated?(@file_path)
   end
 
   private
