@@ -104,11 +104,6 @@ jobs:
         sudo apt-get update
         sudo apt-get -yqq install libpq-dev libfuse2
 
-    - name: Install ImageMagick (${{ env.IMAGEMAGICK_VERSION }})
-      uses: ./.github/actions/install-imagemagick
-      with:
-        version: ${{ env.IMAGEMAGICK_VERSION }}
-
     - name: Install libvips
       run: |
         sudo apt-get -yqq install libvips libvips-dev libraqm-dev ffmpeg
