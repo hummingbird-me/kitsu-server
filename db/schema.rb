@@ -21,6 +21,31 @@ ActiveRecord::Schema.define(version: 2024_03_25_042940) do
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
+  create_function :generate_snowflake, sql_definition: <<-'SQL'
+      CREATE OR REPLACE FUNCTION public.generate_snowflake(ts timestamp without time zone DEFAULT clock_timestamp(), id integer DEFAULT nextval('snowflake_id_seq'::regclass))
+       RETURNS bigint
+       LANGUAGE plpgsql
+      AS $function$
+      DECLARE
+          -- Epoch slightly before the founding of hummingbird.me
+          epoch_ts bigint := EXTRACT(EPOCH FROM timestamp '2013-01-01') * 1000;
+          -- Maximum for 22 bits unsigned
+          max_seq_id bigint := (2 ^ 23) - 1;
+          now_ts bigint;
+          seq_id bigint;
+          result bigint := 0;
+      BEGIN
+          -- We just use a big-ass sequence for now, since we're using one shared generator
+          SELECT id::bigint % max_seq_id INTO seq_id;
+
+          SELECT FLOOR(EXTRACT(EPOCH FROM ts) * 1000) INTO now_ts;
+          result := (now_ts - epoch_ts) << 22;
+          result := result | seq_id;
+      	return result;
+      END;
+      $function$
+  SQL
+
   create_table "ama_subscribers", id: :serial, force: :cascade do |t|
     t.integer "ama_id", null: false
     t.integer "user_id", null: false
