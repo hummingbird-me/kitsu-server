@@ -17,7 +17,7 @@ class Story
         group_or_user,
         media,
         spoiled_unit
-      ]
+      ].compact
     end
   end
 end
