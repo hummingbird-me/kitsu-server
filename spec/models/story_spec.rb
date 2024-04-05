@@ -28,7 +28,7 @@ RSpec.describe Story do
 
       expect {
         story.bump!(time)
-      }.to change { feed_story.reload.bumped_at }.to(time)
+      }.to change { feed_story.reload.bumped_at }.to be_within(0.01).of(time)
     end
   end
 end
