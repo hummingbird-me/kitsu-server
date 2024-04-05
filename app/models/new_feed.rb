@@ -9,5 +9,6 @@
 class NewFeed < ApplicationRecord
   self.table_name = 'feeds'
 
-  has_many :stories, class_name: 'FeedStory', inverse_of: :feed, dependent: :delete_all
+  has_many :stories, class_name: 'FeedStory', foreign_key: 'feed_id', inverse_of: :feed,
+    dependent: :delete_all
 end
