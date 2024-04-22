@@ -79,21 +79,21 @@ module FancyMutation
     # mutation's #ready? and #authorized? methods, detecting the state of the error object after
     # execution and changing the result if needed.
     def ready?(input:)
-      ready, result = super(**input)
+      result = super(**input)
 
       return [false, { errors: }] if errors.present?
 
-      [ready, result]
+      result
     rescue ErrorWrapper => e
       [false, { errors: [*errors, e.error] }]
     end
 
     def authorized?(input:)
-      ready, result = super(**input)
+      result = super(**input)
 
       return [false, { errors: }] if errors.present?
 
-      [ready, result]
+      result
     rescue ErrorWrapper => e
       [false, { errors: [*errors, e.error] }]
     end

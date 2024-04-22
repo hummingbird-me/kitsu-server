@@ -16,12 +16,12 @@ RSpec.describe FancyMutation do
           include FancyMutation
 
           def ready?(**)
-            [true, 'test']
+            true
           end
         end
 
         result = mutation.new.ready?(input: {})
-        expect(result).to eq([true, 'test'])
+        expect(result).to be(true)
       end
     end
 
