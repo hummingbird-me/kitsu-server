@@ -294,9 +294,9 @@ GEM
     graphql-batch (0.6.0)
       graphql (>= 1.12.18, < 3)
       promise.rb (~> 0.7.2)
-    graphql-client (0.18.0)
+    graphql-client (0.22.0)
       activesupport (>= 3.0)
-      graphql
+      graphql (>= 1.13.0)
     graphql-fancy_loader (0.1.5)
       activesupport (>= 5.0, < 8.0)
       graphql (>= 1.3, < 3)
