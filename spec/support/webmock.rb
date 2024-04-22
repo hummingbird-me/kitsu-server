@@ -11,7 +11,8 @@ WebMock.disable_net_connect!(allow: [
   'elasticsearch:9200',
   'minio:9000',
   'oembed.com',
-  'typesense:8108'
+  'typesense:8108',
+  'graphql.anilist.co'
 ])
 
 RSpec.shared_context 'MAL CDN' do
