@@ -24,7 +24,7 @@ class ListImport
 
     def each
       %w[anime manga].each do |type|
-        send("#{type}_list").each do |media|
+        send(:"#{type}_list").each do |media|
           row = Row.new(media, type)
 
           yield row.media, row.data
@@ -48,14 +48,15 @@ class ListImport
 
     def media_lists
       @media_lists ||= AnilistApiWrapper::Client.query(
-        MEDIA_LIST_QUERY,
+        self.class.media_list_query,
         variables: {
           user_name: input_text
         }
       )
     end
 
-    MEDIA_LIST_QUERY = AnilistApiWrapper::Client.parse <<-GRAPHQL
+    def self.media_list_query
+      @media_list_query ||= AnilistApiWrapper::Client.parse <<-GRAPHQL
         query($user_name: String) {
           anime: MediaListCollection(userName: $user_name, type: ANIME) {
             lists {
@@ -128,7 +129,8 @@ class ListImport
             }
           }
         }
-    GRAPHQL
+      GRAPHQL
+    end
 
   rescue StandardError => e
     Sentry.capture_exception(e)
