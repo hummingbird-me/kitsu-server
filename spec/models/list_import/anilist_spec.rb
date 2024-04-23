@@ -22,16 +22,17 @@ RSpec.describe ListImport::Anilist do
   end
 
   describe 'validations' do
-    it { should validate_presence_of(:input_text) }
+    it { is_expected.to validate_presence_of(:input_text) }
+
     it {
-      should validate_length_of(:input_text)
+      is_expected.to validate_length_of(:input_text)
         .is_at_least(3)
         .is_at_most(20)
     }
   end
 
   describe '#count' do
-    it 'should return the total number of entries (combined)' do
+    it 'returns the total number of entries (combined)' do
       expect(subject.count).to eq(12)
     end
   end
@@ -39,7 +40,7 @@ RSpec.describe ListImport::Anilist do
   describe '#each' do
     let(:row_double) { instance_double(ListImport::Anilist::Row) }
 
-    it 'should yield 12 times' do
+    it 'yields 12 times' do
       expect(ListImport::Anilist::Row).to receive(:new).at_least(:once) { row_double }
       expect(row_double).to receive(:media).at_least(:once)
       expect(row_double).to receive(:data).at_least(:once)
