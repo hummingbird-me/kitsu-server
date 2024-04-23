@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'sidekiq/middleware/server/chewy'
 require 'sidekiq/middleware/server/current_user'
 require 'sidekiq/middleware/server/stream_buffer_flusher'
 require 'sidekiq/middleware/client/current_user'
 
-Sidekiq.default_worker_options = { queue: 'later' }
+Sidekiq.default_job_options = { queue: 'later' }
 
 Sidekiq.configure_server do |config|
   require 'prometheus_exporter/instrumentation'
@@ -18,7 +20,7 @@ Sidekiq.configure_server do |config|
   end
 
   config.logger.level = ENV['LOG_LEVEL'].to_sym if ENV['LOG_LEVEL']
-  config.redis = { url: ENV['REDIS_URL'], network_timeout: 3, pool_timeout: 3 }
+  config.redis = { url: ENV.fetch('REDIS_URL', nil), network_timeout: 3, pool_timeout: 3 }
   config.server_middleware do |chain|
     chain.add Sidekiq::Debounce
     chain.add PrometheusExporter::Instrumentation::Sidekiq
@@ -37,7 +39,7 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV['REDIS_URL'], network_timeout: 3, pool_timeout: 3 }
+  config.redis = { url: ENV.fetch('REDIS_URL', nil), network_timeout: 3, pool_timeout: 3 }
 
   config.client_middleware do |chain|
     chain.add Sidekiq::Middleware::Client::CurrentUser
