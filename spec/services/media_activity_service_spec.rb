@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe MediaActivityService do
-  let(:library_entry) { build(:library_entry, user: build(:user, id: 1)) }
-
   subject { described_class.new(library_entry) }
+
+  let(:library_entry) { build(:library_entry, user: create(:user)) }
 
   describe '#status' do
     it 'returns an activity for the user\'s feed' do
@@ -20,7 +22,7 @@ RSpec.describe MediaActivityService do
   end
 
   describe '#reviewed' do
-    let(:review) { build(:review, library_entry: library_entry) }
+    let(:review) { build(:review, library_entry:) }
 
     it 'returns an activity for the user\'s feed' do
       expect(subject.reviewed(review).feed)
