@@ -19,7 +19,7 @@ class TrendingService
     update_score(key, id, weight)
     trim(key, limit: ITEM_LIMIT) if rand < TRIM_PROBABILITY
     if user
-      TrendingFanoutWorker.perform_async(namespace, half_life, user&.id, id,
+      TrendingFanoutWorker.perform_async(namespace.name, half_life, user&.id, id,
         weight)
     end
   end
