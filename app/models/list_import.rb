@@ -89,12 +89,12 @@ class ListImport < ApplicationRecord
   end
 
   def apply_async!(queue: 'now')
-    ListImportWorker.perform_async(id, queue:) unless running?
+    ListImportWorker.set(queue:).perform_async(id) unless running?
   end
 
   def retry_async!(queue: 'eventually')
     update!(status: :queued)
-    ListImportWorker.perform_async(id, queue:)
+    ListImportWorker.set(queue:).perform_async(id)
   end
 
   def merged_entry(entry, data)

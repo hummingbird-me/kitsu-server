@@ -65,7 +65,7 @@ class BufferedStreamClient
 
     def perform_action(action, *args)
       duration do
-        BufferActionWorker.perform_async(@group, @id, action, *args)
+        BufferActionWorker.perform_async(@group, @id, action.to_s, *args.as_json)
       end
     end
   end

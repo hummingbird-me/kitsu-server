@@ -7,8 +7,4 @@ class ListImportWorker
     return if import == ListImport::MyAnimeList
     import&.apply!
   end
-
-  def self.perform_async(*args, queue: 'now')
-    client_push(class: self, args: args, queue: queue)
-  end
 end

@@ -2,7 +2,12 @@ class ShrineDerivativeWorker
   include Sidekiq::Worker
 
   def self.perform_async(attacher)
-    super(attacher.class.name, attacher.record.to_global_id, attacher.name, attacher.file_data)
+    super(
+      attacher.class.name,
+      attacher.record.to_global_id.to_s,
+      attacher.name.to_s,
+      attacher.file_data
+    )
   end
 
   def perform(attacher_class, record, name, file_data)
