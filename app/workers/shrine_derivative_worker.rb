@@ -5,7 +5,7 @@ class ShrineDerivativeWorker
     super(
       attacher.class.name,
       attacher.record.to_global_id.to_s,
-      attacher.name,
+      attacher.name.to_s,
       attacher.file_data
     )
   end
