@@ -13,7 +13,7 @@ module Webhooks
       events = JSON.parse(request.body.read)
 
       GetstreamWebhookParser.new(events).each do |feed, event, activity|
-        GetstreamEventWorker.perform_async(feed, event, activity)
+        GetstreamEventWorker.perform_async(feed, event.to_s, activity)
       end
 
       head 200
