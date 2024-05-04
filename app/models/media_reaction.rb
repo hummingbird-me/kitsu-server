@@ -2,6 +2,8 @@
 
 class MediaReaction < ApplicationRecord
   include WithActivity
+  include WithStory
+
   WordfilterCallbacks.hook(self, :reaction, :reaction)
 
   acts_as_paranoid
@@ -27,6 +29,14 @@ class MediaReaction < ApplicationRecord
 
   before_update do
     votes.destroy_all if reaction_changed?
+  end
+
+  with_story do
+    Story::MediaReactionStory.new(
+      data: {
+        media_reaction_id: self.id
+      }
+    )
   end
 
   def stream_activity
