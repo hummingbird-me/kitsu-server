@@ -23,7 +23,10 @@ RSpec.describe WithStory do
     end
 
     it 'creates a story when the record is created' do
-      expect { StoryOwner.create! }.to change(Story, :count).by(1)
+      owner = StoryOwner.new
+      expect { owner.save! }.to change(Story, :count).by(1)
+      expect(Story.last.data['test_id']).to eq(owner.id)
+      expect(owner.story_id).to eq(Story.last.id)
     end
 
     it 'updates the story when the data changes' do
