@@ -46,7 +46,7 @@ gem 'shrine'
 gem 'shrine-blurhash'
 
 # Background tasks
-gem 'sidekiq', '~> 5'
+gem 'sidekiq', '~> 7'
 gem 'sidekiq-debounce'
 gem 'sidekiq-scheduler'
 
