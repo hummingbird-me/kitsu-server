@@ -75,7 +75,7 @@ module Zorro
       #
       # @return [String, nil] the final URL, following redirects
       def canonical_for(url)
-        req = Typhoeus.head(url)
+        req = HTTP.head(url)
         return unless req.success?
         return if req.headers['Content-Type'] == 'image/gif'
         return canonical_for(req.headers['Location']) if req.headers['Location']
