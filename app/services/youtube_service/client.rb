@@ -16,12 +16,12 @@ class YoutubeService
     end
 
     def valid?
-      res = Typhoeus.get(VERIFY_URL.expand(query: { access_token: token }))
+      res = HTTP.get(VERIFY_URL.expand(query: { access_token: token }))
       res.success? && JSON.parse(res.body)['aud'] == api_key
     end
 
     def channel_id
-      res = Typhoeus.get(CHANNEL_URL.expand(query: {
+      res = HTTP.get(CHANNEL_URL.expand(query: {
         part: 'id',
         mine: 'true',
         access_token: token

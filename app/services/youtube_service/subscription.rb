@@ -38,12 +38,9 @@ class YoutubeService
     private
 
     def post(form)
-      body = URI.encode_www_form(form)
-      res = Typhoeus.post(SUBSCRIBE_URL,
-        headers: { 'Content-Type' => 'application/x-www-form-urlencoded' },
-        body: body)
+      res = HTTP.post(SUBSCRIBE_URL, form:)
 
-      res.success?
+      res.status.success?
     end
 
     def form_for(action)
