@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_25_042940) do
+ActiveRecord::Schema.define(version: 2024_05_05_045832) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
