@@ -102,7 +102,6 @@ gem 'strait' # Rate limiting anything!
 gem 'stream_rails', github: 'GetStream/stream-rails',
   branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'stream-ruby', '~> 2.10.0' # Feeds
-gem 'typhoeus' # Parallelize scraping tasks
 
 # Cash Money
 gem 'stripe'
