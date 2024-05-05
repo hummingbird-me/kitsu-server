@@ -7,7 +7,7 @@ module WithStory
     def with_story(&)
       belongs_to :story, optional: true, dependent: :destroy
 
-      after_update do
+      after_update if: :story_id? do
         story_data = instance_eval(&).data
         story.update!(data: story_data) if story_data != story.data
       end
