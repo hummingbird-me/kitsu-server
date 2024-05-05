@@ -16,8 +16,8 @@ class ListImport
 
     def ensure_list_is_public
       %w[anime manga].each do |kind|
-        request = Typhoeus::Request.get("#{MAL_HOST}/#{kind}list/#{input_text}")
-        case request.code
+        request = HTTP.get("#{MAL_HOST}/#{kind}list/#{input_text}")
+        case request.status
         when 403
           errors.add(:input_text,
             "Your MyAnimeList #{kind} list must be public to import")
@@ -69,9 +69,9 @@ class ListImport
     end
 
     def get(list, page)
-      res = Typhoeus::Request.get(build_url(list, page))
-      raise RateLimitedError.new(res.status_message) if res.code == 429
-      raise ResponseError.new(res.status_message) unless res.success?
+      res = HTTP.get(build_url(list, page))
+      raise RateLimitedError.new(res.status_message) if res.status == 429
+      raise ResponseError.new(res.status_message) unless res.status.success?
       JSON.parse(res.body)
     end
 

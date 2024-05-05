@@ -13,7 +13,7 @@ class ListImport
 
     def ensure_user_exists
       return if input_text.blank?
-      request = Typhoeus::Request.get(build_url("#{input_text}/anime", 1))
+      request = HTTP.get(build_url("#{input_text}/anime", 1))
       case request.code
       when 404
         errors.add(:input_text, 'Anime-Planet user not found')
@@ -47,14 +47,17 @@ class ListImport
 
     private
 
-    def get(url, page = 1, opts = {})
+    def get(url, page = 1)
       url = build_url(url, page)
-      request = Typhoeus::Request.get(url, {
-        cookiefile: '/tmp/anime-planet-cookies',
-        cookiejar: '/tmp/anime-planet-cookies',
-        userpwd: ENV['ANIME_PLANET_PROXY_AUTH'],
-        followlocation: true
-      }.merge(opts).compact)
+
+      request = HTTP.follow
+                    .cookies(@cookie_jar || {})
+                    .basic_auth(
+                      user: ENV['ANIME_PLANET_PROXY_USER'],
+                      pass: ENV['ANIME_PLANET_PROXY_PASS'])
+                    .get(url)
+      @cookie_jar = request.cookies
+
       html = Nokogiri::HTML(request.body)
       html
     end
