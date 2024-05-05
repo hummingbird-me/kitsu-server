@@ -58,7 +58,7 @@ class ListImport
                     .get(url)
       @cookie_jar = request.cookies
 
-      html = Nokogiri::HTML(request.body)
+      html = Nokogiri::HTML(request.body.to_s)
       html
     end
 

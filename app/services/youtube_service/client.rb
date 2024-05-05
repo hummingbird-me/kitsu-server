@@ -17,7 +17,7 @@ class YoutubeService
 
     def valid?
       res = HTTP.get(VERIFY_URL.expand(query: { access_token: token }))
-      res.success? && JSON.parse(res.body)['aud'] == api_key
+      res.status.success? && JSON.parse(res.body)['aud'] == api_key
     end
 
     def channel_id
@@ -26,7 +26,7 @@ class YoutubeService
         mine: 'true',
         access_token: token
       }))
-      return unless res.success?
+      return unless res.status.success?
       channels = JSON.parse(res.body)['items']
       channels.first['id']
     end
