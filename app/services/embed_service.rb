@@ -92,7 +92,7 @@ class EmbedService
   # @return [Embedder,nil] an instance of the first Embedder which matches the URL
   def find_embedder
     EMBEDDERS.each do |embedder|
-      instance = embedder.new(@url)
+      instance = embedder.new(@url, body)
       return instance if instance.match?
     end
     nil
