@@ -455,7 +455,7 @@ GEM
       net-protocol
     nio4r (2.7.1)
     nkf (0.2.0)
-    nokogiri (1.16.4)
+    nokogiri (1.16.5)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     notiffany (0.1.3)
