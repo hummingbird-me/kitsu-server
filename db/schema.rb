@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_05_045832) do
+ActiveRecord::Schema.define(version: 2024_05_26_073938) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -1786,31 +1786,6 @@ ActiveRecord::Schema.define(version: 2024_05_05_045832) do
   add_foreign_key "wiki_submission_logs", "users"
   add_foreign_key "wiki_submission_logs", "wiki_submissions"
   add_foreign_key "wiki_submissions", "users"
-  create_function :generate_snowflake, sql_definition: <<-'SQL'
-      CREATE OR REPLACE FUNCTION public.generate_snowflake(ts timestamp without time zone DEFAULT clock_timestamp(), id integer DEFAULT nextval('snowflake_id_seq'::regclass))
-       RETURNS bigint
-       LANGUAGE plpgsql
-      AS $function$
-      DECLARE
-          -- Epoch slightly before the founding of hummingbird.me
-          epoch_ts bigint := EXTRACT(EPOCH FROM timestamp '2013-01-01') * 1000;
-          -- Maximum for 22 bits unsigned
-          max_seq_id bigint := (2 ^ 23) - 1;
-          now_ts bigint;
-          seq_id bigint;
-          result bigint := 0;
-      BEGIN
-          -- We just use a big-ass sequence for now, since we're using one shared generator
-          SELECT id::bigint % max_seq_id INTO seq_id;
-
-          SELECT FLOOR(EXTRACT(EPOCH FROM ts) * 1000) INTO now_ts;
-          result := (now_ts - epoch_ts) << 22;
-          result := result | seq_id;
-      	return result;
-      END;
-      $function$
-  SQL
-
 
   create_view "media_castings", sql_definition: <<-SQL
       SELECT concat('c', mc.id, 'v', cv.id) AS id,
@@ -1871,5 +1846,20 @@ ActiveRecord::Schema.define(version: 2024_05_05_045832) do
       ms.created_at,
       ms.updated_at
      FROM media_staff ms;
+  SQL
+  create_view "timeline_following", sql_definition: <<-SQL
+      SELECT followed_feeds.user_id,
+      feed_stories.story_id,
+      feed_stories.bumped_at
+     FROM (( SELECT group_members.user_id,
+      groups.feed_id
+     FROM (group_members
+       JOIN groups ON ((groups.id = group_members.group_id)))
+  UNION ALL
+   SELECT follows.follower_id AS user_id,
+      followed.feed_id
+     FROM (follows
+               JOIN users followed ON ((followed.id = follows.followed_id)))) followed_feeds
+       JOIN feed_stories ON ((feed_stories.feed_id = followed_feeds.feed_id)));
   SQL
 end
