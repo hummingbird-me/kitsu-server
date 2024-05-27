@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_27_030224) do
+ActiveRecord::Schema.define(version: 2024_05_27_043332) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -1862,5 +1862,13 @@ ActiveRecord::Schema.define(version: 2024_05_27_030224) do
              FROM (follows
                JOIN users followed ON ((followed.id = follows.followed_id)))) followed_feeds
        JOIN feed_stories ON ((feed_stories.feed_id = followed_feeds.feed_id)));
+  SQL
+  create_view "timeline_global", sql_definition: <<-SQL
+      SELECT 1 AS feed_id,
+      stories.id AS story_id,
+      stories.bumped_at
+     FROM (stories
+       LEFT JOIN posts ON ((posts.id = ((stories.data ->> 'post_id'::text))::integer)))
+    WHERE ((posts.target_user_id IS NULL) AND (posts.target_group_id IS NULL));
   SQL
 end
