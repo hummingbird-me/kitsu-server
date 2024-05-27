@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_27_081034) do
+ActiveRecord::Schema.define(version: 2024_05_27_081337) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -1891,5 +1891,21 @@ ActiveRecord::Schema.define(version: 2024_05_27_081034) do
               dramas.feed_id
              FROM dramas) media_feeds
        JOIN feed_stories fs ON ((media_feeds.feed_id = fs.feed_id)));
+  SQL
+  create_view "timeline_units", sql_definition: <<-SQL
+      SELECT unit_feeds.unit_type,
+      unit_feeds.unit_id,
+      fs.story_id,
+      fs.bumped_at
+     FROM (( SELECT 'Episode'::text AS unit_type,
+              episodes.id AS unit_id,
+              episodes.feed_id
+             FROM episodes
+          UNION ALL
+           SELECT 'Chapter'::text AS unit_type,
+              chapters.id AS unit_id,
+              chapters.feed_id
+             FROM chapters) unit_feeds
+       JOIN feed_stories fs ON ((unit_feeds.feed_id = fs.feed_id)));
   SQL
 end
