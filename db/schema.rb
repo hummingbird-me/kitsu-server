@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_26_073938) do
+ActiveRecord::Schema.define(version: 2024_05_27_030224) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -1487,6 +1487,7 @@ ActiveRecord::Schema.define(version: 2024_05_26_073938) do
     t.datetime "bumped_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.integer "type", limit: 2, null: false
     t.jsonb "data", default: {}, null: false
+    t.index ["bumped_at"], name: "index_stories_on_bumped_at"
   end
 
   create_table "streamers", id: :serial, force: :cascade do |t|
@@ -1852,13 +1853,13 @@ ActiveRecord::Schema.define(version: 2024_05_26_073938) do
       feed_stories.story_id,
       feed_stories.bumped_at
      FROM (( SELECT group_members.user_id,
-      groups.feed_id
-     FROM (group_members
-       JOIN groups ON ((groups.id = group_members.group_id)))
-  UNION ALL
-   SELECT follows.follower_id AS user_id,
-      followed.feed_id
-     FROM (follows
+              groups.feed_id
+             FROM (group_members
+               JOIN groups ON ((groups.id = group_members.group_id)))
+          UNION ALL
+           SELECT follows.follower_id AS user_id,
+              followed.feed_id
+             FROM (follows
                JOIN users followed ON ((followed.id = follows.followed_id)))) followed_feeds
        JOIN feed_stories ON ((feed_stories.feed_id = followed_feeds.feed_id)));
   SQL
