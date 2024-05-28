@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_27_222611) do
+ActiveRecord::Schema.define(version: 2024_05_28_030827) do
 
   create_sequence "snowflake_id_seq", min: 0, max: 8388607, cycle: true
 
@@ -1869,7 +1869,7 @@ ActiveRecord::Schema.define(version: 2024_05_27_222611) do
       stories.bumped_at
      FROM (stories
        LEFT JOIN posts ON ((posts.id = ((stories.data ->> 'post_id'::text))::integer)))
-    WHERE ((posts.target_user_id IS NULL) AND (posts.target_group_id IS NULL));
+    WHERE ((posts.target_user_id IS NULL) AND (posts.target_group_id IS NULL) AND (stories.type = ANY (ARRAY[1, 3])));
   SQL
   create_view "timeline_media", sql_definition: <<-SQL
       SELECT media_feeds.media_type,

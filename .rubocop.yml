@@ -321,3 +321,13 @@ Rails/UnknownEnv:
 RSpec/DescribedClass:
   Enabled: true
   SkipBlocks: true
+RSpec/ContextWording:
+   Prefixes:
+     - when
+     - with
+     - without
+     - if
+     - unless
+     - for
+     - and
+     - at
