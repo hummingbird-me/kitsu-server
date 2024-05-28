@@ -84,6 +84,11 @@ module Media
       dependent: :destroy,
       inverse_of: :destination
     accepts_nested_attributes_for :inverse_media_relationships, allow_destroy: true
+    # Feeds
+    has_many :media_timeline_stories,
+      dependent: nil,
+      class_name: 'TimelineStory::MediaTimelineStory',
+      as: 'media'
 
     delegate :year, to: :start_date, allow_nil: true
     serialize :release_schedule, IceCube::Schedule

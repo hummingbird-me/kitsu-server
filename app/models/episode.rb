@@ -8,10 +8,14 @@ class Episode < ApplicationRecord
   include UnitThumbnailUploader::Attachment(:thumbnail)
 
   belongs_to :media, polymorphic: true, inverse_of: :episodes
-  has_many :videos
+  has_many :videos, dependent: :destroy
   accepts_nested_attributes_for :videos, allow_destroy: true
+  has_many :unit_timeline_stories,
+    dependent: nil,
+    class_name: 'TimelineStory::UnitTimelineStory',
+    as: 'unit'
 
-  validates :media, presence: true, polymorphism: { type: Media }
+  validates :media, polymorphism: { type: Media }
   validates :number, presence: true
   validates :season_number, presence: true
 

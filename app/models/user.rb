@@ -177,6 +177,12 @@ class User < ApplicationRecord
   has_many :quotes, dependent: :nullify
   has_many :wiki_submissions
   has_many :wiki_submission_logs
+  has_many :profile_timeline_stories,
+    dependent: nil,
+    class_name: 'TimelineStory::ProfileTimelineStory'
+  has_many :following_timeline_stories,
+    dependent: nil,
+    class_name: 'TimelineStory::FollowingTimelineStory'
 
   validates :email, format: { with: /\A.+@.+\.[a-z]+\z/, message: 'is not an email' },
     if: :email_changed?, allow_blank: true
