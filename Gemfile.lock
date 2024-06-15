@@ -474,7 +474,7 @@ GEM
     one_signal (1.2.2)
     os (1.1.1)
     paint (2.3.0)
-    parallel (1.23.0)
+    parallel (1.25.1)
     paranoia (2.6.3)
       activerecord (>= 5.1, < 7.2)
     parser (3.3.1.0)
