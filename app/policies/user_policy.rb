@@ -28,8 +28,8 @@ class UserPolicy < ApplicationPolicy
       all
     else
       all - %i[email password confirmed previous_email language time_zone country share_to_global
-               title_language_preference sfw_filter rating_system theme facebook_id has_password
-               ao_pro]
+               title_language_preference sfw_filter rating_system theme facebook_id apple_id
+               has_password ao_pro]
     end
   end
 

@@ -215,6 +215,7 @@ class User < ApplicationRecord
   validates :gender, length: { maximum: 20 }
   validates :password, length: { maximum: 72 }, if: :registered?
   validates :facebook_id, uniqueness: true, allow_nil: true
+  validates :apple_id, uniqueness: true, allow_nil: true
 
   scope :active, -> { where(deleted_at: nil) }
   scope :by_slug, ->(*slugs) { where(slug: slugs&.flatten) }

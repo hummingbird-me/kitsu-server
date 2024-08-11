@@ -38,6 +38,10 @@ class Types::Account < Types::BaseObject
     null: true,
     description: 'Twitter account linked to the account'
 
+  field :apple_id, String,
+    null: true,
+    description: 'AppleID linked to the account'
+
   field :sfw_filter, Boolean,
     null: true,
     description: 'Whether Not Safe For Work content is accessible'
