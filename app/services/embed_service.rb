@@ -4,7 +4,7 @@ class EmbedService
   # User-Agent to use for the HTTP request.  We list facebookexternalhit and Twitterbot as
   # compatible to ensure we get served a version with the correct meta tags
   USER_AGENT = <<-UA.squish.freeze
-    kitsubot/1.0 (+kitsu.io)
+    kitsubot/1.0 (+kitsu.app)
     facebookexternalhit/1.1 (compatible)
     Twitterbot/1.0 (compatible)
   UA
@@ -15,7 +15,7 @@ class EmbedService
   # List of Embedders to try (matched from top to bottom)
   EMBEDDERS = [
     # Site-specific Solutions
-    KitsuEmbedder,      # kitsu.io
+    KitsuEmbedder,      # kitsu.io, kitsu.app
     NicoVideoEmbedder,  # nicovideo.jp
     GiphyMediaEmbedder, # media.giphy.com
     # Embed Standards

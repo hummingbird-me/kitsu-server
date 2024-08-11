@@ -69,6 +69,6 @@ class HTMLFilters::HashtagsFilter < HTML::Pipeline::Filter
   end
 
   def href_for(hashtag)
-    "https://kitsu.io/posts?query=%23#{hashtag}"
+    "https://kitsu.app/posts?query=%23#{hashtag}"
   end
 end

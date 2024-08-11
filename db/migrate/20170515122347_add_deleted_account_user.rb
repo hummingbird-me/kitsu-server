@@ -7,7 +7,7 @@ class AddDeletedAccountUser < ActiveRecord::Migration[4.2]
     User.create!(
       name: 'Deleted',
       id: -10,
-      email: 'noreply+deleted@kitsu.io',
+      email: 'noreply+deleted@kitsu.app',
       password: SecureRandom.base64(45)
     )
   end

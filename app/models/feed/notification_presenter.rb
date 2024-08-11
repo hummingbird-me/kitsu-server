@@ -4,7 +4,7 @@ class Feed
   # Encapsulates the generation of text from a Stream notification
   class NotificationPresenter
     # The base URL used when constructing links to notifications
-    CLIENT_URL = 'https://kitsu.io/'
+    CLIENT_URL = 'https://kitsu.app/'
 
     attr_reader :activity, :user
 

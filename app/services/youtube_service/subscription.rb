@@ -4,7 +4,7 @@ class YoutubeService
       'https://www.youtube.com/xml/feeds/videos.xml{?channel_id}'
     ).freeze
     CALLBACK_URL = Addressable::Template.new(
-      'https://kitsu.io/api/hooks/{?linked_account}'
+      'https://kitsu.app/api/hooks/{?linked_account}'
     ).freeze
     SUBSCRIBE_URL = 'https://pubsubhubbub.appspot.com/subscribe'.freeze
 

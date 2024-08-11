@@ -84,7 +84,7 @@ class MediaImporter
   def run!
     ActiveRecord::Base.logger = Logger.new(nil)
     Chewy.strategy(:bypass)
-    base_media_url = 'https://media.kitsu.io/import_files/'
+    base_media_url = 'https://media.kitsu.app/import_files/'
     anime_filename = 'anidb_anime_category_assoc.json'
     genre_map_filename = 'kitsu_anidb_genre_category_map.json'
     ImportFile.new(base_media_url, anime_filename, genre_map_filename).apply!

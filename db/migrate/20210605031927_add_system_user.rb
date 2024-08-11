@@ -4,7 +4,7 @@ class AddSystemUser < ActiveRecord::Migration[5.2]
     User.new(
       name: 'System',
       id: -11,
-      email: 'noreply+system@kitsu.io',
+      email: 'noreply+system@kitsu.app',
       password: SecureRandom.base64(45)
     ).save!(validate: false)
   end

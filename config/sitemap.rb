@@ -2,7 +2,7 @@ unless Rails.env.development?
   adapter = SitemapGenerator::AwsSdkAdapter.new('kitsu-media')
   SitemapGenerator::Sitemap.adapter = adapter
 end
-SitemapGenerator::Sitemap.default_host = 'https://kitsu.io'
+SitemapGenerator::Sitemap.default_host = 'https://kitsu.app'
 SitemapGenerator::Sitemap.create do
   [Anime, Manga, Drama].each do |model|
     resource = model.table_name

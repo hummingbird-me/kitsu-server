@@ -6,7 +6,7 @@ module ImgixPurgeService
   module_function
 
   def purge(url)
-    url = url.sub('media.kitsu.io', 'kitsu.imgix.net')
+    url = url.sub('media.kitsu.app', 'kitsu.imgix.net')
     http.post(PURGE_ENDPOINT, url: url)
   end
 

@@ -19,7 +19,7 @@ class ApplicationMailer < ActionMailer::Base
   ].freeze
 
   include Rails.application.routes.url_helpers
-  default from: 'Kitsu <help@kitsu.io>'
+  default from: 'Kitsu <help@kitsu.app>'
   layout 'mailer'
 
   rescue_from(*SMTP_HARD_BOUNCES) do

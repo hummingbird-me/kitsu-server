@@ -31,4 +31,4 @@ jobs:
         uses: kamilkisiela/graphql-inspector@master
         with:
           schema: 'schema.graphql'
-          endpoint: 'https://kitsu.io/api/graphql'
+          endpoint: 'https://kitsu.app/api/graphql'

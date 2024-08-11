@@ -1,5 +1,5 @@
 class KitsuEmbedder < Embedder
-  KITSU_URL = %r{\Ahttps?://(?:www\.|staging\.)?kitsu.io/(?<type>[^/]+)/(?<id>[^/]+).*}
+  KITSU_URL = %r{\Ahttps?://(?:www\.|staging\.)?kitsu(?:\.io|\.app)/(?<type>[^/]+)/(?<id>[^/]+).*}
 
   def match?
     KITSU_URL.match(url).present? && subject
@@ -67,6 +67,6 @@ class KitsuEmbedder < Embedder
   end
 
   def canonical_url
-    "https://kitsu.io/#{type}/#{subject&.id || id}"
+    "https://kitsu.app/#{type}/#{subject&.id || id}"
   end
 end

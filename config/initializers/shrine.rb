@@ -10,7 +10,7 @@ Shrine.plugin :infer_extension
 # Handle derivatives in background
 Shrine.plugin :derivatives
 Shrine.plugin :backgrounding
-Shrine.plugin :url_options, store: { host: 'https://media.kitsu.io' }
+Shrine.plugin :url_options, store: { host: 'https://media.kitsu.app' }
 
 if Rails.env.production? || Rails.env.staging?
   # Primary storage

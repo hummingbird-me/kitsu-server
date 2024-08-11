@@ -29,7 +29,7 @@ RailsAdmin.config do |config|
         proc do
           namespace = @abstract_model.table_name.parameterize
           slug = @object.try(:slug) || @object.try(:name)
-          redirect_to "https://kitsu.io/#{namespace}/#{slug}"
+          redirect_to "https://kitsu.app/#{namespace}/#{slug}"
         end
       end
     end

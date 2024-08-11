@@ -41,9 +41,9 @@ class UserMailer < ApplicationMailer
 
   def client_url_base
     if Rails.env.production?
-      'https://kitsu.io'
+      'https://kitsu.app'
     elsif Rails.env.staging?
-      'https://staging.kitsu.io'
+      'https://staging.kitsu.app'
     else
       'https://localhost'
     end

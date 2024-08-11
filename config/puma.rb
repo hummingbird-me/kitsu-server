@@ -43,6 +43,6 @@ lowlevel_error_handler do |ex, env|
   )
   # note the below is just a Rack response
   [500, {}, [<<-MESSAGE.squish]]
-    An unknown error has occurred. If you continue to have problems, contact help@kitsu.io\n
+    An unknown error has occurred. If you continue to have problems, contact help@kitsu.app\n
   MESSAGE
 end

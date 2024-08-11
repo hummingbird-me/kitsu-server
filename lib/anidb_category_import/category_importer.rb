@@ -35,7 +35,7 @@ class CategoryImporter
   def run!
     ActiveRecord::Base.logger = Logger.new(nil)
     Chewy.strategy(:bypass)
-    base_media_url = 'https://media.kitsu.io/import_files/'
+    base_media_url = 'https://media.kitsu.app/import_files/'
     filename = 'anidb_category.json'
     ImportFile.new(base_media_url, filename).apply!
   end

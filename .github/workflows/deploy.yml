@@ -27,7 +27,7 @@ jobs:
       working-directory: ops
       run: |
         git config user.name "Senko-san"
-        git config user.email "developers@kitsu.io"
+        git config user.email "developers@kitsu.app"
 
     - name: Update Image Version
       working-directory: ops

@@ -29,7 +29,7 @@
 # Action classes act like Procs which take a hash as a parameter (defined by the `parameter` calls
 # in the DSL) and return a Struct-like object.  To use an Action, simply `.call()` them, like this:
 #
-#     ResetPassword.call(email: 'help@kitsu.io')
+#     ResetPassword.call(email: 'help@kitsu.app')
 #
 # One thing to note is that any unknown parameters are silently ignored.
 class Action
