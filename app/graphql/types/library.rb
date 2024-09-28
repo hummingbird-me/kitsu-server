@@ -9,68 +9,68 @@ class Types::Library < Types::BaseObject
   end
 
   def random_media(media_type:, status:)
-    library_entries(media_type: media_type, status: status).then do |library_entries|
+    library_entries(media_type:, status:).then do |library_entries|
       library_entries.order(Arel.sql('RANDOM()')).first&.media
     end
   end
 
   field :all, Types::LibraryEntry.connection_type, null: false do
-    description 'All Library Entries for a specific Media'
-    argument :media_type, Types::Enum::MediaType, required: true
+    description 'All Library Entries'
+    argument :media_type, Types::Enum::MediaType, required: false
     argument :status, [Types::Enum::LibraryEntryStatus], required: false
   end
 
-  def all(media_type:, status: nil)
-    library_entries(media_type: media_type, status: status)
+  def all(media_type: nil, status: nil)
+    library_entries(media_type:, status:)
   end
 
   field :current, Types::LibraryEntry.connection_type, null: false do
-    description 'Library Entries for a specific Media filtered by the current status'
-    argument :media_type, Types::Enum::MediaType, required: true
+    description 'Library Entries with the current status'
+    argument :media_type, Types::Enum::MediaType, required: false
   end
 
-  def current(media_type:)
-    library_entries(media_type: media_type, status: :current)
+  def current(media_type: nil)
+    library_entries(media_type:, status: :current)
   end
 
   field :planned, Types::LibraryEntry.connection_type, null: false do
-    description 'Library Entries for a specific Media filtered by the planned status'
-    argument :media_type, Types::Enum::MediaType, required: true
+    description 'Library Entries with the planned status'
+    argument :media_type, Types::Enum::MediaType, required: false
   end
 
-  def planned(media_type:)
-    library_entries(media_type: media_type, status: :planned)
+  def planned(media_type: nil)
+    library_entries(media_type:, status: :planned)
   end
 
   field :completed, Types::LibraryEntry.connection_type, null: false do
-    description 'Library Entries for a specific Media filtered by the completed status'
-    argument :media_type, Types::Enum::MediaType, required: true
+    description 'Library Entries with the completed status'
+    argument :media_type, Types::Enum::MediaType, required: false
   end
 
-  def completed(media_type:)
-    library_entries(media_type: media_type, status: :completed)
+  def completed(media_type: nil)
+    library_entries(media_type:, status: :completed)
   end
 
   field :on_hold, Types::LibraryEntry.connection_type, null: false do
-    description 'Library Entries for a specific Media filtered by the on_hold status'
-    argument :media_type, Types::Enum::MediaType, required: true
+    description 'Library Entries with the on_hold status'
+    argument :media_type, Types::Enum::MediaType, required: false
   end
 
-  def on_hold(media_type:)
-    library_entries(media_type: media_type, status: :on_hold)
+  def on_hold(media_type: nil)
+    library_entries(media_type:, status: :on_hold)
   end
 
   field :dropped, Types::LibraryEntry.connection_type, null: false do
-    description 'Library Entries for a specific Media filtered by the dropped status'
-    argument :media_type, Types::Enum::MediaType, required: true
+    description 'Library Entries with the dropped status'
+    argument :media_type, Types::Enum::MediaType, required: false
   end
 
-  def dropped(media_type:)
-    library_entries(media_type: media_type, status: :dropped)
+  def dropped(media_type: nil)
+    library_entries(media_type:, status: :dropped)
   end
 
   def library_entries(media_type: nil, status: nil)
-    query = { media_type: media_type, status: status }.compact
+    query = { media_type:, status: }.compact
     Loaders::AssociationLoader.for(
       object.class,
       :library_entries,
