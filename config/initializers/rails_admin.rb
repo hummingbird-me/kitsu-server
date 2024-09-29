@@ -100,6 +100,8 @@ RailsAdmin.config do |config|
         TITLES
       end
       field :canonical_title
+      field :romanized_title
+      field :original_title
       field :abbreviated_titles, :string_list do
         label 'Alternative Titles'
         html_attributes rows: 3, cols: 70
@@ -187,6 +189,8 @@ RailsAdmin.config do |config|
       TITLES
     end
     field :canonical_title
+    field :romanized_title
+    field :original_title
     field :abbreviated_titles, :string_list do
       label 'Alternative Titles'
       html_attributes rows: 3, cols: 70

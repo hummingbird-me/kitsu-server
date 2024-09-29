@@ -55,7 +55,7 @@ RSpec.describe TitlesList do
     it 'returns the original language+country if there is a title for it' do
       titleable = described_class.new(titles: {
         'zh_cn' => 'Chinese'
-      }, original_languages: ['zh'], original_countries: ['cn'], canonical_locale: 'junk')
+      }, original_locale: 'zh_cn', canonical_locale: 'junk')
 
       expect(titleable.original_locale).to eq('zh-cn')
     end
@@ -63,7 +63,7 @@ RSpec.describe TitlesList do
     it 'returns ja_jp when that exists' do
       titleable = described_class.new(titles: {
         'ja_jp' => 'Japanese'
-      }, original_languages: [], original_countries: [], canonical_locale: :junk)
+      }, canonical_locale: :junk)
 
       expect(titleable.original_locale).to eq('ja-jp')
     end
@@ -73,7 +73,7 @@ RSpec.describe TitlesList do
     it 'returns the title specified by #original_locale' do
       titleable = described_class.new(titles: {
         'ja_jp' => 'Japanese'
-      }, original_languages: [], original_countries: [], canonical_locale: 'junk')
+      }, canonical_locale: 'junk')
 
       expect(titleable.original).to eq('Japanese')
       expect(titleable.original_locale).to eq('ja-jp')
@@ -126,7 +126,7 @@ RSpec.describe TitlesList do
       titleable = described_class.new(titles: {
         'en' => "Yumi's Cells",
         'ko_kr' => '유미의 세포들'
-      }, canonical_locale: 'en', original_languages: ['ko'], original_countries: ['kr'])
+      }, canonical_locale: 'en', original_locale: 'ko_kr')
 
       expect(titleable.first_title_for(%i[romanized canonical original])).to eq("Yumi's Cells")
       expect(titleable.first_title_for(%i[original romanized canonical])).to eq('유미의 세포들')

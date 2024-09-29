@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_28_222209) do
+ActiveRecord::Schema.define(version: 2024_09_28_225045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -75,6 +75,8 @@ ActiveRecord::Schema.define(version: 2023_10_28_222209) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
+    t.string "original_title"
+    t.string "romanized_title"
     t.index ["age_rating"], name: "index_anime_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["average_rating"], name: "anime_average_rating_idx"
     t.index ["average_rating"], name: "index_anime_on_wilson_ci", order: :desc
@@ -389,6 +391,8 @@ ActiveRecord::Schema.define(version: 2023_10_28_222209) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
+    t.string "original_title"
+    t.string "romanized_title"
     t.index ["age_rating"], name: "index_dramas_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["slug"], name: "index_dramas_on_slug"
   end
@@ -834,6 +838,8 @@ ActiveRecord::Schema.define(version: 2023_10_28_222209) do
     t.jsonb "cover_image_data"
     t.string "origin_languages", default: [], array: true
     t.string "origin_countries", default: [], array: true
+    t.string "original_title"
+    t.string "romanized_title"
     t.index ["age_rating"], name: "index_manga_on_age_rating", comment: "Provide index-only counts by age rating filter"
     t.index ["average_rating"], name: "manga_average_rating_idx"
     t.index ["slug"], name: "index_manga_on_slug"

@@ -338,8 +338,8 @@ class User < ApplicationRecord
   def title_preference_list
     case title_language_preference
     when :canonical then %i[canonical]
-    when :romanized then %i[romanized localized canonical]
-    when :localized then %i[localized romanized canonical]
+    when :romanized then %i[romanized translated canonical]
+    when :localized then %i[translated romanized canonical]
     end
   end
 

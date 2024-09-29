@@ -4,6 +4,8 @@ module Titleable
   included do
     with_options if: ->(obj) { obj.titles.present? } do
       validates :canonical_title, presence: true
+      validates :romanized_title, presence: true, if: :romanized_title_key
+      validates :original_title, presence: true, if: :original_title_key
       validate :has_english_title
     end
   end
@@ -12,9 +14,9 @@ module Titleable
     TitlesList.new(
       titles: titles,
       canonical_locale: self[:canonical_title],
-      alternatives: self[:abbreviated_titles] || [],
-      original_languages: self[:origin_languages] || [],
-      original_countries: self[:origin_countries] || []
+      original_locale: self[:original_title],
+      romanized_locale: self[:romanized_title],
+      alternatives: self[:abbreviated_titles] || []
     )
   end
 
@@ -24,6 +26,22 @@ module Titleable
 
   def canonical_title_key
     self[:canonical_title]
+  end
+
+  def original_title
+    titles[original_title_key]
+  end
+
+  def original_title_key
+    self[:original_title]
+  end
+
+  def romanized_title
+    titles[romanized_title_key]
+  end
+
+  def romanized_title_key
+    self[:romanized_title]
   end
 
   private

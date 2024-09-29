@@ -7,8 +7,8 @@ RSpec.describe Titleable do
       include Titleable
       attr_accessor :titles, :original_languages, :original_countries
 
-      def initialize(canonical_title: nil, **data)
-        @data = { **data, canonical_title: canonical_title }
+      def initialize(canonical_title: nil, original_title: nil, romanized_title: nil, **data)
+        @data = { canonical_title:, original_title:, romanized_title:, **data }
         super(data)
       end
 
@@ -28,6 +28,26 @@ RSpec.describe Titleable do
     }, canonical_title: 'en')).to be_valid
     expect(klass.new(titles: { 'en_jp' => '3-gatsu no Lion' }, canonical_title: 'en_jp')).to be_valid
     expect(klass.new(titles: { 'ja_jp' => '3月のライオン' }, canonical_title: 'ja_jp')).not_to be_valid
+  end
+
+  it 'validates that the romanized_title is present if a key is specified' do
+    expect(klass.new(titles: {
+      'en_jp' => '3-gatsu no Lion'
+    }, canonical_title: 'en_jp', romanized_title: 'en_jp')).to be_valid
+
+    expect(klass.new(titles: {
+      'en' => 'March comes in like a lion'
+    }, canonical_title: 'en', romanized_title: 'en_jp')).not_to be_valid
+  end
+
+  it 'validates that the original_title is present if a key is specified' do
+    expect(klass.new(titles: {
+      'ja_jp' => '3月のライオン',
+      'en' => 'March comes in like a lion'
+    }, canonical_title: 'ja_jp', original_title: 'ja_jp')).to be_valid
+    expect(klass.new(titles: {
+      'en' => 'March comes in like a lion'
+    }, canonical_title: 'en', original_title: 'ja_jp')).not_to be_valid
   end
 
   describe '#titles_list' do
