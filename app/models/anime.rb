@@ -87,6 +87,11 @@ class Anime < ApplicationRecord
     where(id: AlgoliaMediaIndex.search(keyword, filters: 'kind:anime').map(&:id))
   end
 
+  def self.typesense_index
+    TypesenseAnimeIndex
+  end
+  delegate :typesense_index, to: :class
+
   before_save do
     self.episode_count_guess = nil if episode_count
 
@@ -97,11 +102,11 @@ class Anime < ApplicationRecord
   end
 
   after_commit(on: %i[create update]) do
-    TypesenseAnimeIndex.index_one(id) if TypesenseAnimeIndex.should_sync?(saved_changes)
+    typesense_index.index_one(id) if typesense_index.should_sync?(saved_changes)
   end
 
   after_commit(on: :destroy) do
-    TypesenseAnimeIndex.remove_one(id)
+    typesense_index.remove_one(id)
   end
 
   after_save do

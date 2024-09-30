@@ -47,6 +47,19 @@ class Manga < ApplicationRecord
     where(id: AlgoliaMediaIndex.search(keyword, filters: 'kind:manga').map(&:id))
   end
 
+  def self.typesense_index
+    TypesenseMangaIndex
+  end
+  delegate :typesense_index, to: :class
+
+  after_commit(on: %i[create update]) do
+    typesense_index.index_one(id) if typesense_index.should_sync?(saved_changes)
+  end
+
+  after_commit(on: :destroy) do
+    typesense_index.remove_one(id)
+  end
+
   before_save do
     self.chapter_count_guess = nil if chapter_count
 
