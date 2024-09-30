@@ -32,14 +32,11 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
     field 'total_length', type: 'int32', facet: true, optional: true
 
     field 'streaming_sites', type: 'string[]', facet: true, optional: true
-    # TODO: use these + multiple yields to filter by streaming options
-    # (or maybe a better option will be found, I hope, cause this slows it by 5x)
-    # field 'record_id', type: 'int32', facet: true
-    # field 'streaming', type: 'object', facet: true, optional: true
-    # field 'streaming.site', type: 'int32', facet: true, optional: true
-    # field 'streaming.dubs', type: 'string[]', facet: true, optional: true
-    # field 'streaming.subs', type: 'string[]', facet: true, optional: true
-    # field 'streaming.regions', type: 'string[]', facet: true, optional: true
+    field 'streaming_links', type: 'object[]', facet: true, optional: true
+    field 'streaming_links.site', type: 'int32[]', facet: true, optional: true
+    field 'streaming_links.dubs', type: 'string[]', facet: true, optional: true
+    field 'streaming_links.subs', type: 'string[]', facet: true, optional: true
+    field 'streaming_links.regions', type: 'string[]', facet: true, optional: true
   end
 
   def self.should_sync?(changes)
@@ -47,7 +44,9 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
   end
 
   def index(ids)
-    Anime.where(id: ids).includes(:media_categories, :streaming_links, :genres).find_each do |anime|
+    Anime.where(id: ids).includes(
+      :media_categories, :genres, streaming_links: [:streamer]
+    ).find_each do |anime|
       titles = anime.titles_list
 
       yield({
@@ -73,23 +72,21 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
         categories: anime.media_categories.map(&:category_id),
         genres: anime.genres.ids,
         streaming_sites: anime.streaming_links.map(&:streamer_id),
+        streaming_links: anime.streaming_links.filter_map do |link|
+          if link.present?
+            {
+              site: link.streamer_id,
+              dubs: link.dubs,
+              subs: link.subs,
+              regions: link.regions
+            }
+          end
+        end,
         episode_count: anime.episode_count,
         episode_length: anime.episode_length,
         total_length: anime.total_length,
         created_at: format_date(anime.created_at)
       }.compact)
     end
-  end
-
-  # TODO: use this to yield multiple documents per anime, one for each streaming link
-  def format_streaming_link(streaming_link)
-    return if streaming_link.blank?
-
-    {
-      site: streaming_link.streamer_id,
-      dubs: streaming_link.dubs,
-      subs: streaming_link.subs,
-      regions: streaming_link.regions
-    }
   end
 end
