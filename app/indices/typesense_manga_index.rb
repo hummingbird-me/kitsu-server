@@ -54,7 +54,8 @@ class TypesenseMangaIndex < TypesenseBaseIndex
         categories: manga.media_categories.map(&:category_id),
         genres: manga.genres.ids,
         chapter_count: manga.chapter_count,
-        volume_count: manga.volume_count
+        volume_count: manga.volume_count,
+        created_at: format_date(manga.created_at)
       }.compact)
     end
   end
