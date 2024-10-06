@@ -1,4 +1,4 @@
-FROM ruby:3.1-alpine
+FROM ruby:3.2.5-alpine
 MAINTAINER Kitsu, Inc.
 
 RUN apk add --no-cache vips imagemagick git make gcc postgresql-client postgresql-dev build-base tzdata ffmpeg
