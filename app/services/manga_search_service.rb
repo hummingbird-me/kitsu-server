@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class AnimeSearchService < TypesenseSearchService
-  # Runs the search and returns the list of matching anime in order by their
+class MangaSearchService < TypesenseSearchService
+  # Runs the search and returns the list of matching manga in order by their
   # relevance to the queries.
   #
-  # @return [Array<Anime>] the list of matching anime
+  # @return [Array<Manga>] the list of matching manga
   def to_a
     result_ids.map do |id|
       result_media[id.to_i]
@@ -23,7 +23,7 @@ class AnimeSearchService < TypesenseSearchService
   private
 
   def result_media
-    @result_media ||= Anime.find(result_ids).index_by(&:id)
+    @result_media ||= Manga.find(result_ids).index_by(&:id)
   end
 
   def result_ids
@@ -32,7 +32,7 @@ class AnimeSearchService < TypesenseSearchService
 
   def query
     @query ||= begin
-      query = TypesenseAnimeIndex.search(
+      query = TypesenseMangaIndex.search(
         query: filters[:text]&.join(' ') || '',
         query_by: {
           'canonical_title' => 100,
@@ -55,15 +55,11 @@ class AnimeSearchService < TypesenseSearchService
     scope = apply_numeric_filter_for(scope, :user_count)
     scope = apply_auto_filter_for(scope, :subtype)
     scope = apply_status_filter_for(scope)
-    scope = apply_numeric_filter_for(scope, :episode_count)
-    scope = apply_numeric_filter_for(scope, :episode_length)
+    scope = apply_numeric_filter_for(scope, :chapter_count)
     scope = apply_auto_filter_for(scope, :age_rating)
-    scope = apply_auto_filter_for(scope, 'start_cour.season', filter_param: :season)
-    scope = apply_numeric_filter_for(scope, 'start_cour.year', filter_param: :season_year)
     scope = apply_numeric_filter_for(scope, 'start_date.year', filter_param: :year)
     scope = apply_genres_filter_for(scope)
-    scope = apply_categories_filter_for(scope)
-    apply_streamers_filter_for(scope)
+    apply_categories_filter_for(scope)
   end
 
   def apply_order_to(scope)
@@ -144,12 +140,5 @@ class AnimeSearchService < TypesenseSearchService
     category_ids = Category.where(slug: filters[:categories]).ids
     # Implemented as a set of AND filters
     scope.filter(category_ids.map { |id| "categories:=#{id}" })
-  end
-
-  def apply_streamers_filter_for(scope)
-    return scope if filters[:streamers].blank?
-
-    streamer_ids = Streamer.by_name(filters[:streamers]).ids
-    scope.filter(auto_query_for('streaming_sites', streamer_ids))
   end
 end
