@@ -1,6 +1,22 @@
 # frozen_string_literal: true
 
 class TypesenseMangaIndex < TypesenseBaseIndex
+  SAVE_FREQUENCIES = {
+    'id' => 1,
+    'titles' => 1,
+    'canonical_title' => 1,
+    'abbrevated_titles' => 1,
+    'description' => 1,
+    'chapter_count' => 1,
+    'volume_count' => 1,
+    'age_rating' => 1,
+    'subtype' => 1,
+    'start_date' => 1,
+    'end_date' => 1,
+    'user_count' => 0.1,
+    'favorites_count' => 0.1,
+    'average_rating' => 0.1
+  }.freeze
   include TypesenseMediaIndex
 
   index_name 'manga'
@@ -8,6 +24,10 @@ class TypesenseMangaIndex < TypesenseBaseIndex
   schema do
     field 'chapter_count', type: 'int32', facet: true, optional: true
     field 'volume_count', type: 'int32', facet: true, optional: true
+  end
+
+  def self.should_sync?(changes)
+    [*SAVE_FREQUENCIES.values_at(*changes.keys), 0].compact.max >= rand
   end
 
   def index(ids)
