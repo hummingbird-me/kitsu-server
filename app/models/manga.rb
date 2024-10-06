@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 class Manga < ApplicationRecord
   include Media
   include AgeRatings
 
-  enum subtype: %i[manga novel manhua oneshot doujin manhwa oel]
+  enum subtype: { manga: 0, novel: 1, manhua: 2, oneshot: 3, doujin: 4, manhwa: 5,
+                  oel: 6 }
   alias_attribute :progress_limit, :chapter_count
   alias_attribute :manga_type, :subtype
 
@@ -18,7 +21,7 @@ class Manga < ApplicationRecord
   validates :chapter_count, numericality: { greater_than: 0 }, allow_nil: true
 
   def unit(number)
-    chapters.where(number: number).first
+    chapters.where(number:).first
   end
 
   def default_progress_limit
@@ -44,8 +47,18 @@ class Manga < ApplicationRecord
   end
 
   def self.rails_admin_search(keyword)
-    where(id: AlgoliaMediaIndex.search(keyword, filters: 'kind:manga').map(&:id))
-  end
+    where(id: TypesenseMangaIndex.search(
+      query: keyword,
+      query_by: {
+        'canonical_title' => 100,
+        'titles.*' => 90,
+        'alternative_titles' => 90,
+        'descriptions.*' => 80
+      }
+    ).sort({
+      '_text_match(buckets: 6)' => 'desc',
+      'user_count' => 'desc'
+    }).include_fields(:id).load.hits.map { |res| res.document['id'] }) end
 
   def self.typesense_index
     TypesenseMangaIndex
