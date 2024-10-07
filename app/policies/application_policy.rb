@@ -196,4 +196,26 @@ class ApplicationPolicy
       user ? !user.sfw_filter? : false
     end
   end
+
+  class TypesensualScope
+    attr_reader :user, :token, :search
+
+    def initialize(token, search)
+      @token = token
+      @search = search
+      @user = token&.resource_owner
+    end
+
+    def resolve
+      search
+    end
+
+    def blocked_users
+      Block.hidden_for(user)
+    end
+
+    def see_nsfw?
+      user ? !user.sfw_filter? : false
+    end
+  end
 end
