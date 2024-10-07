@@ -43,6 +43,10 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
     [*SAVE_FREQUENCIES.values_at(*changes.keys), 0].compact.max >= rand
   end
 
+  def self.search_key
+    ENV.fetch('TYPESENSE_ANIME_SEARCH_KEY', nil)
+  end
+
   def index(ids)
     Anime.where(id: ids).includes(
       :media_categories, :genres, streaming_links: [:streamer]

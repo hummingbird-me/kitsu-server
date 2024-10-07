@@ -30,6 +30,10 @@ class TypesenseMangaIndex < TypesenseBaseIndex
     [*SAVE_FREQUENCIES.values_at(*changes.keys), 0].compact.max >= rand
   end
 
+  def self.search_key
+    ENV.fetch('TYPESENSE_MANGA_SEARCH_KEY', nil)
+  end
+
   def index(ids)
     Manga.where(id: ids).includes(:media_categories, :genres).find_each do |manga|
       titles = manga.titles_list
