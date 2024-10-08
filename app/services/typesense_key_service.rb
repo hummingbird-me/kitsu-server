@@ -16,6 +16,10 @@ class TypesenseKeyService
     )
   end
 
+  def collection
+    @index.collection.name
+  end
+
   def scope
     return @scope if @scope
     policy = Pundit::PolicyFinder.new(@model).policy

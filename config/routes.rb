@@ -1,4 +1,5 @@
-# rubocop:disable Metrics/BlockLength
+# frozen_string_literal: true
+
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
@@ -172,6 +173,7 @@ Rails.application.routes.draw do
       get '/algolia-keys/groups', to: 'algolia_keys#groups'
       get '/algolia-keys/character', to: 'algolia_keys#character'
       get '/algolia-keys', to: 'algolia_keys#all'
+      get '/typesense-keys', to: 'typesense_keys#all'
 
       # Integrations
       get '/sso/canny', to: 'sso#canny'
