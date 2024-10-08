@@ -7,7 +7,8 @@ class TypesenseKeysController < ApplicationController
     render json: {
       collections: {
         anime: json_for(Anime),
-        manga: json_for(Manga)
+        manga: json_for(Manga),
+        users: json_for(User)
       },
       nodes: Typesensual.client.configuration.nodes.only(:port, :host, :protocol)
     }

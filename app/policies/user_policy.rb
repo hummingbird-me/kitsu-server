@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserPolicy < ApplicationPolicy
   administrated_by :community_mod
 
@@ -42,6 +44,12 @@ class UserPolicy < ApplicationPolicy
   class AlgoliaScope < AlgoliaScope
     def resolve
       blocked_users.map { |id| "id != #{id}" }.join(' AND ')
+    end
+  end
+
+  class TypesenseScope < TypesenseScope
+    def resolve
+      search.filter('id', ":!=[#{blocked_users.join(',')}]")
     end
   end
 end
