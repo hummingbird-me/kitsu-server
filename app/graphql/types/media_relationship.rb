@@ -29,5 +29,6 @@ class Types::MediaRelationship < Types::BaseObject
 
   field :kind, Types::Enum::MediaRelationshipKind,
     null: false,
+    method: :role,
     description: 'The kind of relationship'
 end
