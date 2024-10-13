@@ -56,7 +56,7 @@ class TypesenseGroupsIndex < TypesenseBaseIndex
         privacy: group.privacy,
         is_nsfw: group.nsfw?,
         members_count: group.members_count,
-        last_activity_at: group.last_activity_at.to_i,
+        last_activity_at: format_date(group.last_activity_at),
         created_at: format_date(group.created_at)
       }.compact)
     end
