@@ -27,14 +27,22 @@ class TypesenseUsersIndex < TypesenseBaseIndex
   end
 
   def index(ids)
-    User.where(id: ids).find_each do |user|
-      yield({
-        id: user.id.to_s,
-        name: user.name,
-        past_names: user.past_names,
-        slug: user.slug,
-        followers_count: user.followers_count
-      }.compact)
+    # User.where(id: ids).find_each has far worse performance for this, probably due to the way it
+    # doubles queries (once to get batch IDs, once to get the actual records). Since we have a LOT
+    # of users, this optimization significantly speeds up the bulk indexing process, but isn't
+    # necessary on other indices (which are much smaller).
+    ids.in_groups_of(10_000, false).each do |group_ids|
+      User.where(id: group_ids).each do |user|
+        yield({
+          id: user.id.to_s,
+          avatar_image: format_image(user.avatar_attacher),
+          name: user.name,
+          past_names: user.past_names || [],
+          slug: user.slug,
+          followers_count: user.followers_count,
+          created_at: format_date(user.created_at)
+        }.compact)
+      end
     end
   end
 end
