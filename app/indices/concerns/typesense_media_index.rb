@@ -7,6 +7,9 @@ module TypesenseMediaIndex
     schema do
       token_separators(*%w[/ - ( ) + ; : & , .])
 
+      # Poster
+      field 'poster_image', type: 'object', optional: true, facet: false
+
       # Titles
       field 'canonical_title', type: 'string'
       field 'romanized_title', type: 'string', optional: true
