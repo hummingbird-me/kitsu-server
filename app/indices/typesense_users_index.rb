@@ -2,6 +2,8 @@
 
 class TypesenseUsersIndex < TypesenseBaseIndex
   SAVE_FREQUENCIES = {
+    'id' => 1,
+    'avatar_data' => 1,
     'name' => 1,
     'past_names' => 1,
     'slug' => 1,

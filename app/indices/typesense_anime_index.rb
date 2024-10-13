@@ -3,6 +3,7 @@
 class TypesenseAnimeIndex < TypesenseBaseIndex
   SAVE_FREQUENCIES = {
     'id' => 1,
+    'poster_image_data' => 1,
     'titles' => 1,
     'canonical_title' => 1,
     'abbrevated_titles' => 1,
