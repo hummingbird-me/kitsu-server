@@ -13,7 +13,7 @@ class TypesenseUsersIndex < TypesenseBaseIndex
   schema do
     field 'name', type: 'string'
     field 'past_names', type: 'string[]'
-    field 'slug', type: 'string'
+    field 'slug', type: 'string', optional: true
     field 'followers_count', type: 'int32', facet: true
   end
 
