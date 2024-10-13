@@ -11,6 +11,7 @@ class TypesenseUsersIndex < TypesenseBaseIndex
   index_name 'users'
 
   schema do
+    field 'avatar_image', type: 'object', optional: true, facet: false
     field 'name', type: 'string'
     field 'past_names', type: 'string[]'
     field 'slug', type: 'string', optional: true

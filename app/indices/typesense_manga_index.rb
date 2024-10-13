@@ -40,6 +40,7 @@ class TypesenseMangaIndex < TypesenseBaseIndex
 
       yield({
         id: manga.id.to_s,
+        poster_image: format_image(manga.poster_image_attacher),
         canonical_title: titles.canonical,
         romanized_title: titles.romanized,
         original_title: titles.original,
