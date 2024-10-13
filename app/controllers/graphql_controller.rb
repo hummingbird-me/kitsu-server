@@ -44,7 +44,7 @@ class GraphqlController < ApplicationController
   end
 
   def handle_error(exception)
-    Sentry.capture_exception(exception, {})
+    Sentry.capture_exception(exception)
 
     logger.error exception.message
     logger.error exception.backtrace.join("\n")
