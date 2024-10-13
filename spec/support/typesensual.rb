@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
-  indices = [TypesenseAnimeIndex, TypesenseMangaIndex].freeze
+  indices = [
+    TypesenseAnimeIndex,
+    TypesenseMangaIndex,
+    TypesenseUsersIndex,
+    TypesenseGroupsIndex
+  ].freeze
 
   # Create a new collection for each index before each test and delete it afterwards. We also stub
   # it into place for the index instead of using aliases because the alias is updated
