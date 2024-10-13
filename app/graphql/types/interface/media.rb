@@ -192,6 +192,14 @@ module Types::Interface::Media
     Loaders::AssociationLoader.for(object.class, :mappings).scope(object)
   end
 
+  field :relationships, Types::MediaRelationship.connection_type,
+    null: false,
+    description: 'A list of relationships for this media'
+
+  def relationships
+    Loaders::AssociationLoader.for(object.class, :media_relationships).scope(object)
+  end
+
   field :reactions, Types::MediaReaction.connection_type, null: false do
     description 'A list of reactions for this media'
     argument :sort, Loaders::MediaReactionsLoader.sort_argument, required: false
