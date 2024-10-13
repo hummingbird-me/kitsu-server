@@ -47,7 +47,7 @@ class UserPolicy < ApplicationPolicy
     end
   end
 
-  class TypesenseScope < TypesenseScope
+  class TypesensualScope < TypesensualScope
     def resolve
       search.filter("id:!=[#{blocked_users.join(',')}]")
     end
