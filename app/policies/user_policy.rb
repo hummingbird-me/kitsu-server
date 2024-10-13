@@ -49,7 +49,7 @@ class UserPolicy < ApplicationPolicy
 
   class TypesenseScope < TypesenseScope
     def resolve
-      search.filter('id', ":!=[#{blocked_users.join(',')}]")
+      search.filter("id:!=[#{blocked_users.join(',')}]")
     end
   end
 end

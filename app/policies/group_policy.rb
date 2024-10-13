@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GroupPolicy < ApplicationPolicy
   administrated_by :community_mod
   include GroupPermissionsHelpers
@@ -44,6 +46,14 @@ class GroupPolicy < ApplicationPolicy
       public_groups = 'privacy:open OR privacy:restricted'
       visible_groups = groups.empty? ? public_groups : "(#{private_groups}) OR (#{public_groups})"
       see_nsfw? ? visible_groups : "(#{visible_groups}) AND NOT nsfw:true"
+    end
+  end
+
+  class TypesenseScope < TypesenseScope
+    def resolve
+      group_ids = GroupMember.joins(:group).merge(Group.closed).for_user(user).pluck(:group_id)
+      search = search.filter("(id:=[#{group_ids.compact.join(',')}] || privacy:=[open,restricted])")
+      see_nsfw? ? search : search.filter('is_nsfw:=false')
     end
   end
 end
