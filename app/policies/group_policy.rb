@@ -49,7 +49,7 @@ class GroupPolicy < ApplicationPolicy
     end
   end
 
-  class TypesenseScope < TypesenseScope
+  class TypesensualScope < TypesensualScope
     def resolve
       group_ids = GroupMember.joins(:group).merge(Group.closed).for_user(user).pluck(:group_id)
       search = search.filter("(id:=[#{group_ids.compact.join(',')}] || privacy:=[open,restricted])")
