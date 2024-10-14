@@ -51,4 +51,24 @@ class Types::Comment < Types::BaseObject
       sort: sort
     }, object.id)
   end
+
+  field :attachments, Types::Attachment.connection_type, null: true do
+    description 'The attachments of this comment.'
+    argument :sort, Loaders::AttachmentsLoader.sort_argument, required: false
+  end
+
+  def attachments(sort: [{ on: :upload_order, direction: :asc}])
+    Loaders::AttachmentsLoader.connection_for({
+      find_by: :owner_id,
+      sort: sort,
+      where: { owner_type: object.class.name }
+    }, object.id)
+  end
+
+  field :embeds, Types::Embed,
+    null: true
+
+  def embeds
+    object.embed
+  end
 end
