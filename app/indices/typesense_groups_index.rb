@@ -18,7 +18,7 @@ class TypesenseGroupsIndex < TypesenseBaseIndex
   index_name 'groups'
 
   schema do
-    field 'avatar_image', type: 'object', optional: true, facet: false
+    field 'avatar_image', type: 'object', optional: true, facet: false, index: false
     field 'name', type: 'string'
     field 'slug', type: 'string'
     field 'tagline', type: 'string', optional: true

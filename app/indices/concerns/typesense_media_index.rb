@@ -8,7 +8,7 @@ module TypesenseMediaIndex
       token_separators(*%w[/ - ( ) + ; : & , .])
 
       # Poster
-      field 'poster_image', type: 'object', optional: true, facet: false
+      field 'poster_image', type: 'object', optional: true, facet: false, index: false
 
       # Titles
       field 'canonical_title', type: 'string'
