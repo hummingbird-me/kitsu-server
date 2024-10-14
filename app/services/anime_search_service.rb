@@ -37,8 +37,7 @@ class AnimeSearchService < TypesenseSearchService
         query_by: {
           'canonical_title' => 100,
           'titles.*' => 90,
-          'alternative_titles' => 90,
-          'descriptions.*' => 80
+          'alternative_titles' => 90
         }
       )
       query = apply_filters_to(query)

@@ -18,8 +18,6 @@ module TypesenseMediaIndex
       field 'alternative_titles', type: 'string[]'
       field 'titles', type: 'object'
       field 'titles\..*', type: 'string'
-      field 'descriptions', type: 'object'
-      field 'descriptions\..*', type: 'string'
 
       # Start and end dates
       field 'start_date', type: 'object', optional: true

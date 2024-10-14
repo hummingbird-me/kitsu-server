@@ -48,7 +48,6 @@ class TypesenseMangaIndex < TypesenseBaseIndex
         translated_title: titles.translated,
         alternative_titles: titles.alternatives.compact,
         titles: titles.localized,
-        descriptions: manga.description,
         start_date: format_date(manga.start_date),
         end_date: format_date(manga.end_date),
         status: manga.status,

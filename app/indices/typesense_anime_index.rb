@@ -63,7 +63,6 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
         translated_title: titles.translated,
         alternative_titles: titles.alternatives.compact,
         titles: titles.localized,
-        descriptions: anime.description,
         start_date: format_date(anime.start_date),
         end_date: format_date(anime.end_date),
         start_cour: {
