@@ -46,6 +46,7 @@ class Post < ApplicationRecord
   validates_with ExclusivityValidator, over: %i[target_user target_group target_interest]
   validates_with ExclusivityValidator, over: %i[uploads embed]
   validates :target_user, absence: true, if: :target_group
+  validates :spoiled_unit, unit_in_media: true
 
   def feed
     PostFeed.new(id)

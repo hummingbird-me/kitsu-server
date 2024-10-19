@@ -1,29 +1,34 @@
 class Mutations::Post::Unlock < Mutations::Base
-  prepend RescueValidationErrors
+  include FancyMutation
 
-  argument :input,
-    Types::Input::Post::Unlock,
-    required: true,
-    description: 'Unlock a Post.',
-    as: :post
+  description 'Unock a post'
 
-  field :post, Types::Post, null: true
-  field :errors, [Types::Interface::Error], null: true
-
-  def load_post(value)
-    post = ::Post.find(value.id)
-    post.assign_attributes(value.to_model)
-    post
+  input do
+    argument :id, ID,
+      required: true
   end
 
-  def authorized?(post:)
-    super(post, :unlock?)
+  result Types::Post
+  errors Types::Errors::NotAuthenticated,
+    Types::Errors::NotAuthorized,
+    Types::Errors::NotFound
+  
+  def ready?(id:, **)
+    authenticate!
+    @post = Post.find_by(id:)
+    return errors << Types::Errors::NotFound.build if @post.nil?
+    @post.assign_attributes(
+      locked_at: nil,
+      locked_reason: nil,
+      locked_by: nil
+    )
+    authorize!(@post, :unlock?)
+    true
   end
 
-  def resolve(post:)
-    post.save!
-    ModeratorActionLog.generate!(current_user, 'unlock', post)
-
-    { post: post }
+  def resolve(**)
+    @post.tap(&:save!)
+    ModeratorActionLog.generate!(current_user, 'unlock', @post)
+    @post
   end
 end
