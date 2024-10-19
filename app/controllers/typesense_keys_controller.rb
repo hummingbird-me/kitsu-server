@@ -10,7 +10,9 @@ class TypesenseKeysController < ApplicationController
         manga: json_for(Manga),
         users: json_for(User)
       },
-      nodes: Typesensual.client.configuration.nodes.only(:port, :host, :protocol)
+      nodes: Typesensual.client.configuration.nodes.map do |node|
+        node.only(:port, :host, :protocol)
+      end
     }
   end
 
