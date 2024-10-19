@@ -9,18 +9,6 @@ class TypesenseBaseIndex < Typesensual::Index
     field 'created_at.month', type: 'int32', facet: true, optional: true
     field 'created_at.day', type: 'int32', facet: true, optional: true
     field 'created_at.timestamp', type: 'int64', optional: true
-
-    # Locale-specific strings
-    # Pulled from https://typesense.org/docs/0.24.0/api/collections.html#schema-parameters
-    field '.*\.ja-.*', type: 'string*', locale: 'ja'
-    field '.*\.zh-.*', type: 'string*', locale: 'zh'
-    field '.*\.ko-.*', type: 'string*', locale: 'ko'
-    field '.*\.th-.*', type: 'string*', locale: 'th'
-    field '.*\.el-.*', type: 'string*', locale: 'el'
-    field '.*\.ru-.*', type: 'string*', locale: 'ru'
-    field '.*\.sr-.*', type: 'string*', locale: 'sr'
-    field '.*\.uk-.*', type: 'string*', locale: 'uk'
-    field '.*\.be-.*', type: 'string*', locale: 'be'
   end
 
   private

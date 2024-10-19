@@ -7,6 +7,18 @@ module TypesenseMediaIndex
     schema do
       token_separators(*%w[/ - ( ) + ; : & , .])
 
+      # Locale-specific strings
+      # Pulled from https://typesense.org/docs/0.24.0/api/collections.html#schema-parameters
+      field '.*\.ja-.*', type: 'string*', locale: 'ja'
+      field '.*\.zh-.*', type: 'string*', locale: 'zh'
+      field '.*\.ko-.*', type: 'string*', locale: 'ko'
+      field '.*\.th-.*', type: 'string*', locale: 'th'
+      field '.*\.el-.*', type: 'string*', locale: 'el'
+      field '.*\.ru-.*', type: 'string*', locale: 'ru'
+      field '.*\.sr-.*', type: 'string*', locale: 'sr'
+      field '.*\.uk-.*', type: 'string*', locale: 'uk'
+      field '.*\.be-.*', type: 'string*', locale: 'be'
+
       # Poster
       field 'poster_image', type: 'object', optional: true, facet: false, index: false
 
