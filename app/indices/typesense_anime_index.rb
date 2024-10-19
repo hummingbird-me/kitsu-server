@@ -90,7 +90,7 @@ class TypesenseAnimeIndex < TypesenseBaseIndex
         episode_count: anime.episode_count,
         episode_length: anime.episode_length,
         total_length: anime.total_length,
-        created_at: format_date(anime.created_at)
+        created_at: anime.created_at.to_i
       }.compact)
     end
   end
