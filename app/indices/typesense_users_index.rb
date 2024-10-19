@@ -42,7 +42,7 @@ class TypesenseUsersIndex < TypesenseBaseIndex
           past_names: user.past_names || [],
           slug: user.slug,
           followers_count: user.followers_count,
-          created_at: format_date(user.created_at)
+          created_at: user.created_at.to_i
         }.compact)
       end
     end

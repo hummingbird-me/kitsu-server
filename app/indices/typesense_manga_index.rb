@@ -60,7 +60,7 @@ class TypesenseMangaIndex < TypesenseBaseIndex
         genres: manga.genres.ids,
         chapter_count: manga.chapter_count,
         volume_count: manga.volume_count,
-        created_at: format_date(manga.created_at)
+        created_at: manga.created_at.to_i
       }.compact)
     end
   end
