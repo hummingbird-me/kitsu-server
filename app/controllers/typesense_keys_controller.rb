@@ -11,7 +11,7 @@ class TypesenseKeysController < ApplicationController
         users: json_for(User)
       },
       nodes: Typesensual.client.configuration.nodes.map do |node|
-        node.only(:port, :host, :protocol)
+        node.slice(:port, :host, :protocol)
       end
     }
   end
