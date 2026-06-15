@@ -101,6 +101,18 @@ class UserResource < BaseResource
     records.where(id: current_user&.id) || User.none
   }
 
+  def self._search_service
+    UserSearchService if Flipper[:typesense_user_search].enabled?(User.current)
+  end
+
+  def self._paginator
+    if Flipper[:typesense_user_search].enabled?(User.current)
+      :universal
+    else
+      JSONAPI.configuration.default_paginator
+    end
+  end
+
   index UsersIndex::User
   query :query,
     mode: :query,

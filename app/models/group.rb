@@ -62,6 +62,11 @@ class Group < ApplicationRecord
     @kitsu ||= find_by(id: 1830)
   end
 
+  def self.typesense_index
+    TypesenseGroupsIndex
+  end
+  delegate :typesense_index, to: :class
+
   before_validation do
     self.nsfw = category_id == 9 if category_id_changed?
     true
@@ -71,5 +76,13 @@ class Group < ApplicationRecord
   # cares?)
   after_commit(on: :create) do
     feed.setup!
+  end
+
+  after_commit(on: %i[create update]) do
+    typesense_index.index_one(id) if typesense_index.should_sync?(saved_changes)
+  end
+
+  after_commit(on: :destroy) do
+    typesense_index.remove_one(id)
   end
 end

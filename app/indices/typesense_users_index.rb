@@ -7,6 +7,7 @@ class TypesenseUsersIndex < TypesenseBaseIndex
     'name' => 1,
     'past_names' => 1,
     'slug' => 1,
+    'deleted_at' => 1,
     'followers_count' => 0.025
   }.freeze
 
@@ -17,6 +18,7 @@ class TypesenseUsersIndex < TypesenseBaseIndex
     field 'name', type: 'string'
     field 'past_names', type: 'string[]'
     field 'slug', type: 'string', optional: true
+    field 'is_deleted', type: 'bool', facet: true
     field 'followers_count', type: 'int32', facet: true
   end
 
@@ -41,6 +43,7 @@ class TypesenseUsersIndex < TypesenseBaseIndex
           name: user.name,
           past_names: user.past_names || [],
           slug: user.slug,
+          is_deleted: user.deleted_at.present?,
           followers_count: user.followers_count,
           created_at: user.created_at.to_i
         }.compact)
