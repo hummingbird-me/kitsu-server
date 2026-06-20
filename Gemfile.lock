@@ -21,7 +21,7 @@ GIT
 PATH
   remote: vendor/gems/graphql-fancy_loader
   specs:
-    graphql-fancy_loader (0.1.5)
+    graphql-fancy_loader (0.2.0)
       activesupport (>= 5.0, < 9.0)
       graphql (>= 1.3, < 3)
       graphql-batch (>= 0.4.3, < 1)
