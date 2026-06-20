@@ -2,7 +2,7 @@
 
 class Wordfilter < ApplicationRecord
   flag :locations, %i[post comment reaction]
-  enum action: {
+  enum :action, {
     censor: 10,
     report: 20,
     hold: 25,

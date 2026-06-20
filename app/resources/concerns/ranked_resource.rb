@@ -30,23 +30,37 @@ module RankedResource
       end
     end
 
-    def find_records(filter, opts = {})
-      return super unless _ranked_attributes
+    def records(options = {})
+      with_rank_select(super)
+    end
+
+    def records_for_populate(options = {})
+      with_rank_select(super)
+    end
+
+    def records_for_source_to_related(options = {})
+      with_rank_select(super)
+    end
+
+    private
+
+    def with_rank_select(records)
+      return records unless _ranked_attributes
 
       attrs = _ranked_attributes.map do |column_name|
         ranker = _model_class.ranker(column_name)
-        partition = ranker.with_same.join(', ')
+        partition = ranker.with_same.map { |field| "#{_model_class.table_name}.#{field}" }.join(', ')
 
         <<-SQL.squish
           (row_number() OVER (
             PARTITION BY #{partition}
-            ORDER BY #{column_name} ASC
+            ORDER BY #{_model_class.table_name}.#{column_name} ASC
           ) - 1) AS #{column_name}_position
         SQL
       end
       attrs = attrs.join(', ')
 
-      super.select("*, #{attrs}")
+      records.select(Arel.sql("#{_model_class.table_name}.*, #{attrs}"))
     end
   end
 end

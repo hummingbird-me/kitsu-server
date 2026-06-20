@@ -1,0 +1,18 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "17:00"
+    timezone: America/Los_Angeles
+  open-pull-requests-limit: 10
+  reviewers:
+  - NuckChorris
+  ignore:
+  - dependency-name: connection_pool
+    versions:
+    - 2.2.4
+  - dependency-name: timecop
+    versions:
+    - 0.9.3

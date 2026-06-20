@@ -1,5 +1,5 @@
 class MediaRelationship < ApplicationRecord
-  enum role: {
+  enum :role, {
     sequel: 0,
     prequel: 1,
     alternative_setting: 2,

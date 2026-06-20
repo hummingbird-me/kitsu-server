@@ -7,7 +7,7 @@ class Anime < ApplicationRecord
   include AgeRatings
   include Episodic
 
-  enum subtype: { TV: 0, special: 1, OVA: 2, ONA: 3, movie: 4, music: 5 }
+  enum :subtype, { TV: 0, special: 1, OVA: 2, ONA: 3, movie: 4, music: 5 }
   has_many :streaming_links, as: 'media', dependent: :destroy, inverse_of: :media
   has_many :producers, through: :anime_productions
   has_many :anime_productions, dependent: :destroy

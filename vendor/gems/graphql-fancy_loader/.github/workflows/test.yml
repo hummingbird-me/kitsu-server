@@ -1,0 +1,56 @@
+name: FancyLoader Test Suite
+
+on:
+  push:
+  pull_request:
+    # Branches from forks have the form 'user:branch-name' so we only run
+    # this job on pull_request events for branches that look like fork
+    # branches. Without this we would end up running this job twice for non
+    # forked PRs, once for the push and then once for opening the PR.
+    branches:
+      - "**:**"
+
+jobs:
+  test:
+    name: RSpec Test Suite
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - ruby-2.7
+          - ruby-3.0
+        experimental: [false]
+        include:
+          - ruby: truffleruby-20
+            experimental: true
+          - ruby: ruby-3.1
+            experimental: true
+
+    services:
+      postgres:
+        image: postgres:10-alpine
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: fancyloader_test
+        ports:
+          - 5432/tcp
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+
+      - name: Set up Ruby (${{ matrix.ruby }})
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - name: Run Tests
+        if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/fancyloader_test
+        run: bundle exec rspec

@@ -1,5 +1,5 @@
 class Hashtag < ApplicationRecord
-  enum kind: %i[user_created character anime aozora game art music review genre news event talk]
+  enum :kind, %i[user_created character anime aozora game art music review genre news event talk]
 
   belongs_to :item, polymorphic: true
 

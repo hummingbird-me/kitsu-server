@@ -1,3 +1,5 @@
+require 'ostruct'
+
 # An Action is a class representing a single task.  It's an implementation of the "command" pattern,
 # comparable to the Interactors gem.  Unlike Interactors, however, Actions are based on ActiveModel,
 # and are expected to raise an exception when they fail.

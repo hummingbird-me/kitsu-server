@@ -4,19 +4,19 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 source 'https://rubygems.org'
 
 # Core Stuff
-gem 'i18n', '1.8.11'
+gem 'i18n'
 gem 'puma'
-gem 'rails', '6.1.7.6'
+gem 'rails', '~> 8.0'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
 gem 'attr_encrypted' # encrypt linked_profile tokens
 gem 'connection_pool' # Pool our Redises
 gem 'fx' # Database functions
-gem 'hiredis' # Faster redis
+gem 'hiredis-client' # Faster redis (redis-rb 5 driver)
 gem 'mongo' # MongoDB for Aozora
 gem 'pg' # Postgres
-gem 'redis', '> 3.3.0', require: ['redis', 'redis/connection/hiredis'] # Redis
+gem 'redis', '~> 5.0' # Redis
 gem 'scenic' # Database views
 
 # Search
@@ -46,7 +46,7 @@ gem 'shrine'
 gem 'shrine-blurhash'
 
 # Background tasks
-gem 'sidekiq', '~> 7'
+gem 'sidekiq', '~> 8'
 gem 'sidekiq-debounce'
 gem 'sidekiq-scheduler'
 
@@ -63,11 +63,11 @@ gem 'flipper-redis'
 gem 'flipper-ui'
 
 # API Frameworks
-gem 'apollo-federation', github: 'productboardlabs/apollo-federation-ruby'
+gem 'apollo-federation'
 gem 'graphql'
 gem 'graphql-batch'
-gem 'graphql-fancy_loader'
-gem 'jsonapi-resources', '0.9.12'
+gem 'graphql-fancy_loader', path: 'vendor/gems/graphql-fancy_loader'
+gem 'jsonapi-resources'
 
 # Miscellaneous Utilities
 gem 'active_flag' # Bitfields!
@@ -77,14 +77,13 @@ gem 'aws-sdk-sagemakerruntime' # AWS SageMaker
 gem 'bootsnap' # Faster boots
 gem 'counter_culture' # Fancier counter caches
 gem 'faraday'
-gem 'faraday_middleware'
 gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
-gem 'google-api-client' # Google APIs
+gem 'google-apis-androidpublisher_v3' # Google Play subscription verification
 gem 'google-protobuf', force_ruby_platform: RUBY_PLATFORM.include?('linux-musl') # Google Protobuf
 gem 'graphql-client' # make graphql calls
 gem 'http' # Pewpew HTTP calls easier
-gem 'ice_cube', github: 'ice-cube-ruby/ice_cube' # Episode release schedules
+gem 'ice_cube' # Episode release schedules
 gem 'iso-639' # Language codes
 gem 'iso_country_codes' # Country codes
 gem 'lograge' # Better logging
@@ -92,7 +91,7 @@ gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri' # Parse MAL XML shit
 gem 'oauth2' # Authenticate to Nyckel API
 gem 'one_signal' # Send push notifications
-gem 'paranoia', '~> 2.4' # Faux deletion
+gem 'paranoia' # Faux deletion
 gem 'postmark-rails' # Send via Postmark
 gem 'preferred_locale' # Process Accept-Language headers
 gem 'rack-timeout' # Rack timeout
@@ -102,10 +101,11 @@ gem 'roadie-rails' # Inline CSS for emails
 gem 'ruby-progressbar' # Fancy progress bars for Rake tasks
 gem 'sass-rails' # Process SCSS for emails
 gem 'sitemap_generator' # Generate Sitemaps
-gem 'strait' # Rate limiting anything!
-gem 'stream_rails', github: 'GetStream/stream-rails',
-  branch: 'feature/subreference-enrichment' # Feed Enrichment
-gem 'stream-ruby', '~> 2.10.0' # Feeds
+gem 'strait', path: 'vendor/gems/strait' # Rate limiting anything!
+# Vendored fork of stream_rails with kitsu's subreference-enrichment feature, updated to
+# depend on stream-ruby 4.x (the GetStream git fork ref was unfetchable via shallow clone).
+gem 'stream_rails', path: 'vendor/gems/stream_rails' # Feed Enrichment
+gem 'stream-ruby', '~> 4.1' # Feeds
 
 # Cash Money
 gem 'stripe'
@@ -113,6 +113,11 @@ gem 'stripe'
 # Rack Middleware
 gem 'rack-attack'
 gem 'rack-cors'
+
+# Standard library gems that became bundled gems in Ruby 3.4+ and must be declared
+# explicitly now that they're no longer default gems (used directly across the app).
+gem 'csv'
+gem 'ostruct'
 
 # Optimizations
 gem 'fast_blank' # Faster String#blank?

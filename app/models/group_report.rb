@@ -6,8 +6,8 @@ class GroupReport < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :moderator, class_name: 'User', optional: true
 
-  enum reason: Report.reasons
-  enum status: %i[reported resolved declined escalated]
+  enum :reason, Report.reasons
+  enum :status, %i[reported resolved declined escalated]
 
   scope :visible_for, ->(user) {
     # user == user || has content priv

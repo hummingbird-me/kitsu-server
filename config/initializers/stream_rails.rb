@@ -21,5 +21,6 @@ StreamRails.configure do |config|
 end
 
 require 'buffered_stream_client'
-require 'stream/log_subscriber'
-Stream::LogSubscriber.attach_to :getstream
+# NOTE: stream-ruby >= 3 removed Stream::LogSubscriber (and no longer emits the
+# 'getstream' ActiveSupport notifications it subscribed to), so the previous
+# `Stream::LogSubscriber.attach_to :getstream` hook has been dropped.

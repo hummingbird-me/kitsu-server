@@ -5,7 +5,7 @@ module Holdable
   extend ActiveSupport::Concern
 
   included do
-    enum held_reason: { spamfilter: 1, wordfilter: 2 }
+    enum :held_reason, { spamfilter: 1, wordfilter: 2 }
 
     scope :not_held, -> { where(held_reason: nil) }
     scope :held, -> { where.not(held_reason: nil) }

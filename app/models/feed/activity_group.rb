@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class Feed
   class ActivityGroup < OpenStruct
     attr_reader :feed

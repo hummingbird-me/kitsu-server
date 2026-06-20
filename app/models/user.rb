@@ -118,13 +118,13 @@ class User < ApplicationRecord
     "\u5350"
   ].join.freeze
 
-  enum rating_system: { simple: 0, advanced: 1, regular: 2 }
-  enum status: { unregistered: 0, registered: 1, aozora: 2 }
-  enum theme: { light: 0, dark: 1 }
-  enum pro_tier: { ao_pro: 0, ao_pro_plus: 1, pro: 2, patron: 3 }
-  enum email_status: { email_unconfirmed: 0, email_confirmed: 1, email_bounced: 2 }
-  enum title_language_preference: { canonical: 0, romanized: 1, localized: 2 }
-  enum sfw_filter_preference: { sfw: 0, nsfw_sometimes: 1, nsfw_everywhere: 2 }
+  enum :rating_system, { simple: 0, advanced: 1, regular: 2 }
+  enum :status, { unregistered: 0, registered: 1, aozora: 2 }
+  enum :theme, { light: 0, dark: 1 }
+  enum :pro_tier, { ao_pro: 0, ao_pro_plus: 1, pro: 2, patron: 3 }
+  enum :email_status, { email_unconfirmed: 0, email_confirmed: 1, email_bounced: 2 }
+  enum :title_language_preference, { canonical: 0, romanized: 1, localized: 2 }
+  enum :sfw_filter_preference, { sfw: 0, nsfw_sometimes: 1, nsfw_everywhere: 2 }
 
   rolify
   flag :permissions, %i[admin community_mod database_mod]

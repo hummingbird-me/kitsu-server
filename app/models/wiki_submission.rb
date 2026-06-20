@@ -7,7 +7,7 @@ class WikiSubmission < ApplicationRecord
   has_one :child, inverse_of: :parent, class_name: 'WikiSubmission', foreign_key: :parent_id,
                   dependent: :destroy
 
-  enum status: {
+  enum :status, {
     draft: 0,
     pending: 1,
     approved: 2,

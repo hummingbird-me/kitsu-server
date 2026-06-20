@@ -35,14 +35,14 @@ class LibraryEntry < ApplicationRecord
     )
   }
 
-  enum status: {
+  enum :status, {
     current: 1,
     planned: 2,
     completed: 3,
     on_hold: 4,
     dropped: 5
   }
-  enum reaction_skipped: {
+  enum :reaction_skipped, {
     unskipped: 0,
     skipped: 1,
     ignored: 2

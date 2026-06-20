@@ -43,10 +43,10 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-          - ruby-3.2
+          - 4.0.5
         experimental: [false]
         include:
-          - ruby: ruby-3.3
+          - ruby: ruby-head
             experimental: true
 
     services:
