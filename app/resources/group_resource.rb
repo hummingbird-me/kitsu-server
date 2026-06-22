@@ -57,6 +57,18 @@ class GroupResource < BaseResource
     member.permissions.create!(permission: :owner)
   end
 
+  def self._search_service
+    GroupSearchService if Flipper[:typesense_group_search].enabled?(User.current)
+  end
+
+  def self._paginator
+    if Flipper[:typesense_group_search].enabled?(User.current)
+      :universal
+    else
+      JSONAPI.configuration.default_paginator
+    end
+  end
+
   index GroupsIndex::Group
   query :query,
     mode: :query,
