@@ -10,6 +10,21 @@ class StripeRenewalService
   end
 
   def call
-    ProRenewalService.new(user).renew_for(@invoice.period_start, @invoice.period_end)
+    ProRenewalService.new(user).renew_for(
+      coerce_time(@invoice.period_start),
+      coerce_time(@invoice.period_end)
+    )
+  end
+
+  private
+
+  # Stripe returns invoice period boundaries as Unix timestamps, while the test
+  # mock serialises them as strings. Normalise both to Time.
+  def coerce_time(value)
+    case value
+    when Numeric then Time.zone.at(value)
+    when String then Time.zone.parse(value)
+    else value
+    end
   end
 end

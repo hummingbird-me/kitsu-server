@@ -17,7 +17,7 @@ RSpec.describe ProSubscription::StripeSubscription, type: :model do
       user = create(:user)
       user.stripe_customer.save(source: stripe_mock.generate_card_token)
       sub = ProSubscription::StripeSubscription.create!(user: user, tier: 'pro')
-      expect(sub.subscription).to receive(:delete).once
+      expect(sub.subscription).to receive(:cancel).once
       sub.destroy!
     end
   end

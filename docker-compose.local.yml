@@ -37,6 +37,25 @@ services:
     image: typesense/typesense:0.25.0
     command: --data-dir /tmp --api-key xyz
 
+  minio:
+    image: minio/minio
+    command: server /data
+    environment:
+      MINIO_ROOT_USER: miniotest
+      MINIO_ROOT_PASSWORD: miniotest
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      until /usr/bin/mc alias set local http://minio:9000 miniotest miniotest; do sleep 1; done;
+      /usr/bin/mc mb --ignore-existing local/kitsu-ugc-test;
+      exit 0;
+      "
+
   app:
     build:
       context: .
@@ -50,6 +69,8 @@ services:
         condition: service_started
       typesense:
         condition: service_started
+      createbuckets:
+        condition: service_completed_successfully
     environment:
       RAILS_ENV: development
       LOG_LEVEL: warn
@@ -60,6 +81,10 @@ services:
       ELASTICSEARCH_URL: elasticsearch:9200
       TYPESENSUAL_API_KEY: xyz
       TYPESENSUAL_NODES: http://typesense:8108/
+      AWS_ENDPOINT: http://minio:9000
+      AWS_BUCKET: kitsu-ugc-test
+      AWS_ACCESS_KEY_ID: miniotest
+      AWS_SECRET_ACCESS_KEY: miniotest
     ports:
       - "3000:80"
     volumes:

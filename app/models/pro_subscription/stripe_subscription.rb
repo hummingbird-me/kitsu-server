@@ -11,7 +11,7 @@ class ProSubscription
     alias_method :cancel!, :destroy!
 
     after_destroy do
-      subscription.delete
+      subscription.cancel
     end
 
     before_validation on: :create do

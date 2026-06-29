@@ -177,6 +177,7 @@ end
 
 group :test do
   gem 'faker' # Fake data
+  gem 'faraday-rack' # :rack Faraday adapter (extracted from Faraday 2.x)
   gem 'json_expressions' # Test outputted JSON
   gem 'pundit-matchers' # Test pundit policies
   gem 'rspec-sidekiq' # Test Sidekiq jobs
