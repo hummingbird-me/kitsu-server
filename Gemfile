@@ -42,6 +42,7 @@ gem 'image_optim_pack', require: false
 gem 'image_processing'
 gem 'marcel'
 gem 'mini_magick'
+gem 'ruby-vips', '~> 2.0'
 gem 'shrine'
 gem 'shrine-blurhash'
 
@@ -76,11 +77,13 @@ gem 'ancestry' # Ancestry for categories
 gem 'aws-sdk-sagemakerruntime' # AWS SageMaker
 gem 'bootsnap' # Faster boots
 gem 'counter_culture' # Fancier counter caches
+gem 'after_commit_action' # counter_culture execute_after_commit support
 gem 'faraday'
 gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'google-apis-androidpublisher_v3' # Google Play subscription verification
 gem 'google-protobuf', force_ruby_platform: RUBY_PLATFORM.include?('linux-musl') # Google Protobuf
+gem 'selma', force_ruby_platform: RUBY_PLATFORM.include?('linux-musl') # html-pipeline sanitizer
 gem 'graphql-client' # make graphql calls
 gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube' # Episode release schedules

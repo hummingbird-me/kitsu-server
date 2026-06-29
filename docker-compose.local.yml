@@ -1,0 +1,58 @@
+# Local boot-check stack for kitsu-server.
+# Mirrors the service versions used in .github/workflows/test.yml.
+# Usage:
+#   docker compose -f docker-compose.local.yml build
+#   docker compose -f docker-compose.local.yml run --rm app rake db:create db:schema:load
+#   docker compose -f docker-compose.local.yml run --rm app rake graphql:dump_schema
+#   docker compose -f docker-compose.local.yml down -v
+
+services:
+  postgres:
+    image: postgres:10-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kitsu_development
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:alpine
+
+  elasticsearch:
+    image: elasticsearch:2-alpine
+
+  typesense:
+    image: typesense/typesense:0.25.0
+    command: --data-dir /tmp --api-key xyz
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+      typesense:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      LOG_LEVEL: warn
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/kitsu_development
+      REDIS_HOST: redis
+      REDIS_URL: redis://redis:6379/0
+      ELASTICSEARCH_HOST: elasticsearch:9200
+      ELASTICSEARCH_URL: elasticsearch:9200
+      TYPESENSUAL_API_KEY: xyz
+      TYPESENSUAL_NODES: http://typesense:8108/
+    ports:
+      - "3000:80"
+    volumes:
+      - .:/opt/kitsu/server
