@@ -7,7 +7,7 @@ class GroupTicket < ApplicationRecord
                       dependent: :destroy
 
   enum :status, %i[created assigned resolved]
-  update_index('group_tickets#group_ticket') { self }
+  update_index('group_tickets') { self }
 
   scope :visible_for, ->(user) {
     members = GroupMember.with_permission(:tickets).for_user(user)

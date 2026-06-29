@@ -17,7 +17,7 @@ module Media
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
 
-    update_index("media##{name.underscore}") { self }
+    update_index(name.underscore) { self }
     update_algolia('AlgoliaMediaIndex')
 
     # Genre/Categories/Tags

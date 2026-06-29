@@ -20,7 +20,7 @@ class Anime < ApplicationRecord
 
   rails_admin { fields :episode_count }
 
-  update_index('media#anime') { self }
+  update_index('anime') { self }
 
   def slug_candidates
     # Prefer the canonical title or romaji title before anything else
@@ -74,7 +74,7 @@ class Anime < ApplicationRecord
   end
 
   def self.fuzzy_find(title)
-    MediaIndex::Anime.query(multi_match: {
+    AnimeIndex.query(multi_match: {
       fields: %w[titles.* abbreviated_titles description actors characters],
       query: title,
       fuzziness: 2,

@@ -17,7 +17,7 @@ class GroupMemberResource < BaseResource
   has_many :permissions
   has_many :notes
 
-  index UsersIndex::GroupMember
+  index GroupMembersIndex
   query :query_group, apply: ->(values, _ctx) {
     { term: { group_id: values.join(' ') } }
   }

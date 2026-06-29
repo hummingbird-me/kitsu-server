@@ -130,7 +130,7 @@ class User < ApplicationRecord
   flag :permissions, %i[admin community_mod database_mod]
   flag :flags, %i[require_email_validation banned shadow_banned]
   has_secure_password validations: false
-  update_index('users#user') { self }
+  update_index('users') { self }
   update_algolia('AlgoliaUsersIndex')
 
   belongs_to :waifu, optional: true, class_name: 'Character'

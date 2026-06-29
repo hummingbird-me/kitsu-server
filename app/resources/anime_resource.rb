@@ -12,7 +12,7 @@ class AnimeResource < MediaResource
   has_many :anime_staff
 
   # ElasticSearch hookup
-  index MediaIndex::Anime
+  index AnimeIndex
   query :season, valid: ->(value, _ctx) { Anime::SEASONS.include?(value) }
   query :season_year, NUMERIC_QUERY
   query :streamers, valid: ->(value, _ctx) { Streamer.find_by_name(value) }

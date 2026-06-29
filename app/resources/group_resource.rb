@@ -57,7 +57,7 @@ class GroupResource < BaseResource
     member.permissions.create!(permission: :owner)
   end
 
-  index GroupsIndex::Group
+  index GroupsIndex
   query :query,
     mode: :query,
     apply: ->(values, _ctx) {

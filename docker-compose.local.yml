@@ -23,7 +23,15 @@ services:
     image: redis:alpine
 
   elasticsearch:
-    image: elasticsearch:2-alpine
+    image: elasticsearch:8.19.3
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
   typesense:
     image: typesense/typesense:0.25.0

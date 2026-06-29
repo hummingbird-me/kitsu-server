@@ -16,7 +16,7 @@ class GroupTicketResource < BaseResource
     records.where(status: statuses)
   }
 
-  index GroupTicketsIndex::GroupTicket
+  index GroupTicketsIndex
 
   query :query_group, apply: ->(values, _ctx) {
     { term: { group_id: values.join(' ') } }

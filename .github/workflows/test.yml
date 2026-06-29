@@ -72,7 +72,11 @@ jobs:
         ports:
           - 6379:6379
       elasticsearch:
-        image: elasticsearch:2-alpine
+        image: elasticsearch:8.19.3
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: "false"
+          ES_JAVA_OPTS: "-Xms512m -Xmx512m"
         ports:
           - 9200:9200
       typesense:
