@@ -1,7 +1,7 @@
 FROM ruby:4.0.5-alpine
 MAINTAINER Kitsu, Inc.
 
-RUN apk add --no-cache vips imagemagick git make gcc postgresql-client postgresql-dev build-base tzdata ffmpeg curl bash
+RUN apk add --no-cache vips imagemagick git make gcc postgresql-client postgresql-dev build-base tzdata ffmpeg curl bash yaml-dev cargo rust clang clang-dev llvm-dev
 # Install bundler
 RUN gem install bundler -v '~> 4.0'
 
