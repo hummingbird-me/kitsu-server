@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class HTMLFilters::HashtagsFilter < HTMLPipeline::NodeFilter
+class HTMLFilters::HashtagsFilter
   # These regexex are reproduced from the twitter/tweet-text library, which is licensed under
   # the Apache 2.0 license.  The originals can be found at the following URL:
   #
@@ -41,28 +41,30 @@ class HTMLFilters::HashtagsFilter < HTMLPipeline::NodeFilter
 
   VALID_HASHTAG = /(^|\uFE0E|[^&#{HASHTAG_LETTERS_NUMERALS}])(#|\uFF03)(?!\uFE0F|\u20E3)(#{HASHTAG_LETTERS_NUMERALS_SET}*#{HASHTAG_LETTERS_SET}#{HASHTAG_LETTERS_NUMERALS_SET}*)/i # rubocop:disable Layout/LineLength
 
-  SELECTOR = Selma::Selector.new(match_text_within: '*', ignore_text_within: %w[a code pre])
+  attr_reader :doc, :result, :context
 
-  def after_initialize
+  def initialize(text, context = {}, result = {})
+    @doc = text.is_a?(String) ? Nokogiri::HTML.fragment(text) : text
+    @context = context
+    @result = result
+  end
+
+  def call
     result[:hashtags] ||= []
-  end
-
-  def selector
-    SELECTOR
-  end
-
-  def handle_text_chunk(text)
-    content = text.to_s
-    return unless content.include?('#') || content.include?("\uFF03")
-
-    new_text = content.gsub(VALID_HASHTAG) do
-      # rubocop:disable Style/PerlBackrefs
-      label = [$2, $3].join
-      result[:hashtags] << $3
-      "#{Sanitize.fragment($1)}#{link_for($3, label)}"
-      # rubocop:enable Style/PerlBackrefs
+    doc.xpath('./text()').each do |node|
+      # Skip if we're inside a link
+      next unless node.ancestors('a').empty?
+      # Otherwise linkify hashtags
+      new_text = node.text.gsub(VALID_HASHTAG) do
+        # rubocop:disable Style/PerlBackrefs
+        text = [$2, $3].join
+        result[:hashtags] << $3
+        "#{Sanitize.fragment($1)}#{link_for($3, text)}"
+        # rubocop:enable Style/PerlBackrefs
+      end
+      node.swap(new_text)
     end
-    text.replace(new_text, as: :html) unless new_text == content
+    doc
   end
 
   private

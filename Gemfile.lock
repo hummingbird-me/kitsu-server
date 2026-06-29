@@ -180,6 +180,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
     bcrypt (3.1.22)
+    benchmark (0.5.0)
     benchmark-ips (2.15.1)
     bigdecimal (4.1.2)
     blurhash (0.1.8)
@@ -908,6 +909,7 @@ DEPENDENCIES
   aws-sdk-s3 (~> 1)
   aws-sdk-sagemakerruntime
   bcrypt
+  benchmark
   benchmark-ips
   blurhash
   bootsnap

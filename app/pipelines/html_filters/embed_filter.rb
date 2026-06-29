@@ -1,15 +1,14 @@
-class HTMLFilters::EmbedFilter < HTMLPipeline::NodeFilter
-  SELECTOR = Selma::Selector.new(match_element: 'a.autolink, .onebox a')
+class HTMLFilters::EmbedFilter
+  attr_reader :doc, :result, :context
 
-  def after_initialize
-    result[:embeddable_links] = []
+  def initialize(text, context = {}, result = {})
+    @doc = text.is_a?(String) ? Nokogiri::HTML.fragment(text) : text
+    @context = context
+    @result = result
   end
 
-  def selector
-    SELECTOR
-  end
-
-  def handle_element(element)
-    result[:embeddable_links] << element['href']
+  def call
+    result[:embeddable_links] = doc.css('a.autolink, .onebox a').map { |a| a['href'] }
+    doc
   end
 end

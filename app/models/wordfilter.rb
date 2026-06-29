@@ -8,7 +8,7 @@ class Wordfilter < ApplicationRecord
     hold: 25,
     hide: 30,
     reject: 40
-  }, _prefix: 'action_'
+  }, prefix: 'action_'
 
   validates :pattern, presence: true
 

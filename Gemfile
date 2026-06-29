@@ -76,6 +76,7 @@ gem 'addressable' # Fancy address logic
 gem 'ancestry' # Ancestry for categories
 gem 'aws-sdk-sagemakerruntime' # AWS SageMaker
 gem 'bootsnap' # Faster boots
+gem 'benchmark' # Extracted from Ruby 3.5+ default gems
 gem 'counter_culture' # Fancier counter caches
 gem 'after_commit_action' # counter_culture execute_after_commit support
 gem 'faraday'
