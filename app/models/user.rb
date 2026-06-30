@@ -306,16 +306,6 @@ class User < ApplicationRecord
     sfw_filter_preference == 'sfw'
   end
 
-  def stripe_customer
-    @stripe_customer ||= if stripe_customer_id
-      Stripe::Customer.retrieve(stripe_customer_id)
-    else
-      customer = Stripe::Customer.create(email:)
-      self.stripe_customer_id = customer.id
-      customer
-    end
-  end
-
   def blocked?(user)
     Block.exists?(user: [self, user], blocked: [self, user])
   end
@@ -464,11 +454,6 @@ class User < ApplicationRecord
     update_title
     update_profile_completed
     update_feed_completed
-  end
-
-  after_commit on: :update do
-    # Update email on Stripe
-    stripe_customer.save(email:) if previous_changes['email']
   end
 
   after_commit if: ->(u) { u.previous_changes['email'] && !Rails.env.staging? } do
