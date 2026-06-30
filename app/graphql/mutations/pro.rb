@@ -1,8 +1,5 @@
 class Mutations::Pro < Mutations::Namespace
   # Subscription Management
-  field :subscribe_with_stripe,
-    mutation: Mutations::Pro::SubscribeWithStripe,
-    description: 'Subscribe to Pro using Stripe'
   field :unsubscribe,
     mutation: Mutations::Pro::Unsubscribe,
     description: "End the user's pro subscription"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_05_18_064210) do
+ActiveRecord::Schema.define(version: 2026_06_19_000000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1608,7 +1608,6 @@ ActiveRecord::Schema.define(version: 2025_05_18_064210) do
     t.string "ao_imported"
     t.datetime "pro_started_at"
     t.integer "max_pro_streak"
-    t.string "stripe_customer_id"
     t.integer "quotes_count", default: 0, null: false
     t.integer "pro_tier"
     t.string "pro_message"

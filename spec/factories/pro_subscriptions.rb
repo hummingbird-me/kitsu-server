@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :pro_subscription do
-    type { 'ProSubscription::StripeSubscription' }
+    type { 'ProSubscription::AppleSubscription' }
     association :user, strategy: :build
     billing_id { 'test_customer_id' }
     tier { ProSubscription.tiers.keys.sample }

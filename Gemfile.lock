@@ -8,16 +8,6 @@ GIT
       pundit
       rails (>= 4.2.1)
 
-GIT
-  remote: https://github.com/stripe-ruby-mock/stripe-ruby-mock.git
-  revision: 852fd53316ef9db387ae0b4f3f8c84e712c7950d
-  specs:
-    stripe-ruby-mock (5.0.0)
-      dante (>= 0.2.0)
-      drb (>= 2.0.4, < 3)
-      multi_json (~> 1.0)
-      stripe (> 5, < 14)
-
 PATH
   remote: vendor/gems/graphql-fancy_loader
   specs:
@@ -208,7 +198,6 @@ GEM
     css_parser (2.2.0)
       addressable
     csv (3.3.5)
-    dante (0.2.0)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.2.2)
@@ -852,7 +841,6 @@ GEM
       jwt
       net-http-persistent
     stringio (3.2.0)
-    stripe (13.5.1)
     temping (4.4.0)
       activerecord (>= 6.0, < 8.2)
       activesupport (>= 6.0, < 8.2)
@@ -1031,8 +1019,6 @@ DEPENDENCIES
   strait!
   stream-ruby (~> 4.1)
   stream_rails!
-  stripe
-  stripe-ruby-mock!
   temping
   timecop
   typesensual

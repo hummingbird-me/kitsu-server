@@ -54,7 +54,7 @@ RailsAdmin.config do |config|
     ProfileLinkSites MangaMediaAttribute AnimeMediaAttribute DramasMediaAttribute AnimeCharacter
     QuoteLine WikiSubmission WikiSubmissionLog AMA AMASubscriber CommunityRecommendation
     CommunityRecommendationFollow CommunityRecommendationRequest ProfileLinkSite ProMembershipPlan
-    ProSubscription ProSubscription::AppleSubscription ProSubscription::StripeSubscription
+    ProSubscription ProSubscription::AppleSubscription
     ProSubscription::GooglePlaySubscription ProGift GroupCategory
   ]
 
@@ -328,8 +328,8 @@ RailsAdmin.config do |config|
     exclude_fields :password_digest, :remember_created_at, :current_sign_in_at,
       :last_sign_in_at, :recommendations_up_to_date, :facebook_id, :twitter_id,
       :mal_username, :life_spent_on_anime, :bio, :ninja_banned, :to_follow,
-      :dropbox_token, :dropbox_secret, :last_backup, :stripe_token,
-      :stripe_customer_id, :import_status, :import_from, :import_error,
+      :dropbox_token, :dropbox_secret, :last_backup,
+      :import_status, :import_from, :import_error,
       :profile_completed, :feed_completed, :followers, :following, :comments,
       :posts, :blocks, :last_recommendations_update, :title,
       :library_entries, :library_events, :slug, :permissions

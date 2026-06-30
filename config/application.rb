@@ -108,7 +108,7 @@ module Kitsu
     # Redis caching
     config.cache_store = :redis_cache_store, {
       driver: :hiredis,
-      url: ENV.fetch('REDIS_URL', nil),
+      url: ENV.fetch('CACHE_REDIS_URL') { ENV.fetch('REDIS_URL', nil) },
       expires_in: 1.day
     }
 

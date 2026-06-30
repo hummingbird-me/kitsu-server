@@ -44,7 +44,7 @@ class ProSubscriptionController < ApplicationController
     when :apple_ios
       # We cannot cancel an iOS subscription — cancellation must be done through Apple or in-app
       render_jsonapi_error 400, 'Cannot cancel an iOS subscription outside of the App Store'
-    when :stripe, :google_play
+    when :google_play
       user.pro_subscription.destroy!
       render json: {}
     end

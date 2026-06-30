@@ -100,32 +100,6 @@ RSpec.describe ProSubscriptionController, type: :controller do
       end
     end
 
-    context 'with a Stripe subscription' do
-      let(:stripe_mock) { StripeMock.create_test_helper }
-
-      before do
-        product = stripe_mock.create_product(name: 'Pro Yearly')
-        stripe_mock.create_plan(id: 'pro-yearly', product: product.id)
-        user.stripe_customer.source = stripe_mock.generate_card_token
-        user.stripe_customer.save
-        ProSubscription::StripeSubscription.create!(user: user, tier: :pro)
-        sign_in user
-      end
-
-      it 'should return an empty JSON object' do
-        delete :destroy
-        expect(response).to have_http_status(200)
-        expect(response.body).to eq('{}')
-      end
-
-      it 'should remove my subscription' do
-        expect {
-          delete :destroy
-        }.to(change { user.reload.pro_subscription })
-        expect(user.reload.pro_subscription).to be_nil
-      end
-    end
-
     context 'with a Google Play subscription' do
       include_context 'Stubbed Android Publisher Service'
 

@@ -15,7 +15,6 @@ class Feed
   # @param scrollback [Integer] the number of historical activities to import
   def follow(target, scrollback: 100)
     target = target.write_target if target.respond_to?(:write_target)
-    StreamLog.follow(read_target, target)
     read_feed.follow(*target, scrollback)
   end
 
@@ -69,7 +68,6 @@ class Feed
       follow.transform_values { |val| val.is_a?(Array) ? val.join(':') : val }
     end
     client.follow_many(follows, 10)
-    StreamLog.follow_many(follows, 10)
   end
 
   def self.client

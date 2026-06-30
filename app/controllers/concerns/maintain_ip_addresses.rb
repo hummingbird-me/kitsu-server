@@ -20,6 +20,7 @@ module MaintainIPAddresses
         updated_at = excluded.updated_at,
         user_id = excluded.user_id,
         ip_address = excluded.ip_address
+        WHERE updated_at < (now() - interval '6 hours')
     SQL
   end
 

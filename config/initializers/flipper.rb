@@ -3,7 +3,7 @@ require 'flipper/adapters/redis'
 Flipper.configure do |config|
   config.default do
     # Connect to Redis and initialize Flipper
-    adapter = Flipper::Adapters::Redis.new(Redis.new)
+    adapter = Flipper::Adapters::Redis.new(Redis.new(url: ENV.fetch('PERSISTENT_REDIS_URL') { ENV.fetch('REDIS_URL', nil) }))
     Flipper.new(adapter)
   end
 end

@@ -232,12 +232,4 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'after email update' do
-    it 'synchronizes the email to Stripe' do
-      user = create(:user)
-      expect(user.stripe_customer.email).to eq(user.email)
-      user.update!(email: 'mariya@takeuchi.org')
-      expect(user.stripe_customer.email).to eq('mariya@takeuchi.org')
-    end
-  end
 end

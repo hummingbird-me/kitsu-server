@@ -20,7 +20,7 @@ Sidekiq.configure_server do |config|
   end
 
   config.logger.level = ENV['LOG_LEVEL'].to_sym if ENV['LOG_LEVEL']
-  config.redis = { url: ENV.fetch('REDIS_URL', nil), network_timeout: 3, pool_timeout: 3 }
+  config.redis = { url: ENV.fetch('PERSISTENT_REDIS_URL') { ENV.fetch('REDIS_URL', nil) }, network_timeout: 3, pool_timeout: 3 }
   config.server_middleware do |chain|
     chain.add Sidekiq::Debounce
     chain.add PrometheusExporter::Instrumentation::Sidekiq
@@ -39,7 +39,7 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV.fetch('REDIS_URL', nil), network_timeout: 3, pool_timeout: 3 }
+  config.redis = { url: ENV.fetch('PERSISTENT_REDIS_URL') { ENV.fetch('REDIS_URL', nil) }, network_timeout: 3, pool_timeout: 3 }
 
   config.client_middleware do |chain|
     chain.add Sidekiq::Middleware::Client::CurrentUser
