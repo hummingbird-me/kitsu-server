@@ -67,7 +67,7 @@ gem 'flipper-ui'
 gem 'apollo-federation'
 gem 'graphql'
 gem 'graphql-batch'
-gem 'graphql-fancy_loader', path: 'vendor/gems/graphql-fancy_loader'
+gem 'graphql-fancy_loader', git: 'https://github.com/punoqun/graphql-fancy-loader.git', branch: 'main'
 gem 'jsonapi-resources'
 
 # Miscellaneous Utilities

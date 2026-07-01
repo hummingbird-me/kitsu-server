@@ -8,8 +8,10 @@ GIT
       pundit
       rails (>= 4.2.1)
 
-PATH
-  remote: vendor/gems/graphql-fancy_loader
+GIT
+  remote: https://github.com/punoqun/graphql-fancy-loader.git
+  revision: 9c549ef30cf8383e28e46fe8ce721da69d5449f4
+  branch: main
   specs:
     graphql-fancy_loader (0.2.0)
       activesupport (>= 5.0, < 9.0)
