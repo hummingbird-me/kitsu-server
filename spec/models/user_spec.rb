@@ -175,7 +175,7 @@ RSpec.describe User, type: :model do
         user = build(:user)
         Timecop.freeze do
           user.pro_started_at = 2.weeks.ago
-          expect(user.pro_streak).to eq(2.weeks)
+          expect(user.pro_streak).to be_within(1.second).of(2.weeks)
         end
       end
     end

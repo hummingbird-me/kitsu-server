@@ -118,19 +118,19 @@ class User < ApplicationRecord
     "\u5350"
   ].join.freeze
 
-  enum rating_system: { simple: 0, advanced: 1, regular: 2 }
-  enum status: { unregistered: 0, registered: 1, aozora: 2 }
-  enum theme: { light: 0, dark: 1 }
-  enum pro_tier: { ao_pro: 0, ao_pro_plus: 1, pro: 2, patron: 3 }
-  enum email_status: { email_unconfirmed: 0, email_confirmed: 1, email_bounced: 2 }
-  enum title_language_preference: { canonical: 0, romanized: 1, localized: 2 }
-  enum sfw_filter_preference: { sfw: 0, nsfw_sometimes: 1, nsfw_everywhere: 2 }
+  enum :rating_system, { simple: 0, advanced: 1, regular: 2 }
+  enum :status, { unregistered: 0, registered: 1, aozora: 2 }
+  enum :theme, { light: 0, dark: 1 }
+  enum :pro_tier, { ao_pro: 0, ao_pro_plus: 1, pro: 2, patron: 3 }
+  enum :email_status, { email_unconfirmed: 0, email_confirmed: 1, email_bounced: 2 }
+  enum :title_language_preference, { canonical: 0, romanized: 1, localized: 2 }
+  enum :sfw_filter_preference, { sfw: 0, nsfw_sometimes: 1, nsfw_everywhere: 2 }
 
   rolify
   flag :permissions, %i[admin community_mod database_mod]
   flag :flags, %i[require_email_validation banned shadow_banned]
   has_secure_password validations: false
-  update_index('users#user') { self }
+  update_index('users') { self }
   update_algolia('AlgoliaUsersIndex')
 
   belongs_to :waifu, optional: true, class_name: 'Character'
@@ -306,16 +306,6 @@ class User < ApplicationRecord
     sfw_filter_preference == 'sfw'
   end
 
-  def stripe_customer
-    @stripe_customer ||= if stripe_customer_id
-      Stripe::Customer.retrieve(stripe_customer_id)
-    else
-      customer = Stripe::Customer.create(email:)
-      self.stripe_customer_id = customer.id
-      customer
-    end
-  end
-
   def blocked?(user)
     Block.exists?(user: [self, user], blocked: [self, user])
   end
@@ -464,11 +454,6 @@ class User < ApplicationRecord
     update_title
     update_profile_completed
     update_feed_completed
-  end
-
-  after_commit on: :update do
-    # Update email on Stripe
-    stripe_customer.save(email:) if previous_changes['email']
   end
 
   after_commit if: ->(u) { u.previous_changes['email'] && !Rails.env.staging? } do

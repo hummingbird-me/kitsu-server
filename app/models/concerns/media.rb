@@ -17,7 +17,7 @@ module Media
     friendly_id :slug_candidates, use: %i[slugged finders history]
     resourcify
 
-    update_index("media##{name.underscore}") { self }
+    update_index(name.underscore) { self }
     update_algolia('AlgoliaMediaIndex')
 
     # Genre/Categories/Tags
@@ -83,7 +83,7 @@ module Media
     accepts_nested_attributes_for :inverse_media_relationships, allow_destroy: true
 
     delegate :year, to: :start_date, allow_nil: true
-    serialize :release_schedule, IceCube::Schedule
+    serialize :release_schedule, coder: IceCube::Schedule
 
     # finished: end date has passed
     # current: currently between start and end date

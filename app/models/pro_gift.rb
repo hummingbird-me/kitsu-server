@@ -1,7 +1,7 @@
 class ProGift < ApplicationRecord
   belongs_to :from, class_name: 'User', required: true
   belongs_to :to, class_name: 'User', required: true
-  enum tier: {
+  enum :tier, {
     pro: 1,
     patron: 2
   }

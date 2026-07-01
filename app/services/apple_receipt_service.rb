@@ -43,8 +43,8 @@ class AppleReceiptService
 
   def http
     @http ||= Faraday.new do |builder|
-      builder.use FaradayMiddleware::EncodeJson
-      builder.use FaradayMiddleware::ParseJson, content_type: /\bjson$/
+      builder.request :json
+      builder.response :json, content_type: /\bjson$/
       builder.adapter Faraday.default_adapter
     end
   end

@@ -10,13 +10,11 @@ RSpec.describe Directives::SitePermission do
   end
 
   let(:schema) do
+    qt = query_type
     Class.new(GraphQL::Schema) do
+      query(qt)
       use GraphQL::Schema::Visibility
     end
-  end
-
-  before do
-    schema.query(query_type)
   end
 
   it 'does not affect unrelated fields' do

@@ -84,8 +84,18 @@ class LibraryEntryResource < BaseResource
   # END DEPRECATED
 
   def self.status_counts(filters, opts = {})
+    filters ||= {}
     return if should_query?(filters)
-    find_records(filters, opts).group(:status).count
+
+    options = opts.dup
+    join_manager = JSONAPI::ActiveRelation::JoinManager.new(
+      resource_klass: self,
+      filters:
+    )
+    options[:_relation_helper_options] = { join_manager:, sort_fields: [] }
+    records = apply_joins(records(options), join_manager, options)
+    records = filter_records(records, filters, options) unless filters.empty?
+    records.group(:status).count
   end
 
   def self.sortable_fields(context)
@@ -96,7 +106,7 @@ class LibraryEntryResource < BaseResource
     TitleSortableFields.new(fields)
   end
 
-  def self.apply_sort(records, order_options, context = {})
+  def self.apply_sort(records, order_options, options = {})
     # For each requested sort option, decide whether to use the title sort logic
     order_options = order_options.map do |field, dir|
       [(TITLE_SORT.match?(field) ? :title : :other), field, dir]
@@ -110,15 +120,15 @@ class LibraryEntryResource < BaseResource
     # Send each list to either apply_title_sort or super
     order_options.each do |(type, sorts)|
       records = if type == :title
-        apply_title_sort(records, sorts, context)
+        apply_title_sort(records, sorts, options)
       else
-        super(records, sorts, context)
+        super(records, sorts, options)
       end
     end
     records
   end
 
-  def self.apply_title_sort(records, order_options, _context = {})
+  def self.apply_title_sort(records, order_options, _options = {})
     order_options.each_pair do |field, direction|
       media, title = TITLE_SORT.match(field.to_s)[1..-1]
       direction = direction.upcase

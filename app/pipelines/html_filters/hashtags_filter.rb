@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class HTMLFilters::HashtagsFilter < HTML::Pipeline::Filter
+class HTMLFilters::HashtagsFilter
   # These regexex are reproduced from the twitter/tweet-text library, which is licensed under
   # the Apache 2.0 license.  The originals can be found at the following URL:
   #
@@ -40,6 +40,14 @@ class HTMLFilters::HashtagsFilter < HTML::Pipeline::Filter
   HASHTAG_LETTERS_NUMERALS_SET = "[#{HASHTAG_LETTERS_NUMERALS}]".freeze
 
   VALID_HASHTAG = /(^|\uFE0E|[^&#{HASHTAG_LETTERS_NUMERALS}])(#|\uFF03)(?!\uFE0F|\u20E3)(#{HASHTAG_LETTERS_NUMERALS_SET}*#{HASHTAG_LETTERS_SET}#{HASHTAG_LETTERS_NUMERALS_SET}*)/i # rubocop:disable Layout/LineLength
+
+  attr_reader :doc, :result, :context
+
+  def initialize(text, context = {}, result = {})
+    @doc = text.is_a?(String) ? Nokogiri::HTML.fragment(text) : text
+    @context = context
+    @result = result
+  end
 
   def call
     result[:hashtags] ||= []

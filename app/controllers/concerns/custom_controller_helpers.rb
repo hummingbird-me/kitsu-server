@@ -17,7 +17,7 @@ module CustomControllerHelpers
   end
 
   def serialize_model(model)
-    resource = BaseResource.resource_for_model(model)
+    resource = BaseResource.resource_klass_for_model(model)
     serializer = JSONAPI::ResourceSerializer.new(resource)
     serializer.serialize_to_hash(resource.new(model, context))
   end

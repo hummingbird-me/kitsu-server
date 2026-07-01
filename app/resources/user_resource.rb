@@ -101,7 +101,7 @@ class UserResource < BaseResource
     records.where(id: current_user&.id) || User.none
   }
 
-  index UsersIndex::User
+  index UsersIndex
   query :query,
     mode: :query,
     apply: ->(values, _ctx) {

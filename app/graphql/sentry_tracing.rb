@@ -1,26 +1,31 @@
 # frozen_string_literal: true
 
-class SentryTracing
-  def self.trace(key, data)
-    if key.start_with?('execute_query')
-      # Set the transaction name based on the operation type and name
-      selected_op = data[:query].selected_operation
-      if selected_op
-        op_type = selected_op.operation_type
-        op_name = selected_op.name || 'anonymous'
-      else
-        op_type = 'query'
-        op_name = 'anonymous'
-      end
+module SentryTracing
+  def execute_query(query:)
+    trace_query(query) { super }
+  end
 
-      Sentry.with_scope do
-        Sentry.configure_scope do |scope|
-          scope.set_transaction_name("GraphQL/#{op_type}.#{op_name}")
-        end
+  def execute_query_lazy(query:, multiplex:)
+    trace_query(query) { super }
+  end
 
-        yield
-      end
+  private
+
+  def trace_query(query)
+    selected_op = query&.selected_operation
+    if selected_op
+      op_type = selected_op.operation_type
+      op_name = selected_op.name || 'anonymous'
     else
+      op_type = 'query'
+      op_name = 'anonymous'
+    end
+
+    Sentry.with_scope do
+      Sentry.configure_scope do |scope|
+        scope.set_transaction_name("GraphQL/#{op_type}.#{op_name}")
+      end
+
       yield
     end
   end

@@ -9,11 +9,11 @@ class CharacterResource < BaseResource
 
   filter :slug
 
-  index CharactersIndex::Character
+  index CharactersIndex
   query :name,
     mode: :query,
     apply: ->(values, _ctx) {
-      CharactersIndex::Character.query_for(values.join(' '))
+      CharactersIndex.query_for(values.join(' '))
     }
 
   def description

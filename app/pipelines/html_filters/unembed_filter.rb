@@ -1,12 +1,13 @@
-class HTMLFilters::UnembedFilter < HTML::Pipeline::Filter
-  def call
-    doc.search('iframe, img').each do |embed|
-      href = to_href(embed['src'])
-      embed.swap <<-EOF.squish
-        <a href="#{href}" rel="nofollow">#{href}</a>
-      EOF
-    end
-    doc
+class HTMLFilters::UnembedFilter < HTMLPipeline::NodeFilter
+  SELECTOR = Selma::Selector.new(match_element: 'iframe, img')
+
+  def selector
+    SELECTOR
+  end
+
+  def handle_element(element)
+    href = to_href(element['src'])
+    element.replace(%(<a href="#{href}" rel="nofollow">#{href}</a>), as: :html)
   end
 
   private

@@ -53,42 +53,42 @@ module SearchableResource
       filters.keys.any? { |key| @_query_fields.include?(key) }
     end
 
-    # Override the #find_records method to search when called upon
-    def find_records(filters, opts = {})
+    def find(filters, options = {})
+      return super(filters, options) unless should_query?(filters)
+
+      resources_for(find_records(filters, options), options[:context])
+    end
+
+    def find_fragments(filters, opts = {})
       return super(filters, opts) unless should_query?(filters)
+
+      build_resource_fragments(find_records(filters, opts), opts)
+    end
+
+    def count(filters, opts = {})
+      return super(filters, opts) unless should_query?(filters)
+      return 0 if filters.values.any?(&:nil?)
+
+      apply_scopes(filters, opts).total_count
+    end
+
+    # Compatibility helper for app code which still needs the old relation.
+    def find_records(filters, opts = {})
+      filters ||= {}
+      return records_for_filters(filters, opts) unless should_query?(filters)
       return [] if filters.values.any?(&:nil?)
 
       # Apply scopes and load
       load_query_records(apply_scopes(filters, opts), opts)
     end
 
-    def find_serialized_with_caching(filters, serializer, opts = {})
-      return super(filters, serializer, opts) unless should_query?(filters)
-      records = find_records(filters, opts).reject(&:nil?)
-      cached_resources_for(records, serializer, opts)
-    end
-
-    def load_query_records(query, opts = {})
-      include_directives = opts[:include_directives]
-      unless include_directives
-        return _search_service ? query.to_a : query.load.to_a
-      end
-
-      model_includes = resolve_relationship_names_to_relations(self,
-        include_directives.model_includes, opts)
-
-      if _search_service
-        query.includes(model_includes).to_a
-      else
-        query.load(scope: -> { includes(model_includes) }).to_a
-      end
+    def load_query_records(query, _opts = {})
+      _search_service ? query.to_a : query.load.to_a
     end
 
     # Count all search results
     def find_count(filters, opts = {})
-      return super(filters, opts) unless should_query?(filters)
-      return 0 if filters.values.any?(&:nil?)
-      apply_scopes(filters, opts).total_count
+      count(filters, opts)
     end
 
     # Allow sorting on anything queryable + _score
@@ -107,23 +107,71 @@ module SearchableResource
 
     private
 
-    def pluck_arel_attributes(relation, *attrs)
-      if relation.is_a?(Chewy::Query)
-        attr_names = attrs.map { |a| a.name.to_s }
-        relation = relation.only(*attr_names)
-        relation.map { |row| row.attributes.values_at(*attr_names) }
-      elsif relation.is_a?(Array)
-        attr_names = attrs.map { |a| a.name.to_s }
-        relation.map { |row| row.attributes.values_at(*attr_names) }
-      else
-        conn = relation.connection
-        quoted_attrs = attrs.map do |attr|
-          quoted_table = conn.quote_table_name(attr.relation.table_alias || attr.relation.name)
-          quoted_column = conn.quote_column_name(attr.name)
-          Arel.sql("#{quoted_table}.#{quoted_column}")
-        end
-        relation.pluck(*quoted_attrs)
+    def records_for_filters(filters, opts = {})
+      sort_criteria = opts[:sort_criteria] || []
+      join_manager = JSONAPI::ActiveRelation::JoinManager.new(
+        resource_klass: self,
+        filters:,
+        sort_criteria:
+      )
+
+      apply_request_settings_to_records(
+        records: records(opts),
+        filters:,
+        sort_criteria:,
+        paginator: opts[:paginator],
+        join_manager:,
+        options: opts
+      )
+    end
+
+    def build_resource_fragments(records, opts = {})
+      records.each_with_object({}) do |record, fragments|
+        next if record.nil?
+
+        resource_klass = resource_klass_for_model(record)
+        id = record.public_send(resource_klass._primary_key)
+        next if id.nil?
+
+        identity = JSONAPI::ResourceIdentity.new(resource_klass, id)
+        fragment = JSONAPI::ResourceFragment.new(identity)
+
+        add_fragment_cache(fragment, resource_klass, record) if opts[:cache]
+        add_fragment_attributes(fragment, resource_klass, record, opts[:attributes])
+
+        fragments[identity] = fragment
       end
+    end
+
+    def add_fragment_cache(fragment, resource_klass, record)
+      cache_field = resource_klass.attribute_to_model_field(:_cache_field)
+      return unless record.respond_to?(cache_field[:name])
+
+      fragment.cache = cast_fragment_value(
+        resource_klass,
+        record.public_send(cache_field[:name]),
+        cache_field[:type]
+      )
+    end
+
+    def add_fragment_attributes(fragment, resource_klass, record, attributes)
+      Array.wrap(attributes).each do |attribute|
+        model_field = resource_klass.attribute_to_model_field(attribute)
+        next unless record.respond_to?(model_field[:name])
+
+        fragment.add_attribute(
+          attribute,
+          cast_fragment_value(
+            resource_klass,
+            record.public_send(model_field[:name]),
+            model_field[:type]
+          )
+        )
+      end
+    end
+
+    def cast_fragment_value(resource_klass, value, type)
+      type ? resource_klass.cast_to_attribute_type(value, type) : value
     end
 
     def apply_scopes(filters, opts = {})
@@ -157,11 +205,6 @@ module SearchableResource
       context[:policy_used]&.call
 
       query
-    end
-
-    def preload_included_fragments(resources, records, serializer, options)
-      return unless records.is_a?(ActiveRecord::Relation)
-      super(resources, records, serializer, options)
     end
 
     def search_policy_scope

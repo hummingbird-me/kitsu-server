@@ -5,7 +5,7 @@ class LibraryEvent < ApplicationRecord
   belongs_to :manga, optional: true
   belongs_to :drama, optional: true
 
-  enum kind: %i[progressed updated reacted rated annotated]
+  enum :kind, %i[progressed updated reacted rated annotated]
   validates :kind, presence: true
 
   # 2017 Toy had horrible naming conventions and 2017 Nuck approved shitty code of mine.

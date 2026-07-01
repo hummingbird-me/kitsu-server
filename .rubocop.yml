@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-rails
   - rubocop-rspec
   - rubocop-performance
@@ -8,10 +8,11 @@ AllCops:
     - db/**/*
     - bin/**/*
     - Guardfile
+    - vendor/**/*
   DisplayCopNames: false
   DisplayStyleGuide: true
   StyleGuideCopsOnly: false
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 4.0
 Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 Style/BlockDelimiters:

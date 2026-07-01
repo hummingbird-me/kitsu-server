@@ -6,5 +6,5 @@ class DramaResource < MediaResource
   has_many :drama_staff
 
   # ElasticSearch hookup
-  index MediaIndex::Drama
+  index DramaIndex
 end

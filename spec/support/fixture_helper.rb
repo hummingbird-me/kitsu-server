@@ -35,7 +35,16 @@ class Fixture
   end
 end
 
-# Global helper method for easy, cached access to fixtures
-def fixture(name, opts = {})
-  Fixture.new(name, opts).to_s
+# Helper method for easy, cached access to fixtures.
+#
+# Included via RSpec config so it takes precedence over Rails 8.1's
+# `ActiveRecord::TestFixtures#fixture`, which otherwise shadows this helper.
+module FixtureHelper
+  def fixture(name, opts = {})
+    Fixture.new(name, opts).to_s
+  end
+end
+
+RSpec.configure do |config|
+  config.include FixtureHelper
 end

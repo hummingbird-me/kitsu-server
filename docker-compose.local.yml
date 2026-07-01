@@ -1,0 +1,91 @@
+# Local boot-check stack for kitsu-server.
+# Mirrors the service versions used in .github/workflows/test.yml.
+# Usage:
+#   docker compose -f docker-compose.local.yml build
+#   docker compose -f docker-compose.local.yml run --rm app rake db:create db:schema:load
+#   docker compose -f docker-compose.local.yml run --rm app rake graphql:dump_schema
+#   docker compose -f docker-compose.local.yml down -v
+
+services:
+  postgres:
+    image: postgres:10-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kitsu_development
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:alpine
+
+  elasticsearch:
+    image: elasticsearch:8.19.3
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  typesense:
+    image: typesense/typesense:0.25.0
+    command: --data-dir /tmp --api-key xyz
+
+  minio:
+    image: minio/minio
+    command: server /data
+    environment:
+      MINIO_ROOT_USER: miniotest
+      MINIO_ROOT_PASSWORD: miniotest
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      until /usr/bin/mc alias set local http://minio:9000 miniotest miniotest; do sleep 1; done;
+      /usr/bin/mc mb --ignore-existing local/kitsu-ugc-test;
+      exit 0;
+      "
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+      typesense:
+        condition: service_started
+      createbuckets:
+        condition: service_completed_successfully
+    environment:
+      RAILS_ENV: development
+      LOG_LEVEL: warn
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/kitsu_development
+      REDIS_HOST: redis
+      REDIS_URL: redis://redis:6379/0
+      ELASTICSEARCH_HOST: elasticsearch:9200
+      ELASTICSEARCH_URL: elasticsearch:9200
+      TYPESENSUAL_API_KEY: xyz
+      TYPESENSUAL_NODES: http://typesense:8108/
+      AWS_ENDPOINT: http://minio:9000
+      AWS_BUCKET: kitsu-ugc-test
+      AWS_ACCESS_KEY_ID: miniotest
+      AWS_SECRET_ACCESS_KEY: miniotest
+    ports:
+      - "3000:80"
+    volumes:
+      - .:/opt/kitsu/server

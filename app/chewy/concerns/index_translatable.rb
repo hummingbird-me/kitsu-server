@@ -10,9 +10,9 @@ module IndexTranslatable
 
   class_methods do
     def translatable_field(name, opts = {})
-      field name, { type: 'object' }.merge(opts)
+      field name, **{ type: 'object' }.merge(opts)
       TRANSLATION_MAPPINGS.each do |mask, analyzer|
-        template "#{name}.#{mask}", type: 'string', analyzer: analyzer
+        template "#{name}.#{mask}", type: 'text', analyzer: analyzer
       end
     end
   end

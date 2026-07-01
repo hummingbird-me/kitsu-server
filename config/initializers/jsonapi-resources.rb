@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require Rails.root.join('vendor/resource_serializer')
 require Rails.root.join('lib/instrumented_processor')
+require Rails.root.join('lib/resource_serializer_compat')
 
 JSONAPI_RESOURCES_CACHE_HITS_TOTAL = $prometheus.register(
   :counter,
@@ -14,29 +14,6 @@ JSONAPI_RESOURCES_CACHE_MISSES_TOTAL = $prometheus.register(
   'jsonapi_resources_cache_misses_total',
   'Number of cache misses for JSONAPI::Resources'
 )
-
-module FixIncludeErrors
-  def get_related(current_path)
-    current = @include_directives_hash
-    current_resource_klass = @resource_klass
-    current_path.split('.').each do |fragment|
-      fragment = fragment.to_sym
-
-      if current_resource_klass
-        current_relationship = current_resource_klass._relationships[fragment]
-        current_resource_klass = current_relationship.try(:resource_klass)
-      end
-
-      include_in_join = @force_eager_load || !current_relationship || current_relationship.eager_load_on_include
-
-      current[:include_related][fragment] ||= { include: false, include_related: {},
-                                                include_in_join: }
-      current = current[:include_related][fragment]
-    end
-    current
-  end
-end
-JSONAPI::IncludeDirectives.prepend(FixIncludeErrors)
 
 JSONAPI.configure do |config|
   # Keying
@@ -55,7 +32,7 @@ JSONAPI.configure do |config|
   config.top_level_meta_record_count_key = :count
 
   # Instrumentation
-  config.default_processor_klass = InstrumentedProcessor
+  config.default_processor_klass_name = 'InstrumentedProcessor'
   config.resource_cache_usage_report_function = ->(resource, hits, misses) do
     JSONAPI_RESOURCES_CACHE_HITS_TOTAL.observe(hits, resource:)
     JSONAPI_RESOURCES_CACHE_MISSES_TOTAL.observe(misses, resource:)

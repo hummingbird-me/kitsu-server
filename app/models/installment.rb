@@ -3,7 +3,7 @@ class Installment < ApplicationRecord
   ranks :release_order
   ranks :alternative_order
 
-  enum tag: {
+  enum :tag, {
     main_story: 0,
     side_story: 1,
     spinoff: 2,

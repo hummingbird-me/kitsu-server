@@ -57,15 +57,24 @@ class BaseIndex
       "#{Rails.env}_#{_index}"
     end
 
+    # Algolia is only usable when credentials are configured. When they are
+    # absent (e.g. in tests/CI) indexing and search become no-ops.
+    def enabled?
+      ENV['ALGOLIA_APP_ID'].present? && ENV['ALGOLIA_UPDATE_KEY'].present?
+    end
+
     def index_name=(value)
       @_index = nil
       self._index = value
     end
 
     def search(query, opts = {})
+      return [] unless enabled?
+
       formatted_opts = opts.deep_transform_keys { |key| key.to_s.camelize(:lower) }
 
-      hits = index.search(query, formatted_opts)['hits']
+      response = client.search_single_index(index_name, { 'query' => query }.merge(formatted_opts))
+      hits = response.respond_to?(:hits) ? response.hits : response['hits']
       result_ids = hits.each_with_object({}) do |value, acc|
         acc[value['kind']] ||= []
         acc[value['kind']] << value['id']
@@ -76,8 +85,8 @@ class BaseIndex
       hits.map { |hit| results.dig(hit['kind'], hit['id']) }.compact
     end
 
-    def index
-      @_index ||= Algolia::Index.new(index_name)
+    def client
+      @_client ||= Algolia::SearchClient.create(ENV['ALGOLIA_APP_ID'], ENV['ALGOLIA_UPDATE_KEY'])
     end
 
     def inherited(subclass)
@@ -88,11 +97,11 @@ class BaseIndex
     end
 
     def index!(model)
-      return if Rails.env.development?
+      return if Rails.env.development? || !enabled?
       model.in_batches do |group|
         associated = associated_for(group)
         serialized = group.map { |record| new(record, associated: associated[record.id]).as_json }
-        index.add_objects(serialized)
+        client.save_objects(index_name, serialized)
       end
     end
 
@@ -215,7 +224,7 @@ class BaseIndex
     end
   end
 
-  delegate :index, to: :class
+  delegate :client, :index_name, to: :class
 
   def initialize(model, new: true, associated: nil)
     @_model = model
@@ -254,14 +263,14 @@ class BaseIndex
   end
 
   def save!
-    return if Rails.env.development?
+    return if Rails.env.development? || !self.class.enabled?
 
     if _new || _model.new_record?
-      index.add_object(as_json)
+      client.save_object(index_name, as_json)
     elsif _model.destroyed?
-      index.delete_object(algolia_id)
+      client.delete_object(index_name, algolia_id)
     elsif dirty?
-      index.save_object(as_json)
+      client.save_object(index_name, as_json)
     end
   rescue Algolia::AlgoliaError => e
     Sentry.capture_exception(e)

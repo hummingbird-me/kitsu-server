@@ -3,7 +3,6 @@
 class KitsuSchema < GraphQL::Schema
   include ApolloFederation::Schema
   federation version: '2.0'
-  import_directives %w[tag key shareable]
 
   default_max_page_size 2000
 
@@ -12,7 +11,7 @@ class KitsuSchema < GraphQL::Schema
 
   use GraphQL::Schema::Warden
   use GraphQL::Batch
-  tracer SentryTracing
+  trace_with SentryTracing
 
   query_analyzer Analysis::MaxNodeLimit
   query_analyzer Analysis::PrometheusMetrics

@@ -12,7 +12,8 @@ module SortableByFollowing
 
     def sort_records(records, order_options, options = {})
       if order_options.delete('following')
-        current_user = options[:current_user]&.resource_owner
+        context = options[:context] || options
+        current_user = context[:current_user]&.resource_owner
         records = records.followed_first(current_user) if current_user
       end
       super(records, order_options, options)

@@ -7,8 +7,8 @@ class GroupMember < ApplicationRecord
   counter_culture :group, column_name: ->(model) {
     model.pleb? ? nil : 'leaders_count'
   }
-  update_index('users#group_member') { self }
-  enum rank: %i[pleb mod admin]
+  update_index('group_members') { self }
+  enum :rank, %i[pleb mod admin]
   scope :with_permission, ->(perm) {
     joins(:permissions).merge(GroupPermission.for_permission(perm))
   }

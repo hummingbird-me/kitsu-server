@@ -6,10 +6,10 @@ class Group < ApplicationRecord
 
   friendly_id :name, use: %i[slugged finders history]
   processable :rules, RulesPipeline
-  enum privacy: %i[open closed restricted]
+  enum :privacy, %i[open closed restricted]
 
-  update_index('groups#group') { self }
-  update_index('users#group_member') { members }
+  update_index('groups') { self }
+  update_index('group_members') { members }
   update_algolia('AlgoliaGroupsIndex')
 
   scope :public_visible, -> { open.or(restricted) }

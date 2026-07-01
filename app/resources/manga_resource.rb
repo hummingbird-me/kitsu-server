@@ -5,7 +5,7 @@ class MangaResource < MediaResource
   attribute :manga_type # DEPRECATED
 
   # ElasticSearch hookup
-  index MediaIndex::Manga
+  index MangaIndex
   query :chapter_count, MediaResource::NUMERIC_QUERY
 
   has_many :chapters
