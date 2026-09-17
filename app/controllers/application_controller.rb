@@ -5,17 +5,19 @@ class ApplicationController < JSONAPI::ResourceController
   include DoorkeeperHelpers
   include Pundit::ResourceController
 
+  before_action :validate_token!
+  before_action :tag_sentry_context
+
+  around_action :store_user_on_thread
+  around_action :store_region_on_thread
+  around_action :flush_buffered_feeds
+
   def base_url
-    super + '/api/edge'
+    "#{super}/api/edge"
   end
 
   # TODO: get rid of this dumb hack for pundit-resources
   def enforce_policy_use(*); end
-
-  before_action :validate_token!
-  around_action :store_user_on_thread
-  around_action :store_region_on_thread
-  around_action :flush_buffered_feeds
 
   def flush_buffered_feeds
     yield
@@ -47,8 +49,6 @@ class ApplicationController < JSONAPI::ResourceController
     Sentry.capture_exception(error)
   end
 
-  before_action :tag_sentry_context
-
   def tag_sentry_context
     user = current_user&.resource_owner
     Sentry.set_user(
@@ -69,5 +69,25 @@ class ApplicationController < JSONAPI::ResourceController
       current_user:,
       remote_ip: request.remote_ip
     }
+  end
+
+  private
+
+  # Verifies the Cloudflare Turnstile token sent from the frontend client
+  def valid_captcha?(captcha_token)
+    secret_key = ENV.fetch('TURNSTILE_SECRET_KEY', nil)
+    return true if (secret_key.nil? || secret_key.strip.empty?) && !Rails.env.production?
+    return false if captcha_token.nil? || captcha_token.strip.empty?
+
+    response = HTTP.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', form: {
+      secret: secret_key,
+      response: captcha_token,
+      remoteip: request.remote_ip
+    })
+
+    response.parse['success'] == true
+  rescue StandardError => e
+    Sentry.capture_exception(e) if defined?(Sentry)
+    false
   end
 end

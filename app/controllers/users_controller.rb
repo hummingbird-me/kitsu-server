@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   include CustomControllerHelpers
 
@@ -17,7 +19,14 @@ class UsersController < ApplicationController
     render_jsonapi_error(400, 'No email provided')
   end
 
+  # Used newer Ruby
   def confirm
+    # Run the Turnstile verification check
+    unless valid_captcha?(params[:captcha_token])
+      return render_jsonapi_error(400,
+        'Bot verification failed. Please try again from the website.')
+    end
+
     token = Doorkeeper::AccessToken.by_token(params[:token])
     return render_jsonapi_error(403, 'Not Authorized') unless token&.acceptable?(:email_confirm)
     token.resource_owner.update(confirmed_at: Time.now)
@@ -33,13 +42,13 @@ class UsersController < ApplicationController
 
   def conflicts_index
     return render_jsonapi_error(403, 'Feature disabled') unless Flipper.enabled?(:aozora)
-    conflict_detector = Zorro::UserConflictDetector.new(user: user)
+    conflict_detector = Zorro::UserConflictDetector.new(user:)
     render json: conflict_detector.accounts
   end
 
   def conflicts_update
     return render_jsonapi_error(403, 'Feature disabled') unless Flipper.enabled?(:aozora)
-    render_jsonapi_error 400, 'You must choose' unless params[:chosen].present?
+    render_jsonapi_error 400, 'You must choose' if params[:chosen].blank?
     chosen = params[:chosen].to_sym
     conflict_resolver = Zorro::UserConflictResolver.new(user)
     user = conflict_resolver.merge_onto(chosen)
@@ -55,7 +64,7 @@ class UsersController < ApplicationController
         slug: u.slug,
         name: u.name,
         id: u.id,
-        weight: weight
+        weight:
       }
     end
     render json: alts
@@ -97,8 +106,8 @@ class UsersController < ApplicationController
   def flags
     user = current_user&.resource_owner
     features = Flipper.preload_all
-    flags = features.map { |f| [f.name, f.enabled?(user)] }.to_h
+    flags = features.to_h { |f| [f.name, f.enabled?(user)] }
     enabled_flags = flags.select { |_, enabled| enabled }
-    render json: enabled_flags, status: 200
+    render json: enabled_flags, status: :ok
   end
 end

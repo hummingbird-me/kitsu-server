@@ -108,4 +108,37 @@ RSpec.describe UsersController, type: :controller do
       expect(response.body).to have_resource(USER.dup, 'users', singular: true)
     end
   end
+
+  describe '#confirm' do
+    let(:user) { create(:user, confirmed_at: nil) }
+    let(:token) do
+      Doorkeeper::AccessToken.create(
+        resource_owner_id: user.id,
+        scopes: 'email_confirm',
+        expires_in: 7.days
+      )
+    end
+
+    context 'with an invalid or missing captcha token' do
+      it 'rejects account activation and returns a 400 bad request error' do
+        allow(controller).to receive(:valid_captcha?).and_return(false)
+
+        get :confirm, params: { token: token.token, captcha_token: nil }
+
+        expect(response).to have_http_status(:bad_request)
+        expect(user.reload.confirmed_at).to be_nil
+      end
+    end
+
+    context 'with a valid captcha token' do
+      it 'successfully activates the user account profile' do
+        allow(controller).to receive(:valid_captcha?).and_return(true)
+
+        get :confirm, params: { token: token.token, captcha_token: 'valid_mock_token' }
+
+        expect(response).to have_http_status(:ok)
+        expect(user.reload.confirmed_at).not_to be_nil
+      end
+    end
+  end/workspaces/kitsu-server/spec/controllers/users_controller_spec.rb
 end
