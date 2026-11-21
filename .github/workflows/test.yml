@@ -43,7 +43,7 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-          - ruby-3.3
+          - ruby-3.4
         experimental: [false]
 
     services:
