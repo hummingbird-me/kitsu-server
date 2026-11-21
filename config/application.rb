@@ -24,7 +24,11 @@ Bundler.require(*Rails.groups)
 module Kitsu
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
+
+    # Several models define more than one after_commit and were written against the old
+    # (reverse) execution order.
+    config.active_record.run_after_transaction_callbacks_in_order_defined = false
 
     # Some columns have database defaults that their enum can't represent (wordfilters.action),
     # so leave unchanged attributes out of INSERTs and let the database fill them in.
