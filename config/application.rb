@@ -24,7 +24,7 @@ Bundler.require(*Rails.groups)
 module Kitsu
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 7.2
 
     # Several models define more than one after_commit and were written against the old
     # (reverse) execution order.
