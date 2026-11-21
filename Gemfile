@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 # Core Stuff
 gem 'i18n', '1.8.11'
 gem 'puma'
-gem 'rails', '~> 7.1.0'
+gem 'rails', '~> 7.2.4'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
@@ -92,7 +92,7 @@ gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri' # Parse MAL XML shit
 gem 'oauth2' # Authenticate to Nyckel API
 gem 'one_signal' # Send push notifications
-gem 'paranoia', '~> 2.4' # Faux deletion
+gem 'paranoia', '~> 3.0' # Faux deletion
 gem 'postmark-rails' # Send via Postmark
 gem 'preferred_locale' # Process Accept-Language headers
 gem 'rack-timeout' # Rack timeout
