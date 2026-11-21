@@ -8,6 +8,12 @@ gem 'i18n', '1.8.11'
 gem 'puma'
 gem 'rails', '~> 8.1.0'
 
+# Standard library gems that Ruby 3.4+ stops bundling by default but our dependencies still expect
+gem 'benchmark' # mini_magick
+gem 'csv' # jsonapi-resources
+gem 'mutex_m' # httpclient (algoliasearch, google-api-client)
+gem 'observer' # factory_bot
+
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
 gem 'attr_encrypted' # encrypt linked_profile tokens
