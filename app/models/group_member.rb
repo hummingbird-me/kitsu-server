@@ -8,7 +8,7 @@ class GroupMember < ApplicationRecord
     model.pleb? ? nil : 'leaders_count'
   }
   update_index('users#group_member') { self }
-  enum rank: %i[pleb mod admin]
+  enum :rank, %i[pleb mod admin]
   scope :with_permission, ->(perm) {
     joins(:permissions).merge(GroupPermission.for_permission(perm))
   }

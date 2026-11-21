@@ -15,7 +15,7 @@ module AgeRatings
   end
 
   included do
-    enum age_rating: AGE_RATINGS
+    enum :age_rating, AGE_RATINGS
 
     scope :sfw, -> {
       where(age_rating: age_ratings.values_at(*SAFE_AGE_RATINGS) + [nil])

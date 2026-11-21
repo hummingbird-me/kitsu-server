@@ -31,8 +31,8 @@ class Report < ApplicationRecord
   belongs_to :user, optional: false
   belongs_to :moderator, class_name: 'User', optional: true
 
-  enum reason: { nsfw: 0, offensive: 1, spoiler: 2, bullying: 3, other: 4, spam: 5 }
-  enum status: { reported: 0, resolved: 1, declined: 2 }
+  enum :reason, { nsfw: 0, offensive: 1, spoiler: 2, bullying: 3, other: 4, spam: 5 }
+  enum :status, { reported: 0, resolved: 1, declined: 2 }
 
   validates :explanation, presence: true, if: :other?
   validates :reason, :status, presence: true

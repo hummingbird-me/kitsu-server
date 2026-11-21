@@ -13,7 +13,7 @@ class Post < ApplicationRecord
   processable :content, LongPipeline
   embed_links_in :content, to: :embed
 
-  enum locked_reason: { spam: 0, too_heated: 1, closed: 2 }
+  enum :locked_reason, { spam: 0, too_heated: 1, closed: 2 }
   belongs_to :user
   belongs_to :edited_by, class_name: 'User', optional: true
   belongs_to :target_user, class_name: 'User', optional: true

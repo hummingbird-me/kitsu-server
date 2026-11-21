@@ -11,7 +11,7 @@ class NotificationSetting < ApplicationRecord
     airing:         [false, true,  true,  true]
   }.freeze
 
-  enum setting_type: NOTIFICATION_TYPES
+  enum :setting_type, NOTIFICATION_TYPES
   belongs_to :user, required: true
 
   def enabled_platforms
