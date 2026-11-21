@@ -9,11 +9,19 @@ class DeprecationSubscriber < ActiveSupport::Subscriber
 
   module RubyWarningSubscriber
     def warn(message, category: nil, **_kwargs)
-      if category == :deprecated
+      if category == :deprecated && gem_frozen_string_warning?(message)
+        # Ruby 3.4 repeats this every time a gem mutates a string literal. faraday 0.17 (pinned by
+        # stream-ruby) and elasticsearch-transport 5 (pinned by our ES 2 cluster) do so on every
+        # request and can't be fixed from here, so only report the ones from our own code.
+      elsif category == :deprecated
         RUBY_DEPRECATOR.warn(message)
       else
         super
       end
+    end
+
+    def gem_frozen_string_warning?(message)
+      message.include?('will be frozen in the future') && message.start_with?(*Gem.path)
     end
   end
 
