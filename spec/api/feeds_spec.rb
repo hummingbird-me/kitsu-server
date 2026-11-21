@@ -4,7 +4,7 @@ require 'rails_helper'
 
 # Runs a feed read through the whole glue: FeedsController -> FeedQueryService -> Stream client ->
 # enrichment -> FeedSerializerService, with only Stream's HTTP API stubbed.
-RSpec.describe 'Feeds', type: :request do
+RSpec.describe 'Feeds' do
   let(:user) { create(:user) }
   let(:anime) { create(:anime) }
   let(:feed_post) { create(:post, user:, media: anime) }
@@ -44,7 +44,9 @@ RSpec.describe 'Feeds', type: :request do
     expect(activity.dig('relationships', 'subject', 'data')).to eq(
       'type' => 'posts', 'id' => feed_post.id.to_s
     )
-    expect(json.dig('meta', 'feed')).to include('group' => 'media_aggr', 'id' => "Anime-#{anime.id}")
+    expect(json.dig('meta', 'feed')).to include(
+      'group' => 'media_aggr', 'id' => "Anime-#{anime.id}"
+    )
   end
 
   it 'refuses feeds the requester may not see' do

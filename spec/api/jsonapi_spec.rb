@@ -4,7 +4,7 @@ require 'rails_helper'
 
 # Drives the JSON:API through the full Rack stack with a real OAuth token, so framework upgrades
 # that change request parsing, content negotiation or serialization get caught.
-RSpec.describe 'JSON:API', type: :request do
+RSpec.describe 'JSON:API' do
   let(:user) { create(:user) }
   let(:anime) { create(:anime) }
   let(:token) { Doorkeeper::AccessToken.create!(resource_owner_id: user.id, scopes: 'public') }
