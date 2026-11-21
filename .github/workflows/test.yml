@@ -43,11 +43,8 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-          - ruby-3.2
+          - ruby-3.3
         experimental: [false]
-        include:
-          - ruby: ruby-3.3
-            experimental: true
 
     services:
       minio:
