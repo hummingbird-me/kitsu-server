@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 # Core Stuff
 gem 'i18n', '1.8.11'
 gem 'puma'
-gem 'rails', '6.1.7.6'
+gem 'rails', '~> 7.0.8'
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
