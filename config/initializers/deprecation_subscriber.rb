@@ -3,10 +3,14 @@
 class DeprecationSubscriber < ActiveSupport::Subscriber
   class DisallowedDeprecation < StandardError; end
 
+  # Ruby's own deprecation warnings, reported like Rails' (ActiveSupport::Deprecation.warn is gone
+  # since Rails 7.2)
+  RUBY_DEPRECATOR = Rails.application.deprecators[:ruby] = ActiveSupport::Deprecation.new
+
   module RubyWarningSubscriber
     def warn(message, category: nil, **_kwargs)
       if category == :deprecated
-        ActiveSupport::Deprecation.warn(message)
+        RUBY_DEPRECATOR.warn(message)
       else
         super
       end
