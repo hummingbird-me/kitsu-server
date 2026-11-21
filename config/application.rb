@@ -24,7 +24,11 @@ Bundler.require(*Rails.groups)
 module Kitsu
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
+
+    # Some columns have database defaults that their enum can't represent (wordfilters.action),
+    # so leave unchanged attributes out of INSERTs and let the database fill them in.
+    config.active_record.partial_inserts = true
 
     # Enable assets (used by rails_admin, emails)
     config.assets.enabled = true
