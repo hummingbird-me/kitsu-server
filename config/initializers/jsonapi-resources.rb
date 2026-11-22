@@ -62,7 +62,8 @@ module PositionalRouteOptions
 end
 ActionDispatch::Routing::Mapper.prepend(PositionalRouteOptions::Mapper)
 ActionDispatch::Routing::Mapper::Resources::Resource.prepend(PositionalRouteOptions::Resource)
-ActionDispatch::Routing::Mapper::Resources::SingletonResource.prepend(PositionalRouteOptions::Resource)
+ActionDispatch::Routing::Mapper::Resources::SingletonResource
+  .prepend(PositionalRouteOptions::Resource)
 
 JSONAPI.configure do |config|
   # Keying
