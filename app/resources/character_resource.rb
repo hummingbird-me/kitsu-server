@@ -5,7 +5,6 @@ class CharacterResource < BaseResource
   has_one :primary_media, polymorphic: true
   has_many :castings
   has_many :media_characters
-  has_many :quotes
 
   filter :slug
 
