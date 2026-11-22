@@ -13,6 +13,7 @@ class Category < ApplicationRecord
   has_many :media, through: :media_categories
   has_many :anime, through: :media_categories, source: :media, source_type: 'Anime'
   has_many :manga, through: :media_categories, source: :media, source_type: 'Manga'
+  has_many :drama, through: :media_categories, source: :media, source_type: 'Drama'
   belongs_to :parent, class_name: 'Category', optional: true,
     touch: true, counter_cache: 'child_count'
   has_many :children, class_name: 'Category',

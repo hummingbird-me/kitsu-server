@@ -5,4 +5,5 @@ RSpec.describe Category, type: :model do
 
   it { is_expected.to have_many(:anime).through(:media_categories) }
   it { is_expected.to have_many(:manga).through(:media_categories) }
+  it { is_expected.to have_many(:drama).through(:media_categories) }
 end
