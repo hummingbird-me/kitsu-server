@@ -15,7 +15,7 @@ class GroupPermission < ApplicationRecord
   #
   # @!attribute [rw] permission
   # @return [owner tickets members leaders community content]
-  enum permission: %i[owner tickets members leaders community content]
+  enum :permission, %i[owner tickets members leaders community content]
 
   scope :for_permission, ->(perm) { send(perm).or(owner) }
   scope :visible_for, ->(user) {

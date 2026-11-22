@@ -6,7 +6,13 @@ source 'https://rubygems.org'
 # Core Stuff
 gem 'i18n', '1.8.11'
 gem 'puma'
-gem 'rails', '6.1.7.6'
+gem 'rails', '~> 8.1.0'
+
+# Standard library gems that Ruby 3.4+ stops bundling by default but our dependencies still expect
+gem 'benchmark' # mini_magick
+gem 'csv' # jsonapi-resources
+gem 'mutex_m' # httpclient (algoliasearch, google-api-client)
+gem 'observer' # factory_bot
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker
@@ -92,7 +98,7 @@ gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri' # Parse MAL XML shit
 gem 'oauth2' # Authenticate to Nyckel API
 gem 'one_signal' # Send push notifications
-gem 'paranoia', '~> 2.4' # Faux deletion
+gem 'paranoia', '~> 3.0' # Faux deletion
 gem 'postmark-rails' # Send via Postmark
 gem 'preferred_locale' # Process Accept-Language headers
 gem 'rack-timeout' # Rack timeout

@@ -2,7 +2,7 @@
 
 class IPFilter < ApplicationRecord
   self.inheritance_column = nil
-  enum type: {
+  enum :type, {
     asn: 1,
     city: 2,
     country: 3

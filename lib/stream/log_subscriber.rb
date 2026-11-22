@@ -38,7 +38,7 @@ module Stream
     end
 
     def format_name(name, duration, color)
-      self.color("#{name} (#{duration.round(1)}ms)", color, true)
+      self.color("#{name} (#{duration.round(1)}ms)", color, bold: true)
     end
 
     def format_feed(feed)

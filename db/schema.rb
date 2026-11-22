@@ -10,20 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_06_19_000000) do
-
+ActiveRecord::Schema[8.1].define(version: 2026_06_19_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
-  enable_extension "plpgsql"
 
   create_table "ama_subscribers", id: :serial, force: :cascade do |t|
     t.integer "ama_id", null: false
     t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["ama_id", "user_id"], name: "index_ama_subscribers_on_ama_id_and_user_id", unique: true
     t.index ["ama_id"], name: "index_ama_subscribers_on_ama_id"
     t.index ["user_id"], name: "index_ama_subscribers_on_user_id"
@@ -33,10 +32,10 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "author_id", null: false
     t.integer "original_post_id", null: false
     t.integer "ama_subscribers_count", default: 0, null: false
-    t.datetime "start_date", null: false
-    t.datetime "end_date", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "start_date", precision: nil, null: false
+    t.datetime "end_date", precision: nil, null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "description", default: {}, null: false
     t.index ["author_id"], name: "index_amas_on_author_id"
     t.index ["original_post_id"], name: "index_amas_on_original_post_id"
@@ -48,8 +47,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "episode_count"
     t.integer "episode_length"
     t.string "youtube_video_id", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.decimal "average_rating", precision: 5, scale: 2
     t.integer "user_count", default: 0, null: false
     t.string "age_rating_guide", limit: 255
@@ -90,8 +89,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "locale", null: false
     t.integer "licensor_id"
     t.string "notes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["anime_character_id", "person_id", "locale"], name: "index_anime_castings_on_character_person_locale", unique: true
     t.index ["anime_character_id"], name: "index_anime_castings_on_anime_character_id"
     t.index ["person_id"], name: "index_anime_castings_on_person_id"
@@ -101,8 +100,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "anime_id", null: false
     t.integer "character_id", null: false
     t.integer "role", default: 1, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["anime_id", "character_id"], name: "index_anime_characters_on_anime_id_and_character_id", unique: true
     t.index ["anime_id"], name: "index_anime_characters_on_anime_id"
     t.index ["character_id"], name: "index_anime_characters_on_character_id"
@@ -121,8 +120,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "high_vote_count", default: 0, null: false
     t.integer "neutral_vote_count", default: 0, null: false
     t.integer "low_vote_count", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["anime_id", "media_attribute_id"], name: "index_anime_media_attribute", unique: true
     t.index ["anime_id"], name: "index_anime_media_attributes_on_anime_id"
     t.index ["media_attribute_id"], name: "index_anime_media_attributes_on_media_attribute_id"
@@ -132,8 +131,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "anime_id", null: false
     t.integer "producer_id", null: false
     t.integer "role", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["anime_id"], name: "index_anime_productions_on_anime_id"
     t.index ["producer_id"], name: "index_anime_productions_on_producer_id"
   end
@@ -142,8 +141,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "anime_id", null: false
     t.integer "person_id", null: false
     t.string "role"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["anime_id", "person_id"], name: "index_anime_staff_on_anime_id_and_person_id", unique: true
     t.index ["anime_id"], name: "index_anime_staff_on_anime_id"
     t.index ["person_id"], name: "index_anime_staff_on_person_id"
@@ -152,8 +151,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "blocks", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "blocked_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["blocked_id"], name: "index_blocks_on_blocked_id"
     t.index ["user_id"], name: "index_blocks_on_user_id"
   end
@@ -163,8 +162,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "person_id"
     t.integer "character_id"
     t.string "role", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "voice_actor", default: false, null: false
     t.boolean "featured", default: false, null: false
     t.integer "order"
@@ -185,9 +184,9 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
-    t.datetime "image_updated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "image_updated_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "child_count", default: 0, null: false
     t.jsonb "description", default: {}, null: false
     t.string "ancestry", collation: "POSIX"
@@ -205,8 +204,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "category_favorites", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "category_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["category_id"], name: "index_category_favorites_on_category_id"
     t.index ["user_id"], name: "index_category_favorites_on_user_id"
   end
@@ -219,8 +218,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "volume_number"
     t.integer "length"
     t.date "published"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "filler"
     t.integer "volume_id"
     t.jsonb "description", default: {}, null: false
@@ -235,16 +234,16 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "person_id", null: false
     t.string "locale", null: false
     t.integer "licensor_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["media_character_id"], name: "index_character_voices_on_media_character_id"
     t.index ["person_id"], name: "index_character_voices_on_person_id"
   end
 
   create_table "characters", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "mal_id"
     t.citext "slug"
     t.integer "primary_media_id"
@@ -262,8 +261,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "comment_likes", id: :serial, force: :cascade do |t|
     t.integer "comment_id"
     t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["comment_id"], name: "index_comment_likes_on_comment_id"
     t.index ["user_id", "comment_id"], name: "index_comment_likes_on_user_id_and_comment_id", unique: true
     t.index ["user_id"], name: "index_comment_likes_on_user_id"
@@ -274,17 +273,17 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id", null: false
     t.text "content"
     t.text "content_formatted"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "deleted_at", precision: nil
     t.boolean "blocked", default: false, null: false
     t.integer "parent_id"
     t.integer "likes_count", default: 0, null: false
     t.integer "replies_count", default: 0, null: false
-    t.datetime "edited_at"
+    t.datetime "edited_at", precision: nil
     t.jsonb "embed"
     t.string "ao_id"
-    t.datetime "hidden_at"
+    t.datetime "hidden_at", precision: nil
     t.jsonb "moderation_scores"
     t.integer "held_reason"
     t.index ["ao_id"], name: "index_comments_on_ao_id", unique: true
@@ -298,8 +297,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "community_recommendation_follows", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "community_recommendation_request_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id", "community_recommendation_request_id"], name: "index_community_recommendation_follows_on_user_and_request", unique: true
     t.index ["user_id"], name: "index_community_recommendation_follows_on_user_id"
   end
@@ -307,8 +306,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "community_recommendation_requests", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "description", default: {}, null: false
     t.index ["user_id"], name: "index_community_recommendation_requests_on_user_id"
   end
@@ -320,8 +319,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "drama_id"
     t.integer "manga_id"
     t.integer "community_recommendation_request_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["anime_id"], name: "index_community_recommendations_on_anime_id"
     t.index ["drama_id"], name: "index_community_recommendations_on_drama_id"
     t.index ["manga_id"], name: "index_community_recommendations_on_manga_id"
@@ -335,8 +334,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "locale", null: false
     t.integer "licensor_id"
     t.string "notes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["drama_character_id", "person_id", "locale"], name: "index_drama_castings_on_character_person_locale", unique: true
     t.index ["drama_character_id"], name: "index_drama_castings_on_drama_character_id"
     t.index ["person_id"], name: "index_drama_castings_on_person_id"
@@ -346,8 +345,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "drama_id", null: false
     t.integer "character_id", null: false
     t.integer "role", default: 1, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["character_id"], name: "index_drama_characters_on_character_id"
     t.index ["drama_id", "character_id"], name: "index_drama_characters_on_drama_id_and_character_id", unique: true
     t.index ["drama_id"], name: "index_drama_characters_on_drama_id"
@@ -357,8 +356,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "drama_id", null: false
     t.integer "person_id", null: false
     t.string "role"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["drama_id", "person_id"], name: "index_drama_staff_on_drama_id_and_person_id", unique: true
     t.index ["drama_id"], name: "index_drama_staff_on_drama_id"
     t.index ["person_id"], name: "index_drama_staff_on_person_id"
@@ -382,8 +381,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.decimal "average_rating", precision: 5, scale: 2
     t.hstore "rating_frequencies", default: {}, null: false
     t.integer "user_count", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "popularity_rank"
     t.integer "rating_rank"
     t.integer "favorites_count", default: 0, null: false
@@ -413,8 +412,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "high_vote_count", default: 0, null: false
     t.integer "neutral_vote_count", default: 0, null: false
     t.integer "low_vote_count", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["drama_id", "media_attribute_id"], name: "index_drama_media_attribute", unique: true
     t.index ["drama_id"], name: "index_dramas_media_attributes_on_drama_id"
     t.index ["media_attribute_id"], name: "index_dramas_media_attributes_on_media_attribute_id"
@@ -423,8 +422,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "episodes", id: :serial, force: :cascade do |t|
     t.integer "media_id", null: false
     t.integer "number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "season_number"
     t.date "airdate"
     t.integer "length"
@@ -450,8 +449,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id", null: false
     t.integer "item_id", null: false
     t.string "item_type", limit: 255, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "fav_rank"
     t.index ["item_id", "item_type"], name: "index_favorites_on_item_id_and_item_type"
     t.index ["user_id", "item_id", "item_type"], name: "index_favorites_on_user_id_and_item_id_and_item_type", unique: true
@@ -462,16 +461,16 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "follows", id: :serial, force: :cascade do |t|
     t.integer "followed_id"
     t.integer "follower_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "hidden", default: false, null: false
     t.index ["followed_id", "follower_id"], name: "index_follows_on_followed_id_and_follower_id", unique: true
     t.index ["follower_id"], name: "index_follows_on_followed_id"
   end
 
   create_table "franchises", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.hstore "titles", default: {}, null: false
     t.string "canonical_title", default: "en_jp", null: false
   end
@@ -480,7 +479,7 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "slug", limit: 255, null: false
     t.integer "sluggable_id", null: false
     t.string "sluggable_type", limit: 40
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", unique: true
     t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
@@ -489,20 +488,20 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "gallery_images", id: :serial, force: :cascade do |t|
     t.integer "anime_id"
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "image_file_name", limit: 255
     t.string "image_content_type", limit: 255
     t.integer "image_file_size"
-    t.datetime "image_updated_at"
+    t.datetime "image_updated_at", precision: nil
     t.index ["anime_id"], name: "index_gallery_images_on_anime_id"
   end
 
   create_table "genres", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255
     t.citext "slug"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "description", default: {}, null: false
   end
 
@@ -527,8 +526,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "global_stats", id: :serial, force: :cascade do |t|
     t.string "type", null: false
     t.jsonb "stats_data", default: {}, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "group_action_logs", id: :serial, force: :cascade do |t|
@@ -537,8 +536,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "verb", null: false
     t.integer "target_id", null: false
     t.string "target_type", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.index ["created_at"], name: "index_group_action_logs_on_created_at"
     t.index ["group_id"], name: "index_group_action_logs_on_group_id"
   end
@@ -547,8 +546,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "group_id", null: false
     t.integer "user_id", null: false
     t.integer "moderator_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "notes"
     t.text "notes_formatted"
     t.index ["group_id"], name: "index_group_bans_on_group_id"
@@ -558,8 +557,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "group_categories", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.citext "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "description", default: {}, null: false
   end
 
@@ -567,11 +566,11 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "group_id", null: false
     t.integer "user_id", null: false
     t.integer "sender_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "revoked_at"
-    t.datetime "accepted_at"
-    t.datetime "declined_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "revoked_at", precision: nil
+    t.datetime "accepted_at", precision: nil
+    t.datetime "declined_at", precision: nil
     t.index ["group_id"], name: "index_group_invites_on_group_id"
     t.index ["sender_id"], name: "index_group_invites_on_sender_id"
     t.index ["user_id"], name: "index_group_invites_on_user_id"
@@ -582,15 +581,15 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id", null: false
     t.text "content", null: false
     t.text "content_formatted", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "group_members", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "group_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "rank", default: 0, null: false
     t.integer "unread_count", default: 0, null: false
     t.boolean "hidden", default: false, null: false
@@ -603,8 +602,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "group_neighbors", id: :serial, force: :cascade do |t|
     t.integer "source_id", null: false
     t.integer "destination_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["destination_id"], name: "index_group_neighbors_on_destination_id"
     t.index ["source_id"], name: "index_group_neighbors_on_source_id"
   end
@@ -612,8 +611,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "group_permissions", id: :serial, force: :cascade do |t|
     t.integer "group_member_id", null: false
     t.integer "permission", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["group_member_id"], name: "index_group_permissions_on_group_member_id"
   end
 
@@ -626,8 +625,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "naughty_id", null: false
     t.string "naughty_type", null: false
     t.integer "moderator_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["group_id"], name: "index_group_reports_on_group_id"
     t.index ["naughty_type", "naughty_id"], name: "index_group_reports_on_naughty_type_and_naughty_id"
     t.index ["status"], name: "index_group_reports_on_status"
@@ -639,8 +638,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id", null: false
     t.integer "kind", default: 0, null: false
     t.text "content", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["ticket_id"], name: "index_group_ticket_messages_on_ticket_id"
   end
 
@@ -649,8 +648,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "group_id", null: false
     t.integer "assignee_id"
     t.integer "status", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "first_message_id"
     t.index ["assignee_id"], name: "index_group_tickets_on_assignee_id"
     t.index ["group_id"], name: "index_group_tickets_on_group_id"
@@ -663,8 +662,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.citext "slug", null: false
     t.text "about", default: "", null: false
     t.integer "members_count", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "rules"
     t.text "rules_formatted"
     t.boolean "nsfw", default: false, null: false
@@ -676,7 +675,7 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.boolean "featured", default: false, null: false
     t.integer "category_id", null: false
     t.string "tagline", limit: 60
-    t.datetime "last_activity_at"
+    t.datetime "last_activity_at", precision: nil
     t.integer "pinned_post_id"
     t.jsonb "avatar_data"
     t.jsonb "cover_image_data"
@@ -689,8 +688,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "kind", default: 0, null: false
     t.integer "item_id"
     t.string "item_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "installments", id: :serial, force: :cascade do |t|
@@ -699,8 +698,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "media_type", null: false
     t.integer "release_order"
     t.integer "tag"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "alternative_order"
     t.index ["franchise_id"], name: "index_installments_on_franchise_id"
     t.index ["media_type", "media_id"], name: "index_installments_on_media_type_and_media_id"
@@ -725,8 +724,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "type", null: false
     t.text "pattern", null: false
     t.integer "actions", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "leader_chat_messages", id: :serial, force: :cascade do |t|
@@ -734,9 +733,9 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "group_id", null: false
     t.text "content", null: false
     t.text "content_formatted", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "edited_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "edited_at", precision: nil
     t.index ["group_id"], name: "index_leader_chat_messages_on_group_id"
     t.index ["user_id"], name: "index_leader_chat_messages_on_user_id"
   end
@@ -745,8 +744,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id", null: false
     t.integer "media_id", null: false
     t.integer "status", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "progress", default: 0, null: false
     t.boolean "private", default: false, null: false
     t.text "notes"
@@ -760,9 +759,9 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "drama_id"
     t.integer "rating"
     t.integer "time_spent", default: 0, null: false
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.datetime "progressed_at"
+    t.datetime "started_at", precision: nil
+    t.datetime "finished_at", precision: nil
+    t.datetime "progressed_at", precision: nil
     t.integer "media_reaction_id"
     t.integer "reaction_skipped", default: 0, null: false
     t.index ["anime_id", "id"], name: "index_library_entries_on_anime_id_and_id", where: "(anime_id IS NOT NULL)", comment: "Prevent pkey scans on small limits"
@@ -791,8 +790,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "action_performed", default: "create", null: false
     t.integer "sync_status", default: 0, null: false
     t.text "error_message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["linked_account_id"], name: "index_library_entry_logs_on_linked_account_id"
   end
 
@@ -804,8 +803,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "drama_id"
     t.integer "kind", null: false
     t.jsonb "changed_data", default: {}, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["anime_id"], name: "index_library_events_on_anime_id", where: "(anime_id IS NOT NULL)"
     t.index ["drama_id"], name: "index_library_events_on_drama_id", where: "(drama_id IS NOT NULL)"
     t.index ["library_entry_id"], name: "index_library_events_on_library_entry_id"
@@ -819,8 +818,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.boolean "share_to", default: false, null: false
     t.boolean "share_from", default: false, null: false
     t.string "encrypted_token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "encrypted_token_iv"
     t.string "type", null: false
     t.boolean "sync_to", default: false, null: false
@@ -836,15 +835,15 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "input_file_file_name"
     t.string "input_file_content_type"
     t.integer "input_file_file_size"
-    t.datetime "input_file_updated_at"
+    t.datetime "input_file_updated_at", precision: nil
     t.text "input_text"
     t.integer "status", default: 0, null: false
     t.integer "progress"
     t.integer "total"
     t.text "error_message"
     t.text "error_trace"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "input_file_data"
   end
 
@@ -853,8 +852,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.date "start_date"
     t.date "end_date"
     t.string "serialization", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "cover_image_top_offset", default: 0
     t.integer "volume_count"
     t.integer "chapter_count"
@@ -892,8 +891,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "manga_id", null: false
     t.integer "character_id", null: false
     t.integer "role", default: 1, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["character_id"], name: "index_manga_characters_on_character_id"
     t.index ["manga_id", "character_id"], name: "index_manga_characters_on_manga_id_and_character_id", unique: true
     t.index ["manga_id"], name: "index_manga_characters_on_manga_id"
@@ -905,8 +904,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "high_vote_count", default: 0, null: false
     t.integer "neutral_vote_count", default: 0, null: false
     t.integer "low_vote_count", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["manga_id", "media_attribute_id"], name: "index_manga_media_attribute", unique: true
     t.index ["manga_id"], name: "index_manga_media_attributes_on_manga_id"
     t.index ["media_attribute_id"], name: "index_manga_media_attributes_on_media_attribute_id"
@@ -916,8 +915,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "manga_id", null: false
     t.integer "person_id", null: false
     t.string "role"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["manga_id", "person_id"], name: "index_manga_staff_on_manga_id_and_person_id", unique: true
     t.index ["manga_id"], name: "index_manga_staff_on_manga_id"
     t.index ["person_id"], name: "index_manga_staff_on_person_id"
@@ -928,8 +927,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "external_id", null: false
     t.integer "item_id", null: false
     t.string "item_type", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "issue"
     t.index ["external_site", "external_id", "item_type", "item_id"], name: "index_mappings_on_external_and_item", unique: true
     t.index ["item_type", "item_id"], name: "index_mappings_on_item_type_and_item_id"
@@ -943,8 +942,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "media_id", null: false
     t.string "media_type", null: false
     t.integer "vote", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id", "media_id", "media_type"], name: "index_user_media_on_media_attr_votes", unique: true
     t.index ["user_id"], name: "index_media_attribute_votes_on_user_id"
   end
@@ -955,8 +954,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "neutral_title", null: false
     t.string "low_title", null: false
     t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["slug"], name: "index_media_attributes_on_slug"
     t.index ["title"], name: "index_media_attributes_on_title"
   end
@@ -965,8 +964,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "media_type", null: false
     t.bigint "media_id", null: false
     t.bigint "category_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["category_id"], name: "index_media_categories_on_category_id"
     t.index ["media_type", "media_id"], name: "index_media_categories_on_media_type_and_media_id"
   end
@@ -976,8 +975,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "media_type", null: false
     t.integer "character_id", null: false
     t.integer "role", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["character_id"], name: "index_media_characters_on_character_id"
     t.index ["media_type", "media_id"], name: "index_media_characters_on_media_type_and_media_id"
   end
@@ -986,8 +985,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "media_id"
     t.string "media_type"
     t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["media_type", "media_id"], name: "index_media_ignores_on_media_type_and_media_id"
     t.index ["user_id"], name: "index_media_ignores_on_user_id"
   end
@@ -997,8 +996,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "media_type", null: false
     t.integer "company_id", null: false
     t.integer "role", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["company_id"], name: "index_media_productions_on_company_id"
     t.index ["media_type", "media_id"], name: "index_media_productions_on_media_type_and_media_id"
   end
@@ -1006,8 +1005,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "media_reaction_votes", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "media_reaction_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["media_reaction_id", "user_id"], name: "index_media_reaction_votes_on_media_reaction_id_and_user_id", unique: true
     t.index ["media_reaction_id"], name: "index_media_reaction_votes_on_media_reaction_id"
     t.index ["user_id"], name: "index_media_reaction_votes_on_user_id"
@@ -1024,10 +1023,10 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "up_votes_count", default: 0, null: false
     t.integer "progress", default: 0, null: false
     t.string "reaction", limit: 140
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
-    t.datetime "hidden_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "hidden_at", precision: nil
     t.jsonb "moderation_scores"
     t.integer "held_reason"
     t.index ["anime_id"], name: "index_media_reactions_on_anime_id"
@@ -1046,8 +1045,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "destination_id", null: false
     t.string "destination_type", null: false
     t.integer "role", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["source_type", "source_id"], name: "index_media_relationships_on_source_type_and_source_id"
   end
 
@@ -1056,8 +1055,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "media_type", null: false
     t.integer "person_id", null: false
     t.string "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["media_type", "media_id"], name: "index_media_staff_on_media_type_and_media_id"
     t.index ["person_id"], name: "index_media_staff_on_person_id"
   end
@@ -1067,16 +1066,16 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "target_id", null: false
     t.string "target_type", null: false
     t.string "verb", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "not_interesteds", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "media_id"
     t.string "media_type", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_not_interesteds_on_user_id"
   end
 
@@ -1087,8 +1086,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.boolean "web_enabled", default: true
     t.boolean "mobile_enabled", default: true
     t.boolean "fb_messenger_enabled", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_notification_settings_on_user_id"
   end
 
@@ -1097,8 +1096,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "source_id"
     t.string "source_type", limit: 255
     t.hstore "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "notification_type", limit: 255
     t.boolean "seen", default: false
     t.index ["source_id"], name: "index_notifications_on_source_id"
@@ -1111,8 +1110,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
-    t.datetime "created_at", null: false
-    t.datetime "revoked_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "revoked_at", precision: nil
     t.string "scopes"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
@@ -1123,8 +1122,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at", null: false
+    t.datetime "revoked_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
     t.string "scopes"
     t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
     t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
@@ -1137,8 +1136,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "secret", null: false
     t.text "redirect_uri", null: false
     t.string "scopes", default: "", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "owner_id"
     t.string "owner_type"
     t.boolean "confidential", default: true, null: false
@@ -1150,8 +1149,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id"
     t.string "player_id"
     t.integer "platform"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_one_signal_players_on_user_id"
   end
 
@@ -1159,8 +1158,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "partner_deal_id", null: false
     t.string "code", limit: 255, null: false
     t.integer "user_id"
-    t.datetime "expires_at"
-    t.datetime "claimed_at"
+    t.datetime "expires_at", precision: nil
+    t.datetime "claimed_at", precision: nil
     t.index ["partner_deal_id", "user_id"], name: "index_partner_codes_on_partner_deal_id_and_user_id"
   end
 
@@ -1171,7 +1170,7 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "partner_logo_file_name", limit: 255
     t.string "partner_logo_content_type", limit: 255
     t.integer "partner_logo_file_size"
-    t.datetime "partner_logo_updated_at"
+    t.datetime "partner_logo_updated_at", precision: nil
     t.text "deal_url", null: false
     t.text "deal_description", null: false
     t.text "redemption_info", null: false
@@ -1182,8 +1181,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
 
   create_table "people", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "names", default: {}, null: false
     t.string "canonical_name", null: false
     t.string "other_names", default: [], null: false, array: true
@@ -1195,8 +1194,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   end
 
   create_table "post_follows", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "user_id"
     t.integer "post_id"
     t.index ["post_id"], name: "index_post_follows_on_post_id"
@@ -1206,8 +1205,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "post_likes", id: :serial, force: :cascade do |t|
     t.integer "post_id", null: false
     t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["post_id"], name: "index_post_likes_on_post_id"
     t.index ["user_id"], name: "index_post_likes_on_user_id"
   end
@@ -1224,26 +1223,26 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.boolean "blocked", default: false, null: false
     t.integer "spoiled_unit_id"
     t.string "spoiled_unit_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "deleted_at", precision: nil
     t.integer "target_group_id"
     t.integer "post_likes_count", default: 0, null: false
     t.integer "comments_count", default: 0, null: false
     t.integer "top_level_comments_count", default: 0, null: false
-    t.datetime "edited_at"
+    t.datetime "edited_at", precision: nil
     t.string "target_interest"
     t.jsonb "embed"
     t.integer "community_recommendation_id"
     t.string "ao_id"
     t.integer "edited_by_id"
     t.integer "locked_by_id"
-    t.datetime "locked_at"
+    t.datetime "locked_at", precision: nil
     t.integer "locked_reason"
-    t.datetime "hidden_at"
+    t.datetime "hidden_at", precision: nil
     t.jsonb "moderation_scores"
     t.integer "held_reason"
-    t.datetime "bumped_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "bumped_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"
@@ -1259,8 +1258,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "from_id", null: false
     t.integer "to_id", null: false
     t.text "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "tier", default: 0, null: false
   end
 
@@ -1269,15 +1268,15 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "amount", null: false
     t.integer "duration", null: false
     t.boolean "recurring", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "pro_subscriptions", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "billing_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "type", null: false
     t.integer "tier", default: 0, null: false
     t.index ["user_id"], name: "index_pro_subscriptions_on_user_id"
@@ -1286,14 +1285,14 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "producers", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255
     t.citext "slug"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "profile_link_sites", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "validate_find"
     t.string "validate_replace"
   end
@@ -1302,8 +1301,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id", null: false
     t.integer "profile_link_site_id", null: false
     t.string "url", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["profile_link_site_id"], name: "index_profile_links_on_profile_link_site_id"
     t.index ["user_id", "profile_link_site_id"], name: "index_profile_links_on_user_id_and_profile_link_site_id", unique: true
     t.index ["user_id"], name: "index_profile_links_on_user_id"
@@ -1312,8 +1311,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "quote_likes", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "quote_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["quote_id"], name: "index_quote_likes_on_quote_id"
     t.index ["user_id"], name: "index_quote_likes_on_user_id"
   end
@@ -1323,8 +1322,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "character_id", null: false
     t.integer "order", null: false
     t.string "content", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["character_id"], name: "index_quote_lines_on_character_id"
     t.index ["order"], name: "index_quote_lines_on_order"
     t.index ["quote_id"], name: "index_quote_lines_on_quote_id"
@@ -1333,8 +1332,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "quotes", id: :serial, force: :cascade do |t|
     t.integer "media_id", null: false
     t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "likes_count", default: 0, null: false
     t.string "media_type", null: false
     t.index ["media_id", "media_type"], name: "index_quotes_on_media_id_and_media_type"
@@ -1348,14 +1347,14 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "table", limit: 255
     t.integer "month"
     t.integer "year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "recommendations", id: :serial, force: :cascade do |t|
     t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.hstore "recommendations"
     t.index ["user_id"], name: "index_recommendations_on_user_id"
   end
@@ -1366,8 +1365,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "reason", null: false
     t.text "explanation"
     t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "status", default: 0, null: false
     t.integer "moderator_id"
     t.index ["naughty_id", "user_id"], name: "index_reports_on_naughty_id_and_user_id", unique: true
@@ -1378,15 +1377,15 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "reposts", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "post_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["post_id"], name: "index_reposts_on_post_id"
     t.index ["user_id"], name: "index_reposts_on_user_id"
   end
 
   create_table "review_likes", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "review_id", null: false
     t.integer "user_id", null: false
     t.index ["review_id"], name: "index_review_likes_on_review_id"
@@ -1397,8 +1396,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id", null: false
     t.integer "media_id", null: false
     t.text "content", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.float "rating", null: false
     t.string "source", limit: 255
     t.integer "likes_count", default: 0
@@ -1407,7 +1406,7 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "library_entry_id"
     t.integer "progress"
     t.boolean "spoiler", default: false, null: false
-    t.datetime "deleted_at"
+    t.datetime "deleted_at", precision: nil
     t.index ["deleted_at"], name: "index_reviews_on_deleted_at"
     t.index ["likes_count"], name: "index_reviews_on_likes_count"
     t.index ["media_id"], name: "index_reviews_on_media_id"
@@ -1418,8 +1417,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "name"
     t.integer "resource_id"
     t.string "resource_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
   end
@@ -1431,16 +1430,16 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "max_depth", default: 0, null: false
     t.integer "parent_id"
     t.integer "status", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "original_ancestor_id"
   end
 
   create_table "site_announcements", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "link"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "title", null: false
     t.string "image_url"
     t.jsonb "description", default: {}, null: false
@@ -1450,9 +1449,9 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "user_id", null: false
     t.string "type", null: false
     t.jsonb "stats_data", default: {}, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "recalculated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "recalculated_at", precision: nil, null: false
     t.index "((stats_data ->> 'time'::text))", name: "stats_expr_idx"
     t.index ["type", "user_id"], name: "index_stats_on_type_and_user_id", unique: true
     t.index ["user_id"], name: "index_stats_on_user_id"
@@ -1461,8 +1460,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "stories", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.hstore "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "story_type", limit: 255
     t.integer "target_id"
     t.string "target_type", limit: 255
@@ -1470,7 +1469,7 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.boolean "adult", default: false
     t.integer "total_votes", default: 0, null: false
     t.integer "group_id"
-    t.datetime "deleted_at"
+    t.datetime "deleted_at", precision: nil
     t.index ["created_at"], name: "index_stories_on_created_at"
     t.index ["deleted_at"], name: "index_stories_on_deleted_at"
     t.index ["group_id"], name: "index_stories_on_group_id"
@@ -1482,9 +1481,9 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "logo_file_name"
     t.string "logo_content_type"
     t.integer "logo_file_size"
-    t.datetime "logo_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "logo_updated_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "streaming_links_count", default: 0, null: false
   end
 
@@ -1495,8 +1494,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "url", null: false
     t.string "subs", default: ["en"], null: false, array: true
     t.string "dubs", default: ["ja"], null: false, array: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "regions", default: ["US"], array: true
     t.index ["media_type", "media_id"], name: "index_streaming_links_on_media_type_and_media_id"
     t.index ["regions"], name: "index_streaming_links_on_regions", using: :gin
@@ -1508,19 +1507,19 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "story_id"
     t.integer "target_id"
     t.string "target_type", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.hstore "data"
     t.integer "substory_type", default: 0, null: false
-    t.datetime "deleted_at"
+    t.datetime "deleted_at", precision: nil
   end
 
   create_table "uploads", id: :serial, force: :cascade do |t|
     t.integer "owner_id"
     t.string "owner_type"
     t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "upload_order"
     t.jsonb "content_data"
     t.index ["owner_type", "owner_id"], name: "index_uploads_on_owner_type_and_owner_id"
@@ -1530,8 +1529,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "user_ip_addresses", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.inet "ip_address", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["ip_address", "user_id"], name: "index_user_ip_addresses_on_ip_address_and_user_id", unique: true
     t.index ["user_id"], name: "index_user_ip_addresses_on_user_id"
   end
@@ -1540,12 +1539,12 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "email", limit: 255, default: ""
     t.string "name", limit: 255
     t.string "password_digest", limit: 255, default: ""
-    t.datetime "remember_created_at"
+    t.datetime "remember_created_at", precision: nil
     t.integer "sign_in_count", default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "recommendations_up_to_date"
     t.string "facebook_id", limit: 255
     t.string "bio", limit: 140, default: "", null: false
@@ -1553,12 +1552,12 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "mal_username", limit: 255
     t.integer "life_spent_on_anime", default: 0, null: false
     t.string "about", limit: 500, default: "", null: false
-    t.datetime "confirmed_at"
+    t.datetime "confirmed_at", precision: nil
     t.integer "title_language_preference", default: 0
     t.integer "followers_count", default: 0
     t.integer "following_count", default: 0
     t.boolean "ninja_banned", default: false
-    t.datetime "last_recommendations_update"
+    t.datetime "last_recommendations_update", precision: nil
     t.boolean "subscribed_to_newsletter", default: true
     t.string "location", limit: 255
     t.string "waifu_or_husbando", limit: 255
@@ -1566,10 +1565,10 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.boolean "to_follow", default: false
     t.string "dropbox_token", limit: 255
     t.string "dropbox_secret", limit: 255
-    t.datetime "last_backup"
+    t.datetime "last_backup", precision: nil
     t.integer "approved_edit_count", default: 0
     t.integer "rejected_edit_count", default: 0
-    t.datetime "pro_expires_at"
+    t.datetime "pro_expires_at", precision: nil
     t.text "about_formatted"
     t.integer "import_status"
     t.string "import_from", limit: 255
@@ -1597,7 +1596,7 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.boolean "feed_completed", default: false, null: false
     t.integer "rating_system", default: 0, null: false
     t.integer "theme", default: 0, null: false
-    t.datetime "deleted_at"
+    t.datetime "deleted_at", precision: nil
     t.integer "media_reactions_count", default: 0, null: false
     t.integer "status", default: 1, null: false
     t.citext "slug"
@@ -1606,7 +1605,7 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "ao_facebook_id"
     t.integer "ao_pro"
     t.string "ao_imported"
-    t.datetime "pro_started_at"
+    t.datetime "pro_started_at", precision: nil
     t.integer "max_pro_streak"
     t.integer "quotes_count", default: 0, null: false
     t.integer "pro_tier"
@@ -1632,8 +1631,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
   create_table "users_roles", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "role_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
   end
 
@@ -1644,8 +1643,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.json "object", null: false
     t.json "object_changes", null: false
     t.integer "state", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "comment", limit: 255
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
@@ -1657,8 +1656,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "regions", limit: 255, default: ["US"], array: true
     t.integer "episode_id", null: false
     t.integer "streamer_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "sub_lang", limit: 255
     t.string "dub_lang", limit: 255
     t.string "subs", default: ["en"], array: true
@@ -1678,8 +1677,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "manga_id", null: false
     t.string "isbn", default: [], null: false, array: true
     t.date "published_on"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "thumbnail_data"
     t.jsonb "description", default: {}, null: false
   end
@@ -1689,8 +1688,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.string "target_type", limit: 255, null: false
     t.integer "user_id", null: false
     t.boolean "positive", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["target_id", "target_type", "user_id"], name: "index_votes_on_target_id_and_target_type_and_user_id", unique: true
     t.index ["user_id", "target_type"], name: "index_votes_on_user_id_and_target_type"
   end
@@ -1699,8 +1698,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "status", default: 0, null: false
     t.bigint "user_id"
     t.bigint "wiki_submission_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_wiki_submission_logs_on_user_id"
     t.index ["wiki_submission_id"], name: "index_wiki_submission_logs_on_wiki_submission_id"
   end
@@ -1712,8 +1711,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.jsonb "data", default: {}, null: false
     t.bigint "user_id"
     t.integer "parent_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index "((data -> 'id'::text)), ((data -> 'type'::text))", name: "index_wiki_submission_on_data_id_and_data_type"
     t.index ["parent_id"], name: "index_wiki_submissions_on_parent_id"
     t.index ["user_id"], name: "index_wiki_submissions_on_user_id"
@@ -1724,8 +1723,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.boolean "regex_enabled", default: false, null: false
     t.integer "locations", default: 0, null: false
     t.integer "action", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   add_foreign_key "ama_subscribers", "amas"

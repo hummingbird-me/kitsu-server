@@ -38,6 +38,33 @@ module FixIncludeErrors
 end
 JSONAPI::IncludeDirectives.prepend(FixIncludeErrors)
 
+# HACK: JSONAPI::Resources' route helpers (jsonapi_resources/jsonapi_resource) still pass their
+# options to the router as a positional hash. Rails 8.1 deprecates that for resources/resource and
+# no longer accepts it in Mapper::Resources::Resource.new, so convert it to keywords on the way in.
+module PositionalRouteOptions
+  module Mapper
+    def resources(*args, **options, &)
+      options = args.pop.merge(options) if args.last.is_a?(Hash)
+      super
+    end
+
+    def resource(*args, **options, &)
+      options = args.pop.merge(options) if args.last.is_a?(Hash)
+      super
+    end
+  end
+
+  module Resource
+    def initialize(entities, api_only, shallow, positional = nil, **options)
+      super(entities, api_only, shallow, **positional.to_h, **options)
+    end
+  end
+end
+ActionDispatch::Routing::Mapper.prepend(PositionalRouteOptions::Mapper)
+ActionDispatch::Routing::Mapper::Resources::Resource.prepend(PositionalRouteOptions::Resource)
+ActionDispatch::Routing::Mapper::Resources::SingletonResource
+  .prepend(PositionalRouteOptions::Resource)
+
 JSONAPI.configure do |config|
   # Keying
   config.json_key_format = :camelized_key

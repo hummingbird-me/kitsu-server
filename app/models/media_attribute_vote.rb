@@ -1,5 +1,5 @@
 class MediaAttributeVote < ApplicationRecord
-  enum vote: %i[unvoted low neutral high]
+  enum :vote, %i[unvoted low neutral high]
   belongs_to :user, required: true
   belongs_to :media, polymorphic: true, required: true
 

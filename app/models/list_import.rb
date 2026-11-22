@@ -6,8 +6,8 @@ class ListImport < ApplicationRecord
 
   belongs_to :user, optional: false
 
-  enum strategy: { greater: 0, obliterate: 1 }
-  enum status: { queued: 0, running: 1, failed: 2, completed: 3, partially_failed: 4 }
+  enum :strategy, { greater: 0, obliterate: 1 }
+  enum :status, { queued: 0, running: 1, failed: 2, completed: 3, partially_failed: 4 }
   alias_attribute :kind, :type
 
   validates :strategy, presence: true

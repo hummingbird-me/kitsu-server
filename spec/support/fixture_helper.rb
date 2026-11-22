@@ -39,3 +39,8 @@ end
 def fixture(name, opts = {})
   Fixture.new(name, opts).to_s
 end
+
+# ActiveRecord::TestFixtures#fixture (Rails 7.2+) would otherwise shadow the global helper
+RSpec.configure do |config|
+  config.include(Module.new { def fixture(...) = Fixture.new(...).to_s })
+end

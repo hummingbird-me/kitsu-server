@@ -2,8 +2,8 @@ class LibraryEntryLog < ApplicationRecord
   belongs_to :linked_account, required: true
   belongs_to :media, polymorphic: true, required: true
 
-  enum sync_status: %i[pending success error]
-  enum status: LibraryEntry.statuses
+  enum :sync_status, %i[pending success error]
+  enum :status, LibraryEntry.statuses
 
   validates_presence_of :action_performed, :sync_status
 

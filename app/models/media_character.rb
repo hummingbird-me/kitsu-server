@@ -1,5 +1,5 @@
 class MediaCharacter < ApplicationRecord
-  enum role: %i[main supporting recurring cameo]
+  enum :role, %i[main supporting recurring cameo]
 
   belongs_to :media, polymorphic: true, inverse_of: :characters
   belongs_to :character, inverse_of: :media_characters

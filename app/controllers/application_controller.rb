@@ -9,6 +9,12 @@ class ApplicationController < JSONAPI::ResourceController
     super + '/api/edge'
   end
 
+  # HACK: JSONAPI::Resources compares request.content_type, which includes parameters such as
+  # the charset from Rails 7.1 onwards
+  def verify_content_type_header
+    request.media_type == JSONAPI::MEDIA_TYPE || super
+  end
+
   # TODO: get rid of this dumb hack for pundit-resources
   def enforce_policy_use(*); end
 

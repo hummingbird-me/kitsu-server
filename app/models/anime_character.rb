@@ -1,5 +1,5 @@
 class AnimeCharacter < ApplicationRecord
-  enum role: %i[main supporting]
+  enum :role, %i[main supporting]
 
   belongs_to :anime, required: true
   belongs_to :character, required: true
