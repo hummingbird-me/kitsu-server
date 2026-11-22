@@ -70,7 +70,7 @@ Rails.application.routes.draw do
       ### Media
       jsonapi_resources :anime
       jsonapi_resources :manga
-      jsonapi_resources :drama
+      jsonapi_resources :dramas
       # Cast Info
       jsonapi_resources :media_characters
       jsonapi_resources :media_productions
