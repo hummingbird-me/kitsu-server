@@ -4,6 +4,8 @@ class Drama < ApplicationRecord
   include Episodic
 
   enum :subtype, %i[drama movie special]
+  has_many :drama_characters, dependent: :destroy
+  has_many :drama_staff, dependent: :destroy
   has_many :media_attributes, through: :dramas_media_attributes
   has_many :dramas_media_attributes
 end
