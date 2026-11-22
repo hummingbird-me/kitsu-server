@@ -2,8 +2,7 @@ module Webhooks
   class GetstreamController < ApplicationController
     include CustomControllerHelpers
 
-    http_basic_authenticate_with name: ENV['STREAM_WEBHOOK_USER'],
-                                 password: ENV['STREAM_WEBHOOK_PASS']
+    before_action :authenticate_webhook!
 
     def verify
       render plain: StreamRails.client.api_key
@@ -17,6 +16,18 @@ module Webhooks
       end
 
       head 200
+    end
+
+    private
+
+    # Checked per request because http_basic_authenticate_with raises while the class loads if the
+    # credentials aren't configured, which stops the app from booting. Without them, nobody gets in.
+    def authenticate_webhook!
+      name = ENV.fetch('STREAM_WEBHOOK_USER', nil)
+      password = ENV.fetch('STREAM_WEBHOOK_PASS', nil)
+      return request_http_basic_authentication unless name.present? && password.present?
+
+      http_basic_authenticate_or_request_with(name:, password:)
     end
   end
 end
