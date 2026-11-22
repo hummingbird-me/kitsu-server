@@ -132,7 +132,6 @@ Rails.application.routes.draw do
       jsonapi_resources :comment_likes
       jsonapi_resources :reports
       jsonapi_resources :reposts
-      resources :activities, only: %i[destroy]
       get '/feeds/:group/:id', to: 'feeds#show'
       post '/feeds/:group/:id/_read', to: 'feeds#mark_read'
       post '/feeds/:group/:id/_seen', to: 'feeds#mark_seen'
@@ -207,8 +206,6 @@ Rails.application.routes.draw do
 
     ### Authentication
     use_doorkeeper
-
-    root to: 'home#index'
   end
   match '*any', to: 'error#not_found', via: :all
 end
