@@ -21,6 +21,27 @@ RSpec.describe Webhooks::GetstreamController, type: :controller do
     end
   end
 
+  context 'without webhook credentials configured' do
+    before do
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with('STREAM_WEBHOOK_USER', nil).and_return(nil)
+      get :verify
+    end
+
+    it 'returns a 401 Unauthorized status' do
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+
+  context 'with the wrong credentials' do
+    let(:password) { 'wrong' }
+
+    it 'returns a 401 Unauthorized status' do
+      get :verify
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+
   describe '#notify' do
     context 'receiving feed removed notifications' do
       let(:body) { fixture('getstream_webhook/feed_remove_request.json') }
