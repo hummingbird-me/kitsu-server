@@ -1,0 +1,55 @@
+#Files in the config/locales directory are used for internationalization
+#and are automatically loaded by Rails. If you want to use locales other
+#than English, add the necessary files in this directory.
+#To use the locales, use `I18n.t`:
+#I18n.t 'hello'
+#In views, this is aliased to just `t`:
+#<%= t('hello') %>
+#To use a different locale, set it with `I18n.locale`:
+#I18n.locale = :es
+#This would use the information in config/locales/es.yml.
+#To learn more, please read the Rails Internationalization guide
+#available at http://guides.rubyonrails.org/i18n.html.
+pt:
+  errors:
+    standard_error: 'Um erro desconhecido ocorreu'
+    not_logged_in_error: 'Precisas de estar com a sessão iniciada para fazer isso'
+    stripe:
+      card_error: 'Cartão inválido'
+      api_connection_error: 'Falha ao conectar à rede de cobrança'
+      stripe_error: 'Algo ocorreu errado ao processar a transação'
+    pro_error:
+      invalid_self_gift: 'Não te podes presenciar a ti mesmo'
+      recipient_is_pro: 'Não podes presentear um utilizador que já tem pro'
+      invalid_tier: 'Isto não é um patamar válido de pro'
+    strait:
+      rate_limit_exceeded: 'Limite de pedidos excedido'
+  notifications:
+    mention:
+      post: "%{actor} mencionou-te numa publicação."
+      comment: "%{actor} mencionou-te num comentário."
+    follow: "%{actor} seguiu-te."
+    post_like: "%{actor} gostou da tua publicação."
+    comment_like: "%{actor} gostou do teu comentário."
+    reply:
+      post:
+        you: "%{actor} respondeu à tua publicação."
+        themself: "%{actor} respondeu à publicação do próprio."
+        author: "%{actor} respondeu à publicação de %{author}."
+        unknown: "%{actor} respondeu a uma publicação."
+      comment:
+        you: "%{actor} respondeu ao teu comentário."
+    invited: "%{actor} convidou-te para um grupo."
+    aired:
+      anime: "Episódio %{number} de %{title} transmitido!"
+      manga: "Capítulo %{number} de %{title} foi lançado!"
+  pro_mailer:
+    gift_email:
+      subject: "%{name} deu-te Kitsu %{tier}!"
+    welcome_email:
+      subject: "Bem-vindo ao Kitsu %{tier}"
+    cancellation_email:
+      subject: "A tua subscrição ao Kitsu %{tier} foi cancelada"
+  graphql:
+    errors:
+      warnings_present: "Um aviso estava presente e \"ignore_warnings\" não estava definido como \"true\""
