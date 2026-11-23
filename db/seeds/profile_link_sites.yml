@@ -56,7 +56,7 @@ raptr:
 discord:
   id: 12
   name: Discord
-  validate_find: '\A(.+#[0-9]+)\z'
+  validate_find: '\A(?!.*\.\.)[a-z0-9\_\.]{1,32}\z'
   validate_replace: '\1'
 tumblr:
   id: 13
