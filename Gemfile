@@ -13,6 +13,7 @@ gem 'benchmark' # mini_magick
 gem 'csv' # jsonapi-resources
 gem 'mutex_m' # httpclient (algoliasearch, google-api-client)
 gem 'observer' # factory_bot
+gem 'ostruct' # our own OpenStruct use (feeds, actions) and rack; oj no longer pulls it in
 
 # Database Stuff
 gem 'activerecord-import' # Run bulk imports quicker

@@ -43,7 +43,7 @@ workers ENV.fetch('WEB_CONCURRENCY', 2)
 preload_app!
 
 # Set up prometheus instrumentation and puma plugin.
-on_worker_boot do
+before_worker_boot do
   require 'prometheus_exporter/instrumentation'
   PrometheusExporter::Instrumentation::Process.start(type: 'web')
   PrometheusExporter::Instrumentation::ActiveRecord.start(
