@@ -11,7 +11,8 @@ RSpec.describe Directives::SitePermission do
 
   let(:schema) do
     Class.new(GraphQL::Schema) do
-      use GraphQL::Schema::Visibility
+      # The root types and their fields are added after this, in `before` blocks
+      use GraphQL::Schema::Visibility, preload: false
     end
   end
 
