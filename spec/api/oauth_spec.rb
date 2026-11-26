@@ -102,9 +102,9 @@ RSpec.describe 'OAuth', type: :request do
       expect_oauth_error(:unauthorized, 'invalid_client')
     end
 
-    it 'accepts client credentials sent in both the header and the body' do
+    it 'rejects client credentials sent in both the header and the body' do
       grant(secret_credentials, basic(confidential_app))
-      expect(response).to have_http_status(:ok)
+      expect_oauth_error(:bad_request, 'invalid_request')
     end
   end
 
@@ -193,8 +193,8 @@ RSpec.describe 'OAuth', type: :request do
       expect(signed_in_as(params: { access_token: token })).to eq([user.id])
     end
 
-    it 'accepts a token sent in both the header and a parameter' do
-      expect(signed_in_as(headers: bearer(token), params: { access_token: token })).to eq([user.id])
+    it 'treats a token sent in both the header and a parameter as signed out' do
+      expect(signed_in_as(headers: bearer(token), params: { access_token: token })).to eq([])
     end
 
     it 'rejects a revoked token' do
@@ -217,10 +217,14 @@ RSpec.describe 'OAuth', type: :request do
       expect(Doorkeeper::AccessToken.find_by!(token:)).to be_revoked
     end
 
-    it 'revokes a public client token without its client_id' do
+    it 'needs the client_id to revoke a public client token' do
       token = log_in(client_id: public_app.uid)['access_token']
-      revoke(token)
 
+      revoke(token)
+      expect_oauth_error(:forbidden, 'unauthorized_client')
+      expect(Doorkeeper::AccessToken.find_by!(token:)).not_to be_revoked
+
+      revoke(token, client_id: public_app.uid)
       expect(response).to have_http_status(:ok)
       expect(Doorkeeper::AccessToken.find_by!(token:)).to be_revoked
     end
