@@ -65,7 +65,9 @@ module SearchableResource
     def find_serialized_with_caching(filters, serializer, opts = {})
       return super(filters, serializer, opts) unless should_query?(filters)
       records = find_records(filters, opts).reject(&:nil?)
-      cached_resources_for(records, serializer, opts)
+      # A cache miss is re-fetched through the SQL policy scope, which can hide a record the search
+      # index still returns (a stale document, say).  Drop those instead of serializing a nil.
+      cached_resources_for(records, serializer, opts).compact
     end
 
     def load_query_records(query, opts = {})

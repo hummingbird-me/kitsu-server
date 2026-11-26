@@ -27,6 +27,12 @@ RSpec.describe GroupsController do
       expect(search_ids).to contain_exactly(open.id, nsfw.id)
     end
 
+    it 'leaves out a group the index has not caught up on' do
+      # Skips the callbacks, so the index still says this group is safe for work
+      open.update_columns(nsfw: true) # rubocop:disable Rails/SkipsModelValidations
+      expect(search_ids).to be_empty
+    end
+
     it 'applies the privacy filter alongside the query' do
       sign_in create(:group_member, group: closed).user
       expect(search_ids(filter: { query: 'findable', privacy: 'closed' })).to eq([closed.id])
