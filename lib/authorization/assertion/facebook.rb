@@ -30,6 +30,10 @@ module Authorization
 
       # @return [User] the user to log into, given the facebook assertion
       def user!
+        # Facebook rejected the assertion. Without this, a nil ID matches the first user who has
+        # never linked Facebook and logs the caller in as them.
+        return if facebook_id.blank?
+
         @user ||= if Flipper.enabled?(:aozora)
           conflict.user!
         else
