@@ -73,7 +73,7 @@ jobs:
         ports:
           - 9200:9200
       typesense:
-        image: typesense/typesense:0.25.0
+        image: typesense/typesense:30.2
         ports:
           - 8108:8108
         env:
