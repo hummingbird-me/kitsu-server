@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class LibraryEntryResource < BaseResource
-  TITLE_SORT = /\A([^\.]+)\.titles\.([^\.]+)\z/
+  # Both captures get interpolated into SQL by apply_title_sort, so this regex is the allowlist:
+  # keep it anchored and limited to known tables and locale-shaped keys.
+  TITLE_SORT = /\A(anime|manga|drama)\.titles\.(canonical|[a-z]{2}(?:_[a-z]{2})?)\z/
 
   class TitleSortableFields
     def initialize(whitelist)
@@ -9,15 +11,7 @@ class LibraryEntryResource < BaseResource
     end
 
     def include?(key)
-      return true if @whitelist.include?(key)
-      # Magic match-handling code
-      match = TITLE_SORT.match(key.to_s)
-      return false unless match
-      media, title = match[1..-1]
-      return false unless %w[anime manga drama].include?(media.downcase)
-      return true if title.casecmp('canonical')
-      return false unless /[a-z]{2}(_[a-z]{2})?/.match?(title)
-      true
+      @whitelist.include?(key) || TITLE_SORT.match?(key.to_s)
     end
   end
 
@@ -132,10 +126,10 @@ class LibraryEntryResource < BaseResource
         records = records.order(Arel.sql(<<~ORDER))
           #{media}_sort.titles->#{media}_sort.canonical_title #{direction}
         ORDER
-      elsif /[a-z]{2}(_[a-z]{2})?/i.match?(title)
+      else
         records = records.order(Arel.sql(<<~ORDER.squish))
           COALESCE(
-            NULLIF(#{media}_sort.titles->'#{title}', ''),
+            NULLIF(#{media}_sort.titles->#{records.connection.quote(title)}, ''),
             NULLIF(#{media}_sort.titles->#{media}_sort.canonical_title, ''),
             NULLIF(#{media}_sort.titles->'en_jp', '')
           ) #{direction}

@@ -74,4 +74,68 @@ RSpec.describe 'JSON:API' do
 
     expect(response).to have_http_status(:forbidden)
   end
+
+  describe 'sorting library entries by media title' do
+    it 'sorts by the requested title' do
+      b = create(:library_entry, user:, media: create(:anime, titles: { en_jp: 'Bbb' }))
+      a = create(:library_entry, user:, media: create(:anime, titles: { en_jp: 'Aaa' }))
+
+      %w[anime.titles.en_jp anime.titles.canonical].each do |sort|
+        get '/api/edge/library-entries', params: { filter: { user_id: user.id }, sort: }
+        expect(response).to have_http_status(:ok)
+        expect(json['data'].pluck('id')).to eq([a.id.to_s, b.id.to_s])
+      end
+    end
+
+    # The title key is interpolated into the ORDER BY, so anything which isn't a locale must be
+    # refused before it gets there
+    ["anime.titles.en'", "anime.titles.canonical'", "anime.titles.en'||pg_sleep(1)||'en",
+     'users.titles.en', 'anime.titles.xen_jpx'].each do |sort|
+      it "rejects sort=#{sort}" do
+        get '/api/edge/library-entries', params: { filter: { user_id: user.id }, sort: }
+
+        expect(response).to have_http_status(:bad_request)
+        expect(json.dig('errors', 0, 'title')).to eq('Invalid sort criteria')
+      end
+    end
+  end
+
+  describe 'site permissions' do
+    let(:headers) { auth.merge('Content-Type' => media_type) }
+
+    it 'cannot be granted to yourself' do
+      patch "/api/edge/users/#{user.id}", headers:, params: {
+        data: { id: user.id.to_s, type: 'users', attributes: { permissions: %w[admin] } }
+      }.to_json
+
+      expect(response).to have_http_status(:bad_request)
+      expect(user.reload.permissions.admin?).to be(false)
+    end
+
+    it 'cannot be granted by a community mod' do
+      mod = create(:user, permissions: %i[community_mod])
+      mod_token = Doorkeeper::AccessToken.create!(resource_owner_id: mod.id, scopes: 'public')
+
+      patch "/api/edge/users/#{user.id}",
+        headers: headers.merge('Authorization' => "Bearer #{mod_token.token}"),
+        params: {
+          data: { id: user.id.to_s, type: 'users', attributes: { permissions: %w[admin] } }
+        }.to_json
+
+      expect(response).to have_http_status(:bad_request)
+      expect(user.reload.permissions.admin?).to be(false)
+    end
+
+    it 'cannot be set when signing up' do
+      post '/api/edge/users', headers: { 'Content-Type' => media_type }, params: {
+        data: { type: 'users', attributes: {
+          name: 'Mallory', email: 'mallory@example.com', password: 'hunter2hunter2',
+          permissions: %w[admin]
+        } }
+      }.to_json
+
+      expect(response).to have_http_status(:bad_request)
+      expect(User.where(email: 'mallory@example.com')).not_to exist
+    end
+  end
 end
