@@ -99,4 +99,43 @@ RSpec.describe 'JSON:API' do
       end
     end
   end
+
+  describe 'site permissions' do
+    let(:headers) { auth.merge('Content-Type' => media_type) }
+
+    it 'cannot be granted to yourself' do
+      patch "/api/edge/users/#{user.id}", headers:, params: {
+        data: { id: user.id.to_s, type: 'users', attributes: { permissions: %w[admin] } }
+      }.to_json
+
+      expect(response).to have_http_status(:bad_request)
+      expect(user.reload.permissions.admin?).to be(false)
+    end
+
+    it 'cannot be granted by a community mod' do
+      mod = create(:user, permissions: %i[community_mod])
+      mod_token = Doorkeeper::AccessToken.create!(resource_owner_id: mod.id, scopes: 'public')
+
+      patch "/api/edge/users/#{user.id}",
+        headers: headers.merge('Authorization' => "Bearer #{mod_token.token}"),
+        params: {
+          data: { id: user.id.to_s, type: 'users', attributes: { permissions: %w[admin] } }
+        }.to_json
+
+      expect(response).to have_http_status(:bad_request)
+      expect(user.reload.permissions.admin?).to be(false)
+    end
+
+    it 'cannot be set when signing up' do
+      post '/api/edge/users', headers: { 'Content-Type' => media_type }, params: {
+        data: { type: 'users', attributes: {
+          name: 'Mallory', email: 'mallory@example.com', password: 'hunter2hunter2',
+          permissions: %w[admin]
+        } }
+      }.to_json
+
+      expect(response).to have_http_status(:bad_request)
+      expect(User.where(email: 'mallory@example.com')).not_to exist
+    end
+  end
 end
