@@ -5,7 +5,8 @@ RSpec.configure do |config|
     TypesenseAnimeIndex,
     TypesenseMangaIndex,
     TypesenseUsersIndex,
-    TypesenseGroupsIndex
+    TypesenseGroupsIndex,
+    TypesenseCharactersIndex
   ].freeze
 
   # Create a new collection for each index before each test and delete it afterwards. We also stub

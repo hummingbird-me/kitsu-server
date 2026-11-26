@@ -19,6 +19,14 @@ class Character < ApplicationRecord
 
   update_algolia('AlgoliaCharactersIndex')
 
+  after_commit(on: %i[create update]) do
+    TypesenseCharactersIndex.index_one(id) if TypesenseCharactersIndex.should_sync?(saved_changes)
+  end
+
+  after_commit(on: :destroy) do
+    TypesenseCharactersIndex.remove_one(id)
+  end
+
   def canonical_name
     names[self[:canonical_name]]
   end

@@ -8,6 +8,18 @@ class CharacterResource < BaseResource
 
   filter :slug
 
+  def self._search_service
+    CharacterSearchService if Flipper[:typesense_character_search].enabled?(User.current)
+  end
+
+  def self._paginator
+    if Flipper[:typesense_character_search].enabled?(User.current)
+      :universal
+    else
+      JSONAPI.configuration.default_paginator
+    end
+  end
+
   index CharactersIndex::Character
   query :name,
     mode: :query,
