@@ -33,8 +33,9 @@ class TypesenseUsersIndex < TypesenseBaseIndex
     # doubles queries (once to get batch IDs, once to get the actual records). Since we have a LOT
     # of users, this optimization significantly speeds up the bulk indexing process, but isn't
     # necessary on other indices (which are much smaller).
+    # Users who deleted their account are left out; the model removes them when that happens.
     ids.in_groups_of(10_000, false).each do |group_ids|
-      User.where(id: group_ids).each do |user|
+      User.active.where(id: group_ids).each do |user|
         yield({
           id: user.id.to_s,
           avatar_image: format_image(user.avatar_attacher),

@@ -10,7 +10,9 @@ class TypesenseGroupsIndex < TypesenseBaseIndex
     'about' => 1,
     'locale' => 1,
     'privacy' => 1,
-    'is_nsfw' => 1,
+    'nsfw' => 1,
+    'category_id' => 1,
+    'featured' => 1,
     'members_count' => 0.1,
     'last_activity_at' => 0.5
   }.freeze
@@ -26,6 +28,8 @@ class TypesenseGroupsIndex < TypesenseBaseIndex
     field 'locale', type: 'string'
     field 'privacy', type: 'string'
     field 'is_nsfw', type: 'bool'
+    field 'featured', type: 'bool', facet: true
+    field 'category_id', type: 'int32', facet: true, optional: true
     field 'members_count', type: 'int32', facet: true
     # Last activity timestamp
     field 'last_activity_at', type: 'object'
@@ -55,9 +59,11 @@ class TypesenseGroupsIndex < TypesenseBaseIndex
         locale: group.locale || 'en-US',
         privacy: group.privacy,
         is_nsfw: group.nsfw?,
+        featured: group.featured,
+        category_id: group.category_id,
         members_count: group.members_count,
         last_activity_at: format_date(group.last_activity_at),
-        created_at: format_date(group.created_at)
+        created_at: group.created_at.to_i
       }.compact)
     end
   end
