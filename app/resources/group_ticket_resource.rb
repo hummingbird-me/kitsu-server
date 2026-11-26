@@ -32,6 +32,24 @@ class GroupTicketResource < BaseResource
       }
     }
 
+  # With the flag on, the filters below answer these from the database instead of Elasticsearch
+  def self.searchable?
+    super && !Flipper[:sql_group_ticket_search].enabled?(User.current)
+  end
+
+  filter :query_group, apply: ->(records, values, _options) { records.where(group_id: values) }
+  # Matches the name of whoever opened or was assigned the ticket, or a message the searcher can see
+  filter :query, apply: ->(records, values, options) {
+    text = "%#{GroupTicket.sanitize_sql_like(values.join(' '))}%"
+    people = User.where('users.name ILIKE ?', text).select(:id)
+    messages = GroupTicketMessage.visible_for(options[:context][:current_user]&.resource_owner)
+                                 .where('group_ticket_messages.content ILIKE ?', text)
+    records = records.where(user_id: people).or(records.where(assignee_id: people))
+                     .or(records.where(id: messages.select(:ticket_id)))
+    # Nobody asked for an order, so show the newest tickets first
+    options[:sort_criteria].present? ? records : records.order(created_at: :desc)
+  }
+
   log_verb do |action|
     status if action == :update && previous_changes.include?('status')
   end

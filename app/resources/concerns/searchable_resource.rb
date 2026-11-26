@@ -49,7 +49,7 @@ module SearchableResource
     # Determine if an ElasticSearch hit is required
     def should_query?(filters)
       return false unless filters.respond_to?(:keys)
-      return false unless @_query_fields
+      return false unless searchable?
       filters.keys.any? { |key| @_query_fields.include?(key) }
     end
 
