@@ -74,4 +74,29 @@ RSpec.describe 'JSON:API' do
 
     expect(response).to have_http_status(:forbidden)
   end
+
+  describe 'sorting library entries by media title' do
+    it 'sorts by the requested title' do
+      b = create(:library_entry, user:, media: create(:anime, titles: { en_jp: 'Bbb' }))
+      a = create(:library_entry, user:, media: create(:anime, titles: { en_jp: 'Aaa' }))
+
+      %w[anime.titles.en_jp anime.titles.canonical].each do |sort|
+        get '/api/edge/library-entries', params: { filter: { user_id: user.id }, sort: }
+        expect(response).to have_http_status(:ok)
+        expect(json['data'].pluck('id')).to eq([a.id.to_s, b.id.to_s])
+      end
+    end
+
+    # The title key is interpolated into the ORDER BY, so anything which isn't a locale must be
+    # refused before it gets there
+    ["anime.titles.en'", "anime.titles.canonical'", "anime.titles.en'||pg_sleep(1)||'en",
+     'users.titles.en', 'anime.titles.xen_jpx'].each do |sort|
+      it "rejects sort=#{sort}" do
+        get '/api/edge/library-entries', params: { filter: { user_id: user.id }, sort: }
+
+        expect(response).to have_http_status(:bad_request)
+        expect(json.dig('errors', 0, 'title')).to eq('Invalid sort criteria')
+      end
+    end
+  end
 end
