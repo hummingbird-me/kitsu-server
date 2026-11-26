@@ -21,6 +21,23 @@ RSpec.describe Authorization::Assertion::Facebook do
     it 'returns user' do
       expect(subject).to eq(user)
     end
+
+    context 'when Facebook rejects the token' do
+      let!(:unlinked_user) { create :user, facebook_id: nil }
+
+      before do
+        # Specs force every Flipper feature on; production has aozora off, which is the lookup path
+        allow(Flipper).to receive(:enabled?).with(:aozora).and_return(false)
+        stub_request(:get, %r{https://graph.facebook.com/v.*/me\?.*}).to_return(
+          status: 400,
+          body: { error: { message: 'Invalid OAuth access token', type: 'OAuthException', code: 190 } }.to_json
+        )
+      end
+
+      it 'returns nobody' do
+        expect(subject).to be_nil
+      end
+    end
   end
 
   describe '#auto_follows' do
