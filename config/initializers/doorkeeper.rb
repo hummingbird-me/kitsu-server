@@ -28,8 +28,9 @@ Doorkeeper.configure do
   end
   # Restrict access to the web interface for adding oauth applications
   admin_authenticator do
-    # TODO: write error! method and use Pundit
-    User.find(doorkeeper_token[:resource_owner_id])
+    # Doorkeeper ignores the return value, so anyone we don't stop here gets every application
+    user = User.find_by(id: doorkeeper_token.resource_owner_id) if doorkeeper_token&.accessible?
+    head :forbidden unless user&.permissions&.admin?
   end
 
   # => Token Configuration

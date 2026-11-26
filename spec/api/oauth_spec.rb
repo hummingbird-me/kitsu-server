@@ -232,4 +232,44 @@ RSpec.describe 'OAuth', type: :request do
       expect(Doorkeeper::AccessToken.find_by!(token:)).not_to be_revoked
     end
   end
+
+  describe 'application management' do
+    let(:path) { "/api/oauth/applications/#{confidential_app.id}.json" }
+
+    it 'is forbidden without a token' do
+      get path
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'does not let a normal user read, change or delete an application' do
+      headers = bearer(log_in['access_token'])
+
+      get(path, headers:)
+      expect(response).to have_http_status(:forbidden)
+      expect(response.body).not_to include(confidential_app.secret)
+
+      put path, headers:, params: { doorkeeper_application: { redirect_uri: 'https://evil.example/cb' } }
+      expect(response).to have_http_status(:forbidden)
+
+      delete(path, headers:)
+      expect(response).to have_http_status(:forbidden)
+      expect(confidential_app.reload.redirect_uri).not_to eq('https://evil.example/cb')
+    end
+
+    it 'does not accept a revoked admin token' do
+      user.update!(permissions: [:admin])
+      token = log_in['access_token']
+      Doorkeeper::AccessToken.find_by!(token:).revoke
+
+      get path, headers: bearer(token)
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'lets an admin in' do
+      user.update!(permissions: [:admin])
+      get path, headers: bearer(log_in['access_token'])
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body['uid']).to eq(confidential_app.uid)
+    end
+  end
 end
