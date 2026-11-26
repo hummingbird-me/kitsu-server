@@ -23,6 +23,15 @@ RSpec.describe AnimeController do
         get :index, params: { filter: { text: anime.canonical_title } }
         expect(response.body).to have_resources(ANIME.dup, 'anime')
       end
+
+      it 'pages through the results by offset' do
+        anime = %w[First Second].map { |n| create(:anime, titles: { en_jp: "Pagination #{n}" }) }
+        pages = [0, 1].map do |offset|
+          get :index, params: { filter: { text: 'pagination' }, page: { limit: 1, offset: } }
+          JSON.parse(response.body)['data'].map { |found| found['id'].to_i }
+        end
+        expect(pages.flatten).to match_array(anime.map(&:id))
+      end
     end
   end
 

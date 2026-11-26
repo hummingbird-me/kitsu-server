@@ -112,7 +112,8 @@ class TypesenseSearchService < SearchService
     if @_page
       @_page
     elsif @_offset && @_limit
-      @_page = (@_offset / @_limit).floor
+      # Typesense pages start at 1
+      @_page = (@_offset / @_limit) + 1
     end
   end
 end
