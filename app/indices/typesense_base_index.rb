@@ -9,6 +9,12 @@ class TypesenseBaseIndex < Typesensual::Index
 
   private
 
+  # A blank locale key becomes a field named `titles.`, and Typesense 30 then rejects every
+  # document indexed after it ("Field `titles.` has an incorrect type").
+  def format_localized(strings)
+    strings.reject { |locale, _| locale.blank? }
+  end
+
   def format_date(date)
     return { is_null: true } unless date
     {
