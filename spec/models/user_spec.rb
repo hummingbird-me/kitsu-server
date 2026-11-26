@@ -203,6 +203,12 @@ RSpec.describe User, type: :model do
     end
   end
 
+  it 'can be destroyed once deleting the account has taken it out of the search index' do
+    user = create(:user)
+    user.update!(deleted_at: Time.now)
+    expect { user.destroy! }.not_to raise_error
+  end
+
   context 'after creation' do
     before do
       allow_any_instance_of(Feed).to receive(:follow)

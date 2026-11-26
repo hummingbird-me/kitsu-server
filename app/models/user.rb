@@ -478,10 +478,20 @@ class User < ApplicationRecord
   end
 
   after_commit(on: %i[create update]) do
-    typesense_index.index_one(id) if typesense_index.should_sync?(saved_changes)
+    if saved_change_to_deleted_at?(from: nil)
+      remove_from_typesense
+    elsif typesense_index.should_sync?(saved_changes)
+      typesense_index.index_one(id)
+    end
   end
 
-  after_commit(on: :destroy) do
+  after_commit(on: :destroy) { remove_from_typesense }
+
+  private
+
+  def remove_from_typesense
     typesense_index.remove_one(id)
+  rescue Typesense::Error::ObjectNotFound
+    # Already gone: users leave the index when they delete their account, before they're destroyed
   end
 end

@@ -25,6 +25,35 @@ RSpec.describe UsersController, type: :controller do
         expect(response.body).to have_resources(user_json, 'users')
       end
     end
+    describe 'with filter[query]' do
+      def search_ids(params = {})
+        get :index, params: { filter: { query: 'findable' }, **params }
+        JSON.parse(response.body)['data'].map { |found| found['id'].to_i }
+      end
+
+      it 'finds users by name' do
+        found = create(:user, name: 'Findable')
+        create(:user, name: 'Somebody')
+        expect(search_ids).to eq([found.id])
+      end
+
+      it 'hides users who deleted their account' do
+        create(:user, name: 'Findable', deleted_at: Time.now)
+        expect(search_ids).to be_empty
+      end
+
+      it 'hides users the current user has blocked' do
+        create(:block, user:, blocked: create(:user, name: 'Findable'))
+        sign_in user
+        expect(search_ids).to be_empty
+      end
+
+      it 'pages by offset' do
+        users = Array.new(2) { |i| create(:user, name: "Findable#{i}") }
+        pages = [0, 1].map { |offset| search_ids(page: { limit: 1, offset: }) }
+        expect(pages.flatten).to match_array(users.map(&:id))
+      end
+    end
   end
 
   describe '#show' do
