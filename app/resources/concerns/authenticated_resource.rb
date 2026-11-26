@@ -28,7 +28,7 @@ module AuthenticatedResource
     used_fields = field_data.values.map(&:keys).inject(&:|)
     disallowed_fields = (used_fields - allowed_fields)
     unless disallowed_fields.empty?
-      raise JSONAPI::Exceptions::ParametersNotAllowed, disallowed_fields
+      raise JSONAPI::Exceptions::ParameterNotAllowed, disallowed_fields.join(', ')
     end
     super
   end
